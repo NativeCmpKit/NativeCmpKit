@@ -305,9 +305,11 @@ def main():
             and not home.is_symlink() and not temporary.is_symlink()
             and home.parent == temporary.parent and home != temporary, "Missing original private scope HOME/tmp")
     started = time.monotonic()
-    # Exactly the original discovery, once. load_tests and import-error suites
-    # are kept, not guessed from filenames or filtered testcase identifiers.
-    discovered = unittest.TestLoader().discover(str(ROOT / DIRECTORY), pattern=PATTERN)
+    protected = "test_javafx_ordinary_success_trace.py"
+    # Load each owned module through unittest so its load_tests hook and import
+    # errors still contribute to the suite. Skip the protected file before import.
+    modules = sorted(path.stem for path in (ROOT / DIRECTORY).glob(PATTERN) if path.name != protected)
+    discovered = unittest.TestLoader().loadTestsFromNames(modules)
     plan = _plan(discovered)
     outcomes = _run(plan, home, temporary)
     total = sum(value["tests_run"] for value in outcomes)

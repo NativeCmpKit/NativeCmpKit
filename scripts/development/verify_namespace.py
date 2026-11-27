@@ -25,12 +25,14 @@ HISTORICAL_REJECTION_FIXTURES = {
 }
 ANDROID_PACKAGE_FIXTURE = "nativecmpkit-webview/src/androidHostTest/kotlin/android/webkit/NativeCmpKitControlledResourceError.kt"
 ACTIVE_ROOTS = {"sample", "scripts", "tests", "tools", "gradle", "convention-plugins", ".github"}
-SOURCE_SUFFIXES = {".kt", ".kts", ".java", ".rs", ".swift", ".c", ".cc", ".cpp", ".h", ".mm"}
+ACTIVE_DOCS = {"README.md", "CONTRIBUTING.md", "docs/testing/nativecmpkit-webview-content-policy-focuses.json"}
+SOURCE_SUFFIXES = {".kt", ".kts", ".java", ".rs", ".swift", ".c", ".cc", ".cpp", ".h", ".mm", ".js", ".mjs", ".cjs"}
 CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properties", ".xml", ".plist",
-                   ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro"}
+                   ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro", ".def", ".gradle", ".xcconfig"}
 # Avoid treating longer ordinary words as names when matching camel-case symbols.
 OLD_IDENTITY = re.compile(
     r"com[./_]mohamedrejeb[./_]calf\b|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
+    r"|\b(?i:github\.com/apdelrahman1911/nativecmpkit)\b"
 )
 PACKAGE = re.compile(r"^package\s+([\w.]+)", re.M)
 
@@ -51,9 +53,9 @@ def main():
             continue
         if relative.startswith(("tests/consumer/binary/", "scripts/ci/fixtures/")):
             continue
-        if not (root in ACTIVE_ROOTS or root.startswith("nativecmpkit-") or len(path.parts) == 1):
+        if not (root in ACTIVE_ROOTS or root.startswith("nativecmpkit-") or len(path.parts) == 1 or relative in ACTIVE_DOCS):
             continue
-        if path.suffix not in SOURCE_SUFFIXES | CONFIG_SUFFIXES:
+        if path.suffix not in SOURCE_SUFFIXES | CONFIG_SUFFIXES and relative not in ACTIVE_DOCS:
             continue
         raw = (ROOT / path).read_bytes()
         if b"\0" in raw:

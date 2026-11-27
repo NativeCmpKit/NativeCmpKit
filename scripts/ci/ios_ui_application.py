@@ -1514,11 +1514,18 @@ def main() -> int:
         print("NATIVECMPKIT_UIKIT_TRANSPORT passed=" + str(result["transport_passed"]).lower(), flush=True)
         if not result["transport_passed"]:
             error = result.get("error") or {}
-            protocol = result.get("application_protocol") or {}
+            protocol = result.get("application_protocol") or result.get("application_protocol_partial") or {}
+            transport = result.get("application_transport") or {}
+            crash = result.get("owned_crash_diagnostics") or {}
             details = {
                 "phase": error.get("phase"),
                 "error_type": error.get("type"),
-                "protocol_keys": sorted(protocol),
+                "transport_stage": transport.get("failure_stage"),
+                "transport_reason": transport.get("failure_reason"),
+                "native_cases": protocol.get("counts"),
+                "unfinished_testcase": protocol.get("unfinished_testcase"),
+                "crash_status": crash.get("status"),
+                "crash_exception": crash.get("exception"),
                 "cleanup_error_type": (result.get("cleanup") or {}).get("error_type"),
             }
             print("NATIVECMPKIT_UIKIT_FAILURE " + json.dumps(details, sort_keys=True), file=sys.stderr, flush=True)

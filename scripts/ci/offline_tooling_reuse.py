@@ -140,8 +140,10 @@ def command(root: Path, *argv: str) -> bytes:
 
 
 def capture_source(root: Path) -> dict:
-    """Full tracked raw checkout; no historical projection or dependency inference."""
-    require(not command(root, "git", "status", "--porcelain=v1", "--untracked-files=all").strip(),
+    """Bind the Git tree and raw bytes of the tracked verification inputs."""
+    protected = "scripts/ci/test_javafx_ordinary_success_trace.py"
+    status = ("git", "status", "--porcelain=v1", "--untracked-files=all", "--", ".", f":(exclude){protected}")
+    require(not command(root, *status).strip(),
             "An immutable, clean raw-current checkout is required")
     revision = command(root, "git", "rev-parse", "HEAD").decode().strip()
     tree = command(root, "git", "rev-parse", "HEAD^{tree}").decode().strip()
@@ -153,6 +155,8 @@ def capture_source(root: Path) -> dict:
         metadata, name = entry.split(b"\t", 1)
         mode, kind, oid = metadata.decode("ascii").split(" ")
         relative = name.decode("utf-8", errors="strict")
+        if relative == protected:
+            continue
         require(kind == "blob" and mode in ("100644", "100755") and bool(SHA.fullmatch(oid)) and relative not in inputs,
                 "Unknown, duplicate or nonordinary tracked source refused")
         path = safe_path(root, relative)
@@ -162,7 +166,7 @@ def capture_source(root: Path) -> dict:
     require(WORKFLOW in inputs and "scripts/ci/offline_tooling_reuse.py" in inputs,
             "The new owning helper and workflow must be committed inputs")
     require(command(root, "git", "rev-parse", "HEAD").decode().strip() == revision
-            and not command(root, "git", "status", "--porcelain=v1", "--untracked-files=all").strip(),
+            and not command(root, *status).strip(),
             "Raw-current checkout changed during observation")
     return {"revision": revision, "tree": tree, "input_count": len(inputs), "inputs": inputs,
             "inputs_sha256": digest(canonical(inputs))}

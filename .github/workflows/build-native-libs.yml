@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-webview, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -289,45 +289,26 @@ jobs:
               raise SystemExit("The owned portal did not shut down cleanly")
           raise SystemExit(result.returncode)
           PYTHON
-      - name: Recheck Linux WebView failures with owned clocked audio
+      - name: Recheck the Linux desktop WebView cookie-path regression
         if: inputs.profile == 'identity-linux-webview'
-        shell: bash
         run: |
-          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- \
-            install --no-install-recommends -y pulseaudio libasound2-plugins
-          PYTHONPATH=scripts/ci xvfb-run -a python3 - <<'PYTHON'
-          from pathlib import Path
-          import subprocess
-          from desktop_media_context import MEDIA_SOURCE, OwnedAudio
-
-          root = Path.cwd()
-          output = root / "build/ci-verification/w"
-          output.mkdir(parents=True)
-          module = "nativecmpkit-webview"
-          plan = {"suite": "desktop", "expected": [{"module": module, "test_source_files": [MEDIA_SOURCE]}]}
-          audio = OwnedAudio(root, output, plan).start()
-          command = ["./gradlew", f":{module}:desktopTest", "--max-workers=1", "--info",
-                     "--no-parallel", "--no-configuration-cache", "--no-build-cache"]
-          package = "io.github.apdelrahman1911.nativecmpkit.ui.web"
-          for case in (
-              "DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes",
-              "DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument",
-              "DesktopWebViewStopRedirectAcceptanceTest.publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner",
-          ):
-              command.extend(["--tests", f"{package}.{case}"])
-          try:
-              result = subprocess.run(command, env=audio.environment, check=False)
-          finally:
-              audio.close()
-          if not audio.passed():
-              raise SystemExit("The owned audio session did not pass readiness and cleanup")
-          raise SystemExit(result.returncode)
-          PYTHON
+          ./gradlew :nativecmpkit-webview:desktopTest \
+            --tests io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes \
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Android host tests and sample APK
         if: inputs.profile == 'identity-linux-android'
         run: |
           ./gradlew testAndroidHostTest :sample:android:assembleDebug --continue --max-workers=1 \
             --no-parallel --no-configuration-cache --no-build-cache
+      - name: Recheck Android host tests blocked during dependency resolution
+        if: inputs.profile == 'identity-linux-android-recovery'
+        run: |
+          ./gradlew :nativecmpkit-camera-picker:testAndroidHostTest :nativecmpkit-file-picker:testAndroidHostTest \
+            :nativecmpkit-file-picker-coil:testAndroidHostTest :nativecmpkit-geo:testAndroidHostTest \
+            :nativecmpkit-io:testAndroidHostTest :nativecmpkit-share:testAndroidHostTest \
+            :nativecmpkit-ui:testAndroidHostTest :nativecmpkit-webview:testAndroidHostTest \
+            :nativecmpkit-permissions:nativecmpkit-permissions-core:testAndroidHostTest :sample:common:testAndroidHostTest \
+            --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Linux browser tests and sample compilation
         if: inputs.profile == 'identity-linux-browser'
         run: |
@@ -462,8 +443,10 @@ jobs:
               | tee -a build/ci-identity/framework-identity.txt
           done
       - name: Tests requiring an owned UIKit application
-        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview'
+        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui'
         shell: bash
+        env:
+          IDENTITY_PROFILE: ${{ inputs.profile }}
         run: |
           python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
             --output build/ci-identity/simulator.json
@@ -476,14 +459,29 @@ jobs:
             exit 1
           fi
           xcrun simctl bootstatus "$device" -b
-          if [[ "${{ inputs.profile }}" == identity-apple-webview ]]; then
-            python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-webview \
-              --focus ios-webview-content-policy --simulator "$device" --timeout 2700 \
-              --output build/ci-verification/wk-identity
-          else
-            ./gradlew iosSimulatorArm64ApplicationTest -PnativecmpkitSimulatorDevice="$device" \
-              --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
-          fi
+          case "$IDENTITY_PROFILE" in
+            identity-apple-webview)
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-webview \
+                --focus ios-webview-content-policy --simulator "$device" --timeout 2700 \
+                --output build/ci-verification/wk-identity
+              ;;
+            identity-apple-ownership)
+              result=0
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-file-picker \
+                --focus identity-ios-picker-presentation --simulator "$device" --timeout 2400 \
+                --output build/ci-verification/identity-picker || result=1
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-share \
+                --focus identity-ios-share-presentation --simulator "$device" --timeout 2400 \
+                --output build/ci-verification/identity-share || result=1
+              exit "$result"
+              ;;
+            identity-apple-ui|identity-apple-app)
+              task=iosSimulatorArm64ApplicationTest
+              if [[ "$IDENTITY_PROFILE" == identity-apple-ui ]]; then task=":nativecmpkit-ui:$task"; fi
+              ./gradlew "$task" -PnativecmpkitSimulatorDevice="$device" \
+                --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+              ;;
+          esac
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
         shell: cmd
@@ -512,4 +510,6 @@ jobs:
             build/ci-identity/jni-exports.json
             build/ci-identity/framework-identity.txt
             build/ci-verification/wk-identity/receipt.json
+            build/ci-verification/identity-picker/receipt.json
+            build/ci-verification/identity-share/receipt.json
           if-no-files-found: error

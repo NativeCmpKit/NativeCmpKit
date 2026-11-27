@@ -1048,6 +1048,14 @@ UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_ADMISSION_FOCUS] = {
     "scope": "Seven changed UIKit/Compose ownership and complete application-host methods plus two controlled deferred-call/real UIKit-completion regressions. Original26/7 selections, protocol/XML/Worker/runtime/binary/cleanup gates retained. No unchanged19-method Foundation/filter/copy/staging replay, OS-refusal/swipe/provider/physical/minimum/release certification.",
 }
 
+UI_APPLICATION_FOCUS_SPECS["identity-ios-picker-presentation"] = {
+    "module": "nativecmpkit-file-picker",
+    "groups": ({**IOS_DEFERRED_PRESENTATION_GROUP,
+                "methods": ("exceptionAfterQueuedPresentationCannotDeleteStagingBeforeActualNativeCompletion",),
+                "declared_methods": IOS_DEFERRED_PRESENTATION_GROUP["methods"]},),
+    "scope": "One unresolved picker ownership method in its own UIKit application.",
+}
+
 # Missing IO-013/#50 C3 only. Keep all accepted picker/admission/IO selections unchanged.
 IOS_PICKER_PROVIDER_CANCELLATION_FOCUS = "picker-ios-provider-cancellation"
 IOS_PICKER_PROVIDER_CANCELLATION_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.NativePhotoProviderCancellationTest"
@@ -1102,6 +1110,14 @@ UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRESENTATION_FOCUS] = {
 }
 
 IOS_SHARE_APPLICATION_REQUIRED_GROUPS = UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRESENTATION_FOCUS]["groups"]
+
+UI_APPLICATION_FOCUS_SPECS["identity-ios-share-presentation"] = {
+    "module": "nativecmpkit-share",
+    "groups": ({"classname": IOS_SHARE_PRESENTATION_CLASS, "source": IOS_SHARE_PRESENTATION_SOURCE,
+                "methods": ("realAnimatedShareDisposalWaitsForNativePresentationAndDismissalBeforeLeaseRelease",),
+                "declared_methods": IOS_SHARE_PRESENTATION_METHODS},),
+    "scope": "One unresolved Share ownership method in its own UIKit application.",
+}
 
 # Share188 failed FIRST/Main method only; all original thirteen bodies stay authored and enabled.
 IOS_SHARE_REMEMBERED_FAILURE_FOCUS = "share-ios-remembered-failure-observation"
@@ -2442,7 +2458,8 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
                 raise ValueError("Native date declarations changed; review the exact finite application selection")
             if focus in (IOS_MODAL_LIFECYCLE_FOCUS, IOS_MODAL_LIFECYCLE_MEMORY_FOCUS, IOS_MODAL_WORKER_MEMORY_FOCUS, IOS_MODAL_XCUI_FOCUS, IOS_SHEET_REPEAT_FOCUS, IOS_MODAL_COMPLETION_FOCUS, IOS_POPOVER_ANCHOR_FOCUS, IOS_POPOVER_BAR_RECOVERY_FOCUS) and re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source):
                 raise ValueError("New modal lifecycle source must retain all enabled native declarations")
-            if focus in (IOS_SHARE_PRESENTATION_FOCUS, IOS_SHARE_REMEMBERED_FAILURE_FOCUS) and re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source):
+            if focus in (IOS_SHARE_PRESENTATION_FOCUS, IOS_SHARE_REMEMBERED_FAILURE_FOCUS,
+                         "identity-ios-picker-presentation", "identity-ios-share-presentation") and re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source):
                 raise ValueError("New Share application declarations must remain enabled")
             if (focus in UI_DATE_YEAR_NATIVE_FOCUSES or focus == UI_ALERT_RECOVERY_FOCUS) and re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source):
                 raise ValueError("New important alert/year source must retain all enabled native declarations")
