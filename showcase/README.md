@@ -179,6 +179,7 @@ Temporary sessions, logs and failure captures stay out of the canonical tree.
 
 ## Coverage
 
+Current evidence levels and gaps: [evidence/verification-status.md](evidence/verification-status.md).
 The source-audited component/API view is [INVENTORY.md](INVENTORY.md)
 ([public-api.json](public-api.json) is the raw declaration extract). The
 versioned contract is [coverage.json](coverage.json), with a readable
