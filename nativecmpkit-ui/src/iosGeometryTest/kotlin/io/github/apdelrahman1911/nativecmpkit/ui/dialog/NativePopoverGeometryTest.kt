@@ -47,6 +47,7 @@ class NativePopoverGeometryTest {
         var manager: AlertDialogManager? = null
         var primary: Throwable? = null
         var geometryError: NSError? = null // Main-confined; checked by every awaited predicate.
+        var phase = "scene-identity"
         assertTrue(NSProcessInfo.processInfo.operatingSystemVersion.useContents { majorVersion >= 16 })
         val expectedIdiom = NSProcessInfo.processInfo.environment["NATIVECMPKIT_POPOVER_GEOMETRY_IDIOM"] as? String
         assertTrue(expectedIdiom in setOf("iphone", "ipad"))
@@ -83,7 +84,9 @@ class NativePopoverGeometryTest {
                     UIDevice.currentDevice.userInterfaceIdiom)
                 originalOrientation = scene.interfaceOrientation.also { orientationMask(it) }
             }
+            phase = "portrait-request"
             geometry(UIInterfaceOrientationPortrait)
+            phase = "present-in-portrait"
             runOnIdle {
                 assertEquals(if (expectedIdiom == "ipad") UIUserInterfaceSizeClassRegular else UIUserInterfaceSizeClassCompact,
                     parent.traitCollection.horizontalSizeClass)
@@ -99,6 +102,7 @@ class NativePopoverGeometryTest {
                 }
             }
             waitForNative { parent.presentedViewController is UIAlertController }
+            phase = "initial-anchor"
             lateinit var alert: UIAlertController
             lateinit var popover: UIPopoverPresentationController
             runOnIdle {
@@ -110,7 +114,9 @@ class NativePopoverGeometryTest {
             }
             if (rotateWhilePresented) {
                 // Genuine WindowScene geometry input; no manager/property/delegate update after rotation.
+                phase = "landscape-request"
                 geometry(UIInterfaceOrientationLandscapeLeft)
+                phase = "landscape-anchor"
                 waitForNative {
                     sameNativeObject(alert, parent.presentedViewController) && sameNativeObject(source, popover.sourceView) &&
                         sameRect(checkNotNull(source).bounds, popover.sourceRect)
@@ -120,12 +126,15 @@ class NativePopoverGeometryTest {
                     assertTrue(sameNativeObject(alert, parent.presentedViewController))
                     assertTrue(sameNativeObject(source, popover.sourceView))
                     assertSameRect(checkNotNull(source).bounds, popover.sourceRect)
+                    phase = "fallback-set"
                     manager!!.popoverAnchor = AlertDialogIosPopoverAnchor.ViewRect(null)
                     manager!!.updateDialogProperties() // Change requested anchor only BEFORE the next OS event.
                     assertTrue(sameNativeObject(parent.view, popover.sourceView))
                     assertEquals(0uL, popover.permittedArrowDirections)
                 }
+                phase = "return-portrait-request"
                 geometry(UIInterfaceOrientationPortrait)
+                phase = "fallback-anchor"
                 waitForNative {
                     sameNativeObject(alert, parent.presentedViewController) && sameNativeObject(parent.view, popover.sourceView) &&
                         isFallbackCenter(parent.view.bounds, popover.sourceRect)
@@ -138,8 +147,9 @@ class NativePopoverGeometryTest {
                 }
             }
         } catch (failure: Throwable) {
-            primary = failure
-            throw failure
+            val marked = if (rotateWhilePresented) IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:$phase", failure) else failure
+            primary = marked
+            throw marked
         } finally {
             var cleanupFailure: Throwable? = null
             fun cleanup(action: () -> Unit) {
@@ -151,7 +161,10 @@ class NativePopoverGeometryTest {
             cleanup { runOnIdle { manager?.dispose(); source?.removeFromSuperview() } }
             cleanup { waitForNative { parent.presentedViewController == null } }
             if (attemptedGeometry) cleanup { geometry(checkNotNull(originalOrientation)) }
-            cleanupFailure?.let { throw it }
+            cleanupFailure?.let {
+                if (rotateWhilePresented) throw IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:cleanup", it)
+                throw it
+            }
         }
     }
 

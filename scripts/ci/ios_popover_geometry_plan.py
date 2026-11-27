@@ -24,7 +24,7 @@ INIT_SCRIPT = "scripts/ci/ios_popover_geometry_compile.init.gradle.kts"
 SOURCE = "scripts/ci/ios_popover_geometry_plan.py"
 SOURCES = (NATIVE, HOST, IDENTITY, SCENE)
 SOURCE_SHA256 = {
-    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "5baf9f6b31e7bebd6b5823f81a0fdb29416d95cbc4d8043cecde76b3284da58f",
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "e053317b8f7d392f2e40ffafeecce2864136f6d7bfcf8037b972c607c3e33241",
     "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt": "2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698",
     "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt": "262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8",
     "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt": "5f96c3aaf035f4f82a9b8f93c019e92709f3a189eb7188d9f31d9a94ad8ed53a",

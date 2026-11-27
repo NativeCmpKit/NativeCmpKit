@@ -284,24 +284,21 @@ class PopoverGeometryControls(unittest.TestCase):
 
     def test_current_source_validation_refuses_drift_or_symlink(self):
         import ios_popover_geometry_plan as plan
-        import ios_popover_geometry_source_projection as geometry
-        spec = json.loads(geometry.SPEC_PATH.read_bytes())
-        paths = set(spec["bindings"]) | set(spec["added_inputs"])
-        owning = owned_history._document()
-        paths |= set(owning["bindings"]) | set(owning["added_inputs"])
-        import ios_owned_geometry_fixture_recovery as fixture_recovery
-        newest = fixture_recovery._document()
-        paths |= set(newest["bindings"]) | set(newest["added_inputs"])
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            for name in paths:
-                target = root / name; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes((ROOT / name).read_bytes())
-            self.assertTrue(geometry.validate_current_sources(root))
+            for name in plan.SOURCE_SHA256:
+                target = root / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes((ROOT / name).read_bytes())
+            self.assertTrue(plan.validate_sources(root))
             source = root / plan.SCENE
-            original = source.read_bytes(); source.write_bytes(original + b"\n")
-            with self.assertRaises(ValueError): geometry.validate_current_sources(root)
-            source.unlink(); source.symlink_to(ROOT / plan.SCENE)
-            with self.assertRaises(ValueError): geometry.validate_current_sources(root)
+            source.write_bytes(source.read_bytes() + b"\n")
+            with self.assertRaises(ValueError):
+                plan.validate_sources(root)
+            source.unlink()
+            source.symlink_to(ROOT / plan.SCENE)
+            with self.assertRaises(ValueError):
+                plan.validate_sources(root)
 
     def test_ancestor_projection_reuses_old_pins_without_replaying_native(self):
         import ios_popover_geometry_source_projection as geometry

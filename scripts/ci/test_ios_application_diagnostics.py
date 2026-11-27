@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import patch
 
 import ios_ui_application as a
-from summarize_identity_uikit import android_assembly_summaries, android_receipt_failures, pre26_sample_summary
+from summarize_identity_uikit import android_assembly_summaries, android_receipt_failures, failure_rows, pre26_sample_summary
 import test_ios_ui_application as f
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
@@ -39,6 +39,21 @@ def begun():
 
 
 class AssemblyDiagnosticsTests(unittest.TestCase):
+    def test_ipad_rotation_retains_only_known_phases_from_its_failure(self):
+        raw = b"""<testsuite><testcase name="nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation[iosSimulatorArm64]">
+          <failure message="NATIVECMPKIT_IPAD_ROTATION:landscape-request">
+            private diagnostic Owned public OS geometry request failed: code=42
+            NATIVECMPKIT_IPAD_ROTATION:landscape-anchor-foreign
+          </failure></testcase><testcase name="foreign"><failure message="NATIVECMPKIT_IPAD_ROTATION:cleanup"/></testcase></testsuite>"""
+        with tempfile.TemporaryDirectory() as output:
+            path = Path(output) / "TEST-fixture.xml"
+            path.write_bytes(raw)
+            rotation, foreign = failure_rows("nativecmpkit-ui", path, hashlib.sha256(raw).hexdigest())
+            self.assertEqual(["landscape-request"], rotation["ipad_rotation_phases"])
+            self.assertTrue(rotation["ipad_geometry_request_refused"])
+            self.assertNotIn("ipad_rotation_phases", foreign)
+            self.assertNotIn("private diagnostic", str(rotation))
+
     def test_remote_io_failed_junit_keeps_only_known_categories_and_source_frames(self):
         original = b"""<testsuite><testcase name="cancelOwnedOpen"><failure message="private-data awaiting cancellation socket/native producer terminal">java.lang.AssertionError
  at owned.NativeTests.cancel(AndroidIoRemoteDocumentsTest.kt:123)

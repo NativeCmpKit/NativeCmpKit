@@ -10,6 +10,7 @@ from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
+from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
 from ios_ui_application import (
     CAMERA_DISPOSAL_PHASES, PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
     PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
@@ -24,6 +25,10 @@ TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,90}\Z")
 FRAME = re.compile(r"\b([A-Za-z0-9_]+\.(?:kt|java)):(\d{1,5})\b")
 RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
 RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
+IPAD_ROTATION_PHASE = re.compile(
+    r"\bNATIVECMPKIT_IPAD_ROTATION:(scene-identity|portrait-request|present-in-portrait|initial-anchor|"
+    r"landscape-request|landscape-anchor|fallback-set|return-portrait-request|fallback-anchor|cleanup)(?![A-Za-z0-9_-])"
+)
 ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
 ANDROID_REMOTE_IO_FAILURE_MARKERS = {
     "held-open-admission": "genuine HTTP held pending-open admission",
@@ -181,6 +186,9 @@ def failure_rows(module, path, expected_digest=None):
                 diagnostics["camera_disposal_failure_categories"] = [
                     key for key, marker in CAMERA_DISPOSAL_FAILURE_MARKERS.items() if marker in failure_text
                 ]
+            if module == "nativecmpkit-ui" and name == POPOVER_GEOMETRY_METHODS[1]:
+                diagnostics["ipad_rotation_phases"] = list(dict.fromkeys(IPAD_ROTATION_PHASE.findall(failure_text)))[:2]
+                diagnostics["ipad_geometry_request_refused"] = "Owned public OS geometry request failed:" in failure_text
             yield {
                 "module": module, "case": name, "status": failed.tag,
                 "original_xml_sha256": digest,

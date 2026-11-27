@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -694,7 +694,9 @@ jobs:
         run: |
           simulator_args=()
           simulator_kind=iphone
-          if [[ "$IDENTITY_PROFILE" == identity-apple-ui-ipad-popover ]]; then simulator_kind=ipad; fi
+          if [[ "$IDENTITY_PROFILE" == identity-apple-ui-ipad-popover || "$IDENTITY_PROFILE" == identity-apple-ui-ipad-rotation ]]; then
+            simulator_kind=ipad
+          fi
           if [[ "$IDENTITY_PROFILE" == identity-apple-ui-pre26 || "$IDENTITY_PROFILE" == identity-apple-ui-pre26-diagnostic ]]; then
             simulator_args+=(--adaptive-focus ui-native-adaptive-pre26)
           fi
@@ -773,14 +775,22 @@ jobs:
                 --focus identity-ios-default-action-sheet --simulator "$device" --timeout 2400 \
                 --output build/ci-verification/identity-ui-action-sheet
               ;;
-            identity-apple-ui-ipad-popover)
+            identity-apple-ui-ipad-popover|identity-apple-ui-ipad-rotation)
               result=0
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
                 --focus ui-native-popover-os-rotation --simulator "$device" --timeout 2400 \
                 --output build/ci-verification/identity-ui-ipad-rotation || result=1
-              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
-                --focus identity-ios-default-action-sheet --simulator "$device" --timeout 2400 \
-                --output build/ci-verification/identity-ui-action-sheet || result=1
+              if [[ "$IDENTITY_PROFILE" == identity-apple-ui-ipad-popover ]]; then
+                # The next focus reuses the same Gradle task and replaces its JUnit XML.
+                if python3 scripts/ci/summarize_identity_uikit.py; then
+                  mv build/ci-identity/uikit-diagnostics.json build/ci-identity/uikit-ipad-rotation-diagnostics.json
+                else
+                  result=1
+                fi
+                python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
+                  --focus identity-ios-default-action-sheet --simulator "$device" --timeout 2400 \
+                  --output build/ci-verification/identity-ui-action-sheet || result=1
+              fi
               exit "$result"
               ;;
             identity-apple-ui-pre26-diagnostic)
@@ -846,6 +856,7 @@ jobs:
             build/ci-identity/jvm-api.json
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
+            build/ci-identity/uikit-ipad-rotation-diagnostics.json
             build/ci-identity/android-webview-diagnostics.json
             build/ci-identity/android-ownership-diagnostics.json
             build/ci-identity/consumer/
