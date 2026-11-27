@@ -111,6 +111,19 @@ def click_switch(ui):
     raise AssertionError("no switch-like element exposed")
 
 
+def drag_from_text(ui, text, dy=300):
+    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
+    if not observation.get("satisfied") or not observation.get("nodes"):
+        raise AssertionError(f"no node for {text!r}")
+    node = observation["nodes"][0]
+    bounds = node.get("bounds")
+    if not bounds:
+        raise AssertionError(f"no bounds for {text!r}")
+    x = bounds["x"] + bounds["width"] // 2
+    y = bounds["y"] + bounds["height"] // 2
+    ui.action("pointer.drag", {"x": x, "y": y, "end_x": x, "end_y": y + dy, "duration_ms": 500})
+
+
 def click_switch_near(ui, label):
     observation = tour.soft_find(ui, {"text": label}, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
@@ -238,8 +251,7 @@ FLOWS = [
         assert_text(ui, "Allow swipe to hide"),
         click_switch_near(ui, "Allow swipe to hide"),
         (lambda: (ui.action("keyboard.press", {"keys": ["BACK"]}) if p == "android"
-                  else ui.action("pointer.drag", {"x": 540, "y": 1200, "end_x": 540, "end_y": 2300,
-                                                  "duration_ms": 500})))(),
+                  else drag_from_text(ui, "Allow swipe to hide")))(),
         assert_text(ui, "Allow swipe to hide"),
         click_switch_near(ui, "Allow swipe to hide"),
         tour.click_text(ui, "Close"),
