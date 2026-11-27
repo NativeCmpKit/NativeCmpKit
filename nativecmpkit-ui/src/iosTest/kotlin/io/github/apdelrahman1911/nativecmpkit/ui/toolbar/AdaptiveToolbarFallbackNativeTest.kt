@@ -36,11 +36,16 @@ class AdaptiveToolbarFallbackNativeTest {
 
     private fun fallback(branch: AdaptiveControlBranch, includePopulatedItems: Boolean) {
         requireAdaptiveControlHost(branch)
+        fun trace(phase: String) {
+            if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_TOOLBAR_PHASE $phase")
+        }
+        trace("compose-enter")
         runAdaptiveControlUiTest {
             val expanded = mutableStateOf(true)
             val revision = mutableStateOf(0)
             val items = mutableStateOf(emptyList<UIKitUIBarButtonItem>())
             var mainCompositions = 0; var leadingCompositions = 0; var trailingCompositions = 0
+            trace("set-content-enter")
             setContent {
                 MaterialTheme {
                     Column {
@@ -59,6 +64,7 @@ class AdaptiveToolbarFallbackNativeTest {
                     }
                 }
             }
+            trace("set-content-returned")
             for (populated in if (includePopulatedItems) listOf(false, true) else listOf(false)) {
                 runOnIdle {
                     items.value = if (populated) listOf(UIKitUIBarButtonItem.title("Native fixture item")) else emptyList()
@@ -66,7 +72,9 @@ class AdaptiveToolbarFallbackNativeTest {
                     revision.value++
                 }
                 waitForIdle()
+                if (!populated) trace("first-idle")
                 onNodeWithTag("toolbar").assertWidthIsEqualTo(268.dp)
+                if (!populated) trace("first-width-verified")
                 onNodeWithTag("main").assertIsDisplayed().assertTextEquals("Main ${revision.value}")
                 onNodeWithTag("leading").assertIsDisplayed().assertTextEquals("Leading ${revision.value}")
                 onNodeWithTag("trailing").assertIsDisplayed().assertTextEquals("Trailing ${revision.value}")

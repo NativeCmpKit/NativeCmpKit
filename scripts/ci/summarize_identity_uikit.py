@@ -10,7 +10,10 @@ from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
-from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, PRE26_NEGATIVE_STEPS_PHASES, PRE26_STACK_MARKERS, WK_RESTORE_STEPS
+from ios_ui_application import (
+    PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
+    PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
+)
 
 
 MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share", "nativecmpkit-camera-picker")
@@ -131,13 +134,15 @@ def receipt_rows():
                                             if step in WK_RESTORE_STEPS],
                     "pre26_customization_progress": [
                         step for step in protocol.get("pre26_customization_progress", [])[:len(PRE26_CUSTOMIZATION_PHASES)]
-                        if step in PRE26_CUSTOMIZATION_PHASES
+                        if step in PRE26_CUSTOMIZATION_PHASES or step == PRE26_MISSING_THUMB_PIXELS
                     ],
                     "pre26_customization_host_confirmed": protocol.get("pre26_customization_host_confirmed") is True,
                     "pre26_negative_steps_progress": [
                         step for step in protocol.get("pre26_negative_steps_progress", [])[:len(PRE26_NEGATIVE_STEPS_PHASES)]
                         if step in PRE26_NEGATIVE_STEPS_PHASES
                     ],
+                    "pre26_toolbar_progress": [step for step in protocol.get("pre26_toolbar_progress", [])[:len(PRE26_TOOLBAR_PHASES)]
+                                               if step in PRE26_TOOLBAR_PHASES],
                     **({"camera_photos": camera_photo_summary(data, protocol)}
                        if host == "native-camera-application" else {}),
                     "crash": labels(crash, ("status", "error_type")) | labels(crash.get("exception") or {}, ("type", "signal")),

@@ -209,6 +209,7 @@ PRE26_CUSTOMIZATION_PHASES = (
     "slider-drag-enter", "slider-drag-returned", "disabled-captures-enter", "disabled-captures-returned",
     "disabled-input-enter", "disabled-input-returned", "compose-returned",
 )
+PRE26_MISSING_THUMB_PIXELS = "enabled-thumb-pixels-missing"
 PRE26_NEGATIVE_STEPS_CASE = (
     "io.github.apdelrahman1911.nativecmpkit.ui.slider.AdaptiveSliderNativeMatrixTest",
     "pre26PublicNegativeStepsAreRejected",
@@ -217,10 +218,13 @@ PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
 PRE26_NEGATIVE_STEPS_PHASES = (
     "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned", "public-validation-verified",
 )
-PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, (
+PRE26_TOOLBAR_CASE = (
     "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest",
     "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
-))
+)
+PRE26_TOOLBAR_PREFIX = "NATIVECMPKIT_ADAPTIVE_TOOLBAR_PHASE "
+PRE26_TOOLBAR_PHASES = ("compose-enter", "set-content-enter", "set-content-returned", "first-idle", "first-width-verified")
+PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, PRE26_TOOLBAR_CASE)
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
@@ -357,6 +361,7 @@ class NativeProtocol:
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
+        self.pre26_toolbar_progress = []
         self.pre26_native_pid = None
         self.pre26_native_pid_conflict = False
         self.worker_lifecycle_observations = []
@@ -384,6 +389,9 @@ class NativeProtocol:
             return
         if line.startswith(PRE26_NEGATIVE_STEPS_PREFIX):
             self.observe_pre26_negative_steps(line)
+            return
+        if line.startswith(PRE26_TOOLBAR_PREFIX):
+            self.observe_pre26_toolbar(line)
             return
         if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
             self.observe_pre26_process(line)
@@ -778,6 +786,7 @@ class NativeProtocol:
             if self.open_case in PRE26_STALL_CASES and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_pre26_process(output_line)
+                    self.observe_pre26_toolbar(output_line)
             if self.open_case == PRE26_CUSTOMIZATION_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_pre26_customization(output_line)
@@ -806,8 +815,10 @@ class NativeProtocol:
             return
         index = len(self.pre26_customization_progress)
         phase = line.removeprefix(PRE26_CUSTOMIZATION_PREFIX)
-        if index < len(PRE26_CUSTOMIZATION_PHASES) and phase == PRE26_CUSTOMIZATION_PHASES[index]:
-            self.pre26_customization_progress.append(phase)
+        if index < len(PRE26_CUSTOMIZATION_PHASES) and PRE26_MISSING_THUMB_PIXELS not in self.pre26_customization_progress:
+            expected = PRE26_CUSTOMIZATION_PHASES[index]
+            if phase == expected or (expected == "enabled-thumb-pixels-verified" and phase == PRE26_MISSING_THUMB_PIXELS):
+                self.pre26_customization_progress.append(phase)
 
     def observe_pre26_negative_steps(self, line: str) -> None:
         if self.open_case != PRE26_NEGATIVE_STEPS_CASE or not line.startswith(PRE26_NEGATIVE_STEPS_PREFIX):
@@ -818,6 +829,14 @@ class NativeProtocol:
             progress.append(phase)
         elif len(progress) < len(PRE26_NEGATIVE_STEPS_PHASES) and phase == PRE26_NEGATIVE_STEPS_PHASES[len(progress)]:
             progress.append(phase)
+
+    def observe_pre26_toolbar(self, line: str) -> None:
+        if self.open_case != PRE26_TOOLBAR_CASE or not line.startswith(PRE26_TOOLBAR_PREFIX):
+            return
+        phase = line.removeprefix(PRE26_TOOLBAR_PREFIX)
+        index = len(self.pre26_toolbar_progress)
+        if index < len(PRE26_TOOLBAR_PHASES) and phase == PRE26_TOOLBAR_PHASES[index]:
+            self.pre26_toolbar_progress.append(phase)
 
     def _request_image_profile_if_ready(self) -> None:
         if (self.active is not None and self.completed is None and self.open_case == IMAGE_PROFILE_CASE and
@@ -851,6 +870,7 @@ class NativeProtocol:
                 **({"pre26_customization_host_confirmed": True} if self.pre26_customization_host_confirmed else {}),
                 **({"pre26_negative_steps_progress": self.pre26_negative_steps_progress}
                    if self.pre26_negative_steps_progress else {}),
+                **({"pre26_toolbar_progress": self.pre26_toolbar_progress} if self.pre26_toolbar_progress else {}),
                 **({"worker_lifecycle_observations": self.worker_lifecycle_observations}
                    if self.worker_lifecycle_observations else {}),
                 **({"image_profile_observations": self.image_profile_observations}

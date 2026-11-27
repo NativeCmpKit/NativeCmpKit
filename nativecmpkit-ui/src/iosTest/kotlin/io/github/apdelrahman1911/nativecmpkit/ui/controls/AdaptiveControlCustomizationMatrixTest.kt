@@ -266,11 +266,13 @@ class AdaptiveControlCustomizationMatrixTest {
             trace("enabled-thumb-snapshot-returned")
             val pixels = screenshot.toPixelMap()
             trace("enabled-thumb-pixel-map-returned")
-            assertTrue((0 until pixels.width).any { x -> (0 until pixels.height).any { y ->
+            val matchingPixel = (0 until pixels.width).any { x -> (0 until pixels.height).any { y ->
                 val actual = pixels[x, y]
                 abs(actual.red - expected.red) < .1f && abs(actual.green - expected.green) < .1f &&
                     abs(actual.blue - expected.blue) < .1f && actual.alpha > .9f
-            } }, "The actual custom thumb glyph must draw $expected")
+            } }
+            if (!matchingPixel) trace("enabled-thumb-pixels-missing")
+            assertTrue(matchingPixel, "The actual custom thumb glyph must draw $expected")
             trace("enabled-thumb-pixels-verified")
         } finally {
             screenshot.asSkiaBitmap().close()

@@ -158,6 +158,26 @@ class PartialProtocolTests(unittest.TestCase):
         self.assertTrue(report["pre26_customization_host_confirmed"])
         self.assertEqual(method, report["unfinished_testcase"]["name"])
         self.assertEqual(0, report["counts"]["passed"])
+        until_predicate = a.PRE26_CUSTOMIZATION_PHASES.index("enabled-thumb-pixels-verified")
+        for phase in a.PRE26_CUSTOMIZATION_PHASES[2:until_predicate]:
+            protocol.feed(prefix + phase)
+        protocol.feed(prefix + a.PRE26_MISSING_THUMB_PIXELS)
+        protocol.feed(prefix + "enabled-captures-returned")
+        self.assertEqual([*a.PRE26_CUSTOMIZATION_PHASES[:until_predicate], a.PRE26_MISSING_THUMB_PIXELS],
+                         protocol.partial()["pre26_customization_progress"])
+
+    def test_pre26_toolbar_phases_require_the_named_open_case_and_original_order(self):
+        protocol = a.NativeProtocol()
+        suite, method = a.PRE26_TOOLBAR_CASE
+        prefix = a.PRE26_TOOLBAR_PREFIX
+        for line in (f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
+            protocol.feed(line)
+        protocol.feed(prefix + "first-idle")
+        for phase in a.PRE26_TOOLBAR_PHASES[:3]:
+            protocol.feed(f.frame("testStdOut", name=method, out=prefix + phase))
+        protocol.feed(f.frame("testStdOut", name="foreign", out=prefix + "first-idle"))
+        self.assertEqual(list(a.PRE26_TOOLBAR_PHASES[:3]), protocol.partial()["pre26_toolbar_progress"])
+        self.assertEqual(0, protocol.partial()["counts"]["passed"])
 
     def test_a_started_case_is_running_not_passing_before_actual_finish(self):
         protocol = begun()
