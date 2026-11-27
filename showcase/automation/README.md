@@ -64,7 +64,7 @@ python3 showcase/automation/functional.py \
   --platform android --output-root screenshots
 ```
 
-It writes `screenshots/<platform>/functional.json` with `passed`, `failed` and
+It writes `screenshots/<platform>/functional-<device>.json` with `passed`, `failed` and
 `blocked` entries and before/after PNGs under `screenshots/<platform>/functional/`.
 
 ## Notes

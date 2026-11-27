@@ -120,7 +120,7 @@ python3 showcase/automation/functional.py \
 The driver asserts observable state (counter, switch, slider, menu selection,
 dialog dismissal, sheet dismissal, top-bar/toolbar action, tab content, icon
 filter, WebView title/JS/cookie/error, Geo values, Liquid Glass click) and records
-`passed`, `failed`, or `blocked` in `screenshots/<platform>/functional.json`.
+`passed`, `failed`, or `blocked` in `screenshots/<platform>/functional-<device>.json`.
 It seeds a synthetic text and image fixture for picker discovery; driving the
 system file/photo picker remains explicitly blocked until a deterministic
 selection path is added.

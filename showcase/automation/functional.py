@@ -38,6 +38,16 @@ def text_value(ui, needle: str) -> str:
     raise AssertionError(f"no text containing {needle!r}")
 
 
+def click_any(ui, labels):
+    for label in labels:
+        try:
+            tour.click_text(ui, label)
+            return
+        except Exception:
+            continue
+    raise AssertionError(f"none of {labels!r} were clickable")
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -122,9 +132,9 @@ FLOWS = [
     ("action-sheet", "Adaptive Alert Dialog", lambda ui, p: (
         tour.click_text(ui, "Show ActionSheet"),
         assert_text(ui, "Alert Dialog"),
-        assert_text(ui, "Cancel"),
-        tour.click_text(ui, "Cancel"),
-        assert_absent(ui, "This is a native alert dialog from Kira"),
+        (assert_text(ui, "Cancel"), tour.click_text(ui, "Cancel"),
+         assert_absent(ui, "This is a native alert dialog from Kira")) if p == "ios"
+        else (assert_text(ui, "Confirm"), tour.click_text(ui, "Confirm")),
     )),
     ("permissions-sms-rows", "Permissions", lambda ui, p: (
         assert_text(ui, "ReadSms"),
@@ -136,7 +146,8 @@ FLOWS = [
     )),
     ("permissions-bulk-deny", "Permissions", lambda ui, p: (
         tour.click_text(ui, "Request permissions"),
-        (tour.click_text(ui, "Don't allow") if p == "android" else tour.click_text(ui, "Don’t Allow")),
+        (click_any(ui, ["Don't allow", "Don’t allow", "Deny"]) if p == "android"
+         else click_any(ui, ["Don’t Allow", "Don't Allow", "Don’t allow"])),
         assert_text(ui, "All permissions granted: false"),
     )),
     ("sheet", "Adaptive Bottom Sheet", lambda ui, p: (
@@ -206,9 +217,11 @@ def main() -> None:
     parser.add_argument("--token-file", type=Path, required=True)
     parser.add_argument("--platform", choices=("android", "ios"), required=True)
     parser.add_argument("--output-root", type=Path, default=Path("screenshots"))
+    parser.add_argument("--device", default="")
     parser.add_argument("--only", default="")
     args = parser.parse_args()
 
+    device = args.device or ("api35-phone" if args.platform == "android" else "iphone-simulator")
     LiveUI = tour.load_client(args.client_dir)
     ui = LiveUI.open(args.connection, args.token_file)
     identity = ui.identify()
@@ -223,7 +236,7 @@ def main() -> None:
     def save(flow: str, phase: str, png: bytes):
         directory = args.output_root / args.platform / "functional" / flow
         directory.mkdir(parents=True, exist_ok=True)
-        path = directory / f"{phase}.png"
+        path = directory / f"{device}-{phase}.png"
         path.write_bytes(png)
         return path.as_posix()
 
@@ -261,7 +274,7 @@ def main() -> None:
     failed = sum(1 for item in result["flows"] if item["status"] == "failed")
     blocked = sum(1 for item in result["flows"] if item["status"] == "blocked")
     result["summary"] = {"passed": passed, "failed": failed, "blocked": blocked}
-    out = args.output_root / args.platform / "functional.json"
+    out = args.output_root / args.platform / f"functional-{device}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result["summary"]))
