@@ -256,7 +256,7 @@ independent trust.
 
 ## JavaFX: explicit application runtime, not publisher-host metadata
 
-`calf-webview` compiles against six aligned JavaFX **21.0.13** modules using
+`nativecmpkit-webview` compiles against six aligned JavaFX **21.0.13** modules using
 `compileOnly`. Its published metadata must not select the producer's OS. Desktop
 applications explicitly supply `base`, `graphics`, `controls`, `media`, `web` and
 `swing` for **their** host. Source samples use `desktop.javafx` and WebView tests
@@ -272,9 +272,9 @@ declare their runtime explicitly. There is no silent unsupported-host fallback.
 
 These are the **required verification slots**, not a claim they have all passed.
 Windows arm64 has no verified builder/JNI candidate and is explicitly unsupported.
-Public package/class signatures are retained; removal of accidental transitive
-JavaFX runtime selection is an intentional dependency migration documented for
-consumers. Both POM-only and Gradle-metadata consumers must be checked.
+The JavaFX dependency change removed accidental transitive runtime selection.
+The NativeCmpKit namespace migration separately renamed public packages. Both
+POM-only and Gradle-metadata consumers must be checked.
 
 Read-only Maven queries found all 30 classifier artifacts, and sampled JavaFX
 base/module-info classfiles use Java 17 bytecode (major 61). Exact-version OSV
@@ -485,7 +485,7 @@ compiled libraries, a full passing KMP graph or a runtime test.
 
 ### Observed dependency variants and local payloads
 
-All observed publications use group `io.github.apdelrahman1911.nativecmpkit` and
+The archived 001–003 publications use group `io.github.apdelrahman1911.nativecmpkit` and
 version `0.1.0-SNAPSHOT`. Target POM artifact IDs/file URLs use `nativecmpkit-*`;
 local archive names retain `calf-*`. All three target `.module` component links
 point back to `nativecmpkit-io`'s **unavailable root `.module`**. Class/linkdata and

@@ -62,7 +62,7 @@ serially. Do not run on Linux and relabel that outcome as AppKit evidence.
 ```sh
 NATIVECMPKIT_NATIVE_UI_TESTS=true CARGO_BUILD_JOBS=2 \
   cargo test --locked --features appkit-lifecycle-tests \
-  --test appkit_lifecycle --manifest-path calf-share/native/Cargo.toml
+  --test appkit_lifecycle --manifest-path nativecmpkit-share/native/Cargo.toml
 ```
 
 Wrap the actual process with the lead's bounded process controller/outer timeout.
@@ -76,7 +76,7 @@ original failure and changing/qualifying its cause:
 ```sh
 NATIVECMPKIT_NATIVE_UI_TESTS=true CARGO_BUILD_JOBS=2 \
   cargo test --locked --features appkit-lifecycle-tests \
-  --test appkit_lifecycle --manifest-path calf-share/native/Cargo.toml \
+  --test appkit_lifecycle --manifest-path nativecmpkit-share/native/Cargo.toml \
   -- --case=controlled_picker_dismissal
 ```
 
@@ -85,13 +85,13 @@ Fresh reports are written to
 The per-process directory must be exclusively created; existing output is refused.
 Archive raw process exit/log and XML ONCE, hash actual executable/source inputs,
 and require exactly the requested class
-`com.mohamedrejeb.calf.share.native.AppKitLifecycle` / case identities and actual
+`io.github.apdelrahman1911.nativecmpkit.share.native.AppKitLifecycle` / case identities and actual
 cleanup witnesses. XML is not a substitute for executable/runtime custody. Report
 absence on an earlier preflight failure is missing evidence, not successful tests.
 
 ## Actual default Kotlin owner / JNI / AppKit batch (three new methods)
 
-Class: `com.mohamedrejeb.calf.share.MacOsShareCoroutineLifecycleTest`.
+Class: `io.github.apdelrahman1911.nativecmpkit.share.MacOsShareCoroutineLifecycleTest`.
 No native-operation stub, virtual scheduler, sample application, clipboard write
 or external recipient is used. Each fixture owns an actual JFrame, single-thread
 coroutine executor, scope and default `DesktopShareOwner` operation.
@@ -111,8 +111,8 @@ coroutine executor, scope and default `DesktopShareOwner` operation.
 NATIVECMPKIT_NATIVE_UI_TESTS=true ./gradlew --no-daemon --max-workers=2 \
   --no-parallel --no-configuration-cache \
   --init-script scripts/ci/daemon-jvm.init.gradle.kts \
-  :calf-share:desktopTest \
-  --tests 'com.mohamedrejeb.calf.share.MacOsShareCoroutineLifecycleTest.*'
+  :nativecmpkit-share:desktopTest \
+  --tests 'io.github.apdelrahman1911.nativecmpkit.share.MacOsShareCoroutineLifecycleTest.*'
 ```
 
 This **runtime** command must use the real generated/bundled JNI native library;

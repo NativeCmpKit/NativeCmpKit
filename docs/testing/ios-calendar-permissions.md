@@ -35,9 +35,9 @@ iOS production/test KLIB compiler. Do not use `--rerun` on prior accepted suites
   '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' \
   -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m \
   --init-script scripts/ci/fresh-tests.init.gradle.kts \
-  :calf-permissions:calf-permissions-calendar:desktopTest \
-  --tests com.mohamedrejeb.calf.permissions.helper.CalendarConfigurationTest \
-  :calf-permissions:calf-permissions-calendar:compileTestKotlinIosSimulatorArm64
+  :nativecmpkit-permissions:nativecmpkit-permissions-calendar:desktopTest \
+  --tests io.github.apdelrahman1911.nativecmpkit.permissions.helper.CalendarConfigurationTest \
+  :nativecmpkit-permissions:nativecmpkit-permissions-calendar:compileTestKotlinIosSimulatorArm64
 python3 -m unittest discover -s scripts/ci -p test_ios_calendar_configuration.py -v
 ```
 
@@ -47,11 +47,11 @@ The eight Python controls check source contracts only, not EventKit behavior.
 ## Finite native selector proposal
 
 The lead owns workflow/registry integration. Register one exact iPhone iOS job
-with **only `calf-permissions/calendar`**, using task
-`:calf-permissions:calf-permissions-calendar:iosSimulatorArm64Test` and filter:
+with **only `nativecmpkit-permissions/calendar`**, using task
+`:nativecmpkit-permissions:nativecmpkit-permissions-calendar:iosSimulatorArm64Test` and filter:
 
 ```text
---tests com.mohamedrejeb.calf.permissions.helper.NativeCalendarConfigurationTest
+--tests io.github.apdelrahman1911.nativecmpkit.permissions.helper.NativeCalendarConfigurationTest
 ```
 
 Require all **five** methods below, each reported exactly once by genuine KGP

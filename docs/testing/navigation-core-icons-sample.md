@@ -182,7 +182,7 @@ Extend the real `runComposeUiTest` tests with:
 Example **future** focused command after toolchain/disk prerequisites are met:
 
 ```sh
-xvfb-run -a ./gradlew :calf-navigation:desktopTest \
+xvfb-run -a ./gradlew :nativecmpkit-navigation:desktopTest \
   --no-daemon --max-workers=2 --no-configuration-cache
 ```
 

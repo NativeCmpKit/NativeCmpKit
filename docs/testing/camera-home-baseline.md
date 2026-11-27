@@ -44,9 +44,8 @@ data or replace native JUnit results. Existing sample applications are not used.
 For a **changed relevant input** needing verification, the common regression is:
 
 ```sh
-JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 ./gradlew \
-  :calf-camera-picker:desktopTest \
-  --tests com.mohamedrejeb.calf.camerapicker.SettingsHomeTaskBaselineTest \
+./gradlew :nativecmpkit-camera-picker:desktopTest \
+  --tests io.github.apdelrahman1911.nativecmpkit.camerapicker.SettingsHomeTaskBaselineTest \
   --offline --max-workers=2 --no-configuration-cache \
   -Pkotlin.compiler.execution.strategy=in-process
 ```
@@ -59,7 +58,7 @@ Subtest failure records are not additional executed methods. Preserve red
 results and rerun only failed/meaningfully affected selections.
 
 A changed Android caller needs one serial bounded
-`:calf-camera-picker:assembleAndroidDeviceTest`, retaining8 GiB free disk. Require
+`:nativecmpkit-camera-picker:assembleAndroidDeviceTest`, retaining8 GiB free disk. Require
 the actual task/compiler exit, exact held sources and fresh APK identity. APK
 compilation/signing is not a device test or distributable publication. Reuse
 accepted common/XML/compiler results only on unchanged applicable inputs; never

@@ -1,4 +1,4 @@
-# calf-ui testing, evidence and regression plan
+# NativeCmpKit UI testing, baseline evidence and regression plan
 
 **Source under audit:** `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`.
 See [module execution flows](../modules/ui.md), [findings](../audit/findings/UI.json),
@@ -115,17 +115,17 @@ Use the resource guard in the global testing guide. No command below publishes.
 ```sh
 # Real existing UI tests on desktop; Linux typically needs a display/Xvfb.
 xvfb-run -a ./gradlew --no-daemon --max-workers=2 \
-  -Pkotlin.compiler.execution.strategy=in-process :calf-ui:desktopTest
+  -Pkotlin.compiler.execution.strategy=in-process :nativecmpkit-ui:desktopTest
 
 # AGP KMP Android host unit tests and compilation (not on-device UI tests).
-./gradlew :calf-ui:testAndroidHostTest :calf-ui:compileAndroidMain
+./gradlew :nativecmpkit-ui:testAndroidHostTest :nativecmpkit-ui:compileAndroidMain
 
 # Browser source compilation and common algorithm tests.
-./gradlew :calf-ui:compileKotlinJs :calf-ui:compileKotlinWasmJs \
-  :calf-ui:jsBrowserTest :calf-ui:wasmJsBrowserTest
+./gradlew :nativecmpkit-ui:compileKotlinJs :nativecmpkit-ui:compileKotlinWasmJs \
+  :nativecmpkit-ui:jsBrowserTest :nativecmpkit-ui:wasmJsBrowserTest
 
 # On a compatible macOS/Xcode Arm64 simulator host only.
-./gradlew :calf-ui:iosSimulatorArm64Test
+./gradlew :nativecmpkit-ui:iosSimulatorArm64Test
 ./gradlew :sample:common:linkDebugFrameworkIosSimulatorArm64
 ```
 

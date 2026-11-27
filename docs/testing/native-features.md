@@ -137,12 +137,12 @@ Proposed commands, **not recorded here as successful**:
 
 ```sh
 # Discover exact task names for the installed Gradle/Kotlin/AGP combination first.
-./gradlew :calf-webview:tasks --all :calf-share:tasks --all
+./gradlew :nativecmpkit-webview:tasks --all :nativecmpkit-share:tasks --all
 # Standard desktop compile tasks, subject to the build review's dependency/disk blockers:
-./gradlew :calf-webview:compileKotlinDesktop :calf-camera-picker:compileKotlinDesktop :calf-share:compileKotlinDesktop
+./gradlew :nativecmpkit-webview:compileKotlinDesktop :nativecmpkit-camera-picker:compileKotlinDesktop :nativecmpkit-share:compileKotlinDesktop
 # Native build/check with an approved pinned toolchain and a committed lockfile once adopted:
-cargo check --manifest-path calf-share/native/Cargo.toml --locked
-cargo test --manifest-path calf-share/native/Cargo.toml --locked
+cargo check --manifest-path nativecmpkit-share/native/Cargo.toml --locked
+cargo test --manifest-path nativecmpkit-share/native/Cargo.toml --locked
 ```
 
 The baseline ignores Cargo.lock and has no Rust tests; `--locked` may deliberately fail on a fresh checkout until reproducibility work is done. Do not claim cargo test exercises AppKit simply because the crate compiled. The build reviewer manages actual expensive build runs; avoid duplicate downloads or deleting unrelated caches on this host.
