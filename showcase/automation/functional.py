@@ -58,7 +58,7 @@ def deny_permission_dialogs(ui, platform):
 
 
 def click_node(ui, text, count=1, hold_ms=0):
-    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
+    observation = find_any(ui, text, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise AssertionError(f"no node for {text!r}")
     node = tour.choose_clickable(observation, observation["nodes"])
@@ -73,9 +73,19 @@ def click_node(ui, text, count=1, hold_ms=0):
     ui.action("pointer.click", params)
 
 
+def find_any(ui, text, timeout_ms=3000):
+    observation = tour.soft_find(ui, {"text": text}, timeout_ms=timeout_ms)
+    if observation.get("satisfied") and observation.get("nodes"):
+        return observation
+    observation = tour.soft_find(ui, {"name": text}, timeout_ms=timeout_ms)
+    if observation.get("satisfied") and observation.get("nodes"):
+        return observation
+    return observation
+
+
 def click_text_scroll(ui, text, scrolls=8):
     for _ in range(scrolls):
-        observation = tour.soft_find(ui, {"text": text}, timeout_ms=1200)
+        observation = find_any(ui, text, timeout_ms=1200)
         if observation.get("satisfied") and observation.get("nodes"):
             tour.click_text(ui, text)
             return
@@ -93,8 +103,11 @@ def assert_text_scroll(ui, text, scrolls=8):
 
 
 def count_text(ui, text):
-    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
-    return sum(1 for node in observation.get("nodes", []) if node.get("text") == text)
+    observation = find_any(ui, text, timeout_ms=3000)
+    return sum(
+        1 for node in observation.get("nodes", [])
+        if node.get("text") == text or node.get("name") == text
+    )
 
 
 def click_switch(ui):
@@ -112,7 +125,7 @@ def click_switch(ui):
 
 
 def drag_from_text(ui, text, dy=300):
-    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
+    observation = find_any(ui, text, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise AssertionError(f"no node for {text!r}")
     node = observation["nodes"][0]
@@ -125,7 +138,7 @@ def drag_from_text(ui, text, dy=300):
 
 
 def click_switch_near(ui, label):
-    observation = tour.soft_find(ui, {"text": label}, timeout_ms=3000)
+    observation = find_any(ui, label, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise AssertionError(f"no label {label!r}")
     by_id = {node.get("id"): node for node in observation["nodes"]}
