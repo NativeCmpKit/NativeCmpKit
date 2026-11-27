@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+import ctypes
 import hashlib
 import json
 import os
@@ -220,6 +221,7 @@ PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, (
     "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest",
     "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
 ))
+PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
     "kotlin-symbolicate": (b"getStackTraceStrings", b"Kotlin_getSourceInfo", b"GetStackTraceStrings"),
@@ -352,6 +354,8 @@ class NativeProtocol:
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
+        self.pre26_native_pid = None
+        self.pre26_native_pid_conflict = False
         self.worker_lifecycle_observations = []
         self.picker_admission_observations = []
         self.picker_host_observations = []
@@ -377,6 +381,9 @@ class NativeProtocol:
             return
         if line.startswith(PRE26_NEGATIVE_STEPS_PREFIX):
             self.observe_pre26_negative_steps(line)
+            return
+        if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
+            self.observe_pre26_process(line)
             return
         if line.startswith(WK_RESTORE_PREFIX):
             step = line.removeprefix(WK_RESTORE_PREFIX)
@@ -765,6 +772,9 @@ class NativeProtocol:
                 case["finished"] = True
                 self.open_case = None
         elif kind == "testStdOut":
+            if self.open_case in PRE26_STALL_CASES and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_pre26_process(output_line)
             if self.open_case == PRE26_CUSTOMIZATION_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_pre26_customization(output_line)
@@ -773,6 +783,16 @@ class NativeProtocol:
                     self.observe_pre26_negative_steps(output_line)
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
+
+    def observe_pre26_process(self, line: str) -> None:
+        if self.active is None or self.open_case not in PRE26_STALL_CASES or self.expected_bundle is None:
+            return
+        payload = line.removeprefix(PRE26_OWNED_PROCESS_PREFIX)
+        marker = re.fullmatch(r"bundle=" + re.escape(self.expected_bundle) + r" pid=([1-9][0-9]{0,9})", payload)
+        if payload != line and marker and int(marker[1]) < 2**31:
+            pid = int(marker[1])
+            self.pre26_native_pid_conflict |= self.pre26_native_pid not in (None, pid)
+            self.pre26_native_pid = pid
 
     def observe_pre26_customization(self, line: str) -> None:
         if self.open_case != PRE26_CUSTOMIZATION_CASE:
@@ -997,12 +1017,35 @@ def observe_provider_c3_protocol_failure(protocol: NativeProtocol, error: BaseEx
                 "native_exit_cause_proven": False}
 
 
+def matches_installed_process(pid: int, installed_executable: Path) -> bool:
+    # libproc reads the executable path of the exact PID, even when ps shows only
+    # its display name. The caller already verified the signed installed bytes.
+    if (platform.system() != "Darwin" or type(pid) is not int or not 0 < pid < 2**31 or
+            not installed_executable.is_absolute() or installed_executable.name != APP_EXECUTABLE or
+            installed_executable.parent.name != "NativeCmpkitLibraryTests.app"):
+        return False
+    try:
+        pidpath = ctypes.CDLL("/usr/lib/libproc.dylib").proc_pidpath
+        pidpath.argtypes = (ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32)
+        pidpath.restype = ctypes.c_int
+        buffer = ctypes.create_string_buffer(4096)
+        length = pidpath(pid, buffer, len(buffer))
+        return 0 < length < len(buffer) and buffer.value == os.fsencode(installed_executable)
+    except (AttributeError, OSError, ValueError):
+        return False
+
+
 def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) -> dict | None:
     if protocol.open_case not in PRE26_STALL_CASES or protocol.active is None or protocol.completed is not None:
         return None
-    pid = protocol.observed_launch_pid
-    live = "live-matched-preverified-owned-executable-path"
-    if observe_preverified_owned_launch_pid(pid, installed_executable)["state"] != live:
+    launch_pid = protocol.observed_launch_pid
+    native_pid = protocol.pre26_native_pid
+    if protocol.pre26_native_pid_conflict or (launch_pid is not None and native_pid is not None and launch_pid != native_pid):
+        return {"status": "owned-process-mismatch"}
+    pid = native_pid if native_pid is not None else launch_pid
+    if pid is None:
+        return {"status": "owned-pid-not-observed"}
+    if not matches_installed_process(pid, installed_executable):
         return {"status": "owned-process-unavailable"}
     try:
         with tempfile.TemporaryDirectory(prefix="nativecmpkit-uikit-sample-") as temporary:
@@ -1019,7 +1062,7 @@ def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) ->
                 after = os.fstat(stream.fileno())
                 if len(raw) != identity.st_size or identity.st_size != after.st_size or identity.st_mtime_ns != after.st_mtime_ns:
                     return {"status": "sample-output-refused"}
-            if observe_preverified_owned_launch_pid(pid, installed_executable)["state"] != live:
+            if not matches_installed_process(pid, installed_executable):
                 return {"status": "owned-process-changed"}
             known_frames = [name for name, markers in PRE26_STACK_MARKERS.items() if any(marker in raw for marker in markers)]
             return {"status": "observed", "known_frames": known_frames}

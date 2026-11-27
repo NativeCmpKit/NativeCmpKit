@@ -249,6 +249,13 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
         for name in ("compiler_runtime_fingerprint", "command", "simulator"):
             previous = next(node for node in ast.parse(parent).body if isinstance(node, ast.FunctionDef) and node.name == name)
             latest = next(node for node in ast.parse((ROOT / "scripts/ci/runtime_context.py").read_bytes()).body if isinstance(node, ast.FunctionDef) and node.name == name)
+            if name == "command":
+                previous_timeout = next(node.value for node in previous.body if isinstance(node, ast.Assign))
+                latest_timeout = next(node.value for node in latest.body if isinstance(node, ast.Assign))
+                self.assertEqual("args in SIMULATOR_INVENTORY_COMMANDS", ast.unparse(previous_timeout.test))
+                self.assertEqual("args == GIT_STATUS or args in SIMULATOR_INVENTORY_COMMANDS", ast.unparse(latest_timeout.test))
+                self.assertEqual(("git", "status", "--porcelain", "--untracked-files=normal"), runtime.GIT_STATUS)
+                latest_timeout.test = previous_timeout.test
             self.assertEqual(ast.dump(previous, include_attributes=False), ast.dump(latest, include_attributes=False))
 
     def test_runtime_context_marker_full_version_build_and_clean_arm64_are_required(self):

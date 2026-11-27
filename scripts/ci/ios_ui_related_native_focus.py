@@ -112,7 +112,7 @@ _SELECTIONS = {'ui-native-adaptive-drag-shader-ios26plus': {'focus_property': 'n
                                                'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt']}}
 SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/LiquidButtonConstructionTraceTest.kt': 'dc8931c905b9d29fc14ef5dac53161789e0af080fefc74a67fec578dc11f9471',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt': 'c792203a97cc8bdea914856b5cd53195f7a623170820fbc3f91a4ef9fd55d61d',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt': 'f13c5fa33a993afc0ac074b205e000c840934554031ae1a2da8e2c12998eaa53',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt': '6103a635e38a0260d2dfe8e01c33ea6534c186119e93a97b8561693f1e97bac3',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt': '262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt': '2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt': '5ad05e4614cf83c1402f2df8b8dbaa7424c1bb4931065e7acd5c4d39e66493a6',

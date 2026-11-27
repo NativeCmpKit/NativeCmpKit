@@ -8,6 +8,8 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.onApplicationMain
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
+import platform.Foundation.NSBundle
+import platform.Foundation.NSProcessInfo
 import platform.UIKit.UIDevice
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -20,6 +22,11 @@ internal enum class AdaptiveControlBranch(val label: String) {
 internal fun requireAdaptiveControlHost(branch: AdaptiveControlBranch) {
     val version = onApplicationMain {
         requireOwnedApplicationWindow()
+        if (branch == AdaptiveControlBranch.Pre26) {
+            NSBundle.mainBundle.bundleIdentifier?.let { bundle ->
+                println("NATIVECMPKIT_PRE26_OWNED_PROCESS bundle=$bundle pid=${NSProcessInfo.processInfo.processIdentifier}")
+            }
+        }
         UIDevice.currentDevice.systemVersion
     }
     val major = assertNotNull(version.split('.').firstOrNull()?.toIntOrNull(),

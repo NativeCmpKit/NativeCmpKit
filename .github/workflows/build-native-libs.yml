@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -193,7 +193,7 @@ jobs:
 
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
-    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || inputs.profile == 'identity-apple-camera' && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
+    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || (inputs.profile == 'identity-apple-ui-pre26' || inputs.profile == 'identity-apple-ui-pre26-diagnostic') && 'macos-15' || inputs.profile == 'identity-apple-camera' && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
@@ -685,7 +685,7 @@ jobs:
         shell: bash
         run: |
           simulator_args=()
-          if [[ "$IDENTITY_PROFILE" == identity-apple-ui-pre26 ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-apple-ui-pre26 || "$IDENTITY_PROFILE" == identity-apple-ui-pre26-diagnostic ]]; then
             simulator_args+=(--adaptive-focus ui-native-adaptive-pre26)
           fi
           python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone "${simulator_args[@]}" \
@@ -755,6 +755,11 @@ jobs:
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
                 --focus identity-ios-main-ui --simulator "$device" --timeout 3600 \
                 --output build/ci-verification/identity-main-ui
+              ;;
+            identity-apple-ui-pre26-diagnostic)
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
+                --focus ui-native-adaptive-negative-steps-pre26 --simulator "$device" --timeout 2100 \
+                --output build/ci-verification/identity-ui-pre26-negative-steps
               ;;
             identity-apple-ui-pre26)
               result=0

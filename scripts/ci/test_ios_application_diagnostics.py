@@ -93,26 +93,32 @@ class PartialProtocolTests(unittest.TestCase):
     def test_pre26_stall_samples_only_the_observed_owned_process_and_exports_known_categories(self):
         suite, method = a.PRE26_CUSTOMIZATION_CASE
         protocol = a.NativeProtocol(bundle_id=BUNDLE)
-        for frame in (BUNDLE + ": 123", f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
+        for frame in (f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
             protocol.feed(frame)
         executable = Path("/owned/NativeCmpkitLibraryTests.app") / a.APP_EXECUTABLE
+        protocol.feed(a.PRE26_OWNED_PROCESS_PREFIX + "bundle=foreign.bundle pid=123")
+        self.assertEqual({"status": "owned-pid-not-observed"}, a.observe_pre26_stall(protocol, executable))
+        protocol.feed(f.frame("testStdOut", name=method, out=a.PRE26_OWNED_PROCESS_PREFIX + f"bundle={BUNDLE} pid=123"))
         def fake_sample(command, timeout):
             self.assertEqual(["/usr/bin/sample", "123", "1", "10", "-file"], command[:-1])
             self.assertEqual(10, timeout)
             Path(command[-1]).write_bytes(b"private sample. Kotlin_getSourceInfo, assertThumbGlyph")
             return subprocess.CompletedProcess(command, 0, b"private output", b"")
-        with patch.object(a, "observe_preverified_owned_launch_pid", return_value={"state": "not-observed"}), \
+        with patch.object(a, "matches_installed_process", return_value=False), \
              patch.object(a, "execute_control") as control:
             self.assertEqual({"status": "owned-process-unavailable"}, a.observe_pre26_stall(protocol, executable))
             control.assert_not_called()
-        with patch.object(a, "observe_preverified_owned_launch_pid",
-                          return_value={"state": "live-matched-preverified-owned-executable-path"}) as lookup, \
+        with patch.object(a, "matches_installed_process", return_value=True) as lookup, \
              patch.object(a, "execute_control", side_effect=fake_sample):
             sample = a.observe_pre26_stall(protocol, executable)
             self.assertEqual(2, lookup.call_count)
         self.assertEqual({"status": "observed", "known_frames": ["kotlin-symbolicate", "compose-thumb-pixels"]}, sample)
         dirty = dict(sample, known_frames=sample["known_frames"] + ["private sample"])
         self.assertEqual({"pre26_stall_sample": sample}, pre26_sample_summary({"pre26_stall_sample": dirty}))
+        protocol.feed(BUNDLE + ": 456")
+        with patch.object(a, "matches_installed_process") as lookup:
+            self.assertEqual({"status": "owned-process-mismatch"}, a.observe_pre26_stall(protocol, executable))
+            lookup.assert_not_called()
 
     def test_negative_steps_diagnostics_admit_the_expected_throw_without_certifying_a_pass(self):
         protocol = a.NativeProtocol()

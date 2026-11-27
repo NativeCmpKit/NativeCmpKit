@@ -50,7 +50,8 @@ GRADLE_FAILURE_MARKERS = {
     "android-resources": ("Manifest merger failed", "Android resource linking failed"),
 }
 PRE26_SAMPLE_STATUSES = (
-    "owned-process-unavailable", "sample-tool-refused", "sample-output-refused", "owned-process-changed",
+    "owned-pid-not-observed", "owned-process-mismatch", "owned-process-unavailable", "sample-tool-refused",
+    "sample-output-refused", "owned-process-changed",
     "observed", "sample-tool-unavailable",
 )
 
