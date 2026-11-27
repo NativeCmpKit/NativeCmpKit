@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only migration verification. Network reads occur only with --remote.
+"""Read-only migration verification. Network reads require --remote or --actions-policy.
 
 Never executes archived code/attachments or modifies project refs/GitHub state.
 Bundle restoration uses a temporary, disposable bare repository only.
@@ -20,36 +20,43 @@ from github_json import json_pages
 ROOT = Path(__file__).resolve().parents[2]
 SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
+DESTINATION = "NativeCmpKit/NativeCmpKit"
 VERIFICATION_WORKFLOWS = frozenset({".github/workflows/gradle.yml", ".github/workflows/build-native-libs.yml"})
+REMOTE_ACTION = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*@[0-9a-f]{40}")
 
 
-def approved_actions_configuration(actions: dict, token: dict) -> bool:
-    """Owner decision of 2026-10-26, not the superseded disabled/pinned policy.
+def approved_actions_configuration(actions: dict, token: dict, selected: dict, required: set[str]) -> bool:
+    """Check the currently authorized repository controls.
 
     Missing fields and truthy strings/integers are not authenticated booleans.
     This is a control observation, not action-code or release verification.
     """
+    patterns = selected.get("patterns_allowed")
     return (actions.get("enabled") is True
-            and actions.get("allowed_actions") == "all"
-            and actions.get("sha_pinning_required") is False
+            and actions.get("allowed_actions") == "selected"
+            and actions.get("sha_pinning_required") is True
             and token.get("default_workflow_permissions") == "read"
-            and token.get("can_approve_pull_request_reviews") is False)
+            and token.get("can_approve_pull_request_reviews") is False
+            and selected.get("github_owned_allowed") is False
+            and selected.get("verified_allowed") is False
+            and isinstance(patterns, list)
+            and all(isinstance(pattern, str) and REMOTE_ACTION.fullmatch(pattern) for pattern in patterns)
+            and len(patterns) == len(required) and set(patterns) == required)
 
 
-def explicit_action_reference(reference: str) -> bool:
-    """Accept reviewed named refs as well as optional SHAs; never require pinning."""
+def pinned_action_reference(reference: str) -> bool:
+    """Require immutable references for dependencies outside the checkout."""
     if reference.startswith("./"):
         return bool(re.fullmatch(r"\./[A-Za-z0-9_./-]+", reference)) and all(
             part not in {"", ".", ".."} for part in reference[2:].split("/"))
     if reference.startswith("docker://"):
-        return bool(re.fullmatch(r"docker://[a-z0-9][a-z0-9./_-]*(?::[A-Za-z0-9_.-]+|@sha256:[0-9a-f]{64})", reference))
-    return bool(re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*@[A-Za-z0-9_./-]+", reference))
+        return bool(re.fullmatch(r"docker://[a-z0-9][a-z0-9./_-]*@sha256:[0-9a-f]{64}", reference))
+    return bool(REMOTE_ACTION.fullmatch(reference))
 
 
 def read_only_verification_workflow(source: str) -> bool:
     """Lexical guard for reviewed workflows, NOT a YAML parser or shell sandbox.
 
-    The owner's all-actions setting does not permit write-token/deployment jobs.
     Manual source/action review remains required, including transitive behavior.
     Historical read-only workflows need not satisfy newer cache/test conventions.
     """
@@ -75,6 +82,31 @@ def command(*args: str) -> str:
     if result.returncode:
         raise RuntimeError(f"{args[0]} {args[1] if len(args)>1 else ''} failed (exit {result.returncode}): {result.stderr.strip()[:2000]}")
     return result.stdout
+
+
+def verify_checkout_workflows(check) -> set[str]:
+    required = set()
+    for workflow in sorted((ROOT / ".github/workflows").iterdir()):
+        if workflow.suffix not in {".yml", ".yaml"}:
+            continue
+        source = workflow.read_text()
+        check("read_only_workflow_" + workflow.name, read_only_verification_workflow(source),
+              "Lexical read-only/publication guard; executed source and actions still require review")
+        for action in re.findall(r"(?m)^\s*(?:-\s*)?uses:\s*[\"']?([^\s\"']+)", source):
+            check("pinned_action_reference_" + action, pinned_action_reference(action), {"workflow": workflow.name})
+            if REMOTE_ACTION.fullmatch(action):
+                required.add(action)
+    return required
+
+
+def verify_actions_policy(check, repo: str, required: set[str]) -> None:
+    prefix = f"repos/{repo}/actions/permissions"
+    actions = json.loads(command("gh", "api", prefix))
+    token = json.loads(command("gh", "api", prefix + "/workflow"))
+    selected = json.loads(command("gh", "api", prefix + "/selected-actions"))
+    check("github_actions_owner_policy", approved_actions_configuration(actions, token, selected, required),
+          {"actions": actions, "default_token": token, "selected_actions": selected,
+           "required_action_pins": sorted(required)})
 
 
 def digest(path: Path) -> str:
@@ -138,12 +170,14 @@ def verified_pages_resolution(incident: dict, current_pages: dict) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--remote", action="store_true", help="Also read destination refs/settings using git and gh; no writes")
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--remote", action="store_true", help="Also read destination refs/settings using git and gh; no writes")
+    scope.add_argument("--actions-policy", action="store_true", help="Check workflow pins and the live repository Actions policy only")
     parser.add_argument("--remote-ref", default="refs/heads/main", help="Explicit destination head to compare with this checkout (default: refs/heads/main)")
     parser.add_argument("--output", type=Path, help="Write the same receipt to this explicit output path")
     args = parser.parse_args()
     checks: list[dict] = []
-    report = {"checked_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "remote_reads": args.remote, "checks": checks,
+    report = {"checked_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "remote_reads": args.remote or args.actions_policy, "checks": checks,
               "verification_script_sha256": digest(Path(__file__).resolve()),
               "required_owner_followups": [],
               "receipt_scope": "Verifies the observed checkout/remote SHA and current files, not the later commit storing this receipt."}
@@ -156,6 +190,13 @@ def main() -> int:
     try:
         identity = json.loads((ROOT / "docs/migration/current-identity.json").read_text())
         report["observed_checkout_sha"] = command("git", "rev-parse", "HEAD").strip()
+        if args.actions_policy:
+            if identity["github_repository"] != DESTINATION:
+                raise ValueError("Unexpected destination repository")
+            report["receipt_scope"] = "Checks workflow source in this checkout and the destination's live Actions settings."
+            verify_actions_policy(check, DESTINATION, verify_checkout_workflows(check))
+            report["passed"] = True
+            return write_report(report, args.output)
         report["worktree_porcelain"] = command("git", "status", "--porcelain", "--", ".",
                                               ":(exclude)scripts/ci/test_javafx_ordinary_success_trace.py").splitlines()
         baseline = identity["source_baseline"]
@@ -224,14 +265,7 @@ def main() -> int:
             json.loads((metadata / f).read_text())
         check("metadata_json_readable", True, "Required raw datasets and final exporter manifest parse")
 
-        for workflow in (ROOT / ".github/workflows").glob("*.yml"):
-            source = workflow.read_text()
-            check("read_only_workflow_" + workflow.name,
-                  read_only_verification_workflow(source),
-                  "Lexical read-only/publication guard; executed source and actions still require review")
-            for action in re.findall(r"(?m)^\s*(?:-\s*)?uses:\s*[\"']?([^\s\"']+)", source):
-                check("explicit_action_reference_" + action, explicit_action_reference(action),
-                      {"workflow": workflow.name, "sha_pinning_required": False})
+        required_actions = verify_checkout_workflows(check)
 
         supplemental = archive / "referenced-commits.bundle"
         recovery = json.loads((archive / "referenced-commits-verification.json").read_text())
@@ -271,7 +305,7 @@ def main() -> int:
 
         if args.remote:
             repo = identity["github_repository"]
-            if repo != "NativeCmpKit/NativeCmpKit":
+            if repo != DESTINATION:
                 raise ValueError("Unexpected destination repository")
             state = json.loads(command("gh", "api", "repos/" + repo))
             check("independent_github_repository", state.get("fork") is False and state["full_name"] == repo, {"full_name": state["full_name"], "fork": state.get("fork"), "default_branch": state["default_branch"]})
@@ -293,11 +327,7 @@ def main() -> int:
                 check("github_pages_configuration_removed", state.get("has_pages") is False,
                       "No Pages configuration reported; CDN/cache expiration is not tested")
                 report["pages_unpublishing_verified"] = True
-            actions = json.loads(command("gh", "api", f"repos/{repo}/actions/permissions"))
-            token = json.loads(command("gh", "api", f"repos/{repo}/actions/permissions/workflow"))
-            check("github_actions_owner_policy_20261026", approved_actions_configuration(actions, token),
-                  {"actions": actions, "default_token": token,
-                   "policy": "Enabled/all/no-required-pinning; read-only default, PR approval off. Not release certification."})
+            verify_actions_policy(check, repo, required_actions)
             releases = json.loads(command("gh", "api", f"repos/{repo}/releases?per_page=100"))
             check("no_releases_created", len(releases) == 0, "Historical release JSON is archived, not republished")
             deployment_pages = json_pages(command("gh", "api", "--paginate", f"repos/{repo}/deployments?per_page=100"))
@@ -339,9 +369,13 @@ def main() -> int:
     except Exception as exc:
         report["passed"] = False
         report["error"] = str(exc)
+    return write_report(report, args.output)
+
+
+def write_report(report: dict, output_path: Path | None) -> int:
     output = json.dumps(report, indent=2) + "\n"
-    if args.output:
-        args.output.write_text(output)
+    if output_path:
+        output_path.write_text(output)
     sys.stdout.write(output)
     return 0 if report["passed"] else 1
 

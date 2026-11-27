@@ -1,19 +1,19 @@
 # NativeCmpKit
 
 An independent **Kotlin Multiplatform native component toolkit**, derived from
-[NativeCmpKit](https://github.com/MohamedRejeb/Calf). Imported Git history, authorship,
+[Calf](https://github.com/MohamedRejeb/Calf). Imported Git history, authorship,
 branches, tags and an extensive public GitHub metadata snapshot are preserved
 here; [unavailable records and archive boundaries](docs/migration/metadata-coverage.md)
 are documented explicitly.
 
-**Status: audited migration, not a production-readiness certification.** No
-NativeCmpKit packages or releases have been published. Known defects and build /
-device-verification limitations are tracked in the [technical audit](docs/audit/README.md)
-and [roadmap](docs/roadmap/README.md). Imported `v0.*` tags are historical **Calf**
-versions, not NativeCmpKit releases. The owner's 2026-10-26
-[verification policy](docs/development/containment.md) permits enabled Actions,
-all actions/reusable workflows and no mandatory SHA pinning. Verification uses
-minimum permissions; publication and deployment remain gated.
+**Status: audited migration with platform verification in progress.** The existing
+[0.1.0-preview.1 release](https://github.com/NativeCmpKit/NativeCmpKit/releases/tag/v0.1.0-preview.1)
+belongs to the earlier Kira publication identity. This branch stages the proposed
+`io.github.apdelrahman1911.nativecmpkit` coordinates for verification. Known defects
+and device-verification gaps are tracked in the [technical audit](docs/audit/README.md)
+and [roadmap](docs/roadmap/README.md). Imported Calf tags retain their original history.
+GitHub Actions uses a selected action allowlist, mandatory commit SHA pinning and
+read-only default workflow permissions. Publication and deployment remain gated.
 
 Current contained work: [verified iOS memory-safety and Coil lifecycle fix](docs/development/native-io-verification.md).
 **17 issues closed** as observed on2026-10-27, including [#4](https://github.com/NativeCmpKit/NativeCmpKit/issues/4)
