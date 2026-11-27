@@ -260,6 +260,26 @@ jobs:
           xvfb-run -a ./gradlew jsBrowserTest wasmJsBrowserTest \
             :sample:web-js:compileKotlinJs :sample:web-wasm:compileKotlinWasmJs \
             --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Collect checked native dependency notices
+        if: inputs.profile == 'identity-linux-package'
+        shell: bash
+        run: |
+          for module in nativecmpkit-file-picker nativecmpkit-share; do
+            cargo fetch --locked --manifest-path "$module/native/Cargo.toml"
+            python3 scripts/native/artifacts.py metadata --module "$module"
+          done
+          shopt -s nullglob
+          cache_arguments=()
+          for cache in "${CARGO_HOME:-$HOME/.cargo}"/registry/cache/*; do
+            cache_arguments+=(--registry-cache "$cache")
+          done
+          test "${#cache_arguments[@]}" -gt 0
+          for module in nativecmpkit-file-picker nativecmpkit-share; do
+            python3 tests/consumer/collect_native_licenses.py \
+              --metadata "build/native-metadata/$module.json" "${cache_arguments[@]}" \
+              --vcs-supplements "$PWD/licenses/native-dependency-supplements" --source-root "$PWD" \
+              --output "build/native-notices/$module"
+          done
       - name: Stage isolated desktop publications
         if: inputs.profile == 'identity-linux-package'
         run: |
