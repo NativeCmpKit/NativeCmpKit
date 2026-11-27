@@ -16,6 +16,9 @@ it is `failed` or explicitly `blocked`.
 | `alert-text-field` | Alert Dialog | show text-field dialog | iOS-only section: `Enter Name` field, then Cancel |
 | `action-sheet` | Alert Dialog | show ActionSheet, cancel (iOS only) | action sheet dismisses |
 | `sheet` | Bottom Sheet | show, close | sheet content disappears |
+| `sheet-veto` | Bottom Sheet | open, disable swipe-to-hide, swipe/back, re-enable, close | veto keeps the sheet; Close dismisses |
+| `date-display` | Date Picker | toggle inline display mode | readout changes Picker → Input |
+| `webview-js` | Web View | toggle JavaScript off/on, evaluate title | off does not return the title; on returns `Kira WebView Demo` |
 | `topbar` | Adaptive Top Bar | tap Share | `Last action: Share tapped` |
 | `toolbar` | Adaptive Toolbar | tap Share | `Share tapped` |
 | `navbar` | Adaptive Navigation Bar | select Profile | Profile content visible |
