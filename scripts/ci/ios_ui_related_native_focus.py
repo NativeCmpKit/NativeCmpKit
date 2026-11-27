@@ -117,7 +117,7 @@ SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/n
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt': '2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt': '5ad05e4614cf83c1402f2df8b8dbaa7424c1bb4931065e7acd5c4d39e66493a6',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt': 'c3287592a1f410df9db9d162b8899701f469f5b7405344353d551633abcc7b48',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt': '1968e8d3d1e7d76ab4e3902bf660f071d3e4f130c0d1b815fc2fb9b3178f5b4a',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt': 'ae4042dd54821a812a7a993cdfb69ceba8d87c648d938ce16009ef4cb6c4ea2e',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/DampedDragLifecycleRegressionTest.kt': 'e510be8cf46bb9df5a21489dbcfb324d2d4643cb6f98a91818c06accdfb15aae',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt': 'e4c10d40b659913a83e7ae6ff6eb50e4d981046f556bd01b33e8feb4d856f508',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt': '6b02f069769c8925b65e9896887415b32f45259eed680b9afefbf9dd0a1c744b'}
@@ -125,7 +125,7 @@ INIT_SHA256 = {'ui-native-adaptive-drag-shader-ios26plus': 'd1ca8aa762529030099a
  'ui-native-adaptive-pre26': 'c8ed4c647c4d44ccc72f05480d58bbf9a9e77077bd55a40560e998878f2726a4'}
 # The earlier customization image is retained in the archived inverse. The
 # runtime uses the renamed image of the reviewed screenshot/phase derivative.
-CURRENT_CUSTOM_SOURCE_SHA256 = "0e44bcc8bdb3129f464ac20d845dfd264955144d0f7c015f3c1cc0d6f40faa04"
+CURRENT_CUSTOM_SOURCE_SHA256 = "b9a4cd85d69ae206989118a4bc1730701cf7813f12193d03832eb25785dca490"
 _RELATED_TEN = _SELECTIONS[FOCUSES[1]]
 _CUSTOM_SOURCE = adaptive.CUSTOM_SOURCE
 _PRE26 = _SELECTIONS[FOCUSES[0]]

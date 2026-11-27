@@ -43,6 +43,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -139,7 +140,13 @@ class AdaptiveControlCustomizationMatrixTest {
                                     val color = LocalContentColor.current
                                     SideEffect { observedColors["switch"] = color }
                                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                        Text("T", Modifier.testTag("thumb"), fontSize = 8.sp)
+                                        if (branch == AdaptiveControlBranch.Pre26) {
+                                            // A thicker stroke gives the pixel assertion an opaque glyph interior.
+                                            Text("T", Modifier.testTag("thumb"), color = color,
+                                                fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                        } else {
+                                            Text("T", Modifier.testTag("thumb"), fontSize = 8.sp)
+                                        }
                                     }
                                 })
                         }

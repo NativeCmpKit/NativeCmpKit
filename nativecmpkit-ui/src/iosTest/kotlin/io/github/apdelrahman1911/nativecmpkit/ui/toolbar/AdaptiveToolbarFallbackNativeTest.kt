@@ -41,6 +41,7 @@ class AdaptiveToolbarFallbackNativeTest {
         }
         trace("compose-enter")
         runAdaptiveControlUiTest {
+            val useUnmergedSlots = branch == AdaptiveControlBranch.Pre26
             val expanded = mutableStateOf(true)
             val revision = mutableStateOf(0)
             val items = mutableStateOf(emptyList<UIKitUIBarButtonItem>())
@@ -75,9 +76,9 @@ class AdaptiveToolbarFallbackNativeTest {
                 if (!populated) trace("first-idle")
                 onNodeWithTag("toolbar").assertWidthIsEqualTo(268.dp)
                 if (!populated) trace("first-width-verified")
-                onNodeWithTag("main").assertIsDisplayed().assertTextEquals("Main ${revision.value}")
-                onNodeWithTag("leading").assertIsDisplayed().assertTextEquals("Leading ${revision.value}")
-                onNodeWithTag("trailing").assertIsDisplayed().assertTextEquals("Trailing ${revision.value}")
+                onNodeWithTag("main", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Main ${revision.value}")
+                onNodeWithTag("leading", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Leading ${revision.value}")
+                onNodeWithTag("trailing", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Trailing ${revision.value}")
                 assertTrue(mainCompositions > 0 && leadingCompositions > 0 && trailingCompositions > 0,
                     "The real public fallback must compose all three supplied slots")
                 val toolbarBounds = onNodeWithTag("toolbar").fetchSemanticsNode().boundsInRoot
@@ -87,12 +88,12 @@ class AdaptiveToolbarFallbackNativeTest {
                 val beforeCollapsed = mainCompositions
                 runOnIdle { expanded.value = false; revision.value++ }
                 waitForIdle()
-                onNodeWithTag("main").assertIsDisplayed().assertTextEquals("Main ${revision.value}")
+                onNodeWithTag("main", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Main ${revision.value}")
                 assertTrue(mainCompositions > beforeCollapsed, "Collapsed fallback must keep current main content")
                 runOnIdle { expanded.value = true; revision.value++ }
                 waitForIdle()
-                onNodeWithTag("leading").assertIsDisplayed().assertTextEquals("Leading ${revision.value}")
-                onNodeWithTag("trailing").assertIsDisplayed().assertTextEquals("Trailing ${revision.value}")
+                onNodeWithTag("leading", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Leading ${revision.value}")
+                onNodeWithTag("trailing", useUnmergedTree = useUnmergedSlots).assertIsDisplayed().assertTextEquals("Trailing ${revision.value}")
                 println("NATIVECMPKIT_ADAPTIVE_TOOLBAR_FALLBACK branch=${branch.label} populated=$populated " +
                     "mainCompositions=$mainCompositions leadingCompositions=$leadingCompositions " +
                     "trailingCompositions=$trailingCompositions callerPlacementVerified=true")

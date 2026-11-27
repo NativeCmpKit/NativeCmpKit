@@ -19,6 +19,7 @@ actual fun AdaptiveSlider(
     colors: SliderColors,
     interactionSource: MutableInteractionSource,
 ) {
+    require(steps >= 0) { "steps should be >= 0" }
     if (isIOS26OrAbove()) {
         LiquidGlassSliderImpl(
             value = value,
