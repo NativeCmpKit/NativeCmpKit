@@ -96,8 +96,8 @@ kotlin {
         }
     }
     if ("ios" in consumerTargets) {
-        iosArm64().binaries.framework { baseName = "NativeCmpkitConsumer"; isStatic = true }
-        iosSimulatorArm64().binaries.framework { baseName = "NativeCmpkitConsumer"; isStatic = true }
+        iosArm64().binaries.framework { baseName = "NativeCmpKitConsumer"; isStatic = true }
+        iosSimulatorArm64().binaries.framework { baseName = "NativeCmpKitConsumer"; isStatic = true }
     }
     applyDefaultHierarchyTemplate()
 

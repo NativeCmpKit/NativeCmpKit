@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -393,7 +393,7 @@ jobs:
             --tests io.github.apdelrahman1911.nativecmpkit.camerapicker.SettingsHomeTaskBaselineTest \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Prepare an independent copy of the packaged consumer
-        if: inputs.profile == 'identity-linux-consumer'
+        if: inputs.profile == 'identity-linux-consumer' || inputs.profile == 'identity-apple-consumer-package'
         run: |
           python3 -B tests/consumer/native_consumer_carriage.py \
             --source-root "$PWD" --expected-source-revision "$GITHUB_SHA" \
@@ -425,7 +425,7 @@ jobs:
         id: identity-stage
         shell: bash
         env:
-          TARGETS: ${{ inputs.profile == 'identity-apple-package' && 'all' || 'desktop' }}
+          TARGETS: ${{ (inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package') && 'all' || 'desktop' }}
         run: |
           kotlin_host_options=()
           if [[ "$IDENTITY_PROFILE" == identity-linux-arm64-package ]]; then
@@ -537,8 +537,44 @@ jobs:
             -PconsumerTargets=desktop -PnativecmpkitConsumerTestFocus=native \
             -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Test independent Maven resolution on desktop, Android, browsers and iOS
+        if: inputs.profile == 'identity-apple-consumer-package'
+        shell: bash
+        run: |
+          test "$RUNNER_OS/$RUNNER_ARCH" = macOS/ARM64
+          export CHROME_BIN='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+          test -x "$CHROME_BIN"
+          consumer="$RUNNER_TEMP/nativecmpkit-consumer/independent-consumer"
+          ./gradlew -p "$consumer" \
+            verifyCandidateResolution desktopTest testAndroidHostTest jsBrowserTest wasmJsBrowserTest \
+            iosSimulatorArm64Test linkDebugFrameworkIosArm64 \
+            -PnativecmpkitRepository="$PWD/build/verification-repo" \
+            -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" -PconsumerTargets=desktop,android,web,ios \
+            -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
+            --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Require fresh consumer JUnit counts for all five runtime targets
+        if: ${{ !cancelled() && inputs.profile == 'identity-apple-consumer-package' }}
+        shell: bash
+        run: |
+          root="$RUNNER_TEMP/nativecmpkit-consumer/independent-consumer"
+          receipt=build/ci-identity/consumer/target-junit-summary.json
+          python3 scripts/audit/summarize_junit.py --root "$root" --output "$receipt" --require-reports
+          python3 - "$receipt" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          reports = json.loads(Path(sys.argv[1]).read_text())["by_task"]
+          expected = {"desktopTest": 17, "testAndroidHostTest": 8, "jsBrowserTest": 8,
+                      "wasmJsBrowserTest": 8, "iosSimulatorArm64Test": 8}
+          if set(reports) != set(expected) or any(
+              reports[task] != {"tests": count, "failures": 0, "errors": 0, "skipped": 0}
+              for task, count in expected.items()
+          ):
+              raise SystemExit(f"Unexpected consumer test populations: {reports}")
+          PY
       - name: Retain independent consumer receipts
-        if: ${{ !cancelled() && inputs.profile == 'identity-linux-consumer' }}
+        if: ${{ !cancelled() && (inputs.profile == 'identity-linux-consumer' || inputs.profile == 'identity-apple-consumer-package') }}
         shell: bash
         run: |
           carriage="$RUNNER_TEMP/nativecmpkit-consumer"
