@@ -27,13 +27,13 @@ Status meanings:
 | `AdaptiveButton` | filled, disabled, custom shape/padding/colors, `liquidGlassColors` | supported | supported (Cupertino; Liquid Glass 26+) | supported | supported | Adaptive Buttons | captured; counter passed on Android |
 | `AdaptiveIconButton` | enabled/disabled, custom colors, Liquid Glass on iOS 26 | supported | supported | supported | supported | Adaptive Buttons | captured |
 | `CupertinoButton` | filled, bordered, plain, disabled | supported | supported | supported | supported | Adaptive Buttons | captured |
-| `LiquidGlassButton` + colors/defaults | filled, bordered, plain, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | **pending** |
+| `LiquidGlassButton` + colors/defaults | filled, bordered, plain, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | captured; click asserted on iPhone |
 | `Modifier.adaptiveClickable` | single, long, double, disabled, labels, role, shape, haptic | ripple | press scale 0.96 | ripple | ripple | Adaptive Clickable | captured |
-| `AdaptiveSwitch` | on/off, disabled, thumbContent, colors | Material | Cupertino <26; Liquid Glass 26+ (drops thumb/colors) | Material | Material | Adaptive Switch | captured; toggle assertion pending |
+| `AdaptiveSwitch` | on/off, disabled, thumbContent, colors | Material | Cupertino <26; Liquid Glass 26+ (drops thumb/colors) | Material | Material | Adaptive Switch | captured; toggled (on) on Android and iPhone |
 | `CupertinoSwitch` | on/off, disabled, thumbContent | supported | supported | supported | supported | Adaptive Switch | captured |
-| `LiquidGlassSwitch` + colors/defaults | on/off, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | **pending** |
+| `LiquidGlassSwitch` + colors/defaults | on/off, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | captured on iPhone; toggle not driven |
 | `AdaptiveSlider` | continuous, range, steps, disabled, callback | Material | Cupertino <26; Liquid Glass 26+ (drops steps) | Material | Material | Adaptive Slider | captured |
-| `LiquidGlassSlider` + colors/defaults | continuous, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | **pending** |
+| `LiquidGlassSlider` + colors/defaults | continuous, disabled | not public | supported on iOS 26 | not public | not public | Liquid Glass | captured on iPhone; drag not driven |
 | `AdaptiveCircularProgressIndicator` | indeterminate sizes/color/stroke | supported | Cupertino spinner | supported | supported | Adaptive Progress Bar | captured; determinate unsupported |
 | `CupertinoActivityIndicator` | spinner, color, size | supported | supported | supported | supported | Adaptive Progress Bar | captured |
 | `AdaptiveExpandableFAB` / `UIKitExpandableFABItem` | expanded/collapsed | internal | internal | internal | internal | Known Limitations | unsupported (not public) |
@@ -47,30 +47,30 @@ Status meanings:
 | `AdaptiveDateRangePicker` | start/end/restart, bounded, Material fallback <16.2 | supported | supported | supported | supported | Adaptive Date Picker | captured |
 | `AdaptiveDatePickerState` / `AdaptiveDateRangePickerState` | selected values, display mode, bounds, saver | supported | supported | supported | supported | Adaptive Date Picker | captured; state restoration not driven |
 | `DateBounds`, `SelectableDates.and`, `UIKitDisplayMode` | min/max, combined rule, picker/wheels | supported | supported | supported | supported | Adaptive Date Picker | captured |
-| `AdaptiveTimePicker` / state | 12h/24h, layoutType, Material/time wheels | supported | supported | supported | supported | Adaptive Time Picker | Android captured; iOS **pending** |
+| `AdaptiveTimePicker` / state | 12h/24h, layoutType, Material/time wheels | supported | supported | supported | supported | Adaptive Time Picker | Android captured; iPhone 24-hour readout asserted; iOS visual capture pending |
 | `AdaptiveTimePickerState.is24Hour` | accepted but ignored by UIKit | n/a | format follows locale | n/a | n/a | Adaptive Time Picker | documented unsupported on iOS |
 
 ## kira-ui — presentation
 
 | Public API | Variants / states | Android | iOS | Desktop | Web | Screen | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `AdaptiveAlertDialog` | one/two button, confirm/dismiss, preferred, destructive | Material | UIAlertController | Material | Material | Alert Dialog | captured; cancel/confirm pending |
-| `AdaptiveBasicAlertDialog` | alert/action sheet, severity, text fields, secure/number pad | Material content | UIKit properties | Material content | Material content | Alert Dialog | captured overview; text-field/action-sheet pending |
-| `AlertDialogIosStyle.ActionSheet` | iPhone sheet, iPad centred popover | n/a | supported | n/a | n/a | Alert Dialog | iPhone captured; iPad **pending** |
+| `AdaptiveAlertDialog` | one/two button, confirm/dismiss, preferred, destructive | Material | UIAlertController | Material | Material | Alert Dialog | captured; Cancel and Ok asserted on Android and iPhone |
+| `AdaptiveBasicAlertDialog` | alert/action sheet, severity, text fields, secure/number pad | Material content | UIKit properties | Material content | Material content | Alert Dialog | captured; text-field and action-sheet asserted on iPhone |
+| `AlertDialogIosStyle.ActionSheet` | iPhone sheet, iPad centred popover | n/a | supported | n/a | n/a | Alert Dialog | iPhone sheet asserted; iPad popover **pending** |
 | `AdaptiveBottomSheet` / `AdaptiveSheetState` | detents, drag handle, veto, insets, dismissal | Material | page sheet; insets/shape ignored | Material | Material | Bottom Sheet | captured |
 | `AdaptiveDropDown` / `Item` / `Section` | simple, sections, disabled, destructive, iOS anchor parent | Material | UIMenu | Material | Material | Drop Down | captured |
-| `UIKitUIBarButtonItem` + system items | title/image/system/flexible/fixed/withMenu | n/a | supported | n/a | n/a | Top Bar / Toolbar | captured; all factories pending |
+| `UIKitUIBarButtonItem` + system items | title/image/system/flexible/fixed/withMenu | n/a | supported | n/a | n/a | Top Bar / Toolbar | captured; title, image, system Add and spacing driven |
 
 ## kira-ui — bars, navigation, icons
 
 | Public API | Variants / states | Android | iOS | Desktop | Web | Screen | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `AdaptiveScaffold` | top/bottom bars, FAB, insets | Material | Material + native bar padding | Material | Material | Adaptive Scaffold | captured |
-| `AdaptiveTopBar` | title/leading/trailing, large titles, menu | Material | UINavigationBar | Material | Material | Adaptive Top Bar | captured; action readout pending |
+| `AdaptiveTopBar` | title/leading/trailing, large titles, menu | Material | UINavigationBar | Material | Material | Adaptive Top Bar | captured; Share and Add readouts asserted on iPhone |
 | `AdaptiveNavigationBar` | 3/5 items, selected index, tint | Material | UITabBar | Material | Material | Adaptive Navigation Bar | captured |
 | `AdaptiveToolbar` | expanded, leading/trailing, iOS items | Material | UIToolbar (empty items renders nothing) | Material | Material | Adaptive Toolbar | captured |
 | `UIKitNavigationBarConfiguration` / `UIKitTabBarConfiguration` | large titles, translucent, tints | n/a | supported | n/a | n/a | Top Bar / Navigation Bar | captured visually |
-| `CupertinoIcon` / `CupertinoIcons` | 1,322 codepoints, size, tint, label | font staged; renders | renders | renders | renders | Cupertino Icons | overview + search captured; category filters **pending** |
+| `CupertinoIcon` / `CupertinoIcons` | 1,322 codepoints, size, tint, label | font staged; renders | renders | renders | renders | Cupertino Icons | overview; Arrows filter asserted on Android and iPhone |
 | `SFSymbol` / `UIKitImage` | SystemName, Vector, Bitmap | names only | UIImage | names only | names only | Top Bar / Toolbar | captured; Bitmap variant pending |
 | `CupertinoIndication` | press alpha 0.33 | internal | internal | internal | internal | n/a | unsupported (not public) |
 
@@ -93,9 +93,9 @@ only after an OS request; the current evidence is screen-level unless noted.
 | Permission | Android mapping | iOS helper | Status |
 | --- | --- | --- | --- |
 | `Call` | `CALL_PHONE` | granted | captured |
-| `ReadSms` | `READ_SMS` | NotGranted | **pending** (new row) |
-| `ReceiveSms` | `RECEIVE_SMS` | NotGranted | **pending** (new row) |
-| `SendSms` | `SEND_SMS` | granted | **pending** (new row) |
+| `ReadSms` | `READ_SMS` | NotGranted | row rendered; asserted on Android and iPhone |
+| `ReceiveSms` | `RECEIVE_SMS` | NotGranted | row rendered; asserted on Android and iPhone |
+| `SendSms` | `SEND_SMS` | granted | row rendered; asserted on Android and iPhone |
 | `Camera` | `CAMERA` | AVCapture video | captured; OS dialog **blocked** |
 | `RecordAudio` | `RECORD_AUDIO` | AVCapture audio | captured; OS dialog **blocked** |
 | `Gallery` | legacy/media images | Photos | captured; **granted=true anomaly** |
@@ -130,7 +130,7 @@ Known Limitations screen states this. No ordered/sequential request API exists.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `rememberShareLauncher` / `ShareContent` | Text, Url, File, Files, subject | chooser; Success=opened | UIActivityViewController | clipboard/open/macOS picker | Web Share/clipboard | Content Sharing | screen captured; sheet **blocked** |
 | `WebView` / `WebViewState` | Url, Data, NavigatorOnly; title/url/loading/errors | android.webkit | WKWebView | JavaFX | iframe | Web View | captured; JS/cookie/invalid passed on Android |
-| `WebViewNavigator` | loadUrl/loadHtml/back/forward/reload/stop | supported | supported | supported | supported | Web View | Android second page captured; iOS second page **pending** |
+| `WebViewNavigator` | loadUrl/loadHtml/back/forward/reload/stop | supported | supported | supported | supported | Web View | Android second page/JS/cookies asserted; iOS JS/cookies captured; iOS second page **pending** |
 | `WebSettings` | JavaScript off/on, platform knobs | supported | supported | supported | supported | Web View | JS toggle not driven |
 | `CookieManager` / `Cookie` | set/get/removeAll | supported | supported | generic handler refusal | host cookies | Web View | Android cookie round-trip captured; iOS captured |
 
