@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -203,6 +203,7 @@ jobs:
       GIT_CONFIG_VALUE_1: 'true'
       CARGO_BUILD_JOBS: '2'
       IDENTITY_STAGING_VERSION: '0.1.0-preview.1'
+      IDENTITY_PROFILE: ${{ inputs.profile }}
       ANDROID_WEBVIEW_FOCUS: ${{ inputs.profile == 'identity-linux-android-webview-restore' && 'webview-content-policy-android-restore' || 'webview-content-policy-android' }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -236,6 +237,13 @@ jobs:
         run: |
           python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-webview \
             --focus "$ANDROID_WEBVIEW_FOCUS" --output build/ci-verification/identity-android-webview-device > /dev/null
+      - name: Admit the owned Camera and remote IO device scopes
+        if: inputs.profile == 'identity-linux-android-ownership'
+        run: |
+          python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-camera-picker \
+            --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera > /dev/null
+          python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-io \
+            --focus android-io-controlled-remote --output build/ci-verification/identity-android-remote-io > /dev/null
       - name: Set up pinned Rust
         id: rust
         shell: bash
@@ -243,14 +251,12 @@ jobs:
       - name: Install the official Android SDK platform
         if: (runner.os == 'Linux' && runner.arch == 'X64') || startsWith(inputs.profile, 'identity-apple')
         shell: bash
-        env:
-          IDENTITY_PROFILE: ${{ inputs.profile }}
         run: |
           sdkmanager="${ANDROID_HOME:?}/cmdline-tools/latest/bin/sdkmanager"
           test -x "$sdkmanager"
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
           packages=('cmdline-tools;23.0' 'platforms;android-37.0')
-          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
@@ -269,8 +275,8 @@ jobs:
           python3 scripts/audit/source_inventory.py --check
           python3 scripts/development/validate_resolutions.py --check
           python3 scripts/development/generate_icon_catalogues.py --check
-      - name: Verify NativeCmpKit WebView on an owned Android emulator
-        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore'
+      - name: Verify NativeCmpKit on owned Android emulators
+        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore' || inputs.profile == 'identity-linux-android-ownership'
         run: |
           platform_tools="${ANDROID_HOME:?}/platform-tools"
           test -x "$platform_tools/adb"
@@ -279,6 +285,14 @@ jobs:
           command -v setfacl > /dev/null || sudo apt-get install -y acl
           sudo setfacl -m "u:$(id -un):rw" /dev/kvm
           test -r /dev/kvm && test -w /dev/kvm
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
+            result=0
+            python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-camera-picker \
+              --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera || result=1
+            python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-io \
+              --focus android-io-controlled-remote --output build/ci-verification/identity-android-remote-io || result=1
+            exit "$result"
+          fi
           python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-webview \
             --focus "$ANDROID_WEBVIEW_FOCUS" --output build/ci-verification/identity-android-webview-device
       - name: Linux desktop tests with owned audio and FileChooser services
@@ -568,8 +582,6 @@ jobs:
       - name: Tests requiring an owned UIKit application
         if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera'
         shell: bash
-        env:
-          IDENTITY_PROFILE: ${{ inputs.profile }}
         run: |
           simulator_args=()
           if [[ "$IDENTITY_PROFILE" == identity-apple-ui-pre26 ]]; then
@@ -676,4 +688,8 @@ jobs:
             build/ci-verification/identity-linux-desktop/receipt.json
             build/ci-verification/identity-android-webview-device/controller.json
             build/ci-verification/identity-android-webview-device/library/receipt.json
+            build/ci-verification/identity-android-camera/controller.json
+            build/ci-verification/identity-android-camera/library/receipt.json
+            build/ci-verification/identity-android-remote-io/controller.json
+            build/ci-verification/identity-android-remote-io/library/receipt.json
           if-no-files-found: error

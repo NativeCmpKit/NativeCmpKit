@@ -8,16 +8,28 @@ import workflow_matrix as m
 
 
 class WorkflowMatrixTests(unittest.TestCase):
-    def test_read_only_cli_preflight_covers_the_complete_eleven_slot_matrix_without_builds(self):
-        result = m.preflight_plans("all")
-        self.assertTrue(result["source_only"])
-        self.assertEqual(0, result["Gradle_builds_executed"])
-        self.assertEqual(0, result["library_tests_executed"])
-        self.assertEqual({row["slot"] for row in m.matrix("all")["include"]}, {row["slot"] for row in result["slots"]})
-        for row in result["slots"]:
-            self.assertEqual("plan", row["command"][3])
-            self.assertNotIn("run", row["command"])
-            self.assertEqual(0, row["exit_code"])
+    def test_read_only_cli_preflights_each_host_and_refuses_unowned_android_discovery(self):
+        results = [m.preflight_plans(profile) for profile in ("core", "browser", "apple", "windows", "extended")]
+        planned = {row["slot"] for result in results for row in result["slots"]}
+        declared = {row["slot"] for row in m.matrix("all")["include"]}
+        self.assertEqual(declared - {"android-device-api35"}, planned)
+        for profile in ("android-camera-callback-substitution", "android-io-controlled-remote"):
+            result = m.preflight_plans(profile)
+            self.assertEqual(["android-device-api35"], [row["slot"] for row in result["slots"]])
+            results.append(result)
+        for result in results:
+            self.assertTrue(result["source_only"])
+            self.assertEqual(0, result["Gradle_builds_executed"])
+            self.assertEqual(0, result["library_tests_executed"])
+            for row in result["slots"]:
+                self.assertEqual("plan", row["command"][3])
+                self.assertNotIn("run", row["command"])
+                self.assertEqual(0, row["exit_code"])
+        for profile in ("all", "android-device"):
+            with self.subTest(profile=profile), self.assertRaisesRegex(
+                ValueError, r"preflight failed for android-device-api35; exit 2",
+            ):
+                m.preflight_plans(profile)
 
     def test_related_slider_cli_preflight_keeps_exact_focus_and_module_selection(self):
         for profile in ("ios-slider-remaining", "ios-slider-structure"):
