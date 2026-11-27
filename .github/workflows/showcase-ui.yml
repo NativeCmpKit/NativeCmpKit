@@ -155,9 +155,14 @@ jobs:
             adb -s emulator-5554 shell wm density 420
           fi
           adb -s emulator-5554 shell settings put system font_scale 1.0
-          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.txt" /sdcard/Download/kira-fixture.txt
-          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png" /sdcard/Download/kira-fixture.png
-          adb -s emulator-5554 shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/kira-fixture.png
+          adb -s emulator-5554 shell mkdir -p /sdcard/Download || true
+          sleep 2
+          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.txt" /sdcard/Download/kira-fixture.txt || \
+            adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.txt" /data/local/tmp/kira-fixture.txt || true
+          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png" /sdcard/Download/kira-fixture.png || \
+            adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png" /data/local/tmp/kira-fixture.png || true
+          adb -s emulator-5554 shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/kira-fixture.png || true
+          adb -s emulator-5554 shell ls -l /sdcard/Download/kira-fixture.txt /data/local/tmp/kira-fixture.txt 2>/dev/null || true
           adb -s emulator-5554 shell settings put global window_animation_scale 0
           adb -s emulator-5554 shell settings put global transition_animation_scale 0
           adb -s emulator-5554 shell settings put global animator_duration_scale 0
