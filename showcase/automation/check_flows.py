@@ -49,6 +49,11 @@ def main() -> int:
         if row["execution"]["android"]["status"] == "passed" or row["execution"]["ios"]["status"] == "passed":
             if not row.get("functional"):
                 problems.append(f"{row_id}: passed without functional evidence")
+        for platform in ("android", "ios"):
+            status = row["execution"][platform]["status"]
+            path = row.get("screenshot", {}).get(platform)
+            if status in ("captured", "passed", "failed") and path and not Path(path).exists():
+                problems.append(f"{row_id}: {platform} {status} screenshot missing: {path}")
 
     print(f"flows: {len(flow_ids)} (+{len(blocked_ids)} blocked), mapped flows: {len(mapped)}")
     for problem in problems:

@@ -76,7 +76,13 @@ def main() -> None:
             execution["attempt"] = args.attempt
             execution["job"] = args.job
             execution["device"] = result.get("device")
-            row.setdefault("functional", []).append({
+            if flow.get("after"):
+                row["screenshot"][args.platform] = flow["after"]
+            entries = [
+                item for item in row.setdefault("functional", [])
+                if not (item.get("flow") == flow["id"] and item.get("run") == args.run)
+            ]
+            entries.append({
                 "flow": flow["id"],
                 "status": flow["status"],
                 "run": args.run,
@@ -87,6 +93,7 @@ def main() -> None:
                 "error": flow.get("error"),
                 "reason": flow.get("reason"),
             })
+            row["functional"] = entries
     args.coverage.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
     render(document)
     print(f"recorded {len(result.get('flows', []))} functional flows")
