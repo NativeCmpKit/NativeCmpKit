@@ -8,6 +8,14 @@ import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Exec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootEnvSpec
+import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsEnvSpec
+import org.jetbrains.kotlin.gradle.targets.wasm.nodejs.WasmNodeJsPlugin
+import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnPlugin
+import org.jetbrains.kotlin.gradle.targets.wasm.yarn.WasmYarnRootEnvSpec
 
 plugins {
     kotlin("multiplatform") version "2.4.20"
@@ -47,6 +55,23 @@ val candidateRepository = File(providers.gradleProperty("nativecmpkitRepository"
 require(candidateRepository.isAbsolute && candidateRepository.isDirectory)
 
 if ("android" in consumerTargets) apply(plugin = "com.android.kotlin.multiplatform.library")
+
+// The hosted consumer supplies Node and Yarn on PATH. Installing them from a
+// project Ivy repository would violate the standalone Settings repository guard.
+plugins.withType<NodeJsPlugin> { extensions.configure<NodeJsEnvSpec> { download.set(false) } }
+plugins.withType<WasmNodeJsPlugin> { extensions.configure<WasmNodeJsEnvSpec> { download.set(false) } }
+plugins.withType<YarnPlugin> {
+    extensions.configure<YarnRootEnvSpec> {
+        download.set(false)
+        ignoreScripts.set(true)
+    }
+}
+plugins.withType<WasmYarnPlugin> {
+    extensions.configure<WasmYarnRootEnvSpec> {
+        download.set(false)
+        ignoreScripts.set(true)
+    }
+}
 
 fun consumerJavaFxClassifier(): String {
     val os = System.getProperty("os.name").lowercase()

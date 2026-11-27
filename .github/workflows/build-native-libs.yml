@@ -441,6 +441,7 @@ jobs:
           test -d build/verification-repo
       - name: Inspect staged artifacts and native payload identity
         if: endsWith(inputs.profile, '-package')
+        id: identity-artifacts
         shell: bash
         run: |
           case "$RUNNER_OS/$RUNNER_ARCH" in
@@ -537,21 +538,53 @@ jobs:
             -PconsumerTargets=desktop -PnativecmpkitConsumerTestFocus=native \
             -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
-      - name: Test independent Maven resolution on desktop, Android, browsers and iOS
+      - name: Test independent Maven resolution on desktop, Android and iOS
         if: inputs.profile == 'identity-apple-consumer-package'
         shell: bash
         run: |
           test "$RUNNER_OS/$RUNNER_ARCH" = macOS/ARM64
+          consumer="$RUNNER_TEMP/nativecmpkit-consumer/independent-consumer"
+          mkdir -p build/ci-identity/consumer
+          status=0
+          ./gradlew -p "$consumer" \
+            verifyCandidateResolution desktopTest testAndroidHostTest iosSimulatorArm64Test linkDebugFrameworkIosArm64 \
+            -PnativecmpkitRepository="$PWD/build/verification-repo" \
+            -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" -PconsumerTargets=desktop,android,ios \
+            -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
+            --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache || status=$?
+          if [[ "$status" == 0 || -f "$consumer/build/reports/consumer-resolution.txt" ]]; then
+            mv "$consumer/build/reports/consumer-resolution.txt" build/ci-identity/consumer/consumer-resolution-platforms.txt
+          fi
+          exit "$status"
+      - name: Test independent Maven resolution in JS and Wasm browsers
+        if: ${{ !cancelled() && inputs.profile == 'identity-apple-consumer-package' && steps.identity-artifacts.outcome == 'success' }}
+        shell: bash
+        run: |
+          test "$RUNNER_OS/$RUNNER_ARCH" = macOS/ARM64
+          web_tools="$RUNNER_TEMP/nativecmpkit-consumer-web-tools"
+          mkdir "$web_tools"
+          node_archive=node-v24.16.0-darwin-arm64.tar.xz
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 3 \
+            "https://nodejs.org/dist/v24.16.0/$node_archive" --output "$web_tools/$node_archive"
+          (cd "$web_tools" && printf 'e28ad5531b2aafe0ea555a51b2412c42fdc0f91a6a53fbd03ac93e3847e91389  %s\n' "$node_archive" | shasum -a 256 -c -)
+          tar -xJf "$web_tools/$node_archive" -C "$web_tools"
+          export PATH="$web_tools/node-v24.16.0-darwin-arm64/bin:$PATH"
+          test "$(node --version)" = v24.16.0
+          test "$(yarn --version)" = 1.22.22
           export CHROME_BIN='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
           test -x "$CHROME_BIN"
           consumer="$RUNNER_TEMP/nativecmpkit-consumer/independent-consumer"
+          mkdir -p build/ci-identity/consumer
+          status=0
           ./gradlew -p "$consumer" \
-            verifyCandidateResolution desktopTest testAndroidHostTest jsBrowserTest wasmJsBrowserTest \
-            iosSimulatorArm64Test linkDebugFrameworkIosArm64 \
+            verifyCandidateResolution jsBrowserTest wasmJsBrowserTest \
             -PnativecmpkitRepository="$PWD/build/verification-repo" \
-            -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" -PconsumerTargets=desktop,android,web,ios \
-            -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
-            --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+            -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" -PconsumerTargets=web \
+            --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache || status=$?
+          if [[ "$status" == 0 || -f "$consumer/build/reports/consumer-resolution.txt" ]]; then
+            mv "$consumer/build/reports/consumer-resolution.txt" build/ci-identity/consumer/consumer-resolution-web.txt
+          fi
+          exit "$status"
       - name: Require fresh consumer JUnit counts for all five runtime targets
         if: ${{ !cancelled() && inputs.profile == 'identity-apple-consumer-package' }}
         shell: bash
