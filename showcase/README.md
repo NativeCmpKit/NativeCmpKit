@@ -119,7 +119,8 @@ python3 showcase/automation/compare.py --android-device api35-tablet \
 `record_functional.py` refuses non-canonical devices unless `--allow-device` is
 passed: the coverage execution slots are bound to `api35-phone` and
 `iphone-simulator`. Tablet results are reported as separate large-screen evidence,
-and `record.py --only-rows UI-ALERT-006` attaches the iPad popover row alone.
+and `record.py --tablet` records only the tablet-window rows (iPad popover,
+large-screen index, tablet scaffold and sheet) from the tablet tour.
 
 Functional checks, not screenshots alone:
 
