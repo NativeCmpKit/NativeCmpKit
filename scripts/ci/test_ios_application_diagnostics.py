@@ -1,7 +1,9 @@
 """Python/source diagnostics guards; never real UIImage/GC/native test passes."""
+import hashlib
 import io
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -9,6 +11,7 @@ import unittest
 from unittest.mock import patch
 
 import ios_ui_application as a
+from summarize_identity_uikit import android_assembly_summaries, pre26_sample_summary
 import test_ios_ui_application as f
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
@@ -34,7 +37,55 @@ def begun():
     return protocol
 
 
+class AssemblyDiagnosticsTests(unittest.TestCase):
+    def test_localizes_kotlin_and_java_errors_without_paths_or_messages(self):
+        original = b"""> Task :compileDebugJavaWithJavac FAILED
+/private/build/RemoteIoDocumentsProvider.java:95: error: private javac message
+e: file:///private/build/AndroidCameraProviderTest.kt:41:73 private Kotlin message
+    at org.gradle.internal.SigningConfig
+"""
+        with tempfile.TemporaryDirectory() as output:
+            old = Path.cwd()
+            try:
+                os.chdir(output)
+                log = Path("build/ci-verification/identity-android-remote-io/io-remote-documents/source-apk-build.log")
+                log.parent.mkdir(parents=True)
+                log.write_bytes(original)
+                rows = android_assembly_summaries()
+            finally:
+                os.chdir(old)
+        self.assertEqual([{
+            "stage": "remote-io-helper-apk", "original_log_sha256": hashlib.sha256(original).hexdigest(),
+            "failed_tasks": [":compileDebugJavaWithJavac"], "categories": [],
+            "source_errors": [("RemoteIoDocumentsProvider.java", "95"), ("AndroidCameraProviderTest.kt", "41")],
+        }], rows)
+
+
 class PartialProtocolTests(unittest.TestCase):
+    def test_pre26_stall_samples_only_the_observed_owned_process_and_exports_known_categories(self):
+        suite, method = a.PRE26_CUSTOMIZATION_CASE
+        protocol = a.NativeProtocol(bundle_id=BUNDLE)
+        for frame in (BUNDLE + ": 123", f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
+            protocol.feed(frame)
+        executable = Path("/owned/NativeCmpkitLibraryTests.app") / a.APP_EXECUTABLE
+        def fake_sample(command, timeout):
+            self.assertEqual(["/usr/bin/sample", "123", "1", "10", "-file"], command[:-1])
+            self.assertEqual(10, timeout)
+            Path(command[-1]).write_bytes(b"private sample. Kotlin_getSourceInfo, assertThumbGlyph")
+            return subprocess.CompletedProcess(command, 0, b"private output", b"")
+        with patch.object(a, "observe_preverified_owned_launch_pid", return_value={"state": "not-observed"}), \
+             patch.object(a, "execute_control") as control:
+            self.assertEqual({"status": "owned-process-unavailable"}, a.observe_pre26_stall(protocol, executable))
+            control.assert_not_called()
+        with patch.object(a, "observe_preverified_owned_launch_pid",
+                          return_value={"state": "live-matched-preverified-owned-executable-path"}) as lookup, \
+             patch.object(a, "execute_control", side_effect=fake_sample):
+            sample = a.observe_pre26_stall(protocol, executable)
+            self.assertEqual(2, lookup.call_count)
+        self.assertEqual({"status": "observed", "known_frames": ["kotlin-symbolicate", "compose-thumb-pixels"]}, sample)
+        dirty = dict(sample, known_frames=sample["known_frames"] + ["private sample"])
+        self.assertEqual({"pre26_stall_sample": sample}, pre26_sample_summary({"pre26_stall_sample": dirty}))
+
     def test_negative_steps_diagnostics_admit_the_expected_throw_without_certifying_a_pass(self):
         protocol = a.NativeProtocol()
         suite, method = a.PRE26_NEGATIVE_STEPS_CASE

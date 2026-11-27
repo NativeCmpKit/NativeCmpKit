@@ -38,7 +38,7 @@ class CameraProviderVerificationActivity : ComponentActivity() {
     @Volatile var appliedOptions: CameraPickerOptions? = null
     val results = CopyOnWriteArrayList<CameraPickerResult>()
     // Callback verification is opt-in; existing provider methods still collect results.
-    var resultCallback by mutableStateOf<(CameraPickerResult) -> Unit>(results::add)
+    var resultCallback by mutableStateOf<(CameraPickerResult) -> Unit>({ results.add(it) })
     var recompositionTick by mutableStateOf(0)
     @Volatile var appliedCallback: ((CameraPickerResult) -> Unit)? = null
     @Volatile var appliedTick = -1

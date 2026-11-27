@@ -99,8 +99,11 @@ public final class RemoteIoDocumentsProvider extends DocumentsProvider {
         cursor.setNotificationUri(getContext().getContentResolver(), DocumentsContract.buildRootsUri(RemoteIoContract.AUTHORITY));
         return cursor;
     }
-    @Override public boolean isChildDocument(String parent, String child) throws FileNotFoundException {
-        State owned = live(parent); String[] root = owned.rootDescriptor;
+    @Override public boolean isChildDocument(String parent, String child) {
+        State owned;
+        try { owned = live(parent); }
+        catch (FileNotFoundException missing) { return false; }
+        String[] root = owned.rootDescriptor;
         // Only HTTP-provisioned immutable ID ancestry; never speculative remote listing/network in this method.
         if (root[3].equals(parent)) return root[5].equals(child) || root[7].equals(child) || root[8].equals(child);
         return root[5].equals(parent) && (root[7].equals(child) || root[8].equals(child));

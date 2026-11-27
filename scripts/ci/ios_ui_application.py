@@ -26,6 +26,7 @@ import stat
 import struct
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 
@@ -215,6 +216,20 @@ PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
 PRE26_NEGATIVE_STEPS_PHASES = (
     "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned", "public-validation-verified",
 )
+PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, (
+    "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest",
+    "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
+))
+PRE26_STACK_MARKERS = {
+    "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
+    "kotlin-symbolicate": (b"getStackTraceStrings", b"Kotlin_getSourceInfo", b"GetStackTraceStrings"),
+    "kotlin-test-assertion": (b"assertFailsWith", b"assertTrue", b"DefaultAsserter"),
+    "compose-initial-content": (b"composeInitial", b"setContent"),
+    "compose-idle": (b"waitForIdle", b"runUntilIdle", b"FrameRecomposer"),
+    "compose-thumb-pixels": (b"assertThumbGlyph", b"PixelMap", b"readPixels"),
+    "main-dispatch": (b"dispatch_sync", b"__DISPATCH_WAIT_FOR_QUEUE__"),
+    "native-mutex": (b"__psynch_mutexwait", b"os_unfair_lock_lock_slow"),
+}
 
 
 def macho_simulator_identity(path: Path) -> dict:
@@ -982,9 +997,40 @@ def observe_provider_c3_protocol_failure(protocol: NativeProtocol, error: BaseEx
                 "native_exit_cause_proven": False}
 
 
+def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) -> dict | None:
+    if protocol.open_case not in PRE26_STALL_CASES or protocol.active is None or protocol.completed is not None:
+        return None
+    pid = protocol.observed_launch_pid
+    live = "live-matched-preverified-owned-executable-path"
+    if observe_preverified_owned_launch_pid(pid, installed_executable)["state"] != live:
+        return {"status": "owned-process-unavailable"}
+    try:
+        with tempfile.TemporaryDirectory(prefix="nativecmpkit-uikit-sample-") as temporary:
+            sample = Path(temporary) / "sample.txt"
+            result = execute_control(["/usr/bin/sample", str(pid), "1", "10", "-file", str(sample)], 10)
+            if result.returncode != 0 or not sample.exists():
+                return {"status": "sample-tool-refused"}
+            limit = 4 * 1024**2
+            with os.fdopen(os.open(sample, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), "rb") as stream:
+                identity = os.fstat(stream.fileno())
+                if not stat.S_ISREG(identity.st_mode) or identity.st_nlink != 1 or not 0 < identity.st_size <= limit:
+                    return {"status": "sample-output-refused"}
+                raw = stream.read(limit + 1)
+                after = os.fstat(stream.fileno())
+                if len(raw) != identity.st_size or identity.st_size != after.st_size or identity.st_mtime_ns != after.st_mtime_ns:
+                    return {"status": "sample-output-refused"}
+            if observe_preverified_owned_launch_pid(pid, installed_executable)["state"] != live:
+                return {"status": "owned-process-changed"}
+            known_frames = [name for name, markers in PRE26_STACK_MARKERS.items() if any(marker in raw for marker in markers)]
+            return {"status": "observed", "known_frames": known_frames}
+    except (OSError, ValueError, subprocess.SubprocessError):
+        return {"status": "sample-tool-unavailable"}
+
+
 def forward_application(argv: list[str], protocol: NativeProtocol, timeout: int = APP_TIMEOUT_SECONDS,
                         environment: dict[str, str] | None = None,
-                        provider_c3_installed_executable: Path | None = None) -> dict:
+                        provider_c3_installed_executable: Path | None = None,
+                        pre26_installed_executable: Path | None = None) -> dict:
     """Preserve real frames verbatim through KGP, while bounding owned transport."""
     started = time.monotonic()
     transport = {"started_at_utc": lt.utc_now(), "timeout_seconds": timeout, "console_process_exit": None,
@@ -1048,6 +1094,10 @@ def forward_application(argv: list[str], protocol: NativeProtocol, timeout: int 
                 protocol, error, stage, process.poll(), provider_c3_installed_executable)
             if observation is not None:
                 transport["owned_launch_pid_at_console_failure"] = observation
+        if isinstance(error, TimeoutError) and stage == "protocol-read" and pre26_installed_executable is not None:
+            observation = observe_pre26_stall(protocol, pre26_installed_executable)
+            if observation is not None:
+                transport["pre26_stall_sample"] = observation
         raise
     finally:
         transport["console_process_exit"] = process.poll()
@@ -1404,16 +1454,20 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             appearance_driver = simulator_appearance.AppearanceDriver(device, execute_control)
             appearance_driver.start()
             protocol.system_appearance_request = appearance_driver.request
-        provider_c3_options = {}
+        diagnostic_options = {}
         if provider_c3_only:
             # Only this exact route adds a keyword. Every other call shape stays
             # unchanged. Installation and nonce-bound signed bytes passed above.
             installed_executable = Path(container.stdout.decode("utf-8", errors="strict").strip()) / APP_EXECUTABLE
-            provider_c3_options["provider_c3_installed_executable"] = installed_executable
+            diagnostic_options["provider_c3_installed_executable"] = installed_executable
+        if focus == lt.ui_related.PRE26_RECOVERY_FOCUSES[0] or focus in lt.ui_related.PRE26_PENDING_FOCUSES:
+            diagnostic_options["pre26_installed_executable"] = (
+                Path(container.stdout.decode("utf-8", errors="strict").strip()) / APP_EXECUTABLE
+            )
         phase = "launch-and-real-test-transport"
         receipt["application_protocol"] = forward_application(
             ["/usr/bin/xcrun", "simctl", "launch", "--console", "--terminate-running-process", device, bundle_id, *arguments],
-            protocol, timeout=application_timeout_seconds(focus), **provider_c3_options,
+            protocol, timeout=application_timeout_seconds(focus), **diagnostic_options,
             **({"environment": native_environment} if native_environment is not None else {}))
         if native_input_driver is not None:
             phase = "finish-independent-owned-xctest-input"

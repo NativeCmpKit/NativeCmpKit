@@ -9,7 +9,7 @@ import re
 from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
-from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, PRE26_NEGATIVE_STEPS_PHASES, WK_RESTORE_STEPS
+from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, PRE26_NEGATIVE_STEPS_PHASES, PRE26_STACK_MARKERS, WK_RESTORE_STEPS
 
 
 MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share", "nativecmpkit-camera-picker")
@@ -28,18 +28,23 @@ ANDROID_ASSEMBLY_LOGS = {
 }
 GRADLE_FAILED_TASK = re.compile(r"^> Task ((?::[A-Za-z0-9_-]+){1,6}) FAILED\s*$", re.M)
 GRADLE_SOURCE_ERROR = re.compile(
-    r"^e: [^\r\n]{0,500}[/\\]([A-Za-z0-9_.-]+\.(?:kt|kts|java)):(\d{1,5}):\d{1,5} ", re.M
+    r"^(?:e: [^\r\n]{0,500}[/\\]([A-Za-z0-9_.-]+\.kts?):(\d{1,5}):\d{1,5} "
+    r"|[^\r\n]{0,500}[/\\]([A-Za-z0-9_.-]+\.java):(\d{1,5}): error: )", re.M
 )
 GRADLE_FAILURE_MARKERS = {
     "dependency-resolution": ("Could not resolve", "Could not find", "Could not download"),
     "repository-rate-limit": ("429 Too Many Requests", "status code 429"),
     "repository-policy": ("settings repositories over project repositories",),
     "android-sdk": ("SDK location not found", "Failed to find target", "Build Tools revision", "Failed to install the following Android SDK"),
-    "signing": ("SigningConfig", "Keystore file", "keystore password was incorrect"),
+    "signing": ("Failed to read key", "Keystore file", "keystore password was incorrect"),
     "java-toolchain": ("Cannot find a Java installation", "No matching toolchains found"),
     "compilation": ("Compilation error", "Compilation failed"),
     "android-resources": ("Manifest merger failed", "Android resource linking failed"),
 }
+PRE26_SAMPLE_STATUSES = (
+    "owned-process-unavailable", "sample-tool-refused", "sample-output-refused", "owned-process-changed",
+    "observed", "sample-tool-unavailable",
+)
 
 
 def restore_stages(fixture):
@@ -68,6 +73,17 @@ def camera_photo_summary(data, protocol):
     return outcomes
 
 
+def pre26_sample_summary(transport):
+    sample = transport.get("pre26_stall_sample")
+    if not isinstance(sample, dict) or sample.get("status") not in PRE26_SAMPLE_STATUSES:
+        return {}
+    summary = {"status": sample["status"]}
+    if sample["status"] == "observed":
+        frames = sample.get("known_frames")
+        summary["known_frames"] = [name for name in PRE26_STACK_MARKERS if isinstance(frames, list) and name in frames]
+    return {"pre26_stall_sample": summary}
+
+
 def receipt_rows():
     for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
         "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
@@ -90,6 +106,7 @@ def receipt_rows():
                     "transport_passed": data.get("transport_passed") is True,
                     "error": labels(data.get("error") or {}, ("phase", "type")),
                     "transport_failure": labels(transport, ("failure_stage", "failure_reason")),
+                    **pre26_sample_summary(transport),
                     "finished_case_counts": dict(Counter(case["status"] for case in protocol.get("testcases", [])
                                                         if case.get("status") in {"passed", "failed", "error", "skipped"})),
                     "unfinished_testcase": labels(protocol.get("unfinished_testcase") or {}, ("name",)),
@@ -147,9 +164,11 @@ def android_assembly_summaries():
             continue
         payload = path.read_bytes()
         document = payload.decode("utf-8", errors="replace")
+        sources = ((kotlin or java, kotlin_line or java_line)
+                   for kotlin, kotlin_line, java, java_line in GRADLE_SOURCE_ERROR.findall(document))
         rows.append({"stage": stage, "original_log_sha256": hashlib.sha256(payload).hexdigest(),
                      "failed_tasks": list(dict.fromkeys(GRADLE_FAILED_TASK.findall(document)))[:12],
-                     "source_errors": list(dict.fromkeys(GRADLE_SOURCE_ERROR.findall(document)))[:12],
+                     "source_errors": list(dict.fromkeys(sources))[:12],
                      "categories": [key for key, variants in GRADLE_FAILURE_MARKERS.items()
                                     if any(marker in document for marker in variants)]})
     return rows
