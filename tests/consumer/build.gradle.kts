@@ -189,7 +189,7 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     }
     val root = matchingRoots.single()
     check(resolved.isFile && resolved.extension in setOf("jar", "aar", "klib")) {
-        "Only directly published primary candidate files are eligible: $id/${resolved.name}"
+        "Only directly published candidate library files are eligible: $id/${resolved.name}"
     }
     val relativeDirectory = "${candidateGroup.replace('.', '/')}/${id.module}/$candidateVersion/"
     val metadataRelative = relativeDirectory + "${id.module}-$candidateVersion.module"
@@ -203,7 +203,17 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     check(candidateRepository.resolve(rootMetadataRelative).isFile)
     val rootUrl = if (id.module == root) null else "../../$root/$candidateVersion/$root-$candidateVersion.module"
     check(component["url"] == rootUrl) { "Module metadata redirects outside the exact candidate root: $id" }
-    val canonicalName = "${id.module}-$candidateVersion.${resolved.extension}"
+    val appleTarget = when (id.module) {
+        "$root-iosarm64" -> "iosArm64"
+        "$root-iossimulatorarm64" -> "iosSimulatorArm64"
+        else -> null
+    }
+    val primaryName = "${id.module}-$candidateVersion.${resolved.extension}"
+    val interopUrl = if (root == "nativecmpkit-webview" && appleTarget != null && resolved.extension == "klib")
+        "${id.module}-$candidateVersion-cinterop-nskeyvalueobserving.klib" else null
+    val interopName = interopUrl?.let { "$root-${appleTarget}Cinterop-nskeyvalueobservingMain-$candidateVersion.klib" }
+    val isInterop = interopUrl != null && (resolved.name == interopUrl || resolved.name == interopName)
+    val canonicalName = if (isInterop) checkNotNull(interopUrl) else primaryName
     val stagedRelative = relativeDirectory + canonicalName
     val staged = candidateRepository.resolve(stagedRelative)
     val hash = artifactSha256(resolved)
@@ -212,29 +222,30 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     }
     val variants = metadata["variants"] as? List<*> ?: error("Missing metadata variants: $id")
     check(variants.size in 1..128)
-    val primaryBindings = variants.mapNotNull { entry ->
+    val bindings = variants.mapNotNull { entry ->
         val variant = entry as? Map<*, *> ?: error("Invalid metadata variant: $id")
         val attributes = variant["attributes"] as? Map<*, *> ?: error("Missing variant attributes: $id")
         if (attributes["org.gradle.category"] != "library") return@mapNotNull null
         // KMP root available-at variants have no local files; they are not payload substitutions.
         val files = variant["files"] as? List<*> ?: return@mapNotNull null
-        check(files.size == 1)
-        val declared = files.single() as? Map<*, *> ?: error("Invalid primary metadata file: $id")
-        // Compose resource variants may share the library category. Select the
-        // exact primary Maven URL before comparing its logical producer name.
-        if (declared["url"] != canonicalName) return@mapNotNull null
-        val declaredName = declared["name"] as? String ?: error("Missing primary metadata filename: $id")
+        val declarations = files.map { it as? Map<*, *> ?: error("Invalid metadata file: $id") }
+        check(files.size == 1 || (interopUrl != null && files.size == 2 &&
+            declarations.map { it["url"] }.toSet() == setOf(primaryName, interopUrl))) {
+            "Unexpected files in the candidate library variant: $id"
+        }
+        // Compose resource variants may also use the library category. Bind the
+        // requested file by the exact Maven URL before checking producer names.
+        val declared = declarations.singleOrNull { it["url"] == canonicalName } ?: return@mapNotNull null
+        check(!isInterop || files.size == 2) { "WebView interop must accompany its primary library: $id" }
+        val declaredName = declared["name"] as? String ?: error("Missing metadata filename: $id")
         val producerNames = when {
+            isInterop -> setOf(checkNotNull(interopName))
             id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata" &&
                 resolved.extension == "jar" -> setOf("$root-metadata-$candidateVersion.jar")
             id.module == "$root-android" && resolved.extension == "aar" -> setOf("$root.aar")
             resolved.extension == "klib" -> {
                 val commonNames = setOf("$root.klib", "$root-$candidateVersion.klib")
-                when (id.module) {
-                    "$root-iosarm64" -> commonNames + "$root-iosArm64Main-$candidateVersion.klib"
-                    "$root-iossimulatorarm64" -> commonNames + "$root-iosSimulatorArm64Main-$candidateVersion.klib"
-                    else -> commonNames
-                }
+                if (appleTarget != null) commonNames + "$root-${appleTarget}Main-$candidateVersion.klib" else commonNames
             }
             else -> emptySet()
         }
@@ -250,8 +261,8 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
             "staged_file" to stagedRelative, "metadata_file" to metadataRelative,
             "metadata_sha256" to artifactSha256(metadataFile), "bytes" to resolved.length(), "sha256" to hash)
     }.distinct()
-    check(primaryBindings.size == 1) { "Missing or conflicting primary metadata bindings: $id" }
-    return primaryBindings.single()
+    check(bindings.size == 1) { "Missing or conflicting metadata bindings: $id" }
+    return bindings.single()
 }
 
 // No candidate JNI may initialize before independently reviewed package/source
