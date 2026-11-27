@@ -152,12 +152,12 @@ failure is not reported as successful cleanup.
 
 | Source | Actual code exercised | Deliberate test boundary |
 |---|---|---|
-| `calf-geo/src/commonTest/.../LocationTrackingControllerTest.kt` | Production state machine, real Compose snapshots/derived-state observation, cancellation, ownership, removal failures, permissions, stale fixes | Injected provider events; not Android/GMS/device execution |
-| `calf-geo/src/commonTest/.../LatLngTest.kt` | Current production coordinate math/factories, 500 seeded symmetry/bounds cases | Spherical model, not GPS accuracy or a benchmark |
-| `calf-geo/src/nonAndroidTest/.../UnsupportedLocationTrackerTest.kt` | Actual desktop/iOS/JS/Wasm tracker and common factory on each executed target | Does not implement or test a native location backend |
-| `calf-geo/src/androidHostTest/.../AndroidLocationFixTest.kt` | Real Android `Location` via Robolectric; API23/26/34 flag semantics, units, clocks, mock flag | Host simulation, not GPS hardware |
-| `calf-geo/src/androidHostTest/.../AndroidLocationSubscriptionTest.kt` | Actual adapter, real GMS Tasks/LocationResult/callbacks/main Looper; late registration/removal race, cancellation, security/API errors | Injected provider transport, not installed Play Services |
-| `calf-geo/src/androidHostTest/.../AndroidLocationTrackerTest.kt` | Actual Android wrapper, real LifecycleRegistry/main Looper, lifecycle gating, coroutine dispatch, end-to-end native LocationResult→public states; added real Compose-runtime composition/recomposition | Provider injection; Compose test uses a deterministic frame clock and SideEffect-only composition, no rendered UI or physical lifecycle/permission dialog test |
+| `nativecmpkit-geo/src/commonTest/.../LocationTrackingControllerTest.kt` | Production state machine, real Compose snapshots/derived-state observation, cancellation, ownership, removal failures, permissions, stale fixes | Injected provider events; not Android/GMS/device execution |
+| `nativecmpkit-geo/src/commonTest/.../LatLngTest.kt` | Current production coordinate math/factories, 500 seeded symmetry/bounds cases | Spherical model, not GPS accuracy or a benchmark |
+| `nativecmpkit-geo/src/nonAndroidTest/.../UnsupportedLocationTrackerTest.kt` | Actual desktop/iOS/JS/Wasm tracker and common factory on each executed target | Does not implement or test a native location backend |
+| `nativecmpkit-geo/src/androidHostTest/.../AndroidLocationFixTest.kt` | Real Android `Location` via Robolectric; API23/26/34 flag semantics, units, clocks, mock flag | Host simulation, not GPS hardware |
+| `nativecmpkit-geo/src/androidHostTest/.../AndroidLocationSubscriptionTest.kt` | Actual adapter, real GMS Tasks/LocationResult/callbacks/main Looper; late registration/removal race, cancellation, security/API errors | Injected provider transport, not installed Play Services |
+| `nativecmpkit-geo/src/androidHostTest/.../AndroidLocationTrackerTest.kt` | Actual Android wrapper, real LifecycleRegistry/main Looper, lifecycle gating, coroutine dispatch, end-to-end native LocationResult→public states; added real Compose-runtime composition/recomposition | Provider injection; Compose test uses a deterministic frame clock and SideEffect-only composition, no rendered UI or physical lifecycle/permission dialog test |
 
 No test compiles fake Android/iOS platform classes, extracts baseline declarations,
 or calls a substituted sample API. The original frozen audit probe is unchanged;
@@ -167,12 +167,12 @@ the regression oracle for these fixes.
 ### Reproduction commands and pending targets
 
 ```sh
-./gradlew :calf-geo:desktopTest :calf-geo:testAndroidHostTest \
+./gradlew :nativecmpkit-geo:desktopTest :nativecmpkit-geo:testAndroidHostTest \
   --max-workers=2 --no-configuration-cache
-./gradlew :calf-geo:jsBrowserTest :calf-geo:wasmJsBrowserTest \
+./gradlew :nativecmpkit-geo:jsBrowserTest :nativecmpkit-geo:wasmJsBrowserTest \
   --max-workers=2 --no-configuration-cache
 # macOS/Xcode host only:
-./gradlew :calf-geo:iosSimulatorArm64Test --max-workers=2 --no-configuration-cache
+./gradlew :nativecmpkit-geo:iosSimulatorArm64Test --max-workers=2 --no-configuration-cache
 ```
 
 The build owner coordinates execution. The desktop and Android-host tasks have

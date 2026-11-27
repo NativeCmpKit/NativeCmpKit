@@ -5,12 +5,11 @@ not a declaration that a candidate is API/ABI-certified or already published.
 
 ## Names and artifacts
 
-- Retain public `com.mohamedrejeb.calf.*`, opt-in annotation identities, Android
-  namespaces, generated `com.mohamedrejeb.calf.calf_cupertino_icons` resources,
-  framework names, original JNI package/method names and native filenames.
-- The independent Maven group is `io.github.apdelrahman1911.nativecmpkit`, with
-  `nativecmpkit-*` artifact names. Coordinates change intentionally; packages do
-  not. Never place old Calf and nativeCmpkit artifacts on the same classpath.
+- Use `io.github.apdelrahman1911.nativecmpkit` for public Kotlin packages and the
+  Maven group. Gradle project paths and Maven artifact IDs use `nativecmpkit-*`.
+- Android namespaces, generated Compose resources, opt-in annotations, JNI
+  exports, native library names and the Swift `NativeCmpKit` framework use the
+  migrated identity. See the [identity manifest](../migration/current-identity.json).
 - Keep old constructors/default arguments, launchers and sealed result cases
   where practical. Detailed cancellation/error/capability APIs should be
   additive, with documented adapters. New sealed cases can break exhaustive
@@ -65,11 +64,11 @@ does not certify runtime security or arbitrary untrusted JavaScript policy.
    JVM-public Kotlin internals and flags deltas for classification, not automatic
    severity/compatibility claims.
 4. **External source consumers:** no project/friend paths or source fallback;
-   representative defaults/constructors/public types and old exhaustive sealed
-   branches compiled with supported Kotlin/Compose dependencies.
-5. **Old-binary/new-artifact execution:** retain a consumer compiled against the
-   baseline, replace only nativeCmpkit implementation artifacts, and run its
-   assertions on the new runtime. Compiling the consumer again is not this test.
+   representative defaults, constructors, public types and exhaustive sealed
+   branches compiled under the new namespace with supported dependencies.
+5. **Historical old-binary/new-artifact execution:** the pre-rename checks ran
+   a baseline-compiled consumer after replacing the implementation JARs. This
+   fixture records compatibility before the package rename.
    The [Java linkage runner](../../tests/consumer/binary/README.md)
    enforces unchanged class hashes and unchanged third-party dependencies for
    six narrow cases. Baseline sanity and two receipt-bound local-JAR candidate

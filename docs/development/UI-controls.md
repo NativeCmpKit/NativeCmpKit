@@ -61,11 +61,11 @@ sheet, bars and dropdown work is owned by the separate native UI workstream.
 | UI-041/042 | iOS `ui/utils/InteractiveHighlight.kt`, `DampedDragAnimation.kt`, `DragGestureInspector.kt`, `LiquidGlassButton.kt` | Lazy optional highlight shader, explicit shader/job disposal, cancellable value/feedback job lanes, no per-frame coroutine launch, monotonic normalized velocity. Observer cancellation never invokes commit callbacks. No measured GPU/frame-time claim. |
 | UI-043/044/045 | common `CupertinoIndication.kt`, `CupertinoCircularProgressIndicator.kt`; iOS `ThemeUtils.kt` | Cancel obsolete indication release jobs, honor active press ownership; draw eight unique spokes multiplying caller alpha; restrict UIView theme mutation to the receiver. |
 
-All paths above are below `calf-ui/src/<sourceSet>/kotlin/com/mohamedrejeb/calf/`.
+All paths above are below `nativecmpkit-ui/src/<sourceSet>/kotlin/io/github/apdelrahman1911/nativecmpkit/`.
 The original Cupertino renderer notices/attribution are retained when moving its
-internal implementation from iosMain to commonMain. Public packages and existing
-public method/color-constructor signatures are retained. Internal helper methods
-are not a new supported API. `DampedDragAnimation.cancel()` and
+internal implementation from iosMain to commonMain. Existing public method and
+color-constructor signatures are retained under the NativeCmpKit namespace.
+`DampedDragAnimation.cancel()` and
 `InteractiveHighlight.dispose()` are additive lifecycle operations.
 
 ### Numeric and interaction policy

@@ -7,7 +7,7 @@ or compiler acceptance**. #19 and #107 remain open. Evidence and exact commands:
 ## Architecture and execution flow
 
 The API35 tests live in
-`calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/`:
+`nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/`:
 
 - `AndroidPermissionLifecycleDeviceTest.kt`: three finite public/native scenarios.
 - `OwnedPermissionLifecycle.kt`: owned Binder connection, signature/UID/PID/nonce/
@@ -48,7 +48,7 @@ checks owned app/AVD removal and accessibility restoration.
 | `android-permission-lifecycle-revoke-api35` |`notificationSettingsRevocationRefreshesSingleAndBatchWithoutProcessDeath`|
 
 The owning source is
-`calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionLifecycleDeviceTest.kt`.
+`nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionLifecycleDeviceTest.kt`.
 `library_tests.py`, `android_device_tests.py`, `workflow_matrix.py`, storage-probe
 admission and `gradle.yml` route only these declared methods. The dated native plan
 is archived under `original18/NATIVE-VERIFICATION-PLAN.json`. Its commands are
@@ -78,9 +78,9 @@ restart substitutes for it.
 
 ## Maintenance and evidence reuse
 
-Keep legacy public `com.mohamedrejeb.calf` packages and Gradle module paths for
-compatibility; use NativeCmpKit for new project identity. Keep original issue
-descriptions and native assertions unchanged. Source envelopes current299,
+Use the [NativeCmpKit namespace and Gradle paths](nativecmpkit-identity-migration.md)
+for current sources and selectors. Keep original issue descriptions and native
+assertions unchanged. Source envelopes current299,
 physical union319 and original/static345 are different domains. No global count,
 unchecked repin or broad historical-source fallback may replace them.
 

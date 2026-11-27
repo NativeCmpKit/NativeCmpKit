@@ -11,11 +11,11 @@ contains important controls and actual compilers, **not browser-native acceptanc
 
 ## Implementation and ownership flow
 
-- `calf-share/src/webTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardEnvironmentAcceptanceTest.kt`
+- `nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt`
   owns a random-token iframe, message listener and bounded control requests. Each
   child invokes only the exact selected method from the same emitted library test
   bundle; accepted old methods are not replayed.
-- `calf-share/karma.config.d/nativecmpkit-clipboard-fixture.js` scopes a Karma
+- `nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js` scopes a Karma
   launcher/middleware to this selection. It owns the actual Chrome child, an
   exclusive ordinary profile beneath Karma's disposable root, and the no-follow
   observed DevTools port file. Process/directory identities must remain exact;

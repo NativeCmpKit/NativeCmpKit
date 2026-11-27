@@ -450,10 +450,10 @@ execution, including its UIKitView anchor interaction configuration.
 - `iosTest/sheet/NativeSheetLifecycleTest.kt` — three policy/presentation functions.
 - `iosTest/dropdown/NativeDropDownLifecycleTest.kt` — one real menu lifecycle function.
 
-Scheduled commands belong to the lead: `:calf-ui:desktopTest` under Xvfb, shared
-Android-host/JS/Wasm suites where configured, KLIB-only
-`:calf-ui:compileTestKotlinIosSimulatorArm64` (which also compiles main), Apple linking and
-`:calf-ui:iosSimulatorArm64Test` on a supported, genuinely hosted UIKit simulator.
+Use `:nativecmpkit-ui:desktopTest` under Xvfb and the Android-host, JS and Wasm
+suites where configured. `:nativecmpkit-ui:compileTestKotlinIosSimulatorArm64`
+compiles the Kotlin/Native tests and main sources. Run the UIKit suite with
+`:nativecmpkit-ui:iosSimulatorArm64ApplicationTest` on the selected simulator.
 The new UICalendarView tests require iOS 16+, and the native-menu lifecycle test
 explicitly requires 17.4+; older-version fallback tests remain separate gaps,
 not tests silently skipped by these helpers.

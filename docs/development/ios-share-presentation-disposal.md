@@ -5,7 +5,7 @@ the whole threading, sharing-stage, saver, or sample-resource findings.
 
 ## Owning implementation
 
-`calf-share/src/iosMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.ios.kt`
+`nativecmpkit-share/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.ios.kt`
 retains a Request through these phases:
 
 | Phase | Disposal behavior |
@@ -38,7 +38,7 @@ compatibility is a separate gate.
 
 ## Library-level native verification
 
-`calf-share/src/iosTest/` contains a genuine UIApplication/Compose host and
+`nativecmpkit-share/src/iosTest/` contains a genuine UIApplication/Compose host and
 13 finite application methods: four owning-host cases, four explicitly controlled
 Request cases, and five UIKit/public-launcher cases. The controlled cases are not
 OS-transition evidence. The real cases retain actual owners before launch and

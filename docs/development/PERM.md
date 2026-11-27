@@ -154,8 +154,8 @@ The lead schedules every Gradle invocation. Suggested focused rerun commands (th
 actual combined desktop invocation is recorded in the dated receipt below):
 
 ```sh
-./gradlew :calf-permissions:calf-permissions-core:desktopTest \
-  :calf-permissions:calf-permissions-core:testAndroidHostTest \
+./gradlew :nativecmpkit-permissions:nativecmpkit-permissions-core:desktopTest \
+  :nativecmpkit-permissions:nativecmpkit-permissions-core:testAndroidHostTest \
   --max-workers=2 --no-configuration-cache
 # Repeat desktopTest/jsBrowserTest/wasmJsBrowserTest for each feature Gradle project.
 # macOS/Xcode: compile each iOS module and run iosSimulatorArm64Test, then device fixtures.

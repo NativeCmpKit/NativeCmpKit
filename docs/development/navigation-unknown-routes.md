@@ -16,9 +16,9 @@ The repaired experimental adaptive host validates before rendering a destination
   fails at host mounting; the library does **not** silently erase or skip entries.
 
 Exact matching remains intentional. This is not pattern matching, deep-link
-parsing, a native platform stack or automatic schema migration. Existing public
-packages, factory/controller methods and the legacy back-stack descriptor remain;
-fail-fast errors are an observable correction to the former blank-screen behavior.
+parsing, a native platform stack or automatic schema migration. Use the public
+factory/controller methods and back-stack descriptor under the NativeCmpKit
+namespace. Fail-fast errors replace the former blank-screen behavior.
 
 ## Deliberate application-selected fallback
 
@@ -32,7 +32,7 @@ old navigation arguments and destination UI state are not transferred. Obtain us
 consent or migrate/save important data according to the application's requirements.
 
 ```kotlin
-import com.mohamedrejeb.calf.navigation.AdaptiveNavHostController
+import io.github.apdelrahman1911.nativecmpkit.navigation.AdaptiveNavHostController
 
 fun chooseControllerAfterUpgrade(
     restored: AdaptiveNavHostController,
@@ -69,7 +69,7 @@ explicit application-selected fallback/later invalid navigation. Hosted immutabl
 runtime results are still pending at this source checkpoint. Source inspection or
 compilation alone does not close NAV-007. See
 [ADR0004](../decisions/0004-adaptive-navigation-entries.md) and
-[the library usage contract](../../calf-navigation/README.md).
+[the library usage contract](../../nativecmpkit-navigation/README.md).
 
 ## Accepted immutable execution — 2026-10-28
 
