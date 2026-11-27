@@ -167,6 +167,10 @@ private fun PermissionItem(permission: Permission) {
         text = "Is permission granted: ${permissionState.status.isGranted}",
     )
 
+    Text(
+        text = "Status: ${permissionState.status}",
+    )
+
     LaunchedEffect(permissionState.status) {
         println("${permission.name}: ${permissionState.status}")
         if (!permissionState.status.isGranted && permissionState.status.shouldShowRationale) {
@@ -184,7 +188,15 @@ private fun PermissionItem(permission: Permission) {
         )
     }
 
-
+    AdaptiveButton(
+        onClick = {
+            permissionState.openAppSettings()
+        },
+    ) {
+        Text(
+            text = "Open app settings",
+        )
+    }
 
     Spacer(modifier = Modifier.height(16.dp))
 

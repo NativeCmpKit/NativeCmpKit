@@ -316,8 +316,9 @@ fun FilePickerScreen(navigateBack: () -> Unit) {
  */
 private suspend fun KmpFile.describeStreaming(): String = withContext(Dispatchers.Default) {
     try {
-        val bytes = source().use { source -> source.countBytes() }
-        "$bytes bytes read in ${STREAM_CHUNK_SIZE / 1024} KB chunks with kotlinx-io"
+        val whole = readByteArray().size
+        val streamed = source().use { source -> source.countBytes() }
+        "$whole bytes whole; $streamed streamed in ${STREAM_CHUNK_SIZE / 1024} KB chunks"
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {

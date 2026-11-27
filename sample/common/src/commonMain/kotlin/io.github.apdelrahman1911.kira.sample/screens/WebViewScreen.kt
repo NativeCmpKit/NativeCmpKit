@@ -21,16 +21,26 @@ import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonItem
 import io.github.apdelrahman1911.kira.ui.toolbar.AdaptiveToolbar
 import io.github.apdelrahman1911.kira.ui.uikit.UIKitImage
 import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
+import io.github.apdelrahman1911.kira.ui.web.Cookie
 import io.github.apdelrahman1911.kira.ui.web.LoadingState
 import io.github.apdelrahman1911.kira.ui.web.WebView
 import io.github.apdelrahman1911.kira.ui.web.rememberWebViewNavigator
 import io.github.apdelrahman1911.kira.ui.web.rememberWebViewStateWithHTMLData
+import kotlinx.coroutines.launch
 
 private val INITIAL_URL =
     if (currentPlatform.isWeb)
         "https://en.wikipedia.org/wiki/Main_Page/"
     else
         "https://github.com/Apdelrahman1911/NativeCmpKit"
+
+private val SECOND_HTML = """
+    <!DOCTYPE html>
+    <html>
+    <head><title>Kira Second Page</title></head>
+    <body><h1 id="second">Second deterministic page</h1></body>
+    </html>
+""".trimIndent()
 
 private val DUMMY_HTML = """
     <!DOCTYPE html>
@@ -91,6 +101,8 @@ fun WebViewScreen(
 ) {
     val state = rememberWebViewStateWithHTMLData(data = DUMMY_HTML)
     val navigator = rememberWebViewNavigator()
+    val scope = rememberCoroutineScope()
+    var cookieStatus by remember { mutableStateOf("No cookie operation") }
 
     val iosItems by remember(navigator.canGoBack, navigator.canGoForward) {
         mutableStateOf(
@@ -140,6 +152,41 @@ fun WebViewScreen(
                         Icon(Icons.Filled.ArrowBackIosNew, contentDescription = "Back")
                     }
                 },
+                actions = {
+                    AdaptiveIconButton(
+                        onClick = {
+                            scope.launch {
+                                state.cookieManager.setCookie(
+                                    "https://example.test/",
+                                    Cookie(name = "kira", value = "1"),
+                                )
+                                val cookies = state.cookieManager.getCookies("https://example.test/")
+                                cookieStatus = if (cookies.isEmpty()) {
+                                    "No cookies"
+                                } else {
+                                    cookies.joinToString { "${it.name}=${it.value}" }
+                                }
+                            }
+                        },
+                    ) {
+                        Icon(Icons.Filled.Check, contentDescription = "Set and read cookie")
+                    }
+                    AdaptiveIconButton(
+                        onClick = { navigator.loadUrl("https://nonexistent.invalid/") },
+                    ) {
+                        Icon(Icons.Filled.Warning, contentDescription = "Load invalid URL")
+                    }
+                    AdaptiveIconButton(
+                        onClick = {
+                            scope.launch {
+                                state.cookieManager.removeAllCookies()
+                                cookieStatus = "Cookies cleared"
+                            }
+                        },
+                    ) {
+                        Icon(Icons.Filled.Delete, contentDescription = "Clear cookies")
+                    }
+                },
                 title = {
                     Column {
                         Text(
@@ -157,7 +204,7 @@ fun WebViewScreen(
                             is LoadingState.Finished -> "Finished"
                         }
                         Text(
-                            text = "$loading · errors ${state.errorsForCurrentRequest.size} · back ${navigator.canGoBack}",
+                            text = "$loading · errors ${state.errorsForCurrentRequest.size} · back ${navigator.canGoBack} · $cookieStatus",
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                             style = MaterialTheme.typography.bodySmall,
                             maxLines = 1,
@@ -232,8 +279,8 @@ fun WebViewScreen(
                     AdaptiveIconButton(onClick = { navigator.loadUrl(INITIAL_URL) }) {
                         Icon(Icons.Filled.Language, contentDescription = "Load URL")
                     }
-                    AdaptiveIconButton(onClick = { navigator.loadHtml(DUMMY_HTML) }) {
-                        Icon(Icons.Filled.Code, contentDescription = "Load HTML")
+                    AdaptiveIconButton(onClick = { navigator.loadHtml(SECOND_HTML) }) {
+                        Icon(Icons.Filled.Code, contentDescription = "Load second HTML page")
                     }
                 },
                 iosItems = iosItems,

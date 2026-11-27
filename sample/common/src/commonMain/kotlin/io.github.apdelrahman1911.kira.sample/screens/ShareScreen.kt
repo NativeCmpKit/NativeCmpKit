@@ -38,6 +38,7 @@ fun ShareScreen(
     navigateBack: () -> Unit,
 ) {
     var pickedFile by remember { mutableStateOf<KmpFile?>(null) }
+    var pickedFiles by remember { mutableStateOf<List<KmpFile>>(emptyList()) }
     var text by remember { mutableStateOf("Hello from Kira!") }
     var url by remember { mutableStateOf("https://github.com/Apdelrahman1911/NativeCmpKit") }
     var lastResult by remember { mutableStateOf<ShareResult?>(null) }
@@ -51,6 +52,14 @@ fun ShareScreen(
         selectionMode = FilePickerSelectionMode.Single,
         onResult = { files ->
             pickedFile = files.firstOrNull()
+        },
+    )
+
+    val multipleFilePickerLauncher = rememberFilePickerLauncher(
+        type = FilePickerFileType.All,
+        selectionMode = FilePickerSelectionMode.Multiple(3),
+        onResult = { files ->
+            pickedFiles = files
         },
     )
 
@@ -101,6 +110,34 @@ fun ShareScreen(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Share File")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = { multipleFilePickerLauncher.launch() },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = if (pickedFiles.isEmpty()) "Pick up to 3 files"
+                    else "Picked ${pickedFiles.size} files",
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    if (pickedFiles.isNotEmpty()) {
+                        shareLauncher.launch(
+                            ShareContent.Files(
+                                files = pickedFiles,
+                                mimeType = "*/*",
+                            )
+                        )
+                    }
+                },
+                enabled = pickedFiles.isNotEmpty(),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Share Multiple Files")
             }
 
             Spacer(modifier = Modifier.height(24.dp))

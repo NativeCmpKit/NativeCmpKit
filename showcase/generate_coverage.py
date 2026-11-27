@@ -436,6 +436,32 @@ ROWS = [
 ]
 
 
+def render(document: dict) -> None:
+    lines = [
+        "# Showcase coverage",
+        "",
+        f"Base: `{document['base']['sha']}` on `{document['base']['branch']}`.",
+        "",
+        "The authoritative machine-readable manifest is [coverage.json](coverage.json).",
+        "Regenerate both files with `python3 showcase/generate_coverage.py`.",
+        "",
+        "| ID | Component | Variant | Android | iOS | Route | Android run | iOS run |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for item in document["rows"]:
+        a = item["execution"]["android"]
+        i = item["execution"]["ios"]
+        lines.append(
+            "| {id} | {component} | {variant} | {a} | {i} | {route} | {ar} | {ir} |".format(
+                id=item["id"], component=item["component"], variant=item["variant"],
+                a=item["support"]["android"], i=item["support"]["ios"], route=item["route"],
+                ar=a["status"] + (f" ({a['run']})" if a.get("run") else ""),
+                ir=i["status"] + (f" ({i['run']})" if i.get("run") else ""),
+            )
+        )
+    (ROOT / "showcase" / "COVERAGE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> None:
     for item in ROWS:
         if all(value == "unsupported" for value in item["support"].values()):
@@ -465,26 +491,7 @@ def main() -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
 
-    lines = [
-        "# Showcase coverage",
-        "",
-        f"Base: `{BASE_SHA}` on `{BRANCH}`.",
-        "",
-        "The authoritative machine-readable manifest is [coverage.json](coverage.json).",
-        "Regenerate both files with `python3 showcase/generate_coverage.py`.",
-        "",
-        "| ID | Component | Variant | Android | iOS | Route | Status |",
-        "| --- | --- | --- | --- | --- | --- | --- |",
-    ]
-    for item in ROWS:
-        lines.append(
-            "| {id} | {component} | {variant} | {a} | {i} | {route} | {status} |".format(
-                id=item["id"], component=item["component"], variant=item["variant"],
-                a=item["support"]["android"], i=item["support"]["ios"], route=item["route"],
-                status=item["execution"]["android"]["status"],
-            )
-        )
-    (ROOT / "showcase" / "COVERAGE.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    render(document)
     print(f"wrote {len(ROWS)} rows")
 
 

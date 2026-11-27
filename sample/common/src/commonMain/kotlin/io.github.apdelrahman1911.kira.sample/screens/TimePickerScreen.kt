@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +28,11 @@ fun TimePickerScreen(
         initialHour = 19,
         initialMinute = 20,
     )
+    val state24 = rememberAdaptiveTimePickerState(
+        initialHour = 19,
+        initialMinute = 20,
+        is24Hour = true,
+    )
 
     SampleScreenScaffold(
         title = "Adaptive Time Picker",
@@ -36,6 +43,7 @@ fun TimePickerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
             Text(
@@ -61,6 +69,17 @@ fun TimePickerScreen(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            val formatted24 = "${state24.hour}:${state24.minute.toString().padStart(2, '0')}"
+            Text(
+                text = "24-hour state: $formatted24",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            AdaptiveTimePicker(state = state24)
         }
     }
 }

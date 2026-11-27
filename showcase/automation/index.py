@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""Render screenshots/INDEX.md from canonical captures and reviewed run metadata."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path("screenshots"))
+    parser.add_argument("--coverage", type=Path, default=Path("showcase/coverage.json"))
+    parser.add_argument("--runs", type=Path, default=Path("screenshots/runs.json"))
+    parser.add_argument("--output", type=Path, default=Path("screenshots/INDEX.md"))
+    args = parser.parse_args()
+
+    coverage = json.loads(args.coverage.read_text(encoding="utf-8"))
+    rows = coverage["rows"]
+    runs = json.loads(args.runs.read_text(encoding="utf-8")) if args.runs.exists() else {}
+
+    lines = [
+        "# Showcase device screenshots",
+        "",
+        f"App revision: `{runs.get('appSha', 'pending')}`",
+        f"Base handoff: `{coverage['base']['sha']}`",
+        "",
+        "Every image is a PNG captured from the live GitHub-hosted Android emulator or",
+        "iOS Simulator through ui-test-actions. Host renders and mockups are not used.",
+        "",
+    ]
+
+    for platform in ("android", "ios"):
+        directory = args.root / platform
+        if not directory.exists():
+            continue
+        meta = runs.get("platforms", {}).get(platform, {})
+        lines.extend([
+            f"## {platform}",
+            "",
+            f"- Run: {meta.get('runUrl', 'pending')}",
+            f"- Job/attempt: `{meta.get('job', 'pending')}` / `{meta.get('attempt', 'pending')}`",
+            f"- Device: {meta.get('device', 'pending')}",
+            f"- Runtime: {meta.get('runtime', 'pending')}",
+            f"- ui-test-actions: `{runs.get('uiTestActionsRef', '0c818c5d72e8c30c59bd1287c330a40392bf8e89')}`",
+            "",
+            "| Capture | Component / scenario | Expected observation | Image |",
+            "| --- | --- | --- | --- |",
+        ])
+        for png in sorted(directory.rglob("*.png")):
+            relative = png.as_posix()
+            component = png.parts[-3] if len(png.parts) >= 3 else png.parent.name
+            scenario = png.parts[-2] if len(png.parts) >= 2 else ""
+            expected = ""
+            for row in rows:
+                if row.get("screenshot", {}).get(platform) == relative:
+                    expected = " / ".join(row.get("expected", []))[:220]
+                    break
+            lines.append(
+                f"| `{component}/{scenario}` | {component} | {expected or 'See coverage.json'} | "
+                f"![{component} {scenario}]({platform}/{component}/{scenario}/{png.name}) |"
+            )
+        lines.append("")
+
+    lines.extend([
+        "## Status",
+        "",
+        "The per-row execution state is maintained in",
+        "[showcase/coverage.json](../showcase/coverage.json) and summarized in",
+        "[showcase/COVERAGE.md](../showcase/COVERAGE.md). A capture proves the screen",
+        "rendered on that device; interaction assertions are recorded separately and",
+        "must name the run/attempt/job that produced them.",
+        "",
+        "Unsupported rows point at the Known Limitations screen and are marked",
+        "`not-applicable`; they are not evidence of working functionality.",
+        "",
+    ])
+
+    args.output.write_text("\n".join(lines), encoding="utf-8")
+    print(f"wrote {args.output}")
+
+
+if __name__ == "__main__":
+    main()

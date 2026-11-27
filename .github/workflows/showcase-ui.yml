@@ -23,6 +23,11 @@ on:
         type: choice
         options: [build, session]
         default: build
+      platform:
+        description: both, android, or ios
+        type: choice
+        options: [both, android, ios]
+        default: both
       duration_minutes:
         description: Live session minutes after readiness
         type: string
@@ -44,7 +49,9 @@ env:
 
 jobs:
   android:
-    if: github.repository == 'NativeCmpKit/NativeCmpKit'
+    if: >-
+      github.repository == 'NativeCmpKit/NativeCmpKit' &&
+      (github.event_name != 'workflow_dispatch' || inputs.platform == 'both' || inputs.platform == 'android')
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     steps:
@@ -229,7 +236,9 @@ jobs:
           retention-days: 7
 
   ios:
-    if: github.repository == 'NativeCmpKit/NativeCmpKit'
+    if: >-
+      github.repository == 'NativeCmpKit/NativeCmpKit' &&
+      (github.event_name != 'workflow_dispatch' || inputs.platform == 'both' || inputs.platform == 'ios')
     runs-on: macos-26
     timeout-minutes: 180
     steps:

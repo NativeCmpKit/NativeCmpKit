@@ -165,6 +165,12 @@ def main() -> None:
                 click_text(ui, "More options")
                 shot("ui-adaptive-dropdown", "menu")
                 ui.action("keyboard.press", {"keys": ["BACK"] if args.platform == "android" else ["ESCAPE"]})
+            elif title == "Web View":
+                click_text(ui, "Load second HTML page")
+                find(ui, {"text": "Kira Second Page"}, timeout_ms=10000)
+                shot("webview", "second-page")
+                click_text(ui, "Load invalid URL")
+                shot("webview", "invalid-destination")
             elif title == "Cupertino Icons":
                 search = find(ui, {"properties": {"editable": True}})
                 if search.get("satisfied") and search.get("nodes"):
