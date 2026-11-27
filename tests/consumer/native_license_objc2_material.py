@@ -22,8 +22,9 @@ from verify_artifacts import InvalidArtifact, load_json_bytes
 SCHEMA = 4
 KIND = "adopted-public-objc2-material"
 SCOPE = "Exact fifteen original objc2 package grants and known public notices; not legal, SDK, native or release clearance"
-INDEX_PATH = "objc2-reviewed/manifest.json"
-REVIEWED_INDEX_SHA256 = "4f10a64a9a62c07484cd1d45512141ea91b5652078b004b6e30e39988b218131"
+# The identity refresh rebinds only the four local Cargo files.
+INDEX_PATH = "objc2-reviewed/nativecmpkit-identity-manifest.json"
+REVIEWED_INDEX_SHA256 = "91d164b6ba6d59c8e29e5529da50039842884e546ac3b0ca8dbdf77ba4b11a75"
 OBLIGATIONS = {"license_obligations_reviewed": False, "publisher_provenance_verified": False,
     "SDK_source_and_distribution": "unreviewed", "all_contributor_copyright_exhaustively_verified": False,
     "release_readiness_certified": False}
