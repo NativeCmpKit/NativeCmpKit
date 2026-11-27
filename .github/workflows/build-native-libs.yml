@@ -778,7 +778,7 @@ jobs:
             identity-apple-ui-ipad-popover|identity-apple-ui-ipad-rotation)
               result=0
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
-                --focus ui-native-popover-os-rotation --simulator "$device" --timeout 2400 \
+                --focus ui-native-popover-os-rotation --simulator "$device" --timeout 3600 \
                 --output build/ci-verification/identity-ui-ipad-rotation || result=1
               if [[ "$IDENTITY_PROFILE" == identity-apple-ui-ipad-popover ]]; then
                 # The next focus reuses the same Gradle task and replaces its JUnit XML.

@@ -12,7 +12,8 @@ from library_tests import IOS_DEFAULT_ACTION_SHEET_METHOD, NoDtdBuilder, safe_pa
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
 from ios_ui_application import (
-    CAMERA_DISPOSAL_PHASES, PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
+    CAMERA_DISPOSAL_PHASES, IPAD_ROTATION_PHASES,
+    PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
     PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
 )
 
@@ -26,8 +27,7 @@ FRAME = re.compile(r"\b([A-Za-z0-9_]+\.(?:kt|java)):(\d{1,5})\b")
 RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
 RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
 IPAD_ROTATION_PHASE = re.compile(
-    r"\bNATIVECMPKIT_IPAD_ROTATION:(scene-identity|portrait-request|present-in-portrait|initial-anchor|"
-    r"landscape-request|landscape-anchor|fallback-set|return-portrait-request|fallback-anchor|cleanup)(?![A-Za-z0-9_-])"
+    r"\bNATIVECMPKIT_IPAD_ROTATION:(" + "|".join(map(re.escape, IPAD_ROTATION_PHASES)) + r")(?![A-Za-z0-9_-])"
 )
 DEFAULT_ACTION_SHEET_PHASE = re.compile(
     r"\bNATIVECMPKIT_DEFAULT_ACTION_SHEET:(present|await-sheet|style|compact-size|find-cancel|activate-cancel|ipad-anchor|"
@@ -153,6 +153,8 @@ def receipt_rows():
                     ],
                     "pre26_toolbar_progress": [step for step in protocol.get("pre26_toolbar_progress", [])[:len(PRE26_TOOLBAR_PHASES)]
                                                if step in PRE26_TOOLBAR_PHASES],
+                    "ipad_rotation_progress": [step for step in protocol.get("ipad_rotation_progress", [])[:len(IPAD_ROTATION_PHASES)]
+                                               if step in IPAD_ROTATION_PHASES],
                     **({"camera_photos": camera_photo_summary(data, protocol),
                         "camera_disposal_progress": [step for step in protocol.get("camera_disposal_progress", [])[:len(CAMERA_DISPOSAL_PHASES)]
                                                      if step in CAMERA_DISPOSAL_PHASES]}

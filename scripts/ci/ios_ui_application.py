@@ -235,6 +235,12 @@ CAMERA_DISPOSAL_PHASES = (
     )),
     "foreign-cleanup-complete",
 )
+IPAD_ROTATION_CASE = (lt.IOS_POPOVER_GEOMETRY_CLASS, lt.IOS_POPOVER_GEOMETRY_METHODS[1])
+IPAD_ROTATION_PREFIX = "NATIVECMPKIT_IPAD_ROTATION_PHASE "
+IPAD_ROTATION_PHASES = (
+    "set-content", "scene-identity", "portrait-request", "present-in-portrait", "initial-anchor",
+    "landscape-request", "landscape-anchor", "fallback-set", "return-portrait-request", "fallback-anchor", "cleanup",
+)
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
@@ -369,6 +375,7 @@ class NativeProtocol:
         self.lifecycle_failure_observation = None
         self.wk_restore_progress = []
         self.camera_disposal_progress = []
+        self.ipad_rotation_progress = []
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
@@ -405,7 +412,12 @@ class NativeProtocol:
             self.observe_pre26_toolbar(line)
             return
         if line.startswith(CAMERA_DISPOSAL_PREFIX):
-            self.observe_camera_disposal(line)
+            self.observe_owned_phase(line, CAMERA_DISPOSAL_CASE, CAMERA_DISPOSAL_PREFIX,
+                                     CAMERA_DISPOSAL_PHASES, self.camera_disposal_progress)
+            return
+        if line.startswith(IPAD_ROTATION_PREFIX):
+            self.observe_owned_phase(line, IPAD_ROTATION_CASE, IPAD_ROTATION_PREFIX,
+                                     IPAD_ROTATION_PHASES, self.ipad_rotation_progress)
             return
         if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
             self.observe_pre26_process(line)
@@ -809,7 +821,12 @@ class NativeProtocol:
                     self.observe_pre26_negative_steps(output_line)
             if self.open_case == CAMERA_DISPOSAL_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
-                    self.observe_camera_disposal(output_line)
+                    self.observe_owned_phase(output_line, CAMERA_DISPOSAL_CASE, CAMERA_DISPOSAL_PREFIX,
+                                             CAMERA_DISPOSAL_PHASES, self.camera_disposal_progress)
+            if self.open_case == IPAD_ROTATION_CASE and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_owned_phase(output_line, IPAD_ROTATION_CASE, IPAD_ROTATION_PREFIX,
+                                             IPAD_ROTATION_PHASES, self.ipad_rotation_progress)
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
 
@@ -855,13 +872,13 @@ class NativeProtocol:
         if index < len(PRE26_TOOLBAR_PHASES) and phase == PRE26_TOOLBAR_PHASES[index]:
             self.pre26_toolbar_progress.append(phase)
 
-    def observe_camera_disposal(self, line: str) -> None:
-        if self.open_case != CAMERA_DISPOSAL_CASE or not line.startswith(CAMERA_DISPOSAL_PREFIX):
+    def observe_owned_phase(self, line: str, case: tuple[str, str], prefix: str,
+                            phases: tuple[str, ...], progress: list[str]) -> None:
+        if self.open_case != case or not line.startswith(prefix):
             return
-        phase = line.removeprefix(CAMERA_DISPOSAL_PREFIX)
-        index = len(self.camera_disposal_progress)
-        if index < len(CAMERA_DISPOSAL_PHASES) and phase == CAMERA_DISPOSAL_PHASES[index]:
-            self.camera_disposal_progress.append(phase)
+        phase = line.removeprefix(prefix)
+        if len(progress) < len(phases) and phase == phases[len(progress)]:
+            progress.append(phase)
 
     def _request_image_profile_if_ready(self) -> None:
         if (self.active is not None and self.completed is None and self.open_case == IMAGE_PROFILE_CASE and
@@ -890,6 +907,7 @@ class NativeProtocol:
                 "observed_launch_pid": self.observed_launch_pid,
                 "image_lifetime_observation": self.image_lifetime_observation,
                 **({"camera_disposal_progress": self.camera_disposal_progress} if self.camera_disposal_progress else {}),
+                **({"ipad_rotation_progress": self.ipad_rotation_progress} if self.ipad_rotation_progress else {}),
                 **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
                 **({"pre26_customization_progress": self.pre26_customization_progress}
                    if self.pre26_customization_progress else {}),
