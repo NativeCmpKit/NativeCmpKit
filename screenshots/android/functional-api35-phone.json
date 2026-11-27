@@ -1,0 +1,59 @@
+{
+  "captured_at": "2026-11-27T12:45:58.506936+00:00",
+  "target": "android",
+  "session": "b1a5a3e9615883c8e1c312d0",
+  "device": "api35-phone",
+  "flows": [
+    {
+      "id": "dropdown",
+      "screen": "Adaptive Drop Down",
+      "status": "passed",
+      "before": "screenshots/android/functional/dropdown/api35-phone-before.png",
+      "after": "screenshots/android/functional/dropdown/api35-phone-after.png"
+    },
+    {
+      "id": "alert-text-field",
+      "screen": "Adaptive Alert Dialog",
+      "status": "failed",
+      "before": "screenshots/android/functional/alert-text-field/api35-phone-before.png",
+      "after": "screenshots/android/functional/alert-text-field/api35-phone-failed-after.png",
+      "error": "AssertionError(\"could not scroll to 'Show Text Field Dialog'\")"
+    },
+    {
+      "id": "date-bounds",
+      "screen": "Adaptive Date Picker",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "scaffold-tab",
+      "screen": "Adaptive Scaffold",
+      "status": "passed",
+      "before": "screenshots/android/functional/scaffold-tab/api35-phone-before.png",
+      "after": "screenshots/android/functional/scaffold-tab/api35-phone-after.png"
+    },
+    {
+      "id": "action-sheet",
+      "screen": "Adaptive Alert Dialog",
+      "status": "failed",
+      "before": "screenshots/android/functional/action-sheet/api35-phone-before.png",
+      "after": "screenshots/android/functional/action-sheet/api35-phone-failed-after.png",
+      "error": "AssertionError(\"could not scroll to 'Show ActionSheet'\")"
+    },
+    {
+      "id": "permissions-sms-rows",
+      "screen": "Permissions",
+      "status": "passed",
+      "before": "screenshots/android/functional/permissions-sms-rows/api35-phone-before.png",
+      "after": "screenshots/android/functional/permissions-sms-rows/api35-phone-after.png"
+    }
+  ],
+  "updated_at": "2026-11-27T12:57:18.055236+00:00",
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "blocked": 0
+  }
+}

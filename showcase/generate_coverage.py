@@ -550,6 +550,21 @@ def main() -> None:
                 "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
                 "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png",
             }
+    # Execution, capture and defect evidence are recorded into the manifest by
+    # record.py / record_functional.py. Regenerating must not erase them.
+    out = ROOT / "showcase" / "coverage.json"
+    if out.exists():
+        previous = {
+            row["id"]: row
+            for row in json.loads(out.read_text(encoding="utf-8")).get("rows", [])
+        }
+        for item in ROWS:
+            old = previous.get(item["id"])
+            if not old:
+                continue
+            for key in ("execution", "screenshot", "defect", "functional"):
+                if key in old:
+                    item[key] = old[key]
     document = {
         "schemaVersion": 1,
         "generatedBy": "showcase/generate_coverage.py",
