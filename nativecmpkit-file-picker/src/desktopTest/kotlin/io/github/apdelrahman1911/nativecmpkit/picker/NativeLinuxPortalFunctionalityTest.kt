@@ -153,7 +153,13 @@ class NativeLinuxPortalFunctionalityTest {
     }
 
     private fun focus(id: Long) = xdo("windowfocus", "--sync", "$id")
-    private fun escape(id: Long) { focus(id); xdo("key", "--window", "$id", "--clearmodifiers", "Escape") }
+    private fun escape(id: Long) {
+        focus(id)
+        assertEquals(id.toString(), xdo("getwindowfocus"), "Cancellation requires the owned dialog to hold input focus")
+        // The display is owned by this test. Use XTEST input on the focused
+        // dialog so that GTK receives an ordinary key rather than XSendEvent.
+        xdo("key", "--clearmodifiers", "Escape")
+    }
 
     private suspend fun selectSavePath(id: Long, file: File) {
         val title = windowTitle(id)
@@ -183,7 +189,7 @@ class NativeLinuxPortalFunctionalityTest {
         check(process.waitFor(5, TimeUnit.SECONDS)) { process.destroyForcibly(); "Owned window command timed out" }
         val output = process.inputStream.bufferedReader().readText()
         check(output.length < 8192)
-        check(process.exitValue() == 0 || (allowEmpty && process.exitValue() == 1 && output.isBlank())) { "Owned window command failed" }
+        check(process.exitValue() == 0 || (allowEmpty && process.exitValue() == 1 && output.isBlank())) { "Owned window operation ${arguments.first()} exited ${process.exitValue()}" }
         return output.trim()
     }
 }

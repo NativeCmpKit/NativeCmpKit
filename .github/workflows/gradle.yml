@@ -373,7 +373,7 @@ jobs:
         run: |
           command -v rustup
           rustup toolchain install 1.98.0 --profile minimal --no-self-update --component rustfmt --component clippy
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           packages: 'cmdline-tools;23.0 platforms;android-37.0'
           accept-android-sdk-licenses: true
@@ -506,7 +506,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           packages: 'cmdline-tools;23.0 platforms;android-37.0'
           accept-android-sdk-licenses: true
@@ -697,7 +697,7 @@ jobs:
             sudo apt-get install --no-install-recommends -y pulseaudio libasound2-plugins
           fi
       - name: Provision SDK on every actual host, including Apple and Windows
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           # v3's SDK16 bootstrap installs SDK23 through the official registry.
           # SDK23 has distinct macOS arm64/x64 archives; do not invent mac URLs.
@@ -1125,7 +1125,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y libgtk-3-dev xvfb xauth
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           packages: 'cmdline-tools;23.0 platforms;android-37.0'
           accept-android-sdk-licenses: true
@@ -1220,7 +1220,7 @@ jobs:
           printf 'RUSTUP_HOME=%s\n' "${RUSTUP_HOME:-$HOME/.rustup}" >> "$GITHUB_ENV"
           printf 'CARGO_HOME=%s\n' "${CARGO_HOME:-$HOME/.cargo}" >> "$GITHUB_ENV"
       - name: Provision the required official Android SDK for producer configuration
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           packages: 'cmdline-tools;23.0 platforms;android-37.0'
           accept-android-sdk-licenses: true

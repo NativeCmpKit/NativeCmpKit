@@ -385,7 +385,8 @@ class NativePickerComposeLifetimeTest {
                 try {
                     assertEquals(title, dialogName(id))
                     xdo("windowfocus", "--sync", id.toString())
-                    xdo("key", "--window", id.toString(), "--clearmodifiers", "Escape")
+                    assertEquals(id.toString(), xdo("getwindowfocus"), "Cancellation requires the owned dialog to hold input focus")
+                    xdo("key", "--clearmodifiers", "Escape")
                 } catch (failure: IllegalStateException) {
                     // Cancellation/window close may race between owned lookup and input.
                     // Only an actually vanished same PID/title window is benign cleanup.

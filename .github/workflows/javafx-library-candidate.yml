@@ -45,7 +45,7 @@ jobs:
       EXPECTED_ARCH: ${{ (inputs.platform == 'linux-arm64' || inputs.platform == 'macos-arm64') && 'arm64' || 'x64' }}
       CANDIDATE_SLOT: ${{ inputs.platform == 'linux-arm64' && 'desktop-linux-arm64' || inputs.platform == 'macos-arm64' && 'desktop-macos-arm64' || inputs.platform == 'macos-x64' && 'desktop-macos-x64' || 'desktop-windows-x64' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
       # Voluntary reuse of the existing verification revision, not a SHA policy.
@@ -55,10 +55,10 @@ jobs:
           java-version: '17'
           verify-signature: true
           overwrite-settings: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.12'
-      - uses: gradle/actions/wrapper-validation@v4
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6
         with:
           min-wrapper-count: 1
           allow-snapshots: false
@@ -72,7 +72,7 @@ jobs:
         run: |
           command -v rustup
           rustup toolchain install 1.98.0 --profile minimal --no-self-update --component rustfmt --component clippy
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
           packages: 'cmdline-tools;23.0 platforms;android-37.0'
           accept-android-sdk-licenses: true
@@ -116,7 +116,7 @@ jobs:
               output.write('runtime=' + runtime['compiler_runtime_fingerprint'] + '\n')
           PY
       - name: Restore only the exact established dependency cache, never test results
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           key: nativecmpkit-deps-v2-${{ runner.os }}-${{ runner.arch }}-${{ env.CANDIDATE_SLOT }}-desktop-${{ steps.cache-inputs.outputs.selection }}-${{ steps.cache-inputs.outputs.runtime }}-${{ steps.cache-inputs.outputs.digest }}
           enableCrossOsArchive: false
@@ -134,7 +134,7 @@ jobs:
             --platform "$CANDIDATE_PLATFORM" --download --output build/ci-verification/javafx-library-candidate
       - name: Preserve verification receipts only (no JARs, sources packages or classes)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: javafx-library-candidate-${{ inputs.platform }}-${{ github.run_id }}
           if-no-files-found: error

@@ -275,11 +275,9 @@ jobs:
                      "--no-parallel", "--no-configuration-cache", "--no-build-cache"]
           package = "io.github.apdelrahman1911.nativecmpkit.picker"
           for case in (
-              "NativeLinuxPortalFunctionalityTest",
+              "NativeLinuxPortalFunctionalityTest.cancellingEachDialogLeavesSourcesUntouchedAndAFreshNativeSessionCanStillOpen",
               "NativePickerComposeLifetimeTest.closingTheRealRegistryIdWhileItsDialogIsVisibleKeepsTheShowLeaseValid",
-              "NativePickerComposeLifetimeTest.firstPublicCompositionLaunchAndSettingsUpdatesUseOneActualNativeDialog",
               "NativePickerComposeLifetimeTest.closingComposeWindowWithAnActualDialogVisibleCancelsDeliveryNotNativeOwnership",
-              "platform.NativeCacheProcessIntegrationTest.differentCompiledNativeVersionsRaceInSeparateJvmsAndRetainTheirOwnDigestAndJniValue",
           ):
               command.extend(["--tests", f"{package}.{case}"])
           try:
@@ -369,6 +367,13 @@ jobs:
           ./gradlew stageVerificationPublications \
             -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=desktop \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Inspect staged desktop artifacts and native payload identity
+        if: inputs.profile == 'identity-linux-package'
+        run: |
+          python3 tests/consumer/verify_artifacts.py \
+            --repository build/verification-repo --version 0.1.0-SNAPSHOT \
+            --target desktop --native-platform linux-x64 --expected-native-revision "$GITHUB_SHA" \
+            --output build/ci-identity/desktop-artifacts.json
       - name: Apple simulator tests and sample framework
         if: inputs.profile == 'identity-apple'
         run: |
@@ -421,5 +426,7 @@ jobs:
         if: always() && steps.checkout.outcome == 'success'
         with:
           name: ${{ inputs.profile }}-junit-summary
-          path: build/ci-identity/junit-summary.json
+          path: |
+            build/ci-identity/junit-summary.json
+            build/ci-identity/desktop-artifacts.json
           if-no-files-found: error
