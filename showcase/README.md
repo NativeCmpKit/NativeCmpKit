@@ -90,6 +90,41 @@ The workflow records:
 - the pinned ui-test-actions commit;
 - the build artifact and the live session connection artifact.
 
+## Device matrix and functional testing
+
+Phone is the baseline. `device_class: tablet` selects an iPad simulator on iOS
+and a 1600×2560 / 320 dpi viewport on the Pixel 6 Android emulator.
+
+```sh
+# Android tablet session
+gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
+  --ref feature/showcase-ui-verification \
+  -f mode=session -f platform=android -f device_class=tablet -f duration_minutes=45
+
+# iPad session
+gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
+  --ref feature/showcase-ui-verification \
+  -f mode=session -f platform=ios -f device_class=tablet -f duration_minutes=60
+```
+
+Functional checks, not screenshots alone:
+
+```sh
+python3 showcase/automation/functional.py \
+  --client-dir /path/to/ui-test-actions \
+  --connection /tmp/showcase-session/connection.json \
+  --token-file /tmp/showcase-token \
+  --platform android --output-root screenshots
+```
+
+The driver asserts observable state (counter, switch, slider, menu selection,
+dialog dismissal, sheet dismissal, top-bar/toolbar action, tab content, icon
+filter, WebView title/JS/cookie/error, Geo values, Liquid Glass click) and records
+`passed`, `failed`, or `blocked` in `screenshots/<platform>/functional.json`.
+It seeds a synthetic text and image fixture for picker discovery; driving the
+system file/photo picker remains explicitly blocked until a deterministic
+selection path is added.
+
 ## Capture
 
 See [automation/README.md](automation/README.md). The smoke flow proves Home →
