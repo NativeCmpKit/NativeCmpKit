@@ -88,6 +88,17 @@ def find_search(ui, timeout_ms: int = 2500):
     return None
 
 
+def click_first(ui, labels):
+    last = None
+    for label in labels:
+        try:
+            click_text(ui, label)
+            return label
+        except Exception as error:  # noqa: BLE001 - try the next platform label
+            last = error
+    raise RuntimeError(f"none of {labels!r} were clickable: {last}")
+
+
 def click_text(ui, text: str):
     observation = soft_find(ui, {"text": text})
     if not observation.get("satisfied"):
@@ -285,13 +296,22 @@ def main() -> None:
                 shot("ui-adaptive-dropdown", "menu")
                 ui.action("keyboard.press", {"keys": ["BACK"] if args.platform == "android" else ["ESCAPE"]})
             elif title == "Web View":
-                click_text(ui, "Load second HTML page")
-                find(ui, {"text": "Kira Second Page"}, timeout_ms=10000)
-                shot("webview", "second-page")
-                click_text(ui, "Navigate Back")
-                shot("webview", "after-back")
-                click_text(ui, "Navigate Forward")
-                shot("webview", "after-forward")
+                step_errors = []
+                try:
+                    label = click_first(ui, ["Load second HTML page", "embed code", "HTML"])
+                    find(ui, {"text": "Kira Second Page"}, timeout_ms=10000)
+                    shot("webview", "second-page")
+                except Exception as error:  # noqa: BLE001
+                    step_errors.append({"step": "second-page", "error": repr(error)})
+                for name, labels in (
+                    ("Navigate Back", ["Navigate Back", "chevron left", "Back"]),
+                    ("Navigate Forward", ["Navigate Forward", "chevron right", "Forward"]),
+                ):
+                    try:
+                        click_first(ui, labels)
+                        shot("webview", "after-" + name.split()[-1].lower())
+                    except Exception as error:  # noqa: BLE001
+                        step_errors.append({"step": name, "error": repr(error)})
                 click_text(ui, "Evaluate JavaScript title")
                 find(ui, {"text_contains": "JS:"}, timeout_ms=5000)
                 shot("webview", "javascript-title")
@@ -303,6 +323,8 @@ def main() -> None:
                 shot("webview", "cookies-cleared")
                 click_text(ui, "Load invalid URL")
                 shot("webview", "invalid-destination")
+                for failure in step_errors:
+                    record["errors"].append({"screen": "Web View", **failure})
             elif title == "Cupertino Icons":
                 for category in ("Arrows", "Communication"):
                     click_text(ui, category)
