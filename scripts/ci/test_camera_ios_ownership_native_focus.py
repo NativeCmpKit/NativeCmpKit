@@ -147,6 +147,22 @@ class CameraIosOwnershipNativeFocusControls(unittest.TestCase):
                 target.write_bytes(raw)
         self.assertTrue(camera.validate_sources(self.root))
 
+    def test_disposal_retry_uses_only_the_original_failed_case_and_its_own_admission(self):
+        focus = camera.DISPOSAL_FOCUS
+        plan = library.plan(self.root, "ios", only_modules=(camera.MODULE,), focus=focus)
+        self.assertTrue(library.validate_test_focus(plan))
+        self.assertEqual((camera.DISPOSAL_METHOD,), camera.selected_methods(focus))
+        self.assertEqual(camera.identities(focus), plan["expected"][0]["required_testcases"])
+        self.assertEqual(1, len(camera.identities(focus)))
+        with patch.object(library.platform, "system", return_value="Darwin"), patch.object(library.platform, "machine", return_value="arm64"):
+            command = library.gradle_command("ios", plan, simulator=DEVICE, root=self.root)
+        self.assertIn("-P" + camera.FOCUS_PROPERTY + "=" + focus, command)
+        self.assertEqual(camera.native_request(focus), command[-3:])
+        full = [{**row, "status": "passed"} for row in camera.identities()]
+        _, errors = camera.outcomes(full, "Darwin", cases_by_report=[full], focus=focus)
+        self.assertTrue(errors)
+        self.assertNotEqual(camera.admission_document(native_task=True), camera.admission_document(native_task=True, focus=focus))
+
     def test_separate_compiler_or_ordered_new5_request_uses_public_kgp_three_sources_and_apple_native_host(self):
         init = (ROOT / camera.INIT_SCRIPT).read_text()
         self.assertIn("gradle.startParameter.taskNames in setOf(compilerRequest, applicationRequest)", init)

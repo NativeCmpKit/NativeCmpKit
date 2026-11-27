@@ -4,25 +4,28 @@ import groovy.json.JsonOutput
 import java.security.MessageDigest
 
 // Exact three-source Camera KLIB/native-task admission, not a native result.
-// Only the separate compiler task OR NEW5 application request; no accepted/common
-// test compilation, implicit host, publication, unrelated task or generated XML.
+// The compiler or an exact application selection uses these same three sources.
 gradle.projectsEvaluated {
     val project = rootProject.findProject(":nativecmpkit-camera-picker") ?: return@projectsEvaluated
     val focus = rootProject.providers.gradleProperty("nativecmpkitCameraIosFocus").orNull
-    check(focus == "ios-camera-ownership-memory-callback") { "Explicit exact Camera NEW5 focus is required" }
+    val fullFocus = "ios-camera-ownership-memory-callback"
+    val disposalFocus = "ios-camera-ownership-memory-callback-disposal"
+    check(focus == fullFocus || focus == disposalFocus) { "Explicit exact Camera ownership focus is required" }
     val prefix = "io.github.apdelrahman1911.nativecmpkit.camerapicker.IosCameraOwnershipAcceptanceTest."
-    val methods = listOf(
+    val disposalMethod = "compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown"
+    val fullMethods = listOf(
         "publicOwnerSurvivesOrdinaryRecompositionAndNativeGcAndDeliversToLatestCallback",
         "doubleLaunchDuplicateTerminalInputAndReentrantReplacementKeepOneNativeOwner",
-        "compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown",
+        disposalMethod,
         "actualSimulatorUnavailableAndCompetingModalOutcomesPreserveForeignPresenter",
         "controlledOriginalNativeImageWritesRealPngAndJpegAndSuccessOutlivesOwner",
-    ).map { prefix + it }
+    )
+    val methods = (if (focus == fullFocus) fullMethods else listOf(disposalMethod)).map { prefix + it }
     val compilerRequest = listOf(":nativecmpkit-camera-picker:compileTestKotlinIosSimulatorArm64")
     val applicationRequest = listOf(":nativecmpkit-camera-picker:iosSimulatorArm64ApplicationTest") +
         methods.flatMap { listOf("--tests", it) }
     check(gradle.startParameter.taskNames in setOf(compilerRequest, applicationRequest)) {
-        "Camera accepts only its exact three-input compiler or five native methods, never full/publish/other tasks"
+        "Camera requires its exact three-input compiler or selected application test task"
     }
     val nativeTaskRequested = gradle.startParameter.taskNames == applicationRequest
     val simulator = rootProject.providers.gradleProperty("nativecmpkitSimulatorDevice").orNull
@@ -88,7 +91,7 @@ gradle.projectsEvaluated {
             "apple_links_attested" to 0, "native_tests_executed" to 0,
             "scope" to "Source/selection admission only; compiler result and fresh native XML/runtime/cleanup decide results",
         ))) + "\n")
-        logger.lifecycle("NATIVECMPKIT_CAMERA_SOURCE_ADMISSION methods=5 sources=3 common=0 nativeTestsExecuted=0")
+        logger.lifecycle("NATIVECMPKIT_CAMERA_SOURCE_ADMISSION methods=${methods.size} sources=3 common=0 nativeTestsExecuted=0")
     }
     compilation.doFirst { admit(compilation.path, false) }
     // Always a fresh admission before the native task, even if its exact unchanged

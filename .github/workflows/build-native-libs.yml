@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -193,7 +193,7 @@ jobs:
 
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
-    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || (inputs.profile == 'identity-apple-ui-pre26' || inputs.profile == 'identity-apple-ui-pre26-diagnostic') && 'macos-15' || inputs.profile == 'identity-apple-camera' && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
+    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || (inputs.profile == 'identity-apple-ui-pre26' || inputs.profile == 'identity-apple-ui-pre26-diagnostic') && 'macos-15' || (inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal') && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
@@ -681,7 +681,7 @@ jobs:
               | tee -a "$receipt"
           done
       - name: Tests requiring an owned UIKit application
-        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera'
+        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal'
         shell: bash
         run: |
           simulator_args=()
@@ -692,7 +692,7 @@ jobs:
             --output build/ci-identity/simulator.json
           device="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["udid"])')"
           state="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["state"])')"
-          if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-apple-camera || "$IDENTITY_PROFILE" == identity-apple-camera-disposal ]]; then
             # On iOS 26.5 the grant returned zero but PhotoKit stayed not-determined.
             # Use a fresh iOS 27 simulator and retain the same native authorization gate.
             read -r device_type simulator_runtime runtime_version < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["device_type"], s["runtime_identifier"], s["runtime_version"])')
@@ -714,7 +714,7 @@ jobs:
           elif [[ "$state" != Booted ]]; then
             exit 1
           fi
-          if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-apple-camera || "$IDENTITY_PROFILE" == identity-apple-camera-disposal ]]; then
             xcrun simctl bootstatus "$device" -b | tee build/ci-identity/camera-boot.txt
             if grep -Fq 'Data Migration Failed' build/ci-identity/camera-boot.txt; then
               echo 'CoreSimulator reported a data migration failure. Checking actual boot and Photos startup separately.'
@@ -746,9 +746,11 @@ jobs:
                 --output build/ci-verification/identity-share || result=1
               exit "$result"
               ;;
-            identity-apple-camera)
+            identity-apple-camera|identity-apple-camera-disposal)
+              camera_focus=ios-camera-ownership-memory-callback
+              if [[ "$IDENTITY_PROFILE" == identity-apple-camera-disposal ]]; then camera_focus+=-disposal; fi
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-camera-picker \
-                --focus ios-camera-ownership-memory-callback --simulator "$device" --timeout 2700 \
+                --focus "$camera_focus" --simulator "$device" --timeout 2700 \
                 --output build/ci-verification/identity-camera
               ;;
             identity-apple-main-ui)
@@ -782,7 +784,7 @@ jobs:
               ;;
           esac
       - name: Retain bounded UIKit failure observations
-        if: ${{ always() && steps.checkout.outcome == 'success' && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera') }}
+        if: ${{ always() && steps.checkout.outcome == 'success' && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
       - name: Retain bounded Android WebView failure observations
         if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore') }}

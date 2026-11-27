@@ -9,6 +9,7 @@ import re
 from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
+from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, PRE26_NEGATIVE_STEPS_PHASES, PRE26_STACK_MARKERS, WK_RESTORE_STEPS
 
 
@@ -28,6 +29,13 @@ ANDROID_REMOTE_IO_FAILURE_MARKERS = {
     "provider-file-not-found": "FileNotFoundException",
     "timeout": "TimeoutException",
     "assertion": "AssertionError",
+}
+CAMERA_DISPOSAL_FAILURE_MARKERS = {
+    "presenting-at-launch": "The first disposal variant requires an observed real animated presentation",
+    "presenting-at-disposal": "Composition disposal must occur in the actually observed requested UIKit phase",
+    "unexpected-late-delivery": "Disposed owners suppress their late controlled terminal inputs",
+    "native-timeout": "Timed out awaiting",
+    "incorrect-picker-type": "UIImagePickerController",
 }
 ANDROID_ASSEMBLY_LOGS = {
     "camera-test-apk": "identity-android-camera/apk-assembly.log",
@@ -160,6 +168,10 @@ def failure_rows(module, path, expected_digest=None):
             if module == "nativecmpkit-io":
                 diagnostics["android_remote_io_failure_categories"] = [
                     key for key, marker in ANDROID_REMOTE_IO_FAILURE_MARKERS.items() if marker in failure_text
+                ]
+            if module == "nativecmpkit-camera-picker" and name == DISPOSAL_METHOD:
+                diagnostics["camera_disposal_failure_categories"] = [
+                    key for key, marker in CAMERA_DISPOSAL_FAILURE_MARKERS.items() if marker in failure_text
                 ]
             yield {
                 "module": module, "case": name, "status": failed.tag,

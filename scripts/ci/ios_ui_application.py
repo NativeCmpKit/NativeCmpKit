@@ -1212,8 +1212,8 @@ def application_host(binary_relative: str, focus: str | None) -> dict:
     if len(matching) != 1:
         raise ValueError("Unknown library application executable directory")
     module, host = matching[0]
-    if module == lt.camera_ios.MODULE and focus != lt.camera_ios.FOCUS:
-        raise ValueError("Camera application is exact NEW5-only, never a generic/full or SDK fixture")
+    if module == lt.camera_ios.MODULE and focus not in lt.camera_ios.FOCUSES:
+        raise ValueError("Camera application requires an exact declared ownership selection")
     if focus is not None and lt.UI_APPLICATION_FOCUS_SPECS[focus].get("module", "nativecmpkit-ui") != module:
         raise ValueError("Application test selection belongs to a different owning module")
     if focus in lt.ui_related.SPLIT_FOCUSES:
@@ -1376,7 +1376,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
         protocol = NativeProtocol(bundle_id=bundle_id, **({"provider_c3_only": True} if provider_c3_only else {}))
         if host["module"] == lt.camera_ios.MODULE:
             import ios_camera_photo_fixture as camera_photo
-            lt.camera_ios.source_contract(root)
+            lt.camera_ios.source_contract(root, focus)
             protocol = camera_photo.protocol_adapter(NativeProtocol, bundle_id=bundle_id,
                 source_revision=before["source_revision"], session_nonce=token)
         phase = "foreign-app-preflight"

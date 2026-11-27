@@ -16,6 +16,8 @@ import re
 from ios_popover_anchor_plan import _ordinary_bytes, _unique_object
 
 FOCUS = "ios-camera-ownership-memory-callback"
+DISPOSAL_FOCUS = "ios-camera-ownership-memory-callback-disposal"
+FOCUSES = (FOCUS, DISPOSAL_FOCUS)
 PROFILE = FOCUS
 MODULE = "nativecmpkit-camera-picker"
 TASK_NAME = "iosSimulatorArm64ApplicationTest"
@@ -30,10 +32,11 @@ TEST_SOURCE = "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahm
 HOST_SOURCE = "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt"
 IDENTITY_SOURCE = "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt"
 SOURCES = (TEST_SOURCE, HOST_SOURCE, IDENTITY_SOURCE)
+DISPOSAL_METHOD = "compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown"
 METHODS = (
     "publicOwnerSurvivesOrdinaryRecompositionAndNativeGcAndDeliversToLatestCallback",
     "doubleLaunchDuplicateTerminalInputAndReentrantReplacementKeepOneNativeOwner",
-    "compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown",
+    DISPOSAL_METHOD,
     "actualSimulatorUnavailableAndCompetingModalOutcomesPreserveForeignPresenter",
     "controlledOriginalNativeImageWritesRealPngAndJpegAndSuccessOutlivesOwner",
 )
@@ -46,27 +49,34 @@ SCOPE = ("Only NEW5 genuine Camera UIApplication/Worker/library methods. Control
          "callback-throw, disk-full/cache eviction, observed worker-entry cancellation, other platform/OS, "
          "consumer/API-ABI/dependency/legal/security/readiness/publishing or issue closure claim.")
 SOURCE_SHA256 = {'nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt': '1cc490b60054c619fceb6ec42c65cc9067e8beb2822f1859b1d754e3aefb250d', 'nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt': 'fc6ddb7e7531ef9500388fceaeda04a4aa346f4a9c7601b13c67593c9c8352c5', 'nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt': '77ef5f5037b621f1c6cfe4c92c9d469bdbd3d56ba7318632106c2907c9234379'}
-OTHER_SOURCE_SHA256 = {'nativecmpkit-camera-picker/build.gradle.kts': 'aa2074dab2537796a0d8553f458038999312f08532f7926ee959288d91f6918c', 'nativecmpkit-camera-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.kt': 'ded6bd6767cb25ed00a1f628028479a912f37111f9f7403b0e2b4757cdd1e332', 'nativecmpkit-camera-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerResult.kt': '5b67083ca39c46669b119c99e6cb3ac405bf5f4d4205343986d43f56f7f646a9', 'nativecmpkit-camera-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.ios.kt': '036fd1b3e1b47721419be509812401f128ed2917a4c151bd7b847f2db7ac41d6', 'scripts/ci/ios_camera_ownership_native.init.gradle.kts': '8040d7648390083ba7da639461139dc11e82f431d1ce97d30ab3d10f39fea8ed', 'scripts/ci/ios_camera_photo_fixture.py': '0cae6165e230445944dc59c2aabbcc7b8a1d3c16e156eae9bf8c074e3465d752'}
+OTHER_SOURCE_SHA256 = {'nativecmpkit-camera-picker/build.gradle.kts': 'aa2074dab2537796a0d8553f458038999312f08532f7926ee959288d91f6918c', 'nativecmpkit-camera-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.kt': 'ded6bd6767cb25ed00a1f628028479a912f37111f9f7403b0e2b4757cdd1e332', 'nativecmpkit-camera-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerResult.kt': '5b67083ca39c46669b119c99e6cb3ac405bf5f4d4205343986d43f56f7f646a9', 'nativecmpkit-camera-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.ios.kt': '036fd1b3e1b47721419be509812401f128ed2917a4c151bd7b847f2db7ac41d6', 'scripts/ci/ios_camera_ownership_native.init.gradle.kts': '6574e793dd71ea2a4a3c1ba8b559f451e6b7294429e37df5fa4ce49759b3b4f2', 'scripts/ci/ios_camera_photo_fixture.py': '0cae6165e230445944dc59c2aabbcc7b8a1d3c16e156eae9bf8c074e3465d752'}
 ADMISSION = "build/ci-verification/camera-ios-native-source-admission.json"
 COMPILE_ADMISSION = "build/ci-verification/camera-ios-precompiler-source-admission.json"
 
 
-def selectors() -> tuple[str, ...]:
-    return tuple(CLASS + "." + method for method in METHODS)
+def selected_methods(focus: str) -> tuple[str, ...]:
+    if focus not in FOCUSES:
+        raise ValueError("Unknown exact Camera ownership focus")
+    return METHODS if focus == FOCUS else (DISPOSAL_METHOD,)
 
 
-def focus_spec() -> dict:
+def selectors(focus: str = FOCUS) -> tuple[str, ...]:
+    return tuple(CLASS + "." + method for method in selected_methods(focus))
+
+
+def focus_spec(focus: str = FOCUS) -> dict:
     return {"module": MODULE, "groups": ({"classname": CLASS, "source": TEST_SOURCE,
-             "methods": METHODS, "declared_methods": METHODS},), "scope": SCOPE}
+             "methods": selected_methods(focus), "declared_methods": METHODS},),
+            "scope": SCOPE if focus == FOCUS else "Only the remaining Camera disposal method on the same owned UIKit host."}
 
 
-def identities() -> list[dict]:
+def identities(focus: str = FOCUS) -> list[dict]:
     return [{"classname": TASK_NAME + "." + CLASS, "name": method + "[iosSimulatorArm64]"}
-            for method in METHODS]
+            for method in selected_methods(focus)]
 
 
-def native_request() -> list[str]:
-    return [TASK, *(argument for selector in selectors() for argument in ("--tests", selector))]
+def native_request(focus: str = FOCUS) -> list[str]:
+    return [TASK, *(argument for selector in selectors(focus) for argument in ("--tests", selector))]
 
 
 def _source_hashes(root: Path) -> dict[str, str]:
@@ -92,27 +102,28 @@ def validate_sources(root: Path, test_sources: list[str] | None = None) -> bool:
     return True
 
 
-def _contract() -> dict:
-    return {"schema_version": 1, "focus": FOCUS, "module": MODULE, "task": TASK,
+def _contract(focus: str) -> dict:
+    return {"schema_version": 1, "focus": focus, "module": MODULE, "task": TASK,
             "compiler_task": COMPILER_TASK, "init_script": INIT_SCRIPT,
-            "focus_property": FOCUS_PROPERTY, "selected_methods": list(selectors()),
+            "focus_property": FOCUS_PROPERTY, "selected_methods": list(selectors(focus)),
             "effective_sources": list(SOURCES), "common_sources": [],
             "source_sha256": SOURCE_SHA256, "other_source_sha256": OTHER_SOURCE_SHA256,
-            "required_testcases": identities(), "required_original_xml": 1,
+            "required_testcases": identities(focus), "required_original_xml": 1,
             "privacy_setup": "owned-photos-grant-reset-and-actual-main-authorized-readback",
             "image_scope": "controlled-24x16-three-real-PNG-JPEG-PNG-writes-not-physical-or-profiling",
             "compiler_executions_attested": 0, "apple_links_attested": 0, "native_tests_executed": 0}
 
 
-def source_contract(root: Path) -> dict:
+def source_contract(root: Path, focus: str = FOCUS) -> dict:
     validate_sources(root)
-    return _contract()
+    return _contract(focus)
 
 
 def validate_plan(plan: dict) -> bool:
     expected = plan.get("expected") if type(plan) is dict else None
+    focus = plan.get("explicit_test_focus") if type(plan) is dict else None
     if (type(plan) is not dict or plan.get("suite") != "ios" or
-            plan.get("explicit_test_focus") != FOCUS or plan.get("explicit_module_subset") != [MODULE] or
+            focus not in FOCUSES or plan.get("explicit_module_subset") != [MODULE] or
             plan.get("complete_suite_requested") is not False or type(expected) is not list or len(expected) != 1):
         raise ValueError("Camera requires exactly one explicit NEW5 iOS application plan")
     item = expected[0]
@@ -121,8 +132,8 @@ def validate_plan(plan: dict) -> bool:
             item.get("native_test_host") != "genuine-uikit-application" or
             item.get("test_source_sets") != ["iosTest"] or item.get("test_source_files") != sorted(SOURCES) or
             type(item.get("required_original_xml")) is not int or item["required_original_xml"] != 1 or
-            item.get("test_filter") != ",".join(selectors()) or item.get("required_testcases") != identities() or
-            item.get(CONTRACT_KEY) != _contract() or
+            item.get("test_filter") != ",".join(selectors(focus)) or item.get("required_testcases") != identities(focus) or
+            item.get(CONTRACT_KEY) != _contract(focus) or
             type(item[CONTRACT_KEY].get("schema_version")) is not int or
             any(type(item[CONTRACT_KEY].get(key)) is not int for key in
                 ("compiler_executions_attested", "apple_links_attested", "native_tests_executed", "required_original_xml")) or
@@ -131,19 +142,19 @@ def validate_plan(plan: dict) -> bool:
     return True
 
 
-def admission_document(*, native_task: bool) -> dict:
+def admission_document(*, native_task: bool, focus: str = FOCUS) -> dict:
     if type(native_task) is not bool:
         raise ValueError("Source admission must name its exact compiler or native-task boundary")
-    return {"schema_version": 1, "task": TASK if native_task else COMPILER_TASK, "focus": FOCUS,
+    return {"schema_version": 1, "task": TASK if native_task else COMPILER_TASK, "focus": focus,
             "phase": "native-task-source-admission" if native_task else "precompiler-source-admission",
-            "selected_methods": list(selectors()), "effective_sources": list(SOURCES), "common_sources": [],
+            "selected_methods": list(selectors(focus)), "effective_sources": list(SOURCES), "common_sources": [],
             "source_sha256": SOURCE_SHA256, "excluded_unrelated_test_sources": True,
             "production_source_sets_changed": False, "compiler_executions_attested": 0,
             "apple_links_attested": 0, "native_tests_executed": 0,
             "scope": "Source/selection admission only; compiler result and fresh native XML/runtime/cleanup decide results"}
 
 
-def validate_admission(root: Path, started_ns: int, ended_ns: int) -> bool:
+def validate_admission(root: Path, started_ns: int, ended_ns: int, focus: str = FOCUS) -> bool:
     if type(started_ns) is not int or type(ended_ns) is not int or started_ns <= 0 or ended_ns < started_ns:
         return False
     try:
@@ -153,7 +164,7 @@ def validate_admission(root: Path, started_ns: int, ended_ns: int) -> bool:
         validate_sources(root)
         document = json.loads(raw, object_pairs_hook=_unique_object,
                               parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite Camera admission")))
-        return (type(document) is dict and document == admission_document(native_task=True) and
+        return (type(document) is dict and document == admission_document(native_task=True, focus=focus) and
                 all(type(document.get(key)) is int for key in
                     ("schema_version", "compiler_executions_attested", "apple_links_attested", "native_tests_executed")) and
                 all(type(document.get(key)) is bool for key in
@@ -162,16 +173,17 @@ def validate_admission(root: Path, started_ns: int, ended_ns: int) -> bool:
         return False
 
 
-def outcomes(cases: list[dict], host_system: str, *, cases_by_report: list[list[dict]]) -> tuple[list[dict], list[str]]:
-    wanted = Counter((case["classname"], case["name"]) for case in identities())
+def outcomes(cases: list[dict], host_system: str, *, cases_by_report: list[list[dict]], focus: str = FOCUS) -> tuple[list[dict], list[str]]:
+    selected = identities(focus)
+    wanted = Counter((case["classname"], case["name"]) for case in selected)
     shape = type(cases) is list and all(type(case) is dict and
             all(type(case.get(key)) is str for key in ("classname", "name", "status")) for case in cases)
     exact = shape and Counter((case["classname"], case["name"]) for case in cases) == wanted
     reports = type(cases_by_report) is list and len(cases_by_report) == 1 and cases_by_report == [cases]
     host = type(host_system) is str and host_system.lower() in {"darwin", "macos", "mac os x"}
-    errors = [] if exact and reports and host else ["Camera requires exact NEW5 in one fresh original class XML on actual Apple host"]
+    errors = [] if exact and reports and host else ["Camera requires the exact selected methods in one fresh original class XML on actual Apple host"]
     scenarios = []
-    for identity in identities():
+    for identity in selected:
         matching = [case for case in cases if (case.get("classname"), case.get("name")) ==
                     (identity["classname"], identity["name"])] if shape else []
         passed = exact and reports and host and len(matching) == 1 and matching[0]["status"] == "passed"

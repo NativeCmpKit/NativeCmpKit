@@ -602,7 +602,8 @@ UI_APPLICATION_FOCUS_SPECS[UI_DATE_YEAR_PREDICATE_RED_FOCUS] = {
 }
 
 
-UI_APPLICATION_FOCUS_SPECS[camera_ios.FOCUS] = camera_ios.focus_spec()
+for _focus in camera_ios.FOCUSES:
+    UI_APPLICATION_FOCUS_SPECS[_focus] = camera_ios.focus_spec(_focus)
 UI_APPLICATION_FOCUS_SPECS["ui-native-adaptive-pre26"] = ui_related.focus_spec("ui-native-adaptive-pre26")
 UI_APPLICATION_FOCUS_SPECS["ui-native-adaptive-drag-shader-ios26plus"] = ui_related.focus_spec("ui-native-adaptive-drag-shader-ios26plus")
 for _focus in ui_related.SPLIT_FOCUSES + ui_related.PRE26_RECOVERY_FOCUSES + ui_related.PRE26_PENDING_FOCUSES:
@@ -2366,7 +2367,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
             # do not discover arbitrary XML or count protobuf inventories as tests.
             actual_task = (IOS_APPLICATION_TASK if suite == "ios" and (
                            (module in IOS_APPLICATION_HOST_SOURCES and not (module == "nativecmpkit-file-picker" and focus == IOS_SAVE_WRITE_FOCUS)) or
-                           (module == camera_ios.MODULE and focus == camera_ios.FOCUS)) else task_name)
+                           (module == camera_ios.MODULE and focus in camera_ios.FOCUSES)) else task_name)
             if suite == "ios" and module == ui_related.MODULE and focus in ui_related.SPLIT_FOCUSES:
                 actual_task = ui_related.task_name(focus)
             report_directory = (f"{module}/build/outputs/androidTest-results/connected/androidMain"
@@ -2376,7 +2377,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
                     "test_source_sets": source_sets, "test_source_files": sorted(inputs)}
             if actual_task == IOS_APPLICATION_TASK or (suite == "ios" and module == ui_related.MODULE and
                                                        focus in ui_related.SPLIT_FOCUSES):
-                application_sources = (camera_ios.SOURCES if module == camera_ios.MODULE and focus == camera_ios.FOCUS
+                application_sources = (camera_ios.SOURCES if module == camera_ios.MODULE and focus in camera_ios.FOCUSES
                                        else IOS_APPLICATION_HOST_SOURCES[module])
                 if not all(source in inputs for source in application_sources):
                     raise ValueError("Required genuine UIKit application host/tests are missing; a Skiko/zero-suite fallback is not allowed")
@@ -2461,11 +2462,11 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         spec = UI_APPLICATION_FOCUS_SPECS[focus]
         if focus in content_policy.IOS_FOCUSES:
             content_policy.configure_item(root, selected[0], focus)
-        if focus == camera_ios.FOCUS:
+        if focus in camera_ios.FOCUSES:
             camera_ios.validate_sources(root)
             selected[0]["test_source_files"] = sorted(camera_ios.SOURCES)
             selected[0]["test_source_sets"] = ["iosTest"]
-            selected[0][camera_ios.CONTRACT_KEY] = camera_ios.source_contract(root)
+            selected[0][camera_ios.CONTRACT_KEY] = camera_ios.source_contract(root, focus)
             selected[0]["required_original_xml"] = 1
         if focus in ui_related.ALL_FOCUSES:
             ui_related.validate_sources(root, focus)
@@ -3206,7 +3207,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     validate_android_storage_probe_plan(test_plan)
     focus = test_plan.get("explicit_test_focus")
     camera_callback.validate_contract_placement(test_plan, ANDROID_CAMERA_FOCUSES)
-    if focus != camera_ios.FOCUS and any(camera_ios.CONTRACT_KEY in item for item in test_plan["expected"]):
+    if focus not in camera_ios.FOCUSES and any(camera_ios.CONTRACT_KEY in item for item in test_plan["expected"]):
         raise ValueError("No Camera application/Photos source contract on unrelated or unfocused plans")
     if focus not in content_policy.FOCUSES and any(content_policy.CONTRACT_FIELD in item for item in test_plan["expected"]):
         raise ValueError("No content-policy source or fixture contract on an unrelated or unfocused suite")
@@ -3600,7 +3601,7 @@ def validate_test_focus(test_plan: dict) -> bool:
             raise ValueError("Invalid finite two-method important Material year-policy plan")
         return True
     if focus in UI_APPLICATION_FOCUS_SPECS:
-        if focus == camera_ios.FOCUS:
+        if focus in camera_ios.FOCUSES:
             camera_ios.validate_plan(test_plan)
         if focus in ui_related.ALL_FOCUSES:
             ui_related.validate_plan(test_plan)
@@ -3976,11 +3977,11 @@ def collect_reports(root: Path, test_plan: dict, started_ns: int, ended_ns: int,
             scenarios = [{**c, "source": sources.get(c["classname"], "unselected"), "required_on_host": True,
                           "disposition": "required-executed" if c["status"] == "passed" else "required-not-passed"}
                          for c in module_cases]
-        elif boundary_focus and test_plan["explicit_test_focus"] == camera_ios.FOCUS:
+        elif boundary_focus and test_plan["explicit_test_focus"] in camera_ios.FOCUSES:
             scenarios, policy_errors = camera_ios.outcomes(module_cases, host_system or platform.system(),
-                cases_by_report=cases_by_report)
+                cases_by_report=cases_by_report, focus=test_plan["explicit_test_focus"])
             if len(paths) != 1 or len(reports) != 1:
-                policy_errors.append("Camera requires one original fresh five-case class XML, no extra empty reports")
+                policy_errors.append("Camera requires one original fresh selected class XML, no extra empty reports")
         elif boundary_focus and test_plan["explicit_test_focus"] in ui_related.ALL_FOCUSES:
             scenarios, policy_errors = ui_related.outcomes(module_cases, host_system or platform.system(),
                 test_plan["explicit_test_focus"], cases_by_report=cases_by_report)
@@ -4469,13 +4470,14 @@ def gradle_command(suite: str, test_plan: dict, simulator: str | None = None, *,
                "-Pkotlin.compiler.execution.strategy=in-process", "-Pkotlin.native.jvmArgs=-Xmx2048m",
                "--init-script", "scripts/ci/fresh-tests.init.gradle.kts",
                "--init-script", "scripts/ci/daemon-jvm.init.gradle.kts"]
-    if test_plan.get("explicit_test_focus") == camera_ios.FOCUS:
+    if test_plan.get("explicit_test_focus") in camera_ios.FOCUSES:
         if platform.system() != "Darwin" or platform.machine().lower() not in {"arm64", "aarch64"}:
             raise ValueError("Camera native command requires actual Arm64 Apple host; Linux KLIB is separate")
-        if camera_ios.source_contract(root) != test_plan["expected"][0][camera_ios.CONTRACT_KEY]:
+        focus = test_plan["explicit_test_focus"]
+        if camera_ios.source_contract(root, focus) != test_plan["expected"][0][camera_ios.CONTRACT_KEY]:
             raise ValueError("Camera exact inputs changed before the owning native command")
         command.extend(["--init-script", camera_ios.INIT_SCRIPT,
-                        "-P" + camera_ios.FOCUS_PROPERTY + "=" + camera_ios.FOCUS])
+                        "-P" + camera_ios.FOCUS_PROPERTY + "=" + focus])
     if test_plan.get("explicit_test_focus") in ui_related.ALL_FOCUSES:
         focus = test_plan["explicit_test_focus"]
         if ui_related.source_contract(root, focus) != test_plan["expected"][0]["ui_related_source_contract"]:
@@ -4797,8 +4799,8 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
         focused_ui = test_plan.get("explicit_test_focus") in UI_APPLICATION_FOCUS_SPECS
         if focused_ui:
             validate_test_focus(test_plan)
-        if test_plan.get("explicit_test_focus") == camera_ios.FOCUS:
-            need(camera_ios.validate_admission(root, started_ns, ended_ns),
+        if test_plan.get("explicit_test_focus") in camera_ios.FOCUSES:
+            need(camera_ios.validate_admission(root, started_ns, ended_ns, test_plan["explicit_test_focus"]),
                  "Camera requires fresh exact three-source native-task admission; not historical KLIB or compiler execution")
         else:
             need("camera_photos" not in document, "No Camera Photos lease claim on unrelated application")
@@ -4881,7 +4883,7 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
         need(isinstance(protocol, dict) and type(protocol.get("process_exit")) is int and protocol["process_exit"] == 0,
              "App crash or missing real console process exit")
         need("lifecycle_failure_observation" not in protocol, "Failed owned native lifecycle cannot be accepted")
-        if test_plan.get("explicit_test_focus") == camera_ios.FOCUS:
+        if test_plan.get("explicit_test_focus") in camera_ios.FOCUSES:
             import ios_camera_photo_fixture as camera_photo
             import plistlib
             info = app.app_information(document["bundle_id"], document["macho"]["minimum_os"])

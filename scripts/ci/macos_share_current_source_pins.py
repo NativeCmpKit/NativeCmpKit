@@ -24,7 +24,7 @@ APPKIT_INPUTS = {
     "scripts/ci/fixtures/macos-share-missing-ci-source-inverse.json": "79fa2b0394b10026402bef72992385c38684f19b70414606ed1833b40e3178b9",
     "scripts/ci/fresh-tests.init.gradle.kts": "9f49a87337d3314c89efeb572c029bb12bf8c876a2ceb5d893a7d686f4780abc",
     "scripts/ci/ios_popover_anchor_plan.py": "fd02ad32b0df43fc86b6fcdc3efee8f686db3e484e7c69d7e6ed1c3c10e70205",
-    "scripts/ci/library_tests.py": "6ce464d4b9c1c34270a3d29716c3e3e2104e690b028f697889f89e46b40eb58f",
+    "scripts/ci/library_tests.py": "514c95f4dfb650a630e023f3aded9ae69070c136316e8540801de66842b770b3",
     "scripts/ci/macos_share_appkit_lifecycle.py": "38dad5370bc66b6d68247c4e3e019bc205e3ec70dff21541dabe693bd670108f",
     "scripts/ci/macos_share_appkit_only_route.py": "2d526984d29c044b13e83cb04711be9bcd7aaecf2996e65444ad95132ca8e407",
     "scripts/ci/macos_share_appkit_only_source_projection.py": "b6b28d9b1c6addafcdf8a73db9551a19a90123b648c9fc2138b1731535ac1bfd",
