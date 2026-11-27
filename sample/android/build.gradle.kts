@@ -56,7 +56,9 @@ val copyCupertinoFont by tasks.registering(Copy::class) {
     from(rootProject.file("kira-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf"))
     into(cupertinoFontAssets)
 }
-android.sourceSets.getByName("main").assets.srcDir(
-    layout.buildDirectory.dir("generated/cupertinoAssets"),
-)
+val cupertinoGeneratedAssets = layout.buildDirectory.dir("generated/cupertinoAssets").get().asFile
+android.sourceSets.getByName("main").assets.srcDir(cupertinoGeneratedAssets)
 tasks.named("preBuild").configure { dependsOn(copyCupertinoFont) }
+tasks.matching { it.name.startsWith("merge") && it.name.endsWith("Assets") }.configureEach {
+    dependsOn(copyCupertinoFont)
+}
