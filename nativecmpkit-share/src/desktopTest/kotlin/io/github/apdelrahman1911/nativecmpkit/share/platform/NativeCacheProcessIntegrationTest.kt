@@ -303,13 +303,21 @@ private fun compileNativeVersion(root: Path, version: Int): Path {
         check(Files.size(rustIdentity) < 4096 && Files.readString(rustIdentity).startsWith("rustc $expected "))
     } finally { if (rust.isAlive) { rust.destroyForcibly(); check(rust.waitFor(10, TimeUnit.SECONDS)) } }
     val library = root.resolve(System.mapLibraryName("nativecmpkit_test_v$version"))
+    val compilerError = root.resolve("rust-v$version.stderr")
     val compiler = ProcessBuilder("rustc", "--edition=2021", "--crate-type=cdylib", "--crate-name", "nativecmpkit_cache_v$version",
         "--cfg", "fixture_v$version", "-C", "panic=abort", "-C", "opt-level=2", source.toString(), "-o", library.toString())
         .directory(repo.toFile()).redirectOutput(root.resolve("rust-v$version.stdout").toFile())
-        .redirectError(root.resolve("rust-v$version.stderr").toFile()).start()
+        .redirectError(compilerError.toFile()).start()
     try {
         check(compiler.waitFor(30, TimeUnit.SECONDS)) { "Pinned native fixture compilation timed out" }
-        check(compiler.exitValue() == 0 && Files.isRegularFile(library)) { "Pinned native fixture compilation failed" }
+        check(compiler.exitValue() == 0 && Files.isRegularFile(library)) {
+            val diagnostics = Files.newBufferedReader(compilerError).use { reader ->
+                val buffer = CharArray(4096)
+                val length = reader.read(buffer).coerceAtLeast(0)
+                String(buffer, 0, length)
+            }
+            "Pinned native fixture compilation failed (exit ${compiler.exitValue()}): $diagnostics"
+        }
     } finally {
         if (compiler.isAlive) { compiler.destroyForcibly(); check(compiler.waitFor(10, TimeUnit.SECONDS)) }
     }

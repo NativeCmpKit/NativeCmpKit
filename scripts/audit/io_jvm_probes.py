@@ -20,11 +20,11 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCES = [
     "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeLibCache.kt",
     "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/PlatformFilePicker.kt",
-    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/io/IOUtil.kt",
-    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/net/MimeTypes.kt",
-    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/util/Wildcard.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/io/IOUtil.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypes.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/util/Wildcard.kt",
 ]
-RESOURCE = "nativecmpkit-file-picker/src/desktopMain/resources/jodd/net/MimeTypes.properties"
+RESOURCE = "nativecmpkit-file-picker/src/desktopMain/resources/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypes.properties"
 
 STUBS = {
     "ComposeWindow.kt": """
