@@ -17,10 +17,18 @@ HOSTS = ("native-webview-application", "native-ui-application", "native-picker-a
 OWNED_ROOT = Path("build/ci-verification")
 MAX_BYTES = 4 * 1024 * 1024
 TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,90}\Z")
-FRAME = re.compile(r"\b([A-Za-z0-9_]+\.kt):(\d{1,5})\b")
+FRAME = re.compile(r"\b([A-Za-z0-9_]+\.(?:kt|java)):(\d{1,5})\b")
 RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
 RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
 ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
+ANDROID_REMOTE_IO_FAILURE_MARKERS = {
+    "held-open-admission": "genuine HTTP held pending-open admission",
+    "awaiting-terminal-cleanup": "cancellation socket/native producer terminal",
+    "provider-cancellation": "OperationCanceledException",
+    "provider-file-not-found": "FileNotFoundException",
+    "timeout": "TimeoutException",
+    "assertion": "AssertionError",
+}
 ANDROID_ASSEMBLY_LOGS = {
     "camera-test-apk": "identity-android-camera/apk-assembly.log",
     "remote-io-helper-apk": "identity-android-remote-io/io-remote-documents/source-apk-build.log",
@@ -147,12 +155,18 @@ def failure_rows(module, path, expected_digest=None):
         name = case.get("name", "").removesuffix("[iosSimulatorArm64]")
         if failed is not None and TOKEN.fullmatch(name):
             failure_text = failed.get("message", "") + "\n" + (failed.text or "")
+            diagnostics = {}
+            if module == "nativecmpkit-io":
+                diagnostics["android_remote_io_failure_categories"] = [
+                    key for key, marker in ANDROID_REMOTE_IO_FAILURE_MARKERS.items() if marker in failure_text
+                ]
             yield {
                 "module": module, "case": name, "status": failed.tag,
                 "original_xml_sha256": digest,
                 "source_frames": list(dict.fromkeys(FRAME.findall(failed.text or "")))[:8],
                 "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(failure_text)))[:4],
                 "android_restore_title": list(dict.fromkeys(ANDROID_RESTORE_TITLE.findall(failure_text))),
+                **diagnostics,
             }
 
 
@@ -174,6 +188,26 @@ def android_assembly_summaries():
     return rows
 
 
+def android_receipt_failures(output_name, module_name):
+    root = Path.cwd()
+    receipt = safe_path(root, (OWNED_ROOT / output_name / "library/receipt.json").as_posix())
+    if not receipt.is_file() or not 0 < receipt.stat().st_size <= MAX_BYTES:
+        return []
+    failures = []
+    for module in json.loads(receipt.read_bytes())["modules"]:
+        if module["task"] != f":{module_name}:connectedAndroidDeviceTest":
+            continue
+        for report in module["reports"]:
+            xml = safe_path(root, report["path"])
+            if not xml.is_relative_to(root / module_name / "build/outputs/androidTest-results/connected"):
+                raise ValueError("Android JUnit report must belong to the selected module's connected test task")
+            digest = report["sha256"]
+            if not isinstance(digest, str) or not re.fullmatch(r"[a-f0-9]{64}", digest):
+                raise ValueError("Android JUnit report must have an exact SHA-256 witness")
+            failures.extend(failure_rows(module_name, xml, digest))
+    return failures
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     platform = parser.add_mutually_exclusive_group()
@@ -182,18 +216,11 @@ def main():
     args = parser.parse_args()
     if args.android_ownership:
         output = Path("build/ci-identity/android-ownership-diagnostics.json")
-        summary = {"assembly": android_assembly_summaries()}
+        summary = {"assembly": android_assembly_summaries(),
+                   "junit_failures": android_receipt_failures("identity-android-remote-io", "nativecmpkit-io")}
     elif args.android_webview:
         output = Path("build/ci-identity/android-webview-diagnostics.json")
-        receipt = OWNED_ROOT / "identity-android-webview-device/library/receipt.json"
-        failures = []
-        if receipt.is_file() and 0 < receipt.stat().st_size <= MAX_BYTES:
-            for module in json.loads(receipt.read_bytes())["modules"]:
-                if module["task"] == ":nativecmpkit-webview:connectedAndroidDeviceTest":
-                    for report in module["reports"]:
-                        xml = safe_path(Path.cwd(), report["path"])
-                        failures.extend(failure_rows(module["module"], xml, report["sha256"]))
-        summary = {"junit_failures": failures}
+        summary = {"junit_failures": android_receipt_failures("identity-android-webview-device", "nativecmpkit-webview")}
     else:
         output = Path("build/ci-identity/uikit-diagnostics.json")
         failures = []

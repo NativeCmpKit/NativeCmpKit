@@ -1,6 +1,7 @@
 """Python/source diagnostics guards; never real UIImage/GC/native test passes."""
 import hashlib
 import io
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -11,7 +12,7 @@ import unittest
 from unittest.mock import patch
 
 import ios_ui_application as a
-from summarize_identity_uikit import android_assembly_summaries, pre26_sample_summary
+from summarize_identity_uikit import android_assembly_summaries, android_receipt_failures, pre26_sample_summary
 import test_ios_ui_application as f
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
@@ -38,6 +39,33 @@ def begun():
 
 
 class AssemblyDiagnosticsTests(unittest.TestCase):
+    def test_remote_io_failed_junit_keeps_only_known_categories_and_source_frames(self):
+        original = b"""<testsuite><testcase name="cancelOwnedOpen"><failure message="private-data awaiting cancellation socket/native producer terminal">java.lang.AssertionError
+ at owned.NativeTests.cancel(AndroidIoRemoteDocumentsTest.kt:123)
+ at owned.Provider.open(RemoteIoDocumentsProvider.java:105)
+</failure></testcase></testsuite>"""
+        with tempfile.TemporaryDirectory() as output:
+            root = Path(output).resolve()
+            xml = root / "nativecmpkit-io/build/outputs/androidTest-results/connected/TEST-fixture.xml"
+            xml.parent.mkdir(parents=True)
+            xml.write_bytes(original)
+            receipt = root / "build/ci-verification/identity-android-remote-io/library/receipt.json"
+            receipt.parent.mkdir(parents=True)
+            report = {"path": xml.relative_to(root).as_posix(), "sha256": hashlib.sha256(original).hexdigest()}
+            suite = {"task": ":nativecmpkit-io:connectedAndroidDeviceTest", "reports": [report]}
+            with patch.object(Path, "cwd", return_value=root):
+                receipt.write_text(json.dumps({"modules": [suite]}))
+                rows = android_receipt_failures("identity-android-remote-io", "nativecmpkit-io")
+                self.assertEqual(1, len(rows))
+                self.assertEqual(["awaiting-terminal-cleanup", "assertion"], rows[0]["android_remote_io_failure_categories"])
+                self.assertEqual([("AndroidIoRemoteDocumentsTest.kt", "123"), ("RemoteIoDocumentsProvider.java", "105")],
+                                 rows[0]["source_frames"])
+                self.assertNotIn("private-data", str(rows))
+                report["sha256"] = "0" * 64
+                receipt.write_text(json.dumps({"modules": [suite]}))
+                with self.assertRaisesRegex(ValueError, "differs from its recorded digest"):
+                    android_receipt_failures("identity-android-remote-io", "nativecmpkit-io")
+
     def test_localizes_kotlin_and_java_errors_without_paths_or_messages(self):
         original = b"""> Task :compileDebugJavaWithJavac FAILED
 /private/build/RemoteIoDocumentsProvider.java:95: error: private javac message
