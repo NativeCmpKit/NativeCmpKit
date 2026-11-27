@@ -58,10 +58,11 @@ def load_client(client_dir: Path):
 
 
 def find(ui, selector: dict, *, state: str = "present", timeout_ms: int = 8000):
-    return ui.action(
+    response = ui.action(
         "element.wait",
         {"selector": selector, "state": state, "timeout_ms": timeout_ms},
     )
+    return response.get("result", response)
 
 
 SEARCH_SELECTORS = (
@@ -74,39 +75,57 @@ SEARCH_SELECTORS = (
 
 def find_search(ui, timeout_ms: int = 2500):
     for selector in SEARCH_SELECTORS:
-        observation = find(ui, selector, timeout_ms=timeout_ms)
+        try:
+            observation = find(ui, selector, timeout_ms=timeout_ms)
+        except Exception:
+            continue
         if observation.get("satisfied") and observation.get("nodes"):
             return observation
     return None
 
 
 def click_text(ui, text: str):
-    observation = find(ui, {"text": text})
+    observation = soft_find(ui, {"text": text})
     if not observation.get("satisfied"):
-        observation = find(ui, {"name": text})
+        observation = soft_find(ui, {"name": text})
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise RuntimeError(f"No visible element for {text!r}")
-    node = next(
-        (item for item in observation["nodes"] if item.get("properties", {}).get("clickable")),
-        observation["nodes"][0],
-    )
+    node = choose_clickable(observation, observation["nodes"])
     ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
 
 
+def soft_find(ui, selector: dict, timeout_ms: int = 2500):
+    try:
+        return find(ui, selector, timeout_ms=timeout_ms)
+    except Exception:
+        return {"satisfied": False, "nodes": []}
+
+
+def choose_clickable(observation, nodes):
+    by_id = {node.get("id"): node for node in observation.get("nodes", [])}
+    for node in nodes:
+        current = node
+        seen = set()
+        while current and current.get("id") not in seen:
+            if current.get("properties", {}).get("clickable"):
+                return current
+            seen.add(current.get("id"))
+            current = by_id.get(current.get("parent_id"))
+    return nodes[0]
+
+
 def click_result(ui, text: str):
-    observation = find(ui, {"text": text})
+    observation = soft_find(ui, {"text": text})
     if not observation.get("satisfied"):
-        observation = find(ui, {"name": text})
+        observation = soft_find(ui, {"name": text})
     nodes = [
         node for node in observation.get("nodes", [])
         if not node.get("properties", {}).get("editable")
+        and str(node.get("role", "")).lower() not in ("textbox", "textfield", "edittext")
     ]
     if not nodes:
         raise RuntimeError(f"No non-editable result for {text!r}")
-    node = next(
-        (item for item in nodes if item.get("properties", {}).get("clickable")),
-        nodes[0],
-    )
+    node = choose_clickable(observation, nodes)
     ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
 
 
@@ -131,7 +150,7 @@ def open_screen(ui, title: str):
     ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
     ui.action("text.insert", {"text": title, "replace": True})
     click_result(ui, title)
-    find(ui, {"text": title}, timeout_ms=12000)
+    find(ui, {"text_contains": "component screens"}, state="absent", timeout_ms=10000)
 
 
 def back(ui, platform: str):
@@ -181,6 +200,7 @@ def main() -> None:
         return path.as_posix()
 
     # Home is the index and the reset entry point.
+    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
     shot("home", "index")
 
     for title, component, scenario in SCREENS:
@@ -189,7 +209,7 @@ def main() -> None:
             shot(component, scenario)
 
             if title == "Adaptive Alert Dialog":
-                click_text(ui, "Show Simple Dialog")
+                click_text(ui, "Show Alert Dialog")
                 shot("ui-adaptive-alert-dialog", "simple")
                 click_text(ui, "Cancel")
             elif title == "Adaptive Bottom Sheet":
@@ -209,10 +229,13 @@ def main() -> None:
                 click_text(ui, "Navigate Forward")
                 shot("webview", "after-forward")
                 click_text(ui, "Evaluate JavaScript title")
+                find(ui, {"text_contains": "JS:"}, timeout_ms=5000)
                 shot("webview", "javascript-title")
                 click_text(ui, "Set and read cookie")
+                find(ui, {"text_contains": "kira=1"}, timeout_ms=5000)
                 shot("webview", "cookie-roundtrip")
                 click_text(ui, "Clear cookies")
+                find(ui, {"text_contains": "Cookies cleared"}, timeout_ms=5000)
                 shot("webview", "cookies-cleared")
                 click_text(ui, "Load invalid URL")
                 shot("webview", "invalid-destination")

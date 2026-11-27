@@ -11,6 +11,18 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from generate_coverage import render  # noqa: E402
 
+CAPTURE_ROWS = {
+    ("ui-adaptive-alert-dialog", "simple"): ["UI-ALERT-001", "UI-ALERT-002"],
+    ("ui-adaptive-alert-dialog", "overview"): ["UI-ALERT-003", "UI-ALERT-004"],
+    ("ui-adaptive-bottom-sheet", "expanded"): ["UI-SHEET-001"],
+    ("ui-adaptive-dropdown", "menu"): ["UI-MENU-001", "UI-MENU-002"],
+    ("ui-cupertino-icons", "search-chevron"): ["UI-ICON-001", "UI-ICON-003"],
+    ("webview", "second-page"): ["WEB-001", "WEB-002"],
+    ("webview", "javascript-title"): ["WEB-004"],
+    ("webview", "cookie-roundtrip"): ["WEB-005"],
+    ("webview", "invalid-destination"): ["WEB-003"],
+}
+
 SCREEN_ROWS = {
     "ui-adaptive-button": ["UI-BUTTON-001", "UI-BUTTON-002", "UI-BUTTON-003", "UI-BUTTON-004"],
     "ui-adaptive-clickable": ["UI-CLICK-001"],
@@ -60,7 +72,8 @@ def main() -> None:
 
     for capture in tour.get("captures", []):
         component = capture["component"]
-        for row_id in SCREEN_ROWS.get(component, []):
+        row_ids = CAPTURE_ROWS.get((component, capture["scenario"]), SCREEN_ROWS.get(component, []))
+        for row_id in row_ids:
             row = rows[row_id]
             execution = row["execution"][args.platform]
             if execution["status"] != "not-applicable":
