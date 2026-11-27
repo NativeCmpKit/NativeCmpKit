@@ -321,7 +321,7 @@ jobs:
         run: |
           ./gradlew :nativecmpkit-webview:desktopTest \
             --tests io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes \
-            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+            --refresh-dependencies --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Prepare the exact Robolectric artifact from the Google Cloud Maven Central mirror
         if: inputs.profile == 'identity-linux-android' || inputs.profile == 'identity-linux-android-recovery'
         shell: bash
