@@ -100,6 +100,11 @@ FLOWS = [
         tour.click_text(ui, "Cancel"),
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
+    ("alert-text-field", "Adaptive Alert Dialog", lambda ui, p: (
+        tour.click_text(ui, "Show Text Field Dialog"),
+        (assert_text(ui, "Enter Name") if p == "ios" else assert_text(ui, "Confirm")),
+        (tour.click_text(ui, "Cancel") if p == "ios" else tour.click_text(ui, "Confirm")),
+    )),
     ("alert-confirm", "Adaptive Alert Dialog", lambda ui, p: (
         tour.click_text(ui, "Show Alert Dialog"),
         assert_text(ui, "This is a native alert dialog from Kira"),

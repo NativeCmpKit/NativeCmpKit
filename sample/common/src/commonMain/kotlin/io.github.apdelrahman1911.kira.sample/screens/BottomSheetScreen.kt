@@ -38,8 +38,10 @@ fun BottomSheetScreen(
     navigateBack: () -> Unit
 ) {
     var allowHide by remember { mutableStateOf(true) }
+    var largeOnly by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val sheetState = rememberAdaptiveSheetState(
+        skipPartiallyExpanded = largeOnly,
         confirmValueChange = {
             it != SheetValue.Hidden || allowHide
         }
@@ -69,6 +71,19 @@ fun BottomSheetScreen(
                 onClick = { openBottomSheet = true },
             ) {
                 Text("Show Bottom Sheet")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AdaptiveSwitch(
+                    checked = largeOnly,
+                    onCheckedChange = {
+                        largeOnly = it
+                        openBottomSheet = false
+                    }
+                )
+                Text("Large detent only")
             }
         }
 

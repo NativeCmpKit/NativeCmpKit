@@ -53,6 +53,20 @@ The flow captures Home, opens Adaptive Buttons through the searchable index,
 taps the production counter button, verifies the visible count, goes back, and
 captures Home again.
 
+## Functional checks
+
+`functional.py` drives the real controls and asserts state, not just pixels:
+
+```sh
+python3 showcase/automation/functional.py \
+  --client-dir /path/to/ui-test-actions \
+  --connection live/connection.json --token-file /tmp/showcase-token \
+  --platform android --output-root screenshots
+```
+
+It writes `screenshots/<platform>/functional.json` with `passed`, `failed` and
+`blocked` entries and before/after PNGs under `screenshots/<platform>/functional/`.
+
 ## Notes
 
 - Android uses the API 35 Google APIs x86_64 KVM emulator and the debug APK.

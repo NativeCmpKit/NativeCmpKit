@@ -63,6 +63,8 @@ private val fileTypeOptions = listOf(
     FileTypeOption("PDF", FilePickerFileType.Pdf),
     FileTypeOption("Document", FilePickerFileType.Document),
     FileTypeOption("Text", FilePickerFileType.Text),
+    FileTypeOption("Custom text/plain", FilePickerFileType.Custom(listOf("text/plain"))),
+    FileTypeOption("TXT extension", FilePickerFileType.Extension(listOf("txt"))),
 )
 
 private const val STREAM_CHUNK_SIZE = 64L * 1024

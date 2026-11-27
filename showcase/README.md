@@ -165,7 +165,9 @@ Temporary sessions, logs and failure captures stay out of the canonical tree.
 
 ## Coverage
 
-The versioned contract is [coverage.json](coverage.json), with a readable
+The source-audited component/API view is [INVENTORY.md](INVENTORY.md)
+([public-api.json](public-api.json) is the raw declaration extract). The
+versioned contract is [coverage.json](coverage.json), with a readable
 [COVERAGE.md](COVERAGE.md). It enumerates 66 component/service rows, their
 platform support, route, steps, expected observations, screenshot path and
 execution status. Rows are updated only from reviewed hosted runs.
