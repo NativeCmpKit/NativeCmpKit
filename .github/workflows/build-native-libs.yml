@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -543,20 +543,25 @@ jobs:
           cat > build/ci-identity/framework-consumer.swift <<'SWIFT'
           import NativeCmpKit
           import UIKit
-          func makeViewController() -> UIViewController { Main_iosKt.MainViewController() }
+          public func makeViewController() -> UIViewController { Main_iosKt.MainViewController() }
           SWIFT
           for runtime in ios iphonesimulator; do
             case "$runtime" in
-              ios) target=iosArm64; sdk=iphoneos; triple=arm64-apple-ios18.5 ;;
-              iphonesimulator) target=iosSimulatorArm64; sdk=iphonesimulator; triple=arm64-apple-ios18.5-simulator ;;
+              ios) target=iosArm64; sdk=iphoneos; triple=arm64-apple-ios18.5; platform=IOS ;;
+              iphonesimulator) target=iosSimulatorArm64; sdk=iphonesimulator; triple=arm64-apple-ios18.5-simulator; platform=IOSSIMULATOR ;;
             esac
             directory="sample/common/build/bin/$target/debugFramework"
             framework="$directory/NativeCmpKit.framework"
+            consumer="build/ci-identity/framework-consumer-$target.dylib"
             test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$framework/Info.plist")" = io.github.apdelrahman1911.nativecmpkit.framework
             test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$framework/Info.plist")" = NativeCmpKit
-            xcrun lipo -verify_arch arm64 "$framework/NativeCmpKit"
-            xcrun --sdk "$sdk" swiftc -typecheck -target "$triple" -sdk "$(xcrun --sdk "$sdk" --show-sdk-path)" \
-              -F "$directory" build/ci-identity/framework-consumer.swift
+            test "$(xcrun lipo -archs "$framework/NativeCmpKit")" = arm64
+            grep -Eq '^framework module NativeCmpKit[[:space:]]*\{' "$framework/Modules/module.modulemap"
+            xcrun --sdk "$sdk" swiftc -emit-library -target "$triple" -sdk "$(xcrun --sdk "$sdk" --show-sdk-path)" \
+              -F "$directory" -framework NativeCmpKit build/ci-identity/framework-consumer.swift -o "$consumer"
+            test "$(xcrun lipo -archs "$consumer")" = arm64
+            test "$(xcrun vtool -show-build "$consumer" | awk '$1 == "platform" {print $2}')" = "$platform"
+            printf 'target=%s consumer_platform=%s architecture=arm64\n' "$target" "$platform" | tee -a build/ci-identity/framework-identity.txt
             shasum -a 256 "$framework/NativeCmpKit" "$framework/Info.plist" "$framework/Modules/module.modulemap" \
               | tee -a build/ci-identity/framework-identity.txt
           done
