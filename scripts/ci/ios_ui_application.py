@@ -787,6 +787,7 @@ class NativeProtocol:
                 "counts": lt.case_counts(cases), "stream_bytes": self.stream_bytes,
                 "observed_launch_pid": self.observed_launch_pid,
                 "image_lifetime_observation": self.image_lifetime_observation,
+                **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
                 **({"worker_lifecycle_observations": self.worker_lifecycle_observations}
                    if self.worker_lifecycle_observations else {}),
                 **({"image_profile_observations": self.image_profile_observations}

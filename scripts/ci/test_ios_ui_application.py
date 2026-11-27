@@ -154,6 +154,9 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(0, partial["counts"]["executed"])
         with self.assertRaises(ValueError):
             protocol.finish(0)
+        for line in (frame("testFinished", name=method, duration="1"), frame("testSuiteFinished", name=suite), COMPLETE):
+            protocol.feed(line)
+        self.assertEqual(partial["wk_restore_progress"], protocol.finish(0)["wk_restore_progress"])
 
     def test_exact_failed_startup_predicates_are_retained_without_becoming_transport(self):
         protocol = a.NativeProtocol()
