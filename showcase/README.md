@@ -107,6 +107,20 @@ gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
   -f mode=session -f platform=ios -f device_class=tablet -f duration_minutes=60
 ```
 
+Use `--device` so tablet evidence never overwrites the phone captures:
+
+```sh
+python3 showcase/automation/tour.py ... --device api35-tablet
+python3 showcase/automation/functional.py ... --device api35-tablet
+python3 showcase/automation/compare.py --android-device api35-tablet \
+  --ios-device ipad-simulator --output screenshots/compare-tablet --label tablet
+```
+
+`record_functional.py` refuses non-canonical devices unless `--allow-device` is
+passed: the coverage execution slots are bound to `api35-phone` and
+`iphone-simulator`. Tablet results are reported as separate large-screen evidence,
+and `record.py --only-rows UI-ALERT-006` attaches the iPad popover row alone.
+
 Functional checks, not screenshots alone:
 
 ```sh
