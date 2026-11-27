@@ -67,17 +67,21 @@ def main() -> None:
     parser.add_argument("--attempt", default="1")
     parser.add_argument("--job", required=True)
     parser.add_argument("--passed-ids", default="")
+    parser.add_argument("--only-rows", default="")
     args = parser.parse_args()
 
     document = json.loads(args.coverage.read_text(encoding="utf-8"))
     rows = {row["id"]: row for row in document["rows"]}
     passed = {item.strip() for item in args.passed_ids.split(",") if item.strip()}
+    only = {item.strip() for item in args.only_rows.split(",") if item.strip()}
     tour = json.loads(args.tour.read_text(encoding="utf-8"))
 
     for capture in tour.get("captures", []):
         component = capture["component"]
         row_ids = CAPTURE_ROWS.get((component, capture["scenario"]), SCREEN_ROWS.get(component, []))
         for row_id in row_ids:
+            if only and row_id not in only:
+                continue
             row = rows[row_id]
             execution = row["execution"][args.platform]
             if execution["status"] not in ("not-applicable", "passed"):
@@ -98,6 +102,8 @@ def main() -> None:
     for failure in tour.get("errors", []):
         component = failure.get("screen", "")
         for row_id in SCREEN_ROWS.get(component, []):
+            if only and row_id not in only:
+                continue
             row = rows[row_id]
             execution = row["execution"][args.platform]
             if execution["status"] != "not-applicable":
