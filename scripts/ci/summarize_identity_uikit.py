@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 from xml.etree import ElementTree as ET
 
-from library_tests import NoDtdBuilder, safe_path
+from library_tests import IOS_DEFAULT_ACTION_SHEET_METHOD, NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
 from ios_ui_application import (
@@ -28,6 +28,10 @@ RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "nul
 IPAD_ROTATION_PHASE = re.compile(
     r"\bNATIVECMPKIT_IPAD_ROTATION:(scene-identity|portrait-request|present-in-portrait|initial-anchor|"
     r"landscape-request|landscape-anchor|fallback-set|return-portrait-request|fallback-anchor|cleanup)(?![A-Za-z0-9_-])"
+)
+DEFAULT_ACTION_SHEET_PHASE = re.compile(
+    r"\bNATIVECMPKIT_DEFAULT_ACTION_SHEET:(present|await-sheet|style|compact-size|find-cancel|activate-cancel|ipad-anchor|"
+    r"await-dismissal|callback-counts)(?![A-Za-z0-9_-])"
 )
 ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
 ANDROID_REMOTE_IO_FAILURE_MARKERS = {
@@ -189,6 +193,8 @@ def failure_rows(module, path, expected_digest=None):
             if module == "nativecmpkit-ui" and name == POPOVER_GEOMETRY_METHODS[1]:
                 diagnostics["ipad_rotation_phases"] = list(dict.fromkeys(IPAD_ROTATION_PHASE.findall(failure_text)))[:2]
                 diagnostics["ipad_geometry_request_refused"] = "Owned public OS geometry request failed:" in failure_text
+            if module == "nativecmpkit-ui" and name == IOS_DEFAULT_ACTION_SHEET_METHOD:
+                diagnostics["default_action_sheet_phases"] = list(dict.fromkeys(DEFAULT_ACTION_SHEET_PHASE.findall(failure_text)))[:2]
             yield {
                 "module": module, "case": name, "status": failed.tag,
                 "original_xml_sha256": digest,
