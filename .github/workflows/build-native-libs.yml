@@ -221,8 +221,10 @@ jobs:
       - name: Linux native prerequisites
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
+          # These prerequisites are all provided by the official Ubuntu sources.
+          ubuntu_apt=(-o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=-)
+          sudo apt-get "${ubuntu_apt[@]}" update
+          sudo apt-get "${ubuntu_apt[@]}" install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
       - name: Set up pinned Rust
         id: rust
         shell: bash
@@ -252,7 +254,8 @@ jobs:
         if: inputs.profile == 'identity-linux-picker'
         shell: bash
         run: |
-          sudo apt-get install --no-install-recommends -y xdg-desktop-portal xdg-desktop-portal-gtk xdotool
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- \
+            install --no-install-recommends -y xdg-desktop-portal xdg-desktop-portal-gtk xdotool
           PYTHONPATH=scripts/ci xvfb-run -a python3 - <<'PYTHON'
           from pathlib import Path
           import subprocess
