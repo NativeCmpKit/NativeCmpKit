@@ -34,6 +34,7 @@ import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveScaffold
 import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveTopBar
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitNavigationBarConfiguration
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonItem
+import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonSystemItem
 import io.github.apdelrahman1911.kira.ui.uikit.UIKitImage
 import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
 
@@ -81,6 +82,10 @@ fun TopBarDemoScreen(
                         accessibilityLabel = "More",
                         onClick = { lastAction = "More tapped" },
                     ),
+                    UIKitUIBarButtonItem.systemItem(
+                        systemItem = UIKitUIBarButtonSystemItem.Add,
+                        onClick = { lastAction = "Add tapped" },
+                    ),
                     UIKitUIBarButtonItem(
                         image = UIKitImage.Vector(Icons.Outlined.Favorite),
                         onClick = { /* vector image variant */ },
@@ -88,6 +93,7 @@ fun TopBarDemoScreen(
                 ),
                 iosConfiguration = UIKitNavigationBarConfiguration(
                     prefersLargeTitles = true,
+                    tintColor = MaterialTheme.colorScheme.primary,
                 )
             )
         },

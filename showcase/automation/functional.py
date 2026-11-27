@@ -48,6 +48,15 @@ def click_any(ui, labels):
     raise AssertionError(f"none of {labels!r} were clickable")
 
 
+def deny_permission_dialogs(ui, platform):
+    labels = ["Don't allow", "Don’t allow", "Deny"] if platform == "android" else ["Don’t Allow", "Don't Allow", "Don’t allow"]
+    for _ in range(3):
+        try:
+            click_any(ui, labels)
+        except Exception:
+            return
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -142,12 +151,13 @@ FLOWS = [
         assert_text(ui, "SendSms"),
     )),
     ("time-24h", "Adaptive Time Picker", lambda ui, p: (
+        tour.scroll_list(ui, 3),
+        tour.scroll_list(ui, 3),
         assert_text(ui, "24-hour state: 19:20"),
     )),
     ("permissions-bulk-deny", "Permissions", lambda ui, p: (
         tour.click_text(ui, "Request permissions"),
-        (click_any(ui, ["Don't allow", "Don’t allow", "Deny"]) if p == "android"
-         else click_any(ui, ["Don’t Allow", "Don't Allow", "Don’t allow"])),
+        deny_permission_dialogs(ui, p),
         assert_text(ui, "All permissions granted: false"),
     )),
     ("sheet", "Adaptive Bottom Sheet", lambda ui, p: (
@@ -159,6 +169,7 @@ FLOWS = [
     ("topbar", "Adaptive Top Bar", lambda ui, p: (
         tour.click_text(ui, "Share"),
         assert_text(ui, "Last action: Share tapped"),
+        (tour.click_text(ui, "Add"), assert_text(ui, "Last action: Add tapped")) if p == "ios" else None,
     )),
     ("toolbar", "Adaptive Toolbar", lambda ui, p: (
         tour.click_text(ui, "Share"),

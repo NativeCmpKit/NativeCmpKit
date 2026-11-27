@@ -65,6 +65,7 @@ import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveNavigationBar
 import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveScaffold
 import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveTopBar
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonItem
+import io.github.apdelrahman1911.kira.ui.navigation.UIKitTabBarConfiguration
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitUITabBarItem
 import io.github.apdelrahman1911.kira.ui.uikit.UIKitImage
 import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
@@ -903,6 +904,10 @@ fun NavigationBarScreen(
                 ),
                 iosSelectedIndex = selectedIndex,
                 iosOnItemSelected = { selectedIndex = it },
+                iosConfiguration = UIKitTabBarConfiguration(
+                    selectedItemColor = MaterialTheme.colorScheme.primary,
+                    unselectedItemColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 items.forEachIndexed { index, item ->
