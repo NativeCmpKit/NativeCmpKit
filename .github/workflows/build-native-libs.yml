@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -467,7 +467,7 @@ jobs:
               | tee -a build/ci-identity/framework-identity.txt
           done
       - name: Tests requiring an owned UIKit application
-        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui'
+        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui'
         shell: bash
         env:
           IDENTITY_PROFILE: ${{ inputs.profile }}
@@ -484,9 +484,11 @@ jobs:
           fi
           xcrun simctl bootstatus "$device" -b
           case "$IDENTITY_PROFILE" in
-            identity-apple-webview)
+            identity-apple-webview|identity-apple-webview-restore)
+              focus=ios-webview-content-policy
+              if [[ "$IDENTITY_PROFILE" == identity-apple-webview-restore ]]; then focus=ios-webview-content-policy-restore; fi
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-webview \
-                --focus ios-webview-content-policy --simulator "$device" --timeout 2700 \
+                --focus "$focus" --simulator "$device" --timeout 2700 \
                 --output build/ci-verification/wk-identity
               ;;
             identity-apple-ownership)
@@ -507,7 +509,7 @@ jobs:
               ;;
           esac
       - name: Retain bounded UIKit failure observations
-        if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
+        if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'

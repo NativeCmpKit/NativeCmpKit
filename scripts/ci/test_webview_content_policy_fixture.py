@@ -402,7 +402,7 @@ class WebViewContentPolicyBindingTest(unittest.TestCase):
             self.assertFalse(fixture.receipt()["methods"]["restore"]["claimed"])
             self.assertFalse(fixture.receipt()["fixture_error"])
 
-    def test_bind_is_once_before_ingress_and_only_exact_four_new_native_methods(self):
+    def test_bind_is_once_before_ingress_and_rejects_unreviewed_native_selections(self):
         with Fixture() as fixture:
             self.bind(fixture)
             with self.assertRaises(Refusal):
@@ -412,9 +412,23 @@ class WebViewContentPolicyBindingTest(unittest.TestCase):
             with self.assertRaises(Refusal):
                 self.bind(fixture)
             self.assertIsNone(fixture.receipt()["native_binding"])
-        with Fixture(methods=("restore",)) as fixture:
+        with Fixture(methods=("replay",)) as fixture:
             with self.assertRaises(Refusal):
                 self.bind(fixture)
+
+    def test_restore_wire_receipt_cannot_satisfy_the_full_policy(self):
+        with Fixture(methods=fixture_module.IOS_RESTORE_METHODS) as fixture:
+            self.bind(fixture)
+            fixture.launch_environment({})
+            self.complete_socket_matrix(fixture)
+            arguments = self.arguments(fixture)
+        document = fixture.receipt()
+        self.assertFalse(fixture_module.validate_receipt(document, **arguments))
+        self.assertTrue(fixture_module.validate_receipt(document, **arguments,
+                                                       selected=fixture_module.IOS_RESTORE_METHODS))
+        document["methods"]["restore"]["stages"]["final"]["page"] = 1
+        self.assertFalse(fixture_module.validate_receipt(document, **arguments,
+                                                        selected=fixture_module.IOS_RESTORE_METHODS))
 
     def test_bind_refuses_missing_actual_source_or_malformed_installed_identity(self):
         with Fixture() as fixture:

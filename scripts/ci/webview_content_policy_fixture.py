@@ -52,6 +52,7 @@ PID = re.compile(r"[1-9][0-9]{0,9}\Z")
 BUNDLE = re.compile(r"io\.github\.apdelrahman1911\.nativecmpkit\.verification\.ui\.r[0-9a-f]{12}\.t[0-9a-f]{32}\Z")
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 IOS_METHODS = ("restore", "replay", "headers", "resources")
+IOS_RESTORE_METHODS = ("restore",)
 SOURCE = "scripts/ci/webview_content_policy_fixture.py"
 NATIVE_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt"
 NATIVE_HELPER = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt"
@@ -215,7 +216,7 @@ class OwnedContentPolicyFixture:
             raise FixtureRefusal("Owned installed application identities are required")
         with self._lock:
             if (self._closed or self._closing.is_set() or self._binding is not None or self._connections or self._claims or
-                    self.methods != IOS_METHODS):
+                    self.methods not in (IOS_METHODS, IOS_RESTORE_METHODS)):
                 raise FixtureRefusal("Bind exactly one fresh finite native content-policy attempt before any ingress")
             try:
                 source_hashes = {name: hashlib.sha256((Path(root) / path).read_bytes()).hexdigest() for name, path in (
@@ -544,9 +545,10 @@ class OwnedContentPolicyFixture:
         return False
 
 
-def complete_native_stages(methods: dict) -> bool:
+def complete_native_stages(methods: dict, selected: tuple[str, ...] = IOS_METHODS) -> bool:
     """Exact iOS wire matrix only; socket controls still provide ZERO native evidence."""
-    if not isinstance(methods, dict) or set(methods) != set(IOS_METHODS):
+    if (selected not in (IOS_METHODS, IOS_RESTORE_METHODS) or not isinstance(methods, dict)
+            or set(methods) != set(selected)):
         return False
     main_headers = ("main_initial", "main_authorization")
     asset_headers = tuple(f"{role}_{kind}" for role in ("script", "style", "image") for kind in ("initial", "authorization"))
@@ -577,7 +579,7 @@ def complete_native_stages(methods: dict) -> bool:
         stage("headers", f"{entry}-link", get=4, assets=True)
         for encoding in ("utf8", "utf8-alias"):
             stage("resources", f"{entry}-{encoding}", get=3, page=0, assets=True)
-    for method in IOS_METHODS:
+    for method in selected:
         row = methods[method]
         if (not isinstance(row, dict) or set(row) != {"claimed", "done", "stages"} or
                 row["claimed"] is not True or row["done"] is not True or
@@ -599,6 +601,8 @@ def complete_native_stages(methods: dict) -> bool:
                     return False
     # Redirect forwarding is an observed native policy, not an assumed promise;
     # both supported public entry points must report the same actual facts.
+    if selected == IOS_RESTORE_METHODS:
+        return True
     headers = methods["headers"]["stages"]
     for route in ("initial", "same-final", "cross-final", "link"):
         if any(headers[f"state-{route}"][key] != headers[f"navigator-{route}"][key] for key in main_headers + asset_headers):
@@ -607,7 +611,8 @@ def complete_native_stages(methods: dict) -> bool:
 
 
 def validate_receipt(document: dict, *, bundle_id: str, signed_hash: str, plist_hash: str,
-                     native_pid: int, fixture_hash: str, native_hash: str, helper_hash: str, nonce_hash: str) -> bool:
+                     native_pid: int, fixture_hash: str, native_hash: str, helper_hash: str, nonce_hash: str,
+                     selected: tuple[str, ...] = IOS_METHODS) -> bool:
     """Validate owned transport against REAL caller witnesses, never generate native results.
 
     The lead's unchanged KGP XML/application/source-map validation is separately
@@ -636,11 +641,11 @@ def validate_receipt(document: dict, *, bundle_id: str, signed_hash: str, plist_
             return False
         return (document["schema"] == "nativecmpkit-webview-content-policy-v1" and document["closed"] is True and
                 type(document["connections"]) is int and 0 < document["connections"] <= MAX_CONNECTIONS and
-                type(document["control_requests"]) is int and 2 * len(IOS_METHODS) <= document["control_requests"] <= MAX_CONTROL and
+                type(document["control_requests"]) is int and 2 * len(selected) <= document["control_requests"] <= MAX_CONTROL and
                 all(type(document[key]) is int and document[key] == 0 for key in ("refusals", "owned_sockets")) and
                 document["fixture_error"] is False and document["nonce_sha256"] == nonce_hash and
                 document["process_sha256"] == process_sha256(native_pid) and
-                complete_native_stages(document["methods"]) and
+                complete_native_stages(document["methods"], selected) and
                 document["connections"] == document["control_requests"] + sum(stage["closed"] for method in document["methods"].values() for stage in method["stages"].values()))
     except (ValueError, TypeError, KeyError):
         return False

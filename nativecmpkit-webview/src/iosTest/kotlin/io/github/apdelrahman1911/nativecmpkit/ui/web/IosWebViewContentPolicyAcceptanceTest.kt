@@ -17,43 +17,58 @@ class IosWebViewContentPolicyAcceptanceTest {
             val state = policyState(WebContent.NavigatorOnly)
             val navigator = WebViewNavigator(scope)
             var saved: Any? = null
-            withMounted(state, navigator) {
-                when (row) {
-                    "url", "redirect" -> { runOnIdle { state.content = WebContent.Url(fixture.url(row)) }; awaitDocument(state, fixture, if (row == "redirect") "final" else row, 1) }
-                    "navigator" -> { runOnIdle { navigator.loadUrl(fixture.url(row)) }; awaitDocument(state, fixture, row, 1) }
-                    "html" -> { runOnIdle { state.content = WebContent.Data(IosContentPolicyFixture.inline("restore-inline")) }; awaitInline(state, "restore-inline") }
-                    "null" -> assertBlank(state, navigator)
-                }
-                saved = runOnIdle { save(state) }
-            }
-            val restored = policyState(assertNotNull(WebStateSaver.restore(assertNotNull(saved))))
-            assertNotSame(state, restored)
-            assertNull(restored.pageTitle); assertNull(restored.lastLoadedUrl)
-            val restoredNavigator = WebViewNavigator(scope)
-            withMounted(restored, restoredNavigator) {
-                when (row) {
-                    "url", "navigator", "redirect" -> {
-                        val stage = if (row == "redirect") "final" else row
-                        awaitDocument(restored, fixture, stage, 2)
-                        runOnIdle {
-                            val native = assertNotNull(restored.webView)
-                            assertEquals(fixture.url(stage), restored.lastLoadedUrl)
-                            assertTrue(native.backForwardList.backList.isEmpty()); assertTrue(native.backForwardList.forwardList.isEmpty())
-                            assertFalse(restoredNavigator.canGoBack); assertFalse(restoredNavigator.canGoForward)
-                        }
+            restorePhase(row, "initial") {
+                withMounted(state, navigator) {
+                    when (row) {
+                        "url", "redirect" -> { runOnIdle { state.content = WebContent.Url(fixture.url(row)) }; awaitDocument(state, fixture, if (row == "redirect") "final" else row, 1) }
+                        "navigator" -> { runOnIdle { navigator.loadUrl(fixture.url(row)) }; awaitDocument(state, fixture, row, 1) }
+                        "html" -> { runOnIdle { state.content = WebContent.Data(IosContentPolicyFixture.inline("restore-inline")) }; awaitInline(state, "restore-inline") }
+                        "null" -> assertBlank(state, navigator)
                     }
-                    else -> {
-                        assertEquals(WebContent.NavigatorOnly, restored.content)
-                        assertBlank(restored, restoredNavigator)
-                        val stage = if (row == "html") "html-recovery" else "null-recovery"
-                        runOnIdle { restoredNavigator.loadUrl(fixture.url(stage)) }; awaitDocument(restored, fixture, stage, 1)
+                    saved = runOnIdle { save(state) }
+                }
+            }
+            val restored = restorePhase(row, "saved") {
+                val restored = policyState(assertNotNull(WebStateSaver.restore(assertNotNull(saved))))
+                assertNotSame(state, restored)
+                assertNull(restored.pageTitle); assertNull(restored.lastLoadedUrl)
+                restored
+            }
+            val restoredNavigator = WebViewNavigator(scope)
+            restorePhase(row, "remount") {
+                withMounted(restored, restoredNavigator) {
+                    when (row) {
+                        "url", "navigator", "redirect" -> {
+                            val stage = if (row == "redirect") "final" else row
+                            awaitDocument(restored, fixture, stage, 2)
+                            runOnIdle {
+                                val native = assertNotNull(restored.webView)
+                                assertEquals(fixture.url(stage), restored.lastLoadedUrl)
+                                assertTrue(native.backForwardList.backList.isEmpty()); assertTrue(native.backForwardList.forwardList.isEmpty())
+                                assertFalse(restoredNavigator.canGoBack); assertFalse(restoredNavigator.canGoForward)
+                            }
+                        }
+                        else -> {
+                            assertEquals(WebContent.NavigatorOnly, restored.content)
+                            assertBlank(restored, restoredNavigator)
+                            val stage = if (row == "html") "html-recovery" else "null-recovery"
+                            runOnIdle { restoredNavigator.loadUrl(fixture.url(stage)) }; awaitDocument(restored, fixture, stage, 1)
+                        }
                     }
                 }
             }
         }
-        exact(fixture, "url", "get" to 2, "page" to 2); exact(fixture, "navigator", "get" to 2, "page" to 2)
-        exact(fixture, "redirect", "get" to 1, "redirect" to 1, "page" to 0); exact(fixture, "final", "get" to 2, "page" to 2)
-        exact(fixture, "html-recovery", "get" to 1); exact(fixture, "null-recovery", "get" to 1)
+        restorePhase("wire", "counters") {
+            exact(fixture, "url", "get" to 2, "page" to 2); exact(fixture, "navigator", "get" to 2, "page" to 2)
+            exact(fixture, "redirect", "get" to 1, "redirect" to 1, "page" to 0); exact(fixture, "final", "get" to 2, "page" to 2)
+            exact(fixture, "html-recovery", "get" to 1); exact(fixture, "null-recovery", "get" to 1)
+        }
+    }
+
+    private inline fun <T> restorePhase(row: String, phase: String, block: () -> T): T = try {
+        block()
+    } catch (failure: Throwable) {
+        throw IllegalStateException("NATIVECMPKIT_WK_RESTORE:$row:$phase", failure)
     }
 
     @Test fun documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved() = withFixture("replay") { fixture, scope ->

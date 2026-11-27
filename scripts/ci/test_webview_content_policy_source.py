@@ -211,9 +211,9 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
         imports = [node.module or "" for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
         imports += [alias.name for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names]
         self.assertFalse(set(imports) & {"subprocess", "os", "ios_ui_application", "ios_webview_request_fixture", "library_tests"})
-        for value in ("def bind_application(", "def launch_environment(", "def validate_receipt(", "self.methods != IOS_METHODS",
+        for value in ("def bind_application(", "def launch_environment(", "def validate_receipt(", "self.methods not in (IOS_METHODS, IOS_RESTORE_METHODS)",
                       "self._process not in (None, pid)", '"SIMCTL_CHILD_" + name', "environment = dict(inherited)",
-                      "complete_native_stages(document[\"methods\"])", "process_sha256(native_pid)",
+                      "complete_native_stages(document[\"methods\"], selected)", "process_sha256(native_pid)",
                       'listener.bind(("127.0.0.1", 0))', '"native_helper_sha256"', '"owned_workers_terminated"',
                       "independent(close_listener)", "independent(close_workers)"):
             self.assertIn(value, text)

@@ -16,6 +16,15 @@ OWNED_ROOT = Path("build/ci-verification")
 MAX_BYTES = 4 * 1024 * 1024
 TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,90}\Z")
 FRAME = re.compile(r"\b([A-Za-z0-9_]+\.kt):(\d{1,5})\b")
+RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
+RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
+
+
+def restore_stages(fixture):
+    stages = fixture.get("methods", {}).get("restore", {}).get("stages", {})
+    return {name: {key: value for key in ("get", "page", "redirect", "closed", "pending")
+                   if type(value := stages[name].get(key)) is int and 0 <= value <= 120}
+            for name in RESTORE_STAGES if isinstance(stages.get(name), dict)}
 
 
 def labels(document, fields):
@@ -49,6 +58,7 @@ def receipt_rows():
                            if type(fixture.get(key)) in {int, bool}},
                         "methods": {name: {"claimed": case.get("claimed") is True, "done": case.get("done") is True}
                                     for name, case in fixture.get("methods", {}).items() if name in {"restore", "replay", "headers", "resources"}},
+                        "restore_stages": restore_stages(fixture),
                     },
                 }
 
@@ -69,6 +79,8 @@ def failure_rows():
                         "module": module, "case": name, "status": failed.tag,
                         "original_xml_sha256": hashlib.sha256(raw).hexdigest(),
                         "source_frames": list(dict.fromkeys(FRAME.findall(failed.text or "")))[:8],
+                        "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(
+                            failed.get("message", "") + "\n" + (failed.text or ""))))[:4],
                     }
 
 

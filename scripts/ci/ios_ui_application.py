@@ -1167,7 +1167,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
     content_nonce_hash = None
     native_input_driver = None
     request_fixture_requested = host["module"] == "nativecmpkit-webview" and focus in (None, lt.IOS_WEBVIEW_REQUEST_FOCUS, lt.IOS_WEBVIEW_REQUEST_DNS_FOCUS)
-    content_fixture_requested = host["module"] == "nativecmpkit-webview" and focus == lt.content_policy.IOS_FOCUS
+    content_fixture_requested = host["module"] == "nativecmpkit-webview" and focus in lt.content_policy.IOS_FOCUSES
     native_environment = None
     camera_photos = None
     try:
@@ -1278,7 +1278,8 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             import webview_content_policy_fixture as wk_content
             phase = "prepare-owned-localhost-wk-content-policy-fixture"
             lt.content_policy.source_contract(root, focus)
-            content_fixture = wk_content.OwnedContentPolicyFixture()
+            selected_content = wk_content.IOS_RESTORE_METHODS if focus == lt.content_policy.IOS_RESTORE_FOCUS else wk_content.IOS_METHODS
+            content_fixture = wk_content.OwnedContentPolicyFixture(methods=selected_content)
             content_fixture.bind_application(root, bundle_id=bundle_id, signed_hash=signed_hash, plist_hash=plist_hash)
             content_nonce_hash = content_fixture.nonce_sha256
             receipt["webview_content_policy_nonce_sha256"] = content_nonce_hash
@@ -1382,7 +1383,8 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
                         bundle_id=bundle_id, signed_hash=signed_hash, plist_hash=plist_hash,
                         native_pid=protocol.observed_launch_pid, fixture_hash=lt.sha256(root / wk_content.SOURCE),
                         native_hash=lt.sha256(root / wk_content.NATIVE_SOURCE),
-                        helper_hash=lt.sha256(root / wk_content.NATIVE_HELPER), nonce_hash=content_nonce_hash):
+                        helper_hash=lt.sha256(root / wk_content.NATIVE_HELPER), nonce_hash=content_nonce_hash,
+                        selected=content_fixture.methods):
                     receipt["transport_passed"] = False
                     receipt.setdefault("error", {"phase": "owned-localhost-wk-content-policy-fixture", "type": "EvidenceError"})
             except Exception as content_receipt_error:

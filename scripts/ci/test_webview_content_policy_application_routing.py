@@ -12,6 +12,7 @@ from unittest.mock import Mock, patch
 
 import ios_ui_application as application
 import library_tests as r
+import webview_content_policy_fixture as content_fixture
 import webview_content_policy_native_focus as policy
 from test_webview_content_policy_native_focus import copy_model_checkout, native_plan
 
@@ -48,6 +49,7 @@ def model(node, namespace):
 class FakeContentFixture:
     def __init__(self, events, *, close_error=None, receipt_error=None, bind_error=None):
         self.events = events; self.close_error = close_error; self.receipt_error = receipt_error; self.bind_error = bind_error
+        self.methods = content_fixture.IOS_METHODS
         events.append("construct")
 
     def bind_application(self, root, **identities):
@@ -77,9 +79,13 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
     def namespace(self, *, close_error=None, receipt_error=None, bind_error=None, validated=True):
         events = []; fixture = FakeContentFixture(events, close_error=close_error, receipt_error=receipt_error, bind_error=bind_error)
         validate = Mock(return_value=validated)
+        def construct(*, methods):
+            fixture.methods = methods
+            return fixture
         fake_module = SimpleNamespace(SOURCE=policy.IOS_FIXTURE, NATIVE_SOURCE=policy.spec(policy.IOS_FOCUS)["source"],
                                       NATIVE_HELPER=policy.IOS_HELPER, validate_receipt=validate,
-                                      OwnedContentPolicyFixture=lambda: fixture)
+                                      IOS_METHODS=content_fixture.IOS_METHODS, IOS_RESTORE_METHODS=content_fixture.IOS_RESTORE_METHODS,
+                                      OwnedContentPolicyFixture=construct)
         contract = Mock(side_effect=lambda *args: events.append("source-contract"))
         hashes = policy.SOURCE_SHA256
         namespace = {"root": ROOT, "focus": policy.IOS_FOCUS, "content_fixture_requested": True,
@@ -87,7 +93,7 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
                      "bundle_id": "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32,
                      "signed_hash": "a" * 64, "plist_hash": "b" * 64, "protocol": SimpleNamespace(observed_launch_pid=321),
                      "receipt": {"transport_passed": True}, "wk_content": fake_module, "os": os,
-                     "lt": SimpleNamespace(content_policy=SimpleNamespace(source_contract=contract),
+                     "lt": SimpleNamespace(content_policy=SimpleNamespace(source_contract=contract, IOS_RESTORE_FOCUS=policy.IOS_RESTORE_FOCUS),
                                            sha256=lambda path: hashes[path.relative_to(ROOT).as_posix()])}
         return namespace, fixture, fake_module, events, validate
 
@@ -96,10 +102,10 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
         assign = next(node for node in ast.walk(run) if isinstance(node, ast.Assign) and
                       any(isinstance(target, ast.Name) and target.id == "content_fixture_requested" for target in node.targets))
         for module in ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-share", "nativecmpkit-file-picker"):
-            for focus in (policy.IOS_FOCUS, None, r.IOS_WEBVIEW_REQUEST_FOCUS, r.IOS_WEBVIEW_REQUEST_DNS_FOCUS, r.IOS_WEBVIEW_LIFECYCLE_FOCUS):
+            for focus in (*policy.IOS_FOCUSES, None, r.IOS_WEBVIEW_REQUEST_FOCUS, r.IOS_WEBVIEW_REQUEST_DNS_FOCUS, r.IOS_WEBVIEW_LIFECYCLE_FOCUS):
                 namespace = {"host": {"module": module}, "focus": focus, "lt": SimpleNamespace(content_policy=policy)}
                 expression = ast.fix_missing_locations(ast.Expression(copy.deepcopy(assign.value)))
-                self.assertIs(module == policy.MODULE and focus == policy.IOS_FOCUS, eval(compile(expression, "<source-only-focus-model>", "eval"), namespace))
+                self.assertIs(module == policy.MODULE and focus in policy.IOS_FOCUSES, eval(compile(expression, "<source-only-focus-model>", "eval"), namespace))
         request = next(node for node in ast.walk(run) if isinstance(node, ast.Assign) and
                        any(isinstance(target, ast.Name) and target.id == "request_fixture_requested" for target in node.targets))
         self.assertNotIn("content_policy", ast.unparse(request.value))
@@ -176,7 +182,8 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
         self.assertEqual({"bundle_id": namespace["bundle_id"], "signed_hash": namespace["signed_hash"], "plist_hash": namespace["plist_hash"],
                           "native_pid": namespace["protocol"].observed_launch_pid, "fixture_hash": policy.SOURCE_SHA256[policy.IOS_FIXTURE],
                           "native_hash": policy.SOURCE_SHA256[policy.spec(policy.IOS_FOCUS)["source"]],
-                          "helper_hash": policy.SOURCE_SHA256[policy.IOS_HELPER], "nonce_hash": "d" * 64}, validate.call_args.kwargs)
+                          "helper_hash": policy.SOURCE_SHA256[policy.IOS_HELPER], "nonce_hash": "d" * 64,
+                          "selected": content_fixture.IOS_METHODS}, validate.call_args.kwargs)
         self.assertTrue(namespace["receipt"]["transport_passed"])
         self.assertEqual({"source_model_only": True}, validate.call_args.args[0])
 
@@ -197,6 +204,7 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
         base = sorted(application.TEST_ARGUMENTS); selected = policy.selector(policy.IOS_FOCUS).split(",")
         for methods in (selected, list(reversed(selected))):
             self.assertEqual(policy.IOS_FOCUS, application.application_test_focus(base + ["--ktest_gradle_filter=" + ",".join(methods)]))
+        self.assertEqual(policy.IOS_RESTORE_FOCUS, application.application_test_focus(base + ["--ktest_gradle_filter=" + selected[0]]))
         for methods in (selected[:-1], selected + [selected[0]], [policy.spec(policy.IOS_FOCUS)["classname"]], ["*"], [selected[0] + "*", *selected[1:]]):
             with self.assertRaises(ValueError): application.application_test_focus(base + ["--ktest_gradle_filter=" + ",".join(methods)])
         host = application.application_host("nativecmpkit-webview/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe", policy.IOS_FOCUS)
@@ -207,7 +215,9 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
             root = Path(temporary).resolve(); copy_model_checkout(root); plan = native_plan(root, policy.IOS_FOCUS)
             contract = policy.source_contract(root, policy.IOS_FOCUS); row = policy.spec(policy.IOS_FOCUS)
             validate = Mock(return_value=True)
-            fake = SimpleNamespace(SOURCE=policy.IOS_FIXTURE, NATIVE_SOURCE=row["source"], NATIVE_HELPER=policy.IOS_HELPER, validate_receipt=validate)
+            fake = SimpleNamespace(SOURCE=policy.IOS_FIXTURE, NATIVE_SOURCE=row["source"], NATIVE_HELPER=policy.IOS_HELPER,
+                                   IOS_METHODS=content_fixture.IOS_METHODS, IOS_RESTORE_METHODS=content_fixture.IOS_RESTORE_METHODS,
+                                   validate_receipt=validate)
             document = {"bundle_id": "source-model-bound-app", "signed_application_executable_sha256": "a" * 64,
                         "application_plist_sha256": "b" * 64, "webview_content_policy_nonce_sha256": "d" * 64,
                         "webview_content_policy_fixture": {"source_model_only": True}}

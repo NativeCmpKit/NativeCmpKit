@@ -1207,10 +1207,11 @@ UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_REQUEST_DNS_FOCUS] = {
     "module": "nativecmpkit-webview", "groups": (IOS_WEBVIEW_REQUEST_GROUP, IOS_WEBVIEW_DNS_GROUP),
     "scope": "Exactly three unexecuted genuine UIApplication/library-WK methods in one existing iPhone/Mac job: the unchanged two localhost request/TLS/Stop/redirect/Reload methods and one reserved-nonce provisional DNS fail/fail method. The localhost fixture/ATS lease is required only for the request group; DNS keeps its existing HTTPS .invalid/system-resolver and actual NSURLErrorDomain/CannotFindHost/-1003/zero-commit/previous-error-reset criteria. Eleven accepted WK/application-host methods are compiled but not selected. Exact Worker/runtime/binary/install/native/XML/owned application and fixture cleanup gates remain. No controlled resolver, resolver override, injected errors, arbitrary loads/certificate trust bypass, physical/minimum/ABI/consumer/security/release certification.",
 }
-UI_APPLICATION_FOCUS_SPECS[content_policy.IOS_FOCUS] = {
-    "module": "nativecmpkit-webview", "groups": content_policy.groups(content_policy.IOS_FOCUS),
-    "scope": content_policy.scope(content_policy.IOS_FOCUS),
-}
+for content_focus in content_policy.IOS_FOCUSES:
+    UI_APPLICATION_FOCUS_SPECS[content_focus] = {
+        "module": "nativecmpkit-webview", "groups": content_policy.groups(content_focus),
+        "scope": content_policy.scope(content_focus),
+    }
 IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS = (
     IOS_WEBVIEW_LIFECYCLE_GROUPS[0],
     UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_RECOVERY_FOCUS]["groups"][0],
@@ -2422,13 +2423,13 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         selected[0]["test_filter"] = UI_DATE_YEAR_MATERIAL_CLASS
         selected[0]["required_testcases"] = ui_date_year_material_identities()
         result["scope"] = "Two new important public Material year-policy companions only: actual rule-change setter retention/in-range snapping and actual disabled/enabled single/range calendar click policy. The shared zero-test assertions execute against this Material actual independently of the same-host UIKit application. Never replay accepted date-transaction/bounds/month/dropdown/old alert methods or claim native/physical/older/all-OS/consumer/API-ABI/dependency/security/release certification."
-    elif focus in content_policy.FOCUSES and focus != content_policy.IOS_FOCUS:
+    elif focus in content_policy.FOCUSES and focus not in content_policy.IOS_FOCUSES:
         content_policy.configure_item(root, selected[0], focus)
         result["explicit_test_focus"] = focus
         result["scope"] = content_policy.scope(focus)
     elif focus in UI_APPLICATION_FOCUS_SPECS:
         spec = UI_APPLICATION_FOCUS_SPECS[focus]
-        if focus == content_policy.IOS_FOCUS:
+        if focus in content_policy.IOS_FOCUSES:
             content_policy.configure_item(root, selected[0], focus)
         if focus == camera_ios.FOCUS:
             camera_ios.validate_sources(root)
@@ -3901,7 +3902,7 @@ def collect_reports(root: Path, test_plan: dict, started_ns: int, ended_ns: int,
             policy_errors = ([] if content_policy.case_inventory(focus, module_cases) and
                              len(reports) == len(paths) == expected["required_original_xml"] == 1 else
                              ["Content-policy XML requires exactly the finite NEW/affected native cases in one fresh original target report; no missing/duplicate/skipped/foreign or accepted-replay cases"])
-            required_host = "macos" if focus == content_policy.IOS_FOCUS else "linux"
+            required_host = "macos" if focus in content_policy.IOS_FOCUSES else "linux"
             if native_test_policy.canonical_host(host_system or platform.system()) != required_host:
                 policy_errors.append("Content-policy XML requires its one registered actual host slot")
             try:
@@ -4914,9 +4915,10 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
                  "Native WK request cases lack actual localhost/TLS/client-EOF/owned-cleanup evidence")
         if any((content_policy.spec(content_policy.IOS_FOCUS)["classname"], method) in cases
                for method in content_policy.spec(content_policy.IOS_FOCUS)["methods"]):
-            need(test_plan.get("explicit_test_focus") == content_policy.IOS_FOCUS,
+            content_focus = test_plan.get("explicit_test_focus")
+            need(content_focus in content_policy.IOS_FOCUSES,
                  "New WK content cases require their exact finite owned fixture admission; generic ios/all is not prepared")
-            current_content = content_policy.source_contract(root, content_policy.IOS_FOCUS)
+            current_content = content_policy.source_contract(root, content_focus)
             need(expected.get(content_policy.CONTRACT_FIELD) == current_content,
                  "Native WK content fixture/helper/owner differs from the exact preflight source identity")
             import webview_content_policy_fixture as wk_content
@@ -4928,7 +4930,8 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
                     plist_hash=document["application_plist_sha256"], native_pid=protocol.get("observed_launch_pid"),
                     fixture_hash=current_content["source_hashes"][wk_content.SOURCE],
                     native_hash=current_content["source_hashes"][wk_content.NATIVE_SOURCE],
-                    helper_hash=current_content["source_hashes"][wk_content.NATIVE_HELPER], nonce_hash=nonce_hash),
+                    helper_hash=current_content["source_hashes"][wk_content.NATIVE_HELPER], nonce_hash=nonce_hash,
+                    selected=(wk_content.IOS_RESTORE_METHODS if content_focus == content_policy.IOS_RESTORE_FOCUS else wk_content.IOS_METHODS)),
                  "Native WK content cases lack complete nonce/process/install/source/wire/independent-owned-cleanup evidence")
         if cases.get(app.IMAGE_PROFILE_CASE) == "passed":
             import apple_image_profile
