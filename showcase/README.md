@@ -139,6 +139,17 @@ Supported rows are not claimed as passed until their execution entry names the
 run/attempt/job. Unsupported rows point at the Known Limitations screen and are
 marked `not-applicable`; they are not presented as working features.
 
+### Android icon font packaging
+
+The stock Android APK built from `1c1c534b` did not contain
+`sf_symbols.ttf`, so `CupertinoIcon` rendered tofu boxes. `sample/android` now
+stages the reviewed 257,628-byte font at
+`assets/composeResources/io.github.apdelrahman1911.kira.kira_cupertino_icons.generated.resources/font/sf_symbols.ttf`
+through a deterministic `Copy` task; the rebuilt APK contains the same SHA-256
+`67c44fe9183b002e79dde7f6977e2988661c9a3e4a3c5fce968787efdbed823c` and the
+catalog renders. The underlying AAR packaging path still deserves a library-level
+regression check.
+
 Source-confirmed gaps that shape the showcase:
 
 - `AdaptiveExpandableFAB` and `UIKitExpandableFABItem` are `internal`; there is

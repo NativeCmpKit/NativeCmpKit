@@ -116,6 +116,14 @@ toolchain and host libraries. See [development setup](docs/installation.md#build
 ./gradlew :kira-io:desktopTest :kira-file-picker:desktopTest
 ```
 
+### Showcase and device coverage
+
+The checked-in sample doubles as the reusable showcase: a searchable component
+index, stable routes, semantic tags, a Known Limitations screen and hosted
+Android/iOS UI capture. See [showcase/README.md](showcase/README.md) for the
+build/session commands, the [coverage manifest](showcase/coverage.json) and
+[screenshot index](screenshots/INDEX.md).
+
 - [Releases and release notes](https://github.com/Apdelrahman1911/NativeCmpKit/releases)
 - [Maven Central namespace](https://central.sonatype.com/namespace/io.github.apdelrahman1911.nativecmpkit)
 - [CI runs](https://github.com/Apdelrahman1911/NativeCmpKit/actions)

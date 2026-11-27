@@ -8,6 +8,19 @@ import json
 from pathlib import Path
 
 
+CAPTIONS = {
+    "home": "Searchable component index, stable routes and per-screen reset.",
+    "limitations": "Source-confirmed unsupported and internal APIs; not working parity.",
+    "geo-math": "Deterministic LatLng distance/bearing plus the tracker-unavailable state.",
+    "permissions": "Public permission status and request rows; OS dialogs are separate.",
+    "share": "Native share payloads and terminal result state.",
+    "webview": "Deterministic HTML, navigation/errors, JavaScript and cookie state.",
+    "io-file-picker": "Platform file selection, filters, metadata and streaming readout.",
+    "io-image-picker": "Picked image preview through the KmpFile Coil pipeline.",
+    "io-file-saver": "Save/export entry point and result state.",
+    "io-camera-picker": "Camera launch and the platform-specific unavailable fallback.",
+}
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path("screenshots"))
@@ -52,15 +65,24 @@ def main() -> None:
             relative = png.as_posix()
             component = png.parts[-3] if len(png.parts) >= 3 else png.parent.name
             scenario = png.parts[-2] if len(png.parts) >= 2 else ""
-            expected = ""
-            for row in rows:
-                if row.get("screenshot", {}).get(platform) == relative:
-                    expected = " / ".join(row.get("expected", []))[:220]
-                    break
+            expected = CAPTIONS.get(component, "")
+            if not expected:
+                for row in rows:
+                    if row.get("screenshot", {}).get(platform) == relative:
+                        expected = " / ".join(row.get("expected", []))[:220]
+                        break
             lines.append(
                 f"| `{component}/{scenario}` | {component} | {expected or 'See coverage.json'} | "
                 f"![{component} {scenario}]({platform}/{component}/{scenario}/{png.name}) |"
             )
+        lines.append("")
+
+    compare = args.root / "compare"
+    if compare.exists():
+        lines.extend(["## Side-by-side Android / iOS", ""])
+        for png in sorted(compare.rglob("*.png")):
+            relative = png.relative_to(compare)
+            lines.append(f"- [{relative.as_posix()}]({png.as_posix()})")
         lines.append("")
 
     lines.extend([

@@ -22,6 +22,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+ANDROID_APP_ID = "io.github.apdelrahman1911.nativecmpkit.sample"
+
+
 def load_client(client_dir: Path):
     sys.path.insert(0, str(client_dir))
     from ui_sdk import LiveUI  # type: ignore
@@ -66,15 +69,57 @@ def click_text(ui, text: str):
     ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
 
 
+_SCREEN = None
+
+
+def screen_size(ui):
+    global _SCREEN
+    if _SCREEN is None:
+        screen = ui.capabilities()["screen"]
+        _SCREEN = (screen["width"], screen["height"])
+    return _SCREEN
+
+
+def scroll_list(ui, dy: int):
+    width, height = screen_size(ui)
+    ui.action("pointer.scroll", {"x": width // 2, "y": height // 2, "dx": 0, "dy": dy})
+
+
+def scroll_to_top(ui):
+    for _ in range(20):
+        if soft_find(ui, {"text_contains": "UI Components"}, timeout_ms=600).get("satisfied"):
+            return
+        scroll_list(ui, -5)
+
+
+def ensure_home(ui):
+    if home_visible(ui):
+        return
+    for _ in range(3):
+        ui.action("keyboard.press", {"keys": ["BACK"]})
+        if home_visible(ui):
+            return
+    ui.action("app.restart", {"id": ANDROID_APP_ID})
+    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
+
+
 def open_screen(ui, title: str):
-    search = find_search(ui, timeout_ms=8000)
-    if not search:
-        raise RuntimeError("The Home search field was not found")
-    node = search["nodes"][0]
-    ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
-    ui.action("text.insert", {"text": title, "replace": True})
-    click_result(ui, title)
-    find(ui, {"text_contains": "component screens"}, state="absent", timeout_ms=10000)
+    ensure_home(ui)
+    try:
+        ui.action("keyboard.press", {"keys": ["ESC"]})
+    except Exception:
+        pass
+    scroll_to_top(ui)
+    for _ in range(40):
+        observation = soft_find(ui, {"text_contains": title}, timeout_ms=800)
+        nodes = observation.get("nodes", [])
+        if observation.get("satisfied") and nodes:
+            node = choose_clickable(observation, nodes)
+            ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
+            find(ui, {"text_contains": "component screens"}, state="absent", timeout_ms=10000)
+            return
+        scroll_list(ui, 3)
+    raise RuntimeError(f"Could not find the Home entry for {title!r}")
 
 
 def soft_find(ui, selector: dict, timeout_ms: int = 2500):
@@ -112,13 +157,25 @@ def click_result(ui, text: str):
     ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
 
 
+def home_visible(ui) -> bool:
+    return bool(soft_find(ui, {"text_contains": "component screens"}, timeout_ms=1000).get("satisfied"))
+
+
 def back(ui, platform: str):
-    try:
-        click_text(ui, "Back")
-    except RuntimeError:
-        keys = ["BACK"] if platform == "android" else ["ESCAPE"]
-        ui.action("keyboard.press", {"keys": keys})
-    find(ui, {"text_contains": "component screens"}, timeout_ms=8000)
+    if platform == "android":
+        for _ in range(3):
+            ui.action("keyboard.press", {"keys": ["BACK"]})
+            if home_visible(ui):
+                return
+    else:
+        try:
+            click_text(ui, "Back")
+        except RuntimeError:
+            ui.action("pointer.drag", {"x": 4, "y": 420, "end_x": 300, "end_y": 420, "duration_ms": 300})
+    if home_visible(ui):
+        return
+    ui.action("app.restart", {"id": ANDROID_APP_ID})
+    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
 
 
 def main() -> None:
@@ -150,6 +207,8 @@ def main() -> None:
         record["screenshots"].append({"name": name, "bytes": path.stat().st_size})
         print(f"captured {path}")
 
+    if not home_visible(ui):
+        ui.action("app.restart", {"id": ANDROID_APP_ID})
     find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
     shot("01-home.png")
     open_screen(ui, "Adaptive Buttons")

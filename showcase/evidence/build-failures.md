@@ -53,6 +53,24 @@ runs.
   the environment value after the probe. AXe mode then uses `simctl` device
   screenshots and needs no pyobjc wheel.
 
+## Missing Cupertino icon font in the Android APK — runs 45957524569 / 45972040187
+
+- Base: `1c1c534b` / `36382250`
+- The Android catalog rendered every glyph as a missing-glyph box even though
+  the bundled TTF contains all 1,322 codepoints.
+- Cause: the Compose 1.12 `com.android.kotlin.multiplatform.library` AAR did not
+  contribute `composeResources/.../font/sf_symbols.ttf` to the application APK.
+  `unzip -l android-debug.apk` had no `.ttf` entry.
+- First repair attempt used an Android `SourceSet.assets.srcDir(Provider)` and
+  failed before the build with
+  `You cannot add Provider instances to the Android SourceSet API`.
+- Working repair: a `Copy` task stages the reviewed TTF under
+  `build/generated/cupertinoAssets/composeResources/<resource-package>/font/`
+  and the app adds that static directory to `main` assets. The built APK now
+  contains the exact 257,628-byte `sf_symbols.ttf`.
+- The icon catalog is recaptured from a session built with this repair. The
+  original tofu screenshot remains in the failure record.
+
 ## Cancelled iterations
 
 Two intermediate runs were cancelled after their commit was superseded by a

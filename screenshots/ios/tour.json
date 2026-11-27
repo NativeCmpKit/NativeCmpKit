@@ -1,0 +1,244 @@
+{
+  "captured_at": "2026-11-27T09:26:06.288493+00:00",
+  "target": "ios",
+  "session": "dc8ed10bbd25ac3ef8eaa30a",
+  "device": "iphone-simulator",
+  "commands": [
+    "app.close",
+    "app.install",
+    "app.launch",
+    "app.metrics",
+    "app.reset",
+    "app.restart",
+    "app.uninstall",
+    "clipboard.get",
+    "clipboard.set",
+    "element.assert",
+    "element.click",
+    "element.find",
+    "element.wait",
+    "keyboard.press",
+    "performance.observations",
+    "pointer.click",
+    "pointer.drag",
+    "pointer.scroll",
+    "recording.start",
+    "recording.stop",
+    "text.insert",
+    "trace.start",
+    "trace.stop",
+    "tree.snapshot",
+    "visual.sample",
+    "visual.wait"
+  ],
+  "captures": [
+    {
+      "component": "home",
+      "scenario": "index",
+      "path": "screenshots/ios/home/index/iphone-simulator.png",
+      "bytes": 138669
+    },
+    {
+      "component": "ui-adaptive-button",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png",
+      "bytes": 102085
+    },
+    {
+      "component": "ui-adaptive-clickable",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-clickable/overview/iphone-simulator.png",
+      "bytes": 37574
+    },
+    {
+      "component": "ui-adaptive-switch",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png",
+      "bytes": 76913
+    },
+    {
+      "component": "ui-adaptive-slider",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png",
+      "bytes": 67391
+    },
+    {
+      "component": "ui-adaptive-progress",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png",
+      "bytes": 59345
+    },
+    {
+      "component": "ui-adaptive-date-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png",
+      "bytes": 115302
+    },
+    {
+      "component": "ui-adaptive-bottom-sheet",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-bottom-sheet/overview/iphone-simulator.png",
+      "bytes": 38774
+    },
+    {
+      "component": "ui-adaptive-bottom-sheet",
+      "scenario": "expanded",
+      "path": "screenshots/ios/ui-adaptive-bottom-sheet/expanded/iphone-simulator.png",
+      "bytes": 76295
+    },
+    {
+      "component": "ui-adaptive-dropdown",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-dropdown/overview/iphone-simulator.png",
+      "bytes": 72173
+    },
+    {
+      "component": "ui-adaptive-dropdown",
+      "scenario": "menu",
+      "path": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png",
+      "bytes": 79815
+    },
+    {
+      "component": "ui-adaptive-scaffold",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-scaffold/overview/iphone-simulator.png",
+      "bytes": 55014
+    },
+    {
+      "component": "ui-adaptive-top-bar",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png",
+      "bytes": 126319
+    },
+    {
+      "component": "ui-adaptive-navigation-bar",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-navigation-bar/overview/iphone-simulator.png",
+      "bytes": 64512
+    },
+    {
+      "component": "ui-adaptive-toolbar",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-toolbar/overview/iphone-simulator.png",
+      "bytes": 55130
+    },
+    {
+      "component": "ui-cupertino-icons",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png",
+      "bytes": 130880
+    },
+    {
+      "component": "io-file-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-file-picker/overview/iphone-simulator.png",
+      "bytes": 72125
+    },
+    {
+      "component": "io-image-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-image-picker/overview/iphone-simulator.png",
+      "bytes": 45060
+    },
+    {
+      "component": "io-file-saver",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-file-saver/overview/iphone-simulator.png",
+      "bytes": 56693
+    },
+    {
+      "component": "io-camera-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-camera-picker/overview/iphone-simulator.png",
+      "bytes": 46325
+    },
+    {
+      "component": "share",
+      "scenario": "overview",
+      "path": "screenshots/ios/share/overview/iphone-simulator.png",
+      "bytes": 81248
+    },
+    {
+      "component": "webview",
+      "scenario": "overview",
+      "path": "screenshots/ios/webview/overview/iphone-simulator.png",
+      "bytes": 197410
+    },
+    {
+      "component": "permissions",
+      "scenario": "overview",
+      "path": "screenshots/ios/permissions/overview/iphone-simulator.png",
+      "bytes": 155554
+    },
+    {
+      "component": "geo-math",
+      "scenario": "overview",
+      "path": "screenshots/ios/geo-math/overview/iphone-simulator.png",
+      "bytes": 130964
+    },
+    {
+      "component": "limitations",
+      "scenario": "known-limitations",
+      "path": "screenshots/ios/limitations/known-limitations/iphone-simulator.png",
+      "bytes": 198048
+    },
+    {
+      "component": "ui-adaptive-alert-dialog",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png",
+      "bytes": 131108
+    },
+    {
+      "component": "ui-adaptive-alert-dialog",
+      "scenario": "simple",
+      "path": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png",
+      "bytes": 144680
+    },
+    {
+      "component": "webview",
+      "scenario": "javascript-title",
+      "path": "screenshots/ios/webview/javascript-title/iphone-simulator.png",
+      "bytes": 197422
+    },
+    {
+      "component": "webview",
+      "scenario": "cookie-roundtrip",
+      "path": "screenshots/ios/webview/cookie-roundtrip/iphone-simulator.png",
+      "bytes": 197191
+    },
+    {
+      "component": "webview",
+      "scenario": "cookies-cleared",
+      "path": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png",
+      "bytes": 197191
+    },
+    {
+      "component": "webview",
+      "scenario": "invalid-destination",
+      "path": "screenshots/ios/webview/invalid-destination/iphone-simulator.png",
+      "bytes": 197060
+    }
+  ],
+  "errors": [
+    {
+      "screen": "Adaptive Time Picker",
+      "error": "ClientError('HTTP 408 (condition_timeout)')"
+    }
+  ],
+  "ok": false,
+  "attempts": [
+    {
+      "screen": "Adaptive Alert Dialog",
+      "error": "initial list navigation missed Home entry",
+      "recovered": true
+    },
+    {
+      "screen": "Web View",
+      "error": "initial toolbar contentDescription not exposed; SF Symbol names used",
+      "recovered_partial": true,
+      "missing": [
+        "second-page"
+      ]
+    }
+  ]
+}

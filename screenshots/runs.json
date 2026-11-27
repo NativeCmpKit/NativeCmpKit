@@ -1,0 +1,24 @@
+{
+  "appSha": "e4ec7441",
+  "baseSha": "a2c48c0b9ebf3524192e680ecd4becc1f2880bb8",
+  "uiTestActionsRef": "0c818c5d72e8c30c59bd1287c330a40392bf8e89",
+  "platforms": {
+    "android": {
+      "runUrl": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/45957524569",
+      "job": "140367856551",
+      "attempt": "1",
+      "device": "Pixel 6 API 35 Google APIs x86_64, 1080x2400 @ 420 dpi",
+      "runtime": "Android 15 (API 35)",
+      "appSha": "1c1c534b",
+      "iconRunUrl": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/45973585586"
+    },
+    "ios": {
+      "runUrl": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/45968953555",
+      "job": "140404371284",
+      "attempt": "1",
+      "device": "iPhone simulator via AXe, 402x874",
+      "runtime": "iOS 26.5 simulator (Xcode 26.6)",
+      "appSha": "ae88a5a4"
+    }
+  }
+}
