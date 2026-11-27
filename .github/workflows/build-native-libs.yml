@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-android, identity-linux-browser, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-android, identity-linux-browser, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -248,6 +248,41 @@ jobs:
         run: |
           xvfb-run -a ./gradlew desktopTest --continue --max-workers=1 \
             --no-parallel --no-configuration-cache --no-build-cache
+      - name: Recheck Linux picker tests in an owned FileChooser session
+        if: inputs.profile == 'identity-linux-picker'
+        shell: bash
+        run: |
+          sudo apt-get install --no-install-recommends -y xdg-desktop-portal xdg-desktop-portal-gtk xdotool
+          PYTHONPATH=scripts/ci xvfb-run -a python3 - <<'PYTHON'
+          from pathlib import Path
+          import subprocess
+          from picker_dialog_context import OwnedPickerPortal, SOURCE
+
+          root = Path.cwd()
+          output = root / "build/ci-verification/identity-linux-picker"
+          output.mkdir(parents=True)
+          module = "nativecmpkit-file-picker"
+          plan = {"suite": "desktop", "expected": [{"module": module, "test_source_files": [SOURCE]}]}
+          portal = OwnedPickerPortal(root, output, plan).start()
+          command = ["./gradlew", f":{module}:desktopTest", "--max-workers=1",
+                     "--no-parallel", "--no-configuration-cache", "--no-build-cache"]
+          package = "io.github.apdelrahman1911.nativecmpkit.picker"
+          for case in (
+              "NativeLinuxPortalFunctionalityTest",
+              "NativePickerComposeLifetimeTest.closingTheRealRegistryIdWhileItsDialogIsVisibleKeepsTheShowLeaseValid",
+              "NativePickerComposeLifetimeTest.firstPublicCompositionLaunchAndSettingsUpdatesUseOneActualNativeDialog",
+              "NativePickerComposeLifetimeTest.closingComposeWindowWithAnActualDialogVisibleCancelsDeliveryNotNativeOwnership",
+              "platform.NativeCacheProcessIntegrationTest.differentCompiledNativeVersionsRaceInSeparateJvmsAndRetainTheirOwnDigestAndJniValue",
+          ):
+              command.extend(["--tests", f"{package}.{case}"])
+          try:
+              result = subprocess.run(command, env=portal.environment, check=False)
+          finally:
+              portal.close()
+          if not portal.receipt["clean_owned_shutdown"]:
+              raise SystemExit("The owned portal did not shut down cleanly")
+          raise SystemExit(result.returncode)
+          PYTHON
       - name: Android host tests and sample APK
         if: inputs.profile == 'identity-linux-android'
         run: |

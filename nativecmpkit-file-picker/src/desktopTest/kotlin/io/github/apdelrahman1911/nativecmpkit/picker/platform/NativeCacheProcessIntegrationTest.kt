@@ -300,21 +300,35 @@ private fun compileNativeVersion(root: Path, version: Int): Path {
         .first { Files.isRegularFile(it.resolve("rust-toolchain.toml")) && Files.isRegularFile(it.resolve("settings.gradle.kts")) }
     val expected = Regex("(?m)^channel\\s*=\\s*\"([0-9]+\\.[0-9]+\\.[0-9]+)\"")
         .find(Files.readString(repo.resolve("rust-toolchain.toml")))!!.groupValues[1]
+    val rustc = listOf("rustup", "run", expected, "rustc")
     val rustIdentity = root.resolve("rust-version.txt")
-    val rust = ProcessBuilder("rustc", "--version").directory(repo.toFile()).redirectErrorStream(true)
-        .redirectOutput(rustIdentity.toFile()).start()
+    val rust = ProcessBuilder(rustc + "--version").directory(repo.toFile())
+        .redirectOutput(rustIdentity.toFile())
+        .redirectError(root.resolve("rust-version.stderr").toFile()).start()
     try {
         check(rust.waitFor(10, TimeUnit.SECONDS) && rust.exitValue() == 0)
-        check(Files.size(rustIdentity) < 4096 && Files.readString(rustIdentity).startsWith("rustc $expected "))
+        check(Files.size(rustIdentity) < 4096 && Files.readString(rustIdentity).startsWith("rustc $expected ")) {
+            "The selected fixture compiler did not report rustc $expected"
+        }
     } finally { if (rust.isAlive) { rust.destroyForcibly(); check(rust.waitFor(10, TimeUnit.SECONDS)) } }
     val library = root.resolve(System.mapLibraryName("nativecmpkit_test_v$version"))
-    val compiler = ProcessBuilder("rustc", "--edition=2021", "--crate-type=cdylib", "--crate-name", "nativecmpkit_cache_v$version",
-        "--cfg", "fixture_v$version", "-C", "panic=abort", "-C", "opt-level=2", source.toString(), "-o", library.toString())
+    val compilerError = root.resolve("rust-v$version.stderr")
+    val compiler = ProcessBuilder(rustc + listOf(
+        "--edition=2021", "--crate-type=cdylib", "--crate-name", "nativecmpkit_cache_v$version",
+        "--cfg", "fixture_v$version", "-C", "panic=abort", "-C", "opt-level=2", source.toString(), "-o", library.toString(),
+    ))
         .directory(repo.toFile()).redirectOutput(root.resolve("rust-v$version.stdout").toFile())
-        .redirectError(root.resolve("rust-v$version.stderr").toFile()).start()
+        .redirectError(compilerError.toFile()).start()
     try {
         check(compiler.waitFor(30, TimeUnit.SECONDS)) { "Pinned native fixture compilation timed out" }
-        check(compiler.exitValue() == 0 && Files.isRegularFile(library)) { "Pinned native fixture compilation failed" }
+        check(compiler.exitValue() == 0 && Files.isRegularFile(library)) {
+            val diagnostics = Files.newBufferedReader(compilerError).use { reader ->
+                val buffer = CharArray(4096)
+                val length = reader.read(buffer).coerceAtLeast(0)
+                String(buffer, 0, length)
+            }
+            "Pinned native fixture compilation failed (exit ${compiler.exitValue()}): $diagnostics"
+        }
     } finally {
         if (compiler.isAlive) { compiler.destroyForcibly(); check(compiler.waitFor(10, TimeUnit.SECONDS)) }
     }
