@@ -225,6 +225,16 @@ PRE26_TOOLBAR_CASE = (
 PRE26_TOOLBAR_PREFIX = "NATIVECMPKIT_ADAPTIVE_TOOLBAR_PHASE "
 PRE26_TOOLBAR_PHASES = ("compose-enter", "set-content-enter", "set-content-returned", "first-idle", "first-width-verified")
 PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, PRE26_TOOLBAR_CASE)
+CAMERA_DISPOSAL_CASE = (lt.camera_ios.CLASS, lt.camera_ios.DISPOSAL_METHOD)
+CAMERA_DISPOSAL_PREFIX = "NATIVECMPKIT_CAMERA_DISPOSAL_PHASE "
+CAMERA_DISPOSAL_PHASES = (
+    "entered", "foreign-presented",
+    *(f"{variant}-{phase}" for variant in ("presenting", "presented") for phase in (
+        "launch-enter", "launch-returned", "phase-observed", "removal-requested",
+        "removal-verified", "teardown-observed", "late-input-verified",
+    )),
+    "foreign-cleanup-complete",
+)
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
@@ -358,6 +368,7 @@ class NativeProtocol:
         self.startup_failure_observation = None
         self.lifecycle_failure_observation = None
         self.wk_restore_progress = []
+        self.camera_disposal_progress = []
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
@@ -392,6 +403,9 @@ class NativeProtocol:
             return
         if line.startswith(PRE26_TOOLBAR_PREFIX):
             self.observe_pre26_toolbar(line)
+            return
+        if line.startswith(CAMERA_DISPOSAL_PREFIX):
+            self.observe_camera_disposal(line)
             return
         if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
             self.observe_pre26_process(line)
@@ -793,6 +807,9 @@ class NativeProtocol:
             if self.open_case == PRE26_NEGATIVE_STEPS_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_pre26_negative_steps(output_line)
+            if self.open_case == CAMERA_DISPOSAL_CASE and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_camera_disposal(output_line)
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
 
@@ -838,6 +855,14 @@ class NativeProtocol:
         if index < len(PRE26_TOOLBAR_PHASES) and phase == PRE26_TOOLBAR_PHASES[index]:
             self.pre26_toolbar_progress.append(phase)
 
+    def observe_camera_disposal(self, line: str) -> None:
+        if self.open_case != CAMERA_DISPOSAL_CASE or not line.startswith(CAMERA_DISPOSAL_PREFIX):
+            return
+        phase = line.removeprefix(CAMERA_DISPOSAL_PREFIX)
+        index = len(self.camera_disposal_progress)
+        if index < len(CAMERA_DISPOSAL_PHASES) and phase == CAMERA_DISPOSAL_PHASES[index]:
+            self.camera_disposal_progress.append(phase)
+
     def _request_image_profile_if_ready(self) -> None:
         if (self.active is not None and self.completed is None and self.open_case == IMAGE_PROFILE_CASE and
                 self.image_profile_pid is not None and self.image_profile_request is not None and
@@ -864,6 +889,7 @@ class NativeProtocol:
                 "open_suites": list(self.stack), "stream_bytes": self.stream_bytes,
                 "observed_launch_pid": self.observed_launch_pid,
                 "image_lifetime_observation": self.image_lifetime_observation,
+                **({"camera_disposal_progress": self.camera_disposal_progress} if self.camera_disposal_progress else {}),
                 **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
                 **({"pre26_customization_progress": self.pre26_customization_progress}
                    if self.pre26_customization_progress else {}),

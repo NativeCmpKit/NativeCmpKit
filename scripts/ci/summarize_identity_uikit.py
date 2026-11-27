@@ -11,7 +11,7 @@ from xml.etree import ElementTree as ET
 from library_tests import NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_ui_application import (
-    PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
+    CAMERA_DISPOSAL_PHASES, PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
     PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
 )
 
@@ -144,7 +144,9 @@ def receipt_rows():
                     ],
                     "pre26_toolbar_progress": [step for step in protocol.get("pre26_toolbar_progress", [])[:len(PRE26_TOOLBAR_PHASES)]
                                                if step in PRE26_TOOLBAR_PHASES],
-                    **({"camera_photos": camera_photo_summary(data, protocol)}
+                    **({"camera_photos": camera_photo_summary(data, protocol),
+                        "camera_disposal_progress": [step for step in protocol.get("camera_disposal_progress", [])[:len(CAMERA_DISPOSAL_PHASES)]
+                                                     if step in CAMERA_DISPOSAL_PHASES]}
                        if host == "native-camera-application" else {}),
                     "crash": labels(crash, ("status", "error_type")) | labels(crash.get("exception") or {}, ("type", "signal")),
                     "fixture": {

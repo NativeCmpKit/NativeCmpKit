@@ -179,6 +179,22 @@ class PartialProtocolTests(unittest.TestCase):
         self.assertEqual(list(a.PRE26_TOOLBAR_PHASES[:3]), protocol.partial()["pre26_toolbar_progress"])
         self.assertEqual(0, protocol.partial()["counts"]["passed"])
 
+    def test_camera_disposal_phases_require_the_named_open_case_and_original_order(self):
+        protocol = a.NativeProtocol()
+        suite, method = a.CAMERA_DISPOSAL_CASE
+        prefix = a.CAMERA_DISPOSAL_PREFIX
+        protocol.feed(prefix + "entered")
+        self.assertNotIn("camera_disposal_progress", protocol.partial())
+        for line in (f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
+            protocol.feed(line)
+        protocol.feed(prefix + "foreign-presented")
+        protocol.feed(f.frame("testStdOut", name="foreign", out=prefix + "entered"))
+        self.assertNotIn("camera_disposal_progress", protocol.partial())
+        protocol.feed(prefix + "entered")
+        protocol.feed(f.frame("testStdOut", name=method, out=prefix + "foreign-presented"))
+        self.assertEqual(["entered", "foreign-presented"], protocol.partial()["camera_disposal_progress"])
+        self.assertEqual(0, protocol.partial()["counts"]["passed"])
+
     def test_a_started_case_is_running_not_passing_before_actual_finish(self):
         protocol = begun()
         self.assertEqual("running", next(iter(protocol.cases.values()))["status"])

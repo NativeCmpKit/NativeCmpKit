@@ -163,6 +163,8 @@ class IosCameraOwnershipAcceptanceTest {
     }
 
     @Test fun compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown() = runCameraApplicationUiTest {
+        fun trace(phase: String) = println("NATIVECMPKIT_CAMERA_DISPOSAL_PHASE $phase")
+        trace("entered")
         setContent {}
         val foreign = runOnIdle { ForeignWindowModal() }
         var failure: Throwable? = null
@@ -170,7 +172,9 @@ class IosCameraOwnershipAcceptanceTest {
             waitForCameraNative { sameNativeObject(foreign.parent.view.window, foreign.window) }
             runOnIdle { foreign.beginPresentation() }
             waitForCameraNative { foreign.isActuallyPresented() }
+            trace("foreign-presented")
             for (duringPresentation in listOf(true, false)) {
+                val variant = if (duringPresentation) "presenting" else "presented"
                 val mounted = mutableStateOf(true)
                 val deliveries = mutableListOf<CameraPickerResult>()
                 var disposalWitness: Boolean? = null
@@ -198,7 +202,9 @@ class IosCameraOwnershipAcceptanceTest {
                 runOnIdle {
                     requireActualSimulatorPhotoLibrary()
                     foreign.assertPreserved()
+                    trace("$variant-launch-enter")
                     launcher.launch()
+                    trace("$variant-launch-returned")
                 }
                 waitForCameraNative {
                     assertTrue(deliveries.isEmpty(), "Camera returned a result before disposal admission")
@@ -212,13 +218,17 @@ class IosCameraOwnershipAcceptanceTest {
                     }
                     picker = actual
                     lateDelegate = assertIs<UIImagePickerControllerDelegateProtocol>(actual.delegate)
+                    trace("$variant-phase-observed")
                     mounted.value = false
+                    trace("$variant-removal-requested")
                     true
                 }
                 waitForIdle()
                 runOnIdle { assertEquals(true, disposalWitness, "Composition disposal must occur in the actually observed requested UIKit phase") }
+                trace("$variant-removal-verified")
                 val ownedPicker = assertNotNull(picker)
                 waitForCameraNative { parent.presentedViewController == null && nativePickerHasNoPresentation(parent, ownedPicker) && rootIsReappeared() }
+                trace("$variant-teardown-observed")
                 runOnIdle {
                     lateDelegate.imagePickerControllerDidCancel(ownedPicker)
                     lateDelegate.imagePickerController(picker = ownedPicker, didFinishPickingMediaWithInfo = emptyMap<Any?, Any?>())
@@ -228,10 +238,12 @@ class IosCameraOwnershipAcceptanceTest {
                     foreign.assertPreserved()
                     requireCameraApplicationWindow()
                 }
+                trace("$variant-late-input-verified")
             }
         } catch (error: Throwable) { failure = error; throw error } finally {
             cleanupPreserving(failure, { closeForeignWindow(foreign) })
         }
+        trace("foreign-cleanup-complete")
     }
 
     @Test fun actualSimulatorUnavailableAndCompetingModalOutcomesPreserveForeignPresenter() = runCameraApplicationUiTest {
