@@ -96,6 +96,18 @@ FLOWS = [
         tour.click_text(ui, "Cancel"),
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
+    ("action-sheet", "Adaptive Alert Dialog", lambda ui, p: (
+        tour.click_text(ui, "Show ActionSheet"),
+        assert_text(ui, "Alert Dialog"),
+        assert_text(ui, "Cancel"),
+        tour.click_text(ui, "Cancel"),
+        assert_absent(ui, "This is a native alert dialog from Kira"),
+    )),
+    ("permissions-bulk-deny", "Permissions", lambda ui, p: (
+        tour.click_text(ui, "Request permissions"),
+        (tour.click_text(ui, "Don't allow") if p == "android" else tour.click_text(ui, "Don’t Allow")),
+        assert_text(ui, "All permissions granted: false"),
+    )),
     ("sheet", "Adaptive Bottom Sheet", lambda ui, p: (
         tour.click_text(ui, "Show Bottom Sheet"),
         assert_text(ui, "Bottom Sheet"),
