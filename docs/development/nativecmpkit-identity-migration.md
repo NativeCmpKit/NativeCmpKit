@@ -26,7 +26,7 @@ comparison uses the starting development revision `d968257f`.
 | [#553](https://github.com/MohamedRejeb/Calf/pull/553) `53f502a7` | The PR introduces a different Navigation 3 implementation, foldables, a bar host, a toolchain update, and a redesigned sample. Importing those changes would expand the task. The Material dropdown and minute validation, cross-origin requested-URL tracking, desktop inline HTML, and Android icon resource enablement already have independent implementations here. Our iOS bar layout, sheet/picker behavior, calendar semantics, and popover ownership differ. The upstream diff does not establish the corresponding device behavior on this branch. |
 | [#552](https://github.com/MohamedRejeb/Calf/pull/552) `d7f022d8` | The bitmap color/alpha failure has an independent fix and native pixel tests. NativeCmpKit also invalidates images after density and layout-direction changes. Painter images and richer appearance are new APIs. Its positional reuse of equal-count tab items would invalidate our stale-selection test on reorder, so that implementation was not imported. |
 
-The hosted `identity-linux`, `identity-apple` and `identity-windows` profiles
+The hosted `identity-linux`, `identity-apple` `identity-apple-app` and `identity-windows` profiles
 report their own test scope. Historical source-projection and full verification
 profiles require separate results. The identity profiles do not issue an
 offline-tooling reuse certificate.

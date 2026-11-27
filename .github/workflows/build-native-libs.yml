@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-apple, identity-windows, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-apple, identity-apple-app, identity-windows, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -192,9 +192,9 @@ jobs:
             build/ci-verification/picker-jni-macos-domain/*.json
 
   identity-verification:
-    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'identity-linux' || inputs.profile == 'identity-apple' || inputs.profile == 'identity-windows')
-    runs-on: ${{ inputs.profile == 'identity-apple' && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: 60
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'identity-linux' || inputs.profile == 'identity-apple' || inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-windows')
+    runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
+    timeout-minutes: ${{ inputs.profile == 'identity-apple-app' && 90 || 60 }}
     env:
       CARGO_BUILD_JOBS: '2'
     steps:
@@ -246,17 +246,34 @@ jobs:
             -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=desktop \
             --continue --max-workers=2 --no-configuration-cache --no-build-cache
       - name: Apple simulator tests and sample framework
-        if: runner.os == 'macOS'
+        if: inputs.profile == 'identity-apple'
         run: |
           ./gradlew iosSimulatorArm64Test :sample:common:linkDebugFrameworkIosSimulatorArm64 \
             :sample:common:linkDebugFrameworkIosArm64 \
+            --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Tests requiring an owned UIKit application
+        if: inputs.profile == 'identity-apple-app'
+        shell: bash
+        run: |
+          python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
+            --output build/ci-identity/simulator.json
+          device="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["udid"])')"
+          state="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["state"])')"
+          if [[ "$state" == Shutdown ]]; then
+            xcrun simctl boot "$device"
+            trap 'xcrun simctl shutdown "$device"' EXIT
+          elif [[ "$state" != Booted ]]; then
+            exit 1
+          fi
+          xcrun simctl bootstatus "$device" -b
+          ./gradlew iosSimulatorArm64ApplicationTest -PnativecmpkitSimulatorDevice="$device" \
             --continue --max-workers=2 --no-configuration-cache --no-build-cache
       - name: Windows desktop tests
         if: runner.os == 'Windows'
         shell: cmd
         run: gradlew.bat :nativecmpkit-file-picker:desktopTest :nativecmpkit-share:desktopTest --continue --max-workers=2 --no-configuration-cache --no-build-cache
       - name: Native crate tests
-        if: ${{ !cancelled() && steps.rust.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.rust.outcome == 'success' && inputs.profile != 'identity-apple-app' }}
         shell: bash
         run: |
           cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
