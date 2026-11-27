@@ -126,6 +126,14 @@ FLOWS = [
         tour.click_text(ui, "Cancel"),
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
+    ("permissions-sms-rows", "Permissions", lambda ui, p: (
+        assert_text(ui, "ReadSms"),
+        assert_text(ui, "ReceiveSms"),
+        assert_text(ui, "SendSms"),
+    )),
+    ("time-24h", "Adaptive Time Picker", lambda ui, p: (
+        assert_text(ui, "24-hour state: 19:20"),
+    )),
     ("permissions-bulk-deny", "Permissions", lambda ui, p: (
         tour.click_text(ui, "Request permissions"),
         (tour.click_text(ui, "Don't allow") if p == "android" else tour.click_text(ui, "Don’t Allow")),
