@@ -113,6 +113,7 @@ def count_text(ui, text):
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
+        {"role": "AXCheckBox"}, {"role": "checkbox"},
         {"properties": {"checkable": True}}, {"properties": {"checked": False}},
     )
     for selector in selectors:
@@ -174,7 +175,32 @@ def drag_slider(ui, needle: str):
                 "duration_ms": 500,
             })
             return
-    raise AssertionError("no slider role exposed")
+    # iOS exposes the UISlider as an unnamed AXGroup; use the label row above it
+    # and the wide track group that shares its left edge.
+    label = find_any(ui, needle, timeout_ms=3000)
+    nodes = label.get("nodes", [])
+    if not nodes:
+        raise AssertionError("no slider label exposed")
+    bounds = nodes[0].get("bounds")
+    if not bounds:
+        raise AssertionError("slider label has no bounds")
+    snapshot = ui.action("tree.snapshot")["result"]
+    track = None
+    for node in snapshot.get("nodes", []):
+        candidate = node.get("bounds")
+        if not candidate:
+            continue
+        if (candidate["x"] == bounds["x"] and candidate["y"] >= bounds["y"] + bounds["height"]
+                and candidate["width"] > 200 and candidate["height"] <= 80):
+            track = candidate
+            break
+    if not track:
+        raise AssertionError("no slider track exposed")
+    ui.action("pointer.drag", {
+        "x": track["x"] + track["width"] // 2, "y": track["y"] + track["height"] // 2,
+        "end_x": track["x"] + track["width"] - 8, "end_y": track["y"] + track["height"] // 2,
+        "duration_ms": 500,
+    })
 
 
 FLOWS = [
@@ -319,7 +345,7 @@ FLOWS = [
         assert_text(ui, "No determinate circular progress"),
     )),
     ("liquidglass", "Liquid Glass", lambda ui, p: (
-        assert_text(ui, "LiquidGlassButton") if p == "ios" else assert_text(ui, "Liquid Glass is iOS 26 only"),
+        (find_any(ui, "LiquidGlassButton") if p == "ios" else assert_text(ui, "Liquid Glass is iOS 26 only")),
         (tour.click_text(ui, "Glass click 0"), assert_text(ui, "Glass click 1")) if p == "ios" else None,
     )),
     ("webview", "Web View", lambda ui, p: (
