@@ -610,9 +610,9 @@ observed client/daemon diagnostics with6 exact bindings. It is not library/
 consumer testing, ordinary dependency enforcement, independent trust, wrapper/
 compiler/native-cache use or forced-daemon-cleanup proof. Read its frozen scope.
 
-For calf-ui iOS presenter acceptance, use the distinct
-`:calf-ui:iosSimulatorArm64ApplicationTest`, **not** default Skiko/spawn as an app
-substitute. The source-aware `scripts/ci/library_tests.py` iOS plan selects it
+For NativeCmpKit UI iOS presenter acceptance, run
+`:nativecmpkit-ui:iosSimulatorArm64ApplicationTest` in the owned UIKit host.
+The source-aware `scripts/ci/library_tests.py` iOS plan selects it
 automatically, threads a fresh owned receipt root into the child, and requires
 complete actual KGP XML/application protocol/runtime/cleanup agreement. Existing
 `ios-ui` CI is an explicit single-module diagnostic, not the full iOS matrix.

@@ -1,19 +1,19 @@
 # Third-party notices
 
-nativeCmpkit retains Calf's Apache-2.0 source license and attribution; see
+NativeCmpKit retains Calf's Apache-2.0 source license and attribution; see
 `LICENSE` and `NOTICE`. Third-party components keep their own licenses. This
 document is not a certification of every transitive dependency's licensing.
 
 ## Embedded Jodd utilities and MIME database
 
-The `jodd` sources/resources in `calf-file-picker` retain their complete
+The `jodd` sources/resources in `nativecmpkit-file-picker` retain their complete
 upstream two-clause BSD license headers:
 
-- `src/desktopMain/kotlin/jodd/io/IOUtil.kt`
-- `src/desktopMain/kotlin/jodd/net/MimeTypes.kt`
-- `src/desktopMain/kotlin/jodd/util/Wildcard.kt`
-- `src/desktopMain/resources/jodd/net/MimeTypes.properties`
-- `src/desktopTest/kotlin/jodd/net/MimeTypesTest.kt`
+- `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/io/IOUtil.kt`
+- `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypes.kt`
+- `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/util/Wildcard.kt`
+- `src/desktopMain/resources/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypes.properties`
+- `src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypesTest.kt`
 
 Copyright (c) 2003-present, Jodd Team (http://jodd.org).
 The five existing headers were compared and have identical license text
@@ -26,7 +26,7 @@ artifact notice packaging includes them before future publication.
 
 ## Cupertino Icons font
 
-`calf-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf` is
+`nativecmpkit-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf` is
 the **CupertinoIcons Version 1.08** font, not Apple's proprietary SF Symbols
 font. On 2026-10-24 its 257,628 bytes were verified byte-for-byte against
 Flutter's `cupertino_icons` package at commit
@@ -48,7 +48,7 @@ notice addition.
 
 ## Apple SF Symbol name constants
 
-`calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/sf/symbols/SFSymbol.kt`
+`nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/sf/symbols/SFSymbol.kt`
 contains string identifiers passed to Apple's system image APIs; it does
 not contain the Apple SF Symbols font or image outlines. The identifier
 catalogue and Cupertino Icons font are different components. System symbol
@@ -59,15 +59,15 @@ independently reconstructed; see `docs/audit/navigation-core-icons-sample.md`.
 
 ## Compose Cupertino slider adaptation
 
-`calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt`
-explicitly credits the Compose Cupertino implementation at baseline lines76-80.
+The historical iOS `CupertinoSlider.kt` explicitly credits the Compose Cupertino
+implementation at baseline lines 76–80.
 The reference source at observation commit
 `f66875aa6f3848b30c38e42a89fc99c9ac24a585` carries:
 
 > Copyright (c) 2023-2024. Compose Cupertino project and open source contributors.
 
 It is licensed under Apache License2.0. Preserve this source attribution along
-with Calf/nativeCmpkit's adaptation history. The upstream license is retained
+with the Calf and NativeCmpKit adaptation history. The upstream license is retained
 verbatim in
 [licenses/compose-cupertino-Apache-2.0.txt](licenses/compose-cupertino-Apache-2.0.txt),
 including its separate JetBrains2020-2021/respective-authors attribution.
@@ -77,17 +77,17 @@ including its separate JetBrains2020-2021/respective-authors attribution.
 
 This reference identifies observed attribution, **not** the exact version
 originally copied into Calf. Retained Calf history establishes the slider
-introduction; nativeCmpkit commit `6eb7c66eb01b390353100c63882cd102846c7b8d`
+introduction. NativeCmpKit commit `6eb7c66eb01b390353100c63882cd102846c7b8d`
 then adds the common path and deletes the historical iOS path. Git reports
 separate A/D events, not a detected rename or byte-identical move. Neither
 observation establishes the original third-party copy revision;
 see [introduction trace](licenses/derived-apache-introduction-history.json).
-The current adaptation is in `calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt`
+The current adaptation is in `nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt`
 and retains the known source copyright/license header and Calf change notice.
 
 ## Kyant AndroidLiquidGlass sample adaptations
 
-The following `calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/` files are
+The following `nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/` files are
 adapted from the AndroidLiquidGlass reference implementation:
 
 - `button/LiquidGlassButton.kt`

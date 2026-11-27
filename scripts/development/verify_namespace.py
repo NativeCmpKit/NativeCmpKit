@@ -25,7 +25,8 @@ HISTORICAL_REJECTION_FIXTURES = {
 }
 ANDROID_PACKAGE_FIXTURE = "nativecmpkit-webview/src/androidHostTest/kotlin/android/webkit/NativeCmpKitControlledResourceError.kt"
 ACTIVE_ROOTS = {"sample", "scripts", "tests", "tools", "gradle", "convention-plugins", ".github"}
-ACTIVE_DOCS = {"README.md", "CONTRIBUTING.md", "docs/testing/nativecmpkit-webview-content-policy-focuses.json"}
+ACTIVE_DOCS = {"README.md", "CONTRIBUTING.md", "NOTICE", "THIRD_PARTY_NOTICES.md", "docs/index.md",
+               "docs/testing/nativecmpkit-webview-content-policy-focuses.json"}
 SOURCE_SUFFIXES = {".kt", ".kts", ".java", ".rs", ".swift", ".c", ".cc", ".cpp", ".h", ".mm", ".js", ".mjs", ".cjs"}
 CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properties", ".xml", ".plist",
                    ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro", ".def", ".gradle", ".xcconfig"}
