@@ -506,6 +506,9 @@ jobs:
                 --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
               ;;
           esac
+      - name: Retain bounded UIKit failure observations
+        if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
+        run: python3 scripts/ci/summarize_identity_uikit.py
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
         shell: cmd
@@ -533,6 +536,7 @@ jobs:
             build/ci-identity/publication-artifacts.json
             build/ci-identity/jni-exports.json
             build/ci-identity/framework-identity.txt
+            build/ci-identity/uikit-diagnostics.json
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
