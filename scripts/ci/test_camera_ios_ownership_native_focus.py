@@ -163,6 +163,17 @@ class CameraIosOwnershipNativeFocusControls(unittest.TestCase):
         self.assertTrue(errors)
         self.assertNotEqual(camera.admission_document(native_task=True), camera.admission_document(native_task=True, focus=focus))
 
+    def test_camera_module_admits_exact_full_and_disposal_focuses_at_both_gates(self):
+        build_script = (self.root / camera.MODULE / "build.gradle.kts").read_text()
+        focuses = re.search(r"val cameraIosFocuses = setOf\(([^)]*)\)", build_script).group(1)
+        self.assertEqual([camera.FOCUS, camera.DISPOSAL_FOCUS], re.findall(r'"([^"]+)"', focuses))
+        self.assertIn("check(cameraIosFocus == null || cameraIosFocus in cameraIosFocuses)", build_script)
+        self.assertIn(
+            f'doFirst {{\n                    val taskFocus = providers.gradleProperty("{camera.FOCUS_PROPERTY}").orNull\n'
+            '                    check(taskFocus != null && taskFocus in cameraIosFocuses)',
+            build_script,
+        )
+
     def test_separate_compiler_or_ordered_new5_request_uses_public_kgp_three_sources_and_apple_native_host(self):
         init = (ROOT / camera.INIT_SCRIPT).read_text()
         self.assertIn("gradle.startParameter.taskNames in setOf(compilerRequest, applicationRequest)", init)

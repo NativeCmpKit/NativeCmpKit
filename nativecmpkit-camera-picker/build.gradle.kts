@@ -9,9 +9,13 @@ plugins {
     id("module.publication")
 }
 
+val cameraIosFocuses = setOf(
+    "ios-camera-ownership-memory-callback",
+    "ios-camera-ownership-memory-callback-disposal",
+)
 val cameraIosFocus = providers.gradleProperty("nativecmpkitCameraIosFocus").orNull
-check(cameraIosFocus == null || cameraIosFocus == "ios-camera-ownership-memory-callback") {
-    "Only the exact Camera NEW5 verification focus is allowed"
+check(cameraIosFocus == null || cameraIosFocus in cameraIosFocuses) {
+    "Only the exact Camera ownership and disposal verification focuses are allowed"
 }
 
 kotlin {
@@ -54,7 +58,7 @@ kotlin {
             val application = binaries.getTest("application", DEBUG)
             tasks.register<KotlinNativeHostTest>("iosSimulatorArm64ApplicationTest") {
                 group = "verification"
-                description = "Only NEW5 Camera ownership methods in a separately owned UIKit application using KGP's actual JUnit parser."
+                description = "Selected Camera ownership methods in a separately owned UIKit application using KGP's actual JUnit parser."
                 executable(rootProject.file("scripts/ci/ios_ui_application.py"))
                 dependsOn(application.linkTaskProvider)
                 args = listOf("--binary", application.outputFile.absolutePath)
@@ -70,7 +74,8 @@ kotlin {
                 outputs.doNotCacheIf("Camera application requires fresh actual native execution") { true }
                 onlyIf("UIKit simulator applications require macOS") { System.getProperty("os.name") == "Mac OS X" }
                 doFirst {
-                    check(providers.gradleProperty("nativecmpkitCameraIosFocus").orNull == "ios-camera-ownership-memory-callback")
+                    val taskFocus = providers.gradleProperty("nativecmpkitCameraIosFocus").orNull
+                    check(taskFocus != null && taskFocus in cameraIosFocuses)
                     val identifier = providers.gradleProperty("nativecmpkitSimulatorDevice").orNull
                         ?: error("Select the actual recorded booted simulator")
                     check(Regex("[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}").matches(identifier))

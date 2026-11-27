@@ -8,7 +8,7 @@ CAMERA_CALLBACK = {
     "docs/testing/android-camera-callback-substitution.md": "163a6ab327f96a75b133c95d93ae204ad10c20b143a6f32b18fbd4e031fad236",
     "gradle.properties": "4ce2b9da06ff33e4c0a9889e3d44280c63c81f6f169bcd8a5ba2acbd56a4e470",
     "gradle/libs.versions.toml": "8004dd57979bc368d57269c01c30d60fa19f2c4f2cc7a29bf62699388bbc5327",
-    "nativecmpkit-camera-picker/build.gradle.kts": "aa2074dab2537796a0d8553f458038999312f08532f7926ee959288d91f6918c",
+    "nativecmpkit-camera-picker/build.gradle.kts": "44a82f78c4b35e0b9c63c964398c107e64ebd5756b5aa983e4016ebbff103ea4",
     "nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml": "b984639ea95152ef8d153cd1df79bdd2dfb83726626eca4d5875bc093e6aadd8",
     "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraCallbackSubstitutionTest.kt": "302f33d860ccc31507a1249d108a0af3d61692b54510555958f6b0384d8f9f01",
     "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraProviderTest.kt": "8107370b8167325aad822b430c39f0f6e8409acd6d65e01ee4f232a0153e8048",
