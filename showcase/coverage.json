@@ -4372,11 +4372,10 @@
           "job": null
         },
         "ios": {
-          "status": "passed",
-          "run": "46014167086",
-          "attempt": "1",
-          "job": "140556939197",
-          "device": "iphone-simulator"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -4392,20 +4391,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "functional": [
-        {
-          "flow": "action-sheet",
-          "status": "passed",
-          "run": "46014167086",
-          "attempt": "1",
-          "job": "140556939197",
-          "before": "screenshots/ios/functional/action-sheet/iphone-simulator-before.png",
-          "after": "screenshots/ios/functional/action-sheet/iphone-simulator-after.png",
-          "error": null,
-          "reason": null
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-SHEET-002",

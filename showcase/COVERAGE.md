@@ -77,7 +77,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | PERM-SMS-001 | ReadSms, ReceiveSms, SendSms | legacy SMS routes | supported | supported | Permission | passed (45993784178) | passed (46014167086) |
 | UI-ICON-004 | CupertinoIcon catalog | category filters | supported | supported | CupertinoIconsCatalog | not-run | passed (46014167086) |
 | UI-ALERT-005 | AdaptiveBasicAlertDialog | text field and critical severity | unsupported | supported | Dialog | not-applicable | passed (46014167086) |
-| UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | passed (46014167086) |
+| UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | not-run |
 | UI-SHEET-002 | AdaptiveSheetState | detents, veto and dismissal | supported | supported | BottomSheet | not-run | failed (46014167086) |
 | UI-DATE-006 | AdaptiveDatePicker | picker and input display modes | supported | supported | DatePicker | not-run | failed (46014167086) |
 | UI-TIME-002 | AdaptiveTimePicker | 24-hour state | supported | supported | TimePicker | not-run | passed (46014167086) |

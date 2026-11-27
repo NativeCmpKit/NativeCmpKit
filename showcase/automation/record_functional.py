@@ -20,7 +20,7 @@ FLOW_ROWS = {
     "alert-cancel": ["UI-ALERT-001"],
     "alert-confirm": ["UI-ALERT-001"],
     "alert-text-field": ["UI-ALERT-003", "UI-ALERT-005"],
-    "action-sheet": ["UI-ALERT-004", "UI-ALERT-006"],
+    "action-sheet": ["UI-ALERT-004"],
     "sheet": ["UI-SHEET-001"],
     "sheet-veto": ["UI-SHEET-002"],
     "date-display": ["UI-DATE-006"],
