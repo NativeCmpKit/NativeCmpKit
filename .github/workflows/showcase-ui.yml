@@ -365,13 +365,17 @@ jobs:
           raise SystemExit("No available simulator")
           PY
           )
+          device_name=$(printf '%s' "$chosen" | cut -f2)
+          device_udid=$(printf '%s' "$chosen" | cut -f3)
+          test -n "$device_udid"
           echo "Selected simulator: $chosen"
-          echo "UI_DEVICE=$(printf '%s' "$chosen" | cut -f3)" >> "$GITHUB_ENV"
-          echo "UI_DEVICE_NAME=$(printf '%s' "$chosen" | cut -f2)" >> "$GITHUB_ENV"
-          xcrun simctl bootstatus "$(printf '%s' "$chosen" | cut -f3)" -b
+          echo "UI_DEVICE=$device_udid" >> "$GITHUB_ENV"
+          echo "UI_DEVICE_NAME=$device_name" >> "$GITHUB_ENV"
+          xcrun simctl bootstatus "$device_udid" -b
           xcrun simctl list devices booted
-          xcrun simctl addmedia "$udid" "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png"
-          open -a Simulator --args -CurrentDeviceUDID "$udid"
+          xcrun simctl addmedia "$device_udid" "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png" \
+            || echo "warning: could not seed the photo fixture" >&2
+          open -a Simulator --args -CurrentDeviceUDID "$device_udid"
 
       - name: Install the AXe accessibility helper
         if: steps.mode.outputs.mode == 'session'
