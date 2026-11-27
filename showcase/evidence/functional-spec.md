@@ -10,16 +10,16 @@ it is `failed` or explicitly `blocked`.
 | `buttons` | Adaptive Buttons | tap the filled counter | text changes from 0 to 1 |
 | `switch` | Adaptive Switch | toggle the Wi-Fi switch | row text changes off → on |
 | `slider` | Adaptive Slider | drag the brightness slider | readout changes |
-| `dropdown` | Adaptive Drop Down | open menu, select Duplicate | readout becomes `Duplicated!` |
+| `dropdown` | Adaptive Drop Down | iOS: top-bar UIMenu → Duplicate; Android: simple menu → Copy | readout becomes `Duplicated!` / `Copied!` |
 | `alert-cancel` | Alert Dialog | show, cancel | dialog body disappears |
 | `alert-confirm` | Alert Dialog | show, confirm | dialog body disappears |
-| `alert-text-field` | Alert Dialog | show text-field/basic dialog | iOS name field; Android Confirm action |
-| `action-sheet` | Alert Dialog | show ActionSheet, cancel/confirm | iOS popover/sheet dismisses; Android Material dialog dismisses |
+| `alert-text-field` | Alert Dialog | show text-field dialog | iOS-only section: `Enter Name` field, then Cancel |
+| `action-sheet` | Alert Dialog | show ActionSheet, cancel (iOS only) | action sheet dismisses |
 | `sheet` | Bottom Sheet | show, close | sheet content disappears |
 | `topbar` | Adaptive Top Bar | tap Share | `Last action: Share tapped` |
 | `toolbar` | Adaptive Toolbar | tap Share | `Share tapped` |
 | `navbar` | Adaptive Navigation Bar | select Profile | Profile content visible |
-| `scaffold-tab` | Adaptive Scaffold | select Profile | Profile content/title visible |
+| `scaffold-tab` | Adaptive Scaffold | select Favorites | tab title and content update (two `Favorites` nodes) |
 | `date-bounds` | Date Picker | select `From today` | chip is selected |
 | `time-24h` | Time Picker | scroll to 24-hour state | `24-hour state: 19:20` |
 | `icons-category` | Cupertino Icons | select Arrows | count no longer 1,322 |
@@ -29,6 +29,8 @@ it is `failed` or explicitly `blocked`.
 | `webview` | Web View | second HTML, JS, cookie, clear, invalid | title, `JS:`, `kira=1`, cleared, one error |
 | `permissions-bulk-deny` | Permissions | bulk request, deny OS prompts | `All permissions granted: false` |
 | `permissions-sms-rows` | Permissions | read the three SMS rows | `ReadSms`, `ReceiveSms`, `SendSms` |
+| `alert-text-field` | Alert Dialog | — | not-applicable on Android: sample section is iOS-only |
+| `action-sheet` | Alert Dialog | — | not-applicable on Android: sample section is iOS-only |
 | `file-picker` | File Picker | — | blocked: seeded file selection not driven |
 | `file-saver` | File Saver | — | blocked: no save destination |
 | `share` | Content Sharing | — | blocked: no external recipient |

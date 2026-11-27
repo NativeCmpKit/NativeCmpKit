@@ -157,10 +157,10 @@ FLOWS = [
         ))(text_value(ui, "Brightness")),
     )),
     ("dropdown", "Adaptive Drop Down", lambda ui, p: (
-        click_any(ui, ["Top bar menu", "More options"]),
-        assert_text(ui, "Copy"),
-        tour.click_text(ui, "Copy"),
-        assert_text(ui, "Copied!"),
+        (tour.click_text(ui, "More options"), assert_text(ui, "Duplicate"),
+         tour.click_text(ui, "Duplicate"), assert_text(ui, "Duplicated!")) if p == "ios"
+        else (tour.click_text(ui, "Simple drop down menu"), assert_text(ui, "Copy"),
+              tour.click_text(ui, "Copy"), assert_text(ui, "Copied!")),
     )),
     ("alert-cancel", "Adaptive Alert Dialog", lambda ui, p: (
         tour.click_text(ui, "Show Alert Dialog"),
