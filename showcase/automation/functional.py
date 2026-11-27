@@ -138,26 +138,35 @@ def drag_from_text(ui, text, dy=300):
     ui.action("pointer.drag", {"x": x, "y": y, "end_x": x, "end_y": y + dy, "duration_ms": 500})
 
 
-def click_switch_near(ui, label):
+def click_switch_near(ui, label, expect=None):
     observation = find_any(ui, label, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise AssertionError(f"no label {label!r}")
-    by_id = {node.get("id"): node for node in observation["nodes"]}
     anchor = observation["nodes"][0]
-    parent = by_id.get(anchor.get("parent_id"))
-    candidates = []
-    if parent:
-        candidates.append(parent)
-        for node in observation["nodes"]:
-            if node.get("parent_id") == parent.get("id"):
-                candidates.append(node)
-    for node in candidates:
-        if node.get("properties", {}).get("checkable") or str(node.get("role", "")).lower() in (
-            "switch", "axswitch", "togglebutton",
-        ):
-            ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
-            return
-    click_switch(ui)
+    bounds = anchor.get("bounds")
+    clicked = False
+    snapshot = ui.action("tree.snapshot")["result"]
+    for node in snapshot.get("nodes", []):
+        node_bounds = node.get("bounds")
+        if not node_bounds or not bounds:
+            continue
+        role = str(node.get("role", "")).lower()
+        if role not in ("axcheckbox", "checkbox", "switch", "axswitch", "togglebutton"):
+            continue
+        if abs(node_bounds["y"] - bounds["y"]) <= 24 and node_bounds["x"] > bounds["x"]:
+            ui.action("pointer.click", {
+                "x": node_bounds["x"] + node_bounds["width"] // 2,
+                "y": node_bounds["y"] + node_bounds["height"] // 2,
+            })
+            clicked = True
+            break
+    if not clicked:
+        click_switch(ui)
+    if expect:
+        try:
+            tour.find(ui, {"text_contains": expect}, timeout_ms=3000)
+        except Exception as error:  # noqa: BLE001
+            raise AssertionError(f"switch did not produce {expect!r}") from error
 
 
 def drag_slider(ui, needle: str):
@@ -289,7 +298,7 @@ FLOWS = [
     )),
     ("sheet-veto", "Adaptive Bottom Sheet", lambda ui, p: (
         tour.click_text(ui, "Show Bottom Sheet"),
-        assert_text(ui, "Allow swipe to hide"),
+        assert_text_scroll(ui, "Allow swipe to hide", scrolls=5),
         click_switch_near(ui, "Allow swipe to hide"),
         (lambda: (ui.action("keyboard.press", {"keys": ["BACK"]}) if p == "android"
                   else drag_from_text(ui, "Allow swipe to hide")))(),
@@ -300,18 +309,22 @@ FLOWS = [
     )),
     ("date-display", "Adaptive Date Picker", lambda ui, p: (
         assert_text(ui, "Inline display: Picker"),
-        click_switch_near(ui, "Inline display: Picker"),
-        assert_text(ui, "Inline display: Input"),
+        click_switch_near(ui, "Inline display: Picker", expect="Inline display: Input"),
     )),
     ("webview-js", "Web View", lambda ui, p: (
         assert_text(ui, "JavaScript: on"),
         click_switch_near(ui, "JavaScript: on"),
         assert_text(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
-        assert_text(ui, "JS: null"),
+        assert_text(ui, "JS:"),
+        (lambda value: (_ for _ in ()).throw(AssertionError("JS result leaked the title"))
+         if "Kira WebView Demo" in value else None)(text_value(ui, "JS:")),
         click_switch_near(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
-        assert_text(ui, "Kira WebView Demo"),
+        (lambda value: None if "Kira WebView Demo" in value
+         else (_ for _ in ()).throw(AssertionError(f"JS on did not return the title: {value!r}")))(
+            (assert_text(ui, "JS:"), text_value(ui, "JS:"))[1]
+        ),
     )),
     ("sheet", "Adaptive Bottom Sheet", lambda ui, p: (
         tour.click_text(ui, "Show Bottom Sheet"),
