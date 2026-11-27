@@ -11,7 +11,7 @@ review the source/results before using it in a genuine clean producer.
 `tests/consumer/native_license_objc2_material.py` implements an explicit schema4
 adapter. Its independently source-reviewed index is
 `licenses/native-dependency-supplements/objc2-reviewed/manifest.json`, SHA256
-`4f10a64a9a62c07484cd1d45512141ea91b5652078b004b6e30e39988b218131`.
+`91d164b6ba6d59c8e29e5529da50039842884e546ac3b0ca8dbdf77ba4b11a75`.
 There is no producer-supplied digest override. Editing or rehashing that index
 requires new independent source review, not an asserted successful report.
 
@@ -25,8 +25,8 @@ The exact two module `Cargo.toml` and `Cargo.lock` inputs must match the reviewe
 public index. The adapter keeps all three published Cargo/VCS proofs and original
 raw source commit/tree/path/blob and workspace-inheritance proofs. Only bounded
 raw-object/workspace/snapshot primitives are reused from
-`native_license_material_v2.py`; its pending material API, schema and tests remain
-inert and byte-identical. Ordinary schema1 JNI and schema3 WinAPI formats remain
+`native_license_material_v2.py`. Its pending material API remains inert. The
+schema and reader use the renamed Cargo paths. Schema1 JNI and schema3 WinAPI formats remain
 separate. Unknown entries or original identities do not become new fallbacks.
 
 ### Grants, credit and unresolved provenance
@@ -74,8 +74,8 @@ obligations and release readiness remain explicitly false or unreviewed.
 `native_license_supplements.load_supplements()` captures the active set once for
 a requested registry graph, returns recursively immutable owned snapshots, and
 rejects duplicate or foreign identities. The shared `_reviewed-objc2/` proof pool
-contains exactly147 public files/1,670,040 bytes once per module, not fifteen
-physical copies. Reports still bind each package to its full proof/text record.
+contains exactly 147 public files and 1,670,130 bytes per module. Reports bind
+each package to its full proof and text record.
 
 The collector's explicit schema3/4 paths recheck compressed archive size/SHA256
 against already reviewed correspondence. They do **not** open tar payloads again.
@@ -105,17 +105,10 @@ payload rescan. The helper derives a **new** report from actual complete coverag
 keeps legal/readiness false, and rechecks all four current Cargo inputs before and
 after writing. A complete new report is not a native producer revision witness.
 
-The lead's future independently reviewed operation is:
-
-```sh
-python3 -B tests/consumer/carry_forward_native_licenses.py \
-  --original-notices "$EXACT_ORIGINAL_PUBLIC_NOTICE_ROOT" \
-  --module calf-file-picker \
-  --source-root "$INDEPENDENTLY_REVIEWED_CLEAN_CURRENT_PRODUCER" \
-  --registry-cache "$EXPLICIT_ORIGINAL_PUBLIC_CRATE_CACHE" \
-  --output "$NEW_EXTERNAL_MODULE_NOTICE_ROOT"
-# A separate new output for --module calf-share, with its exact original input.
-```
+The two pinned reports and their command belong to the pre-migration crate
+identity. Current staging collects fresh notice material for both renamed crates
+in the `identity-*-package` GitHub Actions profiles. The current validator
+refuses reuse of the historical receipts under a different crate identity.
 
 Output must be a new canonical absolute path, have existing unlinked directory
 ancestors, and not overlap original/source/cache inputs or Git metadata. Every

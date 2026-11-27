@@ -1,18 +1,18 @@
 # Finite WebView content-policy routing — #66 / #73
 
 This later, isolated routing patch registers the five literal proposals in
-[`webview-content-policy-focuses.json`](webview-content-policy-focuses.json).
+[`nativecmpkit-webview-content-policy-focuses.json`](nativecmpkit-webview-content-policy-focuses.json).
 The original author document/JSON, four native classes, 14 native methods and all
 existing native bodies/helpers remain unchanged. They remain source preparation,
 not observations from a provider, browser, JavaFX or WKWebView.
 
 | Exact profile / focus | One existing slot | Task | Selected executions |
 | --- | --- | --- | ---: |
-| `webview-content-policy-linux` | `desktop-linux-x64` | `:calf-webview:desktopTest` | NEW3 |
-| `webview-content-policy-android` | `android-device-api35` | `:calf-webview:connectedAndroidDeviceTest` | NEW4 + affected1 |
-| `webview-content-policy-js` | `browser-js` | `:calf-webview:jsBrowserTest` | NEW3 |
-| `webview-content-policy-wasm` | `browser-wasm` | `:calf-webview:wasmJsBrowserTest` | NEW3, independently |
-| `ios-webview-content-policy` | `ios-iphone` | `:calf-webview:iosSimulatorArm64ApplicationTest` | NEW4 |
+| `webview-content-policy-linux` | `desktop-linux-x64` | `:nativecmpkit-webview:desktopTest` | NEW3 |
+| `webview-content-policy-android` | `android-device-api35` | `:nativecmpkit-webview:connectedAndroidDeviceTest` | NEW4 + affected1 |
+| `webview-content-policy-js` | `browser-js` | `:nativecmpkit-webview:jsBrowserTest` | NEW3 |
+| `webview-content-policy-wasm` | `browser-wasm` | `:nativecmpkit-webview:wasmJsBrowserTest` | NEW3, independently |
+| `ios-webview-content-policy` | `ios-iphone` | `:nativecmpkit-webview:iosSimulatorArm64ApplicationTest` | NEW4 |
 
 There is no all-host alias, extra companion or whole existing-class replay. The
 NEW target population is still 17. Only Android adds the directly affected,

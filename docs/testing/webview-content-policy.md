@@ -9,20 +9,20 @@ fixture remain unchanged and unselected.
 
 ## Finite missing-criteria proposal
 
-[`webview-content-policy-focuses.json`](webview-content-policy-focuses.json) binds
+[`nativecmpkit-webview-content-policy-focuses.json`](nativecmpkit-webview-content-policy-focuses.json) binds
 each proposal to one module, host, task, exact class and method list. These names
 are **not yet registered** in the shared runner/workflow by this subagent. The
 lead alone wires, freezes, pushes, dispatches, reviews and accepts actual results.
 
 | Proposed profile / focus | Actual target task | Exact NEW cases |
 | --- | --- | ---: |
-| `webview-content-policy-linux` | `:calf-webview:desktopTest` — Linux x64 | 3 |
-| `webview-content-policy-android` | `:calf-webview:connectedAndroidDeviceTest` — API35 | 4 |
-| `webview-content-policy-js` | `:calf-webview:jsBrowserTest` | 3 |
-| `webview-content-policy-wasm` | `:calf-webview:wasmJsBrowserTest` | 3 |
-| `ios-webview-content-policy` | `:calf-webview:iosSimulatorArm64ApplicationTest` — iPhone | 4 |
+| `webview-content-policy-linux` | `:nativecmpkit-webview:desktopTest` — Linux x64 | 3 |
+| `webview-content-policy-android` | `:nativecmpkit-webview:connectedAndroidDeviceTest` — API35 | 4 |
+| `webview-content-policy-js` | `:nativecmpkit-webview:jsBrowserTest` | 3 |
+| `webview-content-policy-wasm` | `:nativecmpkit-webview:wasmJsBrowserTest` | 3 |
+| `ios-webview-content-policy` | `:nativecmpkit-webview:iosSimulatorArm64ApplicationTest` — iPhone | 4 |
 
-The class prefix is `com.mohamedrejeb.calf.ui.web.`. Classes are
+The class prefix is `io.github.apdelrahman1911.nativecmpkit.ui.web.`. Classes are
 `DesktopWebViewContentPolicyAcceptanceTest`,
 `AndroidWebViewContentPolicyAcceptanceTest`,
 `BrowserWebViewContentPolicyAcceptanceTest` and
@@ -130,13 +130,13 @@ modified by this isolated patch.
 No heavy slot was granted to this subagent. After a fresh serial-local slot and
 at least 8 GiB free, the lead should qualify the new target compilers separately:
 
-- Desktop test compilation (`:calf-webview:compileTestKotlinDesktop`).
+- Desktop test compilation (`:nativecmpkit-webview:compileTestKotlinDesktop`).
 - Android production saver + instrumentation APK
-  (`:calf-webview:assembleAndroidDeviceTest`).
-- iOS test KLIB (`:calf-webview:compileTestKotlinIosSimulatorArm64`); it is not an
+  (`:nativecmpkit-webview:assembleAndroidDeviceTest`).
+- iOS test KLIB (`:nativecmpkit-webview:compileTestKotlinIosSimulatorArm64`); it is not an
   Apple link, UIApplication launch or native result.
-- JS and Wasm test compilers (`:calf-webview:compileTestKotlinJs` and
-  `:calf-webview:compileTestKotlinWasmJs`); neither is a real browser execution.
+- JS and Wasm test compilers (`:nativecmpkit-webview:compileTestKotlinJs` and
+  `:nativecmpkit-webview:compileTestKotlinWasmJs`); neither is a real browser execution.
 
 The important existing affected saver seam is
 `AndroidWebViewLifetimeDeviceTest.retainedStateReleasesRepeatedRealActivitiesAndViewsAndRestoresSerializedNativeState`.

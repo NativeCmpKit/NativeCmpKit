@@ -6,7 +6,7 @@ release receipt. Original audit requirements and accepted older results remain.
 
 ## Owning correction (#138 / UI-035)
 
-`calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/ui/toggle/CupertinoSwitch.kt`
+`nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toggle/CupertinoSwitch.kt`
 invoked caller `thumbContent` under the inherited `LocalContentColor`. The iOS26
 actual already translated all four supplied Material icon colors; the pre26
 Cupertino renderer did not. A non-null custom thumb must instead receive its
@@ -20,7 +20,7 @@ This is intentional correction of ignored customization, not a package/API renam
 
 ## New library cases and real host admission
 
-Files under `calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/`:
+Files under `nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/`:
 
 | Class | Exact pre26 method | Exact iOS26+ method |
 | --- | --- | --- |
@@ -29,14 +29,14 @@ Files under `calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/`:
 | `controls.AdaptiveControlCustomizationMatrixTest` | `pre26CustomColorsContentAndInteractionsSurviveDarkAndLargeText` | `ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText` |
 | `toolbar.AdaptiveToolbarFallbackNativeTest` | `pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement` | `ios26EmptyItemsRenderMaterialSlotsAndCallerPlacement` |
 
-The classname prefix is `com.mohamedrejeb.calf.ui.`. Select four methods on
+The classname prefix is `io.github.apdelrahman1911.nativecmpkit.ui.`. Select four methods on
 **each** real OS branch, not all eight on one runtime. Admission reads actual
 `UIDevice.currentDevice.systemVersion` on application Main, requires the existing
 active/key/attached owned application window, refuses malformed/nonpositive
 versions, and asserts `<26` or `>=26`. Wrong or unavailable hosts fail; they are
 not skips, a version override, or direct Cupertino execution disguised as pre26.
 
-Use the genuine `:calf-ui:iosSimulatorArm64ApplicationTest` and its original
+Use the genuine `:nativecmpkit-ui:iosSimulatorArm64ApplicationTest` and its original
 Worker/native-XML/runtime/source-custody/owned-cleanup protocol. The lead must
 qualify finite routing for these **new** selectors before dispatch. The standalone
 init below currently admits compilation, not arbitrary/new native execution.
@@ -107,10 +107,10 @@ for those original tests. Do not close #129 from this subset.
 2. `disabledCustomThumbInDarkLargeTextActuallyDrawsTheSuppliedIconColor`:
    actual dark/fontScale2 disabled custom glyph pixels, not only configuration.
 
-Execute only those exact new methods on `:calf-ui:desktopTest` (Linux Xvfb),
+Execute only those exact new methods on `:nativecmpkit-ui:desktopTest` (Linux Xvfb),
 preserve the real red, then run the failed/owning affected subset after the fix.
 `scripts/ci/adaptive_controls_compile.init.gradle.kts` admits this exact Desktop2
-request or `:calf-ui:compileTestKotlinIosSimulatorArm64`. It uses the compiler's
+request or `:nativecmpkit-ui:compileTestKotlinIosSimulatorArm64`. It uses the compiler's
 public exact source collection and, for native only, its public commonSources.
 Gradle9.7.1 CLI filters are inspected separately from configured includePatterns.
 Ordinary/full source sets, dependencies, production compilation, public binaries

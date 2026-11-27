@@ -13,11 +13,11 @@ remain open. Source controls and a KLIB compile cannot establish native results.
 
 - Manual profile/focus: `ios-camera-ownership-memory-callback`.
 - Exactly one existing `ios-iphone` / `macos-26` / Arm64 / `python3` row.
-- Module/task: `:calf-camera-picker:iosSimulatorArm64ApplicationTest`.
-- Entry: `com.mohamedrejeb.calf.camerapicker.internal.nativeCameraApplicationMain`.
+- Module/task: `:nativecmpkit-camera-picker:iosSimulatorArm64ApplicationTest`.
+- Entry: `io.github.apdelrahman1911.nativecmpkit.camerapicker.internal.nativeCameraApplicationMain`.
 - Objective-C delegate: `NativecmpkitCameraLibraryTestDelegate`.
 - Distinct binary directory:
-  `calf-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest`.
+  `nativecmpkit-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest`.
 - Distinct fresh receipt child: `native-camera-application`.
 - Exactly three `iosTest` compiler inputs and empty common-test sources.
 - Exactly one original fresh class XML, containing each of the five required
@@ -78,7 +78,7 @@ The nine routing bindings contain 45 reversible fragments: the approved Camera
 43 plus the two independently accepted Image633 reader fragments. The one
 Camera source guard requires 46 inputs: its original owning44 plus those two
 unchanged reviewed Image leaves. It does not consume AGENTS or the external
-197-input preimage packet. Only calf-ui's existing exact Image recovery scope
+197-input preimage packet. Only nativecmpkit-ui's existing exact Image recovery scope
 may read its retained sidecar; Camera and all other scopes remain receipt-only.
 The accepted Image NEW10 and Camera terminal/barrier NEW5 results are reused,
 not executed by this routing qualification. Original Image633 remains FAILED;
@@ -95,12 +95,12 @@ sealed host or an intermediate Photos host:
 ```
 ./gradlew --init-script scripts/ci/ios_camera_ownership_native.init.gradle.kts \
   -PnativecmpkitCameraIosFocus=ios-camera-ownership-memory-callback \
-  :calf-camera-picker:compileTestKotlinIosSimulatorArm64
+  :nativecmpkit-camera-picker:compileTestKotlinIosSimulatorArm64
 ```
 
 The init accepts only this separate compiler task or the exact ordered NEW5
 application request. Public KGP source APIs enforce the three effective sources
-and common0, preserving production/dependent calf-io main compilation. Separate
+and common0, preserving production/dependent nativecmpkit-io main compilation. Separate
 precompiler and fresh native-task admission receipts each attest zero compiler,
 link and native executions. A legitimate unchanged UP-TO-DATE compiler/link does
 not replace fresh native admission. Actual before/after compiler inputs,

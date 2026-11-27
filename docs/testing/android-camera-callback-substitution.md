@@ -4,11 +4,11 @@
 
 - Profile and focus: `android-camera-callback-substitution`.
 - Slot: `android-device-api35`; Linux x64, enforcing booted stock API35 x86_64 owned emulator.
-- Library: `calf-camera-picker`; task `:calf-camera-picker:connectedAndroidDeviceTest`.
+- Library: `nativecmpkit-camera-picker`; task `:nativecmpkit-camera-picker:connectedAndroidDeviceTest`.
 - Exact ATE selector:
-  `com.mohamedrejeb.calf.camerapicker.AndroidCameraCallbackSubstitutionTest#nativeActiveCaptureDeliversOnceToLatestCallbackWithoutReplacingOwner`.
+  `io.github.apdelrahman1911.nativecmpkit.camerapicker.AndroidCameraCallbackSubstitutionTest#nativeActiveCaptureDeliversOnceToLatestCallbackWithoutReplacingOwner`.
 - Required original evidence: exactly one fresh one-method XML under
-  `calf-camera-picker/build/outputs/androidTest-results/connected/androidMain`, one fresh actual connected-task marker, zero Gradle/native failure or skip, exact own-Git input before/after maps and native runtime agreement. The declared AGP intermediate is not the actual XML producer.
+  `nativecmpkit-camera-picker/build/outputs/androidTest-results/connected/androidMain`, one fresh actual connected-task marker, zero Gradle/native failure or skip, exact own-Git input before/after maps and native runtime agreement. The declared AGP intermediate is not the actual XML producer.
 
 ## What the method must actually establish
 
@@ -33,7 +33,7 @@ Read-only plan, once the lead's current-source composition is qualified:
 
 ```sh
 python3 -B scripts/ci/android_device_tests.py plan \
-  --api-level 35 --module calf-camera-picker \
+  --api-level 35 --module nativecmpkit-camera-picker \
   --focus android-camera-callback-substitution --output build/ci-plan
 ```
 

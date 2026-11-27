@@ -14,7 +14,7 @@ The source preparation is [535–548](../development/evidence/current-platform-r
 | `ios-popover-geometry-ipad` | `ui-native-popover-os-rotation` | `NativePopoverGeometryTest.nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation` |
 
 Both use `macos-26`, Arm64, a recorded booted simulator of the exact idiom, and
-the genuine `:calf-ui:iosSimulatorArm64ApplicationTest`. Each profile selects one
+the genuine `:nativecmpkit-ui:iosSimulatorArm64ApplicationTest`. Each profile selects one
 new method; all previously accepted anchor/bar methods remain excluded.
 
 The first owned575 requests failed in a shared **historical workflow hash test**,
@@ -69,7 +69,7 @@ Use JDK17 and the serial 8-GiB-reserve bounded build runner:
   --max-workers=1 --init-script scripts/ci/daemon-jvm.init.gradle.kts \
   --init-script scripts/ci/ios_popover_geometry_compile.init.gradle.kts \
   -PnativecmpkitPopoverGeometryFocus=ui-native-popover-os-rotation \
-  :calf-ui:compileTestKotlinIosSimulatorArm64
+  :nativecmpkit-ui:compileTestKotlinIosSimulatorArm64
 ```
 
 Linux can typecheck this focused test KLIB, **not link or execute UIKit**. See

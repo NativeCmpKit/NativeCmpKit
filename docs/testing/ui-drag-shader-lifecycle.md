@@ -12,7 +12,7 @@ scenarios still require actual execution at this patch's frozen source.
 
 ## New scenarios and source ownership
 
-All sources below are library `calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/`
+All sources below are library `nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/`
 inputs. No sample application, replacement shader, stubbed animation or ignored
 test supplies these results.
 
@@ -25,7 +25,7 @@ test supplies these results.
 | Same | `removingAnActualPressedHighlightClosesItsBuilderAndNewCompositionUsesANewOwnedResource` | Actual pressed-node removal, native builder closure, same surviving caller/sibling, fresh real builder identity after recreation. |
 | `button.LiquidButtonConstructionTraceTest` | `hundredActualPublicButtonsKeepOptionalShaderConstructionAtZeroThroughInputDisableAndRecreation` | Eager composition of 100 **public** `LiquidGlassButton` instances, actual first/last-button scrolling/input, held-button disable, zero optional highlight shaders, two generations/200 terminal disposals. |
 
-The fully qualified class prefix is `com.mohamedrejeb.calf.ui.`. The original
+The fully qualified class prefix is `io.github.apdelrahman1911.nativecmpkit.ui.`. The original
 application, Worker, runtime/source receipts, exact selected XML, failure
 propagation and independent owned cleanup remain required for native execution.
 `requireUiDragShaderApplication()` requires the original active, visible owned
@@ -51,7 +51,7 @@ exact compile-only request:
   -Pkotlin.compiler.execution.strategy=in-process \
   -Pkotlin.native.jvmArgs=-Xmx2048m \
   --init-script scripts/ci/ui_drag_shader_compile.init.gradle.kts \
-  :calf-ui:compileTestKotlinIosSimulatorArm64
+  :nativecmpkit-ui:compileTestKotlinIosSimulatorArm64
 ```
 
 The isolated init admits exactly seven ordinary repository test files: the three

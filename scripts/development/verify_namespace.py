@@ -29,8 +29,17 @@ ARCHIVED_CARRIAGE_METADATA = (
 )
 ANDROID_PACKAGE_FIXTURE = "nativecmpkit-webview/src/androidHostTest/kotlin/android/webkit/NativeCmpKitControlledResourceError.kt"
 ACTIVE_ROOTS = {"sample", "scripts", "tests", "tools", "gradle", "convention-plugins", ".github"}
-ACTIVE_DOCS = {"README.md", "CONTRIBUTING.md", "NOTICE", "THIRD_PARTY_NOTICES.md", "docs/index.md",
-               "docs/testing/nativecmpkit-webview-content-policy-focuses.json"}
+ACTIVE_DOCS = {
+    "README.md", "CONTRIBUTING.md", "NOTICE", "THIRD_PARTY_NOTICES.md", "docs/index.md",
+    "docs/installation.md", "docs/ui.md", "docs/webview.md", "docs/filepicker.md", "docs/share.md",
+    "docs/sf-symbols.md", "docs/permissions.md",
+    "docs/testing/adaptive-controls-native-matrix.md", "docs/testing/android-camera-callback-substitution.md",
+    "docs/testing/ios-camera-ownership-native-routing.md", "docs/testing/ios-popover-geometry.md",
+    "docs/testing/native-license-schema4.md",
+    "docs/testing/ui-drag-shader-lifecycle.md",
+    "docs/testing/webview-content-policy.md", "docs/testing/webview-content-policy-native-routing.md",
+    "docs/testing/nativecmpkit-webview-content-policy-focuses.json",
+}
 SOURCE_SUFFIXES = {".kt", ".kts", ".java", ".rs", ".swift", ".c", ".cc", ".cpp", ".h", ".mm", ".js", ".mjs", ".cjs"}
 CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properties", ".xml", ".plist",
                    ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro", ".def", ".gradle", ".xcconfig"}
@@ -59,9 +68,10 @@ def main():
             continue
         if relative.startswith(("tests/consumer/binary/", "scripts/ci/fixtures/")):
             continue
-        if not (root in ACTIVE_ROOTS or root.startswith("nativecmpkit-") or len(path.parts) == 1 or relative in ACTIVE_DOCS):
+        current_doc = relative in ACTIVE_DOCS or (relative.startswith("docs/ui/") and path.suffix == ".md")
+        if not (root in ACTIVE_ROOTS or root.startswith("nativecmpkit-") or len(path.parts) == 1 or current_doc):
             continue
-        if path.suffix not in SOURCE_SUFFIXES | CONFIG_SUFFIXES and relative not in ACTIVE_DOCS:
+        if path.suffix not in SOURCE_SUFFIXES | CONFIG_SUFFIXES and not current_doc:
             continue
         raw = (ROOT / path).read_bytes()
         if b"\0" in raw:
