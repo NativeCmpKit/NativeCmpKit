@@ -143,7 +143,9 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         sources = [(FIXTURE / 'build.gradle.kts').read_text(), (ROOT / 'tests/consumer/build.gradle.kts').read_text()]
         helpers = [source.split('fun bindCandidateArtifact(', 1)[1].split('\n}\n', 1)[0] for source in sources]
         self.assertEqual(helpers[0], helpers[1])
-        for expression in ('declared["name"] == resolved.name', 'declared["url"] == canonicalName',
+        for expression in ('declaredName in setOf(canonicalName, producerName)', 'declared["url"] == canonicalName',
+                           'id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata"',
+                           'resolved.name in setOf(declaredName, canonicalName)',
                            '"staged_file" to stagedRelative', '"metadata_sha256" to artifactSha256(metadataFile)',
                            'artifactSha256(staged) == hash', 'primaryBindings.size == 1'):
             self.assertIn(expression, helpers[0])

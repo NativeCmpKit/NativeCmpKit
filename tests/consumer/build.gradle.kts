@@ -187,8 +187,14 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
         val files = variant["files"] as? List<*> ?: return@mapNotNull null
         check(files.size == 1)
         val declared = files.single() as? Map<*, *> ?: error("Invalid primary metadata file: $id")
-        check(declared["name"] == canonicalName && declared["name"] == resolved.name &&
-            declared["url"] == canonicalName) { "Resolved name/metadata URL do not bind to the exact candidate: $id" }
+        val declaredName = declared["name"] as? String ?: error("Missing primary metadata filename: $id")
+        val producerName = if (id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata" &&
+            resolved.extension == "jar") "$root-metadata-$candidateVersion.jar" else canonicalName
+        // KMP can use a logical metadata JAR name distinct from its canonical Maven URL.
+        check(declaredName in setOf(canonicalName, producerName) && resolved.name in setOf(declaredName, canonicalName) &&
+            declared["url"] == canonicalName) {
+            "Unexpected artifact filenames for $id: declared=$declaredName, url=${declared["url"]}, resolved=${resolved.name}"
+        }
         val stagedRelative = relativeDirectory + canonicalName
         val staged = candidateRepository.resolve(stagedRelative)
         val hash = artifactSha256(resolved)
@@ -199,7 +205,7 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
             (declared["size"] as Number).toLong() == resolved.length() && declared["sha256"] == hash) {
             "Module metadata size/hash does not match staged/resolved bytes: $id"
         }
-        mapOf("declared_file_name" to resolved.name, "declared_file_url" to canonicalName,
+        mapOf("declared_file_name" to declaredName, "declared_file_url" to canonicalName,
             "staged_file" to stagedRelative, "metadata_file" to metadataRelative,
             "metadata_sha256" to artifactSha256(metadataFile), "bytes" to resolved.length(), "sha256" to hash)
     }.distinct()
@@ -354,7 +360,8 @@ tasks.register("verifyCandidateResolution") {
                         candidates += id.module
                         val binding = bindCandidateArtifact(id, artifact.file)
                         lines += "${configuration.name}\t${id.displayName}\t${artifact.file.name}\t${artifactSha256(artifact.file)}" +
-                            "\t${binding.getValue("staged_file")}\t${binding.getValue("metadata_file")}\t${binding.getValue("metadata_sha256")}"
+                            "\t${binding.getValue("staged_file")}\t${binding.getValue("metadata_file")}\t${binding.getValue("metadata_sha256")}" +
+                            "\t${binding.getValue("declared_file_name")}\t${binding.getValue("declared_file_url")}"
                     } else {
                         lines += "${configuration.name}\t${id.displayName}\t${artifact.file.name}\t${artifactSha256(artifact.file)}"
                     }

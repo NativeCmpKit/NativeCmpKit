@@ -46,7 +46,7 @@ SCOPE = "Independent full consumer source/checker carriage with inert exact orig
 
 # Preserve the renamed full 21-root configuration and the complete 17-method suite.
 PRESERVED_CONSUMER_INPUTS = MappingProxyType({
-    'build.gradle.kts': '73d5af482d944f8b60e74889b5e2e31e84bbf347a4a374f91f8f7c51f80ef4c8',
+    'build.gradle.kts': '71362cac0ce76c285b73938a0362b42334a29c478de3fa7330dd017d662ecbd0',
     'settings.gradle.kts': '0a5eb5ae6d16ab58dfae5b7d5c99b982184391169fe426c845363da00975544d',
     'gradle.properties': 'bf8bbec28b310adfdc5b6d3319217bc2cf8657f44cdba2f38214eca4035ddf3b',
     'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': 'b9090ad4e82401038b5a4a9c385b11f29ad364834928a643a66a21f91bb32274',
