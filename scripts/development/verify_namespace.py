@@ -36,7 +36,8 @@ CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properti
                    ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro", ".def", ".gradle", ".xcconfig"}
 # Avoid treating longer ordinary words as names when matching camel-case symbols.
 OLD_IDENTITY = re.compile(
-    r"com[./_]mohamedrejeb[./_](?:calf|nativecmpkit)\b|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
+    r"com[./_]mohamedrejeb[./_](?:calf|nativecmpkit)(?:[./_]|\b)|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
+    r"|io[./_]github[./_]apdelrahman1911[./_]kira(?:[./_]|\b)|\bkira-"
     r"|\b(?i:github\.com/apdelrahman1911/nativecmpkit)\b"
 )
 PACKAGE = re.compile(r"^package\s+([\w.]+)", re.M)
@@ -51,7 +52,7 @@ def main():
     for relative in filter(None, paths):
         path = Path(relative)
         root = path.parts[0]
-        if re.match(r"(?i)^calf-", root):
+        if re.match(r"(?i)^(?:calf|kira)-", root):
             errors.append(f"{relative}: legacy module path")
             continue
         if relative == "scripts/development/verify_namespace.py" or relative in ARCHIVE_TOOLS:

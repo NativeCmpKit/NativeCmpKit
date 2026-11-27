@@ -4,11 +4,25 @@ import json
 import plistlib
 import unittest
 
+from verify_namespace import OLD_IDENTITY
+
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class CurrentIdentityTest(unittest.TestCase):
+    def test_legacy_detection_covers_compiler_and_publication_spellings(self):
+        old_jni = 'Java_' + '_'.join(('com', 'mohamedrejeb', 'calf', 'picker', 'abiVersion'))
+        alternate_namespace = '.'.join(('io', 'github', 'apdelrahman1911', 'kira', 'picker'))
+        alternate_artifact = '-'.join(('kira', 'file', 'picker'))
+        for obsolete in (old_jni, alternate_namespace, alternate_artifact):
+            with self.subTest(value=obsolete):
+                self.assertIsNotNone(OLD_IDENTITY.search(obsolete))
+        for current in ('Java_io_github_apdelrahman1911_nativecmpkit_picker_abiVersion',
+                        'io.github.apdelrahman1911.nativecmpkit.picker', 'nativecmpkit-file-picker'):
+            with self.subTest(value=current):
+                self.assertIsNone(OLD_IDENTITY.search(current))
+
     def test_library_and_exact_producer_root_use_the_owner_requested_name(self):
         identity = json.loads((ROOT / "docs/migration/current-identity.json").read_bytes())
         self.assertEqual("NativeCmpKit", identity["project"])
