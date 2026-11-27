@@ -276,7 +276,8 @@ jobs:
           xcodebuild -project sample/ios/Kira.xcodeproj -scheme Kira \
             -configuration Debug -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+            -derivedDataPath build ARCHS=arm64 EXCLUDED_ARCHS=x86_64 \
+            CODE_SIGNING_ALLOWED=NO build
           app=$(find build/Build/Products -maxdepth 2 -name '*.app' -type d | head -1)
           test -n "$app"
           echo "SHOWCASE_IOS_APP=$(realpath "$app")" >> "$GITHUB_ENV"

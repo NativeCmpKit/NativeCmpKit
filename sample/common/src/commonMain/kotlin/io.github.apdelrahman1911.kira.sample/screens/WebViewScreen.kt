@@ -178,6 +178,15 @@ fun WebViewScreen(
                     }
                     AdaptiveIconButton(
                         onClick = {
+                            state.evaluateJavascript("document.title") { result ->
+                                cookieStatus = "JS: ${result ?: "null"}"
+                            }
+                        },
+                    ) {
+                        Icon(Icons.Filled.Build, contentDescription = "Evaluate JavaScript title")
+                    }
+                    AdaptiveIconButton(
+                        onClick = {
                             scope.launch {
                                 state.cookieManager.removeAllCookies()
                                 cookieStatus = "Cookies cleared"
