@@ -93,6 +93,13 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6, allowlisted
 
+      - name: Check showcase manifests and flows
+        shell: bash
+        run: |
+          python3 showcase/generate_coverage.py
+          git diff --exit-code -- showcase/coverage.json showcase/COVERAGE.md
+          python3 showcase/automation/check_flows.py
+
       - name: Install Android SDK and emulator image
         shell: bash
         run: |

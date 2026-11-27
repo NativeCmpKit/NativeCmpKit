@@ -38,6 +38,8 @@ FLOW_ROWS = {
     "permissions-sms-rows": ["PERM-SMS-001"],
     "time-24h": ["UI-TIME-002"],
     "date-bounds": ["UI-DATE-004"],
+    "limitations": ["UI-PROGRESS-003", "UI-FAB-001", "PERM-STUB-001", "NAV-002",
+                    "GEO-002", "EXCL-MAPS-001", "EXCL-MEDIA-001", "EXCL-NOTIF-001"],
 }
 
 
