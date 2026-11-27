@@ -40,9 +40,9 @@ gradle.projectsEvaluated {
         "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt",
     )
     val expectedHashes = mapOf(
-        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "5e5a62825d8a47ad7a5880df2a75807aba01ffd79f4ffd601f04082a89797230",
-        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt" to "9a8a186ce3205a8b3ffb136d92e53c44139059e56775d84c9b21129ad8fa05fc",
-        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt" to "62cb9f661dea845a7b103b497b3d788cbe3b738a6449e9860855b94575f80f1b",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "1cc490b60054c619fceb6ec42c65cc9067e8beb2822f1859b1d754e3aefb250d",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt" to "fc6ddb7e7531ef9500388fceaeda04a4aa346f4a9c7601b13c67593c9c8352c5",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt" to "77ef5f5037b621f1c6cfe4c92c9d469bdbd3d56ba7318632106c2907c9234379",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

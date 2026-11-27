@@ -160,10 +160,10 @@ function cut(source, start, end) {
         // Any genuine clipboard scenario entry (nativeMode first) is a hard safety failure.
         // Also refuse accepted/foreign harness operations; the original selector excludes them.
         for (const key of Object.keys(jsCode)) {
-          if (/^com\.mohamedrejeb\.nativecmpkit\.share\.native(?:Mode|Value|SecureContext|Activation|ApiAvailable|MaskApi|ObserveWrites|Permission|Arm|Cleanup)$/.test(key) ||
-              /^com\.mohamedrejeb\.nativecmpkit\.share\.js(?:IsClipboardSupported|CopyToClipboard)$/.test(key)) {
+          if (/^io\.github\.apdelrahman1911\.nativecmpkit\.share\.native(?:Mode|Value|SecureContext|Activation|ApiAvailable|MaskApi|ObserveWrites|Permission|Arm|Cleanup)$/.test(key) ||
+              /^io\.github\.apdelrahman1911\.nativecmpkit\.share\.js(?:IsClipboardSupported|CopyToClipboard)$/.test(key)) {
             Object.defineProperty(jsCode, key, { ...Object.getOwnPropertyDescriptor(jsCode, key), value: guardInterop });
-          } else if (/^com\.mohamedrejeb\.nativecmpkit\.share\.(?:install|field|file)$/.test(key)) {
+          } else if (/^io\.github\.apdelrahman1911\.nativecmpkit\.share\.(?:install|field|file)$/.test(key)) {
             Object.defineProperty(jsCode, key, { ...Object.getOwnPropertyDescriptor(jsCode, key), value: guardOtherTestInterop });
           }
         }

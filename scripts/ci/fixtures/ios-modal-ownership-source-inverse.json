@@ -16,7 +16,7 @@
         }
       ]
     },
-    "nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePresentationState.kt": {
+    "calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/ui/internal/NativePresentationState.kt": {
       "before_sha256": "7d4c7c0d751bbdbf42032571e9a5556a075f3610db9ec8d245ec5811747da8e8",
       "after_sha256": "a97b10c29537f443e7d97bb2bb0e7d92f6b34b4c9522b12aeb7ea92ce78110db",
       "fragments": [
@@ -29,7 +29,7 @@
         }
       ]
     },
-    "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/AlertDialogManager.kt": {
+    "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/dialog/AlertDialogManager.kt": {
       "before_sha256": "2a6a93b286e42594e50d09f627d4fd0787f7ea00c01e36c856fc5714e694ca2f",
       "after_sha256": "9b50497cbfe5b91ba251762d136d927a4ea85aeed809619c8f711550dab900ad",
       "fragments": [
@@ -42,7 +42,7 @@
         }
       ]
     },
-    "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/BottomSheetManager.kt": {
+    "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/sheet/BottomSheetManager.kt": {
       "before_sha256": "d2754d37288e5e0d68a8ba13d7369b0afab78ff13f3cd8f89d7e47d27dac4078",
       "after_sha256": "6be5d7b569e63da7b5762cdb7c0cef3c162f554ecc99a921988498ded646d088",
       "fragments": [
@@ -69,7 +69,7 @@
         }
       ]
     },
-    "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/SheetState.ios.kt": {
+    "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/sheet/SheetState.ios.kt": {
       "before_sha256": "32880443b53f24212c08f062ccf0d6090aff5d92d33dd726d864e607495fd155",
       "after_sha256": "2ac53a191d1aa8b62c0c82cb5e629092ca207ab477df8608010aa2758a1c589f",
       "fragments": [
@@ -103,7 +103,7 @@
         {
           "id": "modal-batch-01",
           "before": "UI_APPLICATION_FOCUS_SPECS[IOS_UI_STATE_FOCUS] = {\n    \"groups\": IOS_UI_STATE_GROUPS,\n    \"scope\": \"Four new genuine UIKit/Compose time/sheet state, native zone/locale/action cleanup, density/registry/structural-policy methods plus four changed host acceptance methods. Accepted date/other-control suites not replayed; no OS Settings locale/hour-cycle, physical/minimum/gesture/ABI/release certification.\",\n}\n\nIOS_TIME_STATE_RECOVERY_FOCUS = \"ios-native-time-state-recovery\"\n",
-          "after": "UI_APPLICATION_FOCUS_SPECS[IOS_UI_STATE_FOCUS] = {\n    \"groups\": IOS_UI_STATE_GROUPS,\n    \"scope\": \"Four new genuine UIKit/Compose time/sheet state, native zone/locale/action cleanup, density/registry/structural-policy methods plus four changed host acceptance methods. Accepted date/other-control suites not replayed; no OS Settings locale/hour-cycle, physical/minimum/gesture/ABI/release certification.\",\n}\n\nIOS_MODAL_OWNERSHIP_FOCUS = \"ui-native-modal-ownership-batch\"\nIOS_MODAL_OWNERSHIP_CLASS = \"io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeModalOwnershipBatchTest\"\nIOS_MODAL_OWNERSHIP_SOURCE = \"nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeModalOwnershipBatchTest.kt\"\nIOS_MODAL_OWNERSHIP_METHODS = (\n    \"publicHideCancelsAQueuedSheetWithoutDismissingTheActualBlocker\",\n    \"opposingPublicIntentsDuringNativePresentationCompleteTheirOwnWaiters\",\n    \"cancellingANativeHideWaiterCannotCompleteItsReopenedShowEarly\",\n    \"alternatingPublicIntentsCancelOnlyTheUnstartedMiddleTransition\",\n    \"hiddenVetoKeepsTheQueuedShowUntilTheCurrentPolicyAllowsCancellation\",\n    \"concurrentQueuedShowCallersAllCancelAndHiddenCallersAllComplete\",\n    \"queuedDisposalReleasesCapturedContentWithoutRunningUserDismissal\",\n    \"publicDefaultAndIoOperationsMarshalBothPoliciesAndNativeChangesToMain\",\n    \"queuedAlertDismissAndStructuralRebuildNeverPresentStaleControllers\",\n)\nUI_APPLICATION_FOCUS_SPECS[IOS_MODAL_OWNERSHIP_FOCUS] = {\n    \"groups\": ({\"classname\": IOS_MODAL_OWNERSHIP_CLASS, \"source\": IOS_MODAL_OWNERSHIP_SOURCE,\n                \"methods\": IOS_MODAL_OWNERSHIP_METHODS},),\n    \"scope\": \"Nine new genuine UIKit alert/sheet queued-admission, opposing/alternating/concurrent visibility, cancellation, captured-content GC, policy and Main/Default/IO regressions only. No accepted lifecycle replay or native-touch, interactive-detent, physical-device, whole-issue or release certification.\",\n}\n\nIOS_TIME_STATE_RECOVERY_FOCUS = \"ios-native-time-state-recovery\"\n",
+          "after": "UI_APPLICATION_FOCUS_SPECS[IOS_UI_STATE_FOCUS] = {\n    \"groups\": IOS_UI_STATE_GROUPS,\n    \"scope\": \"Four new genuine UIKit/Compose time/sheet state, native zone/locale/action cleanup, density/registry/structural-policy methods plus four changed host acceptance methods. Accepted date/other-control suites not replayed; no OS Settings locale/hour-cycle, physical/minimum/gesture/ABI/release certification.\",\n}\n\nIOS_MODAL_OWNERSHIP_FOCUS = \"ui-native-modal-ownership-batch\"\nIOS_MODAL_OWNERSHIP_CLASS = \"com.mohamedrejeb.calf.ui.internal.NativeModalOwnershipBatchTest\"\nIOS_MODAL_OWNERSHIP_SOURCE = \"calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeModalOwnershipBatchTest.kt\"\nIOS_MODAL_OWNERSHIP_METHODS = (\n    \"publicHideCancelsAQueuedSheetWithoutDismissingTheActualBlocker\",\n    \"opposingPublicIntentsDuringNativePresentationCompleteTheirOwnWaiters\",\n    \"cancellingANativeHideWaiterCannotCompleteItsReopenedShowEarly\",\n    \"alternatingPublicIntentsCancelOnlyTheUnstartedMiddleTransition\",\n    \"hiddenVetoKeepsTheQueuedShowUntilTheCurrentPolicyAllowsCancellation\",\n    \"concurrentQueuedShowCallersAllCancelAndHiddenCallersAllComplete\",\n    \"queuedDisposalReleasesCapturedContentWithoutRunningUserDismissal\",\n    \"publicDefaultAndIoOperationsMarshalBothPoliciesAndNativeChangesToMain\",\n    \"queuedAlertDismissAndStructuralRebuildNeverPresentStaleControllers\",\n)\nUI_APPLICATION_FOCUS_SPECS[IOS_MODAL_OWNERSHIP_FOCUS] = {\n    \"groups\": ({\"classname\": IOS_MODAL_OWNERSHIP_CLASS, \"source\": IOS_MODAL_OWNERSHIP_SOURCE,\n                \"methods\": IOS_MODAL_OWNERSHIP_METHODS},),\n    \"scope\": \"Nine new genuine UIKit alert/sheet queued-admission, opposing/alternating/concurrent visibility, cancellation, captured-content GC, policy and Main/Default/IO regressions only. No accepted lifecycle replay or native-touch, interactive-detent, physical-device, whole-issue or release certification.\",\n}\n\nIOS_TIME_STATE_RECOVERY_FOCUS = \"ios-native-time-state-recovery\"\n",
           "before_fragment_sha256": "d51a98b3da02395ccade47b47290533a0bc8f237dcc63f1ad6651777b4991f51",
           "after_fragment_sha256": "cf8880e988585340c1a4ca096fe779f2190875f99bb3b5b0b71dd13f0925a1f6"
         }
@@ -122,15 +122,15 @@
         },
         {
           "id": "modal-batch-02",
-          "before": "    \"ios-dates-important\": \"nativecmpkit-ui\",\n    \"ios-alert-date-important\": \"nativecmpkit-ui\",\n    \"ios-alert-important-recovery\": \"nativecmpkit-ui\",\n    \"ios-date-year-predicate-red\": \"nativecmpkit-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n    # UIKit, picker-dialog, browser, Windows or packaged-consumer execution.\n",
-          "after": "    \"ios-dates-important\": \"nativecmpkit-ui\",\n    \"ios-alert-date-important\": \"nativecmpkit-ui\",\n    \"ios-alert-important-recovery\": \"nativecmpkit-ui\",\n    \"ios-modal-ownership-batch\": \"nativecmpkit-ui\",\n    \"ios-modal-ownership-ipad\": \"nativecmpkit-ui\",\n    \"ios-date-year-predicate-red\": \"nativecmpkit-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n    # UIKit, picker-dialog, browser, Windows or packaged-consumer execution.\n",
+          "before": "    \"ios-dates-important\": \"calf-ui\",\n    \"ios-alert-date-important\": \"calf-ui\",\n    \"ios-alert-important-recovery\": \"calf-ui\",\n    \"ios-date-year-predicate-red\": \"calf-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n    # UIKit, picker-dialog, browser, Windows or packaged-consumer execution.\n",
+          "after": "    \"ios-dates-important\": \"calf-ui\",\n    \"ios-alert-date-important\": \"calf-ui\",\n    \"ios-alert-important-recovery\": \"calf-ui\",\n    \"ios-modal-ownership-batch\": \"calf-ui\",\n    \"ios-modal-ownership-ipad\": \"calf-ui\",\n    \"ios-date-year-predicate-red\": \"calf-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n    # UIKit, picker-dialog, browser, Windows or packaged-consumer execution.\n",
           "before_fragment_sha256": "3207f7800caf618f7f42ad18741ec61f2ad1536a4d3d70611de2ed35a12ae7bb",
           "after_fragment_sha256": "46fc7bf771eafd1a39c4710fa8c16ca42dcd74ecabc412721861b22ca228ed5f"
         },
         {
           "id": "modal-batch-03",
-          "before": "                rows != [canonical]):\n            raise ValueError(\"Important alert recovery requires the exact single Arm64 iPhone row and nativecmpkit-ui module\")\n        rows[0][\"test-focus\"] = \"ui-native-alert-important-recovery\"\n    if profile == \"ios-saver-write-failure\":\n        for row in rows:\n            row[\"test-focus\"] = \"ios-native-saver-write-failure\"\n",
-          "after": "                rows != [canonical]):\n            raise ValueError(\"Important alert recovery requires the exact single Arm64 iPhone row and nativecmpkit-ui module\")\n        rows[0][\"test-focus\"] = \"ui-native-alert-important-recovery\"\n    if profile in (\"ios-modal-ownership-batch\", \"ios-modal-ownership-ipad\"):\n        kind = \"iphone\" if profile == \"ios-modal-ownership-batch\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"nativecmpkit-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"nativecmpkit-ui\" or rows != [canonical]:\n            raise ValueError(\"Modal ownership batches require one fixed genuine Arm64 UIKit host and nativecmpkit-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-modal-ownership-batch\"\n    if profile == \"ios-saver-write-failure\":\n        for row in rows:\n            row[\"test-focus\"] = \"ios-native-saver-write-failure\"\n",
+          "before": "                rows != [canonical]):\n            raise ValueError(\"Important alert recovery requires the exact single Arm64 iPhone row and calf-ui module\")\n        rows[0][\"test-focus\"] = \"ui-native-alert-important-recovery\"\n    if profile == \"ios-saver-write-failure\":\n        for row in rows:\n            row[\"test-focus\"] = \"ios-native-saver-write-failure\"\n",
+          "after": "                rows != [canonical]):\n            raise ValueError(\"Important alert recovery requires the exact single Arm64 iPhone row and calf-ui module\")\n        rows[0][\"test-focus\"] = \"ui-native-alert-important-recovery\"\n    if profile in (\"ios-modal-ownership-batch\", \"ios-modal-ownership-ipad\"):\n        kind = \"iphone\" if profile == \"ios-modal-ownership-batch\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"calf-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"calf-ui\" or rows != [canonical]:\n            raise ValueError(\"Modal ownership batches require one fixed genuine Arm64 UIKit host and calf-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-modal-ownership-batch\"\n    if profile == \"ios-saver-write-failure\":\n        for row in rows:\n            row[\"test-focus\"] = \"ios-native-saver-write-failure\"\n",
           "before_fragment_sha256": "697cce57f648647e5734e0af7a05828cb8da7d21e92ecb270550176b22423622",
           "after_fragment_sha256": "0fa13d4d7bd377cee358d3836f50276b9df80b886b3d4a6d0cb17a35b96744b6"
         }

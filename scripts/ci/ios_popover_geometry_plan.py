@@ -9,7 +9,6 @@ from pathlib import Path
 import re
 
 from ios_popover_anchor_plan import RECEIPT, _ordinary_bytes, _unique_object
-import ios_popover_geometry_source_projection as source_history
 
 FOCUSES = ("ui-native-popover-portrait-traits", "ui-native-popover-os-rotation")
 CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverGeometryTest"
@@ -24,13 +23,23 @@ IDENTITY = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativec
 INIT_SCRIPT = "scripts/ci/ios_popover_geometry_compile.init.gradle.kts"
 SOURCE = "scripts/ci/ios_popover_geometry_plan.py"
 SOURCES = (NATIVE, HOST, IDENTITY, SCENE)
+SOURCE_SHA256 = {
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "5baf9f6b31e7bebd6b5823f81a0fdb29416d95cbc4d8043cecde76b3284da58f",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt": "2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt": "262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8",
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt": "5f96c3aaf035f4f82a9b8f93c019e92709f3a189eb7188d9f31d9a94ad8ed53a",
+    "scripts/ci/ios_popover_geometry_compile.init.gradle.kts": "5d65b18ad5b1b641d41c3829855f5b377d8b61de89e7a13993f157cd3b4ce23d",
+    "scripts/ci/fixtures/ios-popover-geometry-source-inverse.json": "a19b28201b2e77644109c97f636323865ff7a250b2e58474a6ac567a36cbc723",
+}
 ORIENTATIONS = ["UIInterfaceOrientationPortrait", "UIInterfaceOrientationLandscapeLeft",
                 "UIInterfaceOrientationLandscapeRight", "UIInterfaceOrientationPortraitUpsideDown"]
 
 
 def validate_sources(root: Path) -> bool:
     """Exact native/route/host postimages; older source projection is not current admission."""
-    source_history.validate_current_sources(root)
+    for relative, digest in SOURCE_SHA256.items():
+        if hashlib.sha256(_ordinary_bytes(root, relative)[0]).hexdigest() != digest:
+            raise ValueError("Current geometry source differs from its reviewed NativeCmpKit input: " + relative)
     native = _ordinary_bytes(root, NATIVE)[0].decode("utf-8")
     scene = _ordinary_bytes(root, SCENE)[0].decode("utf-8")
     if (re.search(r"@(Ignore|Disabled|IgnoredTest)\b", native + scene) or

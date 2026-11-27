@@ -108,23 +108,22 @@ _SELECTIONS = {'ui-native-adaptive-drag-shader-ios26plus': {'focus_property': 'n
                                                'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt',
                                                'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt',
                                                'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt']}}
-SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/LiquidButtonConstructionTraceTest.kt': '1b417a078d26c7d2f09dcaa5c5e17ac9be0806fd4f8a88dffb5e616978207954',
+SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/LiquidButtonConstructionTraceTest.kt': 'dc8931c905b9d29fc14ef5dac53161789e0af080fefc74a67fec578dc11f9471',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt': 'c792203a97cc8bdea914856b5cd53195f7a623170820fbc3f91a4ef9fd55d61d',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt': '5132474a968f50ce40e161049b32700c28d1709d0e6b1bbd6fecb239f6fd9e20',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt': 'd3cccfc654399598abf00e04d6f40529a3802e9488448afde120da8180932df0',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt': 'ea18a76b5270fee0c95e953e6a4d280cc00b4fc2b64538a6ca23f7097ca43a0f',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt': '5e9aef0d114a3e4b9d992ce3be2fd5fd96951443a527e68f1c6f87f78d6a1b2b',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt': '9ed073effcf3b5399f4838887d271a1b893a2a9bb123afc6771fcd15d2ca87d4',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt': 'c7cfac7363f93e1fa880378f5e38c7289faa9e0b3570e3999c9fe11b2bdc2207',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/DampedDragLifecycleRegressionTest.kt': 'd1e96296dce57bb817a08abca87a2943d9924745d1208fd7591751ed9d5dd3e8',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt': '9ded1ba61f6702ef2b6f28312b6971a37a112564c1d030dbe22b0f25419fefbf',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt': '7ce8cef67a1d4df0430852e77d37967574d42fd039b76a0a6ebb347f93b8cb8c'}
-INIT_SHA256 = {'ui-native-adaptive-drag-shader-ios26plus': '6f11a305e3ffbe778d4b3aaa6e8a83e50b51c30af63666d2515f26250839e3c8',
- 'ui-native-adaptive-pre26': '90ac4d7f46ee8f88192eb23a3da5b3ce62ef1c00c9a8003a89800b47e305e8e8'}
-# Retain every original source pin above; only the exact lead-owned screenshot
-# finally/phase derivative is a current native input. Its complete sixteen-site
-# inverse must still recover the original customization source, never a repin.
-CURRENT_CUSTOM_SOURCE_SHA256 = "b58eafaa3f097de27d0e8babe1059ce818fca903d954a77cdbd2a4c1a73252b9"
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt': '7e2be76effbcbd3c6d5f6721abb7aca09ac29a2ceae6036c863602650412d400',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt': '262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt': '2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt': '5ad05e4614cf83c1402f2df8b8dbaa7424c1bb4931065e7acd5c4d39e66493a6',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt': '5ccd331dc4392ec0914b3081911676416f5b77d9b494ae252eb9170ada4fa7b4',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt': '97e6ca0cd96369450e283e0ee6bce16320c5256234596f00e9aba0ef17e864c9',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/DampedDragLifecycleRegressionTest.kt': 'e510be8cf46bb9df5a21489dbcfb324d2d4643cb6f98a91818c06accdfb15aae',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt': 'e4c10d40b659913a83e7ae6ff6eb50e4d981046f556bd01b33e8feb4d856f508',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt': '6b02f069769c8925b65e9896887415b32f45259eed680b9afefbf9dd0a1c744b'}
+INIT_SHA256 = {'ui-native-adaptive-drag-shader-ios26plus': 'd1ca8aa762529030099ab2e68c67788ce718e7163659b4c4544c76442fda26fd',
+ 'ui-native-adaptive-pre26': '1b940d6868de7d1ea871b881e685e209765f985ac9a89685cab5f2f8116afc04'}
+# The earlier customization image is retained in the archived inverse. The
+# runtime uses the renamed image of the reviewed screenshot/phase derivative.
+CURRENT_CUSTOM_SOURCE_SHA256 = "4f413b2a09ad5675a1ee1e930209a6e1e2655541633363cacca191a85beb404d"
 _RELATED_TEN = _SELECTIONS[FOCUSES[1]]
 _CUSTOM_SOURCE = adaptive.CUSTOM_SOURCE
 _SELECTIONS[SPLIT_FOCUSES[0]] = {
@@ -155,7 +154,7 @@ _SELECTIONS[SPLIT_FOCUSES[1]] = {
     "scope": "Only the one missing UI650 genuine iOS26+ customization method, exact four-source/common0 application, unchanged actual assertions/waits plus first-row scalar caller phases and fresh screenshot finally-close. Independent600s cooperative console transport bound still fails on timeout; the dedicated2400s native task preserves original owned cleanup. No hang-cause diagnosis, synthetic success, inner-wait relaxation or acceptance of the separate nine/legacy10/pre26four; actual fresh XML/runtime/Worker/owned cleanup remain mandatory. No compiler/link/native/issue/physical/consumer/API-ABI/security/release inference.",
 }
 for _focus in SPLIT_FOCUSES:
-    INIT_SHA256[_focus] = "93bdd4ec3bbd3fac3db6d2e60709bd6945eb96c8cb05b7bdc50d7c3d7b689a9d"
+    INIT_SHA256[_focus] = "98a0228646f62d82bfd72aea3b23f0e77031fd0d54bbdec174780a00acf3afdd"
 
 
 def _selection(focus: str) -> dict:
@@ -260,10 +259,6 @@ def validate_sources(root: Path, focus: str, test_sources: list[str] | None = No
         raw = text[name].encode()
         if hashlib.sha256(raw).hexdigest() != source_sha256(focus)[name]:
             raise ValueError("Related UI authored source differs from its unchanged reviewed input: " + name)
-        if name == _CUSTOM_SOURCE:
-            from ios_ui_split664_source_projection import current_source_before_ui_split664
-            if hashlib.sha256(current_source_before_ui_split664(name, raw)).hexdigest() != SOURCE_SHA256[name]:
-                raise ValueError("The exact UI609 screenshot/phase derivative must retain its original source pin")
     if hashlib.sha256(_ordinary_bytes(root, init_script(focus))[0]).hexdigest() != INIT_SHA256[focus]:
         raise ValueError("Related UI native-only init differs from its exact reviewed source admission")
     return True

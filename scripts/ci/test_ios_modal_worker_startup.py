@@ -60,7 +60,7 @@ class ModalWorkerStartupControls(unittest.TestCase):
         self.assertEqual(1, command.count(COMPILER))
         source = (ROOT / COMPILER).read_text()
         request = source.split("val applicationRequest", 1)[1].split("val permittedTasks", 1)[0]
-        authored = re.findall(r'"(com\.mohamedrejeb\.[^"\n]+)"', request)
+        authored = re.findall(r'"(io\.github\.apdelrahman1911\.nativecmpkit\.[^"\n]+)"', request)
         expected = [":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"] + [arg for item in authored for arg in ("--tests", item)]
         self.assertEqual(expected, command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         self.assertEqual([library.IOS_MODAL_LIFECYCLE_SOURCE, library.IOS_WORKER_OWNERSHIP_SOURCE,

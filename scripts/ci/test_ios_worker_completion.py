@@ -193,7 +193,7 @@ class WorkerCompletionControls(unittest.TestCase):
         self.assertEqual([':nativecmpkit-ui:compileTestKotlinIosSimulatorArm64'], re.findall(r'listOf\("([^"]+)"\)', permitted))
         self.assertEqual(1, permitted.count("applicationRequest,"))
         request = source.split("    val applicationRequest = ", 1)[1].split("    val permittedTasks", 1)[0]
-        identities = re.findall(r'"(com\.mohamedrejeb\.[^"\n]+)"', request)
+        identities = re.findall(r'"(io\.github\.apdelrahman1911\.nativecmpkit\.[^"\n]+)"', request)
         self.assertEqual(library.ui_application_focus_filter(library.IOS_MODAL_COMPLETION_FOCUS).split(","), identities)
         self.assertNotIn("*", request)
         self.assertIn('flatMap { identity -> listOf("--tests", identity) }', request)

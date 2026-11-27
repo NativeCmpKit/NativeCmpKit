@@ -31,7 +31,7 @@ CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properti
                    ".pbxproj", ".sh", ".bat", ".html", ".css", ".pro", ".def", ".gradle", ".xcconfig"}
 # Avoid treating longer ordinary words as names when matching camel-case symbols.
 OLD_IDENTITY = re.compile(
-    r"com[./_]mohamedrejeb[./_]calf\b|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
+    r"com[./_]mohamedrejeb[./_](?:calf|nativecmpkit)\b|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
     r"|\b(?i:github\.com/apdelrahman1911/nativecmpkit)\b"
 )
 PACKAGE = re.compile(r"^package\s+([\w.]+)", re.M)
@@ -73,7 +73,7 @@ def main():
                 continue
             if relative == "tests/consumer/verify_artifacts.py" and line.startswith("UPSTREAM_GROUP = "):
                 continue
-            if OLD_IDENTITY.search(line):
+            if OLD_IDENTITY.search(line.replace(r"\.", ".")):
                 errors.append(f"{relative}:{number}: superseded identity")
     for error in errors:
         print(error, file=sys.stderr)

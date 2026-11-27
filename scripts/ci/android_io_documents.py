@@ -42,7 +42,7 @@ MAX_HOST_BYTES = 1024**2
 ANDROID = "{http://schemas.android.com/apk/res/android}"
 # Source-only extension of the reporter, never a new accepted helper/package pair.
 # The four complete fragments inverse to the exact previously accepted reporter.
-REMOTE_REPORTER_SHA256 = "397d45d9201637e6a696b3c4148376bb02fe5c4bb1070c541616bdcdaefeeb19"
+REMOTE_REPORTER_SHA256 = "af2b173e0961e85e302a3e81bad4dd7464000bbfbe0353bb8a2cc0e049da8a96"
 REMOTE_REPORTER_FRAGMENTS = (
     b'    <uses-permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.CONTROL_REMOTE_IO" />\n',
     b'        <package android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments" />\n',
@@ -161,7 +161,7 @@ def validate_reference_sources(texts: dict[str, str]) -> None:
     owner = texts[JAVA + "IoSingleDocumentGrantActivity.java"]
     require(re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", reference) == list(lt.ANDROID_IO_REFERENCE_METHODS) and
             re.search(r"\bclass\s+AndroidIoReferenceRegressionTest\b", reference) is not None and
-            re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", reference) is not None and
+            re.search(r"(?m)^package\s+io\.github\.apdelrahman1911\.nativecmpkit\.io\s*$", reference) is not None and
             not re.search(r"@(Ignore|Disabled|IgnoredTest)\b", reference) and
             reference.count("= runBlocking(Dispatchers.IO)") == len(lt.ANDROID_IO_REFERENCE_METHODS),
             "Every exact native reference method must remain enabled and off the main Looper")
@@ -206,7 +206,7 @@ def validate_unavailable_sources(texts: dict[str, str]) -> None:
     endpoint = texts[KOTLIN + "OwnedIoEndpoint.kt"]
     require(re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source) == [lt.ANDROID_IO_UNAVAILABLE_METHOD] and
             re.search(r"\bclass\s+AndroidIoUnavailableProviderTest\b", source) is not None and
-            re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) is not None and
+            re.search(r"(?m)^package\s+io\.github\.apdelrahman1911\.nativecmpkit\.io\s*$", source) is not None and
             not re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) and
             source.count("= runBlocking(Dispatchers.IO)") == 1,
             "The exact missing unavailable-provider method must remain enabled and off the main Looper")

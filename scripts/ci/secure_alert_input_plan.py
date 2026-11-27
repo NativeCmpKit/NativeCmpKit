@@ -38,10 +38,10 @@ CAPTURE_METHODS = (
     "controlledRestoreFlagAndCloseRefusalsStillAttemptAllOtherOwnedCleanup",
     "bodyAndControlledCleanupFailurePreserveExactThrowableAndSuppressedRefusal",
 )
-QUALIFIED_SOURCE_SHA256 = {'sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/alertinput/SampleAlertDialogInputFields.kt': 'eda2a28358c19d6d76fe27c404e2e53c6ec6b89bfbb540baf2702a026a7e6c70',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeSecureAlertInputTest.kt': 'a3c2d326851717510c1b158e90a7322a524595b1af499860a1818f18e26d326b',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCapture.kt': '99a33e856d9cbedbe72be3474e301f15edfe4c1241f3ff2b093caa5b6c5e59fd',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCaptureTest.kt': '38e5e6c9b42657dcc494bd2f6e649976251e24686dcc202422e117eb4a842b84'}
+QUALIFIED_SOURCE_SHA256 = {'sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/alertinput/SampleAlertDialogInputFields.kt': 'cf65d4231fc1cb3f83260224f2acb657634f89a1589e0f4aea56444c5af9ffec',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeSecureAlertInputTest.kt': '4efc19fc6b031d7651bb92ebff1a56ab84cfdb49638aeb18d7e423ec30614e56',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCapture.kt': 'ce12478c3677910dd711293691b046b544103e72cfa3af3102152f03be526ec0',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCaptureTest.kt': '6afae03e21d48a033f0d0475d229c39299bb139cf4cd1d0c22a75e77a01536bc'}
 ORIGINAL_DESCRIPTOR_EXPRESSION_SHA256 = "1adae899b3dd5da975e687a52f60b6f2af26dbadaa62b53af93aa8bbf094528e"
 MAX_SOURCE_BYTES = 2 * 1024 * 1024
 _NO_INPUT_LOG = re.compile(

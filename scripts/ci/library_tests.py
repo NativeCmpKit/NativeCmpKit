@@ -1494,7 +1494,7 @@ WEBVIEW_OFFLINE_FOCUS = "webview-browser-offline-destination"
 WEBVIEW_OFFLINE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewOfflineDestinationAcceptanceTest"
 WEBVIEW_OFFLINE_METHOD = "previouslyReachableOwnedDestinationBecomesOfflineWithoutStoppingKarmaOrRetainingRequestState"
 WEBVIEW_OFFLINE_SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewOfflineDestinationAcceptanceTest.kt"
-WEBVIEW_OFFLINE_SOURCE_SHA256 = "3e58d2a06a083c66ba4ce04071bca3f37bb96a21f45a1fbad212b01166c8d885"
+WEBVIEW_OFFLINE_SOURCE_SHA256 = "9add3501a42dec5ed7a6d071254c5d70e5788e7631c9e74b492e06cc1abae7e5"
 WEBVIEW_OFFLINE_FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-offline-fixture.js"
 WEBVIEW_OFFLINE_FIXTURE_SHA256 = "176fed5c2c7661cd4a0b9ad9171d156ac1fc43f4922c0e947d2040d6b57f8111"
 
@@ -1522,12 +1522,12 @@ SHARE_CLIPBOARD_NATIVE_METHODS = (
     "directTrustedGesturePreservesActivationAndCompletesOneActualOwnedTextWrite",
 )
 SHARE_CLIPBOARD_NATIVE_SOURCE = "nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt"
-SHARE_CLIPBOARD_NATIVE_SOURCE_SHA256 = "10bf06a15f4d840779aa494122d42c24ed6bbd76ec6926d72eedf982c7cebc60"
+SHARE_CLIPBOARD_NATIVE_SOURCE_SHA256 = "1163f6aa51a6041731003ac033ff992b1820814f6614261b3eb96de2fbc42f22"
 SHARE_CLIPBOARD_NATIVE_FIXTURE = "nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
-SHARE_CLIPBOARD_NATIVE_FIXTURE_SHA256 = "e2f95d99ff2dd89fa95bd4de8fbedf9f3b60748284fed87ae6fe2ab3d2278a89"
+SHARE_CLIPBOARD_NATIVE_FIXTURE_SHA256 = "40f5e5449518ad0c24992f503da03ca4d258f33cc86aa264a57d77c3c40d4c87"
 SHARE_CLIPBOARD_NATIVE_HELPERS = {
-    "js": ("nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt", "9d33398d366466f41a3d4a46198a7c8e02e3c23fbfd73af1216aa6b0915ebc05"),
-    "wasm": ("nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt", "b24a367d8c3e45e896559f1ce7a44d627c8825023ebfd9e9f66c6eb34c64ba59"),
+    "js": ("nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt", "e35b02eb8daee3fbe2c3f02ace9e145538f2f874ea9b987553b627f67783c7cb"),
+    "wasm": ("nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt", "c4dc1988b63ad5dea80f72abb87481bed705619a118bdfad985028867de0b901"),
 }
 
 
@@ -2803,7 +2803,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != [ANDROID_IO_UNAVAILABLE_METHOD] or
                 not re.search(r"\bclass\s+AndroidIoUnavailableProviderTest\b", source) or
-                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) or
+                not re.search(r"(?m)^package\s+io\.github\.apdelrahman1911\.nativecmpkit\.io\s*$", source) or
                 any(relative not in selected[0]["test_source_files"] for relative in ANDROID_IO_UNAVAILABLE_SOURCE_DEPENDENCIES) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) or
                 source.count("= runBlocking(Dispatchers.IO)") != 1):
@@ -2845,7 +2845,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_IO_REFERENCE_METHODS) or
                 not re.search(r"\bclass\s+AndroidIoReferenceRegressionTest\b", source) or
-                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) or
+                not re.search(r"(?m)^package\s+io\.github\.apdelrahman1911\.nativecmpkit\.io\s*$", source) or
                 any(relative not in selected[0]["test_source_files"] for relative in ANDROID_IO_REFERENCE_SOURCE_DEPENDENCIES) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android IO reference declarations or native dependencies changed; review the exact three methods")
