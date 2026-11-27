@@ -50,7 +50,7 @@ PRESERVED_CONSUMER_INPUTS = MappingProxyType({
     'settings.gradle.kts': '0a5eb5ae6d16ab58dfae5b7d5c99b982184391169fe426c845363da00975544d',
     'gradle.properties': 'bf8bbec28b310adfdc5b6d3319217bc2cf8657f44cdba2f38214eca4035ddf3b',
     'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': 'b9090ad4e82401038b5a4a9c385b11f29ad364834928a643a66a21f91bb32274',
-    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': 'db451bf0c3a0fe37510e577e36e8e82a918811e62d12a612c3041d2140f963d7',
+    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': 'f7edb96bfaa343c8dc66121f53a37228b57e9b49261de07412572188719c31d9',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt': '6e465280638b566661cd6387a3a7b66a2d75a3faa86e219937c10f9765fbc440',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt': '9f7f8f42fdb3a5a1f5b0b418178f3fbf19ba6ce86e2a193338dc8c33a1d5735a',
 })

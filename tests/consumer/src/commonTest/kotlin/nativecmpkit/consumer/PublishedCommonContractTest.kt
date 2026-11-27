@@ -25,10 +25,10 @@ class PublishedCommonContractTest {
     }
 
     @Test fun customFileTypesRetainMimeAndExtensionValues() {
-        assertContentEquals(arrayOf("application/pdf"), FilePickerFileType.Pdf.value)
-        assertContentEquals(arrayOf("image/png", "text/plain"),
-            FilePickerFileType.Custom(listOf("image/png", "text/plain")).value)
-        assertContentEquals(arrayOf("png", "txt"), FilePickerFileType.Extension(listOf("png", "txt")).value)
+        assertEquals(listOf("application/pdf"), FilePickerFileType.Pdf.value.toList())
+        assertEquals(listOf("image/png", "text/plain"),
+            FilePickerFileType.Custom(listOf("image/png", "text/plain")).value.toList())
+        assertEquals(listOf("png", "txt"), FilePickerFileType.Extension(listOf("png", "txt")).value.toList())
     }
 
     @Test fun permissionIdentityIsNameBasedAcrossArtifacts() {
