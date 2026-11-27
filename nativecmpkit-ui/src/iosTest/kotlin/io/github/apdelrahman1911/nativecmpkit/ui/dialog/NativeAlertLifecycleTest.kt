@@ -7,6 +7,8 @@ import io.github.apdelrahman1911.nativecmpkit.ui.internal.runApplicationUiTest
 import androidx.compose.ui.uikit.LocalUIViewController
 import androidx.compose.ui.window.DialogProperties
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.*
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.sameNativeObject
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.waitForNative
 import platform.UIKit.*
 import kotlin.test.*
@@ -147,6 +149,7 @@ class NativeAlertLifecycleTest {
         runOnIdle {
             manager = AlertDialogManager(parent, {}, AlertDialogIosProperties(animated = false,
                 style = AlertDialogIosStyle.ActionSheet), DialogProperties())
+            manager.popoverAnchor = AlertDialogIosPopoverAnchor.ViewRect(null)
             manager.showAlertDialog()
         }
         try {
@@ -158,5 +161,64 @@ class NativeAlertLifecycleTest {
             }
         } finally { runOnIdle { manager.dispose() } }
         waitForNative { parent.presentedViewController == null }
+    }
+
+    @Test fun defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad() = runApplicationUiTest {
+        lateinit var parent: UIViewController
+        setContent { parent = LocalUIViewController.current }
+        val isPhone = runOnIdle { UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone }
+        var manager: AlertDialogManager? = null
+        var cancels = 0
+        var dismissals = 0
+        var confirms = 0
+        val cancelTitle = "Cancel selection"
+        try {
+            runOnIdle {
+                manager = AlertDialogManager(parent, { dismissals++ }, AlertDialogIosProperties(
+                    title = "Choose a value",
+                    animated = false,
+                    style = AlertDialogIosStyle.ActionSheet,
+                    actions = listOf(
+                        AlertDialogIosAction("Confirm selection", AlertDialogIosActionStyle.Default, { confirms++ }),
+                        AlertDialogIosAction(cancelTitle, AlertDialogIosActionStyle.Cancel, { cancels++ }),
+                    ),
+                ), DialogProperties()).also { it.showAlertDialog() }
+            }
+            waitForNative {
+                val alert = parent.presentedViewController as? UIAlertController
+                alert != null && alert.title == "Choose a value" &&
+                    sameNativeObject(alert.view.window, requireOwnedApplicationWindow())
+            }
+            val sheet = runOnIdle { parent.presentedViewController as UIAlertController }
+            runOnIdle {
+                assertEquals(UIAlertControllerStyleActionSheet, sheet.preferredStyle)
+                if (isPhone) {
+                    val window = requireOwnedApplicationWindow()
+                    val cancel = sheet.view.visibleDescendants().single {
+                        it.accessibilityLabel == cancelTitle &&
+                            (it.accessibilityTraits and UIAccessibilityTraitButton) != 0UL && sameNativeObject(it.window, window)
+                    }
+                    assertTrue(cancel.accessibilityActivate(), "The visible UIKit Cancel button must accept input")
+                } else {
+                    val popover = requireNotNull(sheet.popoverPresentationController)
+                    assertTrue(sameNativeObject(parent.view, popover.sourceView))
+                    assertNull(popover.barButtonItem)
+                    manager?.dispose()
+                }
+            }
+            waitForNative { parent.presentedViewController == null && sheet.view.window == null }
+            runOnIdle {
+                assertEquals(if (isPhone) 1 else 0, cancels)
+                assertEquals(0, confirms)
+                assertEquals(0, dismissals)
+            }
+        } finally {
+            runOnIdle { manager?.dispose() }
+        }
+    }
+
+    private fun UIView.visibleDescendants(): List<UIView> {
+        if (hidden || alpha <= 0.0) return emptyList()
+        return listOf(this) + subviews.filterIsInstance<UIView>().flatMap { it.visibleDescendants() }
     }
 }

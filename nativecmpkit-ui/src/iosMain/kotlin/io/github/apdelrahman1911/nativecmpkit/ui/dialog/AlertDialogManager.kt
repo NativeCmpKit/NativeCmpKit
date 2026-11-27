@@ -21,7 +21,6 @@ import kotlinx.cinterop.useContents
 import kotlinx.cinterop.value
 import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectContainsPoint
-import platform.CoreGraphics.CGRectMake
 import platform.Foundation.NSThread
 import platform.UIKit.*
 import platform.darwin.NSObject
@@ -76,6 +75,7 @@ class AlertDialogManager internal constructor(
             if (!ownsPopover(popoverPresentationController) || presentation.disposed ||
                 presentation.phase == NativePresentationState.Phase.Dismissing) return
             when (val anchor = popoverAnchor.resolveFor(parentUIViewController)) {
+                null -> Unit
                 is ResolvedAlertPopoverAnchor.BarButton -> {
                     // UIKit owns system bar-item geometry; never guess its private view.
                     applyPopoverAnchor(popoverPresentationController, anchor)
@@ -159,18 +159,11 @@ class AlertDialogManager internal constructor(
                 }
             }
             if (iosProperties.severity == AlertDialogIosSeverity.Critical) setSeverity(UIAlertControllerSeverityCritical)
-            // Action sheets require an anchor on iPad. The fallback is explicitly in the
-            // presenter's local coordinate space, not a fabricated global screen rectangle.
             if (iosProperties.style == AlertDialogIosStyle.ActionSheet) {
                 popoverPresentationController?.apply {
                     delegate = presentationDelegate
                     ownedPopover = this
-                    sourceView = parentUIViewController.view
-                    ownedAnchorView = parentUIViewController.view
-                    sourceRect = parentUIViewController.view.bounds.useContents {
-                        CGRectMake(origin.x + size.width / 2, origin.y + size.height / 2, 1.0, 1.0)
-                    }
-                    permittedArrowDirections = 0u
+                    popoverAnchor.resolveFor(parentUIViewController)?.let { applyPopoverAnchor(this, it) }
                 }
             }
         }
@@ -307,8 +300,7 @@ class AlertDialogManager internal constructor(
         ownedPopover?.let { popover ->
             val delegate = popover.delegate as? NSObject
             if (delegate != null && delegate.objcPtr() == presentationDelegate.objcPtr()) {
-                if (ownedAnchorView?.objcPtr() == popover.sourceView?.objcPtr()) popover.sourceView = null
-                if (ownedAnchorBarButton?.objcPtr() == popover.barButtonItem?.objcPtr()) popover.barButtonItem = null
+                clearPopoverAnchor(popover)
                 popover.delegate = null
             }
         }
@@ -330,7 +322,15 @@ class AlertDialogManager internal constructor(
     private fun refreshPopoverAnchor() {
         val popover = ownedPopover ?: return
         if (!ownsPopover(popover) || presentation.disposed) return
-        applyPopoverAnchor(popover, popoverAnchor.resolveFor(parentUIViewController))
+        val anchor = popoverAnchor.resolveFor(parentUIViewController)
+        if (anchor != null) applyPopoverAnchor(popover, anchor) else clearPopoverAnchor(popover)
+    }
+
+    private fun clearPopoverAnchor(popover: UIPopoverPresentationController) {
+        ownedAnchorView?.let { if (it.objcPtr() == popover.sourceView?.objcPtr()) popover.sourceView = null }
+        ownedAnchorBarButton?.let { if (it.objcPtr() == popover.barButtonItem?.objcPtr()) popover.barButtonItem = null }
+        ownedAnchorView = null
+        ownedAnchorBarButton = null
     }
 
     private fun applyPopoverAnchor(popover: UIPopoverPresentationController, anchor: ResolvedAlertPopoverAnchor) {

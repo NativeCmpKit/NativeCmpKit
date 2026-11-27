@@ -525,6 +525,20 @@ IOS_MAIN_BAR_METHODS = (
     "mainNavigationBarCarriesCustomTintAndImageOnlyVoiceOverLabel",
 )
 IOS_MAIN_ALERT_METHOD = "emptyTextIsOmittedOnPresentationAndOnVisibleUpdates"
+IOS_DEFAULT_ACTION_SHEET_FOCUS = "identity-ios-default-action-sheet"
+IOS_DEFAULT_ACTION_SHEET_METHOD = "defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad"
+IOS_ALERT_LIFECYCLE_GROUP = {
+    "classname": "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativeAlertLifecycleTest",
+    "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeAlertLifecycleTest.kt",
+    "declared_methods": (
+        IOS_MAIN_ALERT_METHOD,
+        "presentedAlertUsesLatestActionAndTextFieldCallbacks",
+        "disposalDuringPresentationQueuesCleanupAndReplacement",
+        "outsideDismissRequestsAndDisposalRemainExactlyOnce",
+        "actionSheetHasAPresentingViewPopoverAnchor",
+        IOS_DEFAULT_ACTION_SHEET_METHOD,
+    ),
+}
 UI_APPLICATION_FOCUS_SPECS = {
     IOS_MAIN_IDENTITY_FOCUS: {
         "groups": (
@@ -534,20 +548,13 @@ UI_APPLICATION_FOCUS_SPECS = {
                 "methods": IOS_MAIN_BAR_METHODS,
                 "declared_methods": (*IOS_MAIN_BAR_METHODS, "barLivesInsideItsHostAndContinuesMeasuringAfterLayoutChanges"),
             },
-            {
-                "classname": "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativeAlertLifecycleTest",
-                "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeAlertLifecycleTest.kt",
-                "methods": (IOS_MAIN_ALERT_METHOD,),
-                "declared_methods": (
-                    IOS_MAIN_ALERT_METHOD,
-                    "presentedAlertUsesLatestActionAndTextFieldCallbacks",
-                    "disposalDuringPresentationQueuesCleanupAndReplacement",
-                    "outsideDismissRequestsAndDisposalRemainExactlyOnce",
-                    "actionSheetHasAPresentingViewPopoverAnchor",
-                ),
-            },
+            {**IOS_ALERT_LIFECYCLE_GROUP, "methods": (IOS_MAIN_ALERT_METHOD,)},
         ),
         "scope": "Four UIKit tests for preserved main-branch alert text, bar tint and label, and tab selection and ownership during the namespace migration.",
+    },
+    IOS_DEFAULT_ACTION_SHEET_FOCUS: {
+        "groups": ({**IOS_ALERT_LIFECYCLE_GROUP, "methods": (IOS_DEFAULT_ACTION_SHEET_METHOD,)},),
+        "scope": "One genuine UIKit action sheet checking the default Cancel button and action on iPhone or the default presenter anchor on iPad. Count evidence for the actual executed idiom only.",
     },
     UI_DATE_BOUNDS_FOCUS: {
         "classname": UI_DATE_BOUNDS_CLASS, "source": UI_DATE_BOUNDS_SOURCE, "methods": UI_DATE_BOUNDS_METHODS,

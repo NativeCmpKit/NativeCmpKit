@@ -35,7 +35,10 @@ class NativeAlertDelegateContractTests(unittest.TestCase):
         self.assertLess(creation.index(guard), creation.index("popoverPresentationController?.apply"))
         self.assertIn("delegate = presentationDelegate", creation)
         self.assertIn("ownedPopover = this", creation)
-        self.assertIn("sourceView = parentUIViewController.view", creation)
+        self.assertNotIn("sourceView =", creation)
+        self.assertIn("popoverAnchor.resolveFor(parentUIViewController)?.let { applyPopoverAnchor(this, it) }", creation)
+        pump = self.section("private fun pump()", "private fun clearController()")
+        self.assertLess(pump.index("refreshPopoverAnchor()"), pump.index("parentUIViewController.presentViewController("))
 
     def test_popover_and_adapted_dismissal_callbacks_share_one_owning_reconciliation(self):
         delegate = self.section("private val presentationDelegate", "private fun requireMain")

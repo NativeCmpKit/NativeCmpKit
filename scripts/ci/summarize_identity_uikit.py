@@ -108,7 +108,7 @@ def receipt_rows():
     for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
         "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
         "identity-ui-pre26-customization", "identity-ui-pre26-remaining", "identity-ui-pre26-negative-steps",
-        "identity-ui-pre26-toolbar",
+        "identity-ui-pre26-toolbar", "identity-ui-action-sheet",
     ))):
         for host in HOSTS:
             for path in sorted((parent / host).glob("*/receipt.json")):

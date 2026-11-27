@@ -140,7 +140,11 @@ if (showComplexDialog) {
 
 ## iOS Action Sheet Style
 
-On iOS, you can display the dialog as an action sheet that slides up from the bottom of the screen:
+Set `AlertDialogIosStyle.ActionSheet` to let UIKit present the choices as an action sheet.
+On iPhone, omitting the anchor keeps the system presentation with its visible Cancel action.
+On iPad, the default anchor is the center of the presenting view. Provide a view rectangle or
+bar button through `LocalAlertDialogIosPopoverAnchor` to position the popover near the control
+that opened it. UIKit can replace the visible Cancel button with an outside tap in this presentation.
 
 ```kotlin
 // State to control dialog visibility

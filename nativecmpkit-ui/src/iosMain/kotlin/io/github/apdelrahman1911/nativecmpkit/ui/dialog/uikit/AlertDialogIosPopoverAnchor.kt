@@ -12,7 +12,9 @@ import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectMake
 import platform.Foundation.NSThread
 import platform.UIKit.UIBarButtonItem
+import platform.UIKit.UIDevice
 import platform.UIKit.UIPopoverArrowDirectionAny
+import platform.UIKit.UIUserInterfaceIdiomPhone
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
 
@@ -53,8 +55,9 @@ sealed class AlertDialogIosPopoverAnchor {
 
 /**
  * Provide an [AlertDialogIosPopoverAnchor] around either adaptive alert function
- * when using ActionSheet style. Defaults to a one-point presenter-center anchor
- * with no arrow. Alert style ignores this local. No Android/Desktop/web API changes.
+ * when using ActionSheet style. Without an anchor, iPhone uses UIKit's default
+ * action sheet and iPad uses a one-point presenter-center anchor with no arrow.
+ * Alert style ignores this local.
  */
 val LocalAlertDialogIosPopoverAnchor = staticCompositionLocalOf<AlertDialogIosPopoverAnchor?> { null }
 
@@ -63,8 +66,10 @@ internal sealed class ResolvedAlertPopoverAnchor {
     class BarButton(val item: UIBarButtonItem, val arrows: ULong) : ResolvedAlertPopoverAnchor()
 }
 
-internal fun AlertDialogIosPopoverAnchor?.resolveFor(parent: UIViewController): ResolvedAlertPopoverAnchor {
+internal fun AlertDialogIosPopoverAnchor?.resolveFor(parent: UIViewController): ResolvedAlertPopoverAnchor? {
     check(NSThread.isMainThread) { "UIKit popover anchors must be resolved on Main" }
+    // UIKit keeps the visible Cancel action on iPhone when no anchor is supplied.
+    if (this == null && UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone) return null
     val presenter = parent.view
     val window = presenter.window
     fun inCurrentWindow(view: UIView): Boolean = window != null && view.window?.objcPtr() == window.objcPtr()
