@@ -694,6 +694,8 @@ def matrix(profile: str) -> dict:
                      "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
         if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
             raise ValueError("Related adaptive UI verification requires its exact single iPhone native row")
+        if profile == "ios-ui-adaptive-pre26":
+            rows[0]["runner"] = "macos-15"
         rows[0]["test-focus"] = ("ui-native-adaptive-pre26" if profile == "ios-ui-adaptive-pre26" else
                                 "ui-native-adaptive-drag-shader-ios26plus")
     if profile in {"ios-ui-related-nine-ios26plus", "ios-ui-adaptive-customization-ios26plus"}:

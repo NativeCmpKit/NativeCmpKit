@@ -36,7 +36,7 @@ def labels(document, fields):
 
 def receipt_rows():
     for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
-        "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
+        "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui", "identity-ui-pre26",
     ))):
         for host in HOSTS:
             for path in sorted((parent / host).glob("*/receipt.json")):

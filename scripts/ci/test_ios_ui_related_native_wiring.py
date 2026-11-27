@@ -4,6 +4,7 @@ import ast
 import copy
 import json
 from pathlib import Path
+import subprocess
 from types import SimpleNamespace
 import tomllib
 import unittest
@@ -22,6 +23,19 @@ ROOT = Path(__file__).resolve().parents[2]
 PRE_UUID = "11111111-2222-3333-4444-555555555555"
 NEW_UUID = "AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
 PROFILES = ("ios-ui-adaptive-pre26", "ios-ui-adaptive-drag-shader-ios26plus")
+ARCHIVED_UI_INPUTS = {
+    "scripts/ci/ios_ui_application.py": "3b328deb7c2b9297113ae1ab60f9138178d58096",
+    "scripts/ci/runtime_context.py": "4fa3682b190af891167771952aad1ecf12b5e9bc",
+    ".github/workflows/gradle.yml": "c04db069d1f1f16811bf3020bad152cff90bff27",
+}
+
+
+def archived_ui_input(relative: str) -> bytes:
+    original = subprocess.check_output(["git", "cat-file", "blob", ARCHIVED_UI_INPUTS[relative]], cwd=ROOT)
+    binding = history._document()["bindings"][relative]
+    if len(original) != binding["before_bytes"] or history.sha(original) != binding["before_sha256"]:
+        raise ValueError("Historical UIKit wiring input differs from the original manifest")
+    return original
 
 
 def synthetic_inventory():
@@ -85,7 +99,8 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
                                                       if isinstance(key, ast.Constant) and key.value == profile)
                 self.assertEqual(wanted, ast.literal_eval(value))
                 self.assertFalse(any(isinstance(child, (ast.Name, ast.Attribute)) for child in ast.walk(value)))
-            row = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64", "python": "python3",
+            runner = "macos-15" if profile == "ios-ui-adaptive-pre26" else "macos-26"
+            row = {"slot": "ios-iphone", "suite": "ios", "runner": runner, "arch": "arm64", "python": "python3",
                    "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui", "test-focus": focus}
             self.assertEqual({"include": [row]}, workflow.matrix(profile))
             for field, bad in (("runner", "macos-15"), ("arch", "x64"), ("python", "python"),
@@ -196,7 +211,7 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
         with patch.object(adaptive_runtime, "select_iphone_json", side_effect=AssertionError("Default capture entered new selector")) as select:
             context = capture_model()
             select.assert_not_called(); self.assertNotIn("adaptive_runtime_focus", context)
-        old = history.source_before_ui_related("scripts/ci/ios_ui_application.py", (ROOT / "scripts/ci/ios_ui_application.py").read_bytes())
+        old = archived_ui_input("scripts/ci/ios_ui_application.py")
         old_calls = [node for node in ast.walk(ast.parse(old)) if isinstance(node, ast.Call) and ast.unparse(node.func) == "runtime.capture"]
         old_calls.sort(key=lambda node: (node.lineno, node.col_offset))
         current = sorted(calls("scripts/ci/ios_ui_application.py", "runtime.capture"), key=lambda node: (node.lineno, node.col_offset))
@@ -207,8 +222,8 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
             eval(compile(ast.Expression(after), "new-default-expression-only", "eval"), namespace)
             self.assertEqual(wanted, capture.call_args)
         self.assertEqual(ast.dump(old_calls[1], include_attributes=False), ast.dump(current[1], include_attributes=False))
+        parent = archived_ui_input("scripts/ci/runtime_context.py")
         for name in ("compiler_runtime_fingerprint", "command", "simulator"):
-            parent = history.source_before_ui_related("scripts/ci/runtime_context.py", (ROOT / "scripts/ci/runtime_context.py").read_bytes())
             previous = next(node for node in ast.parse(parent).body if isinstance(node, ast.FunctionDef) and node.name == name)
             latest = next(node for node in ast.parse((ROOT / "scripts/ci/runtime_context.py").read_bytes()).body if isinstance(node, ast.FunctionDef) and node.name == name)
             self.assertEqual(ast.dump(previous, include_attributes=False), ast.dump(latest, include_attributes=False))
@@ -238,7 +253,7 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
         self.assertIn('ui-native-adaptive-drag-shader-ios26plus) args+=(--adaptive-focus ui-native-adaptive-ios26plus) ;;', block)
         self.assertEqual(2, block.count('--adaptive-focus'))
         self.assertNotIn('*)', block)
-        parent = history.source_before_ui_related(name, raw).decode()
+        parent = archived_ui_input(name).decode()
         for fragment in ('xcrun simctl boot "$device"', 'xcrun simctl bootstatus "$device" -b',
                          'args+=(--apple --simulator "$device" --require-booted)'):
             self.assertEqual(parent.count(fragment), text.count(fragment))
