@@ -1,7 +1,8 @@
 # Showcase verification status
 
 Updated 2026-11-27. This page separates evidence levels; a lower level never
-implies a higher one.
+implies a higher one. The contract now has 88 rows, including four tablet-window
+rows (`UI-ALERT-006`, `NAV-004`, `UI-BAR-008`, `UI-SHEET-003`).
 
 ## Source and build
 
