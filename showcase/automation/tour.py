@@ -88,6 +88,16 @@ def find_search(ui, timeout_ms: int = 2500):
     return None
 
 
+def click_text_scroll(ui, text, scrolls=8):
+    for _ in range(scrolls):
+        observation = soft_find(ui, {"text": text}, timeout_ms=1200)
+        if observation.get("satisfied") and observation.get("nodes"):
+            click_text(ui, text)
+            return
+        scroll_list(ui, 3)
+    raise RuntimeError(f"could not scroll to {text!r}")
+
+
 def click_first(ui, labels):
     last = None
     for label in labels:
@@ -284,7 +294,7 @@ def main() -> None:
                 shot("ui-adaptive-alert-dialog", "simple")
                 click_text(ui, "Cancel")
                 if args.platform == "ios":
-                    click_text(ui, "Show ActionSheet")
+                    click_text_scroll(ui, "Show ActionSheet")
                     shot("ui-adaptive-alert-dialog", "action-sheet")
                     click_text(ui, "Cancel")
             elif title == "Adaptive Bottom Sheet":
