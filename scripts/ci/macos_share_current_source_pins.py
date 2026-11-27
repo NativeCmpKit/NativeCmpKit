@@ -2,7 +2,7 @@
 """Exact current AppKit runner and migrated native harness inputs."""
 
 APPKIT_INPUTS = {
-    ".github/workflows/gradle.yml": "144dab2c5f0d46ade446e2186399b71d0ca29c3e955534b25982d7d90366907e",
+    ".github/workflows/gradle.yml": "370e60e916226e7d019e8e1135e61d639e77370c6975867b4e93dd0f2b4c576c",
     "convention-plugins/src/main/kotlin/NativeLibraries.kt": "45d4651e7f3a9532917ac87997ab9f011ec80ed12397f6586eee231233b6de79",
     "docs/testing/macos-share-key-wait-observation.md": "539efcfa88bc0e4f5e5b16bae07b2ec8303b0f3c27f73ab00efec62463aa8ee1",
     "docs/testing/macos-share650-appkit-only.md": "1050a027e620a4da0f8014b0afc32600d3a905c885ce4a402554b00e7715645b",
@@ -24,18 +24,18 @@ APPKIT_INPUTS = {
     "scripts/ci/fixtures/macos-share-missing-ci-source-inverse.json": "79fa2b0394b10026402bef72992385c38684f19b70414606ed1833b40e3178b9",
     "scripts/ci/fresh-tests.init.gradle.kts": "9f49a87337d3314c89efeb572c029bb12bf8c876a2ceb5d893a7d686f4780abc",
     "scripts/ci/ios_popover_anchor_plan.py": "fd02ad32b0df43fc86b6fcdc3efee8f686db3e484e7c69d7e6ed1c3c10e70205",
-    "scripts/ci/library_tests.py": "aa74975805421946b05ada7f37dfe276dcf26d2438aaa9480d059652932ccc7a",
+    "scripts/ci/library_tests.py": "9d17ac96e01ce761ba0db0990760e28ab9d9576d36f51133d6e1d67d3a1265fd",
     "scripts/ci/macos_share_appkit_lifecycle.py": "38dad5370bc66b6d68247c4e3e019bc205e3ec70dff21541dabe693bd670108f",
     "scripts/ci/macos_share_appkit_only_route.py": "2d526984d29c044b13e83cb04711be9bcd7aaecf2996e65444ad95132ca8e407",
     "scripts/ci/macos_share_appkit_only_source_projection.py": "b6b28d9b1c6addafcdf8a73db9551a19a90123b648c9fc2138b1731535ac1bfd",
     "scripts/ci/macos_share_key_wait_observation.py": "e49c2a9e60493fe8cea9bf3a12ffb861cdadc4b073b906d3ecaa77baa36b6653",
-    "scripts/ci/macos_share_missing_ci.py": "a3b0125d0bf11bf5ec26d46a1962521209f7dda5e4e1edaa07efce82aaabd684",
+    "scripts/ci/macos_share_missing_ci.py": "1c0c1af05215d79ad2d3c22826ff4ed1a46a7dd6603441a09222b6f86b6b06a3",
     "scripts/ci/macos_share_missing_only.py": "0deec78f35f116cdc9396cf770cc592d156f9c6a46e416685bc1172cd981fcae",
     "scripts/ci/runtime_context.py": "56a3072e2164c3ff9d8113a94e68dd400a609c0040cf8ce0514d0c1ef1e79a96",
     "scripts/ci/test_macos_share_appkit_lifecycle_runner.py": "152d0c8457b6036f5bc4afd3ad2d6aa99eaeaa1cbbe0150e18457c4baed22a89",
     "scripts/ci/test_macos_share_appkit_only_route607.py": "4497c247dc62e0079ae2cd401c1647b46bca8ecc282ff7f6a8702cd65b6de019",
     "scripts/ci/test_macos_share_key_wait_observation.py": "bb68efbec88bd3a572abee3f5f2067750314d9918a7e9d3917b66a6499008e9a",
     "scripts/ci/test_macos_share_missing_only.py": "5ebdba519f72ecdb1d9ebf8241210d482083e935567579142393126d790af662",
-    "scripts/ci/workflow_matrix.py": "009f53c87309d0b4102f1f5572ad5340ea70cc110ac22dfbe25ce3732c54c0ed",
+    "scripts/ci/workflow_matrix.py": "114e19bb6f61b30495564783a678ac24f33092fbdfd00e206caea4b8caa4eb46",
     "scripts/native/artifacts.py": "52df05c2dac265a40d7437f20c987b674bec206de808f6a3c252b83fced1a75a",
 }

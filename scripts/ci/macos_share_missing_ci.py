@@ -11,6 +11,7 @@ from pathlib import Path
 
 import macos_share_missing_only as recovery
 from ios_popover_anchor_plan import _ordinary_bytes
+from macos_share_current_source_pins import APPKIT_INPUTS
 
 FOCUS = recovery.JNI_FOCUS
 PROFILE = recovery.JNI_PROFILE
@@ -29,17 +30,17 @@ SCOPE = (
     "visible picker/recipient delivery, stress/instrumentation, other-host, consumer, "
     "API-ABI/security/release or issue-closure certification."
 )
-SOURCE_SHA256 = {
-    SOURCE: "43bcc488ed94c0568b9fba1448c278d8438e6d4c7536ab3035063102820970a2",
-    "scripts/ci/macos_share_missing_only.py": "26946c343deec7337310b9ee880c8d5eb39732e5ce7d557dd1630088d5a0a4a8",
-    "scripts/ci/macos_share_appkit_lifecycle.py": "b04a67a0a8b80e6d335ee6408e6149db0f3616f353b38b984b6cf39406415455",
-    "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs": "9e038b83b4e2e4d3d4718869ec05c9eaa198ce1f3c886a38b97b7c13ff83842b",
-    "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs": "b31cad1ca8403b8649b33f43067d778459fe5816099c90c40059465d6b6bbd79",
-    "nativecmpkit-share/native/src/operation.rs": "926b8c1fd41c2039e6bb8a81e9d05333165ed459aa10b9381ab28d140ed62942",
-    "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.desktop.kt": "ac2c199aae4c24359905a9ddeb2951b9babedd2919b035d437087e71ebef64c9",
-    "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridge.kt": "e146cab08a36acbc356f0283868150ad0ed12b786146bb5fe3a4bf58f82757af",
-    "scripts/ci/fresh-tests.init.gradle.kts": "bc14e3ac5105e6a337c896f4f7e88dd565e8862b2b2dc0d8ff055f40ab8cb9d4",
-}
+SOURCE_SHA256 = {name: APPKIT_INPUTS[name] for name in (
+    SOURCE,
+    "scripts/ci/macos_share_missing_only.py",
+    "scripts/ci/macos_share_appkit_lifecycle.py",
+    "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs",
+    "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs",
+    "nativecmpkit-share/native/src/operation.rs",
+    "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.desktop.kt",
+    "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridge.kt",
+    "scripts/ci/fresh-tests.init.gradle.kts",
+)}
 
 
 def identities() -> list[dict]:
