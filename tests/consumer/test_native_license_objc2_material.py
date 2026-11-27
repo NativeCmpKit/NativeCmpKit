@@ -233,7 +233,7 @@ class ActiveObjc2MaterialTest(unittest.TestCase):
             self.assertTrue(all('/_reviewed-objc2/' in path for path in pool))
             outputs.append(pool)
         self.assertTrue(all(pool == outputs[0] for pool in outputs[1:]))
-        self.assertEqual(1670040, sum(map(len, outputs[0].values())))
+        self.assertEqual(1670130, sum(map(len, outputs[0].values())))
         with self.assertRaises(gate.InvalidArtifact):
             next(iter(self.values.values())).provenance_payloads('synthetic/foreign-package/')
 
@@ -247,7 +247,7 @@ class ActiveObjc2MaterialTest(unittest.TestCase):
                     self.assertRaises(gate.InvalidArtifact):
                 supplements.load_supplements(CATALOG, rows, source_root=ROOT)
 
-    def test_carriage_dependency_closure_and_three_inert_sources_are_unchanged(self):
+    def test_carriage_dependency_closure_and_three_inert_sources_are_pinned(self):
         self.assertEqual(15, len(carriage.CONSUMER_FILES)); self.assertEqual(7, len(carriage.CHECKER_MODULES))
         self.assertIn('native_license_objc2_material.py', carriage.CONSUMER_FILES)
         self.assertIn('native_license_material_v2.py', carriage.CONSUMER_FILES)
@@ -258,8 +258,8 @@ class ActiveObjc2MaterialTest(unittest.TestCase):
                        if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == 'modules'
                                                                for target in node.targets))
         self.assertEqual(carriage.CHECKER_MODULES, ast.literal_eval(literal))
-        held = {'native_license_material_v2.py': 'ec1b4c313997bbd9f903f74ad91338fdf611f01f09b25b9952a9e78a733a0b32',
-                'native_license_material_v2.schema.json': 'f097086121f6b87926ca17300e9510ab5c97b42cd49bfcedd7c10a8589067a51',
+        held = {'native_license_material_v2.py': '34ae5f4d48b08f36dc081f0154d101cdfb28be57e52b9d45a546cb56d92cee06',
+                'native_license_material_v2.schema.json': '1a493ae1c6700d4b68b4af7b29bc74a93b24ab6908a49b406d5eb5430c19bf19',
                 'test_native_license_material_v2.py': '0281403a39a55bc254ab2ffcf5712cc10c7d64b541d2a4ee2d08383d935b4a67'}
         for name, expected in held.items():
             self.assertEqual(expected, hashlib.sha256((ROOT / 'tests/consumer' / name).read_bytes()).hexdigest())
@@ -387,24 +387,29 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
                 checks, _ = inspect(changed)
                 self.assertTrue(any(not item['passed'] for item in checks), checks)
 
-    def original_arguments(self, module):
+    def original_arguments(self, archived_module):
         base = ROOT / 'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104'
-        report = (base / 'notices-current606' / (module + '-licenses-report.json')).read_bytes()
-        metadata = (base / 'metadata-current606' / (module + '.json')).read_bytes()
+        report = (base / 'notices-current606' / (archived_module + '-licenses-report.json')).read_bytes()
+        metadata = (base / 'metadata-current606' / (archived_module + '.json')).read_bytes()
         inputs = {path: (ROOT / path).read_bytes() for path in active.INPUT_PATHS}
         return report, metadata, inputs
 
-    def test_independently_pinned_original_report_metadata_and_text_refusal_boundaries(self):
-        for module in carry.ORIGINALS:
-            report, metadata, inputs = self.original_arguments(module)
+    def test_independently_pinned_originals_refuse_mutation_and_cross_identity_reuse(self):
+        archived_names = {'nativecmpkit-file-picker': 'calf-file-picker', 'nativecmpkit-share': 'calf-share'}
+        self.assertEqual(set(carry.ORIGINALS), set(archived_names))
+        for module, archived_module in archived_names.items():
+            report, metadata, inputs = self.original_arguments(archived_module)
+            self.assertEqual(carry.ORIGINALS[module]['report'], supplements.digest(report))
+            self.assertEqual(carry.ORIGINALS[module]['metadata'], supplements.digest(metadata))
             never = mock.Mock(side_effect=AssertionError('Changed original must refuse before notice reads'))
             for changed_report, changed_metadata in ((report + b' ', metadata), (report, metadata + b' '),
                     (encoded(gate.load_json_bytes(report) | {'complete_material_collection': True}), metadata)):
-                with self.subTest(module=module, boundary='independent pin'), self.assertRaises(gate.InvalidArtifact):
+                with self.subTest(module=module, boundary='independent pin'), \
+                        self.assertRaisesRegex(gate.InvalidArtifact, 'differs from independent fixed review'):
                     carry.validate_original(module, changed_report, changed_metadata, never, inputs)
+            with self.subTest(module=module, boundary='archived identity'), self.assertRaises(gate.InvalidArtifact):
+                carry.validate_original(module, report, metadata, never, inputs)
             self.assertEqual(0, never.call_count)
-            with self.subTest(module=module, boundary='complete text'), self.assertRaises(gate.InvalidArtifact):
-                carry.validate_original(module, report, metadata, lambda path: b'Synthetic corrupted original notice.\n', inputs)
 
     def test_known_gap_cannot_use_missing_foreign_or_inert_v2_material(self):
         value, _, package = synthetic_supplement()

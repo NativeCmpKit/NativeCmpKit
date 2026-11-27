@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import tarfile
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest import mock
 import zipfile
@@ -77,6 +78,20 @@ class VcsLicenseSupplementTest(unittest.TestCase):
 
     def tearDown(self):
         self.temp.cleanup()
+
+    def test_windows_path_and_handle_timestamps_use_the_same_identity_basis(self):
+        identity = dict(st_dev=1, st_ino=2, st_size=3, st_mtime_ns=4, st_birthtime_ns=5, st_nlink=1, st_mode=0o100644)
+        before = SimpleNamespace(**identity, st_ctime_ns=5)
+        opened = SimpleNamespace(**identity, st_ctime_ns=6)
+        self.assertNotEqual(supplements.file_fields(before), supplements.file_fields(opened))
+        self.assertEqual(supplements.file_fields(before, compare_birthtime=True),
+                         supplements.file_fields(opened, compare_birthtime=True))
+        for field in identity:
+            with self.subTest(field=field):
+                different = {**identity, field: identity[field] + 1}
+                self.assertNotEqual(supplements.file_fields(before, compare_birthtime=True),
+                                     supplements.file_fields(SimpleNamespace(**different, st_ctime_ns=6),
+                                                             compare_birthtime=True))
 
     def archive_bytes(self, extra=None, links=None):
         entries = self.crate_payloads | (extra or {})

@@ -43,6 +43,15 @@ def canonical_path(value) -> str:
     return value
 
 
+def reparse_point(value: os.stat_result) -> bool:
+    return bool(getattr(value, "st_file_attributes", 0) & stat.FILE_ATTRIBUTE_REPARSE_POINT)
+
+
+def file_fields(value: os.stat_result, *, compare_birthtime: bool = False) -> tuple[int, ...]:
+    timestamp = getattr(value, "st_birthtime_ns", value.st_ctime_ns) if compare_birthtime else value.st_ctime_ns
+    return value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns, timestamp, value.st_nlink, value.st_mode
+
+
 def regular_bytes(root: Path, relative: str, maximum: int = MAX_FILE_BYTES) -> bytes:
     """Hold bounded regular bytes and reject observed links/replacement/mutation.
 
@@ -61,12 +70,13 @@ def regular_bytes(root: Path, relative: str, maximum: int = MAX_FILE_BYTES) -> b
     try:
         for parent in parents:
             value = parent.lstat()
-            if not stat.S_ISDIR(value.st_mode):
+            if not stat.S_ISDIR(value.st_mode) or reparse_point(value):
                 raise InvalidArtifact("Supplement root/parent is not an unlinked directory")
             identities.append((parent, value.st_dev, value.st_ino))
         path = root / relative
         before = path.lstat()
-        if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or not 0 < before.st_size <= maximum:
+        if (not stat.S_ISREG(before.st_mode) or reparse_point(before) or before.st_nlink != 1 or
+                not 0 < before.st_size <= maximum):
             raise InvalidArtifact("Supplement input must be bounded, nonempty and an unshared regular file")
         descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
         try:
@@ -78,18 +88,23 @@ def regular_bytes(root: Path, relative: str, maximum: int = MAX_FILE_BYTES) -> b
             raise
         with stream:
             opened = os.fstat(stream.fileno())
-            fields = lambda value: (value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns,
-                                    value.st_ctime_ns, value.st_nlink, value.st_mode)
-            if fields(before) != fields(opened):
+            # Windows CPython 3.12 can report creation time from lstat and
+            # change time from fstat. Compare their common creation timestamp
+            # only across APIs. Each same-API comparison keeps its full tuple.
+            windows = os.name == "nt"
+            if (reparse_point(opened) or
+                    file_fields(before, compare_birthtime=windows) != file_fields(opened, compare_birthtime=windows)):
                 raise InvalidArtifact("Supplement input was replaced before opening")
             payload = stream.read(maximum + 1)
-            if len(payload) != before.st_size or fields(opened) != fields(os.fstat(stream.fileno())):
+            after_read = os.fstat(stream.fileno())
+            if len(payload) != before.st_size or reparse_point(after_read) or file_fields(opened) != file_fields(after_read):
                 raise InvalidArtifact("Supplement input changed or exceeded its bound")
-        if fields(before) != fields(path.lstat()):
+        after = path.lstat()
+        if reparse_point(after) or file_fields(before) != file_fields(after):
             raise InvalidArtifact("Supplement input was replaced while reading")
         for parent, device, inode in identities:
             value = parent.lstat()
-            if not stat.S_ISDIR(value.st_mode) or (value.st_dev, value.st_ino) != (device, inode):
+            if not stat.S_ISDIR(value.st_mode) or reparse_point(value) or (value.st_dev, value.st_ino) != (device, inode):
                 raise InvalidArtifact("Supplement input directory changed while reading")
         return payload
     except OSError as error:
