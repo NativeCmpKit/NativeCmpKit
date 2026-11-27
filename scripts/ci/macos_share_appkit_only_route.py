@@ -84,7 +84,7 @@ def workflow_context():
 
 
 def plan(root: Path):
-    expected = source.validate_current_sources(root)
+    expected = source.validate_migrated_sources(root)
     return {"schema_version": 1, "suite": "desktop", "profile": PROFILE,
             "explicit_test_focus": ENTRY_FOCUS, "effective_test_focus": EFFECTIVE_FOCUS,
             "complete_suite_requested": False, "explicit_module_subset": [MODULE],
@@ -281,7 +281,7 @@ def _reports_state(root, *, read=None):
 def reference_parent(root: Path, context: dict, now_ns: int):
     """Passive same-job custody; never query/relaunch native objects/processes/JNI."""
     _context(context)
-    expected = source.validate_current_sources(root)
+    expected = source.validate_migrated_sources(root)
     observed = {}
     def read(relative, maximum=source.MAX_SOURCE):
         raw, identity = source.ordinary_bytes(root, relative, maximum)
@@ -457,7 +457,7 @@ def reference_parent(root: Path, context: dict, now_ns: int):
     lock = root / "build/ci-verification/.macos-share-appkit-lifecycle.lock"
     need(not lock.exists() and not lock.is_symlink(), "owning-AppKit-lock-release-absence-required")
     need(read(PARENT + "/receipt.json")[1] == parent_identity and
-         source.validate_current_sources(root) == expected, "AppKit-parent-or-owning-source-changed-during-reference")
+         source.validate_migrated_sources(root) == expected, "AppKit-parent-or-owning-source-changed-during-reference")
     return {"passed": True, "errors": [], "parent_receipt": PARENT + "/receipt.json",
             "parent_receipt_sha256": parent_identity["sha256"], "native_cases_reached": list(CASES),
             "native_cases_unexecuted": [], "same_job_source_runtime_PID_XML_cleanup_held": True,
@@ -516,7 +516,7 @@ def main_for_existing_profile(root: Path, args):
         print(json.dumps(plan(root), indent=2, sort_keys=True))
         return 0
     need(args.output == OUTPUT, "exact-existing-AppKit-result-reference-output-required")
-    source.validate_current_sources(root)
+    source.validate_migrated_sources(root)
     context = workflow_context()
     receipt = {"schema_version": 1, "suite": "native-AppKit-reference-not-JVM", "profile": PROFILE,
                "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS,

@@ -324,12 +324,10 @@ def runtime_identity(root: Path, environment: dict[str, str]) -> dict:
 
 
 def source_contract(root: Path, sources: dict) -> dict:
-    key_wait.validate_current_sources(root)
-    for relative, expected in HARNESS_PINS.items():
-        payload = key_wait._ordinary_bytes(root, relative)[0]
-        require(sources.get(relative) == hashlib.sha256(payload).hexdigest() and
-                hashlib.sha256(key_wait.current_source_before_key_wait(relative, payload)).hexdigest() == expected,
-                "unqualified-native-harness-bytes")
+    from macos_share_appkit_only_source_projection import validate_migrated_sources
+    expected = validate_migrated_sources(root)
+    for relative in (MAIN, CASES_SOURCE):
+        require(sources.get(relative) == expected[relative], "unqualified-native-harness-bytes")
     manifest = tomllib.loads(ordinary_file(root, MANIFEST).read_text())
     require(manifest["package"]["name"] == "nativecmpkit-share-native" and manifest["package"]["version"] == "0.1.0"
             and manifest["package"]["publish"] is False and manifest.get("test") == [{
@@ -399,8 +397,9 @@ def admit_artifact(root: Path, target: Path, stdout: bytes, execution: dict) -> 
     identity = file_identity(path)
     require(execution["started_at_ns"] - FRESHNESS_SLOP_NS <= identity["mtime_ns"] <=
             execution["ended_at_ns"] + FRESHNESS_SLOP_NS, "native-artifact-not-fresh")
+    from macos_share_current_source_pins import APPKIT_INPUTS
     return path, {"relative_path": relative, "package": "nativecmpkit-share-native@0.1.0", "test_target": "appkit_lifecycle",
-                  "source_path": MAIN, "source_sha256": HARNESS_PINS[MAIN], "rust_target": TARGET,
+                  "source_path": MAIN, "source_sha256": APPKIT_INPUTS[MAIN], "rust_target": TARGET,
                   "macho_file_type": "MH_EXECUTE", "fresh_cargo_artifact": True,
                   "diagnostics": diagnostics, **identity}
 

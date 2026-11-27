@@ -16,7 +16,6 @@ import unittest
 from unittest.mock import patch
 
 import macos_share_appkit_lifecycle as runner
-import macos_share_key_wait_observation as key_wait
 
 
 def execution(*, passed=True, pid=4242, started=0, ended=None):
@@ -98,8 +97,8 @@ class SourceAndAdmission(unittest.TestCase):
         self.assertIn("result.is_ok() && cleanup.is_ok() && !CONTROL_FAILED.load(AtomicOrdering::Acquire)", source)
         self.assertIn("CONTROL_FAILED.store(true, AtomicOrdering::Release)", source)
         self.assertNotIn("raw-control-flag=", source)
-        self.assertEqual(runner.HARNESS_PINS[runner.CASES_SOURCE],
-            hashlib.sha256(key_wait.source_before_key_wait(runner.CASES_SOURCE, source.encode())).hexdigest())
+        self.assertEqual(hashlib.sha256(source.encode()).hexdigest(), value["source_sha256"])
+        self.assertEqual(runner.HARNESS_PINS[runner.CASES_SOURCE], value["original_harness_sha256"])
 
     def test_changed_harness_hash_is_refused_before_native(self):
         altered = {**runner.HARNESS_PINS, runner.CASES_SOURCE: "0" * 64}

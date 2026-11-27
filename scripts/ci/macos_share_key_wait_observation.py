@@ -50,8 +50,9 @@ def sha(payload):
 # This is file custody for the importing source, not trusted-builder attestation.
 # Review packets pin the module independently; including its hash in its own spec
 # would make the exact spec pin circular.
-OWNER_SHA256 = sha(appkit_only.peel_appkit_only_for_history(
-    OWNER_RELATIVE, _ordinary_bytes(ROOT, OWNER_RELATIVE)[0], ROOT))
+def _historical_owner_sha256():
+    return sha(appkit_only.peel_appkit_only_for_history(
+        OWNER_RELATIVE, _ordinary_bytes(ROOT, OWNER_RELATIVE)[0], ROOT))
 
 
 def _unique(pairs):
@@ -167,7 +168,7 @@ def validate_current_sources(root: Path):
     document = _document()
     expected = ({name: row["after_sha256"] for name, row in document["bindings"].items()} |
                 document["added_inputs"] | document["unchanged_inputs"] |
-                {SPEC_RELATIVE: SPEC_SHA256, OWNER_RELATIVE: OWNER_SHA256})
+                {SPEC_RELATIVE: SPEC_SHA256, OWNER_RELATIVE: _historical_owner_sha256()})
     for name, digest in expected.items():
         raw = _ordinary_bytes(root, name)[0]
         if sha(appkit_only.peel_appkit_only_for_history(name, raw, root)) != digest:
@@ -182,7 +183,8 @@ def fixture_inputs():
 
 
 def cases_after_sha256():
-    return _document()["bindings"][CASES_SOURCE]["after_sha256"]
+    from macos_share_current_source_pins import APPKIT_INPUTS
+    return APPKIT_INPUTS[CASES_SOURCE]
 
 
 def plan_description():

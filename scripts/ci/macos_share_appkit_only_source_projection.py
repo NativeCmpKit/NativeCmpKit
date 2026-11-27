@@ -271,6 +271,13 @@ def validate_current_sources(root=ROOT):
     return latest.current_input_hashes(root)
 
 
+def validate_migrated_sources(root=ROOT):
+    from macos_share_current_source_pins import APPKIT_INPUTS
+    for name, digest in APPKIT_INPUTS.items():
+        need(sha(ordinary_bytes(root, name)[0]) == digest, "reviewed-NativeCmpKit-AppKit-input-changed")
+    return dict(APPKIT_INPUTS)
+
+
 def fixture_inputs(root=ROOT):
     import macos_share_ci668_composition as latest
     return set(expected_inputs(root)) | {OWNER} | latest.fixture_inputs(root)
