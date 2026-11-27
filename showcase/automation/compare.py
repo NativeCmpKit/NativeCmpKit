@@ -32,24 +32,29 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path("screenshots"))
     parser.add_argument("--output", type=Path, default=Path("screenshots/compare"))
+    parser.add_argument("--android-device", default="api35-phone")
+    parser.add_argument("--ios-device", default="iphone-simulator")
+    parser.add_argument("--label", default="")
     args = parser.parse_args()
 
     android_root = args.root / "android"
     ios_root = args.root / "ios"
     pairs = []
-    for android in sorted(android_root.rglob("*.png")):
+    for android in sorted(android_root.rglob(f"{args.android_device}.png")):
         relative = android.parent.relative_to(android_root)
-        ios_dir = ios_root / relative
-        candidates = sorted(ios_dir.glob("*.png")) if ios_dir.is_dir() else []
-        if candidates:
-            pairs.append((android, candidates[0], relative))
+        ios = ios_root / relative / f"{args.ios_device}.png"
+        if ios.is_file():
+            pairs.append((android, ios, relative))
         else:
             print(f"missing iOS counterpart: {relative}")
 
     for android, ios, relative in pairs:
-        output = args.output / relative.with_suffix(".png")
-        compose(android, ios, output)
-        print(f"wrote {output}")
+        target = args.output / relative
+        if args.label:
+            target = target / args.label
+        target = target.with_suffix(".png")
+        compose(android, ios, target)
+        print(f"wrote {target}")
     print(f"{len(pairs)} comparison sheets")
 
 
