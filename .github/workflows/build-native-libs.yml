@@ -295,10 +295,30 @@ jobs:
           ./gradlew :nativecmpkit-webview:desktopTest \
             --tests io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Prepare the exact Robolectric artifact from the Google Cloud Maven Central mirror
+        if: inputs.profile == 'identity-linux-android' || inputs.profile == 'identity-linux-android-recovery'
+        shell: bash
+        run: |
+          relative=org/robolectric/nativeruntime-dist-compat/1.0.18
+          base=https://maven-central.storage-download.googleapis.com/maven2
+          destination="build/ci-identity/robolectric-repo/$relative"
+          mkdir -p "$destination"
+          fetch() {
+            local name="nativeruntime-dist-compat-1.0.18.$1"
+            local path="$destination/$name"
+            curl --proto '=https' --tlsv1.2 --fail --silent --show-error --connect-timeout 15 --max-time 180 \
+              "$base/$relative/$name" --output "$path.part"
+            printf '%s  %s\n' "$2" "$path.part" | sha256sum -c -
+            mv -- "$path.part" "$path"
+          }
+          # Digests are the canonical Maven Central checksums for these two files.
+          fetch pom fca7dfc0e6a41dde9a3e835218c98628c0a8d4909679eda790ac684354fdfd70
+          fetch jar a6c34d92c990754e5aee076032a36f8e38fcacb5eb878ebe0a324509f3864eef
       - name: Android host tests and sample APK
         if: inputs.profile == 'identity-linux-android'
         run: |
           ./gradlew testAndroidHostTest :sample:android:assembleDebug --continue --max-workers=1 \
+            --init-script scripts/ci/robolectric-mirror.init.gradle.kts \
             --no-parallel --no-configuration-cache --no-build-cache
       - name: Recheck Android host tests blocked during dependency resolution
         if: inputs.profile == 'identity-linux-android-recovery'
@@ -308,6 +328,7 @@ jobs:
             :nativecmpkit-io:testAndroidHostTest :nativecmpkit-share:testAndroidHostTest \
             :nativecmpkit-ui:testAndroidHostTest :nativecmpkit-webview:testAndroidHostTest \
             :nativecmpkit-permissions:nativecmpkit-permissions-core:testAndroidHostTest :sample:common:testAndroidHostTest \
+            --init-script scripts/ci/robolectric-mirror.init.gradle.kts \
             --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Linux browser tests and sample compilation
         if: inputs.profile == 'identity-linux-browser'

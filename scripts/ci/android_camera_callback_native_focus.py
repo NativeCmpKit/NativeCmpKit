@@ -220,7 +220,7 @@ def _own_guard(root, document):
     return sha(raw_current)  # Qualified exact671 executable above the unchanged isolated callback singleton.
 
 
-def current_contract_hashes(root: Path = ROOT):
+def historical_contract_hashes(root: Path = ROOT):
     document = _document()
     from tooling_recovery671_source_projection import current_input_hashes as tooling_input_hashes
     return ({name: row["after_sha256"] for name, row in document["bindings"].items()} |
@@ -262,9 +262,17 @@ def _contract(inputs):
             "source_policy_verified": True, "compiler_or_native_success_inferred": False}
 
 
+def current_contract_hashes():
+    from android_renamed_native_pins import CAMERA_CALLBACK
+    return dict(CAMERA_CALLBACK)
+
+
 def source_contract(root: Path):
-    validate_current_sources(root)
-    return _contract(current_contract_hashes(root))
+    expected = current_contract_hashes()
+    actual = {name: sha(_ordinary_bytes(root, name)) for name in expected}
+    if actual != expected:
+        raise ValueError("The reviewed NativeCmpKit camera callback inputs changed")
+    return _contract(actual)
 
 
 def validate_source_contract(contract):

@@ -35,7 +35,7 @@ FOCUSES = {"android-io-controlled-remote": METHODS,
            "android-io-controlled-remote-cancel": METHODS[1:]}
 ANDROID = "{http://schemas.android.com/apk/res/android}"
 REPORTER_MANIFEST = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
-OLD_REPORTER_SHA256 = "397d45d9201637e6a696b3c4148376bb02fe5c4bb1070c541616bdcdaefeeb19"
+OLD_REPORTER_SHA256 = "af2b173e0961e85e302a3e81bad4dd7464000bbfbe0353bb8a2cc0e049da8a96"
 # Exactly four reversible additions; neither the old reporter nor the accepted helper is generically repinned.
 REPORTER_FRAGMENTS = (
     b'    <uses-permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.CONTROL_REMOTE_IO" />\n',
@@ -45,10 +45,10 @@ REPORTER_FRAGMENTS = (
     b'            android:theme="@android:style/Theme.Material.Light.NoActionBar" />\n',
 )
 REUSED_PINS = {
-    KOTLIN + "NamedSystemDocumentsUi.kt": "e0251e1f3cc8bb4c93791b978d84de5bc4eb18469873c4879c190dbdd93956a0",
-    KOTLIN + "DeviceDescriptorProbe.kt": "941c43e90bd8d32f113b3dc0b863b4885459a4f17716825eb26ffbf8b320a78a",
-    KOTLIN + "AndroidIoSystemTreeGrantActivity.kt": "760634c61aa94ffb04b16f94fc20ceb67f4c58aa06477ee6dde14c3dda24fdde",
-    KOTLIN + "OwnedIoEndpoint.kt": "c2180ba34f3c825e9060ddc68272b41c9d847f13cd91de7f7e2be54b496216a6",
+    KOTLIN + "NamedSystemDocumentsUi.kt": "cef0838a5a1841fd460ed05a7af6b87104cbe3a70bc5e19138088d94fa51a30c",
+    KOTLIN + "DeviceDescriptorProbe.kt": "b10b34dd13bde96b97f871e7e38b9a4cba3a1b039225ba8e6dbe2f0d93b907ff",
+    KOTLIN + "AndroidIoSystemTreeGrantActivity.kt": "5a8cb1a8257a2bf4e6e397f40699002f0e59bae0cae3dfd36f37233f595e6fbc",
+    KOTLIN + "OwnedIoEndpoint.kt": "99dc71b51ac5cd4de3f4ffd9dc0f03dc60da028a51532fad02be7fdc7ba8612b",
 }
 SOURCE_FILES = tuple(sorted((REPORTER_MANIFEST, "nativecmpkit-io/build.gradle.kts", "gradle/libs.versions.toml",
     FIXTURE + "/build.gradle.kts", FIXTURE + "/settings.gradle.kts", FIXTURE + "/gradle.properties",
@@ -431,13 +431,15 @@ def validate_source_receipt(receipt: dict) -> None:
 
 
 def source_contract(root: Path) -> dict:
-    import android_io_remote_routing_source_projection as remote_routing
-    remote_routing.validate_current_sources(root)
+    from android_renamed_native_pins import REMOTE_IO
+    from ios_popover_anchor_plan import _ordinary_bytes
     texts, inputs = {}, {}
     for relative in SOURCE_FILES:
-        path = lt.safe_path(root, relative)
-        require(path.is_file() and 0 < path.stat().st_size <= 524288, "Bounded regular owned remote source required")
-        payload = path.read_bytes(); inputs[relative] = hashlib.sha256(payload).hexdigest(); texts[relative] = payload.decode("utf-8")
+        payload = _ordinary_bytes(root, relative)[0]
+        require(len(payload) <= 524288, "Bounded regular owned remote source required")
+        inputs[relative] = hashlib.sha256(payload).hexdigest()
+        texts[relative] = payload.decode("utf-8")
+    require(inputs == REMOTE_IO, "The reviewed NativeCmpKit remote IO inputs changed")
     normalize_reporter_manifest(texts[REPORTER_MANIFEST].encode("utf-8"))
     for relative, digest in REUSED_PINS.items():
         require(inputs[relative] == digest, "Accepted endpoint/UI/descriptor/system-caller source must remain byte-identical")
