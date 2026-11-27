@@ -181,7 +181,10 @@ def ensure_home(ui):
     if home_visible(ui):
         return
     for _ in range(3):
-        ui.action("keyboard.press", {"keys": ["BACK"]})
+        try:
+            ui.action("keyboard.press", {"keys": ["BACK"]})
+        except Exception:  # noqa: BLE001 - iOS rejects the Android BACK key
+            break
         if home_visible(ui):
             return
     ui.action("app.restart", {"id": ANDROID_APP_ID})
