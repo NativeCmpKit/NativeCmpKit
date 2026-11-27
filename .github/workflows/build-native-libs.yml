@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -203,6 +203,7 @@ jobs:
       GIT_CONFIG_VALUE_1: 'true'
       CARGO_BUILD_JOBS: '2'
       IDENTITY_STAGING_VERSION: '0.1.0-preview.1'
+      ANDROID_WEBVIEW_FOCUS: ${{ inputs.profile == 'identity-linux-android-webview-restore' && 'webview-content-policy-android-restore' || 'webview-content-policy-android' }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         id: checkout
@@ -231,10 +232,10 @@ jobs:
           sudo apt-get "${ubuntu_apt[@]}" update
           sudo apt-get "${ubuntu_apt[@]}" install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
       - name: Admit the finite Android WebView device scope
-        if: inputs.profile == 'identity-linux-android-webview-device'
+        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore'
         run: |
           python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-webview \
-            --focus webview-content-policy-android --output build/ci-verification/identity-android-webview-device > /dev/null
+            --focus "$ANDROID_WEBVIEW_FOCUS" --output build/ci-verification/identity-android-webview-device > /dev/null
       - name: Set up pinned Rust
         id: rust
         shell: bash
@@ -249,7 +250,7 @@ jobs:
           test -x "$sdkmanager"
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
           packages=('cmdline-tools;23.0' 'platforms;android-37.0')
-          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
@@ -262,7 +263,7 @@ jobs:
           python3 scripts/development/validate_resolutions.py --check
           python3 scripts/development/generate_icon_catalogues.py --check
       - name: Verify NativeCmpKit WebView on an owned Android emulator
-        if: inputs.profile == 'identity-linux-android-webview-device'
+        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore'
         run: |
           platform_tools="${ANDROID_HOME:?}/platform-tools"
           test -x "$platform_tools/adb"
@@ -272,7 +273,7 @@ jobs:
           sudo setfacl -m "u:$(id -un):rw" /dev/kvm
           test -r /dev/kvm && test -w /dev/kvm
           python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-webview \
-            --focus webview-content-policy-android --output build/ci-verification/identity-android-webview-device
+            --focus "$ANDROID_WEBVIEW_FOCUS" --output build/ci-verification/identity-android-webview-device
       - name: Linux desktop tests with owned audio and FileChooser services
         if: inputs.profile == 'identity-linux'
         shell: bash
@@ -509,9 +510,13 @@ jobs:
           case "$IDENTITY_PROFILE" in
             identity-apple-webview|identity-apple-webview-restore)
               focus=ios-webview-content-policy
-              if [[ "$IDENTITY_PROFILE" == identity-apple-webview-restore ]]; then focus=ios-webview-content-policy-restore; fi
+              timeout=2700
+              if [[ "$IDENTITY_PROFILE" == identity-apple-webview-restore ]]; then
+                focus=ios-webview-content-policy-restore
+                timeout=3600
+              fi
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-webview \
-                --focus "$focus" --simulator "$device" --timeout 2700 \
+                --focus "$focus" --simulator "$device" --timeout "$timeout" \
                 --output build/ci-verification/wk-identity
               ;;
             identity-apple-ownership)
@@ -535,7 +540,7 @@ jobs:
         if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
       - name: Retain bounded Android WebView failure observations
-        if: ${{ !cancelled() && inputs.profile == 'identity-linux-android-webview-device' }}
+        if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore') }}
         run: python3 scripts/ci/summarize_identity_uikit.py --android-webview
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'

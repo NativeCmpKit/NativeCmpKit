@@ -106,7 +106,13 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
     def test_android_production_diff_is_only_exact_metadata_restore_inverse(self):
         text = (ROOT / ANDROID_SOURCE).read_text()
         self.assertEqual(1, text.count(ANDROID_POSTIMAGE))
-        reconstructed = text.replace(ANDROID_POSTIMAGE, ANDROID_PREIMAGE, 1).encode()
+        restore_order = ("        // Chromium reports the restored history title synchronously in restoreState.\n"
+                         "        // The clients can publish metadata once this WebView owns the state.\n"
+                         "        state.viewState?.let { view.restoreState(it) }\n"
+                         "        state.webView = view\n")
+        previous_order = "        state.webView = view\n        state.viewState?.let { view.restoreState(it) }\n"
+        self.assertEqual(1, text.count(restore_order))
+        reconstructed = text.replace(restore_order, previous_order, 1).replace(ANDROID_POSTIMAGE, ANDROID_PREIMAGE, 1).encode()
         self.assertEqual(ANDROID_PREIMAGE_SHA256, hashlib.sha256(reconstructed).hexdigest())
         for value in ('val pageTitleKey = "pagetitle"', 'val lastLoadedUrlKey = "lastloaded"', 'val stateBundle = "bundle"',
                       "view.saveState(saved)", "pageTitleKey to it.pageTitle", "lastLoadedUrlKey to it.lastLoadedUrl",

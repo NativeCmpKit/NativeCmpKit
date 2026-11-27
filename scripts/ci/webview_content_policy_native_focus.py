@@ -17,12 +17,14 @@ SPEC_RELATIVE = "scripts/ci/fixtures/webview-content-policy-routing-source-inver
 MODULE = "nativecmpkit-webview"
 DESKTOP_FOCUS = "webview-content-policy-linux"
 ANDROID_FOCUS = "webview-content-policy-android"
+ANDROID_RESTORE_FOCUS = "webview-content-policy-android-restore"
+ANDROID_FOCUSES = (ANDROID_FOCUS, ANDROID_RESTORE_FOCUS)
 JS_FOCUS = "webview-content-policy-js"
 WASM_FOCUS = "webview-content-policy-wasm"
 IOS_FOCUS = "ios-webview-content-policy"
 IOS_RESTORE_FOCUS = "ios-webview-content-policy-restore"
 IOS_FOCUSES = (IOS_FOCUS, IOS_RESTORE_FOCUS)
-FOCUSES = (DESKTOP_FOCUS, ANDROID_FOCUS, JS_FOCUS, WASM_FOCUS, *IOS_FOCUSES)
+FOCUSES = (DESKTOP_FOCUS, ANDROID_FOCUS, JS_FOCUS, WASM_FOCUS, *IOS_FOCUSES, ANDROID_RESTORE_FOCUS)
 CONTRACT_FIELD = "webview_content_policy_source_contract"
 ANDROID_FILTER_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidContentPolicyVerificationFilter"
 ANDROID_FILTER_SOURCE = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt"
@@ -117,7 +119,7 @@ SOURCE_SHA256 = {'nativecmpkit-webview/karma.config.d/nativecmpkit-content-polic
  'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt': '8b6d5b4f49d534391d5ba92cbd836bc26562caa034d040a4604884d79967de7b',
  'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
  'nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml': 'd41572dbbaf67ec740c28ed69a8c5fce4223329c4c96d726f1df9a08f95de71d',
- 'nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt': 'd61e7953ee6fd041141346870a0ad38af23c034803e5c7c8d597a08a3d79a2d9',
+ 'nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt': '2a33704f075e1cbef2b8a2fe538d945b8e52aa7a3536cfdf0329781aaf688c5f',
  'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopContentPolicyWindow.kt': 'f12040dc853bbbee03b0e1ef7c589329482e97affd675cd6afa4f261cf9c4716',
  'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '0efd10133e800ba6724ed89f66f2a1c54e20e4195fec896caedbc7e3aeac2450',
  'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
@@ -137,6 +139,9 @@ def spec(focus: str) -> dict:
     if focus == IOS_RESTORE_FOCUS:
         owner = SPECS[IOS_FOCUS]
         return {**owner, "focus": focus, "methods": owner["methods"][:1]}
+    if focus == ANDROID_RESTORE_FOCUS:
+        owner = SPECS[ANDROID_FOCUS]
+        return {**owner, "focus": focus, "methods": owner["methods"][:2]}
     return SPECS[focus]
 
 
@@ -168,6 +173,8 @@ def selector(focus: str) -> str:
     row = spec(focus)
     if focus == ANDROID_FOCUS:
         return ANDROID_FILTER_CLASS
+    if focus == ANDROID_RESTORE_FOCUS:
+        return ",".join(row["classname"] + "#" + method for method in row["methods"])
     if focus in IOS_FOCUSES:
         return ",".join(row["classname"] + "." + method for method in row["methods"])
     return row["classname"]
@@ -176,7 +183,7 @@ def selector(focus: str) -> str:
 def sources(focus: str) -> tuple[str, ...]:
     row = spec(focus)
     selected = {row["source"], *row["helpers"]}
-    if focus == ANDROID_FOCUS:
+    if focus in ANDROID_FOCUSES:
         selected.update((*ANDROID_NETWORK_SOURCES, ANDROID_SAVER_SOURCE, ANDROID_FILTER_SOURCE))
     if focus in IOS_FOCUSES:
         selected.add(IOS_HOST_CONTROL)
@@ -191,12 +198,13 @@ def validate_sources(root, focus: str) -> bool:
             raise ValueError("Exact content-policy native/helper/source image changed: " + name)
     source = payload[row["source"]].decode("utf-8")
     package, classname = row["classname"].rsplit(".", 1)
-    declarations = SPECS[IOS_FOCUS]["methods"] if focus == IOS_RESTORE_FOCUS else row["methods"]
+    owner = {IOS_RESTORE_FOCUS: IOS_FOCUS, ANDROID_RESTORE_FOCUS: ANDROID_FOCUS}.get(focus, focus)
+    declarations = SPECS[owner]["methods"]
     if (_METHOD.findall(source) != list(declarations) or _DISABLED.search(source) or
             not re.search(r"(?m)^package\s+" + re.escape(package) + r"\s*$", source) or
             not re.search(r"\bclass\s+" + re.escape(classname) + r"\s*\{", source)):
         raise ValueError("Exact enabled content-policy native declarations are required")
-    if focus == ANDROID_FOCUS:
+    if focus in ANDROID_FOCUSES:
         helper = payload[ANDROID_FILTER_SOURCE].decode("utf-8")
         if (_METHOD.search(helper) or _DISABLED.search(helper) or
                 "class AndroidContentPolicyVerificationFilter : Filter()" not in helper):
@@ -229,8 +237,8 @@ def configure_item(root, item: dict, focus: str) -> None:
     item[CONTRACT_FIELD] = contract
     # Normal Kotlin source-set inheritance is retained, not narrowed or rewritten.
     item["test_source_files"] = sorted(set(item["test_source_files"]) | set(contract["source_hashes"]))
-    if focus == ANDROID_FOCUS:
-        item.update(test_filter_argument="filter", verification_api_level=35,
+    if focus in ANDROID_FOCUSES:
+        item.update(test_filter_argument="filter" if focus == ANDROID_FOCUS else "class", verification_api_level=35,
                     native_fixture_paths=[*ANDROID_NETWORK_SOURCES, row["helpers"][0],
                                           ANDROID_AFFECTED_SOURCE, ANDROID_FILTER_SOURCE])
     elif focus in (JS_FOCUS, WASM_FOCUS):
@@ -255,8 +263,8 @@ def validate_plan(test_plan: dict) -> bool:
                 ("new_methods", "affected_existing_methods", "compiler_executions_attested", "native_executions_attested")) or
             not set(wanted["source_hashes"]) <= set(item.get("test_source_files", []))):
         raise ValueError("Content policy requires exact task, class, methods, sources and original XML identity")
-    if focus == ANDROID_FOCUS:
-        if (item.get("test_filter_argument") != "filter" or item.get("test_exclusion_annotation") is not None or
+    if focus in ANDROID_FOCUSES:
+        if (item.get("test_filter_argument") != ("filter" if focus == ANDROID_FOCUS else "class") or item.get("test_exclusion_annotation") is not None or
                 type(item.get("verification_api_level")) is not int or item["verification_api_level"] != 35 or
                 item.get("agp_declared_xml_directory") != "nativecmpkit-webview/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 item.get("utp_results_directory") != row["report_directory"] or

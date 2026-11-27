@@ -55,7 +55,8 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
 
     def test_five_literal_profiles_match_unchanged_author_classes_fourteen_methods_and_seventeen_new_targets(self):
         proposal = json.loads((ROOT / "docs/testing/nativecmpkit-webview-content-policy-focuses.json").read_text())
-        authored = [focus for focus in policy.FOCUSES if focus != policy.IOS_RESTORE_FOCUS]
+        recovery = (policy.IOS_RESTORE_FOCUS, policy.ANDROID_RESTORE_FOCUS)
+        authored = [focus for focus in policy.FOCUSES if focus not in recovery]
         self.assertEqual(authored, [row["focus"] for row in proposal["profiles"]])
         self.assertEqual((4, 14, 17), (proposal["authored_classes"], proposal["authored_methods"], proposal["target_executions"]))
         for original in proposal["profiles"]:
@@ -66,10 +67,11 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
             self.assertEqual(original["helpers"], list(current["helpers"]))
         self.assertEqual(18, sum(len(policy.identities(focus)) for focus in authored))
         self.assertEqual(policy.identities(policy.IOS_FOCUS)[:1], policy.identities(policy.IOS_RESTORE_FOCUS))
+        self.assertEqual(policy.identities(policy.ANDROID_FOCUS)[:2], policy.identities(policy.ANDROID_RESTORE_FOCUS))
 
     def test_each_matrix_profile_has_only_its_single_existing_host_module_and_identical_focus(self):
         for focus in policy.FOCUSES:
-            if focus == policy.IOS_RESTORE_FOCUS:
+            if focus in (policy.IOS_RESTORE_FOCUS, policy.ANDROID_RESTORE_FOCUS):
                 continue  # Recovery is registered by the identity workflow.
             row = policy.spec(focus)
             selected = matrix.matrix(focus)["include"]
@@ -81,15 +83,17 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/gradle.yml").read_text()
         options = re.search(r"options: \[([^\n]+)\]", workflow).group(1).split(", ")
         for focus in policy.FOCUSES:
-            if focus != policy.IOS_RESTORE_FOCUS:
+            if focus not in (policy.IOS_RESTORE_FOCUS, policy.ANDROID_RESTORE_FOCUS):
                 self.assertEqual(1, options.count(focus))
         native_workflow = (ROOT / ".github/workflows/build-native-libs.yml").read_text()
         self.assertIn("identity-apple-webview-restore", native_workflow)
         self.assertIn(policy.IOS_RESTORE_FOCUS, native_workflow)
+        self.assertIn("identity-linux-android-webview-restore", native_workflow)
+        self.assertIn(policy.ANDROID_RESTORE_FOCUS, native_workflow)
         self.assertFalse(any("content-policy" in slot for slot in matrix.PROFILES["all"]))
 
     def test_plans_select_new_three_five_three_three_four_with_exact_task_report_and_current_source_contracts(self):
-        for focus, count in zip(policy.FOCUSES, (3, 5, 3, 3, 4, 1), strict=True):
+        for focus, count in zip(policy.FOCUSES, (3, 5, 3, 3, 4, 1, 2), strict=True):
             plan = native_plan(self.root, focus); item = plan["expected"][0]; row = policy.spec(focus)
             self.assertTrue(r.validate_test_focus(plan)); self.assertFalse(plan["complete_suite_requested"])
             self.assertEqual((row["task"], row["report_directory"], count, 1),
@@ -192,23 +196,26 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
 
     def test_android_controller_requires_api35_and_only_the_finite_webview_module(self):
         import android_device_tests as controller
-        controller.validate_api_selection(35, (policy.MODULE,), policy.ANDROID_FOCUS)
-        for api, modules in ((23, (policy.MODULE,)), (34, (policy.MODULE,)), (36, (policy.MODULE,)), (True, (policy.MODULE,)), (35, None), (35, ("nativecmpkit-ui",))):
-            with self.assertRaises(ValueError): controller.validate_api_selection(api, modules, policy.ANDROID_FOCUS)
+        for focus in policy.ANDROID_FOCUSES:
+            controller.validate_api_selection(35, (policy.MODULE,), focus)
+            for api, modules in ((23, (policy.MODULE,)), (34, (policy.MODULE,)), (36, (policy.MODULE,)), (True, (policy.MODULE,)), (35, None), (35, ("nativecmpkit-ui",))):
+                with self.assertRaises(ValueError): controller.validate_api_selection(api, modules, focus)
         source = (ROOT / "scripts/ci/android_device_tests.py").read_text()
-        self.assertIn('choices=[lt.content_policy.ANDROID_FOCUS,', source)
+        self.assertIn('choices=[*lt.content_policy.ANDROID_FOCUSES,', source)
 
     def test_each_new_command_revalidates_current_source_hashes_and_never_selects_another_target(self):
         for focus in policy.FOCUSES:
             row = policy.spec(focus); plan = native_plan(self.root, focus)
             kwargs = {"root": self.root}
             if focus in policy.IOS_FOCUSES: kwargs["simulator"] = "11111111-2222-3333-4444-555555555555"
-            if focus == policy.ANDROID_FOCUS: kwargs["android_serial"] = "emulator-5588"
+            if focus in policy.ANDROID_FOCUSES: kwargs["android_serial"] = "emulator-5588"
             command = r.gradle_command(row["suite"], plan, **kwargs)
             self.assertEqual(1, command.count(row["task"]))
             selected = [command[i + 1] for i, value in enumerate(command[:-1]) if value == "--tests"]
             self.assertEqual(policy.selector(focus).split(",") if focus in policy.IOS_FOCUSES else
-                             [] if focus == policy.ANDROID_FOCUS else [policy.selector(focus)], selected)
+                             [] if focus in policy.ANDROID_FOCUSES else [policy.selector(focus)], selected)
+            if focus == policy.ANDROID_RESTORE_FOCUS:
+                self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + policy.selector(focus), command)
             native = self.root / row["source"]; raw = native.read_bytes(); native.write_bytes(raw + b"\n")
             with self.assertRaises(ValueError): r.gradle_command(row["suite"], plan, **kwargs)
             native.write_bytes(raw)

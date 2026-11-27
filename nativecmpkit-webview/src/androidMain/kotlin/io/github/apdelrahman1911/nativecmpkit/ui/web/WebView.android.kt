@@ -232,8 +232,10 @@ internal fun createAndroidWebView(
     val view = create()
     try {
         configure(view)
-        state.webView = view
+        // Chromium reports the restored history title synchronously in restoreState.
+        // The clients can publish metadata once this WebView owns the state.
         state.viewState?.let { view.restoreState(it) }
+        state.webView = view
         onCreated(view)
         return view
     } catch (error: Throwable) {
