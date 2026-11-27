@@ -14,8 +14,6 @@ on:
     paths:
       - 'ci/showcase-mode'
       - 'ci/showcase-trigger'
-      - 'ci/showcase-android.sha256'
-      - 'ci/showcase-ios.sha256'
   workflow_dispatch:
     inputs:
       mode:
