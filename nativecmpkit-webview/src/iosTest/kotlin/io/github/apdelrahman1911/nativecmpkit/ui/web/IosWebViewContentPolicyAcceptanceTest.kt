@@ -20,13 +20,17 @@ class IosWebViewContentPolicyAcceptanceTest {
             restorePhase(row, "initial") {
                 withMounted(state, navigator) {
                     when (row) {
-                        "url", "redirect" -> { runOnIdle { state.content = WebContent.Url(fixture.url(row)) }; awaitDocument(state, fixture, if (row == "redirect") "final" else row, 1) }
+                        "url", "redirect" -> {
+                            runOnIdle { state.content = WebContent.Url(fixture.url(row)) }
+                            awaitDocument(state, fixture, if (row == "redirect") "final" else row, 1)
+                        }
                         "navigator" -> { runOnIdle { navigator.loadUrl(fixture.url(row)) }; awaitDocument(state, fixture, row, 1) }
                         "html" -> { runOnIdle { state.content = WebContent.Data(IosContentPolicyFixture.inline("restore-inline")) }; awaitInline(state, "restore-inline") }
                         "null" -> assertBlank(state, navigator)
                     }
                     saved = runOnIdle { save(state) }
                 }
+                if (row == "url") restoreProgress("initial-unmounted")
             }
             val restored = restorePhase(row, "saved") {
                 val restored = policyState(assertNotNull(WebStateSaver.restore(assertNotNull(saved))))
@@ -37,16 +41,19 @@ class IosWebViewContentPolicyAcceptanceTest {
             val restoredNavigator = WebViewNavigator(scope)
             restorePhase(row, "remount") {
                 withMounted(restored, restoredNavigator) {
+                    if (row == "url") restoreProgress("remount-mounted")
                     when (row) {
                         "url", "navigator", "redirect" -> {
                             val stage = if (row == "redirect") "final" else row
-                            awaitDocument(restored, fixture, stage, 2)
+                            awaitDocument(restored, fixture, stage, 2, traceRestore = row == "url")
                             runOnIdle {
+                                if (row == "url") restoreProgress("remount-history-check")
                                 val native = assertNotNull(restored.webView)
                                 assertEquals(fixture.url(stage), restored.lastLoadedUrl)
                                 assertTrue(native.backForwardList.backList.isEmpty()); assertTrue(native.backForwardList.forwardList.isEmpty())
                                 assertFalse(restoredNavigator.canGoBack); assertFalse(restoredNavigator.canGoForward)
                             }
+                            if (row == "url") restoreProgress("remount-history-checked")
                         }
                         else -> {
                             assertEquals(WebContent.NavigatorOnly, restored.content)
@@ -56,6 +63,7 @@ class IosWebViewContentPolicyAcceptanceTest {
                         }
                     }
                 }
+                if (row == "url") restoreProgress("remount-unmounted")
             }
         }
         restorePhase("wire", "counters") {
@@ -70,6 +78,8 @@ class IosWebViewContentPolicyAcceptanceTest {
     } catch (failure: Throwable) {
         throw IllegalStateException("NATIVECMPKIT_WK_RESTORE:$row:$phase", failure)
     }
+
+    private fun restoreProgress(step: String) = println("NATIVECMPKIT_WK_RESTORE_PROGRESS $step")
 
     @Test fun documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved() = withFixture("replay") { fixture, scope ->
         val first = policyState(WebContent.Url(fixture.url("get"), fixture.initialHeaders))
@@ -164,8 +174,16 @@ class IosWebViewContentPolicyAcceptanceTest {
         runApplicationUiTest { setContent { WebView(state, Modifier.fillMaxSize(), navigator = navigator) }; waitForIdle(); block() }
         onApplicationMain { assertNull(state.webView); assertNull(state.nativeObserver); assertNull(state.navigator) }
     }
-    private fun NativeApplicationUiTest.awaitDocument(state: WebViewState, fixture: IosContentPolicyFixture, stage: String, count: Int, origin: Int = 0) {
+    private fun NativeApplicationUiTest.awaitDocument(
+        state: WebViewState,
+        fixture: IosContentPolicyFixture,
+        stage: String,
+        count: Int,
+        origin: Int = 0,
+        traceRestore: Boolean = false,
+    ) {
         val observed = fixture.awaitStage(stage) { it.getValue("page") == count && it.getValue("pending") == 0 }
+        if (traceRestore) restoreProgress("remount-http-drained")
         val title = fixture.title(stage, observed)
         val url = fixture.url(stage, origin)
         waitForNative {
@@ -174,8 +192,10 @@ class IosWebViewContentPolicyAcceptanceTest {
                 state.pageTitle == title && state.lastLoadedUrl == url && state.loadingState == LoadingState.Finished &&
                 sameNativeObject(native.window, requireOwnedApplicationWindow())
         }
+        if (traceRestore) restoreProgress("remount-native-ready")
         assertEquals(JavascriptResult.Value(quoteJavascript(title)), evaluate(state, "document.title"))
         assertEquals(JavascriptResult.Value(quoteJavascript(IosContentPolicyFixture.unicode)), evaluate(state, "document.getElementById('policy-document').textContent"))
+        if (traceRestore) restoreProgress("remount-dom-checked")
         runOnIdle { assertTrue(state.errorsForCurrentRequest.isEmpty()) }
     }
     private fun NativeApplicationUiTest.awaitInline(state: WebViewState, title: String) {

@@ -134,6 +134,27 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(1, result["counts"]["passed"])
         self.assertEqual({"main_worker": 1, "owned_worker": 2}, result["activation"])
 
+    def test_wk_restore_progress_stays_bound_to_its_open_case_and_cannot_finish_it(self):
+        first, second = [a.WK_RESTORE_PREFIX + step for step in a.WK_RESTORE_STEPS[:2]]
+        unrelated = self.protocol(complete_lines()[:3])
+        with self.assertRaises(ValueError):
+            unrelated.feed(first)
+
+        suite, method = a.WK_RESTORE_CASE
+        protocol = self.protocol([ACTIVE, frame("testSuiteStarted", name=suite), frame("testStarted", name=method)])
+        with self.assertRaises(ValueError):
+            protocol.feed(second)
+        protocol.feed(first)
+        with self.assertRaises(ValueError):
+            protocol.feed(first)
+        protocol.feed(second)
+        partial = protocol.partial()
+        self.assertEqual(list(a.WK_RESTORE_STEPS[:2]), partial["wk_restore_progress"])
+        self.assertEqual(method, partial["unfinished_testcase"]["name"])
+        self.assertEqual(0, partial["counts"]["executed"])
+        with self.assertRaises(ValueError):
+            protocol.finish(0)
+
     def test_exact_failed_startup_predicates_are_retained_without_becoming_transport(self):
         protocol = a.NativeProtocol()
         with self.assertRaises(ValueError): protocol.feed(STARTUP_TIMEOUT)

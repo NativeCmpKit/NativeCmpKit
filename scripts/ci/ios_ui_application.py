@@ -71,6 +71,8 @@ def application_timeout_seconds(focus: str | None) -> int:
         return lt.ui_related.timeout_accounting(focus)["transport_timeout_seconds"]
     if focus in {lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES}:
         return 360
+    if focus == lt.content_policy.IOS_RESTORE_FOCUS:
+        return 600
     return (SLIDER_TIMEOUT_SECONDS if focus in (
         lt.IOS_SLIDER_LIFECYCLE_FOCUS, lt.IOS_SLIDER_REMAINING_FOCUS, lt.IOS_SLIDER_STRUCTURE_FOCUS,
         lt.IOS_VECTOR_THEME_FOCUS,
@@ -90,6 +92,15 @@ SLIDER_STRUCTURAL_STEPS = (
         "stale-released", "cancellation-verified", "fresh-reset", "fresh-input-verified"))
 )
 SYSTEM_APPEARANCE_CASE = (lt.IOS_VECTOR_THEME_CLASS, lt.IOS_VECTOR_THEME_METHODS[-1])
+WK_RESTORE_CASE = (
+    lt.content_policy.spec(lt.content_policy.IOS_RESTORE_FOCUS)["classname"],
+    lt.content_policy.spec(lt.content_policy.IOS_RESTORE_FOCUS)["methods"][0],
+)
+WK_RESTORE_PREFIX = "NATIVECMPKIT_WK_RESTORE_PROGRESS "
+WK_RESTORE_STEPS = (
+    "initial-unmounted", "remount-mounted", "remount-http-drained", "remount-native-ready",
+    "remount-dom-checked", "remount-history-check", "remount-history-checked", "remount-unmounted",
+)
 SLIDER_TAP_CASES = {
     "Liquid": (lt.IOS_SLIDER_LIFECYCLE_CLASS, lt.IOS_SLIDER_LIFECYCLE_METHODS[4]),
     "Cupertino": (lt.IOS_SLIDER_LIFECYCLE_CLASS, lt.IOS_SLIDER_LIFECYCLE_METHODS[5]),
@@ -289,6 +300,7 @@ class NativeProtocol:
         self.stream_bytes = 0
         self.startup_failure_observation = None
         self.lifecycle_failure_observation = None
+        self.wk_restore_progress = []
         self.worker_lifecycle_observations = []
         self.picker_admission_observations = []
         self.picker_host_observations = []
@@ -309,6 +321,14 @@ class NativeProtocol:
             raise ValueError("Native transport already failed at startup")
         if self.lifecycle_failure_observation is not None:
             raise ValueError("Native transport already failed its owned lifecycle")
+        if line.startswith(WK_RESTORE_PREFIX):
+            step = line.removeprefix(WK_RESTORE_PREFIX)
+            index = len(self.wk_restore_progress)
+            if (self.open_case != WK_RESTORE_CASE or index >= len(WK_RESTORE_STEPS) or
+                    step != WK_RESTORE_STEPS[index]):
+                raise ValueError("Unexpected WKWebView restoration progress frame")
+            self.wk_restore_progress.append(step)
+            return
         if self.expected_bundle is not None and line.startswith(self.expected_bundle + ":"):
             launch = re.fullmatch(re.escape(self.expected_bundle) + r": ([1-9][0-9]{0,9})", line)
             if launch is None or int(launch[1]) > 2**31 - 1 or self.observed_launch_pid is not None:
@@ -716,6 +736,7 @@ class NativeProtocol:
                 "open_suites": list(self.stack), "stream_bytes": self.stream_bytes,
                 "observed_launch_pid": self.observed_launch_pid,
                 "image_lifetime_observation": self.image_lifetime_observation,
+                **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
                 **({"worker_lifecycle_observations": self.worker_lifecycle_observations}
                    if self.worker_lifecycle_observations else {}),
                 **({"image_profile_observations": self.image_profile_observations}

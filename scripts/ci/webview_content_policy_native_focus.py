@@ -125,7 +125,7 @@ SOURCE_SHA256 = {'nativecmpkit-webview/karma.config.d/nativecmpkit-content-polic
  'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '0efd10133e800ba6724ed89f66f2a1c54e20e4195fec896caedbc7e3aeac2450',
  'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
  'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt': 'dd372e8d89e672a31aa14c8fe714894b111d149626c16918467ede1280f2a703',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '94d41e5b77d32cadff53dd812a687833d5cc871346d39a7931268557782cabbe',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '49d63595ef48f42f1f6e979a819dde108f188075ccfe1cb0563d85a761cab4bb',
  'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt': 'cc9b988cc03586fa535bfa8f3be66e0581252611fdfb6db12fa2606b48d09ee6',
  'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt': '4177b7ed6f2d0040ffe72545eea6f7a02ff002bc22cbba46026d937bceb06d50',
  'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt': '24bdf9d5b96aaf13597e08f25be408d60b76311d3c30ad1726129e3205adc8c1',

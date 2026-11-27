@@ -9,6 +9,7 @@ import re
 from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
+from ios_ui_application import WK_RESTORE_STEPS
 
 
 MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share")
@@ -54,6 +55,8 @@ def receipt_rows():
                     "finished_case_counts": dict(Counter(case["status"] for case in protocol.get("testcases", [])
                                                         if case.get("status") in {"passed", "failed", "error", "skipped"})),
                     "unfinished_testcase": labels(protocol.get("unfinished_testcase") or {}, ("name",)),
+                    "wk_restore_progress": [step for step in protocol.get("wk_restore_progress", [])[:len(WK_RESTORE_STEPS)]
+                                            if step in WK_RESTORE_STEPS],
                     "crash": labels(crash, ("status", "error_type")) | labels(crash.get("exception") or {}, ("type", "signal")),
                     "fixture": {
                         **{key: fixture[key] for key in ("connections", "control_requests", "refusals", "owned_sockets", "fixture_error")
