@@ -117,7 +117,7 @@ IOS_APPLICATION_CASES = (
     ("internal.NativeUiApplicationHostTest", "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects"),
     ("utils.UIImageConversionTest", "returnedImageOwnsItsPixelsAfterTemporaryArraysAndContextsAreCollected"),
     ("dialog.RememberNativeAlertPropertiesTest", "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller"),
-    ("navigation.NativeBarOwnershipTest", "emptyTabsClearSelectionAndRepopulationClampsIndex"),
+    ("navigation.NativeBarOwnershipTest", "emptyTabsAndOutOfRangeIndicesClearSelection"),
     ("navigation.NativeBarOwnershipTest", "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags"),
 )
 NATIVE_SHARE_BOUNDARY_FOCUS = "native-share-boundaries"
@@ -518,7 +518,37 @@ UI_DATE_REPLACEMENT_METHODS = (
 )
 UI_DATE_IMPORTANT_FOCUS = "ui-native-important-dates"
 UI_DATE_COMPACT_FOCUS = "ui-native-compact-replacement"
+IOS_MAIN_IDENTITY_FOCUS = "identity-ios-main-ui"
+IOS_MAIN_BAR_METHODS = (
+    "emptyTabsAndOutOfRangeIndicesClearSelection",
+    "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags",
+    "mainNavigationBarCarriesCustomTintAndImageOnlyVoiceOverLabel",
+)
+IOS_MAIN_ALERT_METHOD = "emptyTextIsOmittedOnPresentationAndOnVisibleUpdates"
 UI_APPLICATION_FOCUS_SPECS = {
+    IOS_MAIN_IDENTITY_FOCUS: {
+        "groups": (
+            {
+                "classname": "io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
+                "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/navigation/NativeBarOwnershipTest.kt",
+                "methods": IOS_MAIN_BAR_METHODS,
+                "declared_methods": (*IOS_MAIN_BAR_METHODS, "barLivesInsideItsHostAndContinuesMeasuringAfterLayoutChanges"),
+            },
+            {
+                "classname": "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativeAlertLifecycleTest",
+                "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeAlertLifecycleTest.kt",
+                "methods": (IOS_MAIN_ALERT_METHOD,),
+                "declared_methods": (
+                    IOS_MAIN_ALERT_METHOD,
+                    "presentedAlertUsesLatestActionAndTextFieldCallbacks",
+                    "disposalDuringPresentationQueuesCleanupAndReplacement",
+                    "outsideDismissRequestsAndDisposalRemainExactlyOnce",
+                    "actionSheetHasAPresentingViewPopoverAnchor",
+                ),
+            },
+        ),
+        "scope": "Four UIKit tests for preserved main-branch alert text, bar tint and label, and tab selection and ownership during the namespace migration.",
+    },
     UI_DATE_BOUNDS_FOCUS: {
         "classname": UI_DATE_BOUNDS_CLASS, "source": UI_DATE_BOUNDS_SOURCE, "methods": UI_DATE_BOUNDS_METHODS,
         "scope": "Six exact attached UIKit bounds/month/Saver/Compose methods only; no unrelated native UI replay or device/release certification",

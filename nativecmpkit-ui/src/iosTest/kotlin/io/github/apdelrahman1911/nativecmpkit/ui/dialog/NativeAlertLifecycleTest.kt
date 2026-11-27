@@ -12,6 +12,36 @@ import platform.UIKit.*
 import kotlin.test.*
 
 class NativeAlertLifecycleTest {
+    @Test fun emptyTextIsOmittedOnPresentationAndOnVisibleUpdates() = runApplicationUiTest {
+        lateinit var parent: UIViewController
+        setContent { parent = LocalUIViewController.current }
+        val empty = AlertDialogIosProperties(animated = false)
+        lateinit var manager: AlertDialogManager
+        runOnIdle {
+            manager = AlertDialogManager(parent, {}, empty, DialogProperties())
+            manager.showAlertDialog()
+        }
+        try {
+            waitForNative { parent.presentedViewController is UIAlertController }
+            runOnIdle {
+                val alert = parent.presentedViewController as UIAlertController
+                assertNull(alert.title)
+                assertNull(alert.message)
+                manager.iosProperties = empty.copy(title = "Title", text = "Message")
+                manager.updateDialogProperties()
+                assertEquals("Title", alert.title)
+                assertEquals("Message", alert.message)
+                manager.iosProperties = empty
+                manager.updateDialogProperties()
+                assertNull(alert.title)
+                assertNull(alert.message)
+            }
+        } finally {
+            runOnIdle { manager.dispose() }
+        }
+        waitForNative { parent.presentedViewController == null }
+    }
+
     @Test fun presentedAlertUsesLatestActionAndTextFieldCallbacks() = runApplicationUiTest {
         lateinit var parent: UIViewController
         setContent { parent = LocalUIViewController.current }

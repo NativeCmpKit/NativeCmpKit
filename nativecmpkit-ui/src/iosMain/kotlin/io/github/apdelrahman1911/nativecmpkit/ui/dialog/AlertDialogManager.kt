@@ -130,7 +130,7 @@ class AlertDialogManager internal constructor(
         val structure = iosProperties.structure()
         controllerStructure = structure
         actionChosen = false
-        return UIAlertController.alertControllerWithTitle(iosProperties.title, iosProperties.text,
+        return UIAlertController.alertControllerWithTitle(iosProperties.title.ifEmpty { null }, iosProperties.text.ifEmpty { null },
             iosProperties.style.toUIAlertControllerStyle()).apply {
             iosProperties.actions.forEachIndexed { index, descriptor ->
                 addAction(UIAlertAction.actionWithTitle(descriptor.title, descriptor.style.toUIAlertActionStyle()) {
@@ -197,8 +197,8 @@ class AlertDialogManager internal constructor(
             pump()
             return
         }
-        viewController.title = iosProperties.title
-        viewController.message = iosProperties.text
+        viewController.title = iosProperties.title.ifEmpty { null }
+        viewController.message = iosProperties.text.ifEmpty { null }
         viewController.applyLayoutDirection(layoutDirection)
         viewController.modalInPresentation = !properties.dismissOnClickOutside
         viewController.setPreferredAction(null)

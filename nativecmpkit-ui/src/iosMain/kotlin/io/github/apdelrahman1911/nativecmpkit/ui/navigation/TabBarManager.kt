@@ -63,12 +63,10 @@ internal class TabBarManager(
             currentItems = items
             currentDensity = density
             currentLayoutDirection = layoutDirection
-            val safeSelectedIndex = selectedIndex.coerceIn(uiKitItems.indices)
-            tabBar.selectedItem = uiKitItems[safeSelectedIndex]
+            tabBar.selectedItem = uiKitItems.getOrNull(selectedIndex)
         } else {
             val uiKitItems = tabBar.items?.filterIsInstance<UITabBarItem>() ?: return
-            val safeSelectedIndex = selectedIndex.coerceIn(uiKitItems.indices)
-            tabBar.selectedItem = uiKitItems[safeSelectedIndex]
+            tabBar.selectedItem = uiKitItems.getOrNull(selectedIndex)
         }
     }
 

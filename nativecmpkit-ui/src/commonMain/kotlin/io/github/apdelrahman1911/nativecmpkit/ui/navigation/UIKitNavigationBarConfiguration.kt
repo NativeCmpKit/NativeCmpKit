@@ -13,10 +13,12 @@ import androidx.compose.ui.graphics.Color
  * @param isTranslucent Whether the navigation bar is translucent.
  * @param titleColor The color of the navigation bar title text. When [Color.Unspecified],
  *   the default iOS title color is used.
+ * @param tintColor The tint of the bar button items. When [Color.Unspecified], the bar keeps its current tint.
  */
 @Immutable
 data class UIKitNavigationBarConfiguration(
     val prefersLargeTitles: Boolean = false,
     val isTranslucent: Boolean = true,
     val titleColor: Color = Color.Unspecified,
+    val tintColor: Color = Color.Unspecified,
 )

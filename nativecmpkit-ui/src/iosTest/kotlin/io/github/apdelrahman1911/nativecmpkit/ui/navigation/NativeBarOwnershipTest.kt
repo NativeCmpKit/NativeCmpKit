@@ -2,19 +2,26 @@
 
 package io.github.apdelrahman1911.nativecmpkit.ui.navigation
 
+import androidx.compose.ui.graphics.Color
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.runNativeUiTest
+import io.github.apdelrahman1911.nativecmpkit.ui.uikit.UIKitImage
+import io.github.apdelrahman1911.nativecmpkit.ui.utils.toUIColor
 import platform.CoreGraphics.CGRectMake
 import platform.UIKit.*
 import kotlin.test.*
 
 class NativeBarOwnershipTest {
-    @Test fun emptyTabsClearSelectionAndRepopulationClampsIndex() = runNativeUiTest {
+    @Test fun emptyTabsAndOutOfRangeIndicesClearSelection() = runNativeUiTest {
         val bar = UITabBar()
         val selections = mutableListOf<Int>()
         val manager = TabBarManager(bar) { selections += it }
         val items = listOf(UIKitUITabBarItem("One"), UIKitUITabBarItem("Two"))
         manager.setItems(items, 99, 1f)
+        assertNull(bar.selectedItem)
+        manager.setItems(items, 1, 1f)
         assertEquals(1L, bar.selectedItem?.tag)
+        manager.setItems(items, -1, 1f)
+        assertNull(bar.selectedItem)
         val originalItems = bar.items.orEmpty().filterIsInstance<UITabBarItem>()
         assertEquals(listOf("One", "Two"), originalItems.map { it.title })
         val delegate = assertIs<UITabBarDelegate>(bar.delegate)
@@ -28,7 +35,7 @@ class NativeBarOwnershipTest {
         assertNull(bar.selectedItem)
         assertEquals(listOf(0), selections)
         manager.setItems(items, -1, 1f)
-        assertEquals(0L, bar.selectedItem?.tag)
+        assertNull(bar.selectedItem)
         val repopulated = bar.items.orEmpty().filterIsInstance<UITabBarItem>()
         assertEquals(listOf("One", "Two"), repopulated.map { it.title })
         assertEquals(listOf(0), selections) // Programmatic setup never fabricates a callback.
@@ -46,7 +53,7 @@ class NativeBarOwnershipTest {
         val oldItems = bar.items.orEmpty().filterIsInstance<UITabBarItem>()
         val delegate = assertIs<UITabBarDelegate>(bar.delegate)
 
-        manager.setItems(items.reversed(), 99, 1f)
+        manager.setItems(items.reversed(), 1, 1f)
         val current = bar.items.orEmpty().filterIsInstance<UITabBarItem>()
         assertEquals(listOf("Two", "One"), current.map { it.title })
         assertEquals(1L, bar.selectedItem?.tag)
@@ -68,6 +75,19 @@ class NativeBarOwnershipTest {
         delegate.tabBar(bar, current[1]) // Replaced delegate cannot deliver an obsolete callback.
         assertEquals(listOf(0), selections)
         assertEquals("Two", bar.selectedItem?.title)
+    }
+
+    @Test fun mainNavigationBarCarriesCustomTintAndImageOnlyVoiceOverLabel() = runNativeUiTest {
+        val bar = UINavigationBar()
+        val manager = TopBarManager(bar)
+        val item = UIKitUIBarButtonItem(image = UIKitImage.SystemName("house"), accessibilityLabel = "Open home")
+        val tint = Color(0xFF1976D2)
+        manager.update("Home", emptyList(), listOf(item), UIKitNavigationBarConfiguration(tintColor = tint), false, 1f)
+        assertEquals(tint.toUIColor(), bar.tintColor)
+        val rendered = bar.topItem?.rightBarButtonItems?.filterIsInstance<UIBarButtonItem>()?.single()
+            ?: error("The native navigation bar must expose its image-only item")
+        assertNotNull(rendered.image)
+        assertEquals("Open home", rendered.accessibilityLabel)
     }
 
     @Test fun barLivesInsideItsHostAndContinuesMeasuringAfterLayoutChanges() = runNativeUiTest {

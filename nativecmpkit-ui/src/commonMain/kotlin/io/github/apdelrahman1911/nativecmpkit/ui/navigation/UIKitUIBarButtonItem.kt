@@ -17,6 +17,7 @@ import io.github.apdelrahman1911.nativecmpkit.ui.uikit.UIKitImage
  * @param selected Whether the bar button item is selected. Defaults to false.
  * @param width The width for a [UIKitUIBarButtonSystemItem.FixedSpace] item. Defaults to null.
  * @param onClick Callback invoked when the bar button item is clicked.
+ * @param accessibilityLabel The VoiceOver label for the item. A null value uses the UIKit default.
  */
 @Immutable
 data class UIKitUIBarButtonItem(
@@ -29,6 +30,7 @@ data class UIKitUIBarButtonItem(
     val onClick: () -> Unit = {},
     val menuItems: List<AdaptiveDropDownItem> = emptyList(),
     val menuSections: List<AdaptiveDropDownSection> = emptyList(),
+    val accessibilityLabel: String? = null,
 ) {
     internal val hasMenu: Boolean
         get() = menuItems.isNotEmpty() || menuSections.isNotEmpty()

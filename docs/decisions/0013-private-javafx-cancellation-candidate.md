@@ -109,5 +109,5 @@ private-selector parser refusal and same-byte recovery are retained.
 
 The project continues solo, with serial local heavy work, an 8GiB disk reserve
 and at most two combined hosted-heavy reservations including queued jobs.
-Actions allow all actions without mandatory SHA pinning; voluntary reuse of an
-existing verified revision does not create a mandatory policy.
+The repository now requires full commit SHA pinning and uses a selected-actions
+allowlist. The private verification workflows use the same repository policy.

@@ -44,7 +44,7 @@ REQUIRED = (
     ("internal.NativeUiApplicationHostTest", "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects"),
     ("utils.UIImageConversionTest", "returnedImageOwnsItsPixelsAfterTemporaryArraysAndContextsAreCollected"),
     ("dialog.RememberNativeAlertPropertiesTest", "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller"),
-    ("navigation.NativeBarOwnershipTest", "emptyTabsClearSelectionAndRepopulationClampsIndex"),
+    ("navigation.NativeBarOwnershipTest", "emptyTabsAndOutOfRangeIndicesClearSelection"),
     ("navigation.NativeBarOwnershipTest", "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags"),
     ("utils.NativeVectorThemeAcceptanceTest", "actualSimulatorSystemAppearanceChangesLeaveExplicitNativeOverridesIsolated"),
     ("utils.UIImageMemoryDiagnosticsTest", "actualLibraryConversionsRemainBoundedDuringOwnedAllocationProfile"),
@@ -190,7 +190,7 @@ class IosApplicationReceipts(unittest.TestCase):
     def test_matching_green_protocol_and_xml_cannot_omit_current_property_or_tab_cases(self):
         original = copy.deepcopy(self.document)
         for method in ["stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller",
-                       "emptyTabsClearSelectionAndRepopulationClampsIndex",
+                       "emptyTabsAndOutOfRangeIndicesClearSelection",
                        "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags"]:
             with self.subTest(method=method):
                 self.document = copy.deepcopy(original)

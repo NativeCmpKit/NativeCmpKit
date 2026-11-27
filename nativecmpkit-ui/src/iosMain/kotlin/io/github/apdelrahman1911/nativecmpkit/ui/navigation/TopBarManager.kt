@@ -27,6 +27,7 @@ import platform.UIKit.UINavigationBarDelegateProtocol
 import platform.UIKit.UINavigationItem
 import platform.UIKit.UIBarPositionTopAttached
 import platform.UIKit.UIBarPositioningProtocol
+import platform.UIKit.setAccessibilityLabel
 import platform.darwin.NSObject
 import platform.objc.sel_registerName
 
@@ -100,6 +101,7 @@ internal class TopBarManager(
         if (configuration != currentConfiguration) {
             navBar.prefersLargeTitles = configuration.prefersLargeTitles
             navBar.translucent = configuration.isTranslucent
+            if (configuration.tintColor.isSpecified) navBar.tintColor = configuration.tintColor.toUIColor()
 
             val appearance = UINavigationBarAppearance().apply {
                 if (!isLiquidGlassEnabled) {
@@ -144,6 +146,15 @@ internal fun UIKitUIBarButtonItem.toUIBarButtonItem(
     actionHandler: BarButtonActionHandler,
     density: Float,
     layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+): UIBarButtonItem = createUIBarButtonItem(actionHandler, density, layoutDirection).also { item ->
+    accessibilityLabel?.let { item.setAccessibilityLabel(it) }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+private fun UIKitUIBarButtonItem.createUIBarButtonItem(
+    actionHandler: BarButtonActionHandler,
+    density: Float,
+    layoutDirection: LayoutDirection,
 ): UIBarButtonItem {
     val selector = sel_registerName("handleAction")
 

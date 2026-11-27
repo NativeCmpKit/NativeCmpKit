@@ -35,7 +35,9 @@ def labels(document, fields):
 
 
 def receipt_rows():
-    for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in ("wk-identity", "identity-picker", "identity-share", "identity-camera"))):
+    for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
+        "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
+    ))):
         for host in HOSTS:
             for path in sorted((parent / host).glob("*/receipt.json")):
                 if not re.fullmatch(r"[a-f0-9]{32}", path.parent.name) or not 0 < path.stat().st_size <= MAX_BYTES:
