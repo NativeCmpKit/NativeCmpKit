@@ -241,6 +241,7 @@ def main() -> None:
         "captured_at": datetime.now(timezone.utc).isoformat(),
         "target": identity.get("target"),
         "session": identity.get("id"),
+        "device": device,
         "flows": [],
     }
 

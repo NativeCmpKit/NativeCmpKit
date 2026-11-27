@@ -59,6 +59,7 @@ def main() -> None:
             execution["run"] = args.run
             execution["attempt"] = args.attempt
             execution["job"] = args.job
+            execution["device"] = result.get("device")
             row.setdefault("functional", []).append({
                 "flow": flow["id"],
                 "status": flow["status"],

@@ -84,6 +84,7 @@ def main() -> None:
                 execution["run"] = args.run
                 execution["attempt"] = args.attempt
                 execution["job"] = args.job
+                execution["device"] = tour.get("device")
             row["screenshot"][args.platform] = capture["path"]
             row.setdefault("evidence", []).append({
                 "platform": args.platform,
@@ -103,6 +104,7 @@ def main() -> None:
                 execution["run"] = args.run
                 execution["attempt"] = args.attempt
                 execution["job"] = args.job
+                execution["device"] = tour.get("device")
             row.setdefault("defect", {})
             row["defect"] = {
                 "platform": args.platform,

@@ -85,6 +85,22 @@ def main() -> None:
             lines.append(f"- [{relative.as_posix()}]({png.as_posix()})")
         lines.append("")
 
+    lines.extend(["## Functional flows", ""])
+    any_functional = False
+    for platform in ("android", "ios"):
+        for functional in sorted((args.root / platform).glob("functional-*.json")):
+            data = json.loads(functional.read_text(encoding="utf-8"))
+            summary = data.get("summary", {})
+            lines.append(
+                f"- `{platform}/{functional.name}` — device `{data.get('device', 'unknown')}`: "
+                f"**{summary.get('passed', 0)} passed**, {summary.get('failed', 0)} failed, "
+                f"{summary.get('blocked', 0)} blocked."
+            )
+            any_functional = True
+    if not any_functional:
+        lines.append("- No functional result files were recorded in this checkout.")
+    lines.append("")
+
     lines.extend([
         "## Status",
         "",
