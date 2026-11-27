@@ -20,6 +20,8 @@ EXPECTED_METHODS = (
     "shareNativeLibraryLoadsAndReportsActualHostCapability",
 )
 EXPECTED_FILE = f"TEST-{EXPECTED_CLASS}.xml"
+DESKTOP_SUFFIX = "[desktop]"
+DESKTOP_SUITE_NAMES = {EXPECTED_CLASS + DESKTOP_SUFFIX, EXPECTED_CLASS.rsplit(".", 1)[-1] + DESKTOP_SUFFIX}
 MAX_XML_BYTES = 4 * 1024 * 1024
 
 
@@ -88,8 +90,10 @@ def verify(results: Path, invocation: str) -> dict:
         suite = ET.fromstring(text)
     except (UnicodeError, ET.ParseError) as exc:
         raise InvalidNativeResults("Focused XML is not a valid UTF-8 JUnit report") from exc
-    if suite.tag != "testsuite" or suite.get("name") != EXPECTED_CLASS:
+    suite_name = suite.get("name")
+    if suite.tag != "testsuite" or suite_name not in DESKTOP_SUITE_NAMES | {EXPECTED_CLASS}:
         raise InvalidNativeResults("Focused suite must be the exact native consumer class")
+    method_suffix = DESKTOP_SUFFIX if suite_name in DESKTOP_SUITE_NAMES else ""
     counts = {"tests": "3", "failures": "0", "errors": "0", "skipped": "0"}
     if any(suite.get(name) != value for name, value in counts.items()):
         raise InvalidNativeResults("Focused suite must report exactly three methods and zero failures/errors/skips")
@@ -99,7 +103,7 @@ def verify(results: Path, invocation: str) -> dict:
         raise InvalidNativeResults("Unrecognized focused suite elements refuse")
     cases = list(suite.findall("testcase"))
     identities = [(case.get("classname"), case.get("name")) for case in cases]
-    expected = {(EXPECTED_CLASS, name) for name in EXPECTED_METHODS}
+    expected = {(EXPECTED_CLASS, name + method_suffix) for name in EXPECTED_METHODS}
     if len(identities) != 3 or len(set(identities)) != 3 or set(identities) != expected:
         raise InvalidNativeResults("All three exact native method identities must occur once, with no foreign methods")
     if any(child.tag not in {"properties", "system-out", "system-err"} for case in cases for child in case):

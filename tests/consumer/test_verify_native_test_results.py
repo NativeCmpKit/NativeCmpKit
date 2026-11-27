@@ -48,6 +48,24 @@ class NativeFocusedResultTest(unittest.TestCase):
         self.assertFalse(receipt["release_readiness_certified"])
         self.assertIn("not native authenticity", receipt["scope"])
 
+    def test_kmp_desktop_display_names_still_require_exact_class_targets_and_methods(self):
+        self.suite.set("name", CLASS + "[desktop]")
+        for method, case in zip(METHODS, self.suite):
+            case.set("name", method + "[desktop]")
+        self.write()
+        self.assertEqual(list(METHODS), gate.verify(self.results, INVOCATION)["methods"])
+
+        self.suite.set("name", CLASS.rsplit(".", 1)[-1] + "[desktop]")
+        self.write()
+        self.assertTrue(gate.verify(self.results, INVOCATION)["success"])
+
+        self.suite[0].set("name", METHODS[0] + "[iosSimulatorArm64]")
+        self.write()
+        self.refused("exact native method")
+        self.suite.set("name", CLASS + "[iosSimulatorArm64]")
+        self.write()
+        self.refused("exact native consumer class")
+
     def test_missing_and_empty_no_source_results_refuse(self):
         self.path.unlink()
         self.refused("Exactly one")
