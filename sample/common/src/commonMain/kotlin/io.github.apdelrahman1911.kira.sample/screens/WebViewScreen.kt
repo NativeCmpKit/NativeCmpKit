@@ -221,21 +221,6 @@ fun WebViewScreen(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "JavaScript: ${if (javaScriptEnabled) "on" else "off"}",
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            AdaptiveSwitch(
-                                checked = javaScriptEnabled,
-                                onCheckedChange = {
-                                    javaScriptEnabled = it
-                                    state.settings.javaScriptEnabled = it
-                                },
-                            )
-                        }
                     }
                 }
             )
@@ -258,6 +243,32 @@ fun WebViewScreen(
                 navigator = navigator,
                 modifier = Modifier.fillMaxSize(),
             )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp)
+                    .background(
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                        MaterialTheme.shapes.small,
+                    )
+                    .padding(horizontal = 8.dp, vertical = 2.dp),
+            ) {
+                Text(
+                    text = "JavaScript: ${if (javaScriptEnabled) "on" else "off"}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                AdaptiveSwitch(
+                    checked = javaScriptEnabled,
+                    onCheckedChange = {
+                        javaScriptEnabled = it
+                        state.settings.javaScriptEnabled = it
+                    },
+                )
+            }
 
             val loadingState = state.loadingState
             if (loadingState is LoadingState.Loading) {
