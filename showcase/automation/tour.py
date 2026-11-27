@@ -289,12 +289,9 @@ def main() -> None:
                 click_text(ui, "Load invalid URL")
                 shot("webview", "invalid-destination")
             elif title == "Cupertino Icons":
-                search = find_search(ui)
-                if search:
-                    node = search["nodes"][0]
-                    ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
-                    ui.action("text.insert", {"text": "chevron", "replace": True})
-                    shot("ui-cupertino-icons", "search-chevron")
+                for category in ("Arrows", "Communication"):
+                    click_text(ui, category)
+                    shot("ui-cupertino-icons", "category-" + category.lower())
 
             back(ui, args.platform)
         except Exception as error:  # noqa: BLE001 - the run record must retain the real failure

@@ -39,13 +39,17 @@ def text_value(ui, needle: str) -> str:
 
 
 def click_switch(ui):
-    for role in ("switch", "AXSwitch", "togglebutton"):
-        observation = tour.soft_find(ui, {"role": role}, timeout_ms=1500)
+    selectors = (
+        {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
+        {"properties": {"checkable": True}}, {"properties": {"checked": False}},
+    )
+    for selector in selectors:
+        observation = tour.soft_find(ui, selector, timeout_ms=1500)
         if observation.get("satisfied") and observation.get("nodes"):
             node = tour.choose_clickable(observation, observation["nodes"])
             ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
             return
-    raise AssertionError("no switch role exposed")
+    raise AssertionError("no switch-like element exposed")
 
 
 def drag_slider(ui, needle: str):
@@ -95,6 +99,20 @@ FLOWS = [
         assert_text(ui, "This is a native alert dialog from Kira"),
         tour.click_text(ui, "Cancel"),
         assert_absent(ui, "This is a native alert dialog from Kira"),
+    )),
+    ("alert-confirm", "Adaptive Alert Dialog", lambda ui, p: (
+        tour.click_text(ui, "Show Alert Dialog"),
+        assert_text(ui, "This is a native alert dialog from Kira"),
+        tour.click_text(ui, "Ok"),
+        assert_absent(ui, "This is a native alert dialog from Kira"),
+    )),
+    ("date-bounds", "Adaptive Date Picker", lambda ui, p: (
+        tour.click_text(ui, "From today"),
+        tour.find(ui, {"text": "From today", "properties": {"selected": True}}, timeout_ms=3000),
+    )),
+    ("scaffold-tab", "Adaptive Scaffold", lambda ui, p: (
+        tour.click_text(ui, "Profile"),
+        assert_text(ui, "Profile"),
     )),
     ("action-sheet", "Adaptive Alert Dialog", lambda ui, p: (
         tour.click_text(ui, "Show ActionSheet"),
