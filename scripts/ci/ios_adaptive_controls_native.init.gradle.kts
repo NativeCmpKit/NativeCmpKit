@@ -21,6 +21,8 @@ gradle.projectsEvaluated {
         "ui-native-adaptive-pre26" to pre26,
         "ui-native-adaptive-customization-pre26" to pre26.filter { it.startsWith(prefix + "controls.") },
         "ui-native-adaptive-remaining-pre26" to pre26.filterNot { it.startsWith(prefix + "controls.") },
+        "ui-native-adaptive-negative-steps-pre26" to pre26.filter { it.endsWith(".pre26PublicNegativeStepsAreRejected") },
+        "ui-native-adaptive-toolbar-pre26" to pre26.filter { it.startsWith(prefix + "toolbar.") },
         "ui-native-adaptive-ios26plus" to listOf(
             prefix + "slider.AdaptiveSliderNativeMatrixTest.ios26PublicStepsTapDragAndAccessibilityMatrix",
             prefix + "slider.AdaptiveSliderNativeMatrixTest.ios26PublicNegativeStepsAreRejected",

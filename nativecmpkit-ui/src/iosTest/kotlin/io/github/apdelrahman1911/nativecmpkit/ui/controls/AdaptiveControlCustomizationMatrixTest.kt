@@ -159,9 +159,12 @@ class AdaptiveControlCustomizationMatrixTest {
             assertEquals(Color.Green, observedColors["button"])
             assertEquals(Color.Blue, observedColors["icon"])
             firstRowPhase("enabled-captures-enter")
-            assertOpaqueSurface("button", Color.Red, corner = true)
+            assertOpaqueSurface("button", Color.Red, corner = true, trace = ::firstRowPhase)
+            firstRowPhase("enabled-button-capture-complete")
             assertOpaqueSurface("icon", Color.Yellow)
+            firstRowPhase("enabled-icon-capture-complete")
             assertSliderTracks(Color.Red, Color.Blue)
+            firstRowPhase("enabled-slider-capture-complete")
             assertThumbGlyph(Color.Red, observedColors)
             firstRowPhase("enabled-captures-returned")
 
@@ -229,12 +232,17 @@ class AdaptiveControlCustomizationMatrixTest {
         return labelHeight
     }
 
-    private fun ComposeUiTest.assertOpaqueSurface(tag: String, expected: Color, corner: Boolean = false) {
+    private fun ComposeUiTest.assertOpaqueSurface(
+        tag: String, expected: Color, corner: Boolean = false, trace: (String) -> Unit = {},
+    ) {
         val screenshot = onNodeWithTag(tag).captureToImage()
         try {
+            trace("enabled-button-snapshot-returned")
             val pixels = screenshot.toPixelMap()
+            trace("enabled-button-pixel-map-returned")
             val actual = if (corner) pixels[2, 2] else pixels[pixels.width / 2, pixels.height / 2]
             assertColor(expected, actual, "$tag actual surface")
+            trace("enabled-button-pixels-verified")
         } finally {
             screenshot.asSkiaBitmap().close()
         }

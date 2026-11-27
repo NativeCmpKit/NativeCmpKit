@@ -35,6 +35,26 @@ def begun():
 
 
 class PartialProtocolTests(unittest.TestCase):
+    def test_negative_steps_diagnostics_admit_the_expected_throw_without_certifying_a_pass(self):
+        protocol = a.NativeProtocol()
+        suite, method = a.PRE26_NEGATIVE_STEPS_CASE
+        prefix = a.PRE26_NEGATIVE_STEPS_PREFIX
+        protocol.feed(prefix + "compose-enter")
+        protocol.feed(f.ACTIVE)
+        protocol.feed(f.frame("testSuiteStarted", name=suite))
+        protocol.feed(f.frame("testStarted", name=method))
+        protocol.feed(prefix + "compose-enter")
+        protocol.feed(f.frame("testStdOut", name="foreign", out=prefix + "set-content-enter"))
+        protocol.feed(prefix + "adaptive-slider-enter")
+        self.assertEqual(["compose-enter"], protocol.partial()["pre26_negative_steps_progress"])
+        protocol.feed(prefix + "set-content-enter")
+        protocol.feed(f.frame("testStdOut", name=method, out=prefix + "adaptive-slider-enter"))
+        protocol.feed(prefix + "public-validation-verified")
+        result = protocol.partial()
+        self.assertEqual(["compose-enter", "set-content-enter", "adaptive-slider-enter", "public-validation-verified"],
+                         result["pre26_negative_steps_progress"])
+        self.assertEqual(0, result["counts"]["passed"])
+
     def test_pre26_customization_records_only_ordered_phases_from_its_open_case(self):
         protocol = a.NativeProtocol()
         suite, method = a.PRE26_CUSTOMIZATION_CASE

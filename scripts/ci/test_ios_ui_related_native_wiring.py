@@ -102,6 +102,16 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
             self.assertEqual(related.sources(related.FOCUSES[0]), related.sources(focus))
         self.assertEqual(600, application.application_timeout_seconds(customization))
 
+    def test_pre26_pending_cases_run_independently_without_replaying_the_passed_slider(self):
+        cases = ("pre26PublicNegativeStepsAreRejected", "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement")
+        for focus, case in zip(related.PRE26_PENDING_FOCUSES, cases):
+            with self.subTest(focus=focus):
+                selectors = related.selectors(focus)
+                self.assertEqual([case], [selector.rsplit(".", 1)[1] for selector in selectors])
+                plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
+                self.assertTrue(related.validate_plan(plan))
+                self.assertEqual(600, application.application_timeout_seconds(focus))
+
     def test_literal_profiles_modules_and_exact_canonical_rows_have_no_alias_or_serial_companion(self):
         tree = ast.parse((ROOT / "scripts/ci/workflow_matrix.py").read_bytes())
         definitions = {target.id: node.value for node in tree.body if isinstance(node, ast.Assign)

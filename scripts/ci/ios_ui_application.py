@@ -69,7 +69,7 @@ def application_timeout_seconds(focus: str | None) -> int:
         raise ValueError("Unknown finite application focus")
     if focus in lt.ui_related.SPLIT_FOCUSES:
         return lt.ui_related.timeout_accounting(focus)["transport_timeout_seconds"]
-    if focus == lt.ui_related.PRE26_RECOVERY_FOCUSES[0]:
+    if focus == lt.ui_related.PRE26_RECOVERY_FOCUSES[0] or focus in lt.ui_related.PRE26_PENDING_FOCUSES:
         return 600
     if focus in {lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES}:
         return 360
@@ -194,9 +194,20 @@ PRE26_CUSTOMIZATION_CASE = (
 PRE26_CUSTOMIZATION_PREFIX = "NATIVECMPKIT_ADAPTIVE_CUSTOM_PHASE branch=pre26 dark=false fontScale=1.0 phase="
 PRE26_CUSTOMIZATION_PHASES = (
     "compose-enter", "compose-body-entered", "set-content-enter", "set-content-returned",
-    "enabled-captures-enter", "enabled-captures-returned", "paired-taps-enter", "paired-taps-returned",
+    "enabled-captures-enter", "enabled-button-snapshot-returned", "enabled-button-pixel-map-returned",
+    "enabled-button-pixels-verified", "enabled-button-capture-complete", "enabled-icon-capture-complete",
+    "enabled-slider-capture-complete", "enabled-captures-returned", "paired-taps-enter", "paired-taps-returned",
     "slider-drag-enter", "slider-drag-returned", "disabled-captures-enter", "disabled-captures-returned",
     "disabled-input-enter", "disabled-input-returned", "compose-returned",
+)
+PRE26_NEGATIVE_STEPS_CASE = (
+    "io.github.apdelrahman1911.nativecmpkit.ui.slider.AdaptiveSliderNativeMatrixTest",
+    "pre26PublicNegativeStepsAreRejected",
+)
+PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
+PRE26_NEGATIVE_STEPS_PHASES = (
+    "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned",
+    "wait-for-idle-returned", "public-validation-verified",
 )
 
 
@@ -319,6 +330,7 @@ class NativeProtocol:
         self.wk_restore_progress = []
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
+        self.pre26_negative_steps_progress = []
         self.worker_lifecycle_observations = []
         self.picker_admission_observations = []
         self.picker_host_observations = []
@@ -341,6 +353,9 @@ class NativeProtocol:
             raise ValueError("Native transport already failed its owned lifecycle")
         if line.startswith((PRE26_CUSTOMIZATION_PREFIX, "NATIVECMPKIT_ADAPTIVE_CONTROL_HOST branch=pre26")):
             self.observe_pre26_customization(line)
+            return
+        if line.startswith(PRE26_NEGATIVE_STEPS_PREFIX):
+            self.observe_pre26_negative_steps(line)
             return
         if line.startswith(WK_RESTORE_PREFIX):
             step = line.removeprefix(WK_RESTORE_PREFIX)
@@ -732,6 +747,9 @@ class NativeProtocol:
             if self.open_case == PRE26_CUSTOMIZATION_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_pre26_customization(output_line)
+            if self.open_case == PRE26_NEGATIVE_STEPS_CASE and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_pre26_negative_steps(output_line)
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
 
@@ -746,6 +764,16 @@ class NativeProtocol:
         phase = line.removeprefix(PRE26_CUSTOMIZATION_PREFIX)
         if index < len(PRE26_CUSTOMIZATION_PHASES) and phase == PRE26_CUSTOMIZATION_PHASES[index]:
             self.pre26_customization_progress.append(phase)
+
+    def observe_pre26_negative_steps(self, line: str) -> None:
+        if self.open_case != PRE26_NEGATIVE_STEPS_CASE or not line.startswith(PRE26_NEGATIVE_STEPS_PREFIX):
+            return
+        progress = self.pre26_negative_steps_progress
+        phase = line.removeprefix(PRE26_NEGATIVE_STEPS_PREFIX)
+        if phase == "public-validation-verified" and progress == list(PRE26_NEGATIVE_STEPS_PHASES[:3]):
+            progress.append(phase)
+        elif len(progress) < len(PRE26_NEGATIVE_STEPS_PHASES) and phase == PRE26_NEGATIVE_STEPS_PHASES[len(progress)]:
+            progress.append(phase)
 
     def _request_image_profile_if_ready(self) -> None:
         if (self.active is not None and self.completed is None and self.open_case == IMAGE_PROFILE_CASE and
@@ -777,6 +805,8 @@ class NativeProtocol:
                 **({"pre26_customization_progress": self.pre26_customization_progress}
                    if self.pre26_customization_progress else {}),
                 **({"pre26_customization_host_confirmed": True} if self.pre26_customization_host_confirmed else {}),
+                **({"pre26_negative_steps_progress": self.pre26_negative_steps_progress}
+                   if self.pre26_negative_steps_progress else {}),
                 **({"worker_lifecycle_observations": self.worker_lifecycle_observations}
                    if self.worker_lifecycle_observations else {}),
                 **({"image_profile_observations": self.image_profile_observations}
@@ -1590,6 +1620,7 @@ def main() -> int:
                 "unfinished_testcase": protocol.get("unfinished_testcase"),
                 "pre26_customization_progress": protocol.get("pre26_customization_progress"),
                 "pre26_customization_host_confirmed": protocol.get("pre26_customization_host_confirmed"),
+                "pre26_negative_steps_progress": protocol.get("pre26_negative_steps_progress"),
                 "crash_status": crash.get("status"),
                 "crash_exception": crash.get("exception"),
                 "cleanup_error_type": (result.get("cleanup") or {}).get("error_type"),

@@ -689,8 +689,11 @@ jobs:
             identity-apple-ui-pre26)
               result=0
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
-                --focus ui-native-adaptive-remaining-pre26 --simulator "$device" --timeout 2700 \
-                --output build/ci-verification/identity-ui-pre26-remaining || result=1
+                --focus ui-native-adaptive-toolbar-pre26 --simulator "$device" --timeout 2100 \
+                --output build/ci-verification/identity-ui-pre26-toolbar || result=1
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
+                --focus ui-native-adaptive-negative-steps-pre26 --simulator "$device" --timeout 2100 \
+                --output build/ci-verification/identity-ui-pre26-negative-steps || result=1
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
                 --focus ui-native-adaptive-customization-pre26 --simulator "$device" --timeout 2100 \
                 --output build/ci-verification/identity-ui-pre26-customization || result=1
@@ -745,7 +748,8 @@ jobs:
             build/ci-verification/identity-share/receipt.json
             build/ci-verification/identity-camera/receipt.json
             build/ci-verification/identity-main-ui/receipt.json
-            build/ci-verification/identity-ui-pre26-remaining/receipt.json
+            build/ci-verification/identity-ui-pre26-negative-steps/receipt.json
+            build/ci-verification/identity-ui-pre26-toolbar/receipt.json
             build/ci-verification/identity-ui-pre26-customization/receipt.json
             build/ci-verification/identity-linux-desktop/receipt.json
             build/ci-verification/identity-android-webview-device/controller.json

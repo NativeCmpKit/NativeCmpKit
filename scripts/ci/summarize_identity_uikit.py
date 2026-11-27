@@ -9,7 +9,7 @@ import re
 from xml.etree import ElementTree as ET
 
 from library_tests import NoDtdBuilder, safe_path
-from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, WK_RESTORE_STEPS
+from ios_ui_application import PRE26_CUSTOMIZATION_PHASES, PRE26_NEGATIVE_STEPS_PHASES, WK_RESTORE_STEPS
 
 
 MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share", "nativecmpkit-camera-picker")
@@ -37,7 +37,8 @@ def labels(document, fields):
 def receipt_rows():
     for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
         "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
-        "identity-ui-pre26-customization", "identity-ui-pre26-remaining",
+        "identity-ui-pre26-customization", "identity-ui-pre26-remaining", "identity-ui-pre26-negative-steps",
+        "identity-ui-pre26-toolbar",
     ))):
         for host in HOSTS:
             for path in sorted((parent / host).glob("*/receipt.json")):
@@ -65,6 +66,10 @@ def receipt_rows():
                         if step in PRE26_CUSTOMIZATION_PHASES
                     ],
                     "pre26_customization_host_confirmed": protocol.get("pre26_customization_host_confirmed") is True,
+                    "pre26_negative_steps_progress": [
+                        step for step in protocol.get("pre26_negative_steps_progress", [])[:len(PRE26_NEGATIVE_STEPS_PHASES)]
+                        if step in PRE26_NEGATIVE_STEPS_PHASES
+                    ],
                     "crash": labels(crash, ("status", "error_type")) | labels(crash.get("exception") or {}, ("type", "signal")),
                     "fixture": {
                         **{key: fixture[key] for key in ("connections", "control_requests", "refusals", "owned_sockets", "fixture_error")

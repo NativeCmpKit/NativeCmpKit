@@ -173,13 +173,24 @@ class AdaptiveSliderNativeMatrixTest {
 
     private fun rejectsNegativeSteps(branch: AdaptiveControlBranch) {
         requireAdaptiveControlHost(branch)
+        fun trace(phase: String) {
+            if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE $phase")
+        }
+        trace("compose-enter")
         val failure = assertFailsWith<IllegalArgumentException> {
             runComposeUiTest {
-                setContent { AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1) }
+                trace("set-content-enter")
+                setContent {
+                    trace("adaptive-slider-enter")
+                    AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1)
+                }
+                trace("set-content-returned")
                 waitForIdle()
+                trace("wait-for-idle-returned")
             }
         }
         assertEquals("steps should be >= 0", failure.message,
             "Only the public invalid-steps contract, not a host/setup error, satisfies this test")
+        trace("public-validation-verified")
     }
 }

@@ -22,7 +22,8 @@ FOCUSES = ("ui-native-adaptive-pre26", "ui-native-adaptive-drag-shader-ios26plus
 # diagnostic isolation, not acceptance of any outcome from the failed UI650 ten.
 SPLIT_FOCUSES = ("ui-native-related-nine-ios26plus", "ui-native-adaptive-customization-ios26plus")
 PRE26_RECOVERY_FOCUSES = ("ui-native-adaptive-customization-pre26", "ui-native-adaptive-remaining-pre26")
-ALL_FOCUSES = FOCUSES + SPLIT_FOCUSES + PRE26_RECOVERY_FOCUSES
+PRE26_PENDING_FOCUSES = ("ui-native-adaptive-negative-steps-pre26", "ui-native-adaptive-toolbar-pre26")
+ALL_FOCUSES = FOCUSES + SPLIT_FOCUSES + PRE26_RECOVERY_FOCUSES + PRE26_PENDING_FOCUSES
 MODULE = "nativecmpkit-ui"
 TASK_NAME = "iosSimulatorArm64ApplicationTest"
 TASK = ":nativecmpkit-ui:" + TASK_NAME
@@ -115,16 +116,16 @@ SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/n
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt': '262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt': '2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt': '5ad05e4614cf83c1402f2df8b8dbaa7424c1bb4931065e7acd5c4d39e66493a6',
- 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt': '5ccd331dc4392ec0914b3081911676416f5b77d9b494ae252eb9170ada4fa7b4',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt': '8b772df6ef20986c00531dec5c8bf1b28b225d8d39604cdeaf608b6a57d54f35',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt': '97e6ca0cd96369450e283e0ee6bce16320c5256234596f00e9aba0ef17e864c9',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/DampedDragLifecycleRegressionTest.kt': 'e510be8cf46bb9df5a21489dbcfb324d2d4643cb6f98a91818c06accdfb15aae',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt': 'e4c10d40b659913a83e7ae6ff6eb50e4d981046f556bd01b33e8feb4d856f508',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt': '6b02f069769c8925b65e9896887415b32f45259eed680b9afefbf9dd0a1c744b'}
 INIT_SHA256 = {'ui-native-adaptive-drag-shader-ios26plus': 'd1ca8aa762529030099ab2e68c67788ce718e7163659b4c4544c76442fda26fd',
- 'ui-native-adaptive-pre26': '571c67320f73cd8fe6df485613e69bde408bac90fe44c51e6b6205edfe580742'}
+ 'ui-native-adaptive-pre26': 'c8ed4c647c4d44ccc72f05480d58bbf9a9e77077bd55a40560e998878f2726a4'}
 # The earlier customization image is retained in the archived inverse. The
 # runtime uses the renamed image of the reviewed screenshot/phase derivative.
-CURRENT_CUSTOM_SOURCE_SHA256 = "4f413b2a09ad5675a1ee1e930209a6e1e2655541633363cacca191a85beb404d"
+CURRENT_CUSTOM_SOURCE_SHA256 = "4f1889d1311f2cd47fab12684a68c57aa84bfc24c24a2a9a212536397472b8ed"
 _RELATED_TEN = _SELECTIONS[FOCUSES[1]]
 _CUSTOM_SOURCE = adaptive.CUSTOM_SOURCE
 _PRE26 = _SELECTIONS[FOCUSES[0]]
@@ -137,6 +138,16 @@ for _focus, _custom, _scope in (
         "groups": [{**group, "methods": group["methods"] if (group["source"] == _CUSTOM_SOURCE) == _custom else []}
                    for group in _PRE26["groups"]],
         "scope": _scope,
+    }
+    INIT_SHA256[_focus] = INIT_SHA256[FOCUSES[0]]
+for _focus, _method in zip(PRE26_PENDING_FOCUSES, (
+    "pre26PublicNegativeStepsAreRejected", "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
+)):
+    _SELECTIONS[_focus] = {
+        **_PRE26,
+        "groups": [{**group, "methods": [method for method in group["methods"] if method == _method]}
+                   for group in _PRE26["groups"]],
+        "scope": "One unfinished pre-iOS 26 case with independent native transport and test reporting.",
     }
     INIT_SHA256[_focus] = INIT_SHA256[FOCUSES[0]]
 _SELECTIONS[SPLIT_FOCUSES[0]] = {

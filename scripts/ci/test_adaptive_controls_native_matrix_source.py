@@ -38,7 +38,10 @@ def assert_owned_customization_screenshots(case, text):
         case.assertEqual(1, body.count(".captureToImage()"), name)
         case.assertEqual(1, body.count("val pixels = screenshot.toPixelMap()"), name)
         case.assertEqual(1, body.count("screenshot.asSkiaBitmap().close()"), name)
-        case.assertRegex(body, r"val screenshot = onNodeWithTag\([^\n]+\)\.captureToImage\(\)\n        try \{\n            val pixels = screenshot\.toPixelMap\(\)")
+        capture = r"val screenshot = onNodeWithTag\([^\n]+\)\.captureToImage\(\)\n        try \{\n"
+        if name == "assertOpaqueSurface":
+            capture += '            trace\\("enabled-button-snapshot-returned"\\)\n'
+        case.assertRegex(body, capture + r"            val pixels = screenshot\.toPixelMap\(\)")
         terminal = "} finally {\n            screenshot.asSkiaBitmap().close()\n        }"
         case.assertEqual(1, body.count(terminal), name)
         case.assertLess(body.index("val pixels = screenshot.toPixelMap()"), body.index(terminal), name)
@@ -128,10 +131,10 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
                          "fontScale = 2f", "captureToImage().toPixelMap()"):
             self.assertIn(fragment, desktop)
 
-    def test_accepted_first_eight_liquid_bodies_are_byte_identical_and_compile_script_is_opt_in(self):
+    def test_accepted_first_eight_liquid_bodies_match_the_namespace_migration_and_compile_is_opt_in(self):
         text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/LiquidGlassControlTest.kt")
         prefix = text.split("    @Test fun cancellationAcceptanceSecondPointerHandoffCommitsOnlyAtTheFinalUp()", 1)[0]
-        self.assertEqual("e6d841ab255b36ea60652d1df04ee49c49cd8ab86d0c291f63305637c0f40e91",
+        self.assertEqual("ecd1e95de08970792f4c27741fe424ede5fd8d4e1b860b17c859416f2bcf7e84",
                          hashlib.sha256(prefix.encode()).hexdigest())
         self.assertEqual(8, len(methods(prefix)))
         init = (ROOT / "scripts/ci/adaptive_controls_compile.init.gradle.kts").read_text()
