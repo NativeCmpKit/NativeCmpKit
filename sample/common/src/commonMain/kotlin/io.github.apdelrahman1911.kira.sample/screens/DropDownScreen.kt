@@ -70,7 +70,7 @@ fun DropDownScreen(
         actions = {
             Box {
                 AdaptiveIconButton(onClick = { topBarMenuExpanded = true }) {
-                    Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                    Icon(Icons.Filled.MoreVert, contentDescription = "Top bar menu")
                 }
                 DropdownMenu(
                     expanded = topBarMenuExpanded,
@@ -147,7 +147,7 @@ fun DropDownScreen(
                     }
                     Box {
                         AdaptiveIconButton(onClick = { simpleExpanded = true }) {
-                            Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                            Icon(Icons.Filled.MoreVert, contentDescription = "Simple drop down menu")
                         }
 
                         val items = listOf(
@@ -223,7 +223,7 @@ fun DropDownScreen(
                     }
                     Box {
                         AdaptiveIconButton(onClick = { sectionedExpanded = true }) {
-                            Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+                            Icon(Icons.Filled.MoreVert, contentDescription = "Sectioned drop down menu")
                         }
 
                         val items = listOf(

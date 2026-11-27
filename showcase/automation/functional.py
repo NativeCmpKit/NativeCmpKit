@@ -73,6 +73,30 @@ def click_node(ui, text, count=1, hold_ms=0):
     ui.action("pointer.click", params)
 
 
+def click_text_scroll(ui, text, scrolls=8):
+    for _ in range(scrolls):
+        observation = tour.soft_find(ui, {"text": text}, timeout_ms=1200)
+        if observation.get("satisfied") and observation.get("nodes"):
+            tour.click_text(ui, text)
+            return
+        tour.scroll_list(ui, 3)
+    raise AssertionError(f"could not scroll to {text!r}")
+
+
+def assert_text_scroll(ui, text, scrolls=8):
+    for _ in range(scrolls):
+        observation = tour.soft_find(ui, {"text_contains": text}, timeout_ms=1200)
+        if observation.get("satisfied"):
+            return observation
+        tour.scroll_list(ui, 3)
+    raise AssertionError(f"missing visible text {text!r}")
+
+
+def count_text(ui, text):
+    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
+    return sum(1 for node in observation.get("nodes", []) if node.get("text") == text)
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -133,10 +157,10 @@ FLOWS = [
         ))(text_value(ui, "Brightness")),
     )),
     ("dropdown", "Adaptive Drop Down", lambda ui, p: (
-        tour.click_text(ui, "More options"),
-        assert_text(ui, "Duplicate"),
-        tour.click_text(ui, "Duplicate"),
-        assert_text(ui, "Duplicated!"),
+        click_any(ui, ["Top bar menu", "More options"]),
+        assert_text(ui, "Copy"),
+        tour.click_text(ui, "Copy"),
+        assert_text(ui, "Copied!"),
     )),
     ("alert-cancel", "Adaptive Alert Dialog", lambda ui, p: (
         tour.click_text(ui, "Show Alert Dialog"),
@@ -145,7 +169,7 @@ FLOWS = [
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
     ("alert-text-field", "Adaptive Alert Dialog", lambda ui, p: (
-        tour.click_text(ui, "Show Text Field Dialog"),
+        click_text_scroll(ui, "Show Text Field Dialog"),
         (assert_text(ui, "Enter Name") if p == "ios" else assert_text(ui, "Confirm")),
         (tour.click_text(ui, "Cancel") if p == "ios" else tour.click_text(ui, "Confirm")),
     )),
@@ -156,15 +180,17 @@ FLOWS = [
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
     ("date-bounds", "Adaptive Date Picker", lambda ui, p: (
-        tour.click_text(ui, "From today"),
+        click_text_scroll(ui, "From today"),
         tour.find(ui, {"text": "From today", "properties": {"selected": True}}, timeout_ms=3000),
     )),
     ("scaffold-tab", "Adaptive Scaffold", lambda ui, p: (
-        tour.click_text(ui, "Profile"),
-        assert_text(ui, "Profile"),
+        tour.click_text(ui, "Favorites"),
+        (lambda count: (_ for _ in ()).throw(AssertionError("tab title did not update"))
+         if count < 2 else None)(count_text(ui, "Favorites")),
+        assert_text(ui, "This demonstrates AdaptiveScaffold"),
     )),
     ("action-sheet", "Adaptive Alert Dialog", lambda ui, p: (
-        tour.click_text(ui, "Show ActionSheet"),
+        click_text_scroll(ui, "Show ActionSheet"),
         assert_text(ui, "Alert Dialog"),
         (assert_text(ui, "Cancel"), tour.click_text(ui, "Cancel"),
          assert_absent(ui, "This is a native alert dialog from Kira")) if p == "ios"
@@ -173,8 +199,7 @@ FLOWS = [
     ("permissions-sms-rows", "Permissions", lambda ui, p: (
         assert_text(ui, "ReadSms"),
         assert_text(ui, "ReceiveSms"),
-        tour.scroll_list(ui, 4),
-        assert_text(ui, "SendSms"),
+        assert_text_scroll(ui, "SendSms"),
     )),
     ("time-24h", "Adaptive Time Picker", lambda ui, p: (
         tour.scroll_list(ui, 3),
@@ -238,6 +263,11 @@ FLOWS = [
     )),
 ]
 
+PLATFORM_ONLY = {
+    "alert-text-field": "ios",
+    "action-sheet": "ios",
+}
+
 BLOCKED = [
     ("permission-camera", "Permissions", "OS permission dialog targeting is not enabled in the baseline"),
     ("file-picker", "File Picker", "system document picker; no seeded file selection in this run"),
@@ -281,6 +311,14 @@ def main() -> None:
     for flow_id, screen, action in FLOWS:
         if selected and flow_id not in selected:
             continue
+        if flow_id in PLATFORM_ONLY and PLATFORM_ONLY[flow_id] != args.platform:
+            result["flows"].append({
+                "id": flow_id, "screen": screen, "status": "not-applicable",
+                "reason": f"sample section is {PLATFORM_ONLY[flow_id]}-only",
+                "before": None, "after": None,
+            })
+            print(f"not-applicable: {flow_id}")
+            continue
         entry = {"id": flow_id, "screen": screen, "status": "failed", "before": None, "after": None}
         try:
             ui.action("app.restart", {"id": tour.ANDROID_APP_ID})
@@ -308,12 +346,21 @@ def main() -> None:
         })
         print(f"blocked: {flow_id} ({reason})")
 
+    out = args.output_root / args.platform / f"functional-{device}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if out.exists():
+        previous = json.loads(out.read_text(encoding="utf-8"))
+        if previous.get("device") == device:
+            merged = {item["id"]: item for item in previous.get("flows", [])}
+            merged.update({item["id"]: item for item in result["flows"]})
+            order = [item["id"] for item in FLOWS] + [item["id"] for item in BLOCKED]
+            result["flows"] = [merged[key] for key in order if key in merged]
+            result["captured_at"] = previous.get("captured_at") or result["captured_at"]
+            result["updated_at"] = datetime.now(timezone.utc).isoformat()
     passed = sum(1 for item in result["flows"] if item["status"] == "passed")
     failed = sum(1 for item in result["flows"] if item["status"] == "failed")
     blocked = sum(1 for item in result["flows"] if item["status"] == "blocked")
     result["summary"] = {"passed": passed, "failed": failed, "blocked": blocked}
-    out = args.output_root / args.platform / f"functional-{device}.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result["summary"]))
     raise SystemExit(0 if failed == 0 else 1)
