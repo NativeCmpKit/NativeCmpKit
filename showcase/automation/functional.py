@@ -163,7 +163,13 @@ def click_switch_near(ui, label, expect=None):
         if not node_bounds or not bounds:
             continue
         role = str(node.get("role", "")).lower()
-        if role not in ("axcheckbox", "checkbox", "switch", "axswitch", "togglebutton"):
+        properties = node.get("properties", {})
+        looks_like_switch = (
+            role in ("axcheckbox", "checkbox", "switch", "axswitch", "togglebutton")
+            or properties.get("checkable") is True
+            or properties.get("checked") is not None
+        )
+        if not looks_like_switch:
             continue
         if abs(node_bounds["y"] - bounds["y"]) <= 24 and node_bounds["x"] > bounds["x"]:
             ui.action("pointer.click", {
