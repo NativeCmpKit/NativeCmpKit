@@ -28,6 +28,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 GROUP = "io.github.apdelrahman1911.nativecmpkit"
 UPSTREAM_GROUP = "com.mohamedrejeb.calf"
+SUPERSEDED_PREVIEW_GROUP = "io.github.apdelrahman1911.kira"
+SUPERSEDED_GROUPS = (UPSTREAM_GROUP, SUPERSEDED_PREVIEW_GROUP)
 DESTINATION = "https://github.com/NativeCmpKit/NativeCmpKit"
 TARGET_SUFFIXES = {
     "metadata": "", "android": "-android", "desktop": "-desktop", "js": "-js",
@@ -291,13 +293,19 @@ def archive_names(archive: zipfile.ZipFile) -> set[str]:
 
 
 def legacy_archive_entries(archive: zipfile.ZipFile, names: set[str]) -> list[str]:
-    legacy_spellings = (UPSTREAM_GROUP, UPSTREAM_GROUP.replace(".", "/"), UPSTREAM_GROUP.replace(".", "_"))
-    legacy_bytes = tuple(spelling.encode() for spelling in legacy_spellings)
+    legacy_spellings = tuple(group.replace(".", separator)
+                             for group in SUPERSEDED_GROUPS
+                             for separator in (".", "/", "_"))
+    legacy_bytes = tuple(spelling.encode(encoding) for spelling in legacy_spellings
+                         for encoding in ("utf-8", "utf-16-le"))
+    compiled_metadata_suffixes = (".class", ".kotlin_module", ".kotlin_metadata", ".kotlin_builtins",
+                                  ".knm", ".knt", ".knf", ".knd")
     entries = []
     for name in sorted(names):
         if any(spelling in name for spelling in legacy_spellings):
             entries.append(name)
-        elif name.endswith(".class"):
+        elif (name.endswith(compiled_metadata_suffixes) or name == "AndroidManifest.xml" or
+              name.endswith(("/manifest", "/linkdata/module"))):
             data = archive.read(name)
             if any(marker in data for marker in legacy_bytes):
                 entries.append(name)
@@ -419,7 +427,8 @@ class ArtifactVerifier:
             return None
 
     def dependency(self, group: str | None, artifact: str | None, version: str | None, label: str) -> None:
-        self.check(label + ":upstream-independent", group != UPSTREAM_GROUP, "No dependency on original Calf artifacts")
+        self.check(label + ":upstream-independent", group not in SUPERSEDED_GROUPS,
+                   "No dependency on artifacts using a superseded publication identity")
         if group == GROUP:
             self.check(label + ":candidate-identity", artifact in self.all_coordinates and version == self.version,
                        "Internal dependency uses a known independently named artifact and exact candidate version")

@@ -75,9 +75,15 @@ def main():
             )):
                 errors.append(f"{relative}: Kotlin package is outside the project namespace")
         for number, line in enumerate(source.splitlines(), 1):
+            if relative == "tests/consumer/build.gradle.kts" and line.strip() == (
+                'check(id.group != "com.mohamedrejeb.calf" && id.group != "io.github.apdelrahman1911.kira") {'
+            ):
+                continue
             if relative in HISTORICAL_REJECTION_FIXTURES and "Calf" in line and "!=" in line:
                 continue
-            if relative == "tests/consumer/verify_artifacts.py" and line.startswith("UPSTREAM_GROUP = "):
+            if relative == "tests/consumer/verify_artifacts.py" and line.startswith(
+                ("UPSTREAM_GROUP = ", "SUPERSEDED_PREVIEW_GROUP = ")
+            ):
                 continue
             if relative == "tests/consumer/native_consumer_carriage.py":
                 for archived_path in ARCHIVED_CARRIAGE_METADATA:

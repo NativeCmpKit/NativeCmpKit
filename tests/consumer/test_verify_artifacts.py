@@ -307,6 +307,25 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
         self.assertFalse(check["passed"])
         self.assertEqual(["Current.class", f"{legacy}/Old.class"], json.loads(check["detail"]))
 
+    def test_packaged_legacy_metadata_and_android_manifest_are_refused(self):
+        entries = {
+            "AndroidManifest.xml": gate.SUPERSEDED_PREVIEW_GROUP.encode("utf-16-le"),
+            "default/ir/strings.knt": gate.UPSTREAM_GROUP.replace(".", "_").encode(),
+            "default/linkdata/module": gate.SUPERSEDED_PREVIEW_GROUP.encode(),
+            "default/linkdata/current.knm": gate.GROUP.encode(),
+            "META-INF/nativecmpkit/NOTICE": gate.UPSTREAM_GROUP.encode(),
+        }
+        with zipfile.ZipFile(io.BytesIO(zip_bytes(entries))) as archive:
+            self.assertEqual(["AndroidManifest.xml", "default/ir/strings.knt", "default/linkdata/module"],
+                             gate.legacy_archive_entries(archive, gate.archive_names(archive)))
+
+    def test_packaged_dependencies_refuse_both_superseded_groups(self):
+        verifier = gate.ArtifactVerifier(self.root, self.repo, self.VERSION, targets=["desktop"], native_platforms=["linux-x64"])
+        for group in gate.SUPERSEDED_GROUPS:
+            verifier.dependency(group, "foreign-core", self.VERSION, "foreign")
+        verifier.dependency("org.jetbrains.kotlin", "kotlin-stdlib", "2.4.20", "ordinary")
+        self.assertEqual([False, False, True], [check["passed"] for check in verifier.checks])
+
     def test_current_pom_display_name_is_required_for_root_and_target(self):
         result = self.run_gate()
         checks = [c for c in result["checks"] if c["name"].endswith(":pom-display-name")]

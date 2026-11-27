@@ -354,7 +354,9 @@ tasks.register("verifyCandidateResolution") {
                         }
                         return@artifactLoop
                     }
-                    check(id.group != "com.mohamedrejeb.calf") { "Unexpected original Calf dependency: $id" }
+                    check(id.group != "com.mohamedrejeb.calf" && id.group != "io.github.apdelrahman1911.kira") {
+                        "Unexpected dependency using a superseded publication identity: $id"
+                    }
                     if (id.group == candidateGroup) {
                         check(id.version == candidateVersion) { "Wrong candidate version: $id" }
                         candidates += id.module
