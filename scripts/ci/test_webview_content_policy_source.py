@@ -27,7 +27,8 @@ CLASSES = {
     "BrowserWebViewContentPolicyAcceptanceTest": ("webTest", OTHER_METHODS),
 }
 ANDROID_SOURCE = "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt"
-ANDROID_PREIMAGE_SHA256 = "3d32645991c56f523087a3cf60a5aba5bbd567b9c9686768157cf7e01875b9f7"
+# The d968257f preimage with only its Kotlin namespace migrated.
+ANDROID_PREIMAGE_SHA256 = "130c46efe44e30a7f88b4c8d3b7a03f92169ee646a63f6468405db3ae82551e1"
 ANDROID_PREIMAGE = "                this.pageTitle = it[pageTitleKey] as String?\n                this.lastLoadedUrl = it[lastLoadedUrlKey] as String?\n"
 ANDROID_POSTIMAGE = "                // Native history is not a displayed document. Actual native callbacks\n                // repopulate metadata; never paint an old title/URL over a new blank view.\n"
 UNCHANGED_INPUTS = {
@@ -50,7 +51,7 @@ def source(klass):
 
 
 def proposal():
-    return json.loads((ROOT / "docs/testing/webview-content-policy-focuses.json").read_text())
+    return json.loads((ROOT / "docs/testing/nativecmpkit-webview-content-policy-focuses.json").read_text())
 
 
 class WebViewContentPolicySourceTest(unittest.TestCase):
