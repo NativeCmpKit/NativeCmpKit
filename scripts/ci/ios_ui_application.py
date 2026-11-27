@@ -1512,6 +1512,16 @@ def main() -> int:
         binary = options.binary.absolute().relative_to(lt.ROOT).as_posix()
         result = run(binary, arguments, image_diagnostics=options.image_diagnostics)
         print("NATIVECMPKIT_UIKIT_TRANSPORT passed=" + str(result["transport_passed"]).lower(), flush=True)
+        if not result["transport_passed"]:
+            error = result.get("error") or {}
+            protocol = result.get("application_protocol") or {}
+            details = {
+                "phase": error.get("phase"),
+                "error_type": error.get("type"),
+                "protocol_keys": sorted(protocol),
+                "cleanup_error_type": (result.get("cleanup") or {}).get("error_type"),
+            }
+            print("NATIVECMPKIT_UIKIT_FAILURE " + json.dumps(details, sort_keys=True), file=sys.stderr, flush=True)
         return 0 if result["transport_passed"] else 2
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
         print("Owned UIKit application transport refused: " + type(error).__name__, file=sys.stderr)

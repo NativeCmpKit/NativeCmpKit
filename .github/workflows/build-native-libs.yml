@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-webview, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -218,6 +218,10 @@ jobs:
         with:
           min-wrapper-count: 1
           allow-snapshots: false
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6
+        with:
+          cache-read-only: false
+          add-job-summary: never
       - name: Linux native prerequisites
         if: runner.os == 'Linux'
         run: |
@@ -267,7 +271,7 @@ jobs:
           module = "nativecmpkit-file-picker"
           plan = {"suite": "desktop", "expected": [{"module": module, "test_source_files": [SOURCE]}]}
           portal = OwnedPickerPortal(root, output, plan).start()
-          command = ["./gradlew", f":{module}:desktopTest", "--max-workers=1",
+          command = ["./gradlew", f":{module}:desktopTest", "--max-workers=1", "--info",
                      "--no-parallel", "--no-configuration-cache", "--no-build-cache"]
           package = "io.github.apdelrahman1911.nativecmpkit.picker"
           for case in (
@@ -372,7 +376,7 @@ jobs:
             :sample:common:linkDebugFrameworkIosArm64 \
             --continue --max-workers=2 --no-configuration-cache --no-build-cache
       - name: Tests requiring an owned UIKit application
-        if: inputs.profile == 'identity-apple-app'
+        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview'
         shell: bash
         run: |
           python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
@@ -386,7 +390,14 @@ jobs:
             exit 1
           fi
           xcrun simctl bootstatus "$device" -b
-          ./gradlew iosSimulatorArm64ApplicationTest -PnativecmpkitSimulatorDevice="$device" \
+          args=(iosSimulatorArm64ApplicationTest)
+          if [[ "${{ inputs.profile }}" == identity-apple-webview ]]; then
+            focus="$(PYTHONPATH=scripts/ci python3 -c 'import library_tests as lt; print(lt.ui_application_focus_filter(lt.content_policy.IOS_FOCUS))')"
+            IFS=, read -ra methods <<< "$focus"
+            args=(:nativecmpkit-webview:iosSimulatorArm64ApplicationTest)
+            for method in "${methods[@]}"; do args+=(--tests "$method"); done
+          fi
+          ./gradlew "${args[@]}" -PnativecmpkitSimulatorDevice="$device" \
             --continue --max-workers=2 --no-parallel --no-configuration-cache --no-build-cache
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'

@@ -23,7 +23,10 @@ class DesktopCookieRequestParityTest {
                     "http://owner.example.test/foo/child", "https://sub.owner.example.test/foo/child")) {
                 val wire = requestPairs(native, URI(url))
                 val actual = pairs(manager.getCookies(url))
-                assertEquals(wire, actual, "Actual JDK request-header occurrence parity at $url")
+                // Some JDK 17 updates use raw prefix matching for the wire
+                // header. The library requires a path segment boundary.
+                val expected = if (url == "$owner/foobar") wire.filterNot { it == ("scope" to "foo") } else wire
+                assertEquals(expected, actual, "JDK request-header occurrences with path boundaries at $url")
             }
             assertEquals(listOf("child", "foo", "root"), manager.getCookies("$owner/foo/child/page")
                 .filter { it.name == "scope" }.map { it.value }.sorted())
