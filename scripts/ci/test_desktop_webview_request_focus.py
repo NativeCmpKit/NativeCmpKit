@@ -20,7 +20,7 @@ FOCUS = "webview-desktop-request-state"
 CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
 SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
-SOURCE_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
+SOURCE_SHA256 = "5769b6b558dd528db721ef4970b734aa055fdb22dadeb622c6c1798acf6405ea"
 SLOTS = ("desktop-linux-x64", "desktop-macos-arm64", "desktop-windows-x64", "desktop-linux-arm64", "desktop-macos-x64")
 HOSTS = (("Linux", "x86_64"), ("Darwin", "arm64"), ("Windows", "AMD64"), ("Linux", "aarch64"), ("Darwin", "x86_64"))
 

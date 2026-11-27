@@ -234,7 +234,7 @@ jobs:
         shell: bash
         run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
       - name: Install the official Android SDK platform
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' || inputs.profile == 'identity-apple-webview'
         shell: bash
         run: |
           sdkmanager="${ANDROID_HOME:?}/cmdline-tools/latest/bin/sdkmanager"
@@ -395,15 +395,14 @@ jobs:
             exit 1
           fi
           xcrun simctl bootstatus "$device" -b
-          args=(iosSimulatorArm64ApplicationTest)
           if [[ "${{ inputs.profile }}" == identity-apple-webview ]]; then
-            focus="$(PYTHONPATH=scripts/ci python3 -c 'import library_tests as lt; print(lt.ui_application_focus_filter(lt.content_policy.IOS_FOCUS))')"
-            IFS=, read -ra methods <<< "$focus"
-            args=(:nativecmpkit-webview:iosSimulatorArm64ApplicationTest)
-            for method in "${methods[@]}"; do args+=(--tests "$method"); done
+            python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-webview \
+              --focus ios-webview-content-policy --simulator "$device" --timeout 2700 \
+              --output build/ci-verification/wk-identity
+          else
+            ./gradlew iosSimulatorArm64ApplicationTest -PnativecmpkitSimulatorDevice="$device" \
+              --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
           fi
-          ./gradlew "${args[@]}" -PnativecmpkitSimulatorDevice="$device" \
-            --continue --max-workers=2 --no-parallel --no-configuration-cache --no-build-cache
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
         shell: cmd
@@ -429,4 +428,5 @@ jobs:
           path: |
             build/ci-identity/junit-summary.json
             build/ci-identity/desktop-artifacts.json
+            build/ci-verification/wk-identity/receipt.json
           if-no-files-found: error

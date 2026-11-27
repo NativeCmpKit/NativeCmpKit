@@ -29,8 +29,7 @@ def copy_model_checkout(root):
     for tree in ("nativecmpkit-webview/src", "nativecmpkit-webview/karma.config.d"):
         sources.update(path.relative_to(ROOT).as_posix() for path in r.source_files(ROOT, tree))
     sources.update((policy.SOURCE, policy.SPEC_RELATIVE, policy.IOS_FIXTURE))
-    from webview_current_contract667_source_projection import contract_input_paths
-    sources.update(contract_input_paths())
+    sources.update(policy.CONTRACT_INPUT_SHA256)
     for name in sources:
         target = root / name; target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes((ROOT / name).read_bytes())
@@ -55,7 +54,7 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         self.root = Path(temporary.name).resolve(); copy_model_checkout(self.root)
 
     def test_five_literal_profiles_match_unchanged_author_classes_fourteen_methods_and_seventeen_new_targets(self):
-        proposal = json.loads((ROOT / "docs/testing/webview-content-policy-focuses.json").read_text())
+        proposal = json.loads((ROOT / "docs/testing/nativecmpkit-webview-content-policy-focuses.json").read_text())
         self.assertEqual(list(policy.FOCUSES), [row["focus"] for row in proposal["profiles"]])
         self.assertEqual((4, 14, 17), (proposal["authored_classes"], proposal["authored_methods"], proposal["target_executions"]))
         for original in proposal["profiles"]:

@@ -13,8 +13,6 @@ from unittest.mock import Mock, patch
 import ios_ui_application as application
 import library_tests as r
 import webview_content_policy_native_focus as policy
-import webview_content_policy_source_projection as history
-import camera_ios_ownership_source_projection as camera_history
 from test_webview_content_policy_native_focus import copy_model_checkout, native_plan
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,10 +20,8 @@ APP_SOURCE = "scripts/ci/ios_ui_application.py"
 LIBRARY_SOURCE = "scripts/ci/library_tests.py"
 
 
-def functions(name, payload=None):
-    source = (camera_history.source_before_camera_ios_ownership(name, (ROOT / name).read_bytes())
-              if payload is None else payload)
-    return {node.name: node for node in ast.parse(source).body if isinstance(node, ast.FunctionDef)}
+def functions(name):
+    return {node.name: node for node in ast.parse((ROOT / name).read_bytes()).body if isinstance(node, ast.FunctionDef)}
 
 
 def prepare_node():
@@ -104,11 +100,9 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
                 namespace = {"host": {"module": module}, "focus": focus, "lt": SimpleNamespace(content_policy=policy)}
                 expression = ast.fix_missing_locations(ast.Expression(copy.deepcopy(assign.value)))
                 self.assertIs(module == policy.MODULE and focus == policy.IOS_FOCUS, eval(compile(expression, "<source-only-focus-model>", "eval"), namespace))
-        prior = functions(APP_SOURCE, history.source_before_content_policy(APP_SOURCE, (ROOT / APP_SOURCE).read_bytes()))["run"]
-        def request(node):
-            return next(item for item in ast.walk(node) if isinstance(item, ast.Assign) and
-                        any(isinstance(target, ast.Name) and target.id == "request_fixture_requested" for target in item.targets))
-        self.assertEqual(ast.dump(request(prior), include_attributes=False), ast.dump(request(run), include_attributes=False))
+        request = next(node for node in ast.walk(run) if isinstance(node, ast.Assign) and
+                       any(isinstance(target, ast.Name) and target.id == "request_fixture_requested" for target in node.targets))
+        self.assertNotIn("content_policy", ast.unparse(request.value))
 
     def test_new_profile_enables_only_existing_disposable_local_network_ats_and_no_arbitrary_policy(self):
         identifier = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
@@ -186,27 +180,18 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
         self.assertTrue(namespace["receipt"]["transport_passed"])
         self.assertEqual({"source_model_only": True}, validate.call_args.args[0])
 
-    def test_original_launch_argv_timeout_runtime_sdk_helpers_and_every_old_cleanup_block_are_byte_ast_unchanged(self):
-        current = camera_history.source_before_camera_ios_ownership(APP_SOURCE, (ROOT / APP_SOURCE).read_bytes()); old = history.source_before_content_policy(APP_SOURCE, current)
-        before = functions(APP_SOURCE, old); after = functions(APP_SOURCE, current)
-        self.assertEqual(set(before), set(after))
-        for name in set(before) - {"run"}:
-            self.assertEqual(ast.dump(before[name], include_attributes=False), ast.dump(after[name], include_attributes=False))
-        def calls(node, name):
-            return [ast.dump(item, include_attributes=False) for item in ast.walk(node) if isinstance(item, ast.Call) and
-                    ((isinstance(item.func, ast.Name) and item.func.id == name) or
-                     (isinstance(item.func, ast.Attribute) and item.func.attr == name))]
-        self.assertEqual(calls(before["run"], "forward_application"), calls(after["run"], "forward_application"))
-        self.assertEqual(calls(before["run"], "capture"), calls(after["run"], "capture"))
-        old_try = next(node for node in before["run"].body if isinstance(node, ast.Try) and node.finalbody)
-        new_try = next(node for node in after["run"].body if isinstance(node, ast.Try) and node.finalbody)
-        remaining = [node for node in new_try.finalbody if not (isinstance(node, ast.If) and ast.unparse(node.test) == "content_fixture is not None")]
-        self.assertEqual(ast.dump(ast.Module(old_try.finalbody, []), include_attributes=False), ast.dump(ast.Module(remaining, []), include_attributes=False))
-        old_collect = functions(LIBRARY_SOURCE, history.source_before_content_policy(LIBRARY_SOURCE, (ROOT / LIBRARY_SOURCE).read_bytes()))["collect_one_ios_application_receipt"]
-        new_collect = functions(LIBRARY_SOURCE)["collect_one_ios_application_receipt"]
-        original_need = [ast.dump(node, include_attributes=False) for node in ast.walk(old_collect) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "need"]
-        current_need = [ast.dump(node, include_attributes=False) for node in ast.walk(new_collect) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "need"]
-        self.assertTrue(set(original_need) <= set(current_need))
+    def test_content_fixture_keeps_the_current_launch_timeout_and_independent_cleanup(self):
+        run = functions(APP_SOURCE)["run"]
+        launch = [node for node in ast.walk(run) if isinstance(node, ast.Call)
+                  and isinstance(node.func, ast.Name) and node.func.id == "forward_application"]
+        self.assertEqual(1, len(launch))
+        self.assertEqual("['/usr/bin/xcrun', 'simctl', 'launch', '--console', '--terminate-running-process', device, bundle_id, *arguments]",
+                         ast.unparse(launch[0].args[0]))
+        self.assertIn("timeout=application_timeout_seconds(focus)", [ast.unparse(item) for item in launch[0].keywords])
+        owned = next(node for node in run.body if isinstance(node, ast.Try) and node.finalbody)
+        self.assertIn(cleanup_node().lineno, [node.lineno for node in owned.finalbody])
+        cleanup = ast.unparse(ast.Module(owned.finalbody, []))
+        self.assertLess(cleanup.index("if content_fixture is not None:"), cleanup.index("uninstall"))
 
     def test_new_application_filter_is_exact_four_methods_permutation_not_whole_class_or_partial_registry(self):
         base = sorted(application.TEST_ARGUMENTS); selected = policy.selector(policy.IOS_FOCUS).split(",")

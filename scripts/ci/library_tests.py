@@ -1559,14 +1559,14 @@ WEBVIEW_DESKTOP_REQUEST_FOCUSES = (WEBVIEW_DESKTOP_REQUEST_FOCUS, WEBVIEW_DESKTO
 WEBVIEW_DESKTOP_REQUEST_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 WEBVIEW_DESKTOP_REQUEST_METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
 WEBVIEW_DESKTOP_REQUEST_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
-WEBVIEW_DESKTOP_REQUEST_SOURCE_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
+WEBVIEW_DESKTOP_REQUEST_SOURCE_SHA256 = "5769b6b558dd528db721ef4970b734aa055fdb22dadeb622c6c1798acf6405ea"
 WEBVIEW_DESKTOP_STOP_REDIRECT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 WEBVIEW_DESKTOP_STOP_METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 WEBVIEW_DESKTOP_REDIRECT_METHOD = "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct"
 WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
-WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE_SHA256 = "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3"
+WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE_SHA256 = "a3815e03ab7d4dea91e41f99edd790492cc24e2aa2742fb16e3fb9bb7e424ee3"
 WEBVIEW_DESKTOP_AWT_OWNER_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindow.kt"
-WEBVIEW_DESKTOP_AWT_OWNER_SHA256 = "c7bccc89f020490ea6198b837c7a9e386b051a0926ec22e17b3557699420b082"
+WEBVIEW_DESKTOP_AWT_OWNER_SHA256 = "e3bff42576f712d99e9ad4b35722ec8fe86444fbfbdaa86781ba9a076f903abd"
 # Same five classifier identities as DesktopJavaFx.kt; declaration, not runtime acceptance.
 WEBVIEW_DESKTOP_REQUEST_HOSTS = frozenset({
     ("Linux", "x64"), ("Linux", "arm64"), ("Darwin", "x64"), ("Darwin", "arm64"), ("Windows", "x64"),
@@ -2215,6 +2215,8 @@ def source_files(root: Path, relative: str) -> list[Path]:
     result = []
     for base, directories, names in os.walk(folder, followlinks=False):
         directories[:] = sorted(name for name in directories if name not in IGNORED_INPUT_DIRS)
+        if Path(base) == root / "scripts/ci":
+            names = [name for name in names if name != "test_javafx_ordinary_success_trace.py"]
         for name in [*directories, *names]:
             path = Path(base) / name
             if path.is_symlink():

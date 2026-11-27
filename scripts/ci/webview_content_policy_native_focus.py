@@ -10,6 +10,7 @@ import hashlib
 import re
 
 from ios_popover_anchor_plan import _ordinary_bytes
+from webview_content_policy_source_pins import CONTRACT_INPUT_SHA256
 
 SOURCE = "scripts/ci/webview_content_policy_native_focus.py"
 SPEC_RELATIVE = "scripts/ci/fixtures/webview-content-policy-routing-source-inverse.json"
@@ -108,24 +109,24 @@ SPECS = {'webview-content-policy-linux': {'profile': 'webview-content-policy-lin
                                 'report_directory': 'nativecmpkit-webview/build/test-results/iosSimulatorArm64ApplicationTest'}}
 
 SOURCE_SHA256 = {'nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js': 'c78874d7622fa8a507d68735305a989a5fc21b0a072098532473e6c586212d81',
- 'nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml': '4bb4a2e939562f0ca2f2973ba2438c52ccdd54be1eb500e8afa78d5a5e1b1966',
- 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt': '592151fdea1302aece7c93f8f84d5287af9c68649698df76e6e8bc62d55ca47d',
- 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': 'd292df9838fd7a208d97db9adf69d1b61466b0a5848955bf5e989f2467ab3564',
- 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt': 'eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23',
- 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
+ 'nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml': 'fdf8777e220cdc5f9e6ce133027821e3a908f1e144db0698ba1a89bcadc1e562',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt': 'e461bcc12a49dbe3b4a72c6b762ce0ca0fb1b4135accaecf2b07db5d2fa5e706',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': '5c6f334c2ad3145accf540f5985b4a89f6630101677447bf4ff1f6565ae06f23',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt': '8b6d5b4f49d534391d5ba92cbd836bc26562caa034d040a4604884d79967de7b',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
  'nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml': 'd41572dbbaf67ec740c28ed69a8c5fce4223329c4c96d726f1df9a08f95de71d',
- 'nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt': 'e7f3e127d3f3293d21f1bc2d84d9dd6761d26f65b1b77102237521197bb045a2',
- 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopContentPolicyWindow.kt': 'e90b00f604cc16db8f26a0b8210d0fb815c0faa1af9d1d5edc11aca8ef9eb007',
- 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '79601573fea41ab8d1a78258b2de74153383a2582d9eac031deb6cfbe7e2c683',
- 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt': 'fcb6ab01848cd2b4caaa4ac2274aab6062e16cc3b29103e6da4f748aabcac7c4',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '36713f1ccec7c2b19ed9abba86dd502f4108485889f7e8bb0719a735f05aead9',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt': 'f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt': '0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f',
- 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt': '7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7',
- 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserContentPolicyFixture.kt': '94e13cf71742536efa828c737861c94063b3a35b8df0ceb9d37bad7f7e80f749',
- 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt': 'e31efb65ee40ba0f22c6e5c3f7dd39ce88356d35cfa7e469824f28a325e49d2d',
- 'scripts/ci/webview_content_policy_fixture.py': '7ef8dfd4e8eee68a8d584e91d3ea231daa46b15a68f36cf762ee4409c8b4d571'}
+ 'nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt': 'd61e7953ee6fd041141346870a0ad38af23c034803e5c7c8d597a08a3d79a2d9',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopContentPolicyWindow.kt': 'f12040dc853bbbee03b0e1ef7c589329482e97affd675cd6afa4f261cf9c4716',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '0efd10133e800ba6724ed89f66f2a1c54e20e4195fec896caedbc7e3aeac2450',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt': 'dd372e8d89e672a31aa14c8fe714894b111d149626c16918467ede1280f2a703',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '3eeec5d66ff1a99240e296a4aa58b4bb469bf8269d63c7017b415db2446ca460',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt': 'cc9b988cc03586fa535bfa8f3be66e0581252611fdfb6db12fa2606b48d09ee6',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt': '4177b7ed6f2d0040ffe72545eea6f7a02ff002bc22cbba46026d937bceb06d50',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt': '24bdf9d5b96aaf13597e08f25be408d60b76311d3c30ad1726129e3205adc8c1',
+ 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserContentPolicyFixture.kt': '513d9a85877761382e7af458b1bc3eccaadb3d8f921e6472789b9dbbaae55293',
+ 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt': '2acc1ff9fe88d113b6881ae80211f2046dd567ba5331b855ad3ab9f51e064b1b',
+ 'scripts/ci/webview_content_policy_fixture.py': '61f47eaf30c5840411d073914561e1261083e74f9977f3a15a7d393d26c7c40e'}
 
 
 def spec(focus: str) -> dict:
@@ -195,12 +196,8 @@ def validate_sources(root, focus: str) -> bool:
 
 
 def _contract(focus: str) -> dict:
-    import webview_content_policy_source_projection as history
-    import webview_current_contract667_source_projection as current
     row = spec(focus)
-    pins = {name: SOURCE_SHA256[name] for name in sources(focus)}
-    pins.update(current.current_contract_hashes())
-    pins[SPEC_RELATIVE] = history.SPEC_SHA256
+    pins = {name: SOURCE_SHA256[name] for name in sources(focus)} | CONTRACT_INPUT_SHA256
     return {"schema_version": 1, "focus": focus, "module": MODULE, "suite": row["suite"],
             "task": row["task"], "selected_testcases": identities(focus), "source_hashes": pins,
             "new_methods": len(row["methods"]), "affected_existing_methods": int(focus == ANDROID_FOCUS),
