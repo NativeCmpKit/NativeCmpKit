@@ -14,6 +14,7 @@ from generate_coverage import render  # noqa: E402
 FLOW_ROWS = {
     "buttons": ["UI-BUTTON-001"],
     "switch": ["UI-SWITCH-001"],
+    "clickable": ["UI-CLICK-001"],
     "slider": ["UI-SLIDER-001"],
     "dropdown": ["UI-MENU-001"],
     "alert-cancel": ["UI-ALERT-001"],

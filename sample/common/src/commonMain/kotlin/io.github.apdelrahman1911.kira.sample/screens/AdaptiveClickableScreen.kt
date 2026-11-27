@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -20,6 +24,9 @@ import io.github.apdelrahman1911.kira.ui.gesture.adaptiveClickable
 fun AdaptiveClickableScreen(
     navigateBack: () -> Unit
 ) {
+    var clicks by remember { mutableIntStateOf(0) }
+    var longClicks by remember { mutableIntStateOf(0) }
+    var doubleClicks by remember { mutableIntStateOf(0) }
     SampleScreenScaffold(
         title = "Adaptive Clickable",
         navigateBack = navigateBack,
@@ -44,13 +51,13 @@ fun AdaptiveClickableScreen(
                     .adaptiveClickable(
                         shape = MaterialTheme.shapes.medium,
                         onLongClick = {
-                            // Handle long click
+                            longClicks++
                         },
                         onDoubleClick = {
-                            // Handle double click
+                            doubleClicks++
                         }
                     ) {
-                        // Handle click
+                        clicks++
                     }
                     .background(MaterialTheme.colorScheme.primary)
                     .padding(
@@ -63,6 +70,13 @@ fun AdaptiveClickableScreen(
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Clicks: $clicks · Long: $longClicks · Double: $doubleClicks",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }

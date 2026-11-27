@@ -57,6 +57,22 @@ def deny_permission_dialogs(ui, platform):
             return
 
 
+def click_node(ui, text, count=1, hold_ms=0):
+    observation = tour.soft_find(ui, {"text": text}, timeout_ms=3000)
+    if not observation.get("satisfied") or not observation.get("nodes"):
+        raise AssertionError(f"no node for {text!r}")
+    node = tour.choose_clickable(observation, observation["nodes"])
+    bounds = node.get("bounds")
+    if not bounds:
+        raise AssertionError(f"no bounds for {text!r}")
+    params = {"x": bounds["x"] + bounds["width"] // 2, "y": bounds["y"] + bounds["height"] // 2}
+    if count > 1:
+        params["count"] = count
+    if hold_ms:
+        params["hold_ms"] = hold_ms
+    ui.action("pointer.click", params)
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -94,6 +110,14 @@ FLOWS = [
         assert_text(ui, "Clicked 0 times"),
         tour.click_text(ui, "Clicked 0 times"),
         assert_text(ui, "Clicked 1 times"),
+    )),
+    ("clickable", "Adaptive Clickable", lambda ui, p: (
+        click_node(ui, "Tap me"),
+        assert_text(ui, "Clicks: 1"),
+        click_node(ui, "Tap me", count=2),
+        assert_text(ui, "Double: 1"),
+        click_node(ui, "Tap me", hold_ms=800),
+        assert_text(ui, "Long: 1"),
     )),
     ("switch", "Adaptive Switch", lambda ui, p: (
         assert_text(ui, "Wi-Fi: off"),
