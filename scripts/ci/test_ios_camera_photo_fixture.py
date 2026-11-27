@@ -13,6 +13,7 @@ from unittest.mock import Mock
 import camera_ios_ownership_native_focus as focus
 import ios_camera_photo_fixture as photos
 import ios_ui_application as application
+from summarize_identity_uikit import camera_photo_summary
 
 SOURCE = "a" * 40
 NONCE = "b" * 32
@@ -64,6 +65,18 @@ class FakeSimctl:
 
 
 class IosCameraPhotoFixtureControls(unittest.TestCase):
+    def test_host_report_preserves_refused_status_and_scalar_results_without_raw_identity(self):
+        observer = protocol()
+        observer.feed(f"{BUNDLE}: {PID}")
+        with self.assertRaises(ValueError) as error:
+            observer.feed(marker("denied"))
+        self.assertEqual("camera-photos-status-refused", application.TRANSPORT_FAILURE_REASONS[str(error.exception)])
+        result = camera_photo_summary({"camera_photos": {"grant": {"exit_code": 0}, "reset": {"exit_code": 2}}},
+                                      observer.partial())
+        self.assertEqual({"actual_status": "denied", "main_thread": True, "matches_observed_launch": True,
+                          "grant_exit": 0, "reset_exit": 2}, result)
+        self.assertEqual(0, observer.partial()["counts"]["executed"])
+
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

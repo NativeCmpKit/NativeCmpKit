@@ -34,6 +34,21 @@ def labels(document, fields):
     return {key: value for key in fields if isinstance(value := document.get(key), str) and TOKEN.fullmatch(value)}
 
 
+def camera_photo_summary(data, protocol):
+    lease = data.get("camera_photos") or {}
+    observation = protocol.get("camera_photo_authorization") or {}
+    status = observation.get("status")
+    outcomes = {f"{action}_exit": value for action in ("grant", "reset")
+                if type(value := (lease.get(action) or {}).get("exit_code")) is int and -255 <= value <= 255}
+    if status in ("authorized", "limited", "not-determined", "denied", "restricted", "unknown"):
+        process_id = observation.get("process_id")
+        launch_pid = protocol.get("observed_launch_pid")
+        outcomes["actual_status"] = status
+        outcomes["main_thread"] = observation.get("main_thread") is True
+        outcomes["matches_observed_launch"] = type(process_id) is int and type(launch_pid) is int and process_id == launch_pid
+    return outcomes
+
+
 def receipt_rows():
     for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in (
         "wk-identity", "identity-picker", "identity-share", "identity-camera", "identity-main-ui",
@@ -70,6 +85,8 @@ def receipt_rows():
                         step for step in protocol.get("pre26_negative_steps_progress", [])[:len(PRE26_NEGATIVE_STEPS_PHASES)]
                         if step in PRE26_NEGATIVE_STEPS_PHASES
                     ],
+                    **({"camera_photos": camera_photo_summary(data, protocol)}
+                       if host == "native-camera-application" else {}),
                     "crash": labels(crash, ("status", "error_type")) | labels(crash.get("exception") or {}, ("type", "signal")),
                     "fixture": {
                         **{key: fixture[key] for key in ("connections", "control_requests", "refusals", "owned_sockets", "fixture_error")

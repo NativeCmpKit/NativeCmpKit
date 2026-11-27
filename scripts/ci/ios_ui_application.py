@@ -185,6 +185,11 @@ TRANSPORT_FAILURE_REASONS = {
     "Native suite or testcase is still open": "unfinished-native-case",
     "Zero/incomplete native test execution is not successful transport": "zero-or-incomplete-native-execution",
     "Unbounded incomplete native protocol line": "incomplete-line-byte-limit",
+    "Missing/duplicate/reordered/foreign Camera native Photos readback": "camera-photos-readback-identity",
+    "Actual native Photos status refuses the controlled fallback setup": "camera-photos-status-refused",
+    "Unknown or failing Camera application lifecycle/readback marker": "camera-photos-unknown-marker",
+    "Camera native status PID differs from actual source-bound simctl launch PID": "camera-photos-pid-mismatch",
+    "Camera requires one actual Authorized Main readback from the exact launched app PID": "camera-photos-readback-missing",
 }
 
 PRE26_CUSTOMIZATION_CASE = (

@@ -647,13 +647,38 @@ jobs:
             --output build/ci-identity/simulator.json
           device="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["udid"])')"
           state="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["state"])')"
-          if [[ "$state" == Shutdown ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
+            # Own a fresh device with the same type/runtime to avoid reusing a
+            # preinstalled simulator that reports a failed data migration.
+            read -r device_type simulator_runtime < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["device_type"], s["runtime_identifier"])')
+            original_device="$device"
+            device="$(xcrun simctl create "NativeCmpKit Camera $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$device_type" "$simulator_runtime")"
+            [[ "$device" =~ ^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$ && "$device" != "$original_device" ]]
+            cleanup_camera_simulator() {
+              result=$?
+              xcrun simctl shutdown "$device" || true
+              if ! xcrun simctl delete "$device"; then result=1; fi
+              exit "$result"
+            }
+            trap cleanup_camera_simulator EXIT
+            xcrun simctl boot "$device"
+          elif [[ "$state" == Shutdown ]]; then
             xcrun simctl boot "$device"
             trap 'xcrun simctl shutdown "$device"' EXIT
           elif [[ "$state" != Booted ]]; then
             exit 1
           fi
-          xcrun simctl bootstatus "$device" -b
+          if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
+            xcrun simctl bootstatus "$device" -b | tee build/ci-identity/camera-boot.txt
+            if grep -Fq 'Data Migration Failed' build/ci-identity/camera-boot.txt; then
+              echo 'The disposable Camera simulator failed data migration before application launch.' >&2
+              exit 1
+            fi
+            python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --simulator "$device" --require-booted \
+              --output build/ci-identity/camera-simulator.json
+          else
+            xcrun simctl bootstatus "$device" -b
+          fi
           case "$IDENTITY_PROFILE" in
             identity-apple-webview|identity-apple-webview-restore)
               focus=ios-webview-content-policy
