@@ -384,7 +384,7 @@ def main() -> None:
         try:
             ui.action("app.restart", {"id": tour.ANDROID_APP_ID})
             tour.find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
-            tour.open_screen(ui, screen)
+            tour.open_screen(ui, screen, use_search=args.platform == "android")
             entry["before"] = save(flow_id, "before", ui.screenshot())
             action(ui, args.platform)
             entry["after"] = save(flow_id, "after", ui.screenshot())

@@ -188,7 +188,7 @@ def ensure_home(ui):
     find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
 
 
-def open_screen(ui, title: str):
+def open_screen(ui, title: str, use_search: bool = True):
     ensure_home(ui)
     try:
         ui.action("keyboard.press", {"keys": ["ESC"]})
@@ -196,6 +196,12 @@ def open_screen(ui, title: str):
         pass
     scroll_to_top(ui)
     search = find_search(ui)
+    if search and not use_search:
+        node = search["nodes"][0]
+        ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
+        ui.action("text.insert", {"text": "", "replace": True})
+        ui.action("keyboard.press", {"keys": ["ESC"]})
+        search = None
     if search:
         node = search["nodes"][0]
         ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
@@ -286,7 +292,7 @@ def main() -> None:
 
     for title, component, scenario in SCREENS:
         try:
-            open_screen(ui, title)
+            open_screen(ui, title, use_search=args.platform == "android")
             shot(component, scenario)
 
             if title == "Adaptive Alert Dialog":
@@ -363,7 +369,7 @@ def main() -> None:
         try:
             ui.action("app.restart", {"id": ANDROID_APP_ID})
             find(ui, {"text_contains": "component screens"}, timeout_ms=15000)
-            open_screen(ui, title)
+            open_screen(ui, title, use_search=args.platform == "android")
             shot(component, scenario)
             record["errors"].remove(failure)
             print(f"retried {title}: captured")
