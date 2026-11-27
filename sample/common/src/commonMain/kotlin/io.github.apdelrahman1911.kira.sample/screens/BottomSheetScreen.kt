@@ -97,7 +97,7 @@ fun BottomSheetScreen(
                 var showDialog by remember { mutableStateOf(false) }
 
                 LazyColumn(
-                    modifier = Modifier
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     item {
                         Text("Bottom Sheet")
