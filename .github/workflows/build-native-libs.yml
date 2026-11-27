@@ -577,7 +577,7 @@ jobs:
             test "$executable" = NativeCmpKit
             test "$architecture" = arm64
             printf 'target=%s phase=module-map\n' "$target" | tee -a "$receipt"
-            grep -Eq '^[[:space:]]*(framework[[:space:]]+)?module[[:space:]]+NativeCmpKit[[:space:]]*\{' \
+            grep -Eq '^framework module "NativeCmpKit"[[:space:]]*\{$' \
               "$framework/Modules/module.modulemap"
             printf 'target=%s phase=swift-link\n' "$target" | tee -a "$receipt"
             xcrun --sdk "$sdk" swiftc -emit-library -target "$triple" -sdk "$(xcrun --sdk "$sdk" --show-sdk-path)" \
