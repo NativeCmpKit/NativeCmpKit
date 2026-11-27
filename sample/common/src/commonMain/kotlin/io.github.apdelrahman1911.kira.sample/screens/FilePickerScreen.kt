@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.kira.io.KmpFile
 import io.github.apdelrahman1911.kira.io.getName
 import io.github.apdelrahman1911.kira.io.getPath
+import io.github.apdelrahman1911.kira.io.readByteArray
 import io.github.apdelrahman1911.kira.io.source
 import io.github.apdelrahman1911.kira.picker.FilePickerFileType
 import io.github.apdelrahman1911.kira.picker.FilePickerSelectionMode
