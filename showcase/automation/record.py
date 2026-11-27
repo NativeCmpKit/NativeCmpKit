@@ -35,9 +35,9 @@ SCREEN_ROWS = {
     "ui-adaptive-time-picker": ["UI-TIME-001", "UI-TIME-002"],
     "ui-adaptive-alert-dialog": ["UI-ALERT-001", "UI-ALERT-002", "UI-ALERT-003",
                                  "UI-ALERT-004", "UI-ALERT-005"],
-    "ui-adaptive-bottom-sheet": ["UI-SHEET-001", "UI-SHEET-002"],
+    "ui-adaptive-bottom-sheet": ["UI-SHEET-001", "UI-SHEET-002", "UI-SHEET-003"],
     "ui-adaptive-dropdown": ["UI-MENU-001", "UI-MENU-002"],
-    "ui-adaptive-scaffold": ["UI-BAR-001"],
+    "ui-adaptive-scaffold": ["UI-BAR-001", "UI-BAR-008"],
     "ui-adaptive-top-bar": ["UI-BAR-002", "UI-BAR-005", "UI-ICON-002"],
     "ui-adaptive-navigation-bar": ["UI-BAR-003", "UI-BAR-006"],
     "ui-adaptive-toolbar": ["UI-BAR-004", "UI-BAR-007"],
@@ -53,7 +53,7 @@ SCREEN_ROWS = {
                     "PERM-LOC-001", "PERM-PIM-001", "PERM-BT-001", "PERM-CORE-001",
                     "PERM-SMS-001"],
     "geo-math": ["GEO-001", "GEO-003"],
-    "home": ["NAV-001"],
+    "home": ["NAV-001", "NAV-004"],
     "ui-liquid-glass": ["UI-LIQUID-001", "UI-LIQUID-002", "UI-LIQUID-003", "UI-LIQUID-004"],
     "limitations": ["UI-PROGRESS-003", "UI-FAB-001", "PERM-STUB-001", "NAV-002", "GEO-002",
                     "EXCL-MAPS-001", "EXCL-MEDIA-001", "EXCL-NOTIF-001"],
@@ -70,6 +70,7 @@ def main() -> None:
     parser.add_argument("--job", required=True)
     parser.add_argument("--passed-ids", default="")
     parser.add_argument("--only-rows", default="")
+    parser.add_argument("--tablet", action="store_true")
     args = parser.parse_args()
 
     document = json.loads(args.coverage.read_text(encoding="utf-8"))
@@ -85,6 +86,8 @@ def main() -> None:
             if only and row_id not in only:
                 continue
             row = rows[row_id]
+            if (row.get("windowClass") == "tablet") != args.tablet:
+                continue
             execution = row["execution"][args.platform]
             if execution["status"] not in ("not-applicable", "passed"):
                 execution["status"] = "passed" if row_id in passed else "captured"
@@ -107,6 +110,8 @@ def main() -> None:
             if only and row_id not in only:
                 continue
             row = rows[row_id]
+            if (row.get("windowClass") == "tablet") != args.tablet:
+                continue
             execution = row["execution"][args.platform]
             if execution["status"] != "not-applicable":
                 execution["status"] = "failed"

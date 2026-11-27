@@ -7,8 +7,8 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 
 Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
 
-- android: 50 captured, 1 failed, 20 not-applicable, 10 not-run, 4 passed
-- ios: 42 captured, 6 failed, 9 not-applicable, 12 not-run, 16 passed
+- android: 50 captured, 1 failed, 20 not-applicable, 13 not-run, 4 passed
+- ios: 42 captured, 6 failed, 9 not-applicable, 15 not-run, 16 passed
 
 Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<platform>/functional-<device>.json`.
 
@@ -85,6 +85,9 @@ Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<pl
 | UI-ICON-004 | CupertinoIcon catalog | category filters | supported | supported | CupertinoIconsCatalog | not-run | passed (46014167086) |
 | UI-ALERT-005 | AdaptiveBasicAlertDialog | text field and critical severity | unsupported | supported | Dialog | not-applicable | passed (46014167086) |
 | UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | not-run |
+| NAV-004 | HomeScreen | large-screen index layout | supported | supported | Home | not-run | not-run |
+| UI-BAR-008 | AdaptiveScaffold | tablet tab and bar layout | supported | supported | Scaffold | not-run | not-run |
+| UI-SHEET-003 | AdaptiveBottomSheet | tablet presentation | supported | supported | BottomSheet | not-run | not-run |
 | UI-SHEET-002 | AdaptiveSheetState | detents, veto and dismissal | supported | supported | BottomSheet | not-run | failed (46014167086) |
 | UI-DATE-006 | AdaptiveDatePicker | picker and input display modes | supported | supported | DatePicker | not-run | failed (46014167086) |
 | UI-TIME-002 | AdaptiveTimePicker | 24-hour state | supported | supported | TimePicker | not-run | passed (46014167086) |

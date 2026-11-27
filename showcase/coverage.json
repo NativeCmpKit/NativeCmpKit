@@ -4394,6 +4394,174 @@
       "limitations": []
     },
     {
+      "id": "NAV-004",
+      "module": "kira-ui",
+      "component": "HomeScreen",
+      "variant": "large-screen index layout",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "tablet",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Open the Home index on a tablet window",
+        "Scroll the component list"
+      ],
+      "expected": [
+        "Cards stay readable without clipping",
+        "Search and category filters remain usable"
+      ],
+      "flowId": "android-phone-homescreen-large-screen-index-layout",
+      "screenshot": {
+        "android": "screenshots/android/homescreen/large-screen-index-layout/api35-phone.png",
+        "ios": "screenshots/ios/homescreen/large-screen-index-layout/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-008",
+      "module": "kira-ui",
+      "component": "AdaptiveScaffold",
+      "variant": "tablet tab and bar layout",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "tablet",
+      "route": "Scaffold",
+      "setup": [],
+      "steps": [
+        "Open the Scaffold screen on a tablet window",
+        "Switch tabs"
+      ],
+      "expected": [
+        "Bars span the window",
+        "Tab content updates without clipping"
+      ],
+      "flowId": "android-phone-adaptivescaffold-tablet-tab-and-bar-layout",
+      "screenshot": {
+        "android": "screenshots/android/adaptivescaffold/tablet-tab-and-bar-layout/api35-phone.png",
+        "ios": "screenshots/ios/adaptivescaffold/tablet-tab-and-bar-layout/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-SHEET-003",
+      "module": "kira-ui",
+      "component": "AdaptiveBottomSheet",
+      "variant": "tablet presentation",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "tablet",
+      "route": "BottomSheet",
+      "setup": [],
+      "steps": [
+        "Open the sheet on a tablet window",
+        "Close it"
+      ],
+      "expected": [
+        "The sheet uses the wide presentation",
+        "Close dismisses it"
+      ],
+      "flowId": "android-phone-adaptivebottomsheet-tablet-presentation",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebottomsheet/tablet-presentation/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebottomsheet/tablet-presentation/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
       "id": "UI-SHEET-002",
       "module": "kira-ui",
       "component": "AdaptiveSheetState",
