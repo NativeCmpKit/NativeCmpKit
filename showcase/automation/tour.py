@@ -174,6 +174,17 @@ def open_screen(ui, title: str):
     except Exception:
         pass
     scroll_to_top(ui)
+    search = find_search(ui)
+    if search:
+        node = search["nodes"][0]
+        ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
+        ui.action("text.insert", {"text": title, "replace": True})
+        try:
+            click_result(ui, title)
+            find(ui, {"text_contains": "component screens"}, state="absent", timeout_ms=8000)
+            return
+        except Exception:
+            pass
     for _ in range(40):
         observation = soft_find(ui, {"text_contains": title}, timeout_ms=800)
         nodes = observation.get("nodes", [])

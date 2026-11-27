@@ -114,10 +114,11 @@ FLOWS = [
     ("clickable", "Adaptive Clickable", lambda ui, p: (
         click_node(ui, "Tap me"),
         assert_text(ui, "Clicks: 1"),
-        click_node(ui, "Tap me", count=2),
-        assert_text(ui, "Double: 1"),
         click_node(ui, "Tap me", hold_ms=800),
         assert_text(ui, "Long: 1"),
+        # Android adb taps are separate `input` processes; the two presses exceed
+        # Compose's ~300 ms double-tap window, so only iOS drives the double tap.
+        (click_node(ui, "Tap me", count=2), assert_text(ui, "Double: 1")) if p == "ios" else None,
     )),
     ("switch", "Adaptive Switch", lambda ui, p: (
         assert_text(ui, "Wi-Fi: off"),
@@ -172,6 +173,7 @@ FLOWS = [
     ("permissions-sms-rows", "Permissions", lambda ui, p: (
         assert_text(ui, "ReadSms"),
         assert_text(ui, "ReceiveSms"),
+        tour.scroll_list(ui, 4),
         assert_text(ui, "SendSms"),
     )),
     ("time-24h", "Adaptive Time Picker", lambda ui, p: (
