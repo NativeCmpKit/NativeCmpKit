@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -284,6 +284,40 @@ jobs:
               portal.close()
           if not portal.receipt["clean_owned_shutdown"]:
               raise SystemExit("The owned portal did not shut down cleanly")
+          raise SystemExit(result.returncode)
+          PYTHON
+      - name: Recheck Linux WebView failures with owned clocked audio
+        if: inputs.profile == 'identity-linux-webview'
+        shell: bash
+        run: |
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- \
+            install --no-install-recommends -y pulseaudio libasound2-plugins
+          PYTHONPATH=scripts/ci xvfb-run -a python3 - <<'PYTHON'
+          from pathlib import Path
+          import subprocess
+          from desktop_media_context import MEDIA_SOURCE, OwnedAudio
+
+          root = Path.cwd()
+          output = root / "build/ci-verification/w"
+          output.mkdir(parents=True)
+          module = "nativecmpkit-webview"
+          plan = {"suite": "desktop", "expected": [{"module": module, "test_source_files": [MEDIA_SOURCE]}]}
+          audio = OwnedAudio(root, output, plan).start()
+          command = ["./gradlew", f":{module}:desktopTest", "--max-workers=1", "--info",
+                     "--no-parallel", "--no-configuration-cache", "--no-build-cache"]
+          package = "io.github.apdelrahman1911.nativecmpkit.ui.web"
+          for case in (
+              "DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes",
+              "DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument",
+              "DesktopWebViewStopRedirectAcceptanceTest.publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner",
+          ):
+              command.extend(["--tests", f"{package}.{case}"])
+          try:
+              result = subprocess.run(command, env=audio.environment, check=False)
+          finally:
+              audio.close()
+          if not audio.passed():
+              raise SystemExit("The owned audio session did not pass readiness and cleanup")
           raise SystemExit(result.returncode)
           PYTHON
       - name: Android host tests and sample APK
