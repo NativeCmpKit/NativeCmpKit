@@ -261,6 +261,10 @@ def main() -> None:
                 click_text(ui, "Show Alert Dialog")
                 shot("ui-adaptive-alert-dialog", "simple")
                 click_text(ui, "Cancel")
+                if args.platform == "ios":
+                    click_text(ui, "Show ActionSheet")
+                    shot("ui-adaptive-alert-dialog", "action-sheet")
+                    click_text(ui, "Cancel")
             elif title == "Adaptive Bottom Sheet":
                 click_text(ui, "Show Bottom Sheet")
                 shot("ui-adaptive-bottom-sheet", "expanded")

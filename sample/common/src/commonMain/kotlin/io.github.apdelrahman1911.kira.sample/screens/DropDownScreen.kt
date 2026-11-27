@@ -89,9 +89,10 @@ fun DropDownScreen(
             }
         },
         iosTrailingItems = listOf(
-            UIKitUIBarButtonItem.withMenu(
+            UIKitUIBarButtonItem(
                 image = UIKitImage.SystemName(SFSymbol.ellipsisCircle),
                 menuItems = topBarMenuItems,
+                accessibilityLabel = "More options",
             ),
         ),
     ) { padding ->

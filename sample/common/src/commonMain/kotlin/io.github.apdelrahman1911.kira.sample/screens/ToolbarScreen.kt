@@ -56,20 +56,24 @@ fun ToolbarScreen(
     var selectedPattern by remember { mutableStateOf(SpacingPattern.Default) }
     var expanded by remember { mutableStateOf(true) }
 
-    val backItem = UIKitUIBarButtonItem.image(
+    val backItem = UIKitUIBarButtonItem(
         image = UIKitImage.SystemName(SFSymbol.chevronLeft),
+        accessibilityLabel = "Back",
         onClick = { lastAction = "Back tapped" },
     )
-    val forwardItem = UIKitUIBarButtonItem.image(
+    val forwardItem = UIKitUIBarButtonItem(
         image = UIKitImage.SystemName(SFSymbol.chevronRight),
+        accessibilityLabel = "Forward",
         onClick = { lastAction = "Forward tapped" },
     )
-    val shareItem = UIKitUIBarButtonItem.image(
+    val shareItem = UIKitUIBarButtonItem(
         image = UIKitImage.SystemName(SFSymbol.squareAndArrowUp),
+        accessibilityLabel = "Share",
         onClick = { lastAction = "Share tapped" },
     )
-    val bookmarkItem = UIKitUIBarButtonItem.image(
+    val bookmarkItem = UIKitUIBarButtonItem(
         image = UIKitImage.SystemName(SFSymbol.book),
+        accessibilityLabel = "Bookmark",
         onClick = { lastAction = "Bookmark tapped" },
     )
 
