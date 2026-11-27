@@ -31,18 +31,19 @@ ANDROID_SOURCE = "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrah
 ANDROID_PREIMAGE_SHA256 = "130c46efe44e30a7f88b4c8d3b7a03f92169ee646a63f6468405db3ae82551e1"
 ANDROID_PREIMAGE = "                this.pageTitle = it[pageTitleKey] as String?\n                this.lastLoadedUrl = it[lastLoadedUrlKey] as String?\n"
 ANDROID_POSTIMAGE = "                // Native history is not a displayed document. Actual native callbacks\n                // repopulate metadata; never paint an old title/URL over a new blank view.\n"
+# Complete renamed images from 18e1978d, including the reviewed WebView fixes already in its parent.
 UNCHANGED_INPUTS = {
-    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
-    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
-    "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt": "508c28c1fe336e01537e8ff62bd6249712c3d0eaa4fb591c89b1289f972b773f",
-    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
-    "nativecmpkit-webview/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.web.kt": "798710ff9b6ce32685e25f3cd13042d13e3568fc36d5e1438bf2e6df6991727f",
-    "scripts/ci/ios_webview_request_fixture.py": "a5b4780ab39822a4ee261c07d434bacb9ce9fe72943c1924eeaddcbbeb1e17a7",
-    "nativecmpkit-webview/build.gradle.kts": "6e924d26f988f960ff828383a41901b79d7692d3eea6a07cb38230866b86e908",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt": "0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt": "7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
-    "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt": "eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4476eb5ee9bf590b121e29c8a95e2e3cd31d6e96260c999953da19b6c67460ca",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "f690e412f95a3b9a08eec97b7d6f751cd8f6da20befbc1c31e6bfc5c8b5e951e",
+    "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt": "940585ae412eaeebeedf55ba927ad5e9a6422d9a2b8695608f2dceaadb4bcbef",
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "26b914d5f62aceae320d9ca8df91018e70aca2f8ea3e451f2bc03e2313b85953",
+    "nativecmpkit-webview/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.web.kt": "7f84bda8a1f50b96b4a8c498f4e377d009664036fcfa203707b73180064b95b8",
+    "scripts/ci/ios_webview_request_fixture.py": "caa5842043e012622d8ab05ffdfc61e4382238c5760a3b18db81639908dd4649",
+    "nativecmpkit-webview/build.gradle.kts": "e49deed63c5482e257a08909c3b296c21ac341403596a1d5ca14c6b2b8ed64a7",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt": "4177b7ed6f2d0040ffe72545eea6f7a02ff002bc22cbba46026d937bceb06d50",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt": "24bdf9d5b96aaf13597e08f25be408d60b76311d3c30ad1726129e3205adc8c1",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "cc9b988cc03586fa535bfa8f3be66e0581252611fdfb6db12fa2606b48d09ee6",
+    "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt": "8b6d5b4f49d534391d5ba92cbd836bc26562caa034d040a4604884d79967de7b",
 }
 
 
@@ -140,10 +141,8 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
             self.assertIn(value, text)
 
     def test_owning_common_native_and_accepted_fixture_helper_bytes_remain_unchanged(self):
-        from platform_recovery659_source_projection import current_source_before_platform_recovery659
         for path, digest in UNCHANGED_INPUTS.items():
-            original = current_source_before_platform_recovery659(path, (ROOT / path).read_bytes())
-            self.assertEqual(digest, hashlib.sha256(original).hexdigest(), path)
+            self.assertEqual(digest, hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), path)
 
     def test_authored_native_tests_never_inject_callbacks_loading_title_url_errors_or_saver_results(self):
         forbidden = (r"\.(?:pageTitle|lastLoadedUrl|loadingState|errorsForCurrentRequest)\s*=(?!=)",
@@ -206,13 +205,14 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
                 self.assertIn(value, text)
 
     def test_desktop_browser_unsupported_both_entry_points_preserve_current_dom_with_zero_real_requests(self):
-        from platform_recovery659_source_projection import current_source_before_platform_recovery659
-        for klass in ("DesktopWebViewContentPolicyAcceptanceTest", "BrowserWebViewContentPolicyAcceptanceTest"):
-            relative = PREFIX.format(set=CLASSES[klass][0]) + klass + ".kt"
-            text = current_source_before_platform_recovery659(relative, (ROOT / relative).read_bytes()).decode()
+        for klass, encodings in (
+            ("DesktopWebViewContentPolicyAcceptanceTest", 'listOf("utf-8", "utf8", "UTF-8", "UTF8")'),
+            ("BrowserWebViewContentPolicyAcceptanceTest", 'listOf("utf-8", "utf8")'),
+        ):
+            text = source(klass)
             for value in ('listOf("state", "navigator")', '"additionalHttpHeaders"', '"baseUrl"', 'it.code == -2',
                           '"$entry-headers", "get" to 0', '"$entry-base", "get" to 0, "script" to 0, "style" to 0, "image" to 0',
-                          'listOf("utf-8", "utf8")', 'assertSame(native, state.'):
+                          encodings, 'assertSame(native, state.'):
                 self.assertIn(value, text)
             self.assertIn("outerHTML", text)
 
