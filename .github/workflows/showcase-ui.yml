@@ -37,7 +37,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: showcase-ui-${{ github.ref }}
+  group: showcase-ui-${{ github.ref }}-${{ github.event_name }}-${{ inputs.platform || 'push' }}
   cancel-in-progress: false
 
 env:
