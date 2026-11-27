@@ -82,7 +82,8 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           if [[ ! -x "$SDKMANAGER" ]]; then SDKMANAGER="$(command -v sdkmanager)"; fi
           yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
-          "$SDKMANAGER" 'platforms;android-37.0' 'platform-tools' 'emulator' \
+          "$SDKMANAGER" 'platforms;android-37.0' 'platforms;android-35' \
+            'build-tools;35.0.0' 'platform-tools' 'emulator' \
             'system-images;android-35;google_apis;x86_64'
 
       - name: Build the debug APK
@@ -131,6 +132,14 @@ jobs:
           adb -s emulator-5554 shell getprop ro.build.version.release
           adb -s emulator-5554 shell wm size
           adb -s emulator-5554 shell wm density
+
+      - name: Create a disposable Python environment
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/uivenv"
+          "$RUNNER_TEMP/uivenv/bin/python" -m pip install --disable-pip-version-check --upgrade pip
+          "$RUNNER_TEMP/uivenv/bin/python" --version
 
       - name: Check out the pinned ui-test-actions scripts
         if: steps.mode.outputs.mode == 'session'
@@ -183,7 +192,7 @@ jobs:
           export UI_TEST_READY
           UI_TEST_READY='adb -s emulator-5554 shell dumpsys activity activities | grep -Eq "mResumedActivity.*${ANDROID_APP_ID}|topResumedActivity.*${ANDROID_APP_ID}"'
           cd "$RUNNER_TEMP/ui-test-actions"
-          python3 lifecycle.py start
+          "$RUNNER_TEMP/uivenv/bin/python" lifecycle.py start
 
       - name: Publish the Android connection artifact
         id: publish
@@ -205,7 +214,8 @@ jobs:
           UI_TEST_CONNECTION_FILE: ${{ steps.start.outputs.file }}
           UI_TEST_PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
           PYTHONUNBUFFERED: '1'
-        run: python3 "$UI_TEST_ACTION_PATH/lifecycle.py" hold
+        run: |
+          "$RUNNER_TEMP/uivenv/bin/python" "$UI_TEST_ACTION_PATH/lifecycle.py" hold
 
       - name: Retain emulator and Java diagnostics on failure
         if: failure()
@@ -312,6 +322,14 @@ jobs:
           echo "AXE_BINARY=$axe" >> "$GITHUB_ENV"
           "$axe" --version || true
 
+      - name: Create a disposable Python environment
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/uivenv"
+          "$RUNNER_TEMP/uivenv/bin/python" -m pip install --disable-pip-version-check --upgrade pip
+          "$RUNNER_TEMP/uivenv/bin/python" --version
+
       - name: Check out the pinned ui-test-actions scripts
         if: steps.mode.outputs.mode == 'session'
         shell: bash
@@ -381,7 +399,7 @@ jobs:
           export UI_TEST_READY
           UI_TEST_READY='xcrun simctl spawn "$UI_DEVICE" launchctl list | grep -Fq "UIKitApplication:${IOS_BUNDLE_ID}"'
           cd "$RUNNER_TEMP/ui-test-actions"
-          python3 lifecycle.py start
+          "$RUNNER_TEMP/uivenv/bin/python" lifecycle.py start
 
       - name: Publish the iOS connection artifact
         id: publish
@@ -403,7 +421,8 @@ jobs:
           UI_TEST_CONNECTION_FILE: ${{ steps.start.outputs.file }}
           UI_TEST_PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
           PYTHONUNBUFFERED: '1'
-        run: python3 "$UI_TEST_ACTION_PATH/lifecycle.py" hold
+        run: |
+          "$RUNNER_TEMP/uivenv/bin/python" "$UI_TEST_ACTION_PATH/lifecycle.py" hold
 
       - name: Retain simulator diagnostics on failure
         if: failure()
