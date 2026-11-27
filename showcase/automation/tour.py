@@ -342,6 +342,26 @@ def main() -> None:
                 record["errors"].append({"screen": title, "recovery": repr(recovery)})
                 break
 
+    # A condition timeout can leave the app wedged; restart once and retry the
+    # screens that failed outright, so one bad screen does not lose its capture.
+    by_title = {title: (component, scenario) for title, component, scenario in SCREENS}
+    for failure in list(record["errors"]):
+        title = failure.get("screen")
+        if title not in by_title or failure.get("retried"):
+            continue
+        component, scenario = by_title[title]
+        try:
+            ui.action("app.restart", {"id": ANDROID_APP_ID})
+            find(ui, {"text_contains": "component screens"}, timeout_ms=15000)
+            open_screen(ui, title)
+            shot(component, scenario)
+            record["errors"].remove(failure)
+            print(f"retried {title}: captured")
+        except Exception as error:  # noqa: BLE001
+            failure["retried"] = True
+            failure["retry_error"] = repr(error)
+            print(f"retry failed {title}: {error}", file=sys.stderr)
+
     record["ok"] = not record["errors"]
     out = args.output_root / args.platform / "tour.json"
     out.parent.mkdir(parents=True, exist_ok=True)
