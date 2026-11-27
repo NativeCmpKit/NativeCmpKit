@@ -20,6 +20,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
+from cookie_common_jdk_plan import NATIVE_EXCLUSION
 import ios_ui_application as app
 import ios_webview_request_fixture as requests
 import library_tests as lt
@@ -34,11 +35,11 @@ PROFILE = "ios-webview-request-dns"
 FOCUS = "webview-ios-native-request-dns"
 NATIVE_PINS = {
     "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt":
-        "594eb2139ad98961b06edcf0d6d9dc36efaa3dcad394e3b3ea458db75476aacf",
+        "9cd9c99eae68a83d5eb824295f2b48f086846780304333f37c8120a925cead60",
     "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt":
-        "25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594",
+        "499300428daa27ebdf2eac6ddbe7d164ba8338f3ad8c6a21bb9f5dd841e1e7b3",
     "scripts/ci/ios_webview_request_fixture.py":
-        "a5b4780ab39822a4ee261c07d434bacb9ce9fe72943c1924eeaddcbbeb1e17a7",
+        "caa5842043e012622d8ab05ffdfc61e4382238c5760a3b18db81639908dd4649",
 }
 
 
@@ -308,6 +309,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
                 self.assertEqual(None if dns_only else environment_expected, environment)
                 filters = [arg for arg in argv if arg.startswith("--ktest_gradle_filter=")]
                 self.assertEqual(["--ktest_gradle_filter=" + lt.ui_application_focus_filter(focus)], filters)
+                self.assertEqual(1, argv.count(NATIVE_EXCLUSION))
                 protocol.observed_launch_pid = 12345  # Explicit synthetic console PID, never a native observation.
                 protocol.feed(transport_fixture.ACTIVE)
                 for group in groups:
@@ -321,7 +323,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
             environment_expected = environment
             after = copy.deepcopy(helper.before)
             if runtime_failure: after["source_revision"] = "e" * 40
-            arguments = [*sorted(app.TEST_ARGUMENTS), "--ktest_gradle_filter=" + lt.ui_application_focus_filter(focus)]
+            arguments = [*sorted(app.TEST_ARGUMENTS), "--ktest_gradle_filter=" + lt.ui_application_focus_filter(focus), NATIVE_EXCLUSION]
             with patch.dict(os.environ, {"NATIVECMPKIT_UIKIT_RESULT_ROOT": "build/ci-verification/fixture/native-webview-application"}), \
                  patch.object(app.runtime, "capture", side_effect=[helper.before, after]), \
                  patch.object(app, "execute_control", side_effect=control), \

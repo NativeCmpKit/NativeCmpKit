@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 NATIVE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt"
 PIN_GUARD = "scripts/ci/test_ios_webview_request_dns_focus.py"
 HOST = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt"
-OUTSIDE_HELPER_SHA256 = "a96d4b49bba790fdb3230d8925f29db4084d789c744ad5ee2d961e6e7a0e54f0"
+OUTSIDE_HELPER_SHA256 = "f22e4d28e6877f7cf264fcac32e788a9a1a42efc0dde333fd49e24dc1facb52f"
 HELPER_SHA256 = "5b6123f2a968ccd06e4ca3ec2725a5c1e3666cd212a49a8aa28e3012fb73e6bd"
 
 

@@ -11,13 +11,14 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 IOS = "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt"
 IDENTITY = "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/NativeWebViewIdentity.ios.kt"
+# These source images are the exact inputs carried by the rename commit 18e1978d.
 PINS = {
-    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
-    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt": "594eb2139ad98961b06edcf0d6d9dc36efaa3dcad394e3b3ea458db75476aacf",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt": "25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewLifecycleAcceptanceTest.kt": "49c98aa532e14a75e1b3c09b5404727b426e3c4b859ab16f4af5a4fe9979a381",
-    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "f690e412f95a3b9a08eec97b7d6f751cd8f6da20befbc1c31e6bfc5c8b5e951e",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4476eb5ee9bf590b121e29c8a95e2e3cd31d6e96260c999953da19b6c67460ca",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt": "9cd9c99eae68a83d5eb824295f2b48f086846780304333f37c8120a925cead60",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt": "499300428daa27ebdf2eac6ddbe7d164ba8338f3ad8c6a21bb9f5dd841e1e7b3",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewLifecycleAcceptanceTest.kt": "e5a4d500362f2001f26ef96e7488406e94b1ff9cf3b6f7b853752804f9fe6d30",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "cc9b988cc03586fa535bfa8f3be66e0581252611fdfb6db12fa2606b48d09ee6",
 }
 
 
@@ -282,11 +283,9 @@ class IosCurrentRequestMetadataSourceTests(unittest.TestCase):
         self.assertIn("state.noteIosNativeLoading()", observer)
 
     def test_original_common_api_and_all_native_method_bodies_remain_byte_identical(self):
-        from platform_recovery659_source_projection import current_source_before_platform_recovery659
         for relative, expected in PINS.items():
             with self.subTest(path=relative):
-                original = current_source_before_platform_recovery659(relative, (ROOT / relative).read_bytes())
-                self.assertEqual(expected, hashlib.sha256(original).hexdigest())
+                self.assertEqual(expected, hashlib.sha256((ROOT / relative).read_bytes()).hexdigest())
 
 
 class IosCurrentRequestMetadataSyntheticTests(unittest.TestCase):

@@ -16,10 +16,10 @@ ROOT = Path(__file__).resolve().parents[2]
 NATIVE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt"
 DNS_GUARD = "scripts/ci/test_ios_webview_request_dns_focus.py"
 BOUNDARY_GUARD = "scripts/ci/test_ios_webview_request_callback_boundary.py"
-BASE_NATIVE_SHA256 = "569716cf0524d25b1b3c2712dbe040c0ec82cfe3db24f6dac3775e5ec15bd857"
-BASE_DNS_GUARD_SHA256 = "1e62ccfc0c22296d2490b1af5be0dd0267845ad766ad993e197f2bf1299b487e"
-BASE_BOUNDARY_GUARD_SHA256 = "0229f3de1d266239ddc208fbbd6b273f10b42fa434d13bcc730e7ac2d9e1533f"
-BASE_OUTSIDE_HELPER_SHA256 = "caed126d24aa87b2308dee1aac4f1af1b2a91cc3f1605bcb87dcbbde4768bb14"
+BASE_NATIVE_SHA256 = "216d0eb5ef0a9ce2c90b83aae8642a7e09004a837415ccca80ade319662e9230"
+BASE_DNS_GUARD_SHA256 = "bfe293ec07164c00f8b24b6b6c3822a2359fae607ae4d4627e1dc97e974d9be6"
+BASE_BOUNDARY_GUARD_SHA256 = "e1be8bac706f414e657532b30b5485927b9e067cb5178a5243d4c3efe2265459"
+BASE_OUTSIDE_HELPER_SHA256 = "9486f47308f10241ca3e3f8de22a685b2ea6c58e583320099fb819d49cb63280"
 HELPER_SHA256 = "5b6123f2a968ccd06e4ca3ec2725a5c1e3666cd212a49a8aa28e3012fb73e6bd"
 OLD_LINE = b"                timeoutInterval = 2.0\n"
 NEW_LINE = b"                setTimeoutInterval(2.0)\n"
@@ -133,8 +133,8 @@ class IosWebViewRequestTimeoutSetterTests(unittest.TestCase):
         outside_pin = digest(source.replace(helper, b"", 1)).encode()
         dns_variants = (
             (source_pin, BASE_NATIVE_SHA256.encode()),
-            (b'25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594', b'0' * 64),
-            (b'a5b4780ab39822a4ee261c07d434bacb9ce9fe72943c1924eeaddcbbeb1e17a7', b'0' * 64),
+            (b'499300428daa27ebdf2eac6ddbe7d164ba8338f3ad8c6a21bb9f5dd841e1e7b3', b'0' * 64),
+            (b'caa5842043e012622d8ab05ffdfc61e4382238c5760a3b18db81639908dd4649', b'0' * 64),
             (b'self.assertEqual(pin, lt.sha256(lt.ROOT / source), "Existing native/fixture bytes must remain unchanged")',
              b'self.assertTrue(True)'),
         )
