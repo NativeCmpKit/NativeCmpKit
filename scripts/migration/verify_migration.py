@@ -15,6 +15,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import tomllib
 from github_json import json_pages
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -231,7 +232,39 @@ def main() -> int:
               'rootProject.name = "NativeCmpKit"' in (ROOT / "settings.gradle.kts").read_text(),
               "Current owner-requested root Gradle/library name; archived migration identity remains historical")
         check("maven_identity", 'group = "io.github.apdelrahman1911.nativecmpkit"' in (ROOT / "build.gradle.kts").read_text(), "Prospective independent Maven group (not publication validation)")
-        check("resource_namespace_pinned", 'packageOfResClass = "io.github.apdelrahman1911.nativecmpkit.nativecmpkit_cupertino_icons.generated.resources"' in (ROOT / "nativecmpkit-cupertino-icons/build.gradle.kts").read_text(), "Use the NativeCmpKit Compose resource namespace")
+        resource_package = "io.github.apdelrahman1911.nativecmpkit.nativecmpkit_cupertino_icons.generated.resources"
+        check("resource_namespace_pinned", identity["compose_resource_package"] == resource_package and
+              f'packageOfResClass = "{resource_package}"' in (ROOT / "nativecmpkit-cupertino-icons/build.gradle.kts").read_text(), resource_package)
+        namespace = "io.github.apdelrahman1911.nativecmpkit"
+        opt_in = (ROOT / "nativecmpkit-core/src/commonMain/kotlin" / namespace /
+                  "core/ExperimentalNativeCmpKitApi.kt").read_text()
+        check("public_opt_in_annotation", identity["opt_in_annotation"] == f"{namespace}.core.ExperimentalNativeCmpKitApi" and
+              f"package {namespace}.core" in opt_in and "annotation class ExperimentalNativeCmpKitApi" in opt_in,
+              identity["opt_in_annotation"])
+        framework = identity["swift_framework"]
+        sample = (ROOT / "sample/common/build.gradle.kts").read_text()
+        swift = (ROOT / "sample/ios/NativeCmpKit/NativeCmpKitApp.swift").read_text()
+        check("sample_framework_source_identity", framework == {"name": "NativeCmpKit", "bundle_identifier": f"{namespace}.framework"} and
+              'baseName = "NativeCmpKit"' in sample and f'binaryOption("bundleId", "{namespace}.framework")' in sample and
+              "import NativeCmpKit" in swift.splitlines(), "Framework name, bundle identifier and Swift import in source")
+        native = identity["native_libraries"]
+        check("native_library_source_inventory", set(native) == {"nativecmpkit-file-picker", "nativecmpkit-share"}, "Desktop JNI modules")
+        for module, names in native.items():
+            module_root = safe_child(ROOT, module)
+            crate = tomllib.loads((module_root / "native/Cargo.toml").read_text())
+            bridge_package, bridge_class = names["bridge"].rsplit(".", 1)
+            platform = module_root / "src/desktopMain/kotlin" / bridge_package.replace(".", "/")
+            loader = (platform / "NativeLibLoader.kt").read_text()
+            bridge = (platform / f"{bridge_class}.kt").read_text()
+            rust = (module_root / "native/src/lib.rs").read_text()
+            methods = set(re.findall(r"\bexternal\s+fun\s+(\w+)\s*\(", bridge))
+            exports = set(re.findall(r'pub extern "system" fn (Java_\w+)\(', rust))
+            jni_prefix = "Java_" + names["bridge"].replace(".", "_") + "_"
+            check("native_library_identity_" + module, names["crate"].startswith("nativecmpkit-") and
+                  names["loader_name"] == names["crate"].replace("-", "_") and crate["package"]["name"] == names["crate"] and
+                  names["bridge"].startswith(namespace + ".") and f"package {bridge_package}" in bridge and
+                  f'LIB_NAME = "{names["loader_name"]}"' in loader and bool(methods) and
+                  exports == {jni_prefix + method for method in methods}, "Cargo, loader, Kotlin and JNI source identities agree")
         check("no_git_alternates", not (ROOT / ".git/objects/info/alternates").exists(), "Local checkout does not require another clone's object store")
         check("coordinate_uniqueness", len({m['new_artifact'] for m in identity['modules']}) == len(identity['modules']), f"{len(identity['modules'])} planned artifacts; no publication implied")
         for module in identity["modules"]:

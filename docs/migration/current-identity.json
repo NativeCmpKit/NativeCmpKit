@@ -6,6 +6,24 @@
   "maven_group": "io.github.apdelrahman1911.nativecmpkit",
   "development_version": "0.1.0-SNAPSHOT",
   "public_kotlin_namespace": "io.github.apdelrahman1911.nativecmpkit",
+  "opt_in_annotation": "io.github.apdelrahman1911.nativecmpkit.core.ExperimentalNativeCmpKitApi",
+  "compose_resource_package": "io.github.apdelrahman1911.nativecmpkit.nativecmpkit_cupertino_icons.generated.resources",
+  "swift_framework": {
+    "name": "NativeCmpKit",
+    "bundle_identifier": "io.github.apdelrahman1911.nativecmpkit.framework"
+  },
+  "native_libraries": {
+    "nativecmpkit-file-picker": {
+      "crate": "nativecmpkit-filepicker-native",
+      "loader_name": "nativecmpkit_filepicker_native",
+      "bridge": "io.github.apdelrahman1911.nativecmpkit.picker.platform.NativeFilePickerBridge"
+    },
+    "nativecmpkit-share": {
+      "crate": "nativecmpkit-share-native",
+      "loader_name": "nativecmpkit_share_native",
+      "bridge": "io.github.apdelrahman1911.nativecmpkit.share.platform.NativeShareBridge"
+    }
+  },
   "binary_compatibility_verified": false,
   "modules": [
     {
