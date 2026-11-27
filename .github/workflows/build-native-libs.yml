@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-android, identity-linux-browser, identity-linux-package, identity-apple, identity-apple-app, identity-windows, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-android, identity-linux-browser, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -193,7 +193,7 @@ jobs:
 
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
-    runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
+    runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ inputs.profile == 'identity-apple-app' && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
@@ -290,9 +290,13 @@ jobs:
           ./gradlew iosSimulatorArm64ApplicationTest -PnativecmpkitSimulatorDevice="$device" \
             --continue --max-workers=2 --no-parallel --no-configuration-cache --no-build-cache
       - name: Windows desktop tests
-        if: runner.os == 'Windows'
+        if: inputs.profile == 'identity-windows'
         shell: cmd
         run: gradlew.bat :nativecmpkit-file-picker:desktopTest :nativecmpkit-share:desktopTest --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Windows share fixture recovery
+        if: inputs.profile == 'identity-windows-share'
+        shell: cmd
+        run: gradlew.bat :nativecmpkit-share:desktopTest --tests "io.github.apdelrahman1911.nativecmpkit.share.platform.NativeCacheProcessIntegrationTest.differentCompiledNativeVersionsRaceInSeparateJvmsAndRetainTheirOwnDigestAndJniValue" --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache --info
       - name: Native crate tests
         if: ${{ !cancelled() && steps.rust.outcome == 'success' && (inputs.profile == 'identity-linux' || inputs.profile == 'identity-apple' || inputs.profile == 'identity-windows') }}
         shell: bash
