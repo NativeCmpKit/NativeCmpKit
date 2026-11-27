@@ -228,7 +228,14 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
             id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata" &&
                 resolved.extension == "jar" -> setOf("$root-metadata-$candidateVersion.jar")
             id.module == "$root-android" && resolved.extension == "aar" -> setOf("$root.aar")
-            resolved.extension == "klib" -> setOf("$root.klib", "$root-$candidateVersion.klib")
+            resolved.extension == "klib" -> {
+                val commonNames = setOf("$root.klib", "$root-$candidateVersion.klib")
+                when (id.module) {
+                    "$root-iosarm64" -> commonNames + "$root-iosArm64Main-$candidateVersion.klib"
+                    "$root-iossimulatorarm64" -> commonNames + "$root-iosSimulatorArm64Main-$candidateVersion.klib"
+                    else -> commonNames
+                }
+            }
             else -> emptySet()
         }
         val allowedNames = producerNames + canonicalName
