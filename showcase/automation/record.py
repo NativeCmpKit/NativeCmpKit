@@ -32,7 +32,7 @@ SCREEN_ROWS = {
     "ui-adaptive-progress": ["UI-PROGRESS-001", "UI-PROGRESS-002"],
     "ui-adaptive-date-picker": ["UI-DATE-001", "UI-DATE-002", "UI-DATE-003", "UI-DATE-004",
                                 "UI-DATE-005", "UI-DATE-006"],
-    "ui-adaptive-time-picker": ["UI-TIME-001"],
+    "ui-adaptive-time-picker": ["UI-TIME-001", "UI-TIME-002"],
     "ui-adaptive-alert-dialog": ["UI-ALERT-001", "UI-ALERT-002", "UI-ALERT-003",
                                  "UI-ALERT-004", "UI-ALERT-005"],
     "ui-adaptive-bottom-sheet": ["UI-SHEET-001", "UI-SHEET-002"],
