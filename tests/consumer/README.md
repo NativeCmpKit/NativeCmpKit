@@ -233,6 +233,9 @@ producer-host defect independently.
 
 ## ABI snapshots
 
+The snapshot inspects JVM declarations in the current NativeCmpKit namespace.
+Use the auditor from the historical revision when inspecting the old namespace.
+
 ```sh
 python3 tests/consumer/jvm_abi.py snapshot \
   --jar nativecmpkit-io-desktop=/absolute/candidate/nativecmpkit-io-desktop-0.1.0-preview.1.jar \

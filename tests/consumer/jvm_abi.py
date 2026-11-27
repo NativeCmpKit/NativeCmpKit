@@ -18,7 +18,7 @@ import subprocess
 import sys
 import zipfile
 
-from verify_artifacts import InvalidArtifact, archive_names, load_json_bytes, sha256
+from verify_artifacts import GROUP, InvalidArtifact, archive_names, load_json_bytes, sha256
 
 
 def parse_javap(text: str) -> dict[str, dict]:
@@ -63,14 +63,14 @@ def snapshot_jars(jars: dict[str, Path], revision: str, provenance: str, javap: 
     if not jars:
         raise InvalidArtifact("No artifacts selected")
     artifacts = {}
+    namespace_path = GROUP.replace(".", "/") + "/"
     version = subprocess.run([javap, "-version"], capture_output=True, text=True, check=True, timeout=30)
     for artifact, path in sorted(jars.items()):
         path = path.resolve()
         with zipfile.ZipFile(path) as archive:
             names = archive_names(archive)
         classes = sorted(name[:-6].replace("/", ".") for name in names
-                         if name.endswith(".class") and not name.startswith("META-INF/")
-                         and name.startswith(("com/mohamedrejeb/calf/", "jodd/")))
+                         if name.endswith(".class") and name.startswith(namespace_path))
         if not classes:
             # Some valid aggregation artifacts contain no own classes; retain explicit zero count.
             api = {}

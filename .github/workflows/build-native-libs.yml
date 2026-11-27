@@ -479,6 +479,32 @@ jobs:
           output.write_text(json.dumps({"revision": os.environ["GITHUB_SHA"], "binaries": records}, indent=2) + "\n")
           raise SystemExit(0 if all(record["passed"] for record in records) else 1)
           PY
+      - name: Inspect JVM declarations in the renamed staged Maven artifacts
+        if: inputs.profile == 'identity-linux-consumer'
+        run: |
+          PYTHONPATH=tests/consumer python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from jvm_abi import snapshot_jars
+          from verify_artifacts import GROUP
+
+          identity = json.loads(Path("docs/migration/current-identity.json").read_text())
+          version = os.environ["IDENTITY_STAGING_VERSION"]
+          repository = Path("build/verification-repo") / GROUP.replace(".", "/")
+          coordinates = [module["new_artifact"] + "-desktop" for module in identity["modules"]]
+          jars = {coordinate: repository / coordinate / version / f"{coordinate}-{version}.jar"
+                  for coordinate in coordinates}
+          result = snapshot_jars(jars, os.environ["GITHUB_SHA"], "Local staged desktop Maven variants")
+          inspected = sum(artifact["class_count_inspected"] for artifact in result["artifacts"].values())
+          exported = sum(artifact["exported_class_count"] for artifact in result["artifacts"].values())
+          if not inspected or not exported:
+              raise SystemExit("Missing staged NativeCmpKit JVM declarations")
+          print(f"Inspected {inspected} JVM classes and {exported} exported classes in {len(jars)} Maven artifacts")
+          output = Path("build/ci-identity/jvm-api.json")
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps(result, indent=2) + "\n")
+          PY
       - name: Test renamed desktop JNI from independent Maven dependencies
         if: inputs.profile == 'identity-linux-consumer'
         run: |
@@ -612,6 +638,7 @@ jobs:
             build/ci-identity/junit-summary.json
             build/ci-identity/publication-artifacts.json
             build/ci-identity/jni-exports.json
+            build/ci-identity/jvm-api.json
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
             build/ci-identity/android-webview-diagnostics.json

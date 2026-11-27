@@ -13,8 +13,6 @@ ARCHIVE_TOOLS = {
     "scripts/audit/source_inventory.py",
     "tests/consumer/binary_linkage.py",
     "tests/consumer/test_binary_linkage.py",
-    "tests/consumer/jvm_abi.py",
-    "tests/consumer/test_jvm_abi.py",
 }
 HISTORICAL_REJECTION_FIXTURES = {
     "scripts/ci/core_io_consumer.py",
