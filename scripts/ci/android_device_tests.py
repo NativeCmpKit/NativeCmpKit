@@ -236,7 +236,7 @@ def _run(root: Path, relative: str, only_modules: tuple[str, ...] | None = None,
     permission_demo_required = lt.android_permission_demo_required(plan)
     permission_lifecycle_required = lt.android_permission_lifecycle_required(plan)
     storage_required = lt.android_storage_probe_required(plan)
-    diagnostics = focus in lt.ANDROID_CAMERA_FOCUSES or focus in {lt.ANDROID_IO_PROVIDER_FOCUS, lt.ANDROID_IO_UNAVAILABLE_FOCUS, lt.ANDROID_IO_DEFAULT_DECODE_FOCUS, lt.ANDROID_IO_REFERENCE_FOCUS, lt.ANDROID_IO_NAMED_SYSTEM_FOCUS, "android-io-named-external-storage"} or permission_demo_required or permission_lifecycle_required or storage_required or remote_documents_required
+    diagnostics = focus in lt.ANDROID_CAMERA_FOCUSES or focus in {lt.content_policy.ANDROID_FOCUS, lt.ANDROID_IO_PROVIDER_FOCUS, lt.ANDROID_IO_UNAVAILABLE_FOCUS, lt.ANDROID_IO_DEFAULT_DECODE_FOCUS, lt.ANDROID_IO_REFERENCE_FOCUS, lt.ANDROID_IO_NAMED_SYSTEM_FOCUS, "android-io-named-external-storage"} or permission_demo_required or permission_lifecycle_required or storage_required or remote_documents_required
     if diagnostics:
         output.mkdir(parents=True)
     preflight = {"api_level": api_level, "status": "running", "stage": "sdk-assets",

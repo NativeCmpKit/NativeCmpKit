@@ -264,6 +264,9 @@ jobs:
       - name: Verify NativeCmpKit WebView on an owned Android emulator
         if: inputs.profile == 'identity-linux-android-webview-device'
         run: |
+          platform_tools="${ANDROID_HOME:?}/platform-tools"
+          test -x "$platform_tools/adb"
+          export PATH="$platform_tools:$PATH"
           test -c /dev/kvm
           command -v setfacl > /dev/null || sudo apt-get install -y acl
           sudo setfacl -m "u:$(id -un):rw" /dev/kvm
