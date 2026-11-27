@@ -46,8 +46,8 @@ mavenPublishing {
             }
         }
         issueManagement {
-            system.set("Github")
-            url.set("https://github.com/Apdelrahman1911/nativeCmpkit/issues")
+            system.set("GitHub")
+            url.set("https://github.com/NativeCmpKit/NativeCmpKit/issues")
         }
         scm {
             connection.set("scm:git:https://github.com/NativeCmpKit/NativeCmpKit.git")

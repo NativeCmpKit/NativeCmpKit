@@ -69,6 +69,8 @@ def main():
         for number, line in enumerate(source.splitlines(), 1):
             if relative in HISTORICAL_REJECTION_FIXTURES and "Calf" in line and "!=" in line:
                 continue
+            if relative == "tests/consumer/verify_artifacts.py" and line.startswith("UPSTREAM_GROUP = "):
+                continue
             if OLD_IDENTITY.search(line):
                 errors.append(f"{relative}:{number}: superseded identity")
     for error in errors:

@@ -4,6 +4,8 @@ import json
 import re
 import unittest
 
+from verify_artifacts import UPSTREAM_GROUP
+
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests/consumer/io-desktop"
@@ -63,7 +65,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         for call in ["includeBuild", "project", "mavenLocal", "dependencySubstitution", "srcDir"]:
             self.assertNotRegex(code, r"\b" + call + r"\s*\(")
         self.assertIn('check(id !is ProjectComponentIdentifier)', code)
-        self.assertIn('check(id.group != "io.github.apdelrahman1911.nativecmpkit")', code)
+        self.assertIn(f'check(id.group != "{UPSTREAM_GROUP}")', code)
 
     def test_every_selected_classpath_requires_two_roots_and_exact_staged_bytes(self):
         build = self.code("build.gradle.kts")

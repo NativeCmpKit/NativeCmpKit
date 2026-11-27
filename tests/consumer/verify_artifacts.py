@@ -12,6 +12,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import hashlib
 import importlib.util
+from io import BytesIO
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -26,6 +27,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 GROUP = "io.github.apdelrahman1911.nativecmpkit"
+UPSTREAM_GROUP = "com.mohamedrejeb.calf"
 DESTINATION = "https://github.com/NativeCmpKit/NativeCmpKit"
 TARGET_SUFFIXES = {
     "metadata": "", "android": "-android", "desktop": "-desktop", "js": "-js",
@@ -288,6 +290,20 @@ def archive_names(archive: zipfile.ZipFile) -> set[str]:
     return names
 
 
+def legacy_archive_entries(archive: zipfile.ZipFile, names: set[str]) -> list[str]:
+    legacy_spellings = (UPSTREAM_GROUP, UPSTREAM_GROUP.replace(".", "/"), UPSTREAM_GROUP.replace(".", "_"))
+    legacy_bytes = tuple(spelling.encode() for spelling in legacy_spellings)
+    entries = []
+    for name in sorted(names):
+        if any(spelling in name for spelling in legacy_spellings):
+            entries.append(name)
+        elif name.endswith(".class"):
+            data = archive.read(name)
+            if any(marker in data for marker in legacy_bytes):
+                entries.append(name)
+    return entries
+
+
 def native_filename(module: str, platform: str) -> str:
     name = NATIVE_NAMES[module]
     if platform.startswith("windows-"):
@@ -403,7 +419,7 @@ class ArtifactVerifier:
             return None
 
     def dependency(self, group: str | None, artifact: str | None, version: str | None, label: str) -> None:
-        self.check(label + ":upstream-independent", group != "com.mohamedrejeb.calf", "No dependency on original Calf artifacts")
+        self.check(label + ":upstream-independent", group != UPSTREAM_GROUP, "No dependency on original Calf artifacts")
         if group == GROUP:
             self.check(label + ":candidate-identity", artifact in self.all_coordinates and version == self.version,
                        "Internal dependency uses a known independently named artifact and exact candidate version")
@@ -425,6 +441,8 @@ class ArtifactVerifier:
             self.check(coordinate + ":pom-license", root.findtext("m:licenses/m:license/m:name", namespaces=ns) == "Apache-2.0", "Apache-2.0 POM declaration")
             self.check(coordinate + ":pom-url", value("url") == DESTINATION, "Independent project URL")
             self.check(coordinate + ":pom-scm", root.findtext("m:scm/m:url", namespaces=ns) == DESTINATION, "Independent SCM URL")
+            self.check(coordinate + ":pom-issues", root.findtext("m:issueManagement/m:url", namespaces=ns) == DESTINATION + "/issues",
+                       "Current project issue tracker")
             developers = {node.text for node in root.findall("m:developers/m:developer/m:id", ns)}
             self.check(coordinate + ":pom-attribution", {"Apdelrahman1911", "MohamedRejeb"}.issubset(developers), "Maintainer and upstream author attribution")
             for index, dependency in enumerate(root.findall("m:dependencies/m:dependency", ns)):
@@ -660,6 +678,12 @@ class ArtifactVerifier:
                 names = archive_names(archive)
                 self.check(label + ":crc", archive.testzip() is None, "Archive CRC check; no extraction")
                 primary = path.name == f"{coordinate}-{self.version}.jar" or path.name == f"{coordinate}-{self.version}.aar"
+                legacy = legacy_archive_entries(archive, names)
+                if target == "android" and primary:
+                    if self.check(label + ":android-classes", "classes.jar" in names, "AAR contains its JVM classes archive"):
+                        with zipfile.ZipFile(BytesIO(archive.read("classes.jar"))) as classes:
+                            legacy.extend(legacy_archive_entries(classes, archive_names(classes)))
+                self.check(label + ":no-legacy-namespace", not legacy, json.dumps(legacy))
                 derived_sources = module in DERIVED_APACHE_SOURCE_PATHS and path.name == f"{coordinate}-{self.version}-sources.jar"
                 if companion:
                     self.notices(archive, names, label)

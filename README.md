@@ -95,7 +95,7 @@ created by this migration.
 
 Feature usage guides are preserved under `docs/`; their historical examples do
 not establish correctness. The source audit takes precedence where they disagree.
-Use this repository's [issues](https://github.com/Apdelrahman1911/nativeCmpkit/issues)
+Use this repository's [issues](https://github.com/NativeCmpKit/NativeCmpKit/issues)
 for development. No NativeCmpKit demo/documentation site was intentionally
 deployed. An [unintended legacy Pages deployment](docs/migration/pages-incident.md)
 from the imported historical branch was discovered. The owner completed Unpublish;

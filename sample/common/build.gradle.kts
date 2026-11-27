@@ -26,6 +26,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "NativeCmpKit"
+            binaryOption("bundleId", "io.github.apdelrahman1911.nativecmpkit.framework")
             isStatic = true
 
             // IMPORTANT: Exporting nativecmpkit-ui is required for some functionalities to work

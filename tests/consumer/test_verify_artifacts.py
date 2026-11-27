@@ -278,6 +278,7 @@ class RepositoryFixtureBase(unittest.TestCase):
 <groupId>{gate.GROUP}</groupId><artifactId>{coordinate}</artifactId><version>{self.VERSION}</version>
 <name>NativeCmpKit - core</name>
 <url>{gate.DESTINATION}</url><scm><url>{gate.DESTINATION}</url></scm>
+<issueManagement><url>{gate.DESTINATION}/issues</url></issueManagement>
 <licenses><license><name>Apache-2.0</name></license></licenses>
 <developers><developer><id>Apdelrahman1911</id></developer><developer><id>MohamedRejeb</id></developer></developers>
 </project>''')
@@ -295,6 +296,17 @@ class RepositoryFixtureBase(unittest.TestCase):
 
 
 class RepositoryFixtureTest(RepositoryFixtureBase):
+    def test_packaged_legacy_class_path_and_binary_reference_are_refused(self):
+        coordinate = "nativecmpkit-core-desktop"
+        jar = self.directory(coordinate) / f"{coordinate}-{self.VERSION}.jar"
+        legacy = gate.UPSTREAM_GROUP.replace(".", "/")
+        jar.write_bytes(zip_bytes({f"{legacy}/Old.class": b"class bytes", "Current.class": legacy.encode()}))
+        verifier = gate.ArtifactVerifier(self.root, self.repo, self.VERSION, targets=["desktop"], native_platforms=["linux-x64"])
+        verifier.archive(jar, coordinate, "nativecmpkit-core", "desktop")
+        check = next(row for row in verifier.checks if row["name"].endswith(":no-legacy-namespace"))
+        self.assertFalse(check["passed"])
+        self.assertEqual(["Current.class", f"{legacy}/Old.class"], json.loads(check["detail"]))
+
     def test_current_pom_display_name_is_required_for_root_and_target(self):
         result = self.run_gate()
         checks = [c for c in result["checks"] if c["name"].endswith(":pom-display-name")]
@@ -305,7 +317,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
         for coordinate in ("nativecmpkit-core", "nativecmpkit-core-desktop"):
             path = self.directory(coordinate) / f"{coordinate}-{self.VERSION}.pom"
             original = path.read_text()
-            for replacement in ("<name>NativeCmpKit - core</name>", "<name>nativeCmpkit - core</name>",
+            for replacement in ("<name>Calf - core</name>", "<name>nativeCmpkit - core</name>",
                                 "<name>NativeCmpKit - another-module</name>", ""):
                 with self.subTest(coordinate=coordinate, replacement=replacement):
                     path.write_text(original.replace("<name>NativeCmpKit - core</name>", replacement))
@@ -328,7 +340,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
 
     def test_wrong_pom_group_fails(self):
         path = self.directory("nativecmpkit-core") / f"nativecmpkit-core-{self.VERSION}.pom"
-        path.write_text(path.read_text().replace(gate.GROUP, "io.github.apdelrahman1911.nativecmpkit"))
+        path.write_text(path.read_text().replace(gate.GROUP, "org.example.incorrect"))
         self.assertFalse(self.run_gate()["success"])
 
     def test_missing_companion_notice_fails(self):

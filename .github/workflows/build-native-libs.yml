@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-webview, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-webview, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -194,7 +194,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ inputs.profile == 'identity-apple-app' && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -202,6 +202,7 @@ jobs:
       GIT_CONFIG_KEY_1: core.longpaths
       GIT_CONFIG_VALUE_1: 'true'
       CARGO_BUILD_JOBS: '2'
+      IDENTITY_STAGING_VERSION: '0.1.0-preview.1'
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         id: checkout
@@ -234,7 +235,7 @@ jobs:
         shell: bash
         run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
       - name: Install the official Android SDK platform
-        if: runner.os == 'Linux' || inputs.profile == 'identity-apple-webview'
+        if: runner.os == 'Linux' || startsWith(inputs.profile, 'identity-apple')
         shell: bash
         run: |
           sdkmanager="${ANDROID_HOME:?}/cmdline-tools/latest/bin/sdkmanager"
@@ -342,7 +343,7 @@ jobs:
             --tests io.github.apdelrahman1911.nativecmpkit.camerapicker.SettingsHomeTaskBaselineTest \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Collect checked native dependency notices
-        if: inputs.profile == 'identity-linux-package'
+        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
         shell: bash
         run: |
           for module in nativecmpkit-file-picker nativecmpkit-share; do
@@ -361,25 +362,105 @@ jobs:
               --vcs-supplements "$PWD/licenses/native-dependency-supplements" --source-root "$PWD" \
               --output "build/native-notices/$module"
           done
-      - name: Stage isolated desktop publications
-        if: inputs.profile == 'identity-linux-package'
+      - name: Stage isolated Maven publications
+        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
+        id: identity-stage
+        env:
+          TARGETS: ${{ inputs.profile == 'identity-apple-package' && 'all' || 'desktop' }}
         run: |
           ./gradlew stageVerificationPublications \
-            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=desktop \
+            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets="$TARGETS" \
+            -PnativeCmpkit.version="$IDENTITY_STAGING_VERSION" \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
-      - name: Inspect staged desktop artifacts and native payload identity
-        if: inputs.profile == 'identity-linux-package'
+      - name: Inspect staged artifacts and native payload identity
+        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
+        shell: bash
         run: |
+          case "$RUNNER_OS/$RUNNER_ARCH" in
+            Linux/X64) selection=(--target desktop --native-platform linux-x64) ;;
+            macOS/ARM64) selection=(--native-platform macos-arm64) ;;
+            *) exit 1 ;;
+          esac
           python3 tests/consumer/verify_artifacts.py \
-            --repository build/verification-repo --version 0.1.0-SNAPSHOT \
-            --target desktop --native-platform linux-x64 --expected-native-revision "$GITHUB_SHA" \
-            --output build/ci-identity/desktop-artifacts.json
+            --repository build/verification-repo --version "$IDENTITY_STAGING_VERSION" \
+            "${selection[@]}" --expected-native-revision "$GITHUB_SHA" \
+            --output build/ci-identity/publication-artifacts.json
+      - name: Verify staged desktop JNI exports
+        if: ${{ !cancelled() && steps.identity-stage.outcome == 'success' }}
+        shell: bash
+        run: |
+          PYTHONPATH=tests/consumer python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import tempfile
+          import zipfile
+          from verify_artifacts import GROUP, NATIVE_MODULES, native_filename
+
+          system = os.environ["RUNNER_OS"]
+          platform, nm = {
+              "Linux": ("linux-x64", ["nm", "-D", "--defined-only"]),
+              "macOS": ("macos-arm64", ["xcrun", "nm", "-gU"]),
+          }[system]
+          version = os.environ["IDENTITY_STAGING_VERSION"]
+          repository = Path("build/verification-repo") / GROUP.replace(".", "/")
+          records = []
+          with tempfile.TemporaryDirectory() as directory:
+              for module in NATIVE_MODULES:
+                  coordinate = module + "-desktop"
+                  jar = repository / coordinate / version / f"{coordinate}-{version}.jar"
+                  filename = native_filename(module, platform)
+                  binary = Path(directory) / filename
+                  with zipfile.ZipFile(jar) as archive:
+                      binary.write_bytes(archive.read(f"native/{platform}/{filename}"))
+                  output = subprocess.check_output([*nm, str(binary)], text=True)
+                  exports = {symbol.removeprefix("_") for symbol in re.findall(r"\b_?Java_[A-Za-z0-9_]+\b", output)}
+                  source = (Path(module) / "native/src/lib.rs").read_text()
+                  expected = set(re.findall(r'pub extern "system" fn (Java_[A-Za-z0-9_]+)', source))
+                  prefix = "Java_" + GROUP.replace(".", "_") + "_"
+                  passed = bool(expected) and exports == expected and all(symbol.startswith(prefix) for symbol in exports)
+                  records.append({"module": module, "platform": platform, "expected": sorted(expected),
+                                  "exports": sorted(exports), "passed": passed})
+          output = Path("build/ci-identity/jni-exports.json")
+          output.parent.mkdir(parents=True, exist_ok=True)
+          output.write_text(json.dumps({"revision": os.environ["GITHUB_SHA"], "binaries": records}, indent=2) + "\n")
+          raise SystemExit(0 if all(record["passed"] for record in records) else 1)
+          PY
       - name: Apple simulator tests and sample framework
         if: inputs.profile == 'identity-apple'
         run: |
           ./gradlew iosSimulatorArm64Test :sample:common:linkDebugFrameworkIosSimulatorArm64 \
             :sample:common:linkDebugFrameworkIosArm64 \
             --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Link and verify the sample framework as a Swift consumer
+        if: inputs.profile == 'identity-apple-framework'
+        shell: bash
+        run: |
+          ./gradlew :sample:common:linkDebugFrameworkIosSimulatorArm64 :sample:common:linkDebugFrameworkIosArm64 \
+            --max-workers=2 --no-configuration-cache --no-build-cache
+          mkdir -p build/ci-identity
+          cat > build/ci-identity/framework-consumer.swift <<'SWIFT'
+          import NativeCmpKit
+          import UIKit
+          func makeViewController() -> UIViewController { Main_iosKt.MainViewController() }
+          SWIFT
+          for runtime in ios iphonesimulator; do
+            case "$runtime" in
+              ios) target=iosArm64; sdk=iphoneos; triple=arm64-apple-ios18.5 ;;
+              iphonesimulator) target=iosSimulatorArm64; sdk=iphonesimulator; triple=arm64-apple-ios18.5-simulator ;;
+            esac
+            directory="sample/common/build/bin/$target/debugFramework"
+            framework="$directory/NativeCmpKit.framework"
+            test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$framework/Info.plist")" = io.github.apdelrahman1911.nativecmpkit.framework
+            test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$framework/Info.plist")" = NativeCmpKit
+            xcrun lipo -verify_arch arm64 "$framework/NativeCmpKit"
+            xcrun --sdk "$sdk" swiftc -typecheck -target "$triple" -sdk "$(xcrun --sdk "$sdk" --show-sdk-path)" \
+              -F "$directory" build/ci-identity/framework-consumer.swift
+            shasum -a 256 "$framework/NativeCmpKit" "$framework/Info.plist" "$framework/Modules/module.modulemap" \
+              | tee -a build/ci-identity/framework-identity.txt
+          done
       - name: Tests requiring an owned UIKit application
         if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview'
         shell: bash
@@ -427,6 +508,8 @@ jobs:
           name: ${{ inputs.profile }}-junit-summary
           path: |
             build/ci-identity/junit-summary.json
-            build/ci-identity/desktop-artifacts.json
+            build/ci-identity/publication-artifacts.json
+            build/ci-identity/jni-exports.json
+            build/ci-identity/framework-identity.txt
             build/ci-verification/wk-identity/receipt.json
           if-no-files-found: error
