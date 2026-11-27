@@ -222,12 +222,14 @@ class AndroidWebViewContentPolicyAcceptanceTest {
     private fun assertMetadataMatchesRealDocument(state: WebViewState, navigator: WebViewNavigator) {
         // Read the DOM once. A page may commit while the provider returns the result,
         // so compare only when the public metadata stays stable across that read.
+        var compared = false
         await("Stable renderer and public metadata before explicit navigation") {
+            if (compared) return@await true
             val before = onMain { state.pageTitle to state.lastLoadedUrl }
             val dom = assertIs<JavascriptResult.Value>(evaluate(state, "[document.title, document.location.href]"),
                 "NATIVECMPKIT_ANDROID_RESTORE_TITLE:evaluation-failed")
             val document = JSONArray(dom.json)
-            onMain {
+            compared = onMain {
                 if (before != (state.pageTitle to state.lastLoadedUrl)) return@onMain false
                 val native = assertNotNull(state.webView)
                 before.first?.takeIf { it.isNotEmpty() }?.let { title ->
@@ -240,6 +242,7 @@ class AndroidWebViewContentPolicyAcceptanceTest {
                 assertEquals(native.canGoForward(), navigator.canGoForward)
                 true
             }
+            compared
         }
     }
     private fun awaitResources(state: WebViewState, server: OwnedWebViewContentPolicyHttpFixture, stage: String) {

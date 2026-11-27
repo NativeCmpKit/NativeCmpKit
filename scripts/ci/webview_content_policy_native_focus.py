@@ -116,7 +116,7 @@ SPECS = {'webview-content-policy-linux': {'profile': 'webview-content-policy-lin
 SOURCE_SHA256 = {'nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js': 'c78874d7622fa8a507d68735305a989a5fc21b0a072098532473e6c586212d81',
  'nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml': 'fdf8777e220cdc5f9e6ce133027821e3a908f1e144db0698ba1a89bcadc1e562',
  'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt': 'd8c6186d531c0ea9d7ba75b5a3afdef880e1ba0917c000d84b92099bd1ca718e',
- 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': 'dcfffbb37d2d3ef0ef392ee7ac90796bf955d077e29ea38e77d66a8b9d0301d7',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': 'a12bce44a6d62eb099a47455d419cdf35b33c241d6e62a08b0857672679592c2',
  'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt': '8b6d5b4f49d534391d5ba92cbd836bc26562caa034d040a4604884d79967de7b',
  'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': 'be3c9d172f7ce95bf070af874170db2ed262793ff483e457a91f1be3a78bb92e',
  'nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml': 'd41572dbbaf67ec740c28ed69a8c5fce4223329c4c96d726f1df9a08f95de71d',
