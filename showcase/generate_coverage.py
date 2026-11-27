@@ -408,7 +408,7 @@ ROWS = [
                     "ios": "screenshots/ios/nav/unsupported-arguments/iphone-simulator.png"},
         limitations=["AdaptiveNavHostController.navigate(route, arguments) ignores arguments."]),
     row("GEO-001", "kira-geo", "LatLng", "distance and bearing maths",
-        "all", "Home",
+        "all", "Geo",
         ["Open the geo maths section", "Read the distance and angle for fixed coordinates"],
         ["0,0 to 0,1 is about 111.19 km", "Cardinal bearings round to 0/90/180/270"]),
     row("GEO-002", "kira-geo", "LocationTracker", "start, stop, updates",

@@ -45,6 +45,7 @@ SCREENS = [
     ("Content Sharing", "share", "overview"),
     ("Web View", "webview", "overview"),
     ("Permissions", "permissions", "overview"),
+    ("Geo Maths", "geo-math", "overview"),
     ("Known Limitations", "limitations", "known-limitations"),
 ]
 

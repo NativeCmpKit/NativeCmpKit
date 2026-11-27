@@ -68,7 +68,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | WEB-005 | CookieManager | set, get, remove | supported | supported | WebView | not-run | not-run |
 | NAV-001 | AdaptiveNavHost | push, back, restore | supported | supported | Home | not-run | not-run |
 | NAV-002 | NavArgument | declared arguments | unsupported | unsupported | Limitations | not-applicable | not-applicable |
-| GEO-001 | LatLng | distance and bearing maths | supported | supported | Home | not-run | not-run |
+| GEO-001 | LatLng | distance and bearing maths | supported | supported | Geo | not-run | not-run |
 | GEO-002 | LocationTracker | start, stop, updates | unsupported | unsupported | Limitations | not-applicable | not-applicable |
 | EXCL-MAPS-001 | maps | excluded build-only module | unsupported | unsupported | Limitations | not-applicable | not-applicable |
 | EXCL-MEDIA-001 | media | excluded module | unsupported | unsupported | Limitations | not-applicable | not-applicable |

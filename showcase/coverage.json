@@ -3525,7 +3525,7 @@
         "web": "supported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Geo",
       "setup": [],
       "steps": [
         "Open the geo maths section",

@@ -35,6 +35,8 @@ SCREEN_ROWS = {
     "webview": ["WEB-001", "WEB-002", "WEB-003", "WEB-004", "WEB-005"],
     "permissions": ["PERM-SINGLE-001", "PERM-BULK-001", "PERM-STATE-001", "PERM-NOTIF-001",
                     "PERM-LOC-001", "PERM-PIM-001", "PERM-BT-001", "PERM-CORE-001"],
+    "geo-math": ["GEO-001"],
+    "home": ["NAV-001"],
     "limitations": ["UI-PROGRESS-003", "UI-FAB-001", "PERM-STUB-001", "NAV-002", "GEO-002",
                     "EXCL-MAPS-001", "EXCL-MEDIA-001", "EXCL-NOTIF-001"],
 }

@@ -31,6 +31,7 @@ kotlin {
         implementation(projects.kiraWebview)
         implementation(libs.jetbrains.navigation.compose)
         implementation(projects.kiraNavigation)
+        implementation(projects.kiraGeo)
         implementation(projects.kiraCameraPicker)
         implementation(projects.kiraShare)
         implementation(projects.kiraCupertinoIcons)
@@ -46,6 +47,8 @@ kotlin {
     sourceSets.androidMain.dependencies {
         implementation(libs.kotlinx.coroutines.android)
         implementation(libs.ktor.client.okhttp)
+        implementation(libs.appcompat)
+        implementation(libs.lifecycle.extensions)
     }
 
     sourceSets.desktopMain.dependencies {

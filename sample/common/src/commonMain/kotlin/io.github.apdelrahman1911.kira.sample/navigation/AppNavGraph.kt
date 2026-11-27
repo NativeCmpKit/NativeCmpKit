@@ -15,6 +15,7 @@ import io.github.apdelrahman1911.kira.sample.screens.DatePickerScreen
 import io.github.apdelrahman1911.kira.sample.screens.FilePickerScreen
 import io.github.apdelrahman1911.kira.sample.screens.HomeScreen
 import io.github.apdelrahman1911.kira.sample.screens.ImagePickerScreen
+import io.github.apdelrahman1911.kira.sample.screens.GeoMathScreen
 import io.github.apdelrahman1911.kira.sample.screens.LimitationsScreen
 import io.github.apdelrahman1911.kira.sample.screens.FileSaverScreen
 import io.github.apdelrahman1911.kira.sample.screens.ShowcaseScreen
@@ -218,6 +219,13 @@ fun AppNavGraph(
 //        }
         composable(Screen.Toolbar.name) {
             ToolbarScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(Screen.Geo.name) {
+            GeoMathScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

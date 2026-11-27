@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Navigation
 import androidx.compose.material.icons.outlined.Pages
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.PunchClock
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.SaveAlt
@@ -193,6 +194,12 @@ enum class Screen(
         description = "Floating toolbar with Liquid Glass on iOS and Material3 Expressive HorizontalFloatingToolbar",
         icon = Icons.Outlined.Menu,
         category = ScreenCategory.UIComponents,
+    ),
+    Geo(
+        title = "Geo Maths",
+        description = "Deterministic LatLng distance and bearing; tracker limitations",
+        icon = Icons.Outlined.Public,
+        category = ScreenCategory.PlatformAPIs,
     ),
     Limitations(
         title = "Known Limitations",
