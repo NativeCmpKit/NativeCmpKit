@@ -1,0 +1,417 @@
+# NativeCmpKit showcase verification.
+#
+# Builds the real sample/showcase application on both mobile platforms and,
+# when ci/showcase-mode contains "session", opens a live ui-test-actions
+# session for the external agent. The ui-test-actions composite action is not
+# on this repository's Actions allowlist, so the reviewed upstream scripts are
+# cloned at a pinned commit and executed directly. Only allowlisted actions are
+# used by this workflow.
+name: Showcase UI verification
+
+on:
+  push:
+    branches: [feature/showcase-ui-verification]
+    paths:
+      - 'ci/showcase-mode'
+      - 'ci/showcase-android.sha256'
+      - 'ci/showcase-ios.sha256'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: build or session
+        type: choice
+        options: [build, session]
+        default: build
+      duration_minutes:
+        description: Live session minutes after readiness
+        type: string
+        default: '60'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: showcase-ui-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  UI_TEST_ACTIONS_REF: 0c818c5d72e8c30c59bd1287c330a40392bf8e89
+  ANDROID_APP_ID: io.github.apdelrahman1911.nativecmpkit.sample
+  IOS_BUNDLE_ID: io.github.apdelrahman1911.nativecmpkit.sample
+  AXE_VERSION: v2.1.1
+  AXE_SHA256: 8788838b1b32059d143cf06541b72fcaead85c16274457cdbff086510a5b17fa
+
+jobs:
+  android:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - name: Select showcase mode
+        id: mode
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            mode='${{ inputs.mode }}'
+            duration='${{ inputs.duration_minutes }}'
+          else
+            mode=$(tr -d '[:space:]' < ci/showcase-mode)
+            duration=60
+          fi
+          case "$mode" in build|session) ;; *) echo "Unknown showcase mode: $mode" >&2; exit 2 ;; esac
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "duration=$duration" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, allowlisted
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5, allowlisted
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6, allowlisted
+
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6, allowlisted
+
+      - name: Install Android SDK and emulator image
+        shell: bash
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [[ ! -x "$SDKMANAGER" ]]; then SDKMANAGER="$(command -v sdkmanager)"; fi
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          "$SDKMANAGER" 'platforms;android-37.0' 'platform-tools' 'emulator' \
+            'system-images;android-35;google_apis;x86_64'
+
+      - name: Build the debug APK
+        shell: bash
+        run: |
+          ./gradlew :sample:android:assembleDebug --no-configuration-cache --max-workers=2 \
+            '-Dorg.gradle.jvmargs=-Xmx3072m -Dfile.encoding=UTF-8' \
+            -Pkotlin.compiler.execution.strategy=in-process
+          apk=$(find sample/android/build/outputs/apk/debug -name '*.apk' -type f | head -1)
+          test -n "$apk"
+          echo "SHOWCASE_APK=$(realpath "$apk")" >> "$GITHUB_ENV"
+          echo "APK: $(realpath "$apk")"
+
+      - name: Record the build output
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: showcase-android-apk-${{ github.run_attempt }}
+          path: ${{ env.SHOWCASE_APK }}
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Create a KVM-ready API 35 emulator
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          sudo chmod 666 /dev/kvm
+          export ANDROID_USER_HOME="$HOME/.android"
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/showcase-avds"
+          mkdir -p "$ANDROID_USER_HOME" "$ANDROID_AVD_HOME"
+          adb start-server
+          echo no | "$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager" create avd \
+            --force --name showcase --package 'system-images;android-35;google_apis;x86_64' \
+            --path "$ANDROID_AVD_HOME/showcase.avd"
+          nohup "$ANDROID_HOME/emulator/emulator" -avd showcase -port 5554 \
+            -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect \
+            > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          timeout 420 bash -c '
+            until [[ "$(adb -s emulator-5554 shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" == 1 ]]; do
+              sleep 2
+            done'
+          adb -s emulator-5554 shell input keyevent KEYCODE_WAKEUP
+          adb -s emulator-5554 shell wm dismiss-keyguard
+          adb -s emulator-5554 shell settings put global window_animation_scale 0
+          adb -s emulator-5554 shell settings put global transition_animation_scale 0
+          adb -s emulator-5554 shell settings put global animator_duration_scale 0
+          adb -s emulator-5554 shell getprop ro.build.version.release
+          adb -s emulator-5554 shell wm size
+          adb -s emulator-5554 shell wm density
+
+      - name: Check out the pinned ui-test-actions scripts
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ui-test-actions/ui-test-actions.git \
+            "$RUNNER_TEMP/ui-test-actions"
+          git -C "$RUNNER_TEMP/ui-test-actions" checkout "$UI_TEST_ACTIONS_REF"
+          test "$(git -C "$RUNNER_TEMP/ui-test-actions" rev-parse HEAD)" = "$UI_TEST_ACTIONS_REF"
+          python3 --version
+
+      - name: Resolve the one-time token digest
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "A workflow_dispatch session uses the committed digest file." >&2
+          fi
+          digest=$(tr -d '[:space:]' < ci/showcase-android.sha256)
+          if [[ ! "$digest" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "ci/showcase-android.sha256 must contain one lowercase SHA-256 digest" >&2
+            exit 2
+          fi
+          echo "UI_TEST_TOKEN_SHA256=$digest" >> "$GITHUB_ENV"
+
+      - name: Open the Android live UI session
+        id: start
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        env:
+          UI_TEST_TARGET: android
+          UI_TEST_DURATION: ${{ steps.mode.outputs.duration }}
+          UI_TEST_STARTUP_TIMEOUT: '420'
+          UI_TEST_DEVICE: emulator-5554
+          UI_TEST_APP_IDS: ${{ env.ANDROID_APP_ID }}
+          UI_TEST_DEEPLINK_SCHEMES: kira
+          UI_TEST_TRANSPORT: auto
+          UI_TEST_TRANSPORT_FALLBACK: none
+          UI_TEST_ANDROID_IME: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          echo "UI_TEST_APP_INSTALLS={\"$ANDROID_APP_ID\":\"$SHOWCASE_APK\"}" >> "$GITHUB_ENV"
+          export UI_TEST_APP_INSTALLS
+          export UI_TEST_LAUNCH
+          UI_TEST_LAUNCH=$(cat <<'EOF'
+          adb -s emulator-5554 install -r "$SHOWCASE_APK"
+          adb -s emulator-5554 shell am start -W -n "$ANDROID_APP_ID/io.github.apdelrahman1911.kira.sample.MainActivity"
+          EOF
+          )
+          export UI_TEST_READY
+          UI_TEST_READY='adb -s emulator-5554 shell dumpsys activity activities | grep -Eq "mResumedActivity.*${ANDROID_APP_ID}|topResumedActivity.*${ANDROID_APP_ID}"'
+          cd "$RUNNER_TEMP/ui-test-actions"
+          python3 lifecycle.py start
+
+      - name: Publish the Android connection artifact
+        id: publish
+        if: steps.mode.outputs.mode == 'session' && steps.start.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: ui-session-android-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
+          path: ${{ steps.start.outputs.file }}
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Hold the Android session open
+        if: steps.mode.outputs.mode == 'session' && success() && steps.start.outcome == 'success'
+        shell: bash
+        env:
+          UI_TEST_ACTION_PATH: ${{ runner.temp }}/ui-test-actions
+          UI_TEST_DURATION: ${{ steps.mode.outputs.duration }}
+          UI_TEST_CONNECTION_FILE: ${{ steps.start.outputs.file }}
+          UI_TEST_PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+          PYTHONUNBUFFERED: '1'
+        run: python3 "$UI_TEST_ACTION_PATH/lifecycle.py" hold
+
+      - name: Retain emulator and Java diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: showcase-android-failure-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/emulator.log
+            sample/android/build/outputs/logs/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  ios:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit'
+    runs-on: macos-26
+    timeout-minutes: 180
+    steps:
+      - name: Select showcase mode
+        id: mode
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            mode='${{ inputs.mode }}'
+            duration='${{ inputs.duration_minutes }}'
+          else
+            mode=$(tr -d '[:space:]' < ci/showcase-mode)
+            duration=60
+          fi
+          case "$mode" in build|session) ;; *) echo "Unknown showcase mode: $mode" >&2; exit 2 ;; esac
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "duration=$duration" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, allowlisted
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5, allowlisted
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6, allowlisted
+
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6, allowlisted
+
+      - name: Build the iOS simulator app
+        shell: bash
+        run: |
+          xcodebuild -project sample/ios/Kira.xcodeproj -scheme Kira \
+            -configuration Debug -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+          app=$(find build/Build/Products -maxdepth 2 -name '*.app' -type d | head -1)
+          test -n "$app"
+          echo "SHOWCASE_IOS_APP=$(realpath "$app")" >> "$GITHUB_ENV"
+          echo "APP: $(realpath "$app")"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Info.plist"
+
+      - name: Record the build output
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: showcase-ios-app-${{ github.run_attempt }}
+          path: ${{ env.SHOWCASE_IOS_APP }}
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Select and boot one explicit iPhone simulator
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          xcrun simctl list devices available -j > "$RUNNER_TEMP/devices.json"
+          udid=$(python3 - "$RUNNER_TEMP/devices.json" <<'PY'
+          import json, sys
+          data = json.load(open(sys.argv[1]))["devices"]
+          for runtime in reversed(sorted(data)):
+              if ".iOS-" not in runtime:
+                  continue
+              for device in data[runtime]:
+                  if device["isAvailable"] and device["name"].startswith("iPhone"):
+                      print(device["udid"])
+                      raise SystemExit
+          raise SystemExit("No available iPhone simulator")
+          PY
+          )
+          echo "UI_DEVICE=$udid" >> "$GITHUB_ENV"
+          xcrun simctl bootstatus "$udid" -b
+          xcrun simctl list devices booted
+          open -a Simulator --args -CurrentDeviceUDID "$udid"
+
+      - name: Install the AXe accessibility helper
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          work="$RUNNER_TEMP/axe"
+          mkdir -p "$work"
+          asset=AXe-macOS-${AXE_VERSION}-universal.tar.gz
+          curl -fsSL --retry 3 \
+            "https://github.com/cameroncooke/AXe/releases/download/${AXE_VERSION}/${asset}" \
+            -o "$work/$asset"
+          printf '%s  %s\n' "$AXE_SHA256" "$work/$asset" | shasum -a 256 -c -
+          tar -xzf "$work/$asset" -C "$work"
+          axe=$(find "$work" -name axe -type f -print -quit)
+          test -x "$axe"
+          echo "AXE_BINARY=$axe" >> "$GITHUB_ENV"
+          "$axe" --version || true
+
+      - name: Check out the pinned ui-test-actions scripts
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/ui-test-actions/ui-test-actions.git \
+            "$RUNNER_TEMP/ui-test-actions"
+          git -C "$RUNNER_TEMP/ui-test-actions" checkout "$UI_TEST_ACTIONS_REF"
+          test "$(git -C "$RUNNER_TEMP/ui-test-actions" rev-parse HEAD)" = "$UI_TEST_ACTIONS_REF"
+          python3 --version
+
+      - name: Resolve the one-time token digest
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          digest=$(tr -d '[:space:]' < ci/showcase-ios.sha256)
+          if [[ ! "$digest" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "ci/showcase-ios.sha256 must contain one lowercase SHA-256 digest" >&2
+            exit 2
+          fi
+          echo "UI_TEST_TOKEN_SHA256=$digest" >> "$GITHUB_ENV"
+
+      - name: Install, launch, and probe the iOS app
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          xcrun simctl install "$UI_DEVICE" "$SHOWCASE_IOS_APP"
+          xcrun simctl launch "$UI_DEVICE" "$IOS_BUNDLE_ID"
+          for attempt in 1 2 3 4 5; do
+            if "$AXE_BINARY" describe-ui --udid "$UI_DEVICE" > "$RUNNER_TEMP/axe/preflight.json" \
+               && python3 -c 'import json,sys; assert len(json.load(open(sys.argv[1]))[0]["children"]) > 0' "$RUNNER_TEMP/axe/preflight.json"; then
+              echo "AXE_READY=1" >> "$GITHUB_ENV"
+              break
+            fi
+            sleep 3
+          done
+          if [[ "${AXE_READY:-0}" != 1 ]]; then
+            echo "AXe preflight did not expose application elements; the session will use the visible Simulator." >&2
+            echo "AXE_READY=0" >> "$GITHUB_ENV"
+          fi
+          xcrun simctl io "$UI_DEVICE" screenshot "$RUNNER_TEMP/axe/preflight.png"
+          python3 -c 'import sys; p=open(sys.argv[1],"rb").read(8); assert p==b"\x89PNG\r\n\x1a\n"' "$RUNNER_TEMP/axe/preflight.png"
+          xcrun simctl spawn "$UI_DEVICE" launchctl list | grep -F "UIKitApplication:${IOS_BUNDLE_ID}"
+
+      - name: Open the iOS live UI session
+        id: start
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        env:
+          UI_TEST_TARGET: ios
+          UI_TEST_DURATION: ${{ steps.mode.outputs.duration }}
+          UI_TEST_STARTUP_TIMEOUT: '300'
+          UI_TEST_DEVICE: ${{ env.UI_DEVICE }}
+          UI_TEST_APP_IDS: ${{ env.IOS_BUNDLE_ID }}
+          UI_TEST_TRANSPORT: auto
+          UI_TEST_TRANSPORT_FALLBACK: none
+          UI_TEST_IOS_AXE: ${{ env.AXE_READY == '1' && env.AXE_BINARY || '' }}
+          PYTHONUNBUFFERED: '1'
+        run: |
+          echo "UI_TEST_APP_INSTALLS={\"$IOS_BUNDLE_ID\":\"$SHOWCASE_IOS_APP\"}" >> "$GITHUB_ENV"
+          export UI_TEST_APP_INSTALLS
+          export UI_TEST_LAUNCH
+          UI_TEST_LAUNCH=$(cat <<'EOF'
+          xcrun simctl install "$UI_DEVICE" "$SHOWCASE_IOS_APP"
+          xcrun simctl launch "$UI_DEVICE" "$IOS_BUNDLE_ID"
+          EOF
+          )
+          export UI_TEST_READY
+          UI_TEST_READY='xcrun simctl spawn "$UI_DEVICE" launchctl list | grep -Fq "UIKitApplication:${IOS_BUNDLE_ID}"'
+          cd "$RUNNER_TEMP/ui-test-actions"
+          python3 lifecycle.py start
+
+      - name: Publish the iOS connection artifact
+        id: publish
+        if: steps.mode.outputs.mode == 'session' && steps.start.outcome == 'success'
+        continue-on-error: true
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: ui-session-ios-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
+          path: ${{ steps.start.outputs.file }}
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Hold the iOS session open
+        if: steps.mode.outputs.mode == 'session' && success() && steps.start.outcome == 'success'
+        shell: bash
+        env:
+          UI_TEST_ACTION_PATH: ${{ runner.temp }}/ui-test-actions
+          UI_TEST_DURATION: ${{ steps.mode.outputs.duration }}
+          UI_TEST_CONNECTION_FILE: ${{ steps.start.outputs.file }}
+          UI_TEST_PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+          PYTHONUNBUFFERED: '1'
+        run: python3 "$UI_TEST_ACTION_PATH/lifecycle.py" hold
+
+      - name: Retain simulator diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
+        with:
+          name: showcase-ios-failure-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/axe/preflight.json
+            ${{ runner.temp }}/axe/preflight.log
+            build/Build/Products/
+          if-no-files-found: ignore
+          retention-days: 7
