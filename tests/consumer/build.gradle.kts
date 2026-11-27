@@ -153,7 +153,7 @@ fun artifactSha256(file: File): String {
     return digest.digest().joinToString("") { "%02x".format(it) }
 }
 
-/** Exact metadata-to-Maven binding; a retained Gradle display name is not a Maven URL. */
+/** Bind each resolved artifact to its canonical staged Maven filename and metadata. */
 fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<String, Any> {
     val suffixes = setOf("", "-desktop", "-android", "-js", "-wasm-js", "-iosarm64", "-iossimulatorarm64")
     val matchingRoots = candidateRoots.filter { root -> suffixes.any { id.module == root + it } }
@@ -177,9 +177,6 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     val rootUrl = if (id.module == root) null else "../../$root/$candidateVersion/$root-$candidateVersion.module"
     check(component["url"] == rootUrl) { "Module metadata redirects outside the exact candidate root: $id" }
     val canonicalName = "${id.module}-$candidateVersion.${resolved.extension}"
-    // These explicit roots/target suffixes map to the retained public NativeCmpKit Gradle project names.
-    // Never accept an arbitrary filename, another group/module, sources or a URL/path alias.
-    val retainedName = "nativecmpkit-${id.module.removePrefix("nativecmpkit-")}-$candidateVersion.${resolved.extension}"
     val variants = metadata["variants"] as? List<*> ?: error("Missing metadata variants: $id")
     check(variants.size in 1..128)
     val primaryBindings = variants.mapNotNull { entry ->
@@ -190,7 +187,7 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
         val files = variant["files"] as? List<*> ?: return@mapNotNull null
         check(files.size == 1)
         val declared = files.single() as? Map<*, *> ?: error("Invalid primary metadata file: $id")
-        check(declared["name"] in setOf(canonicalName, retainedName) && declared["name"] == resolved.name &&
+        check(declared["name"] == canonicalName && declared["name"] == resolved.name &&
             declared["url"] == canonicalName) { "Resolved name/metadata URL do not bind to the exact candidate: $id" }
         val stagedRelative = relativeDirectory + canonicalName
         val staged = candidateRepository.resolve(stagedRelative)

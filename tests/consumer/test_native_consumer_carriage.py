@@ -102,7 +102,8 @@ class NativeConsumerCarriageTest(unittest.TestCase):
     def test_changed_or_self_rehashed_material_metadata_and_original_consumer_are_not_admitted(self):
         selected = (
             'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/LICENSE-MIT',
-            next(path for path in carriage.MATERIAL_INPUTS if path.endswith('/nativecmpkit-file-picker.json')),
+            next(path for path in carriage.MATERIAL_INPUTS
+                 if '/metadata-current606/' in path and path.endswith('-file-picker.json')),
             'tests/consumer/src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt',
         )
         for path in selected:

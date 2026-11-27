@@ -23,6 +23,12 @@ HISTORICAL_REJECTION_FIXTURES = {
     "tests/consumer/webview-desktop/build.gradle.kts",
     "tests/consumer/verify_artifacts.py",
 }
+ARCHIVED_CARRIAGE_METADATA = (
+    "docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/"
+    "calf-file-picker.json",
+    "docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/"
+    "calf-share.json",
+)
 ANDROID_PACKAGE_FIXTURE = "nativecmpkit-webview/src/androidHostTest/kotlin/android/webkit/NativeCmpKitControlledResourceError.kt"
 ACTIVE_ROOTS = {"sample", "scripts", "tests", "tools", "gradle", "convention-plugins", ".github"}
 ACTIVE_DOCS = {"README.md", "CONTRIBUTING.md", "NOTICE", "THIRD_PARTY_NOTICES.md", "docs/index.md",
@@ -74,6 +80,9 @@ def main():
                 continue
             if relative == "tests/consumer/verify_artifacts.py" and line.startswith("UPSTREAM_GROUP = "):
                 continue
+            if relative == "tests/consumer/native_consumer_carriage.py":
+                for archived_path in ARCHIVED_CARRIAGE_METADATA:
+                    line = line.replace(archived_path, "")
             if OLD_IDENTITY.search(line.replace(r"\.", ".")):
                 errors.append(f"{relative}:{number}: superseded identity")
     for error in errors:

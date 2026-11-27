@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -371,8 +371,14 @@ jobs:
           xvfb-run -a ./gradlew :nativecmpkit-camera-picker:jsBrowserTest \
             --tests io.github.apdelrahman1911.nativecmpkit.camerapicker.SettingsHomeTaskBaselineTest \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Prepare an independent copy of the packaged consumer
+        if: inputs.profile == 'identity-linux-consumer'
+        run: |
+          python3 -B tests/consumer/native_consumer_carriage.py \
+            --source-root "$PWD" --expected-source-revision "$GITHUB_SHA" \
+            --output "$RUNNER_TEMP/nativecmpkit-consumer"
       - name: Collect checked native dependency notices
-        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
+        if: endsWith(inputs.profile, '-package') || inputs.profile == 'identity-linux-consumer'
         shell: bash
         run: |
           for module in nativecmpkit-file-picker nativecmpkit-share; do
@@ -392,7 +398,7 @@ jobs:
               --output "build/native-notices/$module"
           done
       - name: Stage isolated Maven publications
-        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
+        if: endsWith(inputs.profile, '-package') || inputs.profile == 'identity-linux-consumer'
         id: identity-stage
         env:
           TARGETS: ${{ inputs.profile == 'identity-apple-package' && 'all' || 'desktop' }}
@@ -402,7 +408,7 @@ jobs:
             -PnativeCmpkit.version="$IDENTITY_STAGING_VERSION" \
             --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Inspect staged artifacts and native payload identity
-        if: inputs.profile == 'identity-linux-package' || inputs.profile == 'identity-apple-package'
+        if: endsWith(inputs.profile, '-package')
         shell: bash
         run: |
           case "$RUNNER_OS/$RUNNER_ARCH" in
@@ -457,6 +463,28 @@ jobs:
           output.write_text(json.dumps({"revision": os.environ["GITHUB_SHA"], "binaries": records}, indent=2) + "\n")
           raise SystemExit(0 if all(record["passed"] for record in records) else 1)
           PY
+      - name: Test renamed desktop JNI from independent Maven dependencies
+        if: inputs.profile == 'identity-linux-consumer'
+        run: |
+          ./gradlew -p "$RUNNER_TEMP/nativecmpkit-consumer/independent-consumer" \
+            verifyCandidateResolution verifyNativeConsumerResults \
+            -PnativecmpkitRepository="$PWD/build/verification-repo" \
+            -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" \
+            -PconsumerTargets=desktop -PnativecmpkitConsumerTestFocus=native \
+            -PnativecmpkitExpectedNativeRevision="$GITHUB_SHA" -PnativecmpkitProducerSourceRoot="$PWD" \
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Retain independent consumer receipts
+        if: ${{ !cancelled() && inputs.profile == 'identity-linux-consumer' }}
+        shell: bash
+        run: |
+          carriage="$RUNNER_TEMP/nativecmpkit-consumer"
+          reports="$carriage/independent-consumer/build/reports"
+          mkdir -p build/ci-identity/consumer
+          shopt -s nullglob
+          for receipt in "$carriage/carriage.json" "$reports/consumer-resolution.txt" \
+            "$reports"/native-consumer/*/{package-preflight,native-results}.json; do
+            if [[ -f "$receipt" ]]; then cp -- "$receipt" build/ci-identity/consumer/; fi
+          done
       - name: Apple simulator tests and sample framework
         if: inputs.profile == 'identity-apple'
         run: |
@@ -571,6 +599,7 @@ jobs:
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
             build/ci-identity/android-webview-diagnostics.json
+            build/ci-identity/consumer/
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json

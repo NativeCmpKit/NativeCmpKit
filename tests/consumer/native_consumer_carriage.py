@@ -44,21 +44,21 @@ MAX_RECEIPT_BYTES = 64 * 1024
 METADATA_ORIGIN_REVISION = "7d6b6d5b43f93ae085dc66a3377b3c7967400bf7"
 SCOPE = "Independent full consumer source/checker carriage with inert exact original schema3 context; not execution or readiness"
 
-# Preserve the reviewed full21/17-method configuration and original Kotlin bodies.
+# Preserve the renamed full 21-root configuration and the complete 17-method suite.
 PRESERVED_CONSUMER_INPUTS = MappingProxyType({
-    'build.gradle.kts': 'e565f80c844ed09d7c0eb14fbbade6434a2b19da9d234806386941bb1071237f',
-    'settings.gradle.kts': '876b0ba5574957bae968ff73d126a5a3a38bfe0c70a8d529b88e3aacf3727da4',
+    'build.gradle.kts': '85584c5f87544a3c3bf498ab470e19ca19bbf775e4aae08572e394da261abf3f',
+    'settings.gradle.kts': '0a5eb5ae6d16ab58dfae5b7d5c99b982184391169fe426c845363da00975544d',
     'gradle.properties': 'bf8bbec28b310adfdc5b6d3319217bc2cf8657f44cdba2f38214eca4035ddf3b',
-    'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': '58d79b3b90efa303736b76496298eada17842aabb296f4287c768b436100fb3a',
-    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': '75df0776f4ab714c6bcbdede1adf73671279ea13af13b56928fb5a930bc3709e',
-    'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt': '95c4089c0f065eee7d0b9dbbf003d42b003e6c01bd7d2f60ca5ef6337bcf3f10',
-    'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt': 'cf09cfd8cab360f12d825ba0b06374d2ef012e9802d611960fcebae78ca569e7',
+    'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': 'b9090ad4e82401038b5a4a9c385b11f29ad364834928a643a66a21f91bb32274',
+    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': 'db451bf0c3a0fe37510e577e36e8e82a918811e62d12a612c3041d2140f963d7',
+    'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt': '6e465280638b566661cd6387a3a7b66a2d75a3faa86e219937c10f9765fbc440',
+    'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt': '9f7f8f42fdb3a5a1f5b0b418178f3fbf19ba6ce86e2a193338dc8c33a1d5735a',
 })
 
 # Exact663 catalog/f510 metadata originals, not a mutable producer-report waiver.
 MATERIAL_INPUTS = {
-    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/nativecmpkit-file-picker.json': 'e53bd784aae97aab724d887e7256bac6cf7c0497ef7a0ac9387e11c4060d8524',
-    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/nativecmpkit-share.json': '63e8c694ed7cc4a33e6419b7cd9307ca999b118ccd3d2ed980b202f20cda880a',
+    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/calf-file-picker.json': 'e53bd784aae97aab724d887e7256bac6cf7c0497ef7a0ac9387e11c4060d8524',
+    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/calf-share.json': '63e8c694ed7cc4a33e6419b7cd9307ca999b118ccd3d2ed980b202f20cda880a',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/LICENSE-APACHE': 'b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/LICENSE-MIT': '5b19674a1db628a475850a131956ed49521b744e3dda8f5a94141f9aba681219',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/crate/Cargo.toml': '9652222664ffc7e2a26fdcdebdce0917a455b39d8fbcbf451bf0b011a3067bf7',
