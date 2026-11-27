@@ -60,7 +60,7 @@
   "schema_version": 1,
   "scope": "Recognized busy FallbackHome references permit bounded read-only waiting only; unchanged strict empty parser/native/original/cleanup gates remain. Installed image and original actual component not inferred.",
   "unchanged_owning_inputs": {
-    "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraRestorationTest.kt": "357c8545e35d5fa529a6b38b064a86c1724ea2b0a2d2b7ec46d5ff4c3671a7d0",
+    "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraRestorationTest.kt": "357c8545e35d5fa529a6b38b064a86c1724ea2b0a2d2b7ec46d5ff4c3671a7d0",
     "scripts/ci/android_camera_developer_prerequisite.py": "0e47097d10f1886bec0ee8eebc280b29afb704dc47d09df1bbdb41ddaa651b26",
     "scripts/ci/android_device_tests.py": "f096609a3731628c02966b7f6edd40641d7c0ff8119d0922605f6c7e6e99d7d8",
     "scripts/ci/fixtures/camera-boot-failure-observation-source-inverse.json": "33c20dc9f166d1aa3e91c1d7a3655c9c0d0d9a1b197e5d5f4f70563347c154a0",

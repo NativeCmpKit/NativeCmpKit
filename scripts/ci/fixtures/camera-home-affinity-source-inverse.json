@@ -1,7 +1,7 @@
 {
   "actual_raw_affinity_spelling_proved": false,
   "bindings": {
-    "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaseline.kt": {
+    "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaseline.kt": {
       "after_bytes": 4572,
       "after_sha256": "044d050378036573aa527226130ccb67bdbe4717231b8cc1ff10da70816b3801",
       "before_bytes": 4543,
@@ -23,7 +23,7 @@
         }
       ]
     },
-    "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaselineTest.kt": {
+    "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaselineTest.kt": {
       "after_bytes": 11627,
       "after_sha256": "f46f20ff936c4909ca1b9a96c9dbbe1c970c1363d8616141077bdcc6d9cb7c57",
       "before_bytes": 6805,
@@ -125,9 +125,9 @@
       "before_sha256": "4f29e88d18193320a04803679efa1c36b91d4e6c9a4fa862566c6849e5ec22b6",
       "fragments": [
         {
-          "after": "from unittest.mock import patch\n\nimport camera_home_baseline_source_projection as history\nimport ios_geometry_simulator_source_projection as owned_history\nfrom camera_home_affinity_source_projection import current_source_before_home_affinity\n\nROOT = Path(__file__).resolve().parents[2]\nHELPER = \"scripts/ci/android_camera_developer_prerequisite.py\"\nNATIVE = \"nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt\"\n",
+          "after": "from unittest.mock import patch\n\nimport camera_home_baseline_source_projection as history\nimport ios_geometry_simulator_source_projection as owned_history\nfrom camera_home_affinity_source_projection import current_source_before_home_affinity\n\nROOT = Path(__file__).resolve().parents[2]\nHELPER = \"scripts/ci/android_camera_developer_prerequisite.py\"\nNATIVE = \"calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt\"\n",
           "after_fragment_sha256": "0894570ac44d26214fef2f292b9b48da6983535650a2da42c49dcb1e36fcb668",
-          "before": "from unittest.mock import patch\n\nimport camera_home_baseline_source_projection as history\nimport ios_geometry_simulator_source_projection as owned_history\n\nROOT = Path(__file__).resolve().parents[2]\nHELPER = \"scripts/ci/android_camera_developer_prerequisite.py\"\nNATIVE = \"nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt\"\n",
+          "before": "from unittest.mock import patch\n\nimport camera_home_baseline_source_projection as history\nimport ios_geometry_simulator_source_projection as owned_history\n\nROOT = Path(__file__).resolve().parents[2]\nHELPER = \"scripts/ci/android_camera_developer_prerequisite.py\"\nNATIVE = \"calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt\"\n",
           "before_fragment_sha256": "8dda2bc69fd025b8fc3b665d4f948cba38f8436f9c0000b32a2311d565e53a18",
           "id": "home-affinity-exact-1"
         },
