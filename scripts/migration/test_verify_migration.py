@@ -124,6 +124,21 @@ jobs:
         self.assertFalse(module.approved_verification_run({**run, "event": "pull_request_target"}))
         self.assertFalse(module.approved_verification_run({**run, "event": "push"}))
 
+    def test_dependency_push_registration_is_limited_to_its_development_branch(self):
+        run = {"path": ".github/workflows/javafx-library-candidate.yml", "event": "push", "status": "completed",
+               "head_branch": "development/preview-hardening"}
+        self.assertTrue(module.approved_verification_run(run))
+        self.assertFalse(module.approved_verification_run({**run, "head_branch": "main"}))
+
+    def test_preview_release_requires_exact_record_and_preserved_tag(self):
+        release = module.PUBLISHED_KIRA_PREVIEW
+        tag = "refs/tags/" + release["tag_name"]
+        refs = {tag: module.KIRA_PREVIEW_DEPLOYMENT["sha"]}
+        self.assertTrue(module.matches_kira_preview([release], refs))
+        self.assertFalse(module.matches_kira_preview([release, {"id": 1}], refs))
+        self.assertFalse(module.matches_kira_preview([{**release, "prerelease": False}], refs))
+        self.assertFalse(module.matches_kira_preview([release], {tag: "a" * 40}))
+
 
 class PagesResolutionTests(unittest.TestCase):
     def setUp(self):

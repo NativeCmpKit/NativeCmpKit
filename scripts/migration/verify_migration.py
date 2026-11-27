@@ -21,8 +21,16 @@ ROOT = Path(__file__).resolve().parents[2]
 SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 DESTINATION = "NativeCmpKit/NativeCmpKit"
-VERIFICATION_WORKFLOWS = frozenset({".github/workflows/gradle.yml", ".github/workflows/build-native-libs.yml"})
+TRANSFER_SNAPSHOT = "docs/migration/upstream-updates/20261024T183300Z/destination/repository.json"
+DEPENDENCY_WORKFLOWS = frozenset({".github/workflows/javafx-dependency-regression.yml",
+                                 ".github/workflows/javafx-library-candidate.yml"})
+VERIFICATION_WORKFLOWS = DEPENDENCY_WORKFLOWS | {".github/workflows/gradle.yml", ".github/workflows/build-native-libs.yml"}
 REMOTE_ACTION = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*@[0-9a-f]{40}")
+PUBLISHED_KIRA_PREVIEW = {"id": 449677531, "tag_name": "v0.1.0-preview.1", "draft": False,
+                          "prerelease": True, "published_at": "2026-11-18T08:02:22Z"}
+KIRA_PREVIEW_DEPLOYMENT = {"id": 7877162495, "ref": PUBLISHED_KIRA_PREVIEW["tag_name"],
+                           "sha": "6fac2815a6e3e7cdb1d1d5dd5259ac59e8663eaa", "environment": "maven-central",
+                           "creator": "Apdelrahman1911", "created_at": "2026-11-18T07:38:09Z"}
 
 
 def approved_actions_configuration(actions: dict, token: dict, selected: dict, required: set[str]) -> bool:
@@ -72,9 +80,19 @@ def read_only_verification_workflow(source: str) -> bool:
 
 def approved_verification_run(run: dict) -> bool:
     """Safe entry-point observation, not a claim of completed/passing execution."""
-    return (run.get("path") in VERIFICATION_WORKFLOWS
-            and run.get("event") == "workflow_dispatch"
+    workflow = run.get("path")
+    event = run.get("event")
+    registration = (event == "push" and workflow in DEPENDENCY_WORKFLOWS
+                    and run.get("head_branch") == "development/preview-hardening")
+    return (workflow in VERIFICATION_WORKFLOWS and (event == "workflow_dispatch" or registration)
             and run.get("status") in {"queued", "in_progress", "completed", "waiting", "pending", "requested"})
+
+
+def matches_kira_preview(releases: list[dict], remote_refs: dict[str, str]) -> bool:
+    tag = "refs/tags/" + PUBLISHED_KIRA_PREVIEW["tag_name"]
+    return (len(releases) == 1
+            and all(releases[0].get(key) == value for key, value in PUBLISHED_KIRA_PREVIEW.items())
+            and remote_refs.get(tag) == KIRA_PREVIEW_DEPLOYMENT["sha"])
 
 
 def command(*args: str) -> str:
@@ -307,11 +325,18 @@ def main() -> int:
             repo = identity["github_repository"]
             if repo != DESTINATION:
                 raise ValueError("Unexpected destination repository")
+            if not args.remote_ref.startswith("refs/heads/"):
+                raise ValueError("--remote-ref must be an explicit refs/heads/ reference")
+            command("git", "check-ref-format", args.remote_ref)
+            remote = dict(line.split()[::-1] for line in command("git", "ls-remote", "--refs", f"https://github.com/{repo}.git").splitlines())
             state = json.loads(command("gh", "api", "repos/" + repo))
             check("independent_github_repository", state.get("fork") is False and state["full_name"] == repo, {"full_name": state["full_name"], "fork": state.get("fork"), "default_branch": state["default_branch"]})
             incident = json.loads((ROOT / "docs/migration/pages-incident.json").read_text())
-            check("legacy_pages_incident_disclosed", incident["repository"] == repo and incident["schema_version"] == 1,
-                  "One unintended historical-branch deployment is recorded; not a zero-deployment claim")
+            archive_destination = json.loads((ROOT / TRANSFER_SNAPSHOT).read_text())
+            check("legacy_pages_incident_disclosed", type(state.get("id")) is int
+                  and state["id"] == archive_destination["id"]
+                  and incident["repository"] == archive_destination["full_name"] and incident["schema_version"] == 1,
+                  {"historical_repository": archive_destination["full_name"], "repository_id": state.get("id")})
             report["pages_configuration_present"] = state.get("has_pages")
             if state.get("has_pages"):
                 pages = json.loads(command("gh", "api", f"repos/{repo}/pages"))
@@ -328,38 +353,41 @@ def main() -> int:
                       "No Pages configuration reported; CDN/cache expiration is not tested")
                 report["pages_unpublishing_verified"] = True
             verify_actions_policy(check, repo, required_actions)
-            releases = json.loads(command("gh", "api", f"repos/{repo}/releases?per_page=100"))
-            check("no_releases_created", len(releases) == 0, "Historical release JSON is archived, not republished")
+            release_pages = json_pages(command("gh", "api", "--paginate", f"repos/{repo}/releases?per_page=100"))
+            releases = [release for page in release_pages for release in page]
+            check("only_recorded_kira_preview_release", matches_kira_preview(releases, remote),
+                  {"observed_release_ids": [release["id"] for release in releases],
+                   "recorded_prior_release": PUBLISHED_KIRA_PREVIEW})
             deployment_pages = json_pages(command("gh", "api", "--paginate", f"repos/{repo}/deployments?per_page=100"))
             if not all(isinstance(page, list) for page in deployment_pages):
                 raise ValueError("Unexpected deployment response shape")
             deployments = [deployment for page in deployment_pages for deployment in page]
-            known = {item["id"]: item for item in incident["disclosed_deployments"]}
+            known = {item["id"]: item for item in [*incident["disclosed_deployments"], KIRA_PREVIEW_DEPLOYMENT]}
             check("no_undisclosed_deployments", all(
                 deployment["id"] in known and
                 all(deployment[field] == known[deployment["id"]][field] for field in ("ref", "sha", "environment", "created_at")) and
                 deployment["creator"]["login"] == known[deployment["id"]]["creator"]
                 for deployment in deployments),
                 {"observed_ids": [d["id"] for d in deployments], "disclosed_incident_ids": sorted(known),
-                 "scope": "The unintended legacy Pages event is retained, not hidden or recreated as a nativeCmpkit release"})
-            pages = json_pages(command("gh", "api", "--paginate", f"repos/{repo}/actions/runs?per_page=100"))
+                 "scope": "The historical Pages incident and the earlier Maven Central preview are both recorded"})
+            branch = args.remote_ref.removeprefix("refs/heads/")
+            planned_revision = report["observed_checkout_sha"]
+            pages = json_pages(command("gh", "api", "--paginate", "--method", "GET", f"repos/{repo}/actions/runs", "-F", "per_page=100",
+                                       "-f", f"branch={branch}", "-f", f"head_sha={planned_revision}"))
             runs = [run for page in pages for run in page["workflow_runs"]]
+            report["verification_workflow_run_scope"] = {"branch": branch, "head_sha": planned_revision}
             for run in runs:
-                check("approved_verification_run_" + str(run["id"]), approved_verification_run(run),
+                check("approved_verification_run_" + str(run["id"]), run.get("head_sha") == planned_revision
+                      and run.get("head_branch") == branch and approved_verification_run(run),
                       {k: run[k] for k in ("id", "path", "head_sha", "event", "status", "conclusion")})
-                if not SHA.fullmatch(run["head_sha"]): raise ValueError("Invalid workflow revision")
-                workflow = command("git", "show", run["head_sha"] + ":" + run["path"])
+                workflow = command("git", "show", planned_revision + ":" + run["path"])
                 check("read_only_executed_workflow_" + str(run["id"]), read_only_verification_workflow(workflow),
                       "Approved workflow source at its executed revision; report artifacts are not releases/packages")
             report["verification_workflow_runs"] = [run["id"] for run in runs]
             report["unfinished_verification_runs"] = [run["id"] for run in runs if run["status"] != "completed"]
             report["completed_nonsuccess_verification_runs"] = [run["id"] for run in runs if run["status"] == "completed" and run["conclusion"] != "success"]
-            remote = dict(line.split()[::-1] for line in command("git", "ls-remote", "--refs", f"https://github.com/{repo}.git").splitlines())
             preserved = {ref: oid for ref, oid in expected.items() if ref.startswith(("refs/heads/", "refs/tags/")) and ref != "refs/heads/main"}
             check("historical_remote_refs_identical", all(remote.get(ref) == oid for ref, oid in preserved.items()), f"{len(preserved)} non-main heads/tags are byte-identical object IDs")
-            if not args.remote_ref.startswith("refs/heads/"):
-                raise ValueError("--remote-ref must be an explicit refs/heads/ reference")
-            command("git", "check-ref-format", args.remote_ref)
             report["observed_remote_main_sha"] = remote.get("refs/heads/main")
             check("remote_ref_matches_checkout", remote.get(args.remote_ref) == report["observed_checkout_sha"],
                   {"ref": args.remote_ref, "sha": remote.get(args.remote_ref)})
