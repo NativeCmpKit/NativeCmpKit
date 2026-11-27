@@ -387,27 +387,28 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
                 checks, _ = inspect(changed)
                 self.assertTrue(any(not item['passed'] for item in checks), checks)
 
-    def original_arguments(self, archived_module):
-        base = ROOT / 'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104'
-        report = (base / 'notices-current606' / (archived_module + '-licenses-report.json')).read_bytes()
-        metadata = (base / 'metadata-current606' / (archived_module + '.json')).read_bytes()
+    def original_arguments(self, pinned):
+        archived_metadata, = [ROOT / path for path, digest in carriage.MATERIAL_INPUTS.items()
+                              if digest == pinned['metadata'] and '/metadata-current606/' in path]
+        report_path = archived_metadata.parent.parent / 'notices-current606' / (archived_metadata.stem + '-licenses-report.json')
+        report, metadata = report_path.read_bytes(), archived_metadata.read_bytes()
         inputs = {path: (ROOT / path).read_bytes() for path in active.INPUT_PATHS}
         return report, metadata, inputs
 
     def test_independently_pinned_originals_refuse_mutation_and_cross_identity_reuse(self):
-        archived_names = {'nativecmpkit-file-picker': 'calf-file-picker', 'nativecmpkit-share': 'calf-share'}
-        self.assertEqual(set(carry.ORIGINALS), set(archived_names))
-        for module, archived_module in archived_names.items():
-            report, metadata, inputs = self.original_arguments(archived_module)
-            self.assertEqual(carry.ORIGINALS[module]['report'], supplements.digest(report))
-            self.assertEqual(carry.ORIGINALS[module]['metadata'], supplements.digest(metadata))
+        self.assertEqual(2, len(carry.ORIGINALS))
+        for module, pinned in carry.ORIGINALS.items():
+            report, metadata, inputs = self.original_arguments(pinned)
+            self.assertEqual(pinned['report'], supplements.digest(report))
+            self.assertEqual(pinned['metadata'], supplements.digest(metadata))
             never = mock.Mock(side_effect=AssertionError('Changed original must refuse before notice reads'))
             for changed_report, changed_metadata in ((report + b' ', metadata), (report, metadata + b' '),
                     (encoded(gate.load_json_bytes(report) | {'complete_material_collection': True}), metadata)):
                 with self.subTest(module=module, boundary='independent pin'), \
                         self.assertRaisesRegex(gate.InvalidArtifact, 'differs from independent fixed review'):
                     carry.validate_original(module, changed_report, changed_metadata, never, inputs)
-            with self.subTest(module=module, boundary='archived identity'), self.assertRaises(gate.InvalidArtifact):
+            with self.subTest(module=module, boundary='archived identity'), \
+                    self.assertRaisesRegex(gate.InvalidArtifact, 'Unsupported native metadata module/schema'):
                 carry.validate_original(module, report, metadata, never, inputs)
             self.assertEqual(0, never.call_count)
 
