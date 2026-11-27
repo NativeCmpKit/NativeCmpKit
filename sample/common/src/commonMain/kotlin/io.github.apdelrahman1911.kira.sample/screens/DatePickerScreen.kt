@@ -146,6 +146,13 @@ fun DatePickerScreen(
                 }
             }
 
+            Text(
+                text = "Range: ${rangeOption.label}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(

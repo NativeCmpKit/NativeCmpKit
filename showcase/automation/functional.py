@@ -283,8 +283,9 @@ FLOWS = [
         assert_absent(ui, "This is a native alert dialog from Kira"),
     )),
     ("date-bounds", "Adaptive Date Picker", lambda ui, p: (
+        assert_text(ui, "Range: Any date"),
         click_text_scroll(ui, "From today"),
-        tour.find(ui, {"text": "From today", "properties": {"selected": True}}, timeout_ms=3000),
+        assert_text(ui, "Range: From today"),
     )),
     ("scaffold-tab", "Adaptive Scaffold", lambda ui, p: (
         tour.click_text(ui, "Favorites"),
