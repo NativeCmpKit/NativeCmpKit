@@ -110,6 +110,18 @@ def count_text(ui, text):
     )
 
 
+def nav_restore(ui, platform):
+    assert_text(ui, "111.19")
+    if platform != "android":
+        raise AssertionError("orientation control is not exposed for this target")
+    try:
+        ui.action("device.orientation", {"orientation": "landscape"})
+        tour.find(ui, {"text_contains": "Geo Maths"}, timeout_ms=8000)
+        assert_text(ui, "111.19")
+    finally:
+        ui.action("device.orientation", {"orientation": "portrait"})
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -351,6 +363,7 @@ FLOWS = [
         assert_absent(ui, "1322 icons"),
         assert_text(ui, "icons"),
     )),
+    ("nav-restore", "Geo Maths", lambda ui, p: nav_restore(ui, p)),
     ("geo-math", "Geo Maths", lambda ui, p: (
         assert_text(ui, "111.19"),
         assert_text(ui, "Live tracking: unavailable"),
@@ -381,6 +394,7 @@ FLOWS = [
 PLATFORM_ONLY = {
     "alert-text-field": "ios",
     "action-sheet": "ios",
+    "nav-restore": "android",
 }
 
 BLOCKED = [

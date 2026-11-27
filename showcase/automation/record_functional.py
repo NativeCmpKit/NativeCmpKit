@@ -31,6 +31,7 @@ FLOW_ROWS = {
     "scaffold-tab": ["UI-BAR-001"],
     "icons-category": ["UI-ICON-004"],
     "geo-math": ["GEO-001"],
+    "nav-restore": ["NAV-003"],
     "liquidglass": ["UI-LIQUID-001", "UI-LIQUID-002", "UI-LIQUID-003", "UI-LIQUID-004"],
     "webview": ["WEB-001", "WEB-002", "WEB-003", "WEB-004", "WEB-005"],
     "permissions-bulk-deny": ["PERM-BULK-001"],
