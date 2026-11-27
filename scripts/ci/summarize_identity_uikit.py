@@ -21,6 +21,25 @@ FRAME = re.compile(r"\b([A-Za-z0-9_]+\.kt):(\d{1,5})\b")
 RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
 RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
 ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
+ANDROID_ASSEMBLY_LOGS = {
+    "camera-test-apk": "identity-android-camera/apk-assembly.log",
+    "remote-io-helper-apk": "identity-android-remote-io/io-remote-documents/source-apk-build.log",
+    "remote-io-test-apk": "identity-android-remote-io/apk-assembly.log",
+}
+GRADLE_FAILED_TASK = re.compile(r"^> Task ((?::[A-Za-z0-9_-]+){1,6}) FAILED\s*$", re.M)
+GRADLE_SOURCE_ERROR = re.compile(
+    r"^e: [^\r\n]{0,500}[/\\]([A-Za-z0-9_.-]+\.(?:kt|kts|java)):(\d{1,5}):\d{1,5} ", re.M
+)
+GRADLE_FAILURE_MARKERS = {
+    "dependency-resolution": ("Could not resolve", "Could not find", "Could not download"),
+    "repository-rate-limit": ("429 Too Many Requests", "status code 429"),
+    "repository-policy": ("settings repositories over project repositories",),
+    "android-sdk": ("SDK location not found", "Failed to find target", "Build Tools revision", "Failed to install the following Android SDK"),
+    "signing": ("SigningConfig", "Keystore file", "keystore password was incorrect"),
+    "java-toolchain": ("Cannot find a Java installation", "No matching toolchains found"),
+    "compilation": ("Compilation error", "Compilation failed"),
+    "android-resources": ("Manifest merger failed", "Android resource linking failed"),
+}
 
 
 def restore_stages(fixture):
@@ -120,11 +139,32 @@ def failure_rows(module, path, expected_digest=None):
             }
 
 
+def android_assembly_summaries():
+    rows = []
+    for stage, relative in ANDROID_ASSEMBLY_LOGS.items():
+        path = safe_path(Path.cwd(), (OWNED_ROOT / relative).as_posix())
+        if not path.is_file() or path.is_symlink() or not 0 < path.stat().st_size <= MAX_BYTES:
+            continue
+        payload = path.read_bytes()
+        document = payload.decode("utf-8", errors="replace")
+        rows.append({"stage": stage, "original_log_sha256": hashlib.sha256(payload).hexdigest(),
+                     "failed_tasks": list(dict.fromkeys(GRADLE_FAILED_TASK.findall(document)))[:12],
+                     "source_errors": list(dict.fromkeys(GRADLE_SOURCE_ERROR.findall(document)))[:12],
+                     "categories": [key for key, variants in GRADLE_FAILURE_MARKERS.items()
+                                    if any(marker in document for marker in variants)]})
+    return rows
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--android-webview", action="store_true")
+    platform = parser.add_mutually_exclusive_group()
+    platform.add_argument("--android-webview", action="store_true")
+    platform.add_argument("--android-ownership", action="store_true")
     args = parser.parse_args()
-    if args.android_webview:
+    if args.android_ownership:
+        output = Path("build/ci-identity/android-ownership-diagnostics.json")
+        summary = {"assembly": android_assembly_summaries()}
+    elif args.android_webview:
         output = Path("build/ci-identity/android-webview-diagnostics.json")
         receipt = OWNED_ROOT / "identity-android-webview-device/library/receipt.json"
         failures = []

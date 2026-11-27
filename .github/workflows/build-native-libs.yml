@@ -769,6 +769,9 @@ jobs:
       - name: Retain bounded Android WebView failure observations
         if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore') }}
         run: python3 scripts/ci/summarize_identity_uikit.py --android-webview
+      - name: Retain bounded Android ownership assembly observations
+        if: ${{ !cancelled() && inputs.profile == 'identity-linux-android-ownership' }}
+        run: python3 scripts/ci/summarize_identity_uikit.py --android-ownership
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
         shell: cmd
@@ -799,6 +802,7 @@ jobs:
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
             build/ci-identity/android-webview-diagnostics.json
+            build/ci-identity/android-ownership-diagnostics.json
             build/ci-identity/consumer/
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
