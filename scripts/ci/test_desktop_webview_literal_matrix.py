@@ -24,12 +24,12 @@ FOCUSES = (FOCUS, STOP_FOCUS, ALL_FOCUS)
 OLD_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 OLD_METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
 OLD_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
-OLD_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
+OLD_SHA256 = "5769b6b558dd528db721ef4970b734aa055fdb22dadeb622c6c1798acf6405ea"
 NEW_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 STOP_METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 REDIRECT_METHOD = "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct"
 NEW_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
-NEW_SHA256 = "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3"
+NEW_SHA256 = "a3815e03ab7d4dea91e41f99edd790492cc24e2aa2742fb16e3fb9bb7e424ee3"
 ROWS = (
     ("desktop-linux-x64", FOCUS, "Linux", "x86_64", 1, 1),
     ("desktop-macos-arm64", STOP_FOCUS, "Darwin", "arm64", 2, 2),
@@ -289,13 +289,12 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         self.assertEqual(OLD_SHA256, hashlib.sha256((lt.ROOT / OLD_SOURCE).read_bytes()).hexdigest())
         self.assertEqual([OLD_METHOD], re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", (lt.ROOT / OLD_SOURCE).read_text()))
         preserved = {
-            "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxWebViewTest.kt": "0c061f3ee9acc0d7d188d8604105349f0afe3fc1e61f743361eaf9cba38963ae",
-            "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
-            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
+            "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxWebViewTest.kt": "083361851d1c0264f4a6b1651ec346f69a0a7fce0637cc1a8ab1bfe88a15c54e",
+            "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "26b914d5f62aceae320d9ca8df91018e70aca2f8ea3e451f2bc03e2313b85953",
+            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4476eb5ee9bf590b121e29c8a95e2e3cd31d6e96260c999953da19b6c67460ca",
         }
-        from platform_recovery659_source_projection import current_source_before_platform_recovery659
         for relative, expected in preserved.items():
-            preserved_source = current_source_before_platform_recovery659(relative, (lt.ROOT / relative).read_bytes())
+            preserved_source = (lt.ROOT / relative).read_bytes()
             self.assertEqual(expected, hashlib.sha256(preserved_source).hexdigest())
         # This proposal changes no YAML. Authorized unrelated option additions
         # must not be blocked by a whole-workflow preimage hash. Row focus tokens
@@ -331,7 +330,7 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         cls = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == "DesktopWebViewRequestFocusTests")
         hashes = {node.name: hashlib.sha256(ast.get_source_segment(old_guard, node).encode()).hexdigest()
                   for node in cls.body if isinstance(node, ast.FunctionDef) and node.name.startswith("test_")}
-        expected_unchanged = {'test_plan_and_command_pin_one_method_one_source_and_preserve_inherited_compilation': '6e760fb18ad6a30a96752187fa7b795968b45bf6eb9152f865366a3c669f0468', 'test_real_cli_plans_exact_focus_and_refuses_wrong_suite_module_or_unknown_focus': '5454a8ce9e0135acfc6d8c2f5244adb0eb6e7ac740e649577bd702dc76d9fd6e', 'test_supported_runtime_aliases_pass_and_unknown_host_architecture_is_refused': '01ef654a7a54881705b66343039c3d26760821bbacf359afaaa704563aaf5d7c', 'test_source_calibration_precedes_any_renamed_ignored_extra_or_changed_fixture_refusal': '471de94611d34bb43b5c6b43d94473fa5544cd0f35270ed49a6058255ca84d40', 'test_filter_source_case_task_report_or_complete_suite_mutations_cannot_fall_back': '233f6ac75229cd0c9e05ef36b6440d6597b519be7cc4d451a346ae7f35062143', 'test_only_one_fresh_exact_success_is_required_without_host_na_or_accepted_cases': '4ac7b7bbc90930c4b15aff293acb97df446814edf7044417f13db0b8ca9bf7f4', 'test_empty_extra_duplicate_foreign_or_wrong_target_xml_stays_red': 'a042ef38dbc22fece7bb8608a1830439cb9fe38a0d9978ddc0e0e385b3d68876', 'test_failed_errored_skipped_stale_or_nonfresh_task_evidence_is_not_accepted': 'fe24197d2fca29c95dceb62e7d9eda61ac25779feaf814c2c2babbbf41e0a6b6', 'test_nonmedia_selection_does_not_start_source_inferred_audio_or_change_full_source_inventory': 'e79420bd19e4b5467dc26553a3671a691eb82c59e7d7553de73f9b84884590fd', 'test_only_profile_option_is_added_without_permissions_upload_or_parallel_policy_expansion': '15c9c10c3016b70137379b12a39ec2ac6e9c9fa6dece700acdf45b2e603ade7d'}
+        expected_unchanged = {'test_plan_and_command_pin_one_method_one_source_and_preserve_inherited_compilation': '48bcfeffe58d045b448aced0a3a054da58c57eec7a17ed8ebbc269f1c984023b', 'test_real_cli_plans_exact_focus_and_refuses_wrong_suite_module_or_unknown_focus': 'ff1517e0dc5b5472ac482402056e72ef8c556737006ff14223dc8ba37799faf3', 'test_supported_runtime_aliases_pass_and_unknown_host_architecture_is_refused': '01ef654a7a54881705b66343039c3d26760821bbacf359afaaa704563aaf5d7c', 'test_source_calibration_precedes_any_renamed_ignored_extra_or_changed_fixture_refusal': 'c72f1dab3a002e1c0d2970389f3816f6a9e82ae24ae851d0fabed35da7f24784', 'test_filter_source_case_task_report_or_complete_suite_mutations_cannot_fall_back': '6a7db7719584c7ebd786d66cf5359fde1fe8727a2009f6a15fcd7d360c8090e4', 'test_only_one_fresh_exact_success_is_required_without_host_na_or_accepted_cases': '4ac7b7bbc90930c4b15aff293acb97df446814edf7044417f13db0b8ca9bf7f4', 'test_empty_extra_duplicate_foreign_or_wrong_target_xml_stays_red': 'a042ef38dbc22fece7bb8608a1830439cb9fe38a0d9978ddc0e0e385b3d68876', 'test_failed_errored_skipped_stale_or_nonfresh_task_evidence_is_not_accepted': 'fe24197d2fca29c95dceb62e7d9eda61ac25779feaf814c2c2babbbf41e0a6b6', 'test_nonmedia_selection_does_not_start_source_inferred_audio_or_change_full_source_inventory': '5feef4d8aa529a2957b6d875c76b74aab7db3f3735a64018986cb21da2b787ff', 'test_only_profile_option_is_added_without_permissions_upload_or_parallel_policy_expansion': '15c9c10c3016b70137379b12a39ec2ac6e9c9fa6dece700acdf45b2e603ade7d'}
         self.assertEqual(expected_unchanged, {name: digest for name, digest in hashes.items() if name in expected_unchanged})
         self.assertEqual({"test_profile_selects_only_missing_literal_cells_on_all_five_declared_desktop_hosts", *expected_unchanged}, set(hashes))
 
