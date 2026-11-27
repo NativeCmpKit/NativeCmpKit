@@ -77,9 +77,12 @@ def main() -> None:
             )
         lines.append("")
 
-    compare = args.root / "compare"
-    if compare.exists():
-        lines.extend(["## Side-by-side Android / iOS", ""])
+    for name, title in (("compare", "Side-by-side Android / iOS"),
+                        ("compare-tablet", "Side-by-side tablet windows")):
+        compare = args.root / name
+        if not compare.exists():
+            continue
+        lines.extend([f"## {title}", ""])
         for png in sorted(compare.rglob("*.png")):
             relative = png.relative_to(compare)
             lines.append(f"- [{relative.as_posix()}]({png.as_posix()})")
