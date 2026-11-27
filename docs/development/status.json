@@ -3,10 +3,10 @@
   "kind": "offline-development-status-index",
   "generator": {
     "path": "scripts/development/validate_resolutions.py",
-    "sha256": "82ad5502dbec4a5a151336a0e6d33eb97e7a1eb10bb099d2af242d4969fce982"
+    "sha256": "0e9d202006900084c4ed3211d5ba469a45719812ce3d836569b52d8229cec54d"
   },
   "baseline_revision": "af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6",
-  "repository": "Apdelrahman1911/nativeCmpkit",
+  "repository": "NativeCmpKit/NativeCmpKit",
   "scope": "Structural validation and content-addressed snapshot only. No test execution/evidence certification, status promotion, live issue query, automatic closure or release authorization.",
   "snapshot_freshness": "Run validate_resolutions.py --check. Any input-byte/input-set/generator/output difference makes the index stale; this file cannot update itself when ledgers change.",
   "freshness_scope": "Only the listed metadata/ledger inputs and generator are hashed. Referenced source, test, log/XML and evidence files are not rehashed or certified; they can change while this ledger index remains CURRENT.",
@@ -44,17 +44,17 @@
     "docs/audit/findings/PERM.json": "27ad1d47cad95bdb5943d6c776febf3e9fb713ba20a4a4b15fd398a968612cc8",
     "docs/audit/findings/UI.json": "9a507808155d4d8c99047a15247f7450042762b985875262a7681dbd39ad8c3a",
     "docs/development/resolutions/BUILD.json": "e4938fae044f868160523afa8aa90b671ae1ef74b521c4bcc7820d5b8c662448",
-    "docs/development/resolutions/IO.json": "c70d312fbbfa44576e5c6e38100cf132348b2e606873f6d74546f7b1fb34b909",
-    "docs/development/resolutions/NATIVE.json": "813ed215b5cc021ab381c9588265d9a6221ca41391d3929104a8dde269ea512d",
+    "docs/development/resolutions/IO.json": "75ff0bebbbfc6392b197765b8213c97f54c83fb8873ccd020246e86288da397a",
+    "docs/development/resolutions/NATIVE.json": "7a7e74148edcdd27e5a8c6933a28c53dcc0fe225e933f4c94b95bf281622d7a1",
     "docs/development/resolutions/NAV.json": "c4473e55a76f5c3eebb6055d170f8bbbd779102038d46063e92eb6cb71163a15",
     "docs/development/resolutions/PERM-geo.json": "402459875a00f7873752652d42eb6844a0903d547ced3c22b90d69e460ea347c",
     "docs/development/resolutions/PERM-permissions.json": "957c57c0d2e08934d82c7e6638f28fbc507615cc976dce02cbac145944261e48",
-    "docs/development/resolutions/UI-controls.json": "8838386ae0bc7dc5ab98a8d07b5e7300f00794b108d839b8a7d53812fca0c561",
-    "docs/development/resolutions/UI-native.json": "580f0dfb4db09bbdae5ed47ec88f14392c1054a9919aa308322c9aca2ac7cf07",
+    "docs/development/resolutions/UI-controls.json": "8372053f59a3c7cf83f5479aeed3a9f239e2d75f9a0ed92456949819cfdaf142",
+    "docs/development/resolutions/UI-native.json": "83f3388ee31c862813361eaa5db87df9b018282bfc6a7f91a951736d4cdafc36",
     "docs/migration/issue-map.json": "5ebc06ad6e81bd6a6953b9731fd617edfe1d99189bea236d9c2198daa48be861",
-    "docs/roadmap/backlog.json": "044eb0eb9f7f640035f26f15a86a0fb60887747f6a12e02dd2b94df371273e10"
+    "docs/roadmap/backlog.json": "d74dd0ea37752f1e967dd3bc00533fd5791f27cf777393e28dd1287087592cf6"
   },
-  "input_fingerprint": "b22ecbe5683db7965461769ed93f17bc562fa11768bf00c6c7f0b481b51f9032",
+  "input_fingerprint": "1f11b14a49618e7ebcbfdb9879980fd9ba4a9f5894668d2f7e05e587f8b3e236",
   "counts": {
     "baseline_findings": 164,
     "unique_resolution_ids": 164,
@@ -116,7 +116,7 @@
       "dependencies": [],
       "issue": {
         "number": 2,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/2",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/2",
         "mapping_key": "audit:BUILD-003",
         "historical_mapping_state": "open"
       },
@@ -222,7 +222,7 @@
       "dependencies": [],
       "issue": {
         "number": 41,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/41",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/41",
         "mapping_key": "audit:BUILD-008",
         "historical_mapping_state": "closed"
       },
@@ -303,7 +303,7 @@
       "dependencies": [],
       "issue": {
         "number": 42,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/42",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/42",
         "mapping_key": "audit:BUILD-009",
         "historical_mapping_state": "closed"
       },
@@ -396,12 +396,12 @@
           "id": "BUILD-003",
           "original_order": 1,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/2"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/2"
         }
       ],
       "issue": {
         "number": 146,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/146",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/146",
         "mapping_key": "audit:BUILD-011",
         "historical_mapping_state": "closed"
       },
@@ -502,7 +502,7 @@
       "dependencies": [],
       "issue": {
         "number": 1,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/1",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/1",
         "mapping_key": "audit:BUILD-001",
         "historical_mapping_state": "closed"
       },
@@ -616,7 +616,7 @@
       "dependencies": [],
       "issue": {
         "number": 3,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/3",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/3",
         "mapping_key": "audit:BUILD-006",
         "historical_mapping_state": "open"
       },
@@ -957,7 +957,7 @@
       "dependencies": [],
       "issue": {
         "number": 4,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/4",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/4",
         "mapping_key": "audit:IO-001",
         "historical_mapping_state": "closed"
       },
@@ -1232,7 +1232,7 @@
       "dependencies": [],
       "issue": {
         "number": 5,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/5",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/5",
         "mapping_key": "audit:IO-002",
         "historical_mapping_state": "closed"
       },
@@ -1453,7 +1453,7 @@
       "dependencies": [],
       "issue": {
         "number": 6,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/6",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/6",
         "mapping_key": "audit:IO-003",
         "historical_mapping_state": "closed"
       },
@@ -1594,7 +1594,7 @@
       "dependencies": [],
       "issue": {
         "number": 7,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/7",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/7",
         "mapping_key": "audit:IO-004",
         "historical_mapping_state": "closed"
       },
@@ -1693,7 +1693,7 @@
       "dependencies": [],
       "issue": {
         "number": 9,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/9",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/9",
         "mapping_key": "audit:NATIVE-001",
         "historical_mapping_state": "closed"
       },
@@ -1994,7 +1994,7 @@
       "dependencies": [],
       "issue": {
         "number": 10,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/10",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/10",
         "mapping_key": "audit:NATIVE-002",
         "historical_mapping_state": "closed"
       },
@@ -2282,7 +2282,7 @@
       "dependencies": [],
       "issue": {
         "number": 11,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/11",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/11",
         "mapping_key": "audit:NATIVE-010",
         "historical_mapping_state": "closed"
       },
@@ -2554,7 +2554,7 @@
       "dependencies": [],
       "issue": {
         "number": 12,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/12",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/12",
         "mapping_key": "audit:NATIVE-013",
         "historical_mapping_state": "closed"
       },
@@ -2706,7 +2706,7 @@
       "dependencies": [],
       "issue": {
         "number": 13,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/13",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/13",
         "mapping_key": "audit:NATIVE-019",
         "historical_mapping_state": "open"
       },
@@ -3155,7 +3155,7 @@
       "dependencies": [],
       "issue": {
         "number": 14,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/14",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/14",
         "mapping_key": "audit:NATIVE-027",
         "historical_mapping_state": "closed"
       },
@@ -3298,7 +3298,7 @@
       "dependencies": [],
       "issue": {
         "number": 15,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/15",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/15",
         "mapping_key": "audit:NAV-001",
         "historical_mapping_state": "closed"
       },
@@ -3516,12 +3516,12 @@
           "id": "NAV-001",
           "original_order": 17,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/15"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/15"
         }
       ],
       "issue": {
         "number": 16,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/16",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/16",
         "mapping_key": "audit:NAV-002",
         "historical_mapping_state": "closed"
       },
@@ -3728,7 +3728,7 @@
       "dependencies": [],
       "issue": {
         "number": 17,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/17",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/17",
         "mapping_key": "audit:NAV-009",
         "historical_mapping_state": "closed"
       },
@@ -3824,7 +3824,7 @@
       "dependencies": [],
       "issue": {
         "number": 22,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/22",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/22",
         "mapping_key": "audit:PERM-011",
         "historical_mapping_state": "open"
       },
@@ -3998,7 +3998,7 @@
       "dependencies": [],
       "issue": {
         "number": 24,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/24",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/24",
         "mapping_key": "audit:PERM-018",
         "historical_mapping_state": "closed"
       },
@@ -4269,7 +4269,7 @@
       "dependencies": [],
       "issue": {
         "number": 26,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/26",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/26",
         "mapping_key": "audit:UI-001",
         "historical_mapping_state": "closed"
       },
@@ -4401,7 +4401,7 @@
       "dependencies": [],
       "issue": {
         "number": 27,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/27",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/27",
         "mapping_key": "audit:UI-002",
         "historical_mapping_state": "open"
       },
@@ -4483,7 +4483,7 @@
       "dependencies": [],
       "issue": {
         "number": 28,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/28",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/28",
         "mapping_key": "audit:UI-012",
         "historical_mapping_state": "open"
       },
@@ -4626,7 +4626,7 @@
       "dependencies": [],
       "issue": {
         "number": 29,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/29",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/29",
         "mapping_key": "audit:UI-013",
         "historical_mapping_state": "open"
       },
@@ -4810,7 +4810,7 @@
       "dependencies": [],
       "issue": {
         "number": 30,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/30",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/30",
         "mapping_key": "audit:UI-014",
         "historical_mapping_state": "open"
       },
@@ -4989,7 +4989,7 @@
       "dependencies": [],
       "issue": {
         "number": 32,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/32",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/32",
         "mapping_key": "audit:UI-020",
         "historical_mapping_state": "open"
       },
@@ -5080,12 +5080,12 @@
           "id": "UI-020",
           "original_order": 27,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/32"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/32"
         }
       ],
       "issue": {
         "number": 33,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/33",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/33",
         "mapping_key": "audit:UI-021",
         "historical_mapping_state": "open"
       },
@@ -5168,13 +5168,13 @@
       "dependencies": [],
       "issue": {
         "number": 34,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/34",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/34",
         "mapping_key": "audit:UI-027",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/UI-controls.json",
-      "owner_record_sha256": "c8637caab47067a9776a18ff0ae128eb2e0a9b17333bc874f11cd39cff27c0a9",
+      "owner_record_sha256": "145357c9a48a7307c54e9e31c94ed2ba440575e16bf720a0a85db9739616b661",
       "owner_record": {
         "id": "UI-027",
         "status": "verified",
@@ -5369,8 +5369,8 @@
           "state": "closed",
           "state_reason": "completed",
           "closed_at": "2026-10-29T20:07:53Z",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/34",
-          "resolution_comment_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/34#issuecomment-6507141452"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/34",
+          "resolution_comment_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/34#issuecomment-6507141452"
         }
       },
       "closure_or_release_authorized_by_index": false
@@ -5425,7 +5425,7 @@
       "dependencies": [],
       "issue": {
         "number": 37,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/37",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/37",
         "mapping_key": "audit:UI-040",
         "historical_mapping_state": "open"
       },
@@ -5633,12 +5633,12 @@
           "id": "BUILD-003",
           "original_order": 1,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/2"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/2"
         }
       ],
       "issue": {
         "number": 38,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/38",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/38",
         "mapping_key": "audit:BUILD-004",
         "historical_mapping_state": "open"
       },
@@ -5722,7 +5722,7 @@
       "dependencies": [],
       "issue": {
         "number": 39,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/39",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/39",
         "mapping_key": "audit:BUILD-005",
         "historical_mapping_state": "closed"
       },
@@ -5820,7 +5820,7 @@
       "dependencies": [],
       "issue": {
         "number": 40,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/40",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/40",
         "mapping_key": "audit:BUILD-007",
         "historical_mapping_state": "open"
       },
@@ -6120,7 +6120,7 @@
       "dependencies": [],
       "issue": {
         "number": 45,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/45",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/45",
         "mapping_key": "audit:IO-008",
         "historical_mapping_state": "open"
       },
@@ -6369,12 +6369,12 @@
           "id": "IO-008",
           "original_order": 34,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/45"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/45"
         }
       ],
       "issue": {
         "number": 8,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/8",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/8",
         "mapping_key": "audit:IO-005",
         "historical_mapping_state": "open"
       },
@@ -6531,7 +6531,7 @@
       "dependencies": [],
       "issue": {
         "number": 104,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/104",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/104",
         "mapping_key": "audit:PERM-001",
         "historical_mapping_state": "closed"
       },
@@ -6727,12 +6727,12 @@
           "id": "PERM-001",
           "original_order": 36,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/104"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/104"
         }
       ],
       "issue": {
         "number": 18,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/18",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/18",
         "mapping_key": "audit:PERM-002",
         "historical_mapping_state": "closed"
       },
@@ -6900,12 +6900,12 @@
           "id": "PERM-002",
           "original_order": 37,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/18"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/18"
         }
       ],
       "issue": {
         "number": 105,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/105",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/105",
         "mapping_key": "audit:PERM-003",
         "historical_mapping_state": "closed"
       },
@@ -7114,12 +7114,12 @@
           "id": "PERM-003",
           "original_order": 38,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/105"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/105"
         }
       ],
       "issue": {
         "number": 19,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/19",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/19",
         "mapping_key": "audit:PERM-004",
         "historical_mapping_state": "open"
       },
@@ -7282,7 +7282,7 @@
       "dependencies": [],
       "issue": {
         "number": 106,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/106",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/106",
         "mapping_key": "audit:PERM-005",
         "historical_mapping_state": "closed"
       },
@@ -7499,12 +7499,12 @@
           "id": "PERM-005",
           "original_order": 40,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/106"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/106"
         }
       ],
       "issue": {
         "number": 108,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108",
         "mapping_key": "audit:PERM-007",
         "historical_mapping_state": "closed"
       },
@@ -7690,12 +7690,12 @@
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         }
       ],
       "issue": {
         "number": 21,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/21",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/21",
         "mapping_key": "audit:PERM-009",
         "historical_mapping_state": "open"
       },
@@ -7840,24 +7840,24 @@
           "id": "PERM-003",
           "original_order": 38,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/105"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/105"
         },
         {
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         },
         {
           "id": "PERM-009",
           "original_order": 42,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/21"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/21"
         }
       ],
       "issue": {
         "number": 20,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/20",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/20",
         "mapping_key": "audit:PERM-008",
         "historical_mapping_state": "open"
       },
@@ -8064,12 +8064,12 @@
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         }
       ],
       "issue": {
         "number": 23,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/23",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/23",
         "mapping_key": "audit:PERM-013",
         "historical_mapping_state": "open"
       },
@@ -8231,12 +8231,12 @@
           "id": "PERM-018",
           "original_order": 21,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/24"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/24"
         }
       ],
       "issue": {
         "number": 116,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/116",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/116",
         "mapping_key": "audit:PERM-020",
         "historical_mapping_state": "closed"
       },
@@ -8514,18 +8514,18 @@
           "id": "PERM-018",
           "original_order": 21,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/24"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/24"
         },
         {
           "id": "PERM-020",
           "original_order": 45,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/116"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/116"
         }
       ],
       "issue": {
         "number": 25,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/25",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/25",
         "mapping_key": "audit:PERM-021",
         "historical_mapping_state": "closed"
       },
@@ -8844,7 +8844,7 @@
       "dependencies": [],
       "issue": {
         "number": 125,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/125",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/125",
         "mapping_key": "audit:UI-016",
         "historical_mapping_state": "open"
       },
@@ -8971,12 +8971,12 @@
           "id": "UI-016",
           "original_order": 47,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/125"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/125"
         }
       ],
       "issue": {
         "number": 126,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/126",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/126",
         "mapping_key": "audit:UI-017",
         "historical_mapping_state": "open"
       },
@@ -9103,18 +9103,18 @@
           "id": "UI-016",
           "original_order": 47,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/125"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/125"
         },
         {
           "id": "UI-017",
           "original_order": 48,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/126"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/126"
         }
       ],
       "issue": {
         "number": 31,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/31",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/31",
         "mapping_key": "audit:UI-018",
         "historical_mapping_state": "open"
       },
@@ -9277,7 +9277,7 @@
       "dependencies": [],
       "issue": {
         "number": 134,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/134",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/134",
         "mapping_key": "audit:UI-030",
         "historical_mapping_state": "closed"
       },
@@ -9445,12 +9445,12 @@
           "id": "UI-030",
           "original_order": 50,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/134"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/134"
         }
       ],
       "issue": {
         "number": 35,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/35",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/35",
         "mapping_key": "audit:UI-029",
         "historical_mapping_state": "open"
       },
@@ -9617,12 +9617,12 @@
           "id": "UI-030",
           "original_order": 50,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/134"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/134"
         }
       ],
       "issue": {
         "number": 36,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/36",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/36",
         "mapping_key": "audit:UI-031",
         "historical_mapping_state": "closed"
       },
@@ -9810,12 +9810,12 @@
           "id": "BUILD-001",
           "original_order": 5,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/1"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/1"
         }
       ],
       "issue": {
         "number": 144,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/144",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/144",
         "mapping_key": "audit:BUILD-002",
         "historical_mapping_state": "closed"
       },
@@ -9972,18 +9972,18 @@
           "id": "BUILD-003",
           "original_order": 1,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/2"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/2"
         },
         {
           "id": "BUILD-005",
           "original_order": 32,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/39"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/39"
         }
       ],
       "issue": {
         "number": 145,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/145",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/145",
         "mapping_key": "audit:BUILD-010",
         "historical_mapping_state": "closed"
       },
@@ -10084,12 +10084,12 @@
           "id": "BUILD-005",
           "original_order": 32,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/39"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/39"
         }
       ],
       "issue": {
         "number": 147,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/147",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/147",
         "mapping_key": "audit:BUILD-012",
         "historical_mapping_state": "closed"
       },
@@ -10185,24 +10185,24 @@
           "id": "IO-002",
           "original_order": 8,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/5"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/5"
         },
         {
           "id": "IO-004",
           "original_order": 10,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/7"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/7"
         },
         {
           "id": "IO-005",
           "original_order": 35,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/8"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/8"
         }
       ],
       "issue": {
         "number": 43,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/43",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/43",
         "mapping_key": "audit:IO-006",
         "historical_mapping_state": "closed"
       },
@@ -10538,7 +10538,7 @@
       "dependencies": [],
       "issue": {
         "number": 44,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/44",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/44",
         "mapping_key": "audit:IO-007",
         "historical_mapping_state": "open"
       },
@@ -10692,7 +10692,7 @@
       "dependencies": [],
       "issue": {
         "number": 46,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/46",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/46",
         "mapping_key": "audit:IO-009",
         "historical_mapping_state": "closed"
       },
@@ -10818,7 +10818,7 @@
       "dependencies": [],
       "issue": {
         "number": 47,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/47",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/47",
         "mapping_key": "audit:IO-010",
         "historical_mapping_state": "closed"
       },
@@ -11096,7 +11096,7 @@
       "dependencies": [],
       "issue": {
         "number": 48,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/48",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/48",
         "mapping_key": "audit:IO-011",
         "historical_mapping_state": "open"
       },
@@ -11206,7 +11206,7 @@
       "dependencies": [],
       "issue": {
         "number": 49,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/49",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/49",
         "mapping_key": "audit:IO-012",
         "historical_mapping_state": "open"
       },
@@ -11333,18 +11333,18 @@
           "id": "IO-007",
           "original_order": 57,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/44"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/44"
         },
         {
           "id": "IO-008",
           "original_order": 34,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/45"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/45"
         }
       ],
       "issue": {
         "number": 50,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/50",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/50",
         "mapping_key": "audit:IO-013",
         "historical_mapping_state": "closed"
       },
@@ -11581,12 +11581,12 @@
           "id": "IO-008",
           "original_order": 34,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/45"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/45"
         }
       ],
       "issue": {
         "number": 51,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/51",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/51",
         "mapping_key": "audit:IO-014",
         "historical_mapping_state": "closed"
       },
@@ -11890,7 +11890,7 @@
       "dependencies": [],
       "issue": {
         "number": 52,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/52",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/52",
         "mapping_key": "audit:IO-015",
         "historical_mapping_state": "open"
       },
@@ -11981,12 +11981,12 @@
           "id": "IO-003",
           "original_order": 9,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/6"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/6"
         }
       ],
       "issue": {
         "number": 53,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/53",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/53",
         "mapping_key": "audit:IO-017",
         "historical_mapping_state": "closed"
       },
@@ -12158,7 +12158,7 @@
       "dependencies": [],
       "issue": {
         "number": 54,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/54",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/54",
         "mapping_key": "audit:IO-018",
         "historical_mapping_state": "open"
       },
@@ -12413,24 +12413,24 @@
           "id": "IO-008",
           "original_order": 34,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/45"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/45"
         },
         {
           "id": "IO-010",
           "original_order": 59,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/47"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/47"
         }
       ],
       "issue": {
         "number": 55,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/55",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/55",
         "mapping_key": "audit:IO-019",
         "historical_mapping_state": "open"
       },
       "reported_status": "partially-verified",
       "owner_ledger": "docs/development/resolutions/IO.json",
-      "owner_record_sha256": "1c44971fa49ad9a9344a50bd6182697ca70dc312a034a8abca646154695225f3",
+      "owner_record_sha256": "88b8f8c6812e4c62284cf2a597c64ef0186c328a4c45768202ef568d52124e17",
       "owner_record": {
         "id": "IO-019",
         "status": "partially-verified",
@@ -12639,7 +12639,7 @@
             "scope": "Exact finite source-history reader composition only; original current/history pin declarations and native actions/assertions/cleanup remain. ExternalStorage1 still must run; unchanged Downloads/root-policy limits and cloudC1/#55 stay open. No native/consumer/API-ABI/security/release inference."
           },
           {
-            "command": "gh workflow run gradle.yml -R Apdelrahman1911/nativeCmpkit --ref development/preview-hardening -f profile=android-io-named-external-storage; review original41508129890 once",
+            "command": "gh workflow run gradle.yml -R NativeCmpKit/NativeCmpKit --ref development/preview-hardening -f profile=android-io-named-external-storage; review original41508129890 once",
             "result": "Actual336/337 at34a533b93599b00a15d80b4445ce332335a98c60 remains FAILED before profile selection: offline2431/77.638s,6 failures/one error/seven records. ZERO native/Gradle/APK/emulator/XML/artifacts or actual uploaded source maps. Fifteen passive original checks hold frozen1211 Git/dispatch/local only; no hosted after-map or #55 criterion acceptance.",
             "evidence": [
               "docs/development/evidence/current-platform-recovery-20261101/android-external-tooling336-341/DISPATCH336.json",
@@ -12659,7 +12659,7 @@
             ]
           },
           {
-            "command": "gh workflow run gradle.yml -R Apdelrahman1911/nativeCmpkit --ref development/preview-hardening -f profile=android-io-named-external-storage; review once-acquired original41510126699 source/results; post/read back #55 progress before docs",
+            "command": "gh workflow run gradle.yml -R NativeCmpKit/NativeCmpKit --ref development/preview-hardening -f profile=android-io-named-external-storage; review once-acquired original41510126699 source/results; post/read back #55 progress before docs",
             "result": "Actual342–345 at260ea5dc358d18588cb0eff9c7e3614c54e462aa passes1/1 native/one fresh XML/Gradle0/70.03s, zero failures/errors/skips/N/A. All four actual1212 maps equal frozen Git/dispatch/current.28 solo passive checks qualify original genuine system selection, tree/child metadata, bounded public reads, real descriptor EOF/close ownership, persisted grant after Activity destruction, release/revocation/denied read and conditional owned row deletion. API35 Android15 x86_64 Enforcing/JDK17.0.21/Gradle9.7.1 and explicit owned graceful guest shutdown hold. No io_documents/transport-removal/process-device-restart witness or invented XML timing interpretation. Progress6586939864 read back exact; original issue fields unchanged/#55 open. ExternalStorage C1 subset accepted only; Downloads/cloud remain, accepted method excluded from replay.",
             "evidence": [
               "docs/development/evidence/current-platform-recovery-20261101/android-external-native342-345/DISPATCH342.json",
@@ -12729,7 +12729,7 @@
       "dependencies": [],
       "issue": {
         "number": 56,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/56",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/56",
         "mapping_key": "audit:IO-020",
         "historical_mapping_state": "closed"
       },
@@ -12958,18 +12958,18 @@
           "id": "IO-001",
           "original_order": 7,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/4"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/4"
         },
         {
           "id": "IO-020",
           "original_order": 68,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/56"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/56"
         }
       ],
       "issue": {
         "number": 57,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/57",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/57",
         "mapping_key": "audit:IO-021",
         "historical_mapping_state": "open"
       },
@@ -13338,18 +13338,18 @@
           "id": "IO-003",
           "original_order": 9,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/6"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/6"
         },
         {
           "id": "IO-017",
           "original_order": 65,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/53"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/53"
         }
       ],
       "issue": {
         "number": 58,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/58",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/58",
         "mapping_key": "audit:IO-023",
         "historical_mapping_state": "open"
       },
@@ -13414,12 +13414,12 @@
           "id": "IO-006",
           "original_order": 56,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/43"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/43"
         }
       ],
       "issue": {
         "number": 59,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/59",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/59",
         "mapping_key": "audit:IO-024",
         "historical_mapping_state": "closed"
       },
@@ -13517,12 +13517,12 @@
           "id": "IO-015",
           "original_order": 64,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/52"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/52"
         }
       ],
       "issue": {
         "number": 60,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/60",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/60",
         "mapping_key": "audit:IO-025",
         "historical_mapping_state": "closed"
       },
@@ -13642,7 +13642,7 @@
       "dependencies": [],
       "issue": {
         "number": 61,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/61",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/61",
         "mapping_key": "audit:IO-026",
         "historical_mapping_state": "closed"
       },
@@ -13760,13 +13760,13 @@
       "dependencies": [],
       "issue": {
         "number": 62,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/62",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/62",
         "mapping_key": "audit:NATIVE-003",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/NATIVE.json",
-      "owner_record_sha256": "f0c83c5a55d163be329aa4f478f8e922b9fdbaf1965f5ea9914e54ece171e842",
+      "owner_record_sha256": "e68ecd8903a2ecf7c0b85cef8e85492b16bb4ebc06718f87882982d54aa7e2e4",
       "owner_record": {
         "id": "NATIVE-003",
         "title": "Android and iOS onCreated run before the advertised native WebView reference exists",
@@ -13930,7 +13930,7 @@
             "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=1 -Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8 -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts --init-script scripts/ci/daemon-jvm.init.gradle.kts -PnativecmpkitSimulatorDevice=726D52AF-426A-408A-974D-CA8B9BE8A479 :nativecmpkit-webview:iosSimulatorArm64ApplicationTest --tests io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewLifecycleAcceptanceTest.creationHookSeesConfiguredCurrentNativeOwnerAndRemountCannotExposeThePriorView",
             "source_revision": "36ec139b2a0e6ead1b161abcd72afef493d7665d",
             "run_id": 41015744209,
-            "run_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/41015744209",
+            "run_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/41015744209",
             "result": "PASS fresh iOS1/1, Gradle exit0/957.28s; real UIApplication/UIKit/WebKit/main versus owned Worker, installed binary and cleanup/fresh XML verified. Six earlier accepted complete methods reused from four input-bound workflows, not replayed or promoted to whole-workflow passes. All three original criteria reviewed; GitHub issue CLOSED/completed with exact technical body/title/labels retained.",
             "test_count": 1,
             "report_count": 1,
@@ -13983,7 +13983,7 @@
       "dependencies": [],
       "issue": {
         "number": 63,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/63",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/63",
         "mapping_key": "audit:NATIVE-004",
         "historical_mapping_state": "closed"
       },
@@ -14137,7 +14137,7 @@
       "dependencies": [],
       "issue": {
         "number": 64,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/64",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/64",
         "mapping_key": "audit:NATIVE-005",
         "historical_mapping_state": "open"
       },
@@ -14731,7 +14731,7 @@
       "dependencies": [],
       "issue": {
         "number": 65,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/65",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/65",
         "mapping_key": "audit:NATIVE-006",
         "historical_mapping_state": "closed"
       },
@@ -15011,7 +15011,7 @@
       "dependencies": [],
       "issue": {
         "number": 66,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/66",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/66",
         "mapping_key": "audit:NATIVE-007",
         "historical_mapping_state": "open"
       },
@@ -15287,7 +15287,7 @@
       "dependencies": [],
       "issue": {
         "number": 67,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/67",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/67",
         "mapping_key": "audit:NATIVE-008",
         "historical_mapping_state": "closed"
       },
@@ -15636,7 +15636,7 @@
       "dependencies": [],
       "issue": {
         "number": 68,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/68",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/68",
         "mapping_key": "audit:NATIVE-009",
         "historical_mapping_state": "open"
       },
@@ -15703,7 +15703,7 @@
       "dependencies": [],
       "issue": {
         "number": 69,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/69",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/69",
         "mapping_key": "audit:NATIVE-011",
         "historical_mapping_state": "open"
       },
@@ -15977,7 +15977,7 @@
       "dependencies": [],
       "issue": {
         "number": 70,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/70",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/70",
         "mapping_key": "audit:NATIVE-012",
         "historical_mapping_state": "open"
       },
@@ -16221,7 +16221,7 @@
       "dependencies": [],
       "issue": {
         "number": 71,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/71",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/71",
         "mapping_key": "audit:NATIVE-014",
         "historical_mapping_state": "closed"
       },
@@ -16374,7 +16374,7 @@
       "dependencies": [],
       "issue": {
         "number": 72,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/72",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/72",
         "mapping_key": "audit:NATIVE-015",
         "historical_mapping_state": "closed"
       },
@@ -16663,7 +16663,7 @@
       "dependencies": [],
       "issue": {
         "number": 73,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/73",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/73",
         "mapping_key": "audit:NATIVE-016",
         "historical_mapping_state": "open"
       },
@@ -16910,7 +16910,7 @@
       "dependencies": [],
       "issue": {
         "number": 74,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/74",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/74",
         "mapping_key": "audit:NATIVE-017",
         "historical_mapping_state": "open"
       },
@@ -16972,7 +16972,7 @@
       "dependencies": [],
       "issue": {
         "number": 75,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/75",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/75",
         "mapping_key": "audit:NATIVE-018",
         "historical_mapping_state": "open"
       },
@@ -17064,7 +17064,7 @@
       "dependencies": [],
       "issue": {
         "number": 76,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/76",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/76",
         "mapping_key": "audit:NATIVE-020",
         "historical_mapping_state": "open"
       },
@@ -17254,7 +17254,7 @@
       "dependencies": [],
       "issue": {
         "number": 77,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/77",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/77",
         "mapping_key": "audit:NATIVE-021",
         "historical_mapping_state": "open"
       },
@@ -17442,7 +17442,7 @@
       "dependencies": [],
       "issue": {
         "number": 78,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/78",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/78",
         "mapping_key": "audit:NATIVE-022",
         "historical_mapping_state": "closed"
       },
@@ -17596,12 +17596,12 @@
           "id": "NATIVE-020",
           "original_order": 88,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/76"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/76"
         }
       ],
       "issue": {
         "number": 79,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/79",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/79",
         "mapping_key": "audit:NATIVE-023",
         "historical_mapping_state": "open"
       },
@@ -17704,7 +17704,7 @@
       "dependencies": [],
       "issue": {
         "number": 80,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/80",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/80",
         "mapping_key": "audit:NATIVE-024",
         "historical_mapping_state": "open"
       },
@@ -17943,7 +17943,7 @@
       "dependencies": [],
       "issue": {
         "number": 81,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/81",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/81",
         "mapping_key": "audit:NATIVE-025",
         "historical_mapping_state": "open"
       },
@@ -18208,7 +18208,7 @@
       "dependencies": [],
       "issue": {
         "number": 82,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/82",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/82",
         "mapping_key": "audit:NATIVE-026",
         "historical_mapping_state": "closed"
       },
@@ -18405,7 +18405,7 @@
       "dependencies": [],
       "issue": {
         "number": 83,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/83",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/83",
         "mapping_key": "audit:NATIVE-028",
         "historical_mapping_state": "closed"
       },
@@ -18550,7 +18550,7 @@
       "dependencies": [],
       "issue": {
         "number": 84,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/84",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/84",
         "mapping_key": "audit:NATIVE-029",
         "historical_mapping_state": "open"
       },
@@ -18685,12 +18685,12 @@
           "id": "NATIVE-029",
           "original_order": 96,
           "reported_status": "implemented",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/84"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/84"
         }
       ],
       "issue": {
         "number": 85,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/85",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/85",
         "mapping_key": "audit:NATIVE-030",
         "historical_mapping_state": "open"
       },
@@ -18895,7 +18895,7 @@
       "dependencies": [],
       "issue": {
         "number": 86,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/86",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/86",
         "mapping_key": "audit:NATIVE-031",
         "historical_mapping_state": "closed"
       },
@@ -19094,7 +19094,7 @@
       "dependencies": [],
       "issue": {
         "number": 87,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/87",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/87",
         "mapping_key": "audit:NATIVE-032",
         "historical_mapping_state": "closed"
       },
@@ -19357,7 +19357,7 @@
       "dependencies": [],
       "issue": {
         "number": 88,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/88",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/88",
         "mapping_key": "audit:NATIVE-033",
         "historical_mapping_state": "open"
       },
@@ -19597,24 +19597,24 @@
           "id": "NATIVE-002",
           "original_order": 12,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/10"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/10"
         },
         {
           "id": "NATIVE-006",
           "original_order": 77,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/65"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/65"
         }
       ],
       "issue": {
         "number": 89,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/89",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/89",
         "mapping_key": "audit:NATIVE-037",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/NATIVE.json",
-      "owner_record_sha256": "819e596c4cea7c0fa7d87f493a52a15b877f4d39180f5c2dfc5c825b09830058",
+      "owner_record_sha256": "6b4692a47240585dd04cc78e7acbd06ec7fcf50585454194a3d3ddeb4ce4cd50",
       "owner_record": {
         "id": "NATIVE-037",
         "title": "Replacing WebViewState or native lifecycle callbacks at the same composable identity is not safely rebound",
@@ -19940,7 +19940,7 @@
             "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=1 -Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8 -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts --init-script scripts/ci/daemon-jvm.init.gradle.kts -PnativecmpkitSimulatorDevice=726D52AF-426A-408A-974D-CA8B9BE8A479 :nativecmpkit-webview:iosSimulatorArm64ApplicationTest --tests io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewLifecycleAcceptanceTest.creationHookSeesConfiguredCurrentNativeOwnerAndRemountCannotExposeThePriorView",
             "source_revision": "36ec139b2a0e6ead1b161abcd72afef493d7665d",
             "run_id": 41015744209,
-            "run_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/41015744209",
+            "run_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/41015744209",
             "result": "PASS fresh iOS1/1, Gradle exit0/957.28s; real UIApplication/UIKit/WebKit/main versus owned Worker, installed binary and cleanup/fresh XML verified. Six earlier accepted complete methods reused from four input-bound workflows, not replayed or promoted to whole-workflow passes. All three original criteria reviewed; GitHub issue CLOSED/completed with exact technical body/title/labels retained.",
             "test_count": 1,
             "report_count": 1,
@@ -19998,7 +19998,7 @@
       "dependencies": [],
       "issue": {
         "number": 90,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/90",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/90",
         "mapping_key": "audit:NATIVE-038",
         "historical_mapping_state": "closed"
       },
@@ -20119,7 +20119,7 @@
       "dependencies": [],
       "issue": {
         "number": 91,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/91",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/91",
         "mapping_key": "audit:NAV-003",
         "historical_mapping_state": "closed"
       },
@@ -20361,7 +20361,7 @@
       "dependencies": [],
       "issue": {
         "number": 92,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/92",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/92",
         "mapping_key": "audit:NAV-004",
         "historical_mapping_state": "closed"
       },
@@ -20623,18 +20623,18 @@
           "id": "NAV-003",
           "original_order": 103,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/91"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/91"
         },
         {
           "id": "NAV-004",
           "original_order": 104,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/92"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/92"
         }
       ],
       "issue": {
         "number": 93,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/93",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/93",
         "mapping_key": "audit:NAV-005",
         "historical_mapping_state": "closed"
       },
@@ -20871,18 +20871,18 @@
           "id": "NAV-001",
           "original_order": 17,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/15"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/15"
         },
         {
           "id": "NAV-002",
           "original_order": 18,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/16"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/16"
         }
       ],
       "issue": {
         "number": 94,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/94",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/94",
         "mapping_key": "audit:NAV-006",
         "historical_mapping_state": "closed"
       },
@@ -21087,12 +21087,12 @@
           "id": "NAV-001",
           "original_order": 17,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/15"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/15"
         }
       ],
       "issue": {
         "number": 95,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/95",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/95",
         "mapping_key": "audit:NAV-007",
         "historical_mapping_state": "closed"
       },
@@ -21304,7 +21304,7 @@
       "dependencies": [],
       "issue": {
         "number": 96,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/96",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/96",
         "mapping_key": "audit:NAV-008",
         "historical_mapping_state": "closed"
       },
@@ -21523,7 +21523,7 @@
       "dependencies": [],
       "issue": {
         "number": 97,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/97",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/97",
         "mapping_key": "audit:NAV-010",
         "historical_mapping_state": "open"
       },
@@ -21625,12 +21625,12 @@
           "id": "NAV-009",
           "original_order": 19,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/17"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/17"
         }
       ],
       "issue": {
         "number": 98,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/98",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/98",
         "mapping_key": "audit:NAV-011",
         "historical_mapping_state": "open"
       },
@@ -21760,7 +21760,7 @@
       "dependencies": [],
       "issue": {
         "number": 99,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/99",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/99",
         "mapping_key": "audit:NAV-012",
         "historical_mapping_state": "closed"
       },
@@ -21865,7 +21865,7 @@
       "dependencies": [],
       "issue": {
         "number": 100,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/100",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/100",
         "mapping_key": "audit:NAV-013",
         "historical_mapping_state": "open"
       },
@@ -21986,7 +21986,7 @@
       "dependencies": [],
       "issue": {
         "number": 101,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/101",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/101",
         "mapping_key": "audit:NAV-014",
         "historical_mapping_state": "closed"
       },
@@ -22101,7 +22101,7 @@
       "dependencies": [],
       "issue": {
         "number": 102,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/102",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/102",
         "mapping_key": "audit:NAV-015",
         "historical_mapping_state": "closed"
       },
@@ -22286,12 +22286,12 @@
           "id": "NAV-008",
           "original_order": 108,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/96"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/96"
         }
       ],
       "issue": {
         "number": 103,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/103",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/103",
         "mapping_key": "audit:NAV-018",
         "historical_mapping_state": "closed"
       },
@@ -22529,12 +22529,12 @@
           "id": "PERM-013",
           "original_order": 44,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/23"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/23"
         }
       ],
       "issue": {
         "number": 107,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/107",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/107",
         "mapping_key": "audit:PERM-006",
         "historical_mapping_state": "open"
       },
@@ -22710,18 +22710,18 @@
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         },
         {
           "id": "PERM-009",
           "original_order": 42,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/21"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/21"
         }
       ],
       "issue": {
         "number": 109,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/109",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/109",
         "mapping_key": "audit:PERM-010",
         "historical_mapping_state": "open"
       },
@@ -22898,12 +22898,12 @@
           "id": "PERM-011",
           "original_order": 20,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/22"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/22"
         }
       ],
       "issue": {
         "number": 110,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/110",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/110",
         "mapping_key": "audit:PERM-012",
         "historical_mapping_state": "open"
       },
@@ -23081,12 +23081,12 @@
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         }
       ],
       "issue": {
         "number": 111,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/111",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/111",
         "mapping_key": "audit:PERM-014",
         "historical_mapping_state": "open"
       },
@@ -23253,12 +23253,12 @@
           "id": "PERM-007",
           "original_order": 41,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/108"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/108"
         }
       ],
       "issue": {
         "number": 112,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/112",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/112",
         "mapping_key": "audit:PERM-015",
         "historical_mapping_state": "open"
       },
@@ -23421,7 +23421,7 @@
       "dependencies": [],
       "issue": {
         "number": 113,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/113",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/113",
         "mapping_key": "audit:PERM-016",
         "historical_mapping_state": "open"
       },
@@ -23640,12 +23640,12 @@
           "id": "PERM-016",
           "original_order": 121,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/113"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/113"
         }
       ],
       "issue": {
         "number": 114,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/114",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/114",
         "mapping_key": "audit:PERM-017",
         "historical_mapping_state": "closed"
       },
@@ -23849,12 +23849,12 @@
           "id": "PERM-018",
           "original_order": 21,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/24"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/24"
         }
       ],
       "issue": {
         "number": 115,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/115",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/115",
         "mapping_key": "audit:PERM-019",
         "historical_mapping_state": "closed"
       },
@@ -24151,12 +24151,12 @@
           "id": "PERM-018",
           "original_order": 21,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/24"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/24"
         }
       ],
       "issue": {
         "number": 117,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/117",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/117",
         "mapping_key": "audit:PERM-022",
         "historical_mapping_state": "closed"
       },
@@ -24416,7 +24416,7 @@
       "dependencies": [],
       "issue": {
         "number": 118,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/118",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/118",
         "mapping_key": "audit:PERM-024",
         "historical_mapping_state": "open"
       },
@@ -24553,7 +24553,7 @@
       "dependencies": [],
       "issue": {
         "number": 119,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/119",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/119",
         "mapping_key": "audit:UI-003",
         "historical_mapping_state": "closed"
       },
@@ -24655,7 +24655,7 @@
       "dependencies": [],
       "issue": {
         "number": 120,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/120",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/120",
         "mapping_key": "audit:UI-004",
         "historical_mapping_state": "closed"
       },
@@ -24776,7 +24776,7 @@
       "dependencies": [],
       "issue": {
         "number": 121,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/121",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/121",
         "mapping_key": "audit:UI-006",
         "historical_mapping_state": "closed"
       },
@@ -24862,7 +24862,7 @@
       "dependencies": [],
       "issue": {
         "number": 122,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/122",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/122",
         "mapping_key": "audit:UI-007",
         "historical_mapping_state": "open"
       },
@@ -24979,13 +24979,13 @@
       "dependencies": [],
       "issue": {
         "number": 123,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/123",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/123",
         "mapping_key": "audit:UI-009",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/UI-native.json",
-      "owner_record_sha256": "d2ead34e7ce02a3f84356af4057f8c175f9c02b31bc232ab75a6bf6dfed13948",
+      "owner_record_sha256": "7ce0992823b8a38c6e96625ad6693969065d39e1bf4428749e5a878aa96310cb",
       "owner_record": {
         "acceptance_record": "docs/development/evidence/timepicker-original-acceptance-20261027/lead-timepicker-state-acceptance.json",
         "affected_paths": [
@@ -25056,7 +25056,7 @@
             "scope": "Original UI-009 constructor/boundary/Saver requirements on both Material and iOS actuals only. Individually passed immutable source/XML accepted without relabeling a failed Apple whole suite, device rendering, ABI, native state-owner, security or release readiness."
           },
           {
-            "command": "gh api repos/Apdelrahman1911/nativeCmpkit/issues/123; exact comment/state readbacks from the archived single-POST/single-PATCH apply driver",
+            "command": "gh api repos/NativeCmpKit/NativeCmpKit/issues/123; exact comment/state readbacks from the archived single-POST/single-PATCH apply driver",
             "evidence": "docs/development/evidence/issue-closure123-20261027/apply/receipt.json",
             "result": "Original constructor/Saver acceptance evidence pushed at202059 and held preflight021/postfreeze links reviewed before closure. Issue123 closed completed at2026-10-27T14:44:44Z with one additive resolution comment6445012496 and one state-only PATCH; exact final issue/comment readbacks preserve body/title/labels. Nine total verified existing closures; no broad module/native/release clearance."
           }
@@ -25099,7 +25099,7 @@
       "dependencies": [],
       "issue": {
         "number": 124,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/124",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/124",
         "mapping_key": "audit:UI-010",
         "historical_mapping_state": "closed"
       },
@@ -25194,7 +25194,7 @@
       "dependencies": [],
       "issue": {
         "number": 127,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/127",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/127",
         "mapping_key": "audit:UI-019",
         "historical_mapping_state": "closed"
       },
@@ -25279,13 +25279,13 @@
       "dependencies": [],
       "issue": {
         "number": 128,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/128",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/128",
         "mapping_key": "audit:UI-022",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/UI-native.json",
-      "owner_record_sha256": "fb5621fbbb266bb11d47cbc1c6d0fce5016afb096e9e04924dad6e383394d103",
+      "owner_record_sha256": "a6f9f0418add26478233d92164744a40d9641a44f8622050b7868ed0aa055fde",
       "owner_record": {
         "acceptance_review_20261027_current_UIKit": {
           "evidence": "docs/development/evidence/uikit-original-acceptance-20261027/lead-original-acceptance-review.json",
@@ -25301,7 +25301,7 @@
                 {
                   "XML_method_name": "emptyTabsClearSelectionAndRepopulationClampsIndex[iosSimulatorArm64]",
                   "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-                  "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+                  "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
                   "method": "emptyTabsClearSelectionAndRepopulationClampsIndex",
                   "status": "passed"
                 }
@@ -25314,14 +25314,14 @@
                 {
                   "XML_method_name": "emptyTabsClearSelectionAndRepopulationClampsIndex[iosSimulatorArm64]",
                   "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-                  "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+                  "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
                   "method": "emptyTabsClearSelectionAndRepopulationClampsIndex",
                   "status": "passed"
                 },
                 {
                   "XML_method_name": "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags[iosSimulatorArm64]",
                   "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-                  "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+                  "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
                   "method": "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags",
                   "status": "passed"
                 }
@@ -25449,7 +25449,7 @@
       "dependencies": [],
       "issue": {
         "number": 129,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/129",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/129",
         "mapping_key": "audit:UI-023",
         "historical_mapping_state": "open"
       },
@@ -25516,7 +25516,7 @@
       "dependencies": [],
       "issue": {
         "number": 130,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/130",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/130",
         "mapping_key": "audit:UI-024",
         "historical_mapping_state": "closed"
       },
@@ -25640,12 +25640,12 @@
           "id": "UI-024",
           "original_order": 135,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/130"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/130"
         }
       ],
       "issue": {
         "number": 131,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/131",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/131",
         "mapping_key": "audit:UI-025",
         "historical_mapping_state": "open"
       },
@@ -25727,7 +25727,7 @@
       "dependencies": [],
       "issue": {
         "number": 132,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/132",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/132",
         "mapping_key": "audit:UI-026",
         "historical_mapping_state": "closed"
       },
@@ -25812,7 +25812,7 @@
       "dependencies": [],
       "issue": {
         "number": 135,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/135",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/135",
         "mapping_key": "audit:UI-032",
         "historical_mapping_state": "closed"
       },
@@ -25989,18 +25989,18 @@
           "id": "UI-029",
           "original_order": 51,
           "reported_status": "partially-verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/35"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/35"
         },
         {
           "id": "UI-032",
           "original_order": 138,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/135"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/135"
         }
       ],
       "issue": {
         "number": 133,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/133",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/133",
         "mapping_key": "audit:UI-028",
         "historical_mapping_state": "open"
       },
@@ -26150,7 +26150,7 @@
       "dependencies": [],
       "issue": {
         "number": 136,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/136",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/136",
         "mapping_key": "audit:UI-033",
         "historical_mapping_state": "closed"
       },
@@ -26303,13 +26303,13 @@
       "dependencies": [],
       "issue": {
         "number": 137,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/137",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/137",
         "mapping_key": "audit:UI-034",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/UI-controls.json",
-      "owner_record_sha256": "92e385f3411aad9c54b38be310222c50dc3bd6e434acf4ae5e46c8371908bdd2",
+      "owner_record_sha256": "56c14b21729b74c4349b37fe0e91fb87b4b29b83378be73f6efebd8407ad6edc",
       "owner_record": {
         "id": "UI-034",
         "status": "verified",
@@ -26495,8 +26495,8 @@
           "state": "closed",
           "state_reason": "completed",
           "closed_at": "2026-10-29T20:08:00Z",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/137",
-          "resolution_comment_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/137#issuecomment-6507144067"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/137",
+          "resolution_comment_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/137#issuecomment-6507144067"
         }
       },
       "closure_or_release_authorized_by_index": false
@@ -26551,7 +26551,7 @@
       "dependencies": [],
       "issue": {
         "number": 138,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/138",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/138",
         "mapping_key": "audit:UI-035",
         "historical_mapping_state": "open"
       },
@@ -26656,7 +26656,7 @@
       "dependencies": [],
       "issue": {
         "number": 139,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/139",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/139",
         "mapping_key": "audit:UI-036",
         "historical_mapping_state": "closed"
       },
@@ -26816,7 +26816,7 @@
       "dependencies": [],
       "issue": {
         "number": 140,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/140",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/140",
         "mapping_key": "audit:UI-037",
         "historical_mapping_state": "closed"
       },
@@ -26997,12 +26997,12 @@
           "id": "UI-037",
           "original_order": 144,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/140"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/140"
         }
       ],
       "issue": {
         "number": 141,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/141",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/141",
         "mapping_key": "audit:UI-038",
         "historical_mapping_state": "open"
       },
@@ -27198,18 +27198,18 @@
           "id": "UI-031",
           "original_order": 52,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/36"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/36"
         },
         {
           "id": "UI-032",
           "original_order": 138,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/135"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/135"
         }
       ],
       "issue": {
         "number": 142,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/142",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/142",
         "mapping_key": "audit:UI-042",
         "historical_mapping_state": "open"
       },
@@ -27320,7 +27320,7 @@
       "dependencies": [],
       "issue": {
         "number": 143,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/143",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/143",
         "mapping_key": "audit:UI-045",
         "historical_mapping_state": "closed"
       },
@@ -27425,7 +27425,7 @@
       "dependencies": [],
       "issue": {
         "number": 148,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/148",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/148",
         "mapping_key": "audit:IO-016",
         "historical_mapping_state": "closed"
       },
@@ -27518,7 +27518,7 @@
       "dependencies": [],
       "issue": {
         "number": 149,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/149",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/149",
         "mapping_key": "audit:IO-022",
         "historical_mapping_state": "closed"
       },
@@ -27682,7 +27682,7 @@
       "dependencies": [],
       "issue": {
         "number": 150,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/150",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/150",
         "mapping_key": "audit:NATIVE-034",
         "historical_mapping_state": "open"
       },
@@ -27919,7 +27919,7 @@
       "dependencies": [],
       "issue": {
         "number": 151,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/151",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/151",
         "mapping_key": "audit:NATIVE-035",
         "historical_mapping_state": "closed"
       },
@@ -28008,7 +28008,7 @@
       "dependencies": [],
       "issue": {
         "number": 152,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/152",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/152",
         "mapping_key": "audit:NATIVE-036",
         "historical_mapping_state": "closed"
       },
@@ -28155,7 +28155,7 @@
       "dependencies": [],
       "issue": {
         "number": 153,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/153",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/153",
         "mapping_key": "audit:NATIVE-039",
         "historical_mapping_state": "closed"
       },
@@ -28455,12 +28455,12 @@
           "id": "NAV-008",
           "original_order": 108,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/96"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/96"
         }
       ],
       "issue": {
         "number": 154,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/154",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/154",
         "mapping_key": "audit:NAV-016",
         "historical_mapping_state": "closed"
       },
@@ -28580,7 +28580,7 @@
       "dependencies": [],
       "issue": {
         "number": 155,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/155",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/155",
         "mapping_key": "audit:NAV-017",
         "historical_mapping_state": "closed"
       },
@@ -28660,7 +28660,7 @@
       "dependencies": [],
       "issue": {
         "number": 156,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/156",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/156",
         "mapping_key": "audit:PERM-023",
         "historical_mapping_state": "closed"
       },
@@ -29018,7 +29018,7 @@
       "dependencies": [],
       "issue": {
         "number": 157,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/157",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/157",
         "mapping_key": "audit:UI-005",
         "historical_mapping_state": "closed"
       },
@@ -29149,7 +29149,7 @@
       "dependencies": [],
       "issue": {
         "number": 158,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/158",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/158",
         "mapping_key": "audit:UI-008",
         "historical_mapping_state": "closed"
       },
@@ -29286,7 +29286,7 @@
       "dependencies": [],
       "issue": {
         "number": 159,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/159",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/159",
         "mapping_key": "audit:UI-011",
         "historical_mapping_state": "open"
       },
@@ -29381,18 +29381,18 @@
           "id": "UI-012",
           "original_order": 24,
           "reported_status": "verified",
-          "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/28"
+          "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/28"
         }
       ],
       "issue": {
         "number": 160,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/160",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/160",
         "mapping_key": "audit:UI-015",
         "historical_mapping_state": "closed"
       },
       "reported_status": "verified",
       "owner_ledger": "docs/development/resolutions/UI-native.json",
-      "owner_record_sha256": "431684ac7f2c606cbc6dc75ec2d45894407292dc890bd95bc806782360c80a52",
+      "owner_record_sha256": "182221794ef73abcdc041dd01b346eddb283c8aca112c00130f064a97c69f2db",
       "owner_record": {
         "acceptance_review_20261027_current_UIKit": {
           "evidence": "docs/development/evidence/uikit-original-acceptance-20261027/lead-original-acceptance-review.json",
@@ -29406,7 +29406,7 @@
                 {
                   "XML_method_name": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller[iosSimulatorArm64]",
                   "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.dialog.RememberNativeAlertPropertiesTest",
-                  "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+                  "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
                   "method": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller",
                   "status": "passed"
                 }
@@ -29419,7 +29419,7 @@
                 {
                   "XML_method_name": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller[iosSimulatorArm64]",
                   "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.dialog.RememberNativeAlertPropertiesTest",
-                  "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+                  "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
                   "method": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller",
                   "status": "passed"
                 }
@@ -29541,7 +29541,7 @@
       "dependencies": [],
       "issue": {
         "number": 161,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/161",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/161",
         "mapping_key": "audit:UI-039",
         "historical_mapping_state": "open"
       },
@@ -29649,7 +29649,7 @@
       "dependencies": [],
       "issue": {
         "number": 162,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/162",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/162",
         "mapping_key": "audit:UI-041",
         "historical_mapping_state": "open"
       },
@@ -29757,7 +29757,7 @@
       "dependencies": [],
       "issue": {
         "number": 163,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/163",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/163",
         "mapping_key": "audit:UI-043",
         "historical_mapping_state": "closed"
       },
@@ -29841,7 +29841,7 @@
       "dependencies": [],
       "issue": {
         "number": 164,
-        "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/164",
+        "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/164",
         "mapping_key": "audit:UI-044",
         "historical_mapping_state": "closed"
       },
@@ -29912,7 +29912,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/165",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/165",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]
@@ -29931,7 +29931,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/166",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/166",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]
@@ -29950,7 +29950,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/167",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/167",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]
@@ -29969,7 +29969,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/168",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/168",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]
@@ -29988,7 +29988,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/169",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/169",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]
@@ -30007,7 +30007,7 @@
       ],
       "workstream": "Actionable historical requests",
       "state": "open",
-      "issue_url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/170",
+      "issue_url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/170",
       "required_tests": [
         "Reproduce current behavior or define scoped platform acceptance criteria before implementation."
       ]

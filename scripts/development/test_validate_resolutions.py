@@ -346,7 +346,7 @@ class ResolutionFixtures(unittest.TestCase):
 
     def test_issue_urls_statuses_numbers_and_topic_mapping_are_validated(self) -> None:
         for index, key, value in ((0, "url", "https://github.com/other/repo/issues/1001"),
-                                  (0, "url", "https://github.com/Apdelrahman1911/nativeCmpkit/issues/9999"),
+                                  (0, "url", "https://github.com/NativeCmpKit/NativeCmpKit/issues/9999"),
                                   (0, "number", True), (0, "number", 0), (0, "state", "done"),
                                   (0, "actual_state", "DONE"), (3, "finding_ids", ["FIX-001"]),
                                   (3, "key", "unexpected-topic:example")):

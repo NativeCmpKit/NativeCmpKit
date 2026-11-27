@@ -271,7 +271,7 @@ def main() -> int:
 
         if args.remote:
             repo = identity["github_repository"]
-            if repo != "Apdelrahman1911/nativeCmpkit":
+            if repo != "NativeCmpKit/NativeCmpKit":
                 raise ValueError("Unexpected destination repository")
             state = json.loads(command("gh", "api", "repos/" + repo))
             check("independent_github_repository", state.get("fork") is False and state["full_name"] == repo, {"full_name": state["full_name"], "fork": state.get("fork"), "default_branch": state["default_branch"]})

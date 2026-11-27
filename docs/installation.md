@@ -3,8 +3,8 @@
 
 ## Publication status
 
-**No NativeCmpKit package or release has been published.** The planned coordinates
-below identify the renamed build, not a currently downloadable Maven release:
+The coordinates below describe this development branch. The repository’s published preview
+uses a separate set of coordinates documented on `main`:
 
 ```kotlin
 // Future coordinates only — do not expect these to resolve from Maven Central yet.
@@ -25,8 +25,8 @@ dependencies (`projects.nativecmpkitUi`, `projects.nativecmpkitFilePicker`, etc.
 runtime or source-fetch dependency on the original repository.
 
 ```sh
-git clone https://github.com/Apdelrahman1911/nativeCmpkit.git
-cd nativeCmpkit
+git clone https://github.com/NativeCmpKit/NativeCmpKit.git
+cd NativeCmpKit
 ./gradlew :nativecmpkit-io:desktopTest :nativecmpkit-file-picker:desktopTest
 # These require an appropriate local graphical / Android / browser environment:
 ./gradlew :sample:desktop:run

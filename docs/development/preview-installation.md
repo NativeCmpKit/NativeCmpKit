@@ -19,7 +19,7 @@ dependencyResolutionManagement {
             forRepository {
                 maven {
                     name = "NativeCmpkitGitHub"
-                    url = uri("https://maven.pkg.github.com/Apdelrahman1911/nativeCmpkit")
+                    url = uri("https://maven.pkg.github.com/NativeCmpKit/NativeCmpKit")
                     credentials {
                         username = providers.environmentVariable("NATIVECMPKIT_GITHUB_USER").orNull
                         password = providers.environmentVariable("NATIVECMPKIT_GITHUB_TOKEN").orNull

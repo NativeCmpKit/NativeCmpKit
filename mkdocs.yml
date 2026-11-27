@@ -4,7 +4,7 @@
 site_name: 'NativeCmpKit'
 site_description: 'A library that allows you to easily create adaptive UIs and access platform specific APIs from your Compose Multiplatform apps.'
 site_author: 'NativeCmpKit contributors; original Calf authors credited in NOTICE'
-site_url: 'https://apdelrahman1911.github.io/nativeCmpkit/'
+site_url: 'https://nativecmpkit.github.io/NativeCmpKit/'
 # Reserved for a future owner-authorized deployment; preserved upstream gh-pages is immutable.
 remote_branch: nativecmpkit-pages
 edit_uri: ""
@@ -25,8 +25,8 @@ exclude_docs: |
   audit/issue-drafts/**
 
 # Repository
-repo_name: 'Apdelrahman1911/nativeCmpkit'
-repo_url: 'https://github.com/Apdelrahman1911/nativeCmpkit'
+repo_name: 'NativeCmpKit/NativeCmpKit'
+repo_url: 'https://github.com/NativeCmpKit/NativeCmpKit'
 
 # Configuration
 theme:
@@ -56,7 +56,7 @@ extra:
   nativecmpkit_version: '0.1.0-SNAPSHOT'
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/Apdelrahman1911/nativeCmpkit
+      link: https://github.com/NativeCmpKit/NativeCmpKit
 
 # Navigation
 nav:

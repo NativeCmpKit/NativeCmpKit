@@ -26,7 +26,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 GROUP = "io.github.apdelrahman1911.nativecmpkit"
-DESTINATION = "https://github.com/Apdelrahman1911/nativeCmpkit"
+DESTINATION = "https://github.com/NativeCmpKit/NativeCmpKit"
 TARGET_SUFFIXES = {
     "metadata": "", "android": "-android", "desktop": "-desktop", "js": "-js",
     "wasmJs": "-wasm-js", "iosArm64": "-iosarm64", "iosSimulatorArm64": "-iossimulatorarm64",

@@ -352,7 +352,7 @@ credentials anywhere.
 
 Central publication/signing is therefore **not presently configured through
 those channels**. A first Maven destination can instead be **GitHub Packages** at
-`https://maven.pkg.github.com/Apdelrahman1911/nativeCmpkit`, using a separately
+`https://maven.pkg.github.com/NativeCmpKit/NativeCmpKit`, using a separately
 gated Actions job with `packages:write`, scoped to this repository and only the
 verified candidate. A following GitHub prerelease can link the immutable package
 coordinates, checksums, notices, changelog and verification receipts. Registry

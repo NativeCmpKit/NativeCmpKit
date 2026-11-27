@@ -6,7 +6,7 @@ problems, advisory matches, and limitations; a source finding is not automatical
 a demonstrated exploit.
 
 Private vulnerability reporting is enabled for this repository. Use
-https://github.com/Apdelrahman1911/nativeCmpkit/security/advisories/new rather than
+https://github.com/NativeCmpKit/NativeCmpKit/security/advisories/new rather than
 posting credentials, private data, or weaponized exploit details publicly.
 
 The owner explicitly authorized enabled verification Actions on 2026-10-26 with

@@ -19,7 +19,7 @@ class IssueVerificationTests(unittest.TestCase):
         (self.root / "docs/migration").mkdir(parents=True)
         self.body = "<!-- nativecmpkit-item:audit:IO-001 -->\nEvidence\n"
         self.item = {"key": "audit:IO-001", "title": "A finding", "body_sha256": hashlib.sha256(self.body.encode()).hexdigest(), "labels": ["audit"]}
-        self.receipt = {**self.item, "number": 1, "url": "https://github.com/Apdelrahman1911/nativeCmpkit/issues/1", "actual_state": "open", "github_author": "Apdelrahman1911", "github_created_at": "2026-10-24T16:00:00Z", "pending_initial_close": False}
+        self.receipt = {**self.item, "number": 1, "url": "https://github.com/NativeCmpKit/NativeCmpKit/issues/1", "actual_state": "open", "github_author": "Apdelrahman1911", "github_created_at": "2026-10-24T16:00:00Z", "pending_initial_close": False}
         self.issue = {"number": 1, "html_url": self.receipt["url"], "body": self.body, "title": self.item["title"], "labels": [{"name": "audit"}], "state": "open", "user": {"login": "Apdelrahman1911"}, "created_at": self.receipt["github_created_at"]}
         self.remote = [self.issue]
 

@@ -39,7 +39,7 @@ fun ShareScreen(
 ) {
     var pickedFile by remember { mutableStateOf<KmpFile?>(null) }
     var text by remember { mutableStateOf("Hello from NativeCmpKit!") }
-    var url by remember { mutableStateOf("https://github.com/Apdelrahman1911/nativeCmpkit") }
+    var url by remember { mutableStateOf("https://github.com/NativeCmpKit/NativeCmpKit") }
     var lastResult by remember { mutableStateOf<ShareResult?>(null) }
 
     val shareLauncher = rememberShareLauncher { result ->

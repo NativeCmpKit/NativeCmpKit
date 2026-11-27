@@ -10,7 +10,7 @@ from urllib.parse import quote, unquote, urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 DOCS = ROOT / "docs"
-REPO = "https://github.com/Apdelrahman1911/nativeCmpkit"
+REPO = "https://github.com/NativeCmpKit/NativeCmpKit"
 EXCLUDED_PREFIXES = ("migration/upstream-metadata/", "migration/git/", "migration/legacy/", "testing/evidence/", "testing/native-features-probes/", "audit/issue-drafts/", "audit/findings/")
 EXCLUDED_FILES = {"audit/source-inventory.json"}
 

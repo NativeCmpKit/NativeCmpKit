@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   public-stop:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.ref == 'refs/heads/development/preview-hardening' && github.event_name == 'workflow_dispatch' && contains(fromJSON('["linux-arm64","macos-arm64","macos-x64","windows"]'), inputs.platform)
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.ref == 'refs/heads/development/preview-hardening' && github.event_name == 'workflow_dispatch' && contains(fromJSON('["linux-arm64","macos-arm64","macos-x64","windows"]'), inputs.platform)
     runs-on: ${{ inputs.platform == 'linux-arm64' && 'ubuntu-24.04-arm' || inputs.platform == 'macos-arm64' && 'macos-26' || inputs.platform == 'macos-x64' && 'macos-26-intel' || 'windows-2025' }}
     timeout-minutes: 45
     defaults:

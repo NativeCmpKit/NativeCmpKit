@@ -573,7 +573,7 @@ hold. Original public creation/typed values/off-on policy/callback identity/
 detached/cleanup assertions and strict isolated worker parser pass. No accepted
 TLS/cookie/graph replay or independent OS/sandbox/security/consumer inference.
 The remaining **Windows3/Linux ARM644** and actual host graphs were requested
-once in [41542403515](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/41542403515)
+once in [41542403515](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/41542403515)
 after both reservations freed; see the newer reviewed results above. #144/#64 remain open,97closed/
 75open/172total; solo/serial/8GiB/max2 including queued/development/read-only
 verification, with all publication/security/readiness restrictions unchanged.
@@ -1420,7 +1420,7 @@ integrates changes and owns immutable verification and immediate verified-subset
 closures. Local builds remain serial with8GiB reserve; at most two combined heavy
 requests, read-only verification tokens and all publishing/security gates remain.
 
-Camera restoration [41238298009](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/41238298009)
+Camera restoration [41238298009](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/41238298009)
 at61003963 requests only its four still-unverified API35 cases. Nonterminal request
 is not acceptance; #13 remains open pending source/results/original-criteria review.
 [Apple diagnostic observations](evidence/apple-launch-error-identities-20261031/README.md)
@@ -2641,7 +2641,7 @@ not the later daemon attestation. **50 confirmed closed;52 implemented/58 partia
 [Date runtime003](evidence/date-bounds-important-20261028/README.md) failed6actual/2pass/4fail, Gradle1; three fixture readiness
 races and one unverified native-month timeout retained. No #120/#157 closure.
 Only four repaired failures plus three new replacement checks are combined once
-in [combined important run40716564702](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40716564702)
+in [combined important run40716564702](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40716564702)
 at71b19242,793own-Git inputs; two passed backend methods not replayed. One separate
 [empty-batch native regression](evidence/permission-batch-important-20261028/README.md) runs40714635604 at9e872623,792inputs;
 throwing empty callback gets an owned SupervisorJob. Both native jobs remain

@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/migration"))
 from github_json import json_pages
 
-REPO = "Apdelrahman1911/nativeCmpkit"
+REPO = "NativeCmpKit/NativeCmpKit"
 SOURCE = "MohamedRejeb/Calf"
 
 

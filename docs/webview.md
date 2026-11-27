@@ -25,7 +25,7 @@ implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-webview:{{ n
 
 ```kotlin
 val state = rememberWebViewState(
-    url = "https://github.com/Apdelrahman1911/nativeCmpkit"
+    url = "https://github.com/NativeCmpKit/NativeCmpKit"
 )
 
 LaunchedEffect(state.isLoading) {
@@ -45,7 +45,7 @@ You can customize the web view settings by changing the `WebSettings` object in 
 
 ```kotlin
 val state = rememberWebViewState(
-    url = "https://github.com/Apdelrahman1911/nativeCmpkit"
+    url = "https://github.com/NativeCmpKit/NativeCmpKit"
 )
 
 LaunchedEffect(Unit) {
@@ -63,7 +63,7 @@ You can call JavaScript functions from the web view by using the `evaluateJavaSc
 
 ```kotlin
 val state = rememberWebViewState(
-    url = "https://github.com/Apdelrahman1911/nativeCmpkit"
+    url = "https://github.com/NativeCmpKit/NativeCmpKit"
 )
 
 LaunchedEffect(Unit) {
@@ -88,7 +88,7 @@ You can manage cookies in the web view using the `CookieManager` available throu
 
 ```kotlin
 val state = rememberWebViewState(
-    url = "https://github.com/Apdelrahman1911/nativeCmpkit"
+    url = "https://github.com/NativeCmpKit/NativeCmpKit"
 )
 
 WebView(

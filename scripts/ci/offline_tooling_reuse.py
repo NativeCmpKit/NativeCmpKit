@@ -29,7 +29,7 @@ import time
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-REPOSITORY = "Apdelrahman1911/nativeCmpkit"
+REPOSITORY = "NativeCmpKit/NativeCmpKit"
 BRANCH = "development/preview-hardening"
 WORKFLOW = ".github/workflows/gradle.yml"
 SCHEMA = "nativecmpkit-offline-tooling-reuse-v1"

@@ -133,7 +133,7 @@ lifecycle decisions/unmanaged labels and refuses ambiguous markers or conflictin
 human edits.
 
 Delivery verification covers **170 managed audit/history issues** (167 open and
-three closed). The separate [operational issue #171](https://github.com/Apdelrahman1911/nativeCmpkit/issues/171)
+three closed). The separate [operational issue #171](https://github.com/NativeCmpKit/NativeCmpKit/issues/171)
 is deliberately excluded from the baseline finding count and managed issue map.
 
 Run `python3 scripts/audit/validate_audit.py` and regenerate indexes with

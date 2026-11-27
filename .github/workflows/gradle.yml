@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: core
-        options: [identity-linux, identity-apple, identity-windows, core, browser, browser-picker, browser-coil-io, browser-coil-io-js, browser-coil-io-wasm, webview-browser, webview-content-transitions, webview-request-state, webview-content-policy-linux, webview-content-policy-android, webview-content-policy-js, webview-content-policy-wasm, ios-webview-content-policy, webview-offline-destination, webview-desktop-request-state, webview-desktop-stop-windows-recovery, webview-desktop-security-regressions, webview-desktop-request-state-linux-pair, webview-desktop-request-state-macos-pair, webview-desktop-request-state-windows-single, webview-desktop-security-linux-arm64-windows-pair, webview-desktop-security-macos-pair, webview-desktop-policy-macos-recovery, webview-desktop-tls-windows-recovery, webview-wasm, share-browser, share-clipboard-native, share-clipboard-native-wasm, ui-dropdown-platforms, ui-dropdown-android-recovery, ui-date-platforms, ui-date-browser, ui-date-js, ui-date-wasm, ui-date-android, navigation-geo, navigation-desktop, webview-desktop, webview-identity, webview-identity-linux, webview-identity-browser, webview-identity-wasm, webview-identity-android, webview-identity-recovery, webview-identity-remount-recovery, webview-identity-ios-remount-recovery, webview-lifetime, webview-lifetime-android, webview-lifetime-android-media, webview-lifetime-linux, webview-lifetime-macos-arm64, webview-lifetime-macos-x64, webview-lifetime-macos-media, webview-lifetime-windows, picker-batch, picker-batch-recovery, picker-batch-linux, picker-batch-macos, picker-batch-windows, picker-saver-state, picker-linux-portal, picker-linux-portal-save, desktop-data-safety, android-resource-safety, android-coil-resource, android-permission-alias, permissions-unsupported, permissions-unsupported-windows, permissions-ios, permissions-ios-safety, permissions-ios-empty-batch, permissions-ios-calendar-configuration, macos-share-lifecycle, macos-share-missing-lifecycle, permissions-completion-android, navigation-geo-matrix, apple, ios, ios-ui, ios-ui-adaptive-pre26, ios-ui-adaptive-drag-shader-ios26plus, ios-secure-alert-input, ios-date-bounds, ios-date-replacement, ios-date-compact, ios-dates-important, ios-alert-date-important, ios-alert-important-recovery, ios-modal-ownership-batch, ios-modal-ownership-ipad, ios-modal-lifecycle-replacement, ios-modal-lifecycle-replacement-ipad, ios-modal-lifecycle-memory-recovery, ios-modal-worker-memory-recovery, ios-sheet-cancellation-repeat, ios-modal-completion-cancellation, ios-xctest-startup, ios-modal-xcui-batch, ios-modal-xcui-batch-ipad, ios-popover-anchor, ios-popover-anchor-ipad, ios-popover-bar-recovery, ios-popover-bar-ipad-recovery, ios-popover-geometry-iphone, ios-popover-geometry-ipad, ios-date-year-predicate-red, ios-io, ios-saver-write-failure, ios-picker-batch, ios-picker-recovery, ios-picker-admission, ios-picker-provider-cancellation, ios-camera-ownership-memory-callback, ios-share-presentation-disposal, ios-share-remembered-failure-observation, ios-switch-cancellation, ios-switch-ownership, ios-slider-numeric, ios-ui-state, ios-time-state-recovery, ios-slider-lifecycle, ios-slider-remaining, ios-slider-structure, ios-slider-tap, ios-slider-pair-structure, ios-vector-theme, ios-vector-theme-recovery, ios-vector-rendering-recovery, ios-vector-rendering-iphone-recovery, ios-vector-native-screen-pair, ios-slider-recovery, ios-image-memory, ios-image-memory-darwin, ios-image-profile-recovery, ios-appinfo-capability, ios-appinfo-shape, ios-webview-lifecycle, ios-webview-recovery, ios-webview-request-state, ios-webview-provisional-dns, ios-webview-request-dns, windows, windows-cache, windows-share-loader, windows-share-boundaries, extended, android-device, android-webview, android-webview-popups, android-webview-request-state, android-webview-stop-redirect-recovery, android-navigation-back, android-geo-ownership, android-geo-provider, android-geo-prerequisites, android-share-grants, android-camera-provider, android-camera-provider-minimum, android-camera-no-handler-minimum, android-camera-restoration, android-camera-restoration-dont-keep, android-camera-callback-substitution, android-io-provider-lifecycle, android-io-provider-unavailable, android-io-named-system-providers, android-io-named-external-storage, android-io-default-decode, android-io-oversize, android-saver-identity, android-saver-identity-missing, android-io-reference-regressions, android-io-controlled-remote, android-io-controlled-remote-positive, android-io-controlled-remote-cancel, android-permission-location-api35, android-permission-lifecycle-grant-api35, android-permission-lifecycle-revoke-api35, android-permission-demo, android-permission-demo-call-denial-recovery, android-permission-demo-denial-recovery, android-io-permission-storage-api35, android-permission-storage-api35-recovery, android-permission-storage-compatibility, android-storage-compatibility, android-media-selection-compatibility, android-media-selection-api33, android-media-selection-api34, android-storage-api28, android-storage-api29-target28, android-storage-api29-legacy, android-storage-api29-scoped, android-storage-api30-normal, android-storage-api30-all-files, android-storage-api35-normal, android-storage-api35-all-files, consumer-core-io, consumer-webview, consumer-webview-remaining, consumer-webview-linux-x64, consumer-webview-linux-arm64, consumer-webview-macos-arm64, consumer-webview-macos-x64, consumer-webview-windows-x64, sample-platforms-linux, sample-platforms-apple, sample-builds-linux, sample-builds-apple, all, ios-ui-related-nine-ios26plus, ios-ui-adaptive-customization-ios26plus, tooling]
+        options: [core, browser, browser-picker, browser-coil-io, browser-coil-io-js, browser-coil-io-wasm, webview-browser, webview-content-transitions, webview-request-state, webview-content-policy-linux, webview-content-policy-android, webview-content-policy-js, webview-content-policy-wasm, ios-webview-content-policy, webview-offline-destination, webview-desktop-request-state, webview-desktop-stop-windows-recovery, webview-desktop-security-regressions, webview-desktop-request-state-linux-pair, webview-desktop-request-state-macos-pair, webview-desktop-request-state-windows-single, webview-desktop-security-linux-arm64-windows-pair, webview-desktop-security-macos-pair, webview-desktop-policy-macos-recovery, webview-desktop-tls-windows-recovery, webview-wasm, share-browser, share-clipboard-native, share-clipboard-native-wasm, ui-dropdown-platforms, ui-dropdown-android-recovery, ui-date-platforms, ui-date-browser, ui-date-js, ui-date-wasm, ui-date-android, navigation-geo, navigation-desktop, webview-desktop, webview-identity, webview-identity-linux, webview-identity-browser, webview-identity-wasm, webview-identity-android, webview-identity-recovery, webview-identity-remount-recovery, webview-identity-ios-remount-recovery, webview-lifetime, webview-lifetime-android, webview-lifetime-android-media, webview-lifetime-linux, webview-lifetime-macos-arm64, webview-lifetime-macos-x64, webview-lifetime-macos-media, webview-lifetime-windows, picker-batch, picker-batch-recovery, picker-batch-linux, picker-batch-macos, picker-batch-windows, picker-saver-state, picker-linux-portal, picker-linux-portal-save, desktop-data-safety, android-resource-safety, android-coil-resource, android-permission-alias, permissions-unsupported, permissions-unsupported-windows, permissions-ios, permissions-ios-safety, permissions-ios-empty-batch, permissions-ios-calendar-configuration, macos-share-lifecycle, macos-share-missing-lifecycle, permissions-completion-android, navigation-geo-matrix, apple, ios, ios-ui, ios-ui-adaptive-pre26, ios-ui-adaptive-drag-shader-ios26plus, ios-secure-alert-input, ios-date-bounds, ios-date-replacement, ios-date-compact, ios-dates-important, ios-alert-date-important, ios-alert-important-recovery, ios-modal-ownership-batch, ios-modal-ownership-ipad, ios-modal-lifecycle-replacement, ios-modal-lifecycle-replacement-ipad, ios-modal-lifecycle-memory-recovery, ios-modal-worker-memory-recovery, ios-sheet-cancellation-repeat, ios-modal-completion-cancellation, ios-xctest-startup, ios-modal-xcui-batch, ios-modal-xcui-batch-ipad, ios-popover-anchor, ios-popover-anchor-ipad, ios-popover-bar-recovery, ios-popover-bar-ipad-recovery, ios-popover-geometry-iphone, ios-popover-geometry-ipad, ios-date-year-predicate-red, ios-io, ios-saver-write-failure, ios-picker-batch, ios-picker-recovery, ios-picker-admission, ios-picker-provider-cancellation, ios-camera-ownership-memory-callback, ios-share-presentation-disposal, ios-share-remembered-failure-observation, ios-switch-cancellation, ios-switch-ownership, ios-slider-numeric, ios-ui-state, ios-time-state-recovery, ios-slider-lifecycle, ios-slider-remaining, ios-slider-structure, ios-slider-tap, ios-slider-pair-structure, ios-vector-theme, ios-vector-theme-recovery, ios-vector-rendering-recovery, ios-vector-rendering-iphone-recovery, ios-vector-native-screen-pair, ios-slider-recovery, ios-image-memory, ios-image-memory-darwin, ios-image-profile-recovery, ios-appinfo-capability, ios-appinfo-shape, ios-webview-lifecycle, ios-webview-recovery, ios-webview-request-state, ios-webview-provisional-dns, ios-webview-request-dns, windows, windows-cache, windows-share-loader, windows-share-boundaries, extended, android-device, android-webview, android-webview-popups, android-webview-request-state, android-webview-stop-redirect-recovery, android-navigation-back, android-geo-ownership, android-geo-provider, android-geo-prerequisites, android-share-grants, android-camera-provider, android-camera-provider-minimum, android-camera-no-handler-minimum, android-camera-restoration, android-camera-restoration-dont-keep, android-camera-callback-substitution, android-io-provider-lifecycle, android-io-provider-unavailable, android-io-named-system-providers, android-io-named-external-storage, android-io-default-decode, android-io-oversize, android-saver-identity, android-saver-identity-missing, android-io-reference-regressions, android-io-controlled-remote, android-io-controlled-remote-positive, android-io-controlled-remote-cancel, android-permission-location-api35, android-permission-lifecycle-grant-api35, android-permission-lifecycle-revoke-api35, android-permission-demo, android-permission-demo-call-denial-recovery, android-permission-demo-denial-recovery, android-io-permission-storage-api35, android-permission-storage-api35-recovery, android-permission-storage-compatibility, android-storage-compatibility, android-media-selection-compatibility, android-media-selection-api33, android-media-selection-api34, android-storage-api28, android-storage-api29-target28, android-storage-api29-legacy, android-storage-api29-scoped, android-storage-api30-normal, android-storage-api30-all-files, android-storage-api35-normal, android-storage-api35-all-files, consumer-core-io, consumer-webview, consumer-webview-remaining, consumer-webview-linux-x64, consumer-webview-linux-arm64, consumer-webview-macos-arm64, consumer-webview-macos-x64, consumer-webview-windows-x64, sample-platforms-linux, sample-platforms-apple, sample-builds-linux, sample-builds-apple, all, ios-ui-related-nine-ios26plus, ios-ui-adaptive-customization-ios26plus, tooling]
 
       offline_tooling_mode:
         description: Explicit offline scopes mode; reuse never waives platform or security gates
@@ -47,7 +47,7 @@ concurrency:
 
 jobs:
   tooling:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-') == false
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -1295,81 +1295,3 @@ jobs:
             build/ci-runtime/consumer-dependencies.json
             build/ci-consumer/core-io-desktop/*.json
             build/ci-consumer/core-io-desktop/junit/TEST-*.xml
-
-  identity-verification:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'identity-linux' || inputs.profile == 'identity-apple' || inputs.profile == 'identity-windows')
-    runs-on: ${{ inputs.profile == 'identity-apple' && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: 60
-    env:
-      CARGO_BUILD_JOBS: '2'
-    steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
-        with:
-          distribution: temurin
-          java-version: '17'
-          verify-signature: true
-          overwrite-settings: false
-      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6
-        with:
-          min-wrapper-count: 1
-          allow-snapshots: false
-      - uses: android-actions/setup-android@v3
-        if: runner.os == 'Linux'
-        with:
-          packages: 'cmdline-tools;23.0 platforms;android-37.0'
-          accept-android-sdk-licenses: true
-          log-accepted-android-sdk-licenses: false
-      - name: Linux native prerequisites
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
-      - name: Set up pinned Rust
-        shell: bash
-        run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
-      - name: Source identity and migration checks
-        if: runner.os == 'Linux'
-        run: |
-          python3 scripts/development/verify_namespace.py
-          python3 scripts/migration/verify_migration.py
-          python3 scripts/audit/source_inventory.py --check
-          python3 scripts/development/validate_resolutions.py --check
-          python3 scripts/development/generate_icon_catalogues.py --check
-      - name: Linux desktop, Android host, browser targets and packaged metadata
-        if: runner.os == 'Linux'
-        run: |
-          export CHROME_BIN="$(command -v google-chrome)"
-          xvfb-run -a ./gradlew desktopTest testAndroidHostTest jsBrowserTest wasmJsBrowserTest \
-            :sample:android:assembleDebug stageVerificationPublications \
-            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=desktop \
-            --continue --max-workers=2 --no-configuration-cache --no-build-cache
-      - name: Apple simulator tests and sample framework
-        if: runner.os == 'macOS'
-        run: |
-          ./gradlew iosSimulatorArm64Test :sample:common:linkDebugFrameworkIosSimulatorArm64 \
-            :sample:common:linkDebugFrameworkIosArm64 \
-            --continue --max-workers=2 --no-configuration-cache --no-build-cache
-      - name: Windows desktop tests
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: gradlew.bat :nativecmpkit-file-picker:desktopTest :nativecmpkit-share:desktopTest --continue --max-workers=2 --no-configuration-cache --no-build-cache
-      - name: Native crate tests
-        if: ${{ !cancelled() }}
-        shell: bash
-        run: |
-          cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
-          cargo test --locked --manifest-path nativecmpkit-share/native/Cargo.toml
-      - name: Summarize available Gradle test reports
-        if: always()
-        shell: bash
-        run: python scripts/audit/summarize_junit.py --output build/ci-identity/junit-summary.json
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        if: always()
-        with:
-          name: ${{ inputs.profile }}-junit-summary
-          path: build/ci-identity/junit-summary.json
-          if-no-files-found: error

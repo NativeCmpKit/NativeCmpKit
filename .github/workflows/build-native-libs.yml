@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-apple, identity-windows, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   native-check:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'all'
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'all'
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -50,7 +50,7 @@ jobs:
         run: cargo test --locked
 
   native-lock-tooling:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'native-lock-reproducibility' || inputs.profile == 'native-lock-windows-source')
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'native-lock-reproducibility' || inputs.profile == 'native-lock-windows-source')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -65,7 +65,7 @@ jobs:
         run: python3 -B -m unittest discover -s scripts/ci -p test_native_lock_windows_workflow.py -v
 
   native-lock-reproducibility:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'native-lock-reproducibility'
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'native-lock-reproducibility'
     needs: native-lock-tooling
     strategy:
       fail-fast: false
@@ -122,7 +122,7 @@ jobs:
           path: build/ci-verification/native-lock-${{ matrix.platform }}/*.json
 
   native-lock-windows-source:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'native-lock-windows-source'
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'native-lock-windows-source'
     needs: native-lock-tooling
     runs-on: windows-2025
     timeout-minutes: 45
@@ -154,7 +154,7 @@ jobs:
           path: build/ci-verification/native-lock-windows-x64/*.json
 
   picker-jni-macos-domain:
-    if: github.repository == 'Apdelrahman1911/nativeCmpkit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'picker-jni-macos-domain'
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'picker-jni-macos-domain'
     runs-on: macos-26
     timeout-minutes: 15
     defaults:
@@ -190,3 +190,81 @@ jobs:
           path: |
             build/ci-runtime/picker-jni-macos.json
             build/ci-verification/picker-jni-macos-domain/*.json
+
+  identity-verification:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'identity-linux' || inputs.profile == 'identity-apple' || inputs.profile == 'identity-windows')
+    runs-on: ${{ inputs.profile == 'identity-apple' && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
+    timeout-minutes: 60
+    env:
+      CARGO_BUILD_JOBS: '2'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: '17'
+          verify-signature: true
+          overwrite-settings: false
+      - uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6
+        with:
+          min-wrapper-count: 1
+          allow-snapshots: false
+      - name: Install the official Android SDK platform
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sdkmanager --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
+          sdkmanager --sdk_root="$ANDROID_HOME" --install 'cmdline-tools;23.0' 'platforms;android-37.0'
+      - name: Linux native prerequisites
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
+      - name: Set up pinned Rust
+        shell: bash
+        run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
+      - name: Source identity and migration checks
+        if: runner.os == 'Linux'
+        run: |
+          python3 scripts/development/verify_namespace.py
+          python3 scripts/migration/verify_migration.py
+          python3 scripts/audit/source_inventory.py --check
+          python3 scripts/development/validate_resolutions.py --check
+          python3 scripts/development/generate_icon_catalogues.py --check
+      - name: Linux desktop, Android host, browser targets and packaged metadata
+        if: runner.os == 'Linux'
+        run: |
+          export CHROME_BIN="$(command -v google-chrome)"
+          xvfb-run -a ./gradlew desktopTest testAndroidHostTest jsBrowserTest wasmJsBrowserTest \
+            :sample:android:assembleDebug stageVerificationPublications \
+            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=desktop \
+            --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Apple simulator tests and sample framework
+        if: runner.os == 'macOS'
+        run: |
+          ./gradlew iosSimulatorArm64Test :sample:common:linkDebugFrameworkIosSimulatorArm64 \
+            :sample:common:linkDebugFrameworkIosArm64 \
+            --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Windows desktop tests
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: gradlew.bat :nativecmpkit-file-picker:desktopTest :nativecmpkit-share:desktopTest --continue --max-workers=2 --no-configuration-cache --no-build-cache
+      - name: Native crate tests
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
+          cargo test --locked --manifest-path nativecmpkit-share/native/Cargo.toml
+      - name: Summarize available Gradle test reports
+        if: always()
+        shell: bash
+        run: python scripts/audit/summarize_junit.py --output build/ci-identity/junit-summary.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: ${{ inputs.profile }}-junit-summary
+          path: build/ci-identity/junit-summary.json
+          if-no-files-found: error

@@ -29,7 +29,8 @@ from urllib.parse import quote
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_FINDINGS = 164
 BASELINE = "af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6"
-REPOSITORY = "Apdelrahman1911/nativeCmpkit"
+REPOSITORY = "NativeCmpKit/NativeCmpKit"
+ARCHIVED_REPOSITORY = "Apdelrahman1911/nativeCmpkit"
 PRIORITIES = ("Critical", "High", "Medium", "Low")
 STATUSES = ("implemented", "partially-verified", "verified", "unresolved", "not-applicable")
 EVIDENCE_STATUSES = ("confirmed-source", "confirmed-test", "risk", "unverified", "improvement")
@@ -105,8 +106,8 @@ def reference_path(value: Any, where: str) -> str:
     return value
 
 
-def issue_url(value: Any, number: int, where: str) -> str:
-    expected = f"https://github.com/{REPOSITORY}/issues/{number}"
+def issue_url(value: Any, number: int, where: str, repository: str = REPOSITORY) -> str:
+    expected = f"https://github.com/{repository}/issues/{number}"
     require(value == expected, where, f"expected the mapped repository/issue URL {expected}")
     return value
 
@@ -324,7 +325,8 @@ def validate_ledgers(raw: dict[str, bytes], paths: list[str], baselines: dict[st
 def validate_mapping(value: Any, baselines: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     object_fields(value, ("schema_version", "repository", "baseline", "complete", "items"), ISSUE_MAP)
     require(type(value["schema_version"]) is int and value["schema_version"] == 1, ISSUE_MAP, "unsupported schema_version")
-    require(value["repository"] == REPOSITORY, ISSUE_MAP, "unexpected repository")
+    repository = value["repository"]
+    require(repository in (ARCHIVED_REPOSITORY, REPOSITORY), ISSUE_MAP, "unexpected repository")
     require(value["baseline"] == BASELINE, ISSUE_MAP, "unexpected baseline revision")
     require(value["complete"] is True, ISSUE_MAP, "mapping is not recorded complete")
     require(isinstance(value["items"], list), ISSUE_MAP + ".items", "expected an array")
@@ -338,7 +340,8 @@ def validate_mapping(value: Any, baselines: dict[str, Any]) -> tuple[dict[str, A
         require(key not in by_key, where, "duplicate issue mapping key")
         number = integer(item["number"], where + ".number", minimum=1)
         require(number not in numbers, where, "duplicate issue number")
-        issue_url(item["url"], number, where + ".url")
+        issue_url(item["url"], number, where + ".url", repository)
+        item = {**item, "url": f"https://github.com/{REPOSITORY}/issues/{number}"}
         string(item["title"], where + ".title")
         choice(item["state"], ("open", "closed"), where + ".state")
         if "actual_state" in item:

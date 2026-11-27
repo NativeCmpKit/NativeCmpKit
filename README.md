@@ -16,7 +16,7 @@ all actions/reusable workflows and no mandatory SHA pinning. Verification uses
 minimum permissions; publication and deployment remain gated.
 
 Current contained work: [verified iOS memory-safety and Coil lifecycle fix](docs/development/native-io-verification.md).
-**17 issues closed** as observed on2026-10-27, including [#4](https://github.com/Apdelrahman1911/nativeCmpkit/issues/4)
+**17 issues closed** as observed on2026-10-27, including [#4](https://github.com/NativeCmpKit/NativeCmpKit/issues/4)
 after reviewed47/47 native simulator tests and [#5's Android saver fix](docs/development/android-saver-verification.md).
 This is a current development count;
 the migration counts below are historical snapshots.
@@ -24,11 +24,11 @@ Specific verified fixes are not whole-library, native/device or release certific
 
 The audit records **164 findings (37 High)**. The [170 verified audit/history issues](docs/migration/issues-verification.json)
 include six actionable historical topics; 167 are open and three migration fixes
-are closed. A separate [Pages cleanup issue #171](https://github.com/Apdelrahman1911/nativeCmpkit/issues/171)
+are closed. A separate [Pages cleanup issue #171](https://github.com/NativeCmpKit/NativeCmpKit/issues/171)
 brings the delivery snapshot to **171 issues (168 open, three closed)**; it is not
 an additional baseline library finding. Counts are observations, not future issue state.
 
-[Verified CI](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40114966617)
+[Verified CI](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40114966617)
 passed **300 target/host test executions (86 distinct original functions)** across
 desktop, Android-host, JS, Wasm and iOS simulator. Android/browser sample builds and
 simulator framework linking also succeeded. These are not physical-device,
@@ -41,7 +41,7 @@ native-UI or ABI certifications; see the [execution ledger](docs/testing/README.
 - Gradle project paths `:nativecmpkit-*`
 - Maven group `io.github.apdelrahman1911.nativecmpkit` with artifact IDs such as
   `nativecmpkit-ui` and `nativecmpkit-file-picker`
-- Development version `0.1.0-SNAPSHOT` (unpublished)
+- Development version `0.1.0-SNAPSHOT` on this branch
 
 See [installation](docs/installation.md) and the
 [current artifact map](docs/migration/current-identity.json).
@@ -66,8 +66,8 @@ feature parity. Read the [source-evidenced platform matrix](docs/platforms/READM
 ## Build from source
 
 ```sh
-git clone https://github.com/Apdelrahman1911/nativeCmpkit.git
-cd nativeCmpkit
+git clone https://github.com/NativeCmpKit/NativeCmpKit.git
+cd NativeCmpKit
 # JDK 17, SDK package platforms;android-37.0, Rust and host dependencies.
 # Linux picker: cargo on PATH, pkg-config and libwayland-dev.
 ./gradlew :nativecmpkit-io:desktopTest :nativecmpkit-file-picker:desktopTest

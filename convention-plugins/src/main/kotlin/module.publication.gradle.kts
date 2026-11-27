@@ -25,7 +25,7 @@ mavenPublishing {
     pom {
         name.set("NativeCmpKit - " + project.name.removePrefix("nativecmpkit-"))
         description.set("Independent Kotlin Multiplatform native component toolkit, derived from Calf under Apache-2.0.")
-        url.set("https://github.com/Apdelrahman1911/nativeCmpkit")
+        url.set("https://github.com/NativeCmpKit/NativeCmpKit")
 
         licenses {
             license {
@@ -50,9 +50,9 @@ mavenPublishing {
             url.set("https://github.com/Apdelrahman1911/nativeCmpkit/issues")
         }
         scm {
-            connection.set("scm:git:https://github.com/Apdelrahman1911/nativeCmpkit.git")
-            developerConnection.set("scm:git:ssh://git@github.com/Apdelrahman1911/nativeCmpkit.git")
-            url.set("https://github.com/Apdelrahman1911/nativeCmpkit")
+            connection.set("scm:git:https://github.com/NativeCmpKit/NativeCmpKit.git")
+            developerConnection.set("scm:git:ssh://git@github.com/NativeCmpKit/NativeCmpKit.git")
+            url.set("https://github.com/NativeCmpKit/NativeCmpKit")
         }
     }
 }

@@ -67,7 +67,7 @@ def write_json(path, value):
 
 
 def model_context():
-    return {"repository": "Apdelrahman1911/nativeCmpkit", "workflow": "NativeCmpKit verification", "job": "library-tests",
+    return {"repository": "NativeCmpKit/NativeCmpKit", "workflow": "NativeCmpKit verification", "job": "library-tests",
             "run_id": "777777", "run_attempt": "1", "source_revision": "b" * 40,
             "ref": "refs/heads/development/model-fixture-not-a-real-run", "profile": route.PROFILE,
             "slot": route.SLOT, "entry_focus": route.ENTRY_FOCUS, "effective_focus": route.EFFECTIVE_FOCUS}

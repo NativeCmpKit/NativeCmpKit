@@ -59,7 +59,7 @@ Share a URL. On iOS, this may show a rich link preview:
 ```kotlin
 shareLauncher.launch(
     ShareContent.Url(
-        url = "https://github.com/Apdelrahman1911/nativeCmpkit",
+        url = "https://github.com/NativeCmpKit/NativeCmpKit",
     )
 )
 ```

@@ -2690,7 +2690,7 @@
         "scope": "Exact finite source-history reader composition only; original current/history pin declarations and native actions/assertions/cleanup remain. ExternalStorage1 still must run; unchanged Downloads/root-policy limits and cloudC1/#55 stay open. No native/consumer/API-ABI/security/release inference."
       },
       {
-        "command": "gh workflow run gradle.yml -R Apdelrahman1911/nativeCmpkit --ref development/preview-hardening -f profile=android-io-named-external-storage; review original41508129890 once",
+        "command": "gh workflow run gradle.yml -R NativeCmpKit/NativeCmpKit --ref development/preview-hardening -f profile=android-io-named-external-storage; review original41508129890 once",
         "result": "Actual336/337 at34a533b93599b00a15d80b4445ce332335a98c60 remains FAILED before profile selection: offline2431/77.638s,6 failures/one error/seven records. ZERO native/Gradle/APK/emulator/XML/artifacts or actual uploaded source maps. Fifteen passive original checks hold frozen1211 Git/dispatch/local only; no hosted after-map or #55 criterion acceptance.",
         "evidence": [
           "docs/development/evidence/current-platform-recovery-20261101/android-external-tooling336-341/DISPATCH336.json",
@@ -2710,7 +2710,7 @@
         ]
       },
       {
-        "command": "gh workflow run gradle.yml -R Apdelrahman1911/nativeCmpkit --ref development/preview-hardening -f profile=android-io-named-external-storage; review once-acquired original41510126699 source/results; post/read back #55 progress before docs",
+        "command": "gh workflow run gradle.yml -R NativeCmpKit/NativeCmpKit --ref development/preview-hardening -f profile=android-io-named-external-storage; review once-acquired original41510126699 source/results; post/read back #55 progress before docs",
         "result": "Actual342–345 at260ea5dc358d18588cb0eff9c7e3614c54e462aa passes1/1 native/one fresh XML/Gradle0/70.03s, zero failures/errors/skips/N/A. All four actual1212 maps equal frozen Git/dispatch/current.28 solo passive checks qualify original genuine system selection, tree/child metadata, bounded public reads, real descriptor EOF/close ownership, persisted grant after Activity destruction, release/revocation/denied read and conditional owned row deletion. API35 Android15 x86_64 Enforcing/JDK17.0.21/Gradle9.7.1 and explicit owned graceful guest shutdown hold. No io_documents/transport-removal/process-device-restart witness or invented XML timing interpretation. Progress6586939864 read back exact; original issue fields unchanged/#55 open. ExternalStorage C1 subset accepted only; Downloads/cloud remain, accepted method excluded from replay.",
         "evidence": [
           "docs/development/evidence/current-platform-recovery-20261101/android-external-native342-345/DISPATCH342.json",

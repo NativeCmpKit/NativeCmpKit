@@ -212,9 +212,9 @@ download. No dependency versions were downgraded to make the Gradle build pass.
 | Migrated root/desktop POM generation plus icons resource generation | **Passed**,87s;42 POMs validated and exact resource package retained. Initial publication guard/convention scripts compiled. Later guard extensions need the final revision's configuration/CI evidence, not this earlier log. | [`migrated-poms-and-resource-package.log`](evidence/migrated-poms-and-resource-package.log), [`migrated-coordinate-and-res-checks.json`](evidence/migrated-coordinate-and-res-checks.json) |
 | Cargo offline metadata, picker/share | Cache-miss failures; not Rust compiler failures. | `evidence/nativecmpkit-*-cargo-dependencies.json` |
 | Cargo online metadata, picker/share | **Passed resolution**:197/48 packages including roots,202 distinct non-root name/version pairs combined. No native compilation or tests implied. | `evidence/nativecmpkit-*-cargo-dependencies-online.json` |
-| Remote native matrix, both crates on Linux/macOS26/Windows | **Passed all three jobs / six `cargo test` invocations; each explicitly ran0tests.** Confirms host Rust compilation/test-harness startup, not native GUI/JNI behavior. Commit `cf6547931d8e339d673e7605ff5fd141a5e42091`. | [Run40106895492](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40106895492), `evidence/github-actions/native-{run,jobs,log}-40106895492.*` |
-| First remote Gradle matrix, commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6` | **Overall failed**: both hosts used an invalid SDK package identifier; desktop/Android/Apple steps skipped. Linux's independent browser step **passed32 JS +32 Wasm common tests**, then JS sample distribution completed with warnings; Wasm production compilation exhausted its2GiB heap. macOS ran0 tests. Archive/audit validation job passed. | [Run40110188721](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40110188721), [inspected results below](#inspected-remote-results) |
-| Corrected remote Linux job, commit `1160893ca17404891b312990bc829535cddb75a2` | **Succeeded**:182 fresh test executions across25 XML reports (86 desktop,32 Android host,32 JS,32 Wasm), no failures/errors/skips. Android sample debug assembly and both browser distribution tasks succeeded; JS production compile/webpack came from cache, while Wasm production compilation/optimization/webpack executed freshly at4GiB. macOS is a separate job. | [Run40114966617](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40114966617), [`Linux terminal log`](evidence/github-actions/gradle-linux-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-linux-40114966617.json) |
+| Remote native matrix, both crates on Linux/macOS26/Windows | **Passed all three jobs / six `cargo test` invocations; each explicitly ran0tests.** Confirms host Rust compilation/test-harness startup, not native GUI/JNI behavior. Commit `cf6547931d8e339d673e7605ff5fd141a5e42091`. | [Run40106895492](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40106895492), `evidence/github-actions/native-{run,jobs,log}-40106895492.*` |
+| First remote Gradle matrix, commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6` | **Overall failed**: both hosts used an invalid SDK package identifier; desktop/Android/Apple steps skipped. Linux's independent browser step **passed32 JS +32 Wasm common tests**, then JS sample distribution completed with warnings; Wasm production compilation exhausted its2GiB heap. macOS ran0 tests. Archive/audit validation job passed. | [Run40110188721](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40110188721), [inspected results below](#inspected-remote-results) |
+| Corrected remote Linux job, commit `1160893ca17404891b312990bc829535cddb75a2` | **Succeeded**:182 fresh test executions across25 XML reports (86 desktop,32 Android host,32 JS,32 Wasm), no failures/errors/skips. Android sample debug assembly and both browser distribution tasks succeeded; JS production compile/webpack came from cache, while Wasm production compilation/optimization/webpack executed freshly at4GiB. macOS is a separate job. | [Run40114966617](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40114966617), [`Linux terminal log`](evidence/github-actions/gradle-linux-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-linux-40114966617.json) |
 | Corrected remote macOS job, same commit/run | **Succeeded**:118 fresh executions across17 XML reports (86 desktop,32 common iOS-simulator tests), no failures/errors/skips;713/713 actionable tasks executed. WebView Objective-C cinterop and the static sample simulator framework link succeeded. Overall corrected run's three jobs succeeded:42 XML reports/300 target executions of86 original functions, not300 distinct tests. | [`macOS terminal log`](evidence/github-actions/gradle-macos-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-macos-40114966617.json), [`complete run summary`](evidence/github-actions/gradle-verification-summary-40114966617.json) |
 | Official wrapper/declared toolchain checks | **Passed** wrapper JAR/distribution digests; Kotlin2.4.20/AGP9.4.0/CMP1.12.0/kotlin-dsl6.7.3 artifacts accessible. | [`registry-version-checks.json`](evidence/registry-version-checks.json) |
 | Exact direct Maven advisory scan |45 queries, one low-severity JavaFX media advisory match; exploitability unverified. | [`osv-direct-maven-query.json`](evidence/osv-direct-maven-query.json) |
@@ -465,7 +465,7 @@ for audit evidence is not publication of library packages.
 
 ### Inspected remote results
 
-[Native run40106895492, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40106895492)
+[Native run40106895492, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40106895492)
 completed successfully on commit
 `cf6547931d8e339d673e7605ff5fd141a5e42091`. The archived jobs and text log were
 inspected: Windows, macOS26 and Ubuntu jobs all succeeded, both crates' `cargo test`
@@ -479,7 +479,7 @@ Archived evidence: [`native-run-40106895492.json`](evidence/github-actions/nativ
 The lead disabled Actions again after that controlled run. Full remote Gradle,
 Android and Apple results must be interpreted separately from native compilation.
 
-[Gradle run40110188721, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40110188721)
+[Gradle run40110188721, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40110188721)
 completed **failure** on commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6`,
 2026-10-24 16:08:43–16:47:04 UTC. Job metadata, all three sanitized job logs and both
 downloaded report artifacts were inspected, not merely the run badge.
@@ -521,7 +521,7 @@ by a read-only test job.
 
 ### Corrected Gradle run: successful, with explicit coverage limits
 
-[Run40114966617, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40114966617)
+[Run40114966617, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40114966617)
 on `1160893ca17404891b312990bc829535cddb75a2` completed **success** on all three jobs,
 2026-10-24 17:11:10–17:34:44 UTC. All terminal logs and both artifact archives were
 downloaded and inspected; each ZIP digest matched GitHub's advertised SHA-256,

@@ -21,7 +21,7 @@ from urllib.parse import quote
 from github_json import json_pages
 
 ROOT=Path(__file__).resolve().parents[2]
-REPO='Apdelrahman1911/nativeCmpkit'
+REPO='NativeCmpKit/NativeCmpKit'
 BASE='af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6'
 PREFIX='<!-- nativecmpkit-item:'
 COLORS={'Critical':'b60205','High':'d93f0b','Medium':'fbca04','Low':'0e8a16'}

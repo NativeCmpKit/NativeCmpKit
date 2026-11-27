@@ -184,7 +184,7 @@ archives. Keep original history, notice files, retained namespaces and publicati
 interlocks. Verify checksum and issue-map receipts before future refactors. This
 phase does not mean a release pipeline exists or has been certified.
 
-**Operational resolution:** [issue #171](https://github.com/Apdelrahman1911/nativeCmpkit/issues/171)
+**Operational resolution:** [issue #171](https://github.com/NativeCmpKit/NativeCmpKit/issues/171)
 is now verified and closed after the owner's **Unpublish site** action. Authenticated
 Pages status is null, checked public routes return 404, and `gh-pages` is unchanged.
 The [additive incident resolution](../migration/pages-incident.md) preserves the

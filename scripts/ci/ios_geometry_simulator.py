@@ -124,7 +124,7 @@ def ci_scope(focus):
         raise ValueError("Only the two exact geometry focuses are authorized")
     if (platform.system() != "Darwin" or platform.machine().lower() not in {"arm64", "aarch64"} or
             os.environ.get("GITHUB_ACTIONS") != "true" or
-            os.environ.get("GITHUB_REPOSITORY") != "Apdelrahman1911/nativeCmpkit" or
+            os.environ.get("GITHUB_REPOSITORY") != "NativeCmpKit/NativeCmpKit" or
             os.environ.get("GITHUB_REF") != "refs/heads/development/preview-hardening" or
             os.environ.get("GITHUB_EVENT_NAME") != "workflow_dispatch"):
         raise ValueError("Owned geometry simulator requires its explicit read-only Apple CI scope")

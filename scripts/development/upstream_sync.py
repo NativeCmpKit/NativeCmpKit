@@ -25,7 +25,7 @@ from archive_upstream import Archive, BASELINE, dump, read, sha256, utc_now  # n
 from sync_github_issues import managed_key, source_links  # noqa: E402
 
 SOURCE = "MohamedRejeb/Calf"
-DESTINATION = "Apdelrahman1911/nativeCmpkit"
+DESTINATION = "NativeCmpKit/NativeCmpKit"
 SOURCE_ID = 674932206
 ARCHIVE_COMMIT_TOKEN = "__UPSTREAM_SYNC_ARCHIVE_COMMIT__"
 MARKER = re.compile(r"^<!-- nativecmpkit-upstream-sync:674932206:(\d+) -->$")

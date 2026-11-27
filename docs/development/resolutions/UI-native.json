@@ -623,7 +623,7 @@
         "scope": "Original UI-009 constructor/boundary/Saver requirements on both Material and iOS actuals only. Individually passed immutable source/XML accepted without relabeling a failed Apple whole suite, device rendering, ABI, native state-owner, security or release readiness."
       },
       {
-        "command": "gh api repos/Apdelrahman1911/nativeCmpkit/issues/123; exact comment/state readbacks from the archived single-POST/single-PATCH apply driver",
+        "command": "gh api repos/NativeCmpKit/NativeCmpKit/issues/123; exact comment/state readbacks from the archived single-POST/single-PATCH apply driver",
         "evidence": "docs/development/evidence/issue-closure123-20261027/apply/receipt.json",
         "result": "Original constructor/Saver acceptance evidence pushed at202059 and held preflight021/postfreeze links reviewed before closure. Issue123 closed completed at2026-10-27T14:44:44Z with one additive resolution comment6445012496 and one state-only PATCH; exact final issue/comment readbacks preserve body/title/labels. Nine total verified existing closures; no broad module/native/release clearance."
       }
@@ -1128,7 +1128,7 @@
             {
               "XML_method_name": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller[iosSimulatorArm64]",
               "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.dialog.RememberNativeAlertPropertiesTest",
-              "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+              "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
               "method": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller",
               "status": "passed"
             }
@@ -1141,7 +1141,7 @@
             {
               "XML_method_name": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller[iosSimulatorArm64]",
               "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.dialog.RememberNativeAlertPropertiesTest",
-              "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+              "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
               "method": "stableInputsRetainIdentityButTextFieldReplacementReachesTheCaller",
               "status": "passed"
             }
@@ -1631,7 +1631,7 @@
             {
               "XML_method_name": "emptyTabsClearSelectionAndRepopulationClampsIndex[iosSimulatorArm64]",
               "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-              "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+              "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
               "method": "emptyTabsClearSelectionAndRepopulationClampsIndex",
               "status": "passed"
             }
@@ -1644,14 +1644,14 @@
             {
               "XML_method_name": "emptyTabsClearSelectionAndRepopulationClampsIndex[iosSimulatorArm64]",
               "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-              "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+              "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
               "method": "emptyTabsClearSelectionAndRepopulationClampsIndex",
               "status": "passed"
             },
             {
               "XML_method_name": "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags[iosSimulatorArm64]",
               "classname": "iosSimulatorArm64ApplicationTest.io.github.apdelrahman1911.nativecmpkit.ui.navigation.NativeBarOwnershipTest",
-              "job_url": "https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40540209480/job/122316654541",
+              "job_url": "https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40540209480/job/122316654541",
               "method": "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags",
               "status": "passed"
             }

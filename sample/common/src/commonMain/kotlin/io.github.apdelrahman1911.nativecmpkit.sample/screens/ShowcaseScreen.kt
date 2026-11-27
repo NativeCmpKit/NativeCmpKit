@@ -254,7 +254,7 @@ fun ShowcaseScreen(
             confirmText = "Ok",
             dismissText = "Cancel",
             title = "View Source",
-            text = "github.com/Apdelrahman1911/nativeCmpkit",
+            text = "github.com/NativeCmpKit/NativeCmpKit",
         )
     }
 

@@ -22,14 +22,14 @@ class RepositoryLinkTests(unittest.TestCase):
         self.assertEqual("../testing/README.md", self.rewrite("../testing/README.md"))
 
     def test_source_link_preserves_fragment_and_query(self):
-        self.assertEqual("https://github.com/Apdelrahman1911/nativeCmpkit/blob/main/src/file.kt?plain=1#L2", self.rewrite("../../src/file.kt?plain=1#L2"))
+        self.assertEqual("https://github.com/NativeCmpKit/NativeCmpKit/blob/main/src/file.kt?plain=1#L2", self.rewrite("../../src/file.kt?plain=1#L2"))
 
     def test_excluded_archive_and_finding_go_to_repository(self):
         for url in ("findings/IO.json", "../migration/upstream-metadata/raw.json"):
             self.assertIn("/blob/main/docs/", self.rewrite(url))
 
     def test_directory_uses_tree(self):
-        self.assertEqual("https://github.com/Apdelrahman1911/nativeCmpkit/tree/main/docs/audit/findings", self.rewrite("findings/"))
+        self.assertEqual("https://github.com/NativeCmpKit/NativeCmpKit/tree/main/docs/audit/findings", self.rewrite("findings/"))
 
     def test_external_missing_and_outside_paths_are_untouched(self):
         for url in ("https://example.test/a", "//example.test/b", "#anchor", "missing.md", "/absolute", "../../../outside.txt"):

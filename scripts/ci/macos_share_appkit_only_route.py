@@ -52,7 +52,7 @@ def need(value, code):
 
 
 def _context(value):
-    constants = {"repository": "Apdelrahman1911/nativeCmpkit", "workflow": "NativeCmpKit verification",
+    constants = {"repository": "NativeCmpKit/NativeCmpKit", "workflow": "NativeCmpKit verification",
                  "job": "library-tests", "profile": PROFILE, "slot": SLOT,
                  "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS}
     need(type(value) is dict and set(value) == {*constants, "run_id", "run_attempt", "source_revision", "ref"} and
@@ -70,13 +70,13 @@ def _context(value):
 def workflow_context():
     """Only actual existing-job identifiers; missing/foreign inputs are refusal."""
     need(os.environ.get("GITHUB_ACTIONS") == "true" and
-         os.environ.get("GITHUB_REPOSITORY") == "Apdelrahman1911/nativeCmpkit" and
+         os.environ.get("GITHUB_REPOSITORY") == "NativeCmpKit/NativeCmpKit" and
          os.environ.get("GITHUB_WORKFLOW") == "NativeCmpKit verification" and
          os.environ.get("GITHUB_JOB") == "library-tests" and
          os.environ.get("SLOT") == SLOT and os.environ.get("SUITE") == "desktop" and
          os.environ.get("TEST_MODULES") == MODULE and os.environ.get("TEST_FOCUS") == ENTRY_FOCUS and
          os.environ.get("NATIVECMPKIT_NATIVE_UI_TESTS") == "true", "exact-existing-AppKit-workflow-job-required")
-    return _context({"repository": "Apdelrahman1911/nativeCmpkit", "workflow": "NativeCmpKit verification",
+    return _context({"repository": "NativeCmpKit/NativeCmpKit", "workflow": "NativeCmpKit verification",
                      "job": "library-tests", "run_id": os.environ.get("GITHUB_RUN_ID", ""),
                      "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
                      "source_revision": os.environ.get("GITHUB_SHA", ""), "ref": os.environ.get("GITHUB_REF", ""),

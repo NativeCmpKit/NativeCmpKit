@@ -30,7 +30,7 @@ private val INITIAL_URL =
     if (currentPlatform.isWeb)
         "https://en.wikipedia.org/wiki/Main_Page/"
     else
-        "https://github.com/Apdelrahman1911/nativeCmpkit"
+        "https://github.com/NativeCmpKit/NativeCmpKit"
 
 private val DUMMY_HTML = """
     <!DOCTYPE html>
