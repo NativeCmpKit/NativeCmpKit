@@ -202,6 +202,12 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     val rootUrl = if (id.module == root) null else "../../$root/$candidateVersion/$root-$candidateVersion.module"
     check(component["url"] == rootUrl) { "Module metadata redirects outside the exact candidate root: $id" }
     val canonicalName = "${id.module}-$candidateVersion.${resolved.extension}"
+    val stagedRelative = relativeDirectory + canonicalName
+    val staged = candidateRepository.resolve(stagedRelative)
+    val hash = artifactSha256(resolved)
+    check(staged.isFile && staged.length() == resolved.length() && artifactSha256(staged) == hash) {
+        "Resolved candidate bytes do not match the actual staged Maven file: $id/${resolved.name}"
+    }
     val variants = metadata["variants"] as? List<*> ?: error("Missing metadata variants: $id")
     check(variants.size in 1..128)
     val primaryBindings = variants.mapNotNull { entry ->
@@ -212,19 +218,20 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
         val files = variant["files"] as? List<*> ?: return@mapNotNull null
         check(files.size == 1)
         val declared = files.single() as? Map<*, *> ?: error("Invalid primary metadata file: $id")
+        // Compose resource variants may share the library category. Select the
+        // exact primary Maven URL before comparing its logical producer name.
+        if (declared["url"] != canonicalName) return@mapNotNull null
         val declaredName = declared["name"] as? String ?: error("Missing primary metadata filename: $id")
-        val producerName = if (id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata" &&
-            resolved.extension == "jar") "$root-metadata-$candidateVersion.jar" else canonicalName
-        // KMP can use a logical metadata JAR name distinct from its canonical Maven URL.
-        check(declaredName in setOf(canonicalName, producerName) && resolved.name in setOf(declaredName, canonicalName) &&
-            declared["url"] == canonicalName) {
-            "Unexpected artifact filenames for $id: declared=$declaredName, url=${declared["url"]}, resolved=${resolved.name}"
+        val producerNames = when {
+            id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata" &&
+                resolved.extension == "jar" -> setOf("$root-metadata-$candidateVersion.jar")
+            id.module == "$root-android" && resolved.extension == "aar" -> setOf("$root.aar")
+            resolved.extension == "klib" -> setOf("$root.klib", "$root-$candidateVersion.klib")
+            else -> emptySet()
         }
-        val stagedRelative = relativeDirectory + canonicalName
-        val staged = candidateRepository.resolve(stagedRelative)
-        val hash = artifactSha256(resolved)
-        check(staged.isFile && artifactSha256(staged) == hash && staged.length() == resolved.length()) {
-            "Resolved candidate bytes do not match the actual staged Maven file: $id/${resolved.name}"
+        val allowedNames = producerNames + canonicalName
+        check(declaredName in allowedNames && resolved.name in setOf(declaredName, canonicalName)) {
+            "Unexpected artifact filenames for $id: declared=$declaredName, url=${declared["url"]}, resolved=${resolved.name}"
         }
         check((declared["size"] is Int || declared["size"] is Long) &&
             (declared["size"] as Number).toLong() == resolved.length() && declared["sha256"] == hash) {
