@@ -1,0 +1,2 @@
+NativeCmpKit showcase fixture
+Synthetic file for picker tests.

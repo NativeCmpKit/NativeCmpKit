@@ -26,6 +26,11 @@ on:
         type: choice
         options: [both, android, ios]
         default: both
+      device_class:
+        description: phone or tablet
+        type: choice
+        options: [phone, tablet]
+        default: phone
       duration_minutes:
         description: Live session minutes after readiness
         type: string
@@ -68,9 +73,16 @@ jobs:
             mode=$(tr -d '[:space:]' < ci/showcase-mode)
             duration=60
           fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            device_class='${{ inputs.device_class }}'
+          else
+            device_class=phone
+          fi
+          case "$device_class" in phone|tablet) ;; *) echo "Unknown device class: $device_class" >&2; exit 2 ;; esac
           case "$mode" in build|session) ;; *) echo "Unknown showcase mode: $mode" >&2; exit 2 ;; esac
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "duration=$duration" >> "$GITHUB_OUTPUT"
+          echo "device_class=$device_class" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5, allowlisted
         with:
@@ -135,9 +147,17 @@ jobs:
             done'
           adb -s emulator-5554 shell input keyevent KEYCODE_WAKEUP
           adb -s emulator-5554 shell wm dismiss-keyguard
-          adb -s emulator-5554 shell wm size 1080x2400
-          adb -s emulator-5554 shell wm density 420
+          if [[ "${{ steps.mode.outputs.device_class }}" == "tablet" ]]; then
+            adb -s emulator-5554 shell wm size 1600x2560
+            adb -s emulator-5554 shell wm density 320
+          else
+            adb -s emulator-5554 shell wm size 1080x2400
+            adb -s emulator-5554 shell wm density 420
+          fi
           adb -s emulator-5554 shell settings put system font_scale 1.0
+          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.txt" /sdcard/Download/kira-fixture.txt
+          adb -s emulator-5554 push "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png" /sdcard/Download/kira-fixture.png
+          adb -s emulator-5554 shell am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file:///sdcard/Download/kira-fixture.png
           adb -s emulator-5554 shell settings put global window_animation_scale 0
           adb -s emulator-5554 shell settings put global transition_animation_scale 0
           adb -s emulator-5554 shell settings put global animator_duration_scale 0
@@ -213,7 +233,7 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
         with:
-          name: ui-session-android-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
+          name: ui-session-android-${{ steps.mode.outputs.device_class }}-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
           path: ${{ steps.start.outputs.file }}
           if-no-files-found: error
           retention-days: 1
@@ -263,9 +283,16 @@ jobs:
             mode=$(tr -d '[:space:]' < ci/showcase-mode)
             duration=60
           fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            device_class='${{ inputs.device_class }}'
+          else
+            device_class=phone
+          fi
+          case "$device_class" in phone|tablet) ;; *) echo "Unknown device class: $device_class" >&2; exit 2 ;; esac
           case "$mode" in build|session) ;; *) echo "Unknown showcase mode: $mode" >&2; exit 2 ;; esac
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "duration=$duration" >> "$GITHUB_OUTPUT"
+          echo "device_class=$device_class" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5, allowlisted
         with:
@@ -310,7 +337,8 @@ jobs:
               if ".iOS-" not in runtime:
                   continue
               for device in data[runtime]:
-                  if device["isAvailable"] and device["name"].startswith("iPhone"):
+                  prefix = "iPad" if "${{ steps.mode.outputs.device_class }}" == "tablet" else "iPhone"
+                  if device["isAvailable"] and device["name"].startswith(prefix):
                       print(device["udid"])
                       raise SystemExit
           raise SystemExit("No available iPhone simulator")
@@ -319,6 +347,7 @@ jobs:
           echo "UI_DEVICE=$udid" >> "$GITHUB_ENV"
           xcrun simctl bootstatus "$udid" -b
           xcrun simctl list devices booted
+          xcrun simctl addmedia "$udid" "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png"
           open -a Simulator --args -CurrentDeviceUDID "$udid"
 
       - name: Install the AXe accessibility helper
@@ -428,7 +457,7 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7, allowlisted
         with:
-          name: ui-session-ios-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
+          name: ui-session-ios-${{ steps.mode.outputs.device_class }}-${{ github.run_attempt }}-${{ steps.start.outputs.session-id }}
           path: ${{ steps.start.outputs.file }}
           if-no-files-found: error
           retention-days: 1
