@@ -91,10 +91,12 @@ def main() -> None:
         for functional in sorted((args.root / platform).glob("functional-*.json")):
             data = json.loads(functional.read_text(encoding="utf-8"))
             summary = data.get("summary", {})
+            flow_count = len(data.get("flows", []))
+            suffix = " (partial result file; see showcase/evidence/)" if flow_count < 30 else ""
             lines.append(
                 f"- `{platform}/{functional.name}` — device `{data.get('device', 'unknown')}`: "
                 f"**{summary.get('passed', 0)} passed**, {summary.get('failed', 0)} failed, "
-                f"{summary.get('blocked', 0)} blocked."
+                f"{summary.get('blocked', 0)} blocked, {flow_count} flows{suffix}."
             )
             any_functional = True
     if not any_functional:

@@ -525,9 +525,27 @@ def render(document: dict) -> None:
         "The authoritative machine-readable manifest is [coverage.json](coverage.json).",
         "Regenerate both files with `python3 showcase/generate_coverage.py`.",
         "",
+        "Statuses: **passed** = a functional flow asserted observable state; "
+        "**captured** = a reviewed screenshot only; **failed** = flow ran and the "
+        "assertion failed; **not-run** = no hosted evidence yet; "
+        "**not-applicable** = the API or sample section does not exist on that platform.",
+        "",
+    ]
+    for platform in ("android", "ios"):
+        counts = {}
+        for item in document["rows"]:
+            status = item["execution"][platform]["status"]
+            counts[status] = counts.get(status, 0) + 1
+        summary = ", ".join(f"{value} {key}" for key, value in sorted(counts.items()))
+        lines.append(f"- {platform}: {summary}")
+    lines.extend([
+        "",
+        "Functional flow evidence lives under [evidence/](evidence/) and "
+        "`screenshots/<platform>/functional-<device>.json`.",
+        "",
         "| ID | Component | Variant | Android | iOS | Route | Android run | iOS run |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
-    ]
+    ])
     for item in document["rows"]:
         a = item["execution"]["android"]
         i = item["execution"]["ios"]

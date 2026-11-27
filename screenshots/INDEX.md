@@ -16,6 +16,52 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 
 | Capture | Component / scenario | Expected observation | Image |
 | --- | --- | --- | --- |
+| `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](android/functional/action-sheet/api35-phone-before.png) |
+| `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](android/functional/action-sheet/api35-phone-failed-after.png) |
+| `functional/alert-cancel` | functional | See coverage.json | ![functional alert-cancel](android/functional/alert-cancel/api35-phone-after.png) |
+| `functional/alert-cancel` | functional | See coverage.json | ![functional alert-cancel](android/functional/alert-cancel/api35-phone-before.png) |
+| `functional/alert-confirm` | functional | See coverage.json | ![functional alert-confirm](android/functional/alert-confirm/api35-phone-after.png) |
+| `functional/alert-confirm` | functional | See coverage.json | ![functional alert-confirm](android/functional/alert-confirm/api35-phone-before.png) |
+| `functional/alert-text-field` | functional | See coverage.json | ![functional alert-text-field](android/functional/alert-text-field/api35-phone-before.png) |
+| `functional/alert-text-field` | functional | See coverage.json | ![functional alert-text-field](android/functional/alert-text-field/api35-phone-failed-after.png) |
+| `functional/buttons` | functional | See coverage.json | ![functional buttons](android/functional/buttons/api35-phone-after.png) |
+| `functional/buttons` | functional | See coverage.json | ![functional buttons](android/functional/buttons/api35-phone-before.png) |
+| `functional/clickable` | functional | See coverage.json | ![functional clickable](android/functional/clickable/api35-phone-after.png) |
+| `functional/clickable` | functional | See coverage.json | ![functional clickable](android/functional/clickable/api35-phone-before.png) |
+| `functional/date-bounds` | functional | See coverage.json | ![functional date-bounds](android/functional/date-bounds/api35-phone-before.png) |
+| `functional/date-bounds` | functional | See coverage.json | ![functional date-bounds](android/functional/date-bounds/api35-phone-failed-after.png) |
+| `functional/dropdown` | functional | See coverage.json | ![functional dropdown](android/functional/dropdown/api35-phone-after.png) |
+| `functional/dropdown` | functional | See coverage.json | ![functional dropdown](android/functional/dropdown/api35-phone-before.png) |
+| `functional/geo-math` | functional | See coverage.json | ![functional geo-math](android/functional/geo-math/api35-phone-after.png) |
+| `functional/geo-math` | functional | See coverage.json | ![functional geo-math](android/functional/geo-math/api35-phone-before.png) |
+| `functional/icons-category` | functional | See coverage.json | ![functional icons-category](android/functional/icons-category/api35-phone-after.png) |
+| `functional/icons-category` | functional | See coverage.json | ![functional icons-category](android/functional/icons-category/api35-phone-before.png) |
+| `functional/limitations` | functional | See coverage.json | ![functional limitations](android/functional/limitations/api35-phone-after.png) |
+| `functional/limitations` | functional | See coverage.json | ![functional limitations](android/functional/limitations/api35-phone-before.png) |
+| `functional/liquidglass` | functional | See coverage.json | ![functional liquidglass](android/functional/liquidglass/api35-phone-after.png) |
+| `functional/liquidglass` | functional | See coverage.json | ![functional liquidglass](android/functional/liquidglass/api35-phone-before.png) |
+| `functional/navbar` | functional | See coverage.json | ![functional navbar](android/functional/navbar/api35-phone-after.png) |
+| `functional/navbar` | functional | See coverage.json | ![functional navbar](android/functional/navbar/api35-phone-before.png) |
+| `functional/permissions-bulk-deny` | functional | See coverage.json | ![functional permissions-bulk-deny](android/functional/permissions-bulk-deny/api35-phone-after.png) |
+| `functional/permissions-bulk-deny` | functional | See coverage.json | ![functional permissions-bulk-deny](android/functional/permissions-bulk-deny/api35-phone-before.png) |
+| `functional/permissions-sms-rows` | functional | See coverage.json | ![functional permissions-sms-rows](android/functional/permissions-sms-rows/api35-phone-after.png) |
+| `functional/permissions-sms-rows` | functional | See coverage.json | ![functional permissions-sms-rows](android/functional/permissions-sms-rows/api35-phone-before.png) |
+| `functional/scaffold-tab` | functional | See coverage.json | ![functional scaffold-tab](android/functional/scaffold-tab/api35-phone-after.png) |
+| `functional/scaffold-tab` | functional | See coverage.json | ![functional scaffold-tab](android/functional/scaffold-tab/api35-phone-before.png) |
+| `functional/sheet` | functional | See coverage.json | ![functional sheet](android/functional/sheet/api35-phone-after.png) |
+| `functional/sheet` | functional | See coverage.json | ![functional sheet](android/functional/sheet/api35-phone-before.png) |
+| `functional/slider` | functional | See coverage.json | ![functional slider](android/functional/slider/api35-phone-after.png) |
+| `functional/slider` | functional | See coverage.json | ![functional slider](android/functional/slider/api35-phone-before.png) |
+| `functional/switch` | functional | See coverage.json | ![functional switch](android/functional/switch/api35-phone-after.png) |
+| `functional/switch` | functional | See coverage.json | ![functional switch](android/functional/switch/api35-phone-before.png) |
+| `functional/time-24h` | functional | See coverage.json | ![functional time-24h](android/functional/time-24h/api35-phone-after.png) |
+| `functional/time-24h` | functional | See coverage.json | ![functional time-24h](android/functional/time-24h/api35-phone-before.png) |
+| `functional/toolbar` | functional | See coverage.json | ![functional toolbar](android/functional/toolbar/api35-phone-after.png) |
+| `functional/toolbar` | functional | See coverage.json | ![functional toolbar](android/functional/toolbar/api35-phone-before.png) |
+| `functional/topbar` | functional | See coverage.json | ![functional topbar](android/functional/topbar/api35-phone-after.png) |
+| `functional/topbar` | functional | See coverage.json | ![functional topbar](android/functional/topbar/api35-phone-before.png) |
+| `functional/webview` | functional | See coverage.json | ![functional webview](android/functional/webview/api35-phone-after.png) |
+| `functional/webview` | functional | See coverage.json | ![functional webview](android/functional/webview/api35-phone-before.png) |
 | `geo-math/overview` | geo-math | Deterministic LatLng distance/bearing plus the tracker-unavailable state. | ![geo-math overview](android/geo-math/overview/api35-phone.png) |
 | `home/index` | home | Searchable component index, stable routes and per-screen reset. | ![home index](android/home/index/api35-phone.png) |
 | `io-camera-picker/overview` | io-camera-picker | Camera launch and the platform-specific unavailable fallback. | ![io-camera-picker overview](android/io-camera-picker/overview/api35-phone.png) |
@@ -61,6 +107,56 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 
 | Capture | Component / scenario | Expected observation | Image |
 | --- | --- | --- | --- |
+| `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](ios/functional/action-sheet/iphone-simulator-after.png) |
+| `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](ios/functional/action-sheet/iphone-simulator-before.png) |
+| `functional/alert-cancel` | functional | See coverage.json | ![functional alert-cancel](ios/functional/alert-cancel/iphone-simulator-after.png) |
+| `functional/alert-cancel` | functional | See coverage.json | ![functional alert-cancel](ios/functional/alert-cancel/iphone-simulator-before.png) |
+| `functional/alert-confirm` | functional | See coverage.json | ![functional alert-confirm](ios/functional/alert-confirm/iphone-simulator-after.png) |
+| `functional/alert-confirm` | functional | See coverage.json | ![functional alert-confirm](ios/functional/alert-confirm/iphone-simulator-before.png) |
+| `functional/alert-text-field` | functional | See coverage.json | ![functional alert-text-field](ios/functional/alert-text-field/iphone-simulator-after.png) |
+| `functional/alert-text-field` | functional | See coverage.json | ![functional alert-text-field](ios/functional/alert-text-field/iphone-simulator-before.png) |
+| `functional/buttons` | functional | See coverage.json | ![functional buttons](ios/functional/buttons/iphone-simulator-after.png) |
+| `functional/buttons` | functional | See coverage.json | ![functional buttons](ios/functional/buttons/iphone-simulator-before.png) |
+| `functional/clickable` | functional | See coverage.json | ![functional clickable](ios/functional/clickable/iphone-simulator-before.png) |
+| `functional/clickable` | functional | See coverage.json | ![functional clickable](ios/functional/clickable/iphone-simulator-failed-after.png) |
+| `functional/date-bounds` | functional | See coverage.json | ![functional date-bounds](ios/functional/date-bounds/iphone-simulator-before.png) |
+| `functional/date-bounds` | functional | See coverage.json | ![functional date-bounds](ios/functional/date-bounds/iphone-simulator-failed-after.png) |
+| `functional/date-display` | functional | See coverage.json | ![functional date-display](ios/functional/date-display/iphone-simulator-before.png) |
+| `functional/date-display` | functional | See coverage.json | ![functional date-display](ios/functional/date-display/iphone-simulator-failed-after.png) |
+| `functional/dropdown` | functional | See coverage.json | ![functional dropdown](ios/functional/dropdown/iphone-simulator-after.png) |
+| `functional/dropdown` | functional | See coverage.json | ![functional dropdown](ios/functional/dropdown/iphone-simulator-before.png) |
+| `functional/geo-math` | functional | See coverage.json | ![functional geo-math](ios/functional/geo-math/iphone-simulator-after.png) |
+| `functional/geo-math` | functional | See coverage.json | ![functional geo-math](ios/functional/geo-math/iphone-simulator-before.png) |
+| `functional/icons-category` | functional | See coverage.json | ![functional icons-category](ios/functional/icons-category/iphone-simulator-after.png) |
+| `functional/icons-category` | functional | See coverage.json | ![functional icons-category](ios/functional/icons-category/iphone-simulator-before.png) |
+| `functional/limitations` | functional | See coverage.json | ![functional limitations](ios/functional/limitations/iphone-simulator-after.png) |
+| `functional/limitations` | functional | See coverage.json | ![functional limitations](ios/functional/limitations/iphone-simulator-before.png) |
+| `functional/liquidglass` | functional | See coverage.json | ![functional liquidglass](ios/functional/liquidglass/iphone-simulator-before.png) |
+| `functional/liquidglass` | functional | See coverage.json | ![functional liquidglass](ios/functional/liquidglass/iphone-simulator-failed-after.png) |
+| `functional/navbar` | functional | See coverage.json | ![functional navbar](ios/functional/navbar/iphone-simulator-after.png) |
+| `functional/navbar` | functional | See coverage.json | ![functional navbar](ios/functional/navbar/iphone-simulator-before.png) |
+| `functional/permissions-bulk-deny` | functional | See coverage.json | ![functional permissions-bulk-deny](ios/functional/permissions-bulk-deny/iphone-simulator-after.png) |
+| `functional/permissions-bulk-deny` | functional | See coverage.json | ![functional permissions-bulk-deny](ios/functional/permissions-bulk-deny/iphone-simulator-before.png) |
+| `functional/permissions-sms-rows` | functional | See coverage.json | ![functional permissions-sms-rows](ios/functional/permissions-sms-rows/iphone-simulator-after.png) |
+| `functional/permissions-sms-rows` | functional | See coverage.json | ![functional permissions-sms-rows](ios/functional/permissions-sms-rows/iphone-simulator-before.png) |
+| `functional/scaffold-tab` | functional | See coverage.json | ![functional scaffold-tab](ios/functional/scaffold-tab/iphone-simulator-after.png) |
+| `functional/scaffold-tab` | functional | See coverage.json | ![functional scaffold-tab](ios/functional/scaffold-tab/iphone-simulator-before.png) |
+| `functional/sheet` | functional | See coverage.json | ![functional sheet](ios/functional/sheet/iphone-simulator-after.png) |
+| `functional/sheet` | functional | See coverage.json | ![functional sheet](ios/functional/sheet/iphone-simulator-before.png) |
+| `functional/sheet-veto` | functional | See coverage.json | ![functional sheet-veto](ios/functional/sheet-veto/iphone-simulator-before.png) |
+| `functional/sheet-veto` | functional | See coverage.json | ![functional sheet-veto](ios/functional/sheet-veto/iphone-simulator-failed-after.png) |
+| `functional/slider` | functional | See coverage.json | ![functional slider](ios/functional/slider/iphone-simulator-before.png) |
+| `functional/slider` | functional | See coverage.json | ![functional slider](ios/functional/slider/iphone-simulator-failed-after.png) |
+| `functional/switch` | functional | See coverage.json | ![functional switch](ios/functional/switch/iphone-simulator-after.png) |
+| `functional/switch` | functional | See coverage.json | ![functional switch](ios/functional/switch/iphone-simulator-before.png) |
+| `functional/time-24h` | functional | See coverage.json | ![functional time-24h](ios/functional/time-24h/iphone-simulator-after.png) |
+| `functional/time-24h` | functional | See coverage.json | ![functional time-24h](ios/functional/time-24h/iphone-simulator-before.png) |
+| `functional/toolbar` | functional | See coverage.json | ![functional toolbar](ios/functional/toolbar/iphone-simulator-after.png) |
+| `functional/toolbar` | functional | See coverage.json | ![functional toolbar](ios/functional/toolbar/iphone-simulator-before.png) |
+| `functional/topbar` | functional | See coverage.json | ![functional topbar](ios/functional/topbar/iphone-simulator-after.png) |
+| `functional/topbar` | functional | See coverage.json | ![functional topbar](ios/functional/topbar/iphone-simulator-before.png) |
+| `functional/webview-js` | functional | See coverage.json | ![functional webview-js](ios/functional/webview-js/iphone-simulator-before.png) |
+| `functional/webview-js` | functional | See coverage.json | ![functional webview-js](ios/functional/webview-js/iphone-simulator-failed-after.png) |
 | `geo-math/overview` | geo-math | Deterministic LatLng distance/bearing plus the tracker-unavailable state. | ![geo-math overview](ios/geo-math/overview/iphone-simulator.png) |
 | `home/index` | home | Searchable component index, stable routes and per-screen reset. | ![home index](ios/home/index/iphone-simulator.png) |
 | `io-camera-picker/overview` | io-camera-picker | Camera launch and the platform-specific unavailable fallback. | ![io-camera-picker overview](ios/io-camera-picker/overview/iphone-simulator.png) |
@@ -126,6 +222,11 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 - [webview/invalid-destination.png](screenshots/compare/webview/invalid-destination.png)
 - [webview/javascript-title.png](screenshots/compare/webview/javascript-title.png)
 - [webview/overview.png](screenshots/compare/webview/overview.png)
+
+## Functional flows
+
+- `android/functional-api35-phone.json` — device `api35-phone`: **3 passed**, 3 failed, 0 blocked, 6 flows (partial result file; see showcase/evidence/).
+- `ios/functional-iphone-simulator.json` — device `iphone-simulator`: **16 passed**, 6 failed, 0 blocked, 22 flows (partial result file; see showcase/evidence/).
 
 ## Status
 

@@ -5,6 +5,13 @@ Base: `a2c48c0b9ebf3524192e680ecd4becc1f2880bb8` on `feature/showcase-ui-verific
 The authoritative machine-readable manifest is [coverage.json](coverage.json).
 Regenerate both files with `python3 showcase/generate_coverage.py`.
 
+Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
+
+- android: 50 captured, 1 failed, 20 not-applicable, 10 not-run, 4 passed
+- ios: 42 captured, 6 failed, 9 not-applicable, 12 not-run, 16 passed
+
+Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<platform>/functional-<device>.json`.
+
 | ID | Component | Variant | Android | iOS | Route | Android run | iOS run |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | UI-BUTTON-001 | AdaptiveButton | filled enabled and disabled | supported | supported | Button | passed (45957524569) | passed (46014167086) |
