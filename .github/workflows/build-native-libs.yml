@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -193,7 +193,7 @@ jobs:
 
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
-    runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
+    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
@@ -241,7 +241,7 @@ jobs:
         shell: bash
         run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
       - name: Install the official Android SDK platform
-        if: runner.os == 'Linux' || startsWith(inputs.profile, 'identity-apple')
+        if: (runner.os == 'Linux' && runner.arch == 'X64') || startsWith(inputs.profile, 'identity-apple')
         shell: bash
         env:
           IDENTITY_PROFILE: ${{ inputs.profile }}
@@ -254,6 +254,13 @@ jobs:
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
+      - name: Provision the official SDK for the Linux ARM64 and Windows package profiles
+        if: inputs.profile == 'identity-linux-arm64-package' || inputs.profile == 'identity-windows-package'
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+        with:
+          packages: cmdline-tools;23.0 platforms;android-37.0
+          accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: false
       - name: Source identity and migration checks
         if: runner.os == 'Linux'
         run: |
@@ -383,16 +390,18 @@ jobs:
         run: |
           for module in nativecmpkit-file-picker nativecmpkit-share; do
             cargo fetch --locked --manifest-path "$module/native/Cargo.toml"
-            python3 scripts/native/artifacts.py metadata --module "$module"
+            python scripts/native/artifacts.py metadata --module "$module"
           done
           shopt -s nullglob
+          cargo_home="${CARGO_HOME:-$HOME/.cargo}"
+          if [[ "$RUNNER_OS" == Windows ]]; then cargo_home="$(cygpath -u "$cargo_home")"; fi
           cache_arguments=()
-          for cache in "${CARGO_HOME:-$HOME/.cargo}"/registry/cache/*; do
+          for cache in "$cargo_home"/registry/cache/*; do
             cache_arguments+=(--registry-cache "$cache")
           done
           test "${#cache_arguments[@]}" -gt 0
           for module in nativecmpkit-file-picker nativecmpkit-share; do
-            python3 tests/consumer/collect_native_licenses.py \
+            python tests/consumer/collect_native_licenses.py \
               --metadata "build/native-metadata/$module.json" "${cache_arguments[@]}" \
               --vcs-supplements "$PWD/licenses/native-dependency-supplements" --source-root "$PWD" \
               --output "build/native-notices/$module"
@@ -400,6 +409,7 @@ jobs:
       - name: Stage isolated Maven publications
         if: endsWith(inputs.profile, '-package') || inputs.profile == 'identity-linux-consumer'
         id: identity-stage
+        shell: bash
         env:
           TARGETS: ${{ inputs.profile == 'identity-apple-package' && 'all' || 'desktop' }}
         run: |
@@ -413,10 +423,13 @@ jobs:
         run: |
           case "$RUNNER_OS/$RUNNER_ARCH" in
             Linux/X64) selection=(--target desktop --native-platform linux-x64) ;;
+            Linux/ARM64) selection=(--target desktop --native-platform linux-arm64) ;;
             macOS/ARM64) selection=(--native-platform macos-arm64) ;;
+            macOS/X64) selection=(--target desktop --native-platform macos-x64) ;;
+            Windows/X64) selection=(--target desktop --native-platform windows-x64) ;;
             *) exit 1 ;;
           esac
-          python3 tests/consumer/verify_artifacts.py \
+          python tests/consumer/verify_artifacts.py \
             --repository build/verification-repo --version "$IDENTITY_STAGING_VERSION" \
             "${selection[@]}" --expected-native-revision "$GITHUB_SHA" \
             --output build/ci-identity/publication-artifacts.json
@@ -424,7 +437,7 @@ jobs:
         if: ${{ !cancelled() && steps.identity-stage.outcome == 'success' }}
         shell: bash
         run: |
-          PYTHONPATH=tests/consumer python3 - <<'PY'
+          PYTHONPATH=tests/consumer python - <<'PY'
           import json
           import os
           from pathlib import Path
@@ -434,11 +447,14 @@ jobs:
           import zipfile
           from verify_artifacts import GROUP, NATIVE_MODULES, native_filename
 
-          system = os.environ["RUNNER_OS"]
+          host = (os.environ["RUNNER_OS"], os.environ["RUNNER_ARCH"])
           platform, nm = {
-              "Linux": ("linux-x64", ["nm", "-D", "--defined-only"]),
-              "macOS": ("macos-arm64", ["xcrun", "nm", "-gU"]),
-          }[system]
+              ("Linux", "X64"): ("linux-x64", ["nm", "-D", "--defined-only"]),
+              ("Linux", "ARM64"): ("linux-arm64", ["nm", "-D", "--defined-only"]),
+              ("macOS", "ARM64"): ("macos-arm64", ["xcrun", "nm", "-gU"]),
+              ("macOS", "X64"): ("macos-x64", ["xcrun", "nm", "-gU"]),
+              ("Windows", "X64"): ("windows-x64", ["llvm-readobj", "--coff-exports"]),
+          }[host]
           version = os.environ["IDENTITY_STAGING_VERSION"]
           repository = Path("build/verification-repo") / GROUP.replace(".", "/")
           records = []

@@ -1,5 +1,5 @@
 # Modified for nativeCmpkit (2026-10-26): owner-authorized, library-only verification.
-# No publication/deployment; action SHAs are voluntary, not a required setting.
+# Verification only. Use Actions from the repository's SHA-pinned allowlist.
 name: NativeCmpKit verification
 
 on:
