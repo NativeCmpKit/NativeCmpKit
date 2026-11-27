@@ -1,0 +1,173 @@
+{
+  "captured_at": "2026-11-27T15:44:09.805477+00:00",
+  "target": "ios",
+  "session": "bba824c324aecaeeedc7c493",
+  "device": "iphone-simulator",
+  "flows": [
+    {
+      "id": "buttons",
+      "screen": "Adaptive Buttons",
+      "status": "passed",
+      "before": "screenshots/ios/functional/buttons/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/buttons/iphone-simulator-after.png"
+    },
+    {
+      "id": "clickable",
+      "screen": "Adaptive Clickable",
+      "status": "failed",
+      "before": "screenshots/ios/functional/clickable/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png",
+      "error": "ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')"
+    },
+    {
+      "id": "switch",
+      "screen": "Adaptive Switch",
+      "status": "passed",
+      "before": "screenshots/ios/functional/switch/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/switch/iphone-simulator-after.png"
+    },
+    {
+      "id": "slider",
+      "screen": "Adaptive Slider",
+      "status": "failed",
+      "before": "screenshots/ios/functional/slider/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png",
+      "error": "AssertionError('no slider label exposed')"
+    },
+    {
+      "id": "dropdown",
+      "screen": "Adaptive Drop Down",
+      "status": "passed",
+      "before": "screenshots/ios/functional/dropdown/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/dropdown/iphone-simulator-after.png"
+    },
+    {
+      "id": "alert-cancel",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/ios/functional/alert-cancel/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/alert-cancel/iphone-simulator-after.png"
+    },
+    {
+      "id": "alert-text-field",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/ios/functional/alert-text-field/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/alert-text-field/iphone-simulator-after.png"
+    },
+    {
+      "id": "alert-confirm",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/ios/functional/alert-confirm/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/alert-confirm/iphone-simulator-after.png"
+    },
+    {
+      "id": "date-bounds",
+      "screen": "Adaptive Date Picker",
+      "status": "failed",
+      "before": "screenshots/ios/functional/date-bounds/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/date-bounds/iphone-simulator-failed-after.png",
+      "error": "ClientError('HTTP 408 (condition_timeout)')"
+    },
+    {
+      "id": "scaffold-tab",
+      "screen": "Adaptive Scaffold",
+      "status": "passed",
+      "before": "screenshots/ios/functional/scaffold-tab/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/scaffold-tab/iphone-simulator-after.png"
+    },
+    {
+      "id": "action-sheet",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/ios/functional/action-sheet/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/action-sheet/iphone-simulator-after.png"
+    },
+    {
+      "id": "permissions-sms-rows",
+      "screen": "Permissions",
+      "status": "passed",
+      "before": "screenshots/ios/functional/permissions-sms-rows/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/permissions-sms-rows/iphone-simulator-after.png"
+    },
+    {
+      "id": "time-24h",
+      "screen": "Adaptive Time Picker",
+      "status": "passed",
+      "before": "screenshots/ios/functional/time-24h/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/time-24h/iphone-simulator-after.png"
+    },
+    {
+      "id": "permissions-bulk-deny",
+      "screen": "Permissions",
+      "status": "passed",
+      "before": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-after.png"
+    },
+    {
+      "id": "sheet-veto",
+      "screen": "Adaptive Bottom Sheet",
+      "status": "failed",
+      "before": "screenshots/ios/functional/sheet-veto/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png",
+      "error": "AssertionError(\"no node for 'Allow swipe to hide'\")"
+    },
+    {
+      "id": "date-display",
+      "screen": "Adaptive Date Picker",
+      "status": "failed",
+      "before": "screenshots/ios/functional/date-display/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/date-display/iphone-simulator-failed-after.png",
+      "error": "AssertionError(\"missing visible text 'Inline display: Input'\")"
+    },
+    {
+      "id": "webview-js",
+      "screen": "Web View",
+      "status": "failed",
+      "before": "screenshots/ios/functional/webview-js/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/webview-js/iphone-simulator-failed-after.png",
+      "error": "AssertionError(\"missing visible text 'JS: null'\")"
+    },
+    {
+      "id": "sheet",
+      "screen": "Adaptive Bottom Sheet",
+      "status": "passed",
+      "before": "screenshots/ios/functional/sheet/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/sheet/iphone-simulator-after.png"
+    },
+    {
+      "id": "topbar",
+      "screen": "Adaptive Top Bar",
+      "status": "passed",
+      "before": "screenshots/ios/functional/topbar/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/topbar/iphone-simulator-after.png"
+    },
+    {
+      "id": "toolbar",
+      "screen": "Adaptive Toolbar",
+      "status": "passed",
+      "before": "screenshots/ios/functional/toolbar/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/toolbar/iphone-simulator-after.png"
+    },
+    {
+      "id": "navbar",
+      "screen": "Adaptive Navigation Bar",
+      "status": "passed",
+      "before": "screenshots/ios/functional/navbar/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/navbar/iphone-simulator-after.png"
+    },
+    {
+      "id": "icons-category",
+      "screen": "Cupertino Icons",
+      "status": "passed",
+      "before": "screenshots/ios/functional/icons-category/iphone-simulator-before.png",
+      "after": "screenshots/ios/functional/icons-category/iphone-simulator-after.png"
+    }
+  ],
+  "summary": {
+    "passed": 16,
+    "failed": 6,
+    "blocked": 0
+  }
+}
