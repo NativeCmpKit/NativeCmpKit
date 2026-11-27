@@ -6,6 +6,7 @@ import android.os.Parcel
 import android.security.NetworkSecurityPolicy
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.json.JSONArray
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.atomic.AtomicReference
@@ -219,22 +220,26 @@ class AndroidWebViewContentPolicyAcceptanceTest {
         assertEquals(JavascriptResult.Value("\"\""), evaluate(state, "document.title"))
     }
     private fun assertMetadataMatchesRealDocument(state: WebViewState, navigator: WebViewNavigator) {
-        // A restored history item is not a rendered document. Compare public metadata
-        // to the actual provider DOM BEFORE the test asks for an explicit new load.
-        val title = evaluate(state, "document.title")
-        val url = evaluate(state, "document.location.href")
-        onMain {
-            val native = assertNotNull(state.webView)
-            state.pageTitle?.takeIf { it.isNotEmpty() }?.let {
-                val observation = when {
-                    title == JavascriptResult.Value("\"\"") -> "blank-dom"
-                    title is JavascriptResult.Value -> "different-dom"
-                    else -> "evaluation-failed"
+        // Read the DOM once. A page may commit while the provider returns the result,
+        // so compare only when the public metadata stays stable across that read.
+        await("Stable renderer and public metadata before explicit navigation") {
+            val before = onMain { state.pageTitle to state.lastLoadedUrl }
+            val dom = assertIs<JavascriptResult.Value>(evaluate(state, "[document.title, document.location.href]"),
+                "NATIVECMPKIT_ANDROID_RESTORE_TITLE:evaluation-failed")
+            val document = JSONArray(dom.json)
+            onMain {
+                if (before != (state.pageTitle to state.lastLoadedUrl)) return@onMain false
+                val native = assertNotNull(state.webView)
+                before.first?.takeIf { it.isNotEmpty() }?.let { title ->
+                    val actual = document.getString(0)
+                    val observation = if (actual.isEmpty()) "blank-dom" else "different-dom"
+                    assertEquals(title, actual, "NATIVECMPKIT_ANDROID_RESTORE_TITLE:$observation")
                 }
-                assertEquals(JavascriptResult.Value(quoteJavascript(it)), title, "NATIVECMPKIT_ANDROID_RESTORE_TITLE:$observation")
+                before.second?.takeIf { it.isNotEmpty() }?.let { url -> assertEquals(url, document.getString(1)) }
+                assertEquals(native.canGoBack(), navigator.canGoBack)
+                assertEquals(native.canGoForward(), navigator.canGoForward)
+                true
             }
-            state.lastLoadedUrl?.takeIf { it.isNotEmpty() }?.let { assertEquals(JavascriptResult.Value(quoteJavascript(it)), url) }
-            assertEquals(native.canGoBack(), navigator.canGoBack); assertEquals(native.canGoForward(), navigator.canGoForward)
         }
     }
     private fun awaitResources(state: WebViewState, server: OwnedWebViewContentPolicyHttpFixture, stage: String) {
