@@ -1,7 +1,7 @@
 """Finite caller/source controls and one notice fixture, never native/legal proof.
 
-The inventory classifies every currently executable Python ArtifactVerifier call
-in tests/ and scripts/. It must not silently admit a new unreviewed native owner.
+The inventory classifies tracked Python ArtifactVerifier calls in tests/ and
+scripts/. New callers enter this inventory when their files are staged.
 Historical documentation/evidence copies are not current executable callers.
 """
 from __future__ import annotations
@@ -9,6 +9,7 @@ from __future__ import annotations
 import ast
 import json
 from pathlib import Path
+import subprocess
 import unittest
 from unittest import mock
 
@@ -43,6 +44,7 @@ CALLER_SCOPES = {
     ("tests/consumer/test_native_package_provenance.py", "NativePackageProvenanceTest.verifier", 1): "native",
     ("tests/consumer/test_verify_artifacts.py", "CupertinoFontResourceTest.test_owning_maven_verifier_rejects_empty_android_and_resource_archives", 1): "nonnative",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureBase.run_gate", 1): "nonnative",
+    ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_packaged_legacy_class_path_and_binary_reference_are_refused", 1): "nonnative",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_candidate_dynamic_or_snapshot_versions_rejected", 1): "invalid",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_unknown_target_or_module_rejected", 1): "invalid",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_unknown_target_or_module_rejected", 2): "invalid",
@@ -56,41 +58,44 @@ CALLER_SCOPES = {
 
 def constructor_sites() -> dict[tuple[str, str, int], ast.Call]:
     result = {}
-    for directory in ("tests", "scripts"):
-        for source in sorted((ROOT / directory).rglob("*.py")):
-            if any(part in {"build", "__pycache__", ".gradle"} for part in source.relative_to(ROOT).parts):
-                continue
-            tree = ast.parse(source.read_text())
-            aliases = {"ArtifactVerifier"}
-            for node in ast.walk(tree):
-                if isinstance(node, ast.ImportFrom) and node.module == "verify_artifacts":
-                    aliases.update(item.asname or item.name for item in node.names if item.name == "ArtifactVerifier")
+    paths = subprocess.check_output([
+        "git", "ls-files", "-z", "--cached", "--",
+        ":(glob)tests/**/*.py", ":(glob)scripts/**/*.py", ":(exclude)scripts/ci/test_javafx_ordinary_success_trace.py",
+    ], cwd=ROOT).decode().split("\0")
+    for relative in sorted(set(filter(None, paths))):
+        if {"build", "__pycache__", ".gradle"}.intersection(Path(relative).parts):
+            continue
+        tree = ast.parse((ROOT / relative).read_text())
+        aliases = {"ArtifactVerifier"}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom) and node.module == "verify_artifacts":
+                aliases.update(item.asname or item.name for item in node.names if item.name == "ArtifactVerifier")
 
-            class Visitor(ast.NodeVisitor):
-                def __init__(self):
-                    self.stack = []
-                    self.ordinals = {}
+        class Visitor(ast.NodeVisitor):
+            def __init__(self):
+                self.stack = []
+                self.ordinals = {}
 
-                def declaration(self, node):
-                    self.stack.append(node.name)
-                    self.generic_visit(node)
-                    self.stack.pop()
+            def declaration(self, node):
+                self.stack.append(node.name)
+                self.generic_visit(node)
+                self.stack.pop()
 
-                visit_ClassDef = declaration
-                visit_FunctionDef = declaration
-                visit_AsyncFunctionDef = declaration
+            visit_ClassDef = declaration
+            visit_FunctionDef = declaration
+            visit_AsyncFunctionDef = declaration
 
-                def visit_Call(self, node):
-                    literal = node.func.attr if isinstance(node.func, ast.Attribute) else (
-                        node.func.id if isinstance(node.func, ast.Name) else "")
-                    if literal in aliases:
-                        context = ".".join(self.stack)
-                        ordinal = self.ordinals.get(context, 0) + 1
-                        self.ordinals[context] = ordinal
-                        result[(source.relative_to(ROOT).as_posix(), context, ordinal)] = node
-                    self.generic_visit(node)
+            def visit_Call(self, node):
+                literal = node.func.attr if isinstance(node.func, ast.Attribute) else (
+                    node.func.id if isinstance(node.func, ast.Name) else "")
+                if literal in aliases:
+                    context = ".".join(self.stack)
+                    ordinal = self.ordinals.get(context, 0) + 1
+                    self.ordinals[context] = ordinal
+                    result[(relative, context, ordinal)] = node
+                self.generic_visit(node)
 
-            Visitor().visit(tree)
+        Visitor().visit(tree)
     return result
 
 
