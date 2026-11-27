@@ -186,8 +186,9 @@ jobs:
           UI_TEST_ANDROID_IME: '1'
           PYTHONUNBUFFERED: '1'
         run: |
-          echo "UI_TEST_APP_INSTALLS={\"$ANDROID_APP_ID\":\"$SHOWCASE_APK\"}" >> "$GITHUB_ENV"
+          UI_TEST_APP_INSTALLS="{\"$ANDROID_APP_ID\":\"$SHOWCASE_APK\"}"
           export UI_TEST_APP_INSTALLS
+          echo "UI_TEST_APP_INSTALLS=$UI_TEST_APP_INSTALLS" >> "$GITHUB_ENV"
           export UI_TEST_LAUNCH
           UI_TEST_LAUNCH=$(cat <<'EOF'
           adb -s emulator-5554 install -r "$SHOWCASE_APK"
@@ -396,8 +397,9 @@ jobs:
           UI_TEST_IOS_AXE: ${{ env.AXE_READY == '1' && env.AXE_BINARY || '' }}
           PYTHONUNBUFFERED: '1'
         run: |
-          echo "UI_TEST_APP_INSTALLS={\"$IOS_BUNDLE_ID\":\"$SHOWCASE_IOS_APP\"}" >> "$GITHUB_ENV"
+          UI_TEST_APP_INSTALLS="{\"$IOS_BUNDLE_ID\":\"$SHOWCASE_IOS_APP\"}"
           export UI_TEST_APP_INSTALLS
+          echo "UI_TEST_APP_INSTALLS=$UI_TEST_APP_INSTALLS" >> "$GITHUB_ENV"
           export UI_TEST_LAUNCH
           UI_TEST_LAUNCH=$(cat <<'EOF'
           xcrun simctl install "$UI_DEVICE" "$SHOWCASE_IOS_APP"
