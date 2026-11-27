@@ -44,7 +44,9 @@ fun SliderScreen(
 
             var brightness by remember { mutableFloatStateOf(0.5f) }
             var volume by remember { mutableFloatStateOf(0.75f) }
-            var progress by remember { mutableFloatStateOf(0f) }
+            var wide by remember { mutableFloatStateOf(40f) }
+            var stepped by remember { mutableFloatStateOf(2f) }
+            var locked by remember { mutableFloatStateOf(0.4f) }
 
             SliderSettingItem(
                 title = "Brightness",
@@ -57,9 +59,26 @@ fun SliderScreen(
                 onValueChange = { volume = it },
             )
             SliderSettingItem(
-                title = "Progress",
-                value = progress,
-                onValueChange = { progress = it },
+                title = "Custom range 0..100",
+                value = wide,
+                onValueChange = { wide = it },
+                valueRange = 0f..100f,
+                readout = { "${it.toInt()} / 100" },
+            )
+            SliderSettingItem(
+                title = "Discrete 0..5 (4 steps)",
+                value = stepped,
+                onValueChange = { stepped = it },
+                valueRange = 0f..5f,
+                steps = 4,
+                readout = { "${it.toInt()} / 5" },
+            )
+            SliderSettingItem(
+                title = "Disabled",
+                value = locked,
+                onValueChange = {},
+                enabled = false,
+                readout = { "${(it * 100).toInt()}%" },
             )
         }
     }
@@ -71,6 +90,10 @@ private fun SliderSettingItem(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    valueRange: ClosedFloatingPointRange<Float> = 0f..1f,
+    steps: Int = 0,
+    readout: (Float) -> String = { "${(it * 100).toInt()}%" },
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -85,7 +108,7 @@ private fun SliderSettingItem(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Text(
-                text = "$title — ${(value * 100).toInt()}%",
+                text = "$title — ${readout(value)}",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -94,6 +117,9 @@ private fun SliderSettingItem(
                 value = value,
                 onValueChange = onValueChange,
                 modifier = Modifier.fillMaxWidth(),
+                enabled = enabled,
+                valueRange = valueRange,
+                steps = steps,
             )
         }
     }

@@ -19,8 +19,8 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | UI-SLIDER-003 | AdaptiveSlider | disabled and custom range | supported | supported | Slider | not-run |
 | UI-PROGRESS-001 | AdaptiveCircularProgressIndicator | indeterminate sizes | supported | supported | ProgressBar | not-run |
 | UI-PROGRESS-002 | CupertinoActivityIndicator | spinner | supported | supported | ProgressBar | not-run |
-| UI-PROGRESS-003 | AdaptiveCircularProgressIndicator | determinate | unsupported | unsupported | ProgressBar | not-applicable |
-| UI-FAB-001 | AdaptiveExpandableFAB | expanded/collapsed | unsupported | unsupported | Button | not-applicable |
+| UI-PROGRESS-003 | AdaptiveCircularProgressIndicator | determinate | unsupported | unsupported | Limitations | not-applicable |
+| UI-FAB-001 | AdaptiveExpandableFAB | expanded/collapsed | unsupported | unsupported | Limitations | not-applicable |
 | UI-DATE-001 | AdaptiveDatePicker | inline selection and readout | supported | supported | DatePicker | not-run |
 | UI-DATE-002 | AdaptiveCompactDatePicker | open, confirm, cancel | supported | supported | DatePicker | not-run |
 | UI-DATE-003 | AdaptiveDateRangePicker | start and end transition | supported | supported | DatePicker | not-run |
@@ -39,7 +39,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | UI-BAR-003 | AdaptiveNavigationBar | items and selected index | supported | supported | NavigationBar | not-run |
 | UI-BAR-004 | AdaptiveToolbar | collapsed and expanded | supported | supported | Toolbar | not-run |
 | UI-ICON-001 | CupertinoIcon catalog | search and category | supported | supported | CupertinoIconsCatalog | not-run |
-| UI-ICON-002 | SFSymbol and UIKitImage | system name, vector, bitmap | unsupported | supported | TopBarDemo | not-applicable |
+| UI-ICON-002 | SFSymbol and UIKitImage | system name and vector | unsupported | supported | TopBarDemo | not-applicable |
 | UI-ICON-003 | CupertinoIcon | size and content description | supported | supported | CupertinoIconsCatalog | not-run |
 | IO-CTX-001 | LocalPlatformContext | host context smoke | supported | supported | FilePicker | not-run |
 | IO-FILE-001 | KmpFile | read, stream, name and path | supported | supported | FilePicker | not-run |
@@ -57,7 +57,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | PERM-PIM-001 | contacts and calendar leaves | read and write | supported | supported | Permission | not-run |
 | PERM-BT-001 | Bluetooth and Wi-Fi leaves | scan/connect and nearby | supported | supported | Permission | not-run |
 | PERM-CORE-001 | storage, call and SMS leaves | legacy routes | supported | supported | Permission | not-run |
-| PERM-STUB-001 | desktop and web permission stubs | unavailable | unsupported | unsupported | Permission | not-applicable |
+| PERM-STUB-001 | desktop and web permission stubs | unavailable | unsupported | unsupported | Limitations | not-applicable |
 | SHARE-001 | ShareContent.Text | native share sheet | supported | supported | Share | not-run |
 | SHARE-002 | ShareContent.Url | native share sheet | supported | supported | Share | not-run |
 | SHARE-003 | ShareContent.File and Files | single and mixed files | supported | supported | Share | not-run |
@@ -67,9 +67,9 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 | WEB-004 | WebViewState.evaluateJavascript and settings | JavaScript on | supported | supported | WebView | not-run |
 | WEB-005 | CookieManager | set, get, remove | supported | supported | WebView | not-run |
 | NAV-001 | AdaptiveNavHost | push, back, restore | supported | supported | Home | not-run |
-| NAV-002 | NavArgument | declared arguments | unsupported | unsupported | Home | not-applicable |
+| NAV-002 | NavArgument | declared arguments | unsupported | unsupported | Limitations | not-applicable |
 | GEO-001 | LatLng | distance and bearing maths | supported | supported | Home | not-run |
-| GEO-002 | LocationTracker | start, stop, updates | unsupported | unsupported | Home | not-applicable |
-| EXCL-MAPS-001 | maps | excluded build-only module | unsupported | unsupported | Home | not-applicable |
-| EXCL-MEDIA-001 | media | excluded module | unsupported | unsupported | Home | not-applicable |
-| EXCL-NOTIF-001 | notification scheduler | excluded module | unsupported | unsupported | Home | not-applicable |
+| GEO-002 | LocationTracker | start, stop, updates | unsupported | unsupported | Limitations | not-applicable |
+| EXCL-MAPS-001 | maps | excluded build-only module | unsupported | unsupported | Limitations | not-applicable |
+| EXCL-MEDIA-001 | media | excluded module | unsupported | unsupported | Limitations | not-applicable |
+| EXCL-NOTIF-001 | notification scheduler | excluded module | unsupported | unsupported | Limitations | not-applicable |

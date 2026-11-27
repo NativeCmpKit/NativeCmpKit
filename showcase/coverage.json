@@ -715,7 +715,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "ProgressBar",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Attempt to construct a determinate indicator from public API"
@@ -725,8 +725,8 @@
       ],
       "flowId": "android-phone-adaptivecircularprogressindicator-determinate",
       "screenshot": {
-        "android": "screenshots/android/ui-progress/unsupported-determinate/api35-phone.png",
-        "ios": "screenshots/ios/ui-progress/unsupported-determinate/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -771,7 +771,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Button",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Attempt to call AdaptiveExpandableFAB from the showcase module"
@@ -781,8 +781,8 @@
       ],
       "flowId": "android-phone-adaptiveexpandablefab-expanded-collapsed",
       "screenshot": {
-        "android": "screenshots/android/ui-fab/unsupported-internal/api35-phone.png",
-        "ios": "screenshots/ios/ui-fab/unsupported-internal/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -1856,7 +1856,7 @@
       "id": "UI-ICON-002",
       "module": "kira-ui",
       "component": "SFSymbol and UIKitImage",
-      "variant": "system name, vector, bitmap",
+      "variant": "system name and vector",
       "support": {
         "android": "unsupported",
         "ios": "supported",
@@ -1868,16 +1868,17 @@
       "setup": [],
       "steps": [
         "Open the Top Bar screen on iOS",
-        "Inspect the SF Symbol bar items"
+        "Inspect the SF Symbol and vector bar items"
       ],
       "expected": [
-        "System-name images render",
-        "The icon font fallback is not presented as an SF Symbol"
+        "System-name and rasterized vector images render",
+        "The icon font fallback is not presented as an SF Symbol",
+        "The UIKitImage.Bitmap variant is not exercised by this screen"
       ],
-      "flowId": "android-phone-sfsymbol-and-uikitimage-system-name-vector-bitmap",
+      "flowId": "android-phone-sfsymbol-and-uikitimage-system-name-and-vector",
       "screenshot": {
-        "android": "screenshots/android/sfsymbol-and-uikitimage/system-name-vector-bitmap/api35-phone.png",
-        "ios": "screenshots/ios/sfsymbol-and-uikitimage/system-name-vector-bitmap/iphone-simulator.png"
+        "android": "screenshots/android/sfsymbol-and-uikitimage/system-name-and-vector/api35-phone.png",
+        "ios": "screenshots/ios/sfsymbol-and-uikitimage/system-name-and-vector/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -2891,7 +2892,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Permission",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Run the showcase on desktop or web",
@@ -2904,8 +2905,8 @@
       ],
       "flowId": "android-phone-desktop-and-web-permission-stubs-unavailable",
       "screenshot": {
-        "android": "screenshots/android/desktop-and-web-permission-stubs/unavailable/api35-phone.png",
-        "ios": "screenshots/ios/desktop-and-web-permission-stubs/unavailable/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -3467,7 +3468,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Attempt to pass a value argument through navigate()"
@@ -3478,8 +3479,8 @@
       ],
       "flowId": "android-phone-navargument-declared-arguments",
       "screenshot": {
-        "android": "screenshots/android/nav/unsupported-arguments/api35-phone.png",
-        "ios": "screenshots/ios/nav/unsupported-arguments/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -3580,7 +3581,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Start the tracker",
@@ -3593,8 +3594,8 @@
       ],
       "flowId": "android-phone-locationtracker-start-stop-updates",
       "screenshot": {
-        "android": "screenshots/android/geo/unsupported-tracker/api35-phone.png",
-        "ios": "screenshots/ios/geo/unsupported-tracker/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -3639,7 +3640,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Inspect the module"
@@ -3649,8 +3650,8 @@
       ],
       "flowId": "android-phone-maps-excluded-build-only-module",
       "screenshot": {
-        "android": "screenshots/android/maps/excluded-build-only-module/api35-phone.png",
-        "ios": "screenshots/ios/maps/excluded-build-only-module/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -3693,7 +3694,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Inspect the module"
@@ -3703,8 +3704,8 @@
       ],
       "flowId": "android-phone-media-excluded-module",
       "screenshot": {
-        "android": "screenshots/android/media/excluded-module/api35-phone.png",
-        "ios": "screenshots/ios/media/excluded-module/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -3747,7 +3748,7 @@
         "web": "unsupported"
       },
       "windowClass": "phone",
-      "route": "Home",
+      "route": "Limitations",
       "setup": [],
       "steps": [
         "Inspect the module"
@@ -3757,8 +3758,8 @@
       ],
       "flowId": "android-phone-notification-scheduler-excluded-module",
       "screenshot": {
-        "android": "screenshots/android/notification-scheduler/excluded-module/api35-phone.png",
-        "ios": "screenshots/ios/notification-scheduler/excluded-module/iphone-simulator.png"
+        "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+        "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
       },
       "execution": {
         "android": {

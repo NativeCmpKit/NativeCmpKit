@@ -18,15 +18,23 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -38,10 +46,19 @@ import io.github.apdelrahman1911.kira.sample.navigation.ScreenCategory
 @Composable
 fun HomeScreen(
     navigate: (String) -> Unit,
+    onReset: () -> Unit = {},
 ) {
-    val screensByCategory = Screen.entries
+    var query by remember { mutableStateOf("") }
+
+    val visibleScreens = Screen.entries
         .filter { it != Screen.Home && it != Screen.Showcase }
-        .groupBy { it.category }
+        .filter { screen ->
+            query.isBlank() ||
+                screen.title.contains(query, ignoreCase = true) ||
+                screen.description.contains(query, ignoreCase = true) ||
+                screen.name.contains(query, ignoreCase = true)
+        }
+    val screensByCategory = visibleScreens.groupBy { it.category }
 
     val colorScheme = MaterialTheme.colorScheme
 
@@ -52,6 +69,7 @@ fun HomeScreen(
             .background(colorScheme.background)
             .windowInsetsPadding(WindowInsets.systemBars)
             .windowInsetsPadding(WindowInsets.ime)
+            .testTag("screen.home")
     ) {
         Text(
             text = "Kira",
@@ -78,8 +96,40 @@ fun HomeScreen(
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(bottom = 12.dp)
         )
+
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = { Text("Search components") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .testTag("home.search")
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "${visibleScreens.size} component screens",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(
+                onClick = onReset,
+                modifier = Modifier.testTag("home.reset"),
+            ) {
+                Text("Reset state")
+            }
+        }
 
         LazyColumn(
             modifier = Modifier
@@ -88,6 +138,7 @@ fun HomeScreen(
             item(key = "showcase") {
                 ShowcaseBanner(
                     onClick = { navigate(Screen.Showcase.name) },
+                    modifier = Modifier.testTag("home.banner.showcase"),
                 )
             }
 
@@ -107,11 +158,23 @@ fun HomeScreen(
                         title = screen.title,
                         description = screen.description,
                         icon = screen.icon,
+                        modifier = Modifier.testTag("home.entry.${screen.name}"),
                     )
                 }
 
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+
+            if (visibleScreens.isEmpty()) {
+                item(key = "empty") {
+                    Text(
+                        text = "No components match \"$query\".",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(24.dp),
+                    )
                 }
             }
         }

@@ -34,6 +34,8 @@ import io.github.apdelrahman1911.kira.sample.components.SampleScreenScaffold
 import io.github.apdelrahman1911.kira.sample.isLiquidGlassAvailable
 import io.github.apdelrahman1911.kira.ui.button.AdaptiveButton
 import io.github.apdelrahman1911.kira.ui.button.AdaptiveIconButton
+import io.github.apdelrahman1911.kira.ui.button.CupertinoButton
+import io.github.apdelrahman1911.kira.ui.button.CupertinoButtonDefaults
 import io.github.apdelrahman1911.kira.ui.button.LiquidGlassButtonColors
 
 @Composable
@@ -192,6 +194,34 @@ fun ButtonScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Share")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            SectionCard(title = "Cupertino Buttons (all platforms)") {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    CupertinoButton(onClick = {}) {
+                        Text("Filled")
+                    }
+                    CupertinoButton(
+                        onClick = {},
+                        colors = CupertinoButtonDefaults.borderedButtonColors(),
+                    ) {
+                        Text("Bordered")
+                    }
+                    CupertinoButton(
+                        onClick = {},
+                        colors = CupertinoButtonDefaults.plainButtonColors(),
+                    ) {
+                        Text("Plain")
+                    }
+                    CupertinoButton(
+                        onClick = {},
+                        enabled = false,
+                    ) {
+                        Text("Disabled")
                     }
                 }
             }

@@ -15,6 +15,7 @@ import io.github.apdelrahman1911.kira.sample.screens.DatePickerScreen
 import io.github.apdelrahman1911.kira.sample.screens.FilePickerScreen
 import io.github.apdelrahman1911.kira.sample.screens.HomeScreen
 import io.github.apdelrahman1911.kira.sample.screens.ImagePickerScreen
+import io.github.apdelrahman1911.kira.sample.screens.LimitationsScreen
 import io.github.apdelrahman1911.kira.sample.screens.FileSaverScreen
 import io.github.apdelrahman1911.kira.sample.screens.ShowcaseScreen
 //import io.github.apdelrahman1911.kira.sample.screens.MapScreen
@@ -32,7 +33,8 @@ import io.github.apdelrahman1911.kira.sample.screens.WebViewScreen
 
 @Composable
 fun AppNavGraph(
-    navController: AdaptiveNavHostController
+    navController: AdaptiveNavHostController,
+    onReset: () -> Unit = {},
 ) {
     AdaptiveNavHost(
         navController = navController,
@@ -42,7 +44,8 @@ fun AppNavGraph(
             HomeScreen(
                 navigate = {
                     navController.navigate(it)
-                }
+                },
+                onReset = onReset,
             )
         }
         composable(Screen.Showcase.name) {
@@ -215,6 +218,13 @@ fun AppNavGraph(
 //        }
         composable(Screen.Toolbar.name) {
             ToolbarScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(Screen.Limitations.name) {
+            LimitationsScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

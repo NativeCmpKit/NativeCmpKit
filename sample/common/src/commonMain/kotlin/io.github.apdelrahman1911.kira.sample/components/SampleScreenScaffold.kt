@@ -10,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import io.github.apdelrahman1911.kira.ui.ExperimentalKiraUiApi
 import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveScaffold
 import io.github.apdelrahman1911.kira.ui.navigation.AdaptiveTopBar
@@ -25,8 +26,9 @@ fun SampleScreenScaffold(
     iosTrailingItems: List<UIKitUIBarButtonItem> = emptyList(),
     content: @Composable (PaddingValues) -> Unit,
 ) {
+    val screenTag = "screen." + title.lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
     AdaptiveScaffold(
-        modifier = modifier,
+        modifier = modifier.testTag(screenTag),
         topBar = {
             AdaptiveTopBar(
                 title = { Text(title) },

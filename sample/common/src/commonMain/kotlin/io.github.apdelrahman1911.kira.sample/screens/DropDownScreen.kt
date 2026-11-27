@@ -163,6 +163,11 @@ fun DropDownScreen(
                                 isDestructive = true,
                                 onClick = { selectedAction = "Deleted!" },
                             ),
+                            AdaptiveDropDownItem(
+                                title = "Archive (disabled)",
+                                isDisabled = true,
+                                onClick = { selectedAction = "Archived!" },
+                            ),
                         )
 
                         AdaptiveDropDown(

@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.kira.sample.components.SampleScreenScaffold
 import io.github.apdelrahman1911.kira.ui.toggle.AdaptiveSwitch
+import io.github.apdelrahman1911.kira.ui.toggle.CupertinoSwitch
 
 @Composable
 fun SwitchScreen(
@@ -66,6 +67,55 @@ fun SwitchScreen(
                 checked = darkModeEnabled,
                 onCheckedChange = { darkModeEnabled = it },
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            var parityEnabled by remember { mutableStateOf(true) }
+
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                ),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Cupertino Switch (parity control)",
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Enabled",
+                            modifier = Modifier.weight(1f),
+                        )
+                        CupertinoSwitch(
+                            checked = parityEnabled,
+                            onCheckedChange = { parityEnabled = it },
+                        )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Disabled",
+                            modifier = Modifier.weight(1f),
+                        )
+                        CupertinoSwitch(
+                            checked = true,
+                            onCheckedChange = null,
+                            enabled = false,
+                        )
+                    }
+                }
+            }
         }
     }
 }

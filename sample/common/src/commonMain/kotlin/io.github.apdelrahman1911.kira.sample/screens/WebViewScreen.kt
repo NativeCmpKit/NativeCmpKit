@@ -24,7 +24,7 @@ import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
 import io.github.apdelrahman1911.kira.ui.web.LoadingState
 import io.github.apdelrahman1911.kira.ui.web.WebView
 import io.github.apdelrahman1911.kira.ui.web.rememberWebViewNavigator
-import io.github.apdelrahman1911.kira.ui.web.rememberWebViewState
+import io.github.apdelrahman1911.kira.ui.web.rememberWebViewStateWithHTMLData
 
 private val INITIAL_URL =
     if (currentPlatform.isWeb)
@@ -89,7 +89,7 @@ private val DUMMY_HTML = """
 fun WebViewScreen(
     navigateBack: () -> Unit
 ) {
-    val state = rememberWebViewState(url = INITIAL_URL)
+    val state = rememberWebViewStateWithHTMLData(data = DUMMY_HTML)
     val navigator = rememberWebViewNavigator()
 
     val iosItems by remember(navigator.canGoBack, navigator.canGoForward) {
@@ -151,15 +151,18 @@ fun WebViewScreen(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                        state.lastLoadedUrl?.let { url ->
-                            Text(
-                                text = url,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                                style = MaterialTheme.typography.bodySmall,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
+                        val loading = when (state.loadingState) {
+                            is LoadingState.Initializing -> "Initializing"
+                            is LoadingState.Loading -> "Loading"
+                            is LoadingState.Finished -> "Finished"
                         }
+                        Text(
+                            text = "$loading · errors ${state.errorsForCurrentRequest.size} · back ${navigator.canGoBack}",
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                     }
                 }
             )

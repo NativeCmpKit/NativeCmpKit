@@ -264,10 +264,12 @@ ROWS = [
          "Inspect a representative grid"],
         ["The grid filters to matching names", "The count updates",
          "Representative glyphs render without tofu"]),
-    row("UI-ICON-002", "kira-ui", "SFSymbol and UIKitImage", "system name, vector, bitmap",
+    row("UI-ICON-002", "kira-ui", "SFSymbol and UIKitImage", "system name and vector",
         "ios", "TopBarDemo",
-        ["Open the Top Bar screen on iOS", "Inspect the SF Symbol bar items"],
-        ["System-name images render", "The icon font fallback is not presented as an SF Symbol"]),
+        ["Open the Top Bar screen on iOS", "Inspect the SF Symbol and vector bar items"],
+        ["System-name and rasterized vector images render",
+         "The icon font fallback is not presented as an SF Symbol",
+         "The UIKitImage.Bitmap variant is not exercised by this screen"]),
     row("UI-ICON-003", "kira-cupertino-icons", "CupertinoIcon", "size and content description",
         "all", "CupertinoIconsCatalog",
         ["Open the Cupertino Icons screen", "Inspect 16/24/48dp samples"],
@@ -435,6 +437,13 @@ ROWS = [
 
 
 def main() -> None:
+    for item in ROWS:
+        if all(value == "unsupported" for value in item["support"].values()):
+            item["route"] = "Limitations"
+            item["screenshot"] = {
+                "android": "screenshots/android/limitations/known-limitations/api35-phone.png",
+                "ios": "screenshots/ios/limitations/known-limitations/iphone-simulator.png",
+            }
     document = {
         "schemaVersion": 1,
         "generatedBy": "showcase/generate_coverage.py",

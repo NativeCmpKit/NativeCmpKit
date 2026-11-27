@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ import io.github.apdelrahman1911.kira.sample.currentPlatform
 import io.github.apdelrahman1911.kira.ui.ExperimentalKiraUiApi
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonItem
 import io.github.apdelrahman1911.kira.ui.toolbar.AdaptiveToolbar
+import io.github.apdelrahman1911.kira.ui.toggle.AdaptiveSwitch
 import io.github.apdelrahman1911.kira.ui.uikit.UIKitImage
 import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
 
@@ -52,6 +54,7 @@ fun ToolbarScreen(
 ) {
     var lastAction by remember { mutableStateOf("Tap a toolbar button") }
     var selectedPattern by remember { mutableStateOf(SpacingPattern.Default) }
+    var expanded by remember { mutableStateOf(true) }
 
     val backItem = UIKitUIBarButtonItem.image(
         image = UIKitImage.SystemName(SFSymbol.chevronLeft),
@@ -161,10 +164,27 @@ fun ToolbarScreen(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = "Material expanded",
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    AdaptiveSwitch(
+                        checked = expanded,
+                        onCheckedChange = { expanded = it },
+                    )
+                }
             }
 
             AdaptiveToolbar(
-                expanded = true,
+                expanded = expanded,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 16.dp),

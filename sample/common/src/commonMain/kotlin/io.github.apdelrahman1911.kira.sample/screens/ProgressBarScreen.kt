@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.kira.sample.components.SampleScreenScaffold
+import io.github.apdelrahman1911.kira.ui.cupertino.CupertinoActivityIndicator
 import io.github.apdelrahman1911.kira.ui.progress.AdaptiveCircularProgressIndicator
 
 @Composable
@@ -79,6 +80,22 @@ fun ProgressBarScreen(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Text(
+                text = "Cupertino Activity Indicator",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            CupertinoActivityIndicator()
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Shared eight-spoke spinner",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

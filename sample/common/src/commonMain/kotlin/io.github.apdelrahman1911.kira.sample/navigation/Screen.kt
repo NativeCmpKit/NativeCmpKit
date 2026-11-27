@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Navigation
 import androidx.compose.material.icons.outlined.Pages
@@ -192,5 +193,11 @@ enum class Screen(
         description = "Floating toolbar with Liquid Glass on iOS and Material3 Expressive HorizontalFloatingToolbar",
         icon = Icons.Outlined.Menu,
         category = ScreenCategory.UIComponents,
+    ),
+    Limitations(
+        title = "Known Limitations",
+        description = "Internal, ignored and unsupported APIs at this revision",
+        icon = Icons.Outlined.Info,
+        category = ScreenCategory.PlatformAPIs,
     ),
 }
