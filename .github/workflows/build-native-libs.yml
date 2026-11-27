@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-android, identity-linux-browser, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-android, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -295,6 +295,13 @@ jobs:
           xvfb-run -a ./gradlew jsBrowserTest wasmJsBrowserTest \
             :sample:web-js:compileKotlinJs :sample:web-wasm:compileKotlinWasmJs \
             --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+      - name: Recheck browser camera baseline parser
+        if: inputs.profile == 'identity-linux-browser-camera'
+        run: |
+          export CHROME_BIN="$(command -v google-chrome)"
+          xvfb-run -a ./gradlew :nativecmpkit-camera-picker:jsBrowserTest \
+            --tests io.github.apdelrahman1911.nativecmpkit.camerapicker.SettingsHomeTaskBaselineTest \
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
       - name: Collect checked native dependency notices
         if: inputs.profile == 'identity-linux-package'
         shell: bash

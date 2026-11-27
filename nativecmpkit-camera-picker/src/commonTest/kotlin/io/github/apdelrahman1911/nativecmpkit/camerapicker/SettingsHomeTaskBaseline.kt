@@ -21,8 +21,8 @@ internal object SettingsHomeTaskBaselineParser {
     private const val MAX_ROW_LENGTH = 2048
     private val decimal = "(?:0|[1-9][0-9]{0,18})"
     private val positiveInt = "([1-9][0-9]{0,9})"
-    private val header = Regex("""  \* Recent #(0|[1-9][0-9]{0,9}): (Task\{[a-f0-9]{1,8} #$positiveInt type=home A=(1000:com\.android\.settings(?:\.FallbackHome)?)})""")
-    private val intent = Regex("""    intent=\{act=android\.intent\.action\.MAIN cat=\[android\.intent\.category\.HOME] flg=0x[1-9a-f][0-9a-f]{0,7} cmp=com\.android\.settings/\.FallbackHome}""")
+    private val header = Regex("""  \* Recent #(0|[1-9][0-9]{0,9}): (Task\{[a-f0-9]{1,8} #$positiveInt type=home A=(1000:com\.android\.settings(?:\.FallbackHome)?)\})""")
+    private val intent = Regex("""    intent=\{act=android\.intent\.action\.MAIN cat=\[android\.intent\.category\.HOME\] flg=0x[1-9a-f][0-9a-f]{0,7} cmp=com\.android\.settings/\.FallbackHome\}""")
     private val policy = Regex("    autoRemoveRecents=(true|false) isPersistable=(true|false) activityType=2")
     private val rootPolicy = Regex("    rootWasReset=(true|false) mNeverRelinquishIdentity=(true|false) mReuseTask=(true|false) " +
         "mLockTaskAuth=LOCK_TASK_AUTH_(?:DONT_LOCK|PINNABLE|LAUNCHABLE|ALLOWLISTED|LAUNCHABLE_PRIV)")
