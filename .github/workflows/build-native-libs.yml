@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-main-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -238,10 +238,12 @@ jobs:
           python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-webview \
             --focus "$ANDROID_WEBVIEW_FOCUS" --output build/ci-verification/identity-android-webview-device > /dev/null
       - name: Admit the owned Camera and remote IO device scopes
-        if: inputs.profile == 'identity-linux-android-ownership'
+        if: inputs.profile == 'identity-linux-android-ownership' || inputs.profile == 'identity-linux-android-remote-io'
         run: |
-          python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-camera-picker \
-            --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera > /dev/null
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
+            python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-camera-picker \
+              --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera > /dev/null
+          fi
           python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-io \
             --focus android-io-controlled-remote --output build/ci-verification/identity-android-remote-io > /dev/null
       - name: Set up pinned Rust
@@ -256,7 +258,7 @@ jobs:
           test -x "$sdkmanager"
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
           packages=('cmdline-tools;23.0' 'platforms;android-37.0')
-          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$IDENTITY_PROFILE" == identity-linux-android-ownership || "$IDENTITY_PROFILE" == identity-linux-android-remote-io ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
@@ -276,19 +278,27 @@ jobs:
           python3 scripts/development/validate_resolutions.py --check
           python3 scripts/development/generate_icon_catalogues.py --check
       - name: Verify NativeCmpKit on owned Android emulators
-        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore' || inputs.profile == 'identity-linux-android-ownership'
+        if: inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore' || inputs.profile == 'identity-linux-android-ownership' || inputs.profile == 'identity-linux-android-remote-io'
         run: |
           platform_tools="${ANDROID_HOME:?}/platform-tools"
           test -x "$platform_tools/adb"
           export PATH="$platform_tools:$PATH"
-          test -c /dev/kvm
           command -v setfacl > /dev/null || sudo apt-get install -y acl
-          sudo setfacl -m "u:$(id -un):rw" /dev/kvm
-          test -r /dev/kvm && test -w /dev/kvm
-          if [[ "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
+          prepare_kvm() {
+            test -c /dev/kvm || return
+            if [[ ! -r /dev/kvm || ! -w /dev/kvm ]]; then
+              sudo setfacl -m "u:$(id -un):rw" /dev/kvm || return
+            fi
+            test -r /dev/kvm && test -w /dev/kvm
+          }
+          prepare_kvm
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-ownership || "$IDENTITY_PROFILE" == identity-linux-android-remote-io ]]; then
             result=0
-            python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-camera-picker \
-              --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera || result=1
+            if [[ "$IDENTITY_PROFILE" == identity-linux-android-ownership ]]; then
+              python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-camera-picker \
+                --focus android-camera-callback-substitution --output build/ci-verification/identity-android-camera || result=1
+              prepare_kvm
+            fi
             python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-io \
               --focus android-io-controlled-remote --output build/ci-verification/identity-android-remote-io || result=1
             exit "$result"
@@ -771,7 +781,7 @@ jobs:
         if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore') }}
         run: python3 scripts/ci/summarize_identity_uikit.py --android-webview
       - name: Retain bounded Android ownership assembly observations
-        if: ${{ !cancelled() && inputs.profile == 'identity-linux-android-ownership' }}
+        if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-ownership' || inputs.profile == 'identity-linux-android-remote-io') }}
         run: python3 scripts/ci/summarize_identity_uikit.py --android-ownership
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
