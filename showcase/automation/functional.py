@@ -377,6 +377,24 @@ BLOCKED = [
 ]
 
 
+def save_result(result, args, device):
+    out = args.output_root / args.platform / f"functional-{device}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if out.exists() and "--no-merge" not in sys.argv:
+        previous = json.loads(out.read_text(encoding="utf-8"))
+        if previous.get("device") == device:
+            merged = {item["id"]: item for item in previous.get("flows", [])}
+            merged.update({item["id"]: item for item in result["flows"]})
+            order = [item[0] for item in FLOWS] + [item[0] for item in BLOCKED]
+            result["flows"] = [merged[key] for key in order if key in merged]
+    passed = sum(1 for item in result["flows"] if item["status"] == "passed")
+    failed = sum(1 for item in result["flows"] if item["status"] == "failed")
+    blocked = sum(1 for item in result["flows"] if item["status"] == "blocked")
+    result["summary"] = {"passed": passed, "failed": failed, "blocked": blocked}
+    out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return out
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--client-dir", type=Path, required=True)
@@ -435,7 +453,8 @@ def main() -> None:
             except Exception:
                 pass
         result["flows"].append(entry)
-        print(f"{entry['status']}: {flow_id} {entry.get('error', '')}")
+        print(f"{entry['status']}: {flow_id} {entry.get('error', '')}", flush=True)
+        save_result(result, args, device)
 
     for flow_id, screen, reason in BLOCKED:
         if selected and flow_id not in selected:
@@ -447,21 +466,12 @@ def main() -> None:
         print(f"blocked: {flow_id} ({reason})")
 
     out = args.output_root / args.platform / f"functional-{device}.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
     if out.exists():
         previous = json.loads(out.read_text(encoding="utf-8"))
-        if previous.get("device") == device:
-            merged = {item["id"]: item for item in previous.get("flows", [])}
-            merged.update({item["id"]: item for item in result["flows"]})
-            order = [item[0] for item in FLOWS] + [item[0] for item in BLOCKED]
-            result["flows"] = [merged[key] for key in order if key in merged]
-            result["captured_at"] = previous.get("captured_at") or result["captured_at"]
-            result["updated_at"] = datetime.now(timezone.utc).isoformat()
-    passed = sum(1 for item in result["flows"] if item["status"] == "passed")
-    failed = sum(1 for item in result["flows"] if item["status"] == "failed")
-    blocked = sum(1 for item in result["flows"] if item["status"] == "blocked")
-    result["summary"] = {"passed": passed, "failed": failed, "blocked": blocked}
-    out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        if previous.get("captured_at"):
+            result["captured_at"] = previous["captured_at"]
+    result["updated_at"] = datetime.now(timezone.utc).isoformat()
+    save_result(result, args, device)
     print(json.dumps(result["summary"]))
     raise SystemExit(0 if failed == 0 else 1)
 
