@@ -69,6 +69,8 @@ def application_timeout_seconds(focus: str | None) -> int:
         raise ValueError("Unknown finite application focus")
     if focus in lt.ui_related.SPLIT_FOCUSES:
         return lt.ui_related.timeout_accounting(focus)["transport_timeout_seconds"]
+    if focus == lt.ui_related.PRE26_RECOVERY_FOCUSES[0]:
+        return 600
     if focus in {lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES}:
         return 360
     if focus == lt.content_policy.IOS_RESTORE_FOCUS:
@@ -156,6 +158,7 @@ WORKER_LIFECYCLE_STEPS = (
     ("main-leases-releasing", True), ("main-leases-released", True),
 )
 TRANSPORT_FAILURE_REASONS = {
+    "Owned UIKit application timed out": "console-timeout",
     "Malformed native TeamCity frame; do not fabricate replacement XML": "malformed-teamcity-frame",
     "Duplicate TeamCity attribute": "duplicate-teamcity-attribute",
     "Unknown TeamCity escape": "unknown-teamcity-escape",
@@ -183,6 +186,18 @@ TRANSPORT_FAILURE_REASONS = {
     "Zero/incomplete native test execution is not successful transport": "zero-or-incomplete-native-execution",
     "Unbounded incomplete native protocol line": "incomplete-line-byte-limit",
 }
+
+PRE26_CUSTOMIZATION_CASE = (
+    "io.github.apdelrahman1911.nativecmpkit.ui.controls.AdaptiveControlCustomizationMatrixTest",
+    "pre26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
+)
+PRE26_CUSTOMIZATION_PREFIX = "NATIVECMPKIT_ADAPTIVE_CUSTOM_PHASE branch=pre26 dark=false fontScale=1.0 phase="
+PRE26_CUSTOMIZATION_PHASES = (
+    "compose-enter", "compose-body-entered", "set-content-enter", "set-content-returned",
+    "enabled-captures-enter", "enabled-captures-returned", "paired-taps-enter", "paired-taps-returned",
+    "slider-drag-enter", "slider-drag-returned", "disabled-captures-enter", "disabled-captures-returned",
+    "disabled-input-enter", "disabled-input-returned", "compose-returned",
+)
 
 
 def macho_simulator_identity(path: Path) -> dict:
@@ -302,6 +317,8 @@ class NativeProtocol:
         self.startup_failure_observation = None
         self.lifecycle_failure_observation = None
         self.wk_restore_progress = []
+        self.pre26_customization_host_confirmed = False
+        self.pre26_customization_progress = []
         self.worker_lifecycle_observations = []
         self.picker_admission_observations = []
         self.picker_host_observations = []
@@ -322,6 +339,9 @@ class NativeProtocol:
             raise ValueError("Native transport already failed at startup")
         if self.lifecycle_failure_observation is not None:
             raise ValueError("Native transport already failed its owned lifecycle")
+        if line.startswith((PRE26_CUSTOMIZATION_PREFIX, "NATIVECMPKIT_ADAPTIVE_CONTROL_HOST branch=pre26")):
+            self.observe_pre26_customization(line)
+            return
         if line.startswith(WK_RESTORE_PREFIX):
             step = line.removeprefix(WK_RESTORE_PREFIX)
             index = len(self.wk_restore_progress)
@@ -708,8 +728,24 @@ class NativeProtocol:
                     case["status"] = "passed"
                 case["finished"] = True
                 self.open_case = None
-        elif kind not in {"testStdOut", "testStdErr", "message", "testCount"}:
+        elif kind == "testStdOut":
+            if self.open_case == PRE26_CUSTOMIZATION_CASE and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_pre26_customization(output_line)
+        elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
+
+    def observe_pre26_customization(self, line: str) -> None:
+        if self.open_case != PRE26_CUSTOMIZATION_CASE:
+            return
+        if re.fullmatch(r"NATIVECMPKIT_ADAPTIVE_CONTROL_HOST branch=pre26 major=(?:[1-9]|1[0-9]|2[0-5])", line):
+            self.pre26_customization_host_confirmed = True
+        if not line.startswith(PRE26_CUSTOMIZATION_PREFIX):
+            return
+        index = len(self.pre26_customization_progress)
+        phase = line.removeprefix(PRE26_CUSTOMIZATION_PREFIX)
+        if index < len(PRE26_CUSTOMIZATION_PHASES) and phase == PRE26_CUSTOMIZATION_PHASES[index]:
+            self.pre26_customization_progress.append(phase)
 
     def _request_image_profile_if_ready(self) -> None:
         if (self.active is not None and self.completed is None and self.open_case == IMAGE_PROFILE_CASE and
@@ -738,6 +774,9 @@ class NativeProtocol:
                 "observed_launch_pid": self.observed_launch_pid,
                 "image_lifetime_observation": self.image_lifetime_observation,
                 **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
+                **({"pre26_customization_progress": self.pre26_customization_progress}
+                   if self.pre26_customization_progress else {}),
+                **({"pre26_customization_host_confirmed": True} if self.pre26_customization_host_confirmed else {}),
                 **({"worker_lifecycle_observations": self.worker_lifecycle_observations}
                    if self.worker_lifecycle_observations else {}),
                 **({"image_profile_observations": self.image_profile_observations}
@@ -1549,6 +1588,8 @@ def main() -> int:
                 "transport_reason": transport.get("failure_reason"),
                 "native_cases": protocol.get("counts"),
                 "unfinished_testcase": protocol.get("unfinished_testcase"),
+                "pre26_customization_progress": protocol.get("pre26_customization_progress"),
+                "pre26_customization_host_confirmed": protocol.get("pre26_customization_host_confirmed"),
                 "crash_status": crash.get("status"),
                 "crash_exception": crash.get("exception"),
                 "cleanup_error_type": (result.get("cleanup") or {}).get("error_type"),

@@ -11,13 +11,16 @@ gradle.projectsEvaluated {
     val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     val focus = rootProject.providers.gradleProperty("nativecmpkitAdaptiveControlsFocus").orNull
     val prefix = "io.github.apdelrahman1911.nativecmpkit.ui."
+    val pre26 = listOf(
+        prefix + "slider.AdaptiveSliderNativeMatrixTest.pre26PublicStepsTapDragAndAccessibilityMatrix",
+        prefix + "slider.AdaptiveSliderNativeMatrixTest.pre26PublicNegativeStepsAreRejected",
+        prefix + "controls.AdaptiveControlCustomizationMatrixTest.pre26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
+        prefix + "toolbar.AdaptiveToolbarFallbackNativeTest.pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
+    )
     val branches = mapOf(
-        "ui-native-adaptive-pre26" to listOf(
-            prefix + "slider.AdaptiveSliderNativeMatrixTest.pre26PublicStepsTapDragAndAccessibilityMatrix",
-            prefix + "slider.AdaptiveSliderNativeMatrixTest.pre26PublicNegativeStepsAreRejected",
-            prefix + "controls.AdaptiveControlCustomizationMatrixTest.pre26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
-            prefix + "toolbar.AdaptiveToolbarFallbackNativeTest.pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
-        ),
+        "ui-native-adaptive-pre26" to pre26,
+        "ui-native-adaptive-customization-pre26" to pre26.filter { it.startsWith(prefix + "controls.") },
+        "ui-native-adaptive-remaining-pre26" to pre26.filterNot { it.startsWith(prefix + "controls.") },
         "ui-native-adaptive-ios26plus" to listOf(
             prefix + "slider.AdaptiveSliderNativeMatrixTest.ios26PublicStepsTapDragAndAccessibilityMatrix",
             prefix + "slider.AdaptiveSliderNativeMatrixTest.ios26PublicNegativeStepsAreRejected",
@@ -30,7 +33,7 @@ gradle.projectsEvaluated {
     val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") +
         selectors.flatMap { listOf("--tests", it) }
     check(gradle.startParameter.taskNames == applicationRequest) {
-        "Adaptive native init accepts only its exact four application methods; no standalone compiler/full/publish task"
+        "Adaptive native init accepts only its exact application methods; no standalone compiler/full/publish task"
     }
     check(System.getProperty("os.name") == "Mac OS X" && System.getProperty("os.arch") in setOf("aarch64", "arm64")) {
         "Adaptive native execution requires the actual Arm64 Apple host, never a skipped Linux compile substitute"
@@ -90,6 +93,6 @@ gradle.projectsEvaluated {
             "compiler_executions_attested" to 0, "apple_links_attested" to 0, "native_tests_executed" to 0,
             "scope" to "Source/selection admission only; original fresh native XML/runtime/cleanup decide results",
         ))) + "\n")
-        logger.lifecycle("NATIVECMPKIT_ADAPTIVE_NATIVE_ADMISSION methods=4 sources=6 nativeTestsExecuted=0")
+        logger.lifecycle("NATIVECMPKIT_ADAPTIVE_NATIVE_ADMISSION methods=${selectors.size} sources=6 nativeTestsExecuted=0")
     }
 }

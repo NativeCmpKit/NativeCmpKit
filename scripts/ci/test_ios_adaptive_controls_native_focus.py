@@ -124,7 +124,8 @@ class AdaptiveNativeFocusTests(unittest.TestCase):
         sources = re.findall(r'"(nativecmpkit-ui/src/iosTest/kotlin/[^"\n]+\.kt)"', init)
         self.assertEqual(list(adaptive.SOURCES), sources)
         for focus in adaptive.FOCUSES:
-            self.assertIn('"' + focus + '" to listOf(', init)
+            binding = "pre26," if focus == adaptive.FOCUSES[0] else "listOf("
+            self.assertIn('"' + focus + '" to ' + binding, init)
             for selector in adaptive.selectors(focus):
                 self.assertIn('prefix + "' + selector.removeprefix(adaptive.PREFIX) + '"', init)
         for fragment in ('gradle.startParameter.taskNames == applicationRequest',

@@ -21,7 +21,8 @@ FOCUSES = ("ui-native-adaptive-pre26", "ui-native-adaptive-drag-shader-ios26plus
 # Legacy four/ten are immutable selections. These two disjoint requests are
 # diagnostic isolation, not acceptance of any outcome from the failed UI650 ten.
 SPLIT_FOCUSES = ("ui-native-related-nine-ios26plus", "ui-native-adaptive-customization-ios26plus")
-ALL_FOCUSES = FOCUSES + SPLIT_FOCUSES
+PRE26_RECOVERY_FOCUSES = ("ui-native-adaptive-customization-pre26", "ui-native-adaptive-remaining-pre26")
+ALL_FOCUSES = FOCUSES + SPLIT_FOCUSES + PRE26_RECOVERY_FOCUSES
 MODULE = "nativecmpkit-ui"
 TASK_NAME = "iosSimulatorArm64ApplicationTest"
 TASK = ":nativecmpkit-ui:" + TASK_NAME
@@ -120,12 +121,24 @@ SOURCE_SHA256 = {'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/n
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt': 'e4c10d40b659913a83e7ae6ff6eb50e4d981046f556bd01b33e8feb4d856f508',
  'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt': '6b02f069769c8925b65e9896887415b32f45259eed680b9afefbf9dd0a1c744b'}
 INIT_SHA256 = {'ui-native-adaptive-drag-shader-ios26plus': 'd1ca8aa762529030099ab2e68c67788ce718e7163659b4c4544c76442fda26fd',
- 'ui-native-adaptive-pre26': '1b940d6868de7d1ea871b881e685e209765f985ac9a89685cab5f2f8116afc04'}
+ 'ui-native-adaptive-pre26': '571c67320f73cd8fe6df485613e69bde408bac90fe44c51e6b6205edfe580742'}
 # The earlier customization image is retained in the archived inverse. The
 # runtime uses the renamed image of the reviewed screenshot/phase derivative.
 CURRENT_CUSTOM_SOURCE_SHA256 = "4f413b2a09ad5675a1ee1e930209a6e1e2655541633363cacca191a85beb404d"
 _RELATED_TEN = _SELECTIONS[FOCUSES[1]]
 _CUSTOM_SOURCE = adaptive.CUSTOM_SOURCE
+_PRE26 = _SELECTIONS[FOCUSES[0]]
+for _focus, _custom, _scope in (
+    (PRE26_RECOVERY_FOCUSES[0], True, "The one unfinished pre-iOS 26 customization case in its own UIKit session."),
+    (PRE26_RECOVERY_FOCUSES[1], False, "The three pre-iOS 26 slider and toolbar cases in a separate UIKit session."),
+):
+    _SELECTIONS[_focus] = {
+        **_PRE26,
+        "groups": [{**group, "methods": group["methods"] if (group["source"] == _CUSTOM_SOURCE) == _custom else []}
+                   for group in _PRE26["groups"]],
+        "scope": _scope,
+    }
+    INIT_SHA256[_focus] = INIT_SHA256[FOCUSES[0]]
 _SELECTIONS[SPLIT_FOCUSES[0]] = {
     **_RELATED_TEN,
     "groups": [group for group in _RELATED_TEN["groups"] if group["source"] != _CUSTOM_SOURCE],
@@ -379,7 +392,7 @@ def outcomes(cases: list[dict], system: str, focus: str, *,
                       Counter((case["classname"], case["name"], case["status"]) for case in cases)) if valid else False
     exact = valid and actual == wanted and reports_ok
     if not exact:
-        errors.append("Related UI XML must contain exactly ten/four selected methods and one fresh report per class")
+        errors.append(f"Related UI XML must contain exactly {len(expected)} selected methods and one fresh report per class")
     source_by_class = {task_name(focus) + "." + group["classname"]: group["source"]
                        for group in focus_spec(focus)["groups"]}
     scenarios = []

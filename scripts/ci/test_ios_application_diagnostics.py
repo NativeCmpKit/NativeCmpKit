@@ -35,6 +35,25 @@ def begun():
 
 
 class PartialProtocolTests(unittest.TestCase):
+    def test_pre26_customization_records_only_ordered_phases_from_its_open_case(self):
+        protocol = a.NativeProtocol()
+        suite, method = a.PRE26_CUSTOMIZATION_CASE
+        prefix = a.PRE26_CUSTOMIZATION_PREFIX
+        protocol.feed(prefix + "compose-enter")
+        protocol.feed(f.ACTIVE)
+        protocol.feed(f.frame("testSuiteStarted", name=suite))
+        protocol.feed(f.frame("testStarted", name=method))
+        protocol.feed("NATIVECMPKIT_ADAPTIVE_CONTROL_HOST branch=pre26 major=18")
+        protocol.feed(prefix + "custom-data")
+        protocol.feed(prefix + "compose-enter")
+        protocol.feed(f.frame("testStdOut", name=method, out=prefix + "compose-body-entered"))
+        protocol.feed(prefix + "enabled-captures-enter")
+        report = protocol.partial()
+        self.assertEqual(["compose-enter", "compose-body-entered"], report["pre26_customization_progress"])
+        self.assertTrue(report["pre26_customization_host_confirmed"])
+        self.assertEqual(method, report["unfinished_testcase"]["name"])
+        self.assertEqual(0, report["counts"]["passed"])
+
     def test_a_started_case_is_running_not_passing_before_actual_finish(self):
         protocol = begun()
         self.assertEqual("running", next(iter(protocol.cases.values()))["status"])

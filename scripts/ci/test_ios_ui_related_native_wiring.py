@@ -89,6 +89,19 @@ def calls(path, name):
 
 
 class RelatedUiNativeWiringControls(unittest.TestCase):
+    def test_pre26_recovery_routes_partition_the_original_four_methods(self):
+        original = set(related.selectors(related.FOCUSES[0]))
+        customization, remaining = related.PRE26_RECOVERY_FOCUSES
+        selected = [set(related.selectors(focus)) for focus in (customization, remaining)]
+        self.assertEqual([1, 3], list(map(len, selected)))
+        self.assertEqual(original, selected[0] | selected[1])
+        for focus in (customization, remaining):
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
+            self.assertTrue(related.validate_plan(plan))
+            self.assertEqual(related.FOCUSES[0], related.runtime_focus(focus))
+            self.assertEqual(related.sources(related.FOCUSES[0]), related.sources(focus))
+        self.assertEqual(600, application.application_timeout_seconds(customization))
+
     def test_literal_profiles_modules_and_exact_canonical_rows_have_no_alias_or_serial_companion(self):
         tree = ast.parse((ROOT / "scripts/ci/workflow_matrix.py").read_bytes())
         definitions = {target.id: node.value for node in tree.body if isinstance(node, ast.Assign)

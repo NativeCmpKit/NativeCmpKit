@@ -605,7 +605,7 @@ UI_APPLICATION_FOCUS_SPECS[UI_DATE_YEAR_PREDICATE_RED_FOCUS] = {
 UI_APPLICATION_FOCUS_SPECS[camera_ios.FOCUS] = camera_ios.focus_spec()
 UI_APPLICATION_FOCUS_SPECS["ui-native-adaptive-pre26"] = ui_related.focus_spec("ui-native-adaptive-pre26")
 UI_APPLICATION_FOCUS_SPECS["ui-native-adaptive-drag-shader-ios26plus"] = ui_related.focus_spec("ui-native-adaptive-drag-shader-ios26plus")
-for _focus in ui_related.SPLIT_FOCUSES:
+for _focus in ui_related.SPLIT_FOCUSES + ui_related.PRE26_RECOVERY_FOCUSES:
     UI_APPLICATION_FOCUS_SPECS[_focus] = ui_related.focus_spec(_focus)
 
 
