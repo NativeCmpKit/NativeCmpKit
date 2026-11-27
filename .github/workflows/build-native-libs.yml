@@ -196,9 +196,15 @@ jobs:
     runs-on: ${{ startsWith(inputs.profile, 'identity-apple') && 'macos-26' || inputs.profile == 'identity-windows' && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ inputs.profile == 'identity-apple-app' && 90 || 60 }}
     env:
+      GIT_CONFIG_COUNT: '2'
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
+      GIT_CONFIG_KEY_1: core.longpaths
+      GIT_CONFIG_VALUE_1: 'true'
       CARGO_BUILD_JOBS: '2'
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        id: checkout
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -279,11 +285,11 @@ jobs:
           cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
           cargo test --locked --manifest-path nativecmpkit-share/native/Cargo.toml
       - name: Summarize available Gradle test reports
-        if: always()
+        if: always() && steps.checkout.outcome == 'success'
         shell: bash
         run: python scripts/audit/summarize_junit.py --output build/ci-identity/junit-summary.json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
-        if: always()
+        if: always() && steps.checkout.outcome == 'success'
         with:
           name: ${{ inputs.profile }}-junit-summary
           path: build/ci-identity/junit-summary.json
