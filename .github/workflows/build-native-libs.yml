@@ -534,6 +534,9 @@ jobs:
       - name: Retain bounded UIKit failure observations
         if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
+      - name: Retain bounded Android WebView failure observations
+        if: ${{ !cancelled() && inputs.profile == 'identity-linux-android-webview-device' }}
+        run: python3 scripts/ci/summarize_identity_uikit.py --android-webview
       - name: Windows desktop tests
         if: inputs.profile == 'identity-windows'
         shell: cmd
@@ -562,9 +565,11 @@ jobs:
             build/ci-identity/jni-exports.json
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
+            build/ci-identity/android-webview-diagnostics.json
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
             build/ci-verification/identity-linux-desktop/receipt.json
             build/ci-verification/identity-android-webview-device/controller.json
+            build/ci-verification/identity-android-webview-device/library/receipt.json
           if-no-files-found: error

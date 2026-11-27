@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Keep bounded UIKit failure diagnostics without raw process or fixture data."""
+"""Keep bounded platform failure diagnostics without raw process or fixture data."""
+import argparse
 from collections import Counter
 import hashlib
 import json
@@ -7,7 +8,7 @@ from pathlib import Path
 import re
 from xml.etree import ElementTree as ET
 
-from library_tests import NoDtdBuilder
+from library_tests import NoDtdBuilder, safe_path
 
 
 MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share")
@@ -63,31 +64,51 @@ def receipt_rows():
                 }
 
 
-def failure_rows():
-    for module in MODULES:
-        results = Path(module) / "build/test-results/iosSimulatorArm64ApplicationTest"
-        for path in sorted(results.glob("TEST-*.xml")):
-            if not 0 < path.stat().st_size <= MAX_BYTES:
-                continue
-            raw = path.read_bytes()
-            xml = ET.fromstring(raw, parser=ET.XMLParser(target=NoDtdBuilder()))
-            for case in xml.iter("testcase"):
-                failed = next((child for child in case if child.tag in {"failure", "error"}), None)
-                name = case.get("name", "").removesuffix("[iosSimulatorArm64]")
-                if failed is not None and TOKEN.fullmatch(name):
-                    yield {
-                        "module": module, "case": name, "status": failed.tag,
-                        "original_xml_sha256": hashlib.sha256(raw).hexdigest(),
-                        "source_frames": list(dict.fromkeys(FRAME.findall(failed.text or "")))[:8],
-                        "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(
-                            failed.get("message", "") + "\n" + (failed.text or ""))))[:4],
-                    }
+def failure_rows(module, path, expected_digest=None):
+    if not 0 < path.stat().st_size <= MAX_BYTES:
+        return
+    raw = path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if expected_digest is not None and expected_digest != digest:
+        raise ValueError("JUnit XML differs from its recorded digest")
+    xml = ET.fromstring(raw, parser=ET.XMLParser(target=NoDtdBuilder()))
+    for case in xml.iter("testcase"):
+        failed = next((child for child in case if child.tag in {"failure", "error"}), None)
+        name = case.get("name", "").removesuffix("[iosSimulatorArm64]")
+        if failed is not None and TOKEN.fullmatch(name):
+            yield {
+                "module": module, "case": name, "status": failed.tag,
+                "original_xml_sha256": digest,
+                "source_frames": list(dict.fromkeys(FRAME.findall(failed.text or "")))[:8],
+                "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(
+                    failed.get("message", "") + "\n" + (failed.text or ""))))[:4],
+            }
 
 
 def main():
-    output = Path("build/ci-identity/uikit-diagnostics.json")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--android-webview", action="store_true")
+    args = parser.parse_args()
+    if args.android_webview:
+        output = Path("build/ci-identity/android-webview-diagnostics.json")
+        receipt = OWNED_ROOT / "identity-android-webview-device/library/receipt.json"
+        failures = []
+        if receipt.is_file() and 0 < receipt.stat().st_size <= MAX_BYTES:
+            for module in json.loads(receipt.read_bytes())["modules"]:
+                if module["task"] == ":nativecmpkit-webview:connectedAndroidDeviceTest":
+                    for report in module["reports"]:
+                        xml = safe_path(Path.cwd(), report["path"])
+                        failures.extend(failure_rows(module["module"], xml, report["sha256"]))
+        summary = {"junit_failures": failures}
+    else:
+        output = Path("build/ci-identity/uikit-diagnostics.json")
+        failures = []
+        for module in MODULES:
+            results = Path(module) / "build/test-results/iosSimulatorArm64ApplicationTest"
+            for path in sorted(results.glob("TEST-*.xml")):
+                failures.extend(failure_rows(module, path))
+        summary = {"application_receipts": list(receipt_rows()), "junit_failures": failures}
     output.parent.mkdir(parents=True, exist_ok=True)
-    summary = {"application_receipts": list(receipt_rows()), "junit_failures": list(failure_rows())}
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print(json.dumps(summary, sort_keys=True))
 
