@@ -177,7 +177,9 @@ def drag_slider(ui, needle: str):
             return
     # iOS exposes the UISlider as an unnamed AXGroup; use the label row above it
     # and the wide track group that shares its left edge.
-    label = find_any(ui, needle, timeout_ms=3000)
+    label = tour.soft_find(ui, {"text_contains": needle}, timeout_ms=3000)
+    if not (label.get("satisfied") and label.get("nodes")):
+        label = find_any(ui, needle, timeout_ms=3000)
     nodes = label.get("nodes", [])
     if not nodes:
         raise AssertionError("no slider label exposed")
