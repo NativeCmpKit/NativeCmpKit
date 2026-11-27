@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-windows, identity-windows-share, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -230,6 +230,11 @@ jobs:
           ubuntu_apt=(-o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=-)
           sudo apt-get "${ubuntu_apt[@]}" update
           sudo apt-get "${ubuntu_apt[@]}" install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
+      - name: Admit the finite Android WebView device scope
+        if: inputs.profile == 'identity-linux-android-webview-device'
+        run: |
+          python3 -B scripts/ci/android_device_tests.py plan --api-level 35 --module nativecmpkit-webview \
+            --focus webview-content-policy-android --output build/ci-verification/identity-android-webview-device > /dev/null
       - name: Set up pinned Rust
         id: rust
         shell: bash
@@ -237,11 +242,17 @@ jobs:
       - name: Install the official Android SDK platform
         if: runner.os == 'Linux' || startsWith(inputs.profile, 'identity-apple')
         shell: bash
+        env:
+          IDENTITY_PROFILE: ${{ inputs.profile }}
         run: |
           sdkmanager="${ANDROID_HOME:?}/cmdline-tools/latest/bin/sdkmanager"
           test -x "$sdkmanager"
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
-          "$sdkmanager" --sdk_root="$ANDROID_HOME" --install 'cmdline-tools;23.0' 'platforms;android-37.0'
+          packages=('cmdline-tools;23.0' 'platforms;android-37.0')
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device ]]; then
+            packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
+          fi
+          "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
       - name: Source identity and migration checks
         if: runner.os == 'Linux'
         run: |
@@ -250,6 +261,15 @@ jobs:
           python3 scripts/audit/source_inventory.py --check
           python3 scripts/development/validate_resolutions.py --check
           python3 scripts/development/generate_icon_catalogues.py --check
+      - name: Verify NativeCmpKit WebView on an owned Android emulator
+        if: inputs.profile == 'identity-linux-android-webview-device'
+        run: |
+          test -c /dev/kvm
+          command -v setfacl > /dev/null || sudo apt-get install -y acl
+          sudo setfacl -m "u:$(id -un):rw" /dev/kvm
+          test -r /dev/kvm && test -w /dev/kvm
+          python3 -B scripts/ci/android_device_tests.py run --api-level 35 --module nativecmpkit-webview \
+            --focus webview-content-policy-android --output build/ci-verification/identity-android-webview-device
       - name: Linux desktop tests with owned audio and FileChooser services
         if: inputs.profile == 'identity-linux'
         shell: bash
@@ -543,4 +563,5 @@ jobs:
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
             build/ci-verification/identity-linux-desktop/receipt.json
+            build/ci-verification/identity-android-webview-device/controller.json
           if-no-files-found: error
