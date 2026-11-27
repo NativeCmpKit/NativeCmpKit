@@ -4,7 +4,9 @@ import java.io.File
 import java.security.MessageDigest
 import java.util.UUID
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import org.gradle.api.artifacts.component.ModuleComponentSelector
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
+import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.Exec
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -374,7 +376,23 @@ tasks.register("verifyCandidateResolution") {
         val consumerOutputDirectories = listOf("classes", "resources", "processedResources").map(buildRoot::resolve)
         configurations.filter { it.isCanBeResolved && (it.name.contains("CompileClasspath") || it.name.contains("RuntimeClasspath") || it.name.contains("CompileKlibraries")) }
             .sortedBy { it.name }.forEach { configuration ->
-                configuration.incoming.artifacts.artifacts.sortedBy { it.id.displayName }.forEach artifactLoop@ { artifact ->
+                val incoming = configuration.incoming
+                val artifacts = when (configuration.name) {
+                    "androidHostTestCompileClasspath", "androidHostTestRuntimeClasspath" -> {
+                        // AGP contributes this consumer's own Android outputs for host tests.
+                        // Their secondary artifact variants have no default artifact type.
+                        val graph = incoming.resolutionResult
+                        val consumer = graph.rootComponent.get().id
+                        check(consumer is ProjectComponentIdentifier && consumer.projectPath == ":")
+                        check(graph.allDependencies.none { dependency ->
+                            dependency is ResolvedDependencyResult && dependency.selected.id == consumer &&
+                                dependency.requested is ModuleComponentSelector
+                        }) { "External module substituted with consumer output in ${configuration.name}" }
+                        incoming.artifactView { componentFilter { it != consumer } }.artifacts
+                    }
+                    else -> incoming.artifacts
+                }
+                artifacts.artifacts.sortedBy { it.id.displayName }.forEach artifactLoop@ { artifact ->
                     val id = artifact.id.componentIdentifier
                     check(id !is ProjectComponentIdentifier) { "Project substitution in ${configuration.name}: $id" }
                     if (id !is ModuleComponentIdentifier) {
