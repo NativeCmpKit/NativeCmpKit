@@ -24,3 +24,17 @@ class AndroidContentPolicyVerificationFilter : Filter() {
 
     override fun describe(): String = "NativeCmpKit content-policy NEW4 plus affected saver1 only"
 }
+
+class AndroidContentPolicyRestoreVerificationFilter : Filter() {
+    override fun shouldRun(description: Description): Boolean {
+        if (!description.isTest) return description.children.any(::shouldRun)
+        if (description.className != AndroidWebViewContentPolicyAcceptanceTest::class.java.name) return false
+        return when (description.methodName) {
+            "savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory",
+            "documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved" -> true
+            else -> false
+        }
+    }
+
+    override fun describe(): String = "NativeCmpKit WebView history restoration cases"
+}

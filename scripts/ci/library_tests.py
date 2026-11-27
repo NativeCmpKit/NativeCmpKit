@@ -4515,7 +4515,7 @@ def gradle_command(suite: str, test_plan: dict, simulator: str | None = None, *,
             command.extend("-Pandroid.testInstrumentationRunnerArguments." + key + "=" + value for key, value in fields.items())
         if boundary_focus:
             item = test_plan["expected"][0]
-            argument = "filter" if test_plan["explicit_test_focus"] == content_policy.ANDROID_FOCUS else "annotation" if (test_plan["explicit_test_focus"] in ANDROID_SAVE_IDENTITY_FOCUSES or
+            argument = "filter" if test_plan["explicit_test_focus"] in content_policy.ANDROID_FOCUSES else "annotation" if (test_plan["explicit_test_focus"] in ANDROID_SAVE_IDENTITY_FOCUSES or
                                         test_plan["explicit_test_focus"] in {ANDROID_GEO_PREREQUISITES_FOCUS, ANDROID_WEBVIEW_REQUEST_FOCUS,
                                                                              ANDROID_PERMISSION_DEMO_RECOVERY_FOCUS}) else "class"
             command.append("-Pandroid.testInstrumentationRunnerArguments." + argument + "=" + item["test_filter"])

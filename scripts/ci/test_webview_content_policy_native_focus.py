@@ -162,12 +162,13 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
             for bad in variants():
                 with self.assertRaises(ValueError): r.validate_test_focus(bad)
 
-    def test_android_filter_is_one_public_noarg_zero_test_exact_five_leaf_identity_tree(self):
+    def test_android_filters_select_exact_full_and_restore_case_inventories(self):
         source = (ROOT / policy.ANDROID_FILTER_SOURCE).read_text()
         self.assertIn("class AndroidContentPolicyVerificationFilter : Filter()", source)
         self.assertIn("if (!description.isTest) return description.children.any { shouldRun(it) }", source)
         self.assertNotRegex(source, r"@(Test|Ignore|Disabled)|Bundle|InstrumentationRegistry|Regex|System\\.")
-        quoted = re.findall(r'"([^"]+)"', source)
+        full, restore = source.split("class AndroidContentPolicyRestoreVerificationFilter : Filter()", 1)
+        quoted = re.findall(r'"([^"]+)"', full)
         native_methods = [value for value in quoted if value in policy.spec(policy.ANDROID_FOCUS)["methods"] or value == policy.ANDROID_AFFECTED_METHOD]
         self.assertEqual([*policy.spec(policy.ANDROID_FOCUS)["methods"], policy.ANDROID_AFFECTED_METHOD], native_methods)
         leaves = {(policy.spec(policy.ANDROID_FOCUS)["classname"], name) for name in native_methods[:-1]}
@@ -176,7 +177,10 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         for leaf in ((policy.ANDROID_AFFECTED_CLASS, "compositionDisposalClosesItsRealSlowConnectionAndStopsTheLiveMediaDocument"),
                      (policy.spec(policy.ANDROID_FOCUS)["classname"], "unreviewed"), (None, None), ("foreign", native_methods[0])):
             self.assertNotIn(leaf, leaves)
-        self.assertEqual(2, source.count("else -> false"))
+        self.assertEqual(2, full.count("else -> false"))
+        self.assertIn("description.className != AndroidWebViewContentPolicyAcceptanceTest::class.java.name", restore)
+        methods = [value for value in re.findall(r'"([^"]+)"', restore) if value in policy.spec(policy.ANDROID_FOCUS)["methods"]]
+        self.assertEqual(list(policy.spec(policy.ANDROID_RESTORE_FOCUS)["methods"]), methods)
 
     def test_android_single_filter_argument_roundtrips_lossless_without_comma_class_or_annotation_transport(self):
         plan = native_plan(self.root, policy.ANDROID_FOCUS)
@@ -215,7 +219,7 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
             self.assertEqual(policy.selector(focus).split(",") if focus in policy.IOS_FOCUSES else
                              [] if focus in policy.ANDROID_FOCUSES else [policy.selector(focus)], selected)
             if focus == policy.ANDROID_RESTORE_FOCUS:
-                self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + policy.selector(focus), command)
+                self.assertIn("-Pandroid.testInstrumentationRunnerArguments.filter=" + policy.selector(focus), command)
             native = self.root / row["source"]; raw = native.read_bytes(); native.write_bytes(raw + b"\n")
             with self.assertRaises(ValueError): r.gradle_command(row["suite"], plan, **kwargs)
             native.write_bytes(raw)
