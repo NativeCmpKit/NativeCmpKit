@@ -373,15 +373,18 @@ jobs:
         run: |
           xcrun simctl install "$UI_DEVICE" "$SHOWCASE_IOS_APP"
           xcrun simctl launch "$UI_DEVICE" "$IOS_BUNDLE_ID"
+          axe_ready=0
           for attempt in 1 2 3 4 5; do
             if "$AXE_BINARY" describe-ui --udid "$UI_DEVICE" > "$RUNNER_TEMP/axe/preflight.json" \
                && python3 -c 'import json,sys; assert len(json.load(open(sys.argv[1]))[0]["children"]) > 0' "$RUNNER_TEMP/axe/preflight.json"; then
-              echo "AXE_READY=1" >> "$GITHUB_ENV"
+              axe_ready=1
               break
             fi
             sleep 3
           done
-          if [[ "${AXE_READY:-0}" != 1 ]]; then
+          if [[ "$axe_ready" == 1 ]]; then
+            echo "AXE_READY=1" >> "$GITHUB_ENV"
+          else
             echo "AXe preflight did not expose application elements; the session will use the visible Simulator." >&2
             echo "AXE_READY=0" >> "$GITHUB_ENV"
           fi
