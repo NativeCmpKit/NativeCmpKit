@@ -34,6 +34,7 @@ ANDROID_REMOTE_IO_FAILURE_MARKERS = {
     "assertion": "AssertionError",
 }
 CAMERA_DISPOSAL_FAILURE_MARKERS = {
+    "terminal-before-disposal": "Camera returned a result before disposal admission",
     "presenting-at-launch": "The first disposal variant requires an observed real animated presentation",
     "presenting-at-disposal": "Composition disposal must occur in the actually observed requested UIKit phase",
     "unexpected-late-delivery": "Disposed owners suppress their late controlled terminal inputs",

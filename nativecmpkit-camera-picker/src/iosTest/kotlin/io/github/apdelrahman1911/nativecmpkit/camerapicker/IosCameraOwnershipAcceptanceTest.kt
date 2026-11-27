@@ -175,6 +175,7 @@ class IosCameraOwnershipAcceptanceTest {
                 val deliveries = mutableListOf<CameraPickerResult>()
                 var disposalWitness: Boolean? = null
                 var picker: UIImagePickerController? = null
+                lateinit var lateDelegate: UIImagePickerControllerDelegateProtocol
                 lateinit var parent: UIViewController
                 lateinit var launcher: CameraPickerLauncher
                 setContent {
@@ -194,21 +195,25 @@ class IosCameraOwnershipAcceptanceTest {
                         }
                     }
                 }
-                val lateDelegate = runOnIdle {
+                runOnIdle {
                     requireActualSimulatorPhotoLibrary()
                     foreign.assertPreserved()
                     launcher.launch()
-                    picker = assertIs<UIImagePickerController>(parent.presentedViewController)
-                    val delegate = assertIs<UIImagePickerControllerDelegateProtocol>(picker!!.delegate)
-                    if (duringPresentation) {
-                        assertTrue(picker!!.isBeingPresented(), "The first disposal variant requires an observed real animated presentation")
-                        mounted.value = false
-                    }
-                    delegate
                 }
-                if (!duringPresentation) {
-                    waitForCameraNative { nativePickerIsPresented(parent, picker) }
-                    runOnIdle { assertTrue(nativePickerIsPresented(parent, picker)); mounted.value = false }
+                waitForCameraNative {
+                    assertTrue(deliveries.isEmpty(), "Camera returned a result before disposal admission")
+                    val actual = parent.presentedViewController as? UIImagePickerController ?: return@waitForCameraNative false
+                    val presented = nativePickerIsPresented(parent, actual)
+                    if (duringPresentation) {
+                        check(!presented) { "The first disposal variant requires an observed real animated presentation" }
+                        if (!actual.isBeingPresented()) return@waitForCameraNative false
+                    } else if (!presented) {
+                        return@waitForCameraNative false
+                    }
+                    picker = actual
+                    lateDelegate = assertIs<UIImagePickerControllerDelegateProtocol>(actual.delegate)
+                    mounted.value = false
+                    true
                 }
                 waitForIdle()
                 runOnIdle { assertEquals(true, disposalWitness, "Composition disposal must occur in the actually observed requested UIKit phase") }
