@@ -335,22 +335,40 @@ jobs:
         shell: bash
         run: |
           xcrun simctl list devices available -j > "$RUNNER_TEMP/devices.json"
-          udid=$(python3 - "$RUNNER_TEMP/devices.json" <<'PY'
+          chosen=$(python3 - "$RUNNER_TEMP/devices.json" "${{ steps.mode.outputs.device_class }}" <<'PY'
           import json, sys
           data = json.load(open(sys.argv[1]))["devices"]
-          for runtime in reversed(sorted(data)):
-              if ".iOS-" not in runtime:
-                  continue
-              for device in data[runtime]:
-                  prefix = "iPad" if "${{ steps.mode.outputs.device_class }}" == "tablet" else "iPhone"
-                  if device["isAvailable"] and device["name"].startswith(prefix):
-                      print(device["udid"])
+          preferred = (
+              ["iPad Pro 13-inch (M4)", "iPad Pro 12.9-inch (6th generation)",
+               "iPad Air 13-inch (M3)", "iPad Air 11-inch (M3)"]
+              if sys.argv[2] == "tablet"
+              else ["iPhone 17 Pro", "iPhone 16 Pro", "iPhone 16", "iPhone 15"]
+          )
+          available = [
+              (runtime, device)
+              for runtime in sorted(data)
+              if ".iOS-" in runtime
+              for device in data[runtime]
+              if device["isAvailable"]
+              and (device["name"].startswith("iPad") if sys.argv[2] == "tablet"
+                   else device["name"].startswith("iPhone"))
+          ]
+          for name in preferred:
+              for runtime, device in reversed(available):
+                  if device["name"] == name:
+                      print(runtime, device["name"], device["udid"], sep="\t")
                       raise SystemExit
-          raise SystemExit("No available iPhone simulator")
+          if available:
+              runtime, device = available[-1]
+              print(runtime, device["name"], device["udid"], sep="\t")
+              raise SystemExit
+          raise SystemExit("No available simulator")
           PY
           )
-          echo "UI_DEVICE=$udid" >> "$GITHUB_ENV"
-          xcrun simctl bootstatus "$udid" -b
+          echo "Selected simulator: $chosen"
+          echo "UI_DEVICE=$(printf '%s' "$chosen" | cut -f3)" >> "$GITHUB_ENV"
+          echo "UI_DEVICE_NAME=$(printf '%s' "$chosen" | cut -f2)" >> "$GITHUB_ENV"
+          xcrun simctl bootstatus "$(printf '%s' "$chosen" | cut -f3)" -b
           xcrun simctl list devices booted
           xcrun simctl addmedia "$udid" "$GITHUB_WORKSPACE/showcase/fixtures/kira-fixture.png"
           open -a Simulator --args -CurrentDeviceUDID "$udid"

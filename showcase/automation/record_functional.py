@@ -45,11 +45,20 @@ def main() -> None:
     parser.add_argument("--run", required=True)
     parser.add_argument("--attempt", default="1")
     parser.add_argument("--job", required=True)
+    parser.add_argument("--allow-device", action="store_true")
     args = parser.parse_args()
 
+    result = json.loads(args.functional.read_text(encoding="utf-8"))
+    canonical = ("api35-phone", "iphone-simulator")
+    if result.get("device") not in canonical and not args.allow_device:
+        raise SystemExit(
+            f"{args.functional} is from device {result.get('device')!r}; the "
+            "coverage execution slots are bound to the canonical phone devices. "
+            "Keep tablet/large-screen results as separate evidence or pass "
+            "--allow-device explicitly."
+        )
     document = json.loads(args.coverage.read_text(encoding="utf-8"))
     rows = {row["id"]: row for row in document["rows"]}
-    result = json.loads(args.functional.read_text(encoding="utf-8"))
     for flow in result.get("flows", []):
         for row_id in FLOW_ROWS.get(flow["id"], []):
             row = rows[row_id]
