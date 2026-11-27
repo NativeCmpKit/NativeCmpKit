@@ -332,22 +332,30 @@ tasks.register("verifyCandidateResolution") {
     doLast {
         val lines = mutableListOf<String>()
         val candidates = mutableSetOf<String>()
+        val buildRoot = layout.buildDirectory.get().asFile.canonicalFile.toPath()
+        val consumerOutputDirectories = listOf("classes", "resources", "processedResources").map(buildRoot::resolve)
         configurations.filter { it.isCanBeResolved && (it.name.contains("CompileClasspath") || it.name.contains("RuntimeClasspath") || it.name.contains("CompileKlibraries")) }
             .sortedBy { it.name }.forEach { configuration ->
-                configuration.incoming.artifacts.artifacts.sortedBy { it.id.displayName }.forEach { artifact ->
+                configuration.incoming.artifacts.artifacts.sortedBy { it.id.displayName }.forEach artifactLoop@ { artifact ->
                     val id = artifact.id.componentIdentifier
                     check(id !is ProjectComponentIdentifier) { "Project substitution in ${configuration.name}: $id" }
-                    if (id is ModuleComponentIdentifier) {
-                        check(id.group != "com.mohamedrejeb.calf") { "Unexpected original Calf dependency: $id" }
-                        if (id.group == candidateGroup) {
-                            check(id.version == candidateVersion) { "Wrong candidate version: $id" }
-                            candidates += id.module
-                            val binding = bindCandidateArtifact(id, artifact.file)
-                            lines += "${configuration.name}\t${id.displayName}\t${artifact.file.name}\t${artifactSha256(artifact.file)}" +
-                                "\t${binding.getValue("staged_file")}\t${binding.getValue("metadata_file")}\t${binding.getValue("metadata_sha256")}"
+                    if (id !is ModuleComponentIdentifier) {
+                        // Gradle contributes this consumer's class/resource directories to its test classpaths.
+                        // Empty source sets can leave these outputs absent even after compilation.
+                        val local = artifact.file.canonicalFile
+                        check((!local.exists() || local.isDirectory) && consumerOutputDirectories.any { local.toPath().startsWith(it) }) {
+                            "Unexpected local dependency in ${configuration.name}: $id"
                         }
+                        return@artifactLoop
                     }
-                    if (id !is ModuleComponentIdentifier || id.group != candidateGroup) {
+                    check(id.group != "com.mohamedrejeb.calf") { "Unexpected original Calf dependency: $id" }
+                    if (id.group == candidateGroup) {
+                        check(id.version == candidateVersion) { "Wrong candidate version: $id" }
+                        candidates += id.module
+                        val binding = bindCandidateArtifact(id, artifact.file)
+                        lines += "${configuration.name}\t${id.displayName}\t${artifact.file.name}\t${artifactSha256(artifact.file)}" +
+                            "\t${binding.getValue("staged_file")}\t${binding.getValue("metadata_file")}\t${binding.getValue("metadata_sha256")}"
+                    } else {
                         lines += "${configuration.name}\t${id.displayName}\t${artifact.file.name}\t${artifactSha256(artifact.file)}"
                     }
                 }
