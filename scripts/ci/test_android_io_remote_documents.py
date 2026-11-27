@@ -280,7 +280,8 @@ class ControlledRemoteSourceControls(unittest.TestCase):
 
     def test_actual_native_cancellation_result_and_thread_terminal_cannot_be_skipped(self):
         path = remote.KOTLIN + "AndroidIoRemoteDocumentsTest.kt"
-        for before, after in (('context.contentResolver.openFileDescriptor(uri, "r", signal)', 'context.contentResolver.openFileDescriptor(uri, "r")'),
+        for before, after in (('it.openFile(uri, "r", signal)', 'it.openFile(uri, "r")'),
+                              ('provider.use {', 'provider.let {'),
                               ('assertIs<OperationCanceledException>(failure)', 'check(failure is Throwable)'),
                               ('assertFalse(assertNotNull(nativeThread).isAlive', 'assertTrue(true')):
             with self.subTest(native_result_guard=before[:25]):

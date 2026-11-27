@@ -331,7 +331,8 @@ def validate_sources(texts: dict[str, str]) -> None:
             'EOF is not the caller\'s explicit FIFO close', 'assertEquals(0, openDeviceDescriptorsFor(assertNotNull(owner.identity)))',
             'assertSocketPair(transfer, server, owner.port)', 'provider.string("requestId"), backend.string("requestId")'),
             "Actual public bounded source/hash/EOF/explicit caller FIFO close/native socket pair assertions required")
-    require(contains(test, 'context.contentResolver.openFileDescriptor(uri, "r", signal)',
+    require(contains(test, 'context.contentResolver.acquireUnstableContentProviderClient(uri)', 'provider.use {',
+            'it.openFile(uri, "r", signal)',
             '"PENDING_FIRST_BODY" && transfer.bool("headersRead")', '!transfer.bool("pipeAllocated")',
             'server.bool("headersSent") && server.bool("heldWaiting") && server.int("bytesWritten") == 0',
             'pending.cancelFromVerifiedPending()', 'verifiedCancellationInvoked = true; signal.cancel()',

@@ -299,8 +299,13 @@ class AndroidIoRemoteDocumentsTest {
         fun start() {
             check(future == null)
             future = executor.submit<ParcelFileDescriptor?> {
-                context.contentResolver.openFileDescriptor(uri, "r", signal).also { descriptor ->
-                    if (descriptor != null) check(returned.compareAndSet(null, descriptor))
+                // Android 15 routes ContentResolver's read-only open through DocumentsProvider's
+                // wildcard typed open, which drops the signal. The public client forwards it to openFile.
+                val provider = assertNotNull(context.contentResolver.acquireUnstableContentProviderClient(uri))
+                provider.use {
+                    it.openFile(uri, "r", signal).also { descriptor ->
+                        if (descriptor != null) check(returned.compareAndSet(null, descriptor))
+                    }
                 }
             }
         }

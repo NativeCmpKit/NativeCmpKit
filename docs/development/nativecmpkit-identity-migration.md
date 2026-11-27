@@ -30,3 +30,15 @@ The hosted `identity-*` profiles report results for separate desktop, Android
 host, browser, package staging, iOS simulator and UIKit application scopes. Historical source-projection and full verification
 profiles require separate results. The identity profiles do not issue an
 offline-tooling reuse certificate.
+
+The API 35 remote IO cancellation fixture opens the granted tree URI through
+`ContentProviderClient.openFile`. Android 15 routes a read-only
+`ContentResolver.openFileDescriptor` call through a wildcard typed-open path
+that discards the cancellation signal in `DocumentsProvider`. The client passes
+the signal directly to the provider's open operation. The fixture still requires
+the actual resulting `OperationCanceledException`, no transferred descriptor,
+and independent provider, socket and worker cleanup. The separate positive
+case exercises the public `KmpFile` stream through `ContentResolver`. See the
+[Android 15 resolver](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r1/core/java/android/content/ContentResolver.java#1741),
+[DocumentsProvider](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r1/core/java/android/provider/DocumentsProvider.java#1366)
+and [ContentProviderClient](https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-15.0.0_r1/core/java/android/content/ContentProviderClient.java#407).
