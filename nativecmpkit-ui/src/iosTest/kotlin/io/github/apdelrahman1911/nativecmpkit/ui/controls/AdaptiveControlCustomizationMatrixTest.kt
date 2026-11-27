@@ -43,7 +43,6 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
-import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,7 +78,7 @@ class AdaptiveControlCustomizationMatrixTest {
             }
         }
         firstRowPhase("compose-enter")
-        runComposeUiTest {
+        runAdaptiveControlUiTest {
             firstRowPhase("compose-body-entered")
             val enabled = mutableStateOf(true)
             val checked = mutableStateOf(false)
@@ -165,7 +164,7 @@ class AdaptiveControlCustomizationMatrixTest {
             firstRowPhase("enabled-icon-capture-complete")
             assertSliderTracks(Color.Red, Color.Blue)
             firstRowPhase("enabled-slider-capture-complete")
-            assertThumbGlyph(Color.Red, observedColors)
+            assertThumbGlyph(Color.Red, observedColors, trace = ::firstRowPhase)
             firstRowPhase("enabled-captures-returned")
 
             firstRowPhase("paired-taps-enter")
@@ -259,16 +258,20 @@ class AdaptiveControlCustomizationMatrixTest {
         }
     }
 
-    private fun ComposeUiTest.assertThumbGlyph(expected: Color, observed: Map<String, Color>) {
+    private fun ComposeUiTest.assertThumbGlyph(expected: Color, observed: Map<String, Color>, trace: (String) -> Unit = {}) {
         assertEquals(expected, observed["switch"], "Actual supplied custom thumb local")
+        trace("enabled-thumb-color-verified")
         val screenshot = onNodeWithTag("thumb", useUnmergedTree = true).captureToImage()
         try {
+            trace("enabled-thumb-snapshot-returned")
             val pixels = screenshot.toPixelMap()
+            trace("enabled-thumb-pixel-map-returned")
             assertTrue((0 until pixels.width).any { x -> (0 until pixels.height).any { y ->
                 val actual = pixels[x, y]
                 abs(actual.red - expected.red) < .1f && abs(actual.green - expected.green) < .1f &&
                     abs(actual.blue - expected.blue) < .1f && actual.alpha > .9f
             } }, "The actual custom thumb glyph must draw $expected")
+            trace("enabled-thumb-pixels-verified")
         } finally {
             screenshot.asSkiaBitmap().close()
         }

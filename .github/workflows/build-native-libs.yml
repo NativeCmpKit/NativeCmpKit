@@ -704,8 +704,7 @@ jobs:
           if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
             xcrun simctl bootstatus "$device" -b | tee build/ci-identity/camera-boot.txt
             if grep -Fq 'Data Migration Failed' build/ci-identity/camera-boot.txt; then
-              echo 'The disposable Camera simulator failed data migration before application launch.' >&2
-              exit 1
+              echo 'CoreSimulator reported a data migration failure. Checking actual boot and Photos startup separately.'
             fi
             python3 scripts/ci/runtime_context.py --expected-arch arm64 --apple --simulator "$device" --require-booted \
               --output build/ci-identity/camera-simulator.json

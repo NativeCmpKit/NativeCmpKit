@@ -39,8 +39,9 @@ def assert_owned_customization_screenshots(case, text):
         case.assertEqual(1, body.count("val pixels = screenshot.toPixelMap()"), name)
         case.assertEqual(1, body.count("screenshot.asSkiaBitmap().close()"), name)
         capture = r"val screenshot = onNodeWithTag\([^\n]+\)\.captureToImage\(\)\n        try \{\n"
-        if name == "assertOpaqueSurface":
-            capture += '            trace\\("enabled-button-snapshot-returned"\\)\n'
+        described = {"assertOpaqueSurface": "button", "assertThumbGlyph": "thumb"}.get(name)
+        if described is not None:
+            capture += r'            trace\("enabled-' + described + r'-snapshot-returned"\)' + "\n"
         case.assertRegex(body, capture + r"            val pixels = screenshot\.toPixelMap\(\)")
         terminal = "} finally {\n            screenshot.asSkiaBitmap().close()\n        }"
         case.assertEqual(1, body.count(terminal), name)

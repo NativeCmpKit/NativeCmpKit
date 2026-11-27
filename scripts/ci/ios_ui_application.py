@@ -201,7 +201,9 @@ PRE26_CUSTOMIZATION_PHASES = (
     "compose-enter", "compose-body-entered", "set-content-enter", "set-content-returned",
     "enabled-captures-enter", "enabled-button-snapshot-returned", "enabled-button-pixel-map-returned",
     "enabled-button-pixels-verified", "enabled-button-capture-complete", "enabled-icon-capture-complete",
-    "enabled-slider-capture-complete", "enabled-captures-returned", "paired-taps-enter", "paired-taps-returned",
+    "enabled-slider-capture-complete", "enabled-thumb-color-verified", "enabled-thumb-snapshot-returned",
+    "enabled-thumb-pixel-map-returned", "enabled-thumb-pixels-verified", "enabled-captures-returned",
+    "paired-taps-enter", "paired-taps-returned",
     "slider-drag-enter", "slider-drag-returned", "disabled-captures-enter", "disabled-captures-returned",
     "disabled-input-enter", "disabled-input-returned", "compose-returned",
 )
@@ -211,8 +213,7 @@ PRE26_NEGATIVE_STEPS_CASE = (
 )
 PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
 PRE26_NEGATIVE_STEPS_PHASES = (
-    "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned",
-    "wait-for-idle-returned", "public-validation-verified",
+    "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned", "public-validation-verified",
 )
 
 

@@ -19,10 +19,10 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.nativecmpkit.ui.controls.AdaptiveControlBranch
 import io.github.apdelrahman1911.nativecmpkit.ui.controls.requireAdaptiveControlHost
+import io.github.apdelrahman1911.nativecmpkit.ui.controls.runAdaptiveControlUiTest
 import io.github.apdelrahman1911.nativecmpkit.ui.navigation.UIKitUIBarButtonItem
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -36,7 +36,7 @@ class AdaptiveToolbarFallbackNativeTest {
 
     private fun fallback(branch: AdaptiveControlBranch, includePopulatedItems: Boolean) {
         requireAdaptiveControlHost(branch)
-        runComposeUiTest {
+        runAdaptiveControlUiTest {
             val expanded = mutableStateOf(true)
             val revision = mutableStateOf(0)
             val items = mutableStateOf(emptyList<UIKitUIBarButtonItem>())

@@ -3,6 +3,9 @@
 
 package io.github.apdelrahman1911.nativecmpkit.ui.controls
 
+import androidx.compose.ui.test.ComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runComposeUiTest
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.onApplicationMain
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
 import platform.UIKit.UIDevice
@@ -25,4 +28,18 @@ internal fun requireAdaptiveControlHost(branch: AdaptiveControlBranch) {
     assertTrue(if (branch == AdaptiveControlBranch.Pre26) major < 26 else major >= 26,
         "${branch.label} must execute on its actual iOS runtime; observed major=$major")
     println("NATIVECMPKIT_ADAPTIVE_CONTROL_HOST branch=${branch.label} major=$major")
+}
+
+/** Let the scene close before reporting a caller assertion to the native test runner. */
+@OptIn(ExperimentalTestApi::class)
+internal fun runAdaptiveControlUiTest(block: suspend ComposeUiTest.() -> Unit) {
+    var assertion: AssertionError? = null
+    runComposeUiTest {
+        try {
+            block()
+        } catch (failure: AssertionError) {
+            assertion = failure
+        }
+    }
+    assertion?.let { throw it }
 }

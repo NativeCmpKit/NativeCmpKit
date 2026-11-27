@@ -8,8 +8,11 @@ import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.AbstractApplier
+import androidx.compose.runtime.Composition
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -28,6 +31,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.nativecmpkit.ui.controls.AdaptiveControlBranch
 import io.github.apdelrahman1911.nativecmpkit.ui.controls.requireAdaptiveControlHost
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.onApplicationMain
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -177,20 +182,36 @@ class AdaptiveSliderNativeMatrixTest {
             if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE $phase")
         }
         trace("compose-enter")
-        val failure = assertFailsWith<IllegalArgumentException> {
-            runComposeUiTest {
-                trace("set-content-enter")
-                setContent {
-                    trace("adaptive-slider-enter")
-                    AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1)
+        onApplicationMain {
+            // Exercise the public argument check synchronously in Compose. This
+            // deliberately invalid input must throw before any layout is created.
+            val parent = Recomposer(EmptyCoroutineContext)
+            val composition = Composition(object : AbstractApplier<Unit>(Unit) {
+                override fun insertTopDown(index: Int, instance: Unit): Unit = error("Unexpected slider layout")
+                override fun insertBottomUp(index: Int, instance: Unit): Unit = error("Unexpected slider layout")
+                override fun remove(index: Int, count: Int) = Unit
+                override fun move(from: Int, to: Int, count: Int) = Unit
+                override fun onClear() = Unit
+            }, parent)
+            try {
+                val failure = assertFailsWith<IllegalArgumentException> {
+                    trace("set-content-enter")
+                    composition.setContent {
+                        trace("adaptive-slider-enter")
+                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1)
+                    }
+                    trace("set-content-returned")
                 }
-                trace("set-content-returned")
-                waitForIdle()
-                trace("wait-for-idle-returned")
+                assertEquals("steps should be >= 0", failure.message,
+                    "Only the public invalid-steps contract satisfies this test")
+                trace("public-validation-verified")
+            } finally {
+                try {
+                    composition.dispose()
+                } finally {
+                    parent.cancel()
+                }
             }
         }
-        assertEquals("steps should be >= 0", failure.message,
-            "Only the public invalid-steps contract, not a host/setup error, satisfies this test")
-        trace("public-validation-verified")
     }
 }
