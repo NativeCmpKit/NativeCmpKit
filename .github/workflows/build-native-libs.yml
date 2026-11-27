@@ -427,10 +427,18 @@ jobs:
         env:
           TARGETS: ${{ inputs.profile == 'identity-apple-package' && 'all' || 'desktop' }}
         run: |
+          kotlin_host_options=()
+          if [[ "$IDENTITY_PROFILE" == identity-linux-arm64-package ]]; then
+            test "$RUNNER_OS/$RUNNER_ARCH/$TARGETS" = Linux/ARM64/desktop
+            # KGP supports the Desktop JVM publications on this host via this
+            # opt-in. iOS publication targets stay outside the staging task.
+            kotlin_host_options+=(-Pkotlin.internal.mpp.allowMultiplatformPublicationsOnUnsupportedHost=true)
+          fi
           ./gradlew stageVerificationPublications \
             -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets="$TARGETS" \
             -PnativeCmpkit.version="$IDENTITY_STAGING_VERSION" \
-            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache "${kotlin_host_options[@]}"
+          test -d build/verification-repo
       - name: Inspect staged artifacts and native payload identity
         if: endsWith(inputs.profile, '-package')
         shell: bash
