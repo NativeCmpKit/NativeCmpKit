@@ -3,9 +3,9 @@
 import org.gradle.api.tasks.testing.Test
 
 gradle.settingsEvaluated {
-    val repositories = dependencyResolutionManagement.repositories
-    val mirror = settingsDir.resolve("build/ci-identity/robolectric-repo")
-    if (settingsDir.canonicalFile == gradle.startParameter.currentDir.canonicalFile) {
+    if (rootProject.name == "NativeCmpKit") {
+        val repositories = dependencyResolutionManagement.repositories
+        val mirror = settingsDir.resolve("build/ci-identity/robolectric-repo")
         check(mirror.isDirectory) { "Verified local Robolectric inputs are required" }
         repositories.exclusiveContent {
             forRepository {
