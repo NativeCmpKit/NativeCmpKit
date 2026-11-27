@@ -212,20 +212,23 @@ jobs:
         with:
           min-wrapper-count: 1
           allow-snapshots: false
-      - name: Install the official Android SDK platform
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          sdkmanager --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
-          sdkmanager --sdk_root="$ANDROID_HOME" --install 'cmdline-tools;23.0' 'platforms;android-37.0'
       - name: Linux native prerequisites
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y libgtk-3-dev libwayland-dev xvfb xauth
       - name: Set up pinned Rust
+        id: rust
         shell: bash
         run: rustup toolchain install 1.98.0 --profile minimal --no-self-update
+      - name: Install the official Android SDK platform
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sdkmanager="${ANDROID_HOME:?}/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$sdkmanager"
+          "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
+          "$sdkmanager" --sdk_root="$ANDROID_HOME" --install 'cmdline-tools;23.0' 'platforms;android-37.0'
       - name: Source identity and migration checks
         if: runner.os == 'Linux'
         run: |
@@ -253,7 +256,7 @@ jobs:
         shell: cmd
         run: gradlew.bat :nativecmpkit-file-picker:desktopTest :nativecmpkit-share:desktopTest --continue --max-workers=2 --no-configuration-cache --no-build-cache
       - name: Native crate tests
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.rust.outcome == 'success' }}
         shell: bash
         run: |
           cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
