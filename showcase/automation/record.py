@@ -32,13 +32,14 @@ SCREEN_ROWS = {
     "ui-adaptive-progress": ["UI-PROGRESS-001", "UI-PROGRESS-002"],
     "ui-adaptive-date-picker": ["UI-DATE-001", "UI-DATE-002", "UI-DATE-003", "UI-DATE-004", "UI-DATE-005"],
     "ui-adaptive-time-picker": ["UI-TIME-001"],
-    "ui-adaptive-alert-dialog": ["UI-ALERT-001", "UI-ALERT-002", "UI-ALERT-003", "UI-ALERT-004"],
+    "ui-adaptive-alert-dialog": ["UI-ALERT-001", "UI-ALERT-002", "UI-ALERT-003",
+                                 "UI-ALERT-004", "UI-ALERT-005"],
     "ui-adaptive-bottom-sheet": ["UI-SHEET-001"],
     "ui-adaptive-dropdown": ["UI-MENU-001", "UI-MENU-002"],
     "ui-adaptive-scaffold": ["UI-BAR-001"],
-    "ui-adaptive-top-bar": ["UI-BAR-002", "UI-ICON-002"],
-    "ui-adaptive-navigation-bar": ["UI-BAR-003"],
-    "ui-adaptive-toolbar": ["UI-BAR-004"],
+    "ui-adaptive-top-bar": ["UI-BAR-002", "UI-BAR-005", "UI-ICON-002"],
+    "ui-adaptive-navigation-bar": ["UI-BAR-003", "UI-BAR-006"],
+    "ui-adaptive-toolbar": ["UI-BAR-004", "UI-BAR-007"],
     "ui-cupertino-icons": ["UI-ICON-001", "UI-ICON-003", "UI-ICON-004"],
     "io-file-picker": ["IO-CTX-001", "IO-FILE-001", "IO-PICK-001", "IO-PICK-002", "IO-PICK-003"],
     "io-image-picker": ["IO-COIL-001"],
@@ -79,7 +80,7 @@ def main() -> None:
         for row_id in row_ids:
             row = rows[row_id]
             execution = row["execution"][args.platform]
-            if execution["status"] != "not-applicable":
+            if execution["status"] not in ("not-applicable", "passed"):
                 execution["status"] = "passed" if row_id in passed else "captured"
                 execution["run"] = args.run
                 execution["attempt"] = args.attempt
