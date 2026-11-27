@@ -143,7 +143,7 @@ private fun SwitchSettingItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = title,
+                    text = "$title: ${if (checked) "on" else "off"}",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )

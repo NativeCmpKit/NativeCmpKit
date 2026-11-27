@@ -195,6 +195,12 @@ enum class Screen(
         icon = Icons.Outlined.Menu,
         category = ScreenCategory.UIComponents,
     ),
+    LiquidGlass(
+        title = "Liquid Glass",
+        description = "iOS 26 standalone glass button, switch and slider; fallback elsewhere",
+        icon = Icons.Outlined.Layers,
+        category = ScreenCategory.UIComponents,
+    ),
     Geo(
         title = "Geo Maths",
         description = "Deterministic LatLng distance and bearing; tracker limitations",

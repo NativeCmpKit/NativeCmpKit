@@ -46,6 +46,7 @@ SCREENS = [
     ("Web View", "webview", "overview"),
     ("Permissions", "permissions", "overview"),
     ("Geo Maths", "geo-math", "overview"),
+    ("Liquid Glass", "ui-liquid-glass", "overview"),
     ("Known Limitations", "limitations", "known-limitations"),
 ]
 

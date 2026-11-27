@@ -21,6 +21,10 @@ import io.github.apdelrahman1911.kira.ui.button.AdaptiveIconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +42,7 @@ import io.github.apdelrahman1911.kira.sf.symbols.SFSymbol
 fun TopBarDemoScreen(
     navigateBack: () -> Unit,
 ) {
+    var lastAction by remember { mutableStateOf("No top-bar action") }
     AdaptiveScaffold(
         topBar = {
             AdaptiveTopBar(
@@ -51,10 +56,10 @@ fun TopBarDemoScreen(
                     }
                 },
                 actions = {
-                    AdaptiveIconButton(onClick = { /* share */ }) {
+                    AdaptiveIconButton(onClick = { lastAction = "Share tapped" }) {
                         Icon(Icons.Filled.Share, contentDescription = "Share")
                     }
-                    AdaptiveIconButton(onClick = { /* more */ }) {
+                    AdaptiveIconButton(onClick = { lastAction = "More tapped" }) {
                         Icon(Icons.Filled.MoreVert, contentDescription = "More")
                     }
                 },
@@ -68,11 +73,11 @@ fun TopBarDemoScreen(
                 iosTrailingItems = listOf(
                     UIKitUIBarButtonItem(
                         image = UIKitImage.SystemName(SFSymbol.squareAndArrowUp),
-                        onClick = { /* share */ },
+                        onClick = { lastAction = "Share tapped" },
                     ),
                     UIKitUIBarButtonItem(
                         image = UIKitImage.SystemName(SFSymbol.ellipsisCircle),
-                        onClick = { /* more */ },
+                        onClick = { lastAction = "More tapped" },
                     ),
                     UIKitUIBarButtonItem(
                         image = UIKitImage.Vector(Icons.Outlined.Favorite),
@@ -96,6 +101,12 @@ fun TopBarDemoScreen(
                 text = "Top app bar using native iOS UINavigationBar and Material3 TopAppBar on other platforms.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Last action: $lastAction",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
             )
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -35,6 +35,9 @@ import io.github.apdelrahman1911.kira.permissions.ReadCalendar
 import io.github.apdelrahman1911.kira.permissions.ReadContacts
 import io.github.apdelrahman1911.kira.permissions.ReadImage
 import io.github.apdelrahman1911.kira.permissions.ReadStorage
+import io.github.apdelrahman1911.kira.permissions.SendSms
+import io.github.apdelrahman1911.kira.permissions.ReceiveSms
+import io.github.apdelrahman1911.kira.permissions.ReadSms
 import io.github.apdelrahman1911.kira.permissions.ReadVideo
 import io.github.apdelrahman1911.kira.permissions.RecordAudio
 import io.github.apdelrahman1911.kira.permissions.RemoteNotification
@@ -54,6 +57,9 @@ fun PermissionScreen(navigateBack: () -> Unit) {
     val permissions = remember {
         listOf(
             Permission.Call,
+            Permission.ReadSms,
+            Permission.ReceiveSms,
+            Permission.SendSms,
             Permission.Camera,
             Permission.Gallery,
             Permission.ReadStorage,

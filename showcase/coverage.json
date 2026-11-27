@@ -43,21 +43,21 @@
       ],
       "flowId": "android-phone-adaptivebutton-filled-enabled-and-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivebutton/filled-enabled-and-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebutton/filled-enabled-and-disabled/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "passed",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -73,23 +73,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-button/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BUTTON-002",
@@ -115,21 +99,21 @@
       ],
       "flowId": "android-phone-adaptivebutton-icon-and-label-content",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivebutton/icon-and-label-content/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebutton/icon-and-label-content/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -145,23 +129,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-button/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BUTTON-003",
@@ -187,21 +155,21 @@
       ],
       "flowId": "android-phone-adaptiveiconbutton-three-enabled-and-one-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptiveiconbutton/three-enabled-and-one-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveiconbutton/three-enabled-and-one-disabled/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -217,23 +185,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-button/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BUTTON-004",
@@ -260,21 +212,21 @@
       ],
       "flowId": "android-phone-cupertinobutton-filled-bordered-plain-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
+        "android": "screenshots/android/cupertinobutton/filled-bordered-plain-disabled/api35-phone.png",
+        "ios": "screenshots/ios/cupertinobutton/filled-bordered-plain-disabled/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -292,22 +244,6 @@
       "defect": null,
       "limitations": [
         "The public API has no size parameter and no selected state."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-button/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -336,21 +272,21 @@
       ],
       "flowId": "android-phone-modifier-adaptiveclickable-single-long-double-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-clickable/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-clickable/overview/iphone-simulator.png"
+        "android": "screenshots/android/modifier-adaptiveclickable/single-long-double-disabled/api35-phone.png",
+        "ios": "screenshots/ios/modifier-adaptiveclickable/single-long-double-disabled/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -366,23 +302,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-clickable/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-clickable/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-SWITCH-001",
@@ -409,21 +329,21 @@
       ],
       "flowId": "android-phone-adaptiveswitch-on-off-and-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptiveswitch/on-off-and-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveswitch/on-off-and-disabled/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -439,23 +359,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-SWITCH-002",
@@ -481,21 +385,21 @@
       ],
       "flowId": "android-phone-cupertinoswitch-on-off-disabled-thumb-content",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png"
+        "android": "screenshots/android/cupertinoswitch/on-off-disabled-thumb-content/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoswitch/on-off-disabled-thumb-content/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -513,22 +417,6 @@
       "defect": null,
       "limitations": [
         "On iOS 26 AdaptiveSwitch drops thumbContent and custom colors; CupertinoSwitch is the parity control."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -556,21 +444,21 @@
       ],
       "flowId": "android-phone-adaptiveslider-continuous-value-readout",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptiveslider/continuous-value-readout/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/continuous-value-readout/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -586,23 +474,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-SLIDER-002",
@@ -628,21 +500,21 @@
       ],
       "flowId": "android-phone-adaptiveslider-discrete-steps",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptiveslider/discrete-steps/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/discrete-steps/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -660,22 +532,6 @@
       "defect": null,
       "limitations": [
         "iOS 26 LiquidGlassSlider silently drops the steps parameter."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -703,21 +559,21 @@
       ],
       "flowId": "android-phone-adaptiveslider-disabled-and-custom-range",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptiveslider/disabled-and-custom-range/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/disabled-and-custom-range/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -733,23 +589,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-PROGRESS-001",
@@ -775,21 +615,21 @@
       ],
       "flowId": "android-phone-adaptivecircularprogressindicator-indeterminate-sizes",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-progress/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivecircularprogressindicator/indeterminate-sizes/api35-phone.png",
+        "ios": "screenshots/ios/adaptivecircularprogressindicator/indeterminate-sizes/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -805,23 +645,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-progress/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-PROGRESS-002",
@@ -847,21 +671,21 @@
       ],
       "flowId": "android-phone-cupertinoactivityindicator-spinner",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-progress/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png"
+        "android": "screenshots/android/cupertinoactivityindicator/spinner/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoactivityindicator/spinner/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -877,23 +701,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-progress/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-PROGRESS-003",
@@ -949,22 +757,6 @@
       "defect": null,
       "limitations": [
         "Determinate circular progress is not part of the public API."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -1021,22 +813,6 @@
       "defect": null,
       "limitations": [
         "AdaptiveExpandableFAB and UIKitExpandableFABItem are internal in this revision."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -1064,21 +840,21 @@
       ],
       "flowId": "android-phone-adaptivedatepicker-inline-selection-and-readout",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivedatepicker/inline-selection-and-readout/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedatepicker/inline-selection-and-readout/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1094,23 +870,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-DATE-002",
@@ -1138,21 +898,21 @@
       ],
       "flowId": "android-phone-adaptivecompactdatepicker-open-confirm-cancel",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivecompactdatepicker/open-confirm-cancel/api35-phone.png",
+        "ios": "screenshots/ios/adaptivecompactdatepicker/open-confirm-cancel/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1168,23 +928,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-DATE-003",
@@ -1213,21 +957,21 @@
       ],
       "flowId": "android-phone-adaptivedaterangepicker-start-and-end-transition",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivedaterangepicker/start-and-end-transition/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedaterangepicker/start-and-end-transition/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1243,23 +987,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-DATE-004",
@@ -1287,21 +1015,21 @@
       ],
       "flowId": "android-phone-datebounds-and-selectabledates-bounded-weekdays-only",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/datebounds-and-selectabledates/bounded-weekdays-only/api35-phone.png",
+        "ios": "screenshots/ios/datebounds-and-selectabledates/bounded-weekdays-only/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1317,23 +1045,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-DATE-005",
@@ -1359,8 +1071,8 @@
       ],
       "flowId": "android-phone-uikitdisplaymode-picker-and-wheels",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/uikitdisplaymode/picker-and-wheels/api35-phone.png",
+        "ios": "screenshots/ios/uikitdisplaymode/picker-and-wheels/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -1370,10 +1082,10 @@
           "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -1389,23 +1101,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-TIME-001",
@@ -1431,15 +1127,15 @@
       ],
       "flowId": "android-phone-adaptivetimepicker-12-hour-and-24-hour-states",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-time-picker/overview/api35-phone.png",
+        "android": "screenshots/android/adaptivetimepicker/12-hour-and-24-hour-states/api35-phone.png",
         "ios": "screenshots/ios/adaptivetimepicker/12-hour-and-24-hour-states/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
           "status": "not-run",
@@ -1461,16 +1157,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-time-picker/overview/api35-phone.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ALERT-001",
@@ -1498,21 +1185,21 @@
       ],
       "flowId": "android-phone-adaptivealertdialog-two-button-confirm-and-cancel",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png"
+        "android": "screenshots/android/adaptivealertdialog/two-button-confirm-and-cancel/api35-phone.png",
+        "ios": "screenshots/ios/adaptivealertdialog/two-button-confirm-and-cancel/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1528,23 +1215,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ALERT-002",
@@ -1571,21 +1242,21 @@
       ],
       "flowId": "android-phone-adaptivealertdialog-single-button",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png"
+        "android": "screenshots/android/adaptivealertdialog/single-button/api35-phone.png",
+        "ios": "screenshots/ios/adaptivealertdialog/single-button/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1601,23 +1272,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ALERT-003",
@@ -1646,8 +1301,8 @@
       ],
       "flowId": "android-phone-adaptivebasicalertdialog-text-fields-and-critical-severity",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivebasicalertdialog/text-fields-and-critical-severity/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebasicalertdialog/text-fields-and-critical-severity/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -1657,10 +1312,10 @@
           "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -1676,23 +1331,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ALERT-004",
@@ -1718,8 +1357,8 @@
       ],
       "flowId": "android-phone-alertdialogiosstyle-actionsheet-iphone-sheet-and-ipad-popover",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png"
+        "android": "screenshots/android/alertdialogiosstyle-actionsheet/iphone-sheet-and-ipad-popover/api35-phone.png",
+        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/iphone-sheet-and-ipad-popover/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -1729,10 +1368,10 @@
           "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -1750,22 +1389,6 @@
       "defect": null,
       "limitations": [
         "The iPad anchor is the presenting view, not a caller-selected source view or bar item."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -1795,21 +1418,21 @@
       ],
       "flowId": "android-phone-adaptivebottomsheet-show-content-dismiss",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-bottom-sheet/expanded/iphone-simulator.png"
+        "android": "screenshots/android/adaptivebottomsheet/show-content-dismiss/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebottomsheet/show-content-dismiss/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1825,37 +1448,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-bottom-sheet/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-bottom-sheet/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-bottom-sheet/expanded/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-MENU-001",
@@ -1884,21 +1477,21 @@
       ],
       "flowId": "android-phone-adaptivedropdown-simple-destructive-and-disabled-items",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-dropdown/menu/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png"
+        "android": "screenshots/android/adaptivedropdown/simple-destructive-and-disabled-items/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedropdown/simple-destructive-and-disabled-items/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -1914,37 +1507,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-dropdown/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-dropdown/menu/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-dropdown/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-MENU-002",
@@ -1970,21 +1533,21 @@
       ],
       "flowId": "android-phone-adaptivedropdownsection-sections",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-dropdown/menu/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png"
+        "android": "screenshots/android/adaptivedropdownsection/sections/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedropdownsection/sections/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2000,37 +1563,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-dropdown/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-dropdown/menu/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-dropdown/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BAR-001",
@@ -2057,21 +1590,21 @@
       ],
       "flowId": "android-phone-adaptivescaffold-top-bar-bottom-bar-content-padding",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-scaffold/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-scaffold/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivescaffold/top-bar-bottom-bar-content-padding/api35-phone.png",
+        "ios": "screenshots/ios/adaptivescaffold/top-bar-bottom-bar-content-padding/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2087,23 +1620,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-scaffold/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-scaffold/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BAR-002",
@@ -2131,21 +1648,21 @@
       ],
       "flowId": "android-phone-adaptivetopbar-title-leading-trailing-menu",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivetopbar/title-leading-trailing-menu/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetopbar/title-leading-trailing-menu/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2161,23 +1678,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BAR-003",
@@ -2203,21 +1704,21 @@
       ],
       "flowId": "android-phone-adaptivenavigationbar-items-and-selected-index",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-navigation-bar/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-navigation-bar/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivenavigationbar/items-and-selected-index/api35-phone.png",
+        "ios": "screenshots/ios/adaptivenavigationbar/items-and-selected-index/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2233,23 +1734,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-navigation-bar/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-navigation-bar/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-BAR-004",
@@ -2276,21 +1761,21 @@
       ],
       "flowId": "android-phone-adaptivetoolbar-collapsed-and-expanded",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-toolbar/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-toolbar/overview/iphone-simulator.png"
+        "android": "screenshots/android/adaptivetoolbar/collapsed-and-expanded/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetoolbar/collapsed-and-expanded/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2306,23 +1791,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-toolbar/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-toolbar/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ICON-001",
@@ -2351,21 +1820,21 @@
       ],
       "flowId": "android-phone-cupertinoicon-catalog-search-and-category",
       "screenshot": {
-        "android": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png",
-        "ios": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png"
+        "android": "screenshots/android/cupertinoicon-catalog/search-and-category/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoicon-catalog/search-and-category/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2381,44 +1850,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-cupertino-icons/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223",
-          "capture": "screenshots/android/ui-cupertino-icons/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223",
-          "capture": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ICON-002",
@@ -2445,8 +1877,8 @@
       ],
       "flowId": "android-phone-sfsymbol-and-uikitimage-system-name-and-vector",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png",
-        "ios": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png"
+        "android": "screenshots/android/sfsymbol-and-uikitimage/system-name-and-vector/api35-phone.png",
+        "ios": "screenshots/ios/sfsymbol-and-uikitimage/system-name-and-vector/iphone-simulator.png"
       },
       "execution": {
         "android": {
@@ -2456,10 +1888,10 @@
           "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -2475,23 +1907,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "UI-ICON-003",
@@ -2517,21 +1933,21 @@
       ],
       "flowId": "android-phone-cupertinoicon-size-and-content-description",
       "screenshot": {
-        "android": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png",
-        "ios": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png"
+        "android": "screenshots/android/cupertinoicon/size-and-content-description/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoicon/size-and-content-description/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2547,44 +1963,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-cupertino-icons/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223",
-          "capture": "screenshots/android/ui-cupertino-icons/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45973585586",
-          "attempt": "1",
-          "job": "140419703223",
-          "capture": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-CTX-001",
@@ -2610,21 +1989,21 @@
       ],
       "flowId": "android-phone-localplatformcontext-host-context-smoke",
       "screenshot": {
-        "android": "screenshots/android/io-file-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/localplatformcontext/host-context-smoke/api35-phone.png",
+        "ios": "screenshots/ios/localplatformcontext/host-context-smoke/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2640,23 +2019,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-FILE-001",
@@ -2685,21 +2048,21 @@
       ],
       "flowId": "android-phone-kmpfile-read-stream-name-and-path",
       "screenshot": {
-        "android": "screenshots/android/io-file-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/kmpfile/read-stream-name-and-path/api35-phone.png",
+        "ios": "screenshots/ios/kmpfile/read-stream-name-and-path/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2715,23 +2078,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-PICK-001",
@@ -2758,21 +2105,21 @@
       ],
       "flowId": "android-phone-rememberfilepickerlauncher-single-selection",
       "screenshot": {
-        "android": "screenshots/android/io-file-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/rememberfilepickerlauncher/single-selection/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilepickerlauncher/single-selection/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2788,23 +2135,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-PICK-002",
@@ -2831,21 +2162,21 @@
       ],
       "flowId": "android-phone-rememberfilepickerlauncher-multiple-with-limit",
       "screenshot": {
-        "android": "screenshots/android/io-file-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/rememberfilepickerlauncher/multiple-with-limit/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilepickerlauncher/multiple-with-limit/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2861,23 +2192,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-PICK-003",
@@ -2905,21 +2220,21 @@
       ],
       "flowId": "android-phone-filepickerfiletype-folder-folder-and-cancel",
       "screenshot": {
-        "android": "screenshots/android/io-file-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/filepickerfiletype-folder/folder-and-cancel/api35-phone.png",
+        "ios": "screenshots/ios/filepickerfiletype-folder/folder-and-cancel/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -2935,23 +2250,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-SAVE-001",
@@ -2979,21 +2278,21 @@
       ],
       "flowId": "android-phone-rememberfilesaverlauncher-bytes-save-and-reopen",
       "screenshot": {
-        "android": "screenshots/android/io-file-saver/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-file-saver/overview/iphone-simulator.png"
+        "android": "screenshots/android/rememberfilesaverlauncher/bytes-save-and-reopen/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilesaverlauncher/bytes-save-and-reopen/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -3009,23 +2308,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-file-saver/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-file-saver/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-COIL-001",
@@ -3051,21 +2334,21 @@
       ],
       "flowId": "android-phone-kmpfilefetcher-and-asyncimage-preview-success",
       "screenshot": {
-        "android": "screenshots/android/io-image-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-image-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/kmpfilefetcher-and-asyncimage/preview-success/api35-phone.png",
+        "ios": "screenshots/ios/kmpfilefetcher-and-asyncimage/preview-success/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -3081,23 +2364,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-image-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-image-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "IO-CAMERA-001",
@@ -3125,21 +2392,21 @@
       ],
       "flowId": "android-phone-remembercamerapickerlauncher-capture-or-fallback",
       "screenshot": {
-        "android": "screenshots/android/io-camera-picker/overview/api35-phone.png",
-        "ios": "screenshots/ios/io-camera-picker/overview/iphone-simulator.png"
+        "android": "screenshots/android/remembercamerapickerlauncher/capture-or-fallback/api35-phone.png",
+        "ios": "screenshots/ios/remembercamerapickerlauncher/capture-or-fallback/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3155,23 +2422,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/io-camera-picker/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/io-camera-picker/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-SINGLE-001",
@@ -3199,21 +2450,21 @@
       ],
       "flowId": "android-phone-rememberpermissionstate-camera-grant-and-deny",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/rememberpermissionstate/camera-grant-and-deny/api35-phone.png",
+        "ios": "screenshots/ios/rememberpermissionstate/camera-grant-and-deny/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3229,23 +2480,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-BULK-001",
@@ -3272,21 +2507,21 @@
       ],
       "flowId": "android-phone-remembermultiplepermissionsstate-camera-and-microphone",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/remembermultiplepermissionsstate/camera-and-microphone/api35-phone.png",
+        "ios": "screenshots/ios/remembermultiplepermissionsstate/camera-and-microphone/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3302,23 +2537,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-STATE-001",
@@ -3345,21 +2564,21 @@
       ],
       "flowId": "android-phone-permissionstate-determined-and-settings-return",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/permissionstate/determined-and-settings-return/api35-phone.png",
+        "ios": "screenshots/ios/permissionstate/determined-and-settings-return/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3375,23 +2594,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-NOTIF-001",
@@ -3418,21 +2621,21 @@
       ],
       "flowId": "android-phone-notification-and-remotenotification-local-and-remote-notification",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/notification-and-remotenotification/local-and-remote-notification/api35-phone.png",
+        "ios": "screenshots/ios/notification-and-remotenotification/local-and-remote-notification/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3448,23 +2651,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-LOC-001",
@@ -3491,21 +2678,21 @@
       ],
       "flowId": "android-phone-backgroundlocation-and-location-leaves-foreground-and-background-location",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/backgroundlocation-and-location-leaves/foreground-and-background-location/api35-phone.png",
+        "ios": "screenshots/ios/backgroundlocation-and-location-leaves/foreground-and-background-location/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3521,23 +2708,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-PIM-001",
@@ -3564,21 +2735,21 @@
       ],
       "flowId": "android-phone-contacts-and-calendar-leaves-read-and-write",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/contacts-and-calendar-leaves/read-and-write/api35-phone.png",
+        "ios": "screenshots/ios/contacts-and-calendar-leaves/read-and-write/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3594,23 +2765,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-BT-001",
@@ -3637,21 +2792,21 @@
       ],
       "flowId": "android-phone-bluetooth-and-wi-fi-leaves-scan-connect-and-nearby",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/bluetooth-and-wi-fi-leaves/scan-connect-and-nearby/api35-phone.png",
+        "ios": "screenshots/ios/bluetooth-and-wi-fi-leaves/scan-connect-and-nearby/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3667,23 +2822,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-CORE-001",
@@ -3709,21 +2848,21 @@
       ],
       "flowId": "android-phone-storage-call-and-sms-leaves-legacy-routes",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
-        "ios": "screenshots/ios/permissions/overview/iphone-simulator.png"
+        "android": "screenshots/android/storage-call-and-sms-leaves/legacy-routes/api35-phone.png",
+        "ios": "screenshots/ios/storage-call-and-sms-leaves/legacy-routes/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3739,23 +2878,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/permissions/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/permissions/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "PERM-STUB-001",
@@ -3812,23 +2935,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "SHARE-001",
@@ -3856,21 +2963,21 @@
       ],
       "flowId": "android-phone-sharecontent-text-native-share-sheet",
       "screenshot": {
-        "android": "screenshots/android/share/overview/api35-phone.png",
-        "ios": "screenshots/ios/share/overview/iphone-simulator.png"
+        "android": "screenshots/android/sharecontent-text/native-share-sheet/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-text/native-share-sheet/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3886,23 +2993,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/share/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/share/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "SHARE-002",
@@ -3929,21 +3020,21 @@
       ],
       "flowId": "android-phone-sharecontent-url-native-share-sheet",
       "screenshot": {
-        "android": "screenshots/android/share/overview/api35-phone.png",
-        "ios": "screenshots/ios/share/overview/iphone-simulator.png"
+        "android": "screenshots/android/sharecontent-url/native-share-sheet/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-url/native-share-sheet/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -3959,23 +3050,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/share/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/share/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "SHARE-003",
@@ -4003,21 +3078,21 @@
       ],
       "flowId": "android-phone-sharecontent-file-and-files-single-and-mixed-files",
       "screenshot": {
-        "android": "screenshots/android/share/overview/api35-phone.png",
-        "ios": "screenshots/ios/share/overview/iphone-simulator.png"
+        "android": "screenshots/android/sharecontent-file-and-files/single-and-mixed-files/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-file-and-files/single-and-mixed-files/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-applicable",
@@ -4033,23 +3108,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/share/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/share/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "WEB-001",
@@ -4077,21 +3136,21 @@
       ],
       "flowId": "android-phone-webviewstate-deterministic-html-load",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
-        "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
+        "android": "screenshots/android/webviewstate/deterministic-html-load/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate/deterministic-html-load/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4107,44 +3166,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/second-page/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookies-cleared/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "WEB-002",
@@ -4172,21 +3194,21 @@
       ],
       "flowId": "android-phone-webviewnavigator-url-load-back-and-forward",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
-        "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
+        "android": "screenshots/android/webviewnavigator/url-load-back-and-forward/api35-phone.png",
+        "ios": "screenshots/ios/webviewnavigator/url-load-back-and-forward/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4202,44 +3224,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/second-page/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookies-cleared/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "WEB-003",
@@ -4266,21 +3251,21 @@
       ],
       "flowId": "android-phone-webviewstate-errorsforcurrentrequest-bad-destination",
       "screenshot": {
-        "android": "screenshots/android/webview/invalid-destination/api35-phone.png",
-        "ios": "screenshots/ios/webview/invalid-destination/iphone-simulator.png"
+        "android": "screenshots/android/webviewstate-errorsforcurrentrequest/bad-destination/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate-errorsforcurrentrequest/bad-destination/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4296,51 +3281,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookies-cleared/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/invalid-destination/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/invalid-destination/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "WEB-004",
@@ -4367,21 +3308,21 @@
       ],
       "flowId": "android-phone-webviewstate-evaluatejavascript-and-settings-javascript-on",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
-        "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
+        "android": "screenshots/android/webviewstate-evaluatejavascript-and-settings/javascript-on/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate-evaluatejavascript-and-settings/javascript-on/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4397,51 +3338,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/javascript-title/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookies-cleared/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/javascript-title/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "WEB-005",
@@ -4470,21 +3367,21 @@
       ],
       "flowId": "android-phone-cookiemanager-set-get-remove",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
-        "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
+        "android": "screenshots/android/cookiemanager/set-get-remove/api35-phone.png",
+        "ios": "screenshots/ios/cookiemanager/set-get-remove/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4500,51 +3397,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/overview/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookie-roundtrip/api35-phone.png"
-        },
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/webview/cookies-cleared/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/overview/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookie-roundtrip/iphone-simulator.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "NAV-001",
@@ -4571,21 +3424,21 @@
       ],
       "flowId": "android-phone-adaptivenavhost-push-back-restore",
       "screenshot": {
-        "android": "screenshots/android/home/index/api35-phone.png",
-        "ios": "screenshots/ios/home/index/iphone-simulator.png"
+        "android": "screenshots/android/adaptivenavhost/push-back-restore/api35-phone.png",
+        "ios": "screenshots/ios/adaptivenavhost/push-back-restore/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4601,23 +3454,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/home/index/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/home/index/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "NAV-002",
@@ -4674,22 +3511,6 @@
       "defect": null,
       "limitations": [
         "AdaptiveNavHostController.navigate(route, arguments) ignores arguments."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
       ]
     },
     {
@@ -4716,21 +3537,21 @@
       ],
       "flowId": "android-phone-latlng-distance-and-bearing-maths",
       "screenshot": {
-        "android": "screenshots/android/geo-math/overview/api35-phone.png",
-        "ios": "screenshots/ios/geo-math/overview/iphone-simulator.png"
+        "android": "screenshots/android/latlng/distance-and-bearing-maths/api35-phone.png",
+        "ios": "screenshots/ios/latlng/distance-and-bearing-maths/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "ios": {
-          "status": "captured",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284"
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
         },
         "desktop": {
           "status": "not-run",
@@ -4746,23 +3567,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/geo-math/overview/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/geo-math/overview/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "GEO-002",
@@ -4821,23 +3626,1083 @@
       "defect": null,
       "limitations": [
         "iOS/desktop/web are no-op stubs; Android LocationTracker does not update its public States."
-      ],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
       ]
+    },
+    {
+      "id": "UI-LIQUID-001",
+      "module": "kira-ui",
+      "component": "LiquidGlassButton",
+      "variant": "filled, bordered, plain, disabled",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "LiquidGlass",
+      "setup": [],
+      "steps": [
+        "Open Liquid Glass on iOS 26",
+        "Tap the filled button",
+        "Inspect bordered/plain/disabled"
+      ],
+      "expected": [
+        "All four glass buttons render",
+        "The click count increments",
+        "Disabled does not fire"
+      ],
+      "flowId": "android-phone-liquidglassbutton-filled-bordered-plain-disabled",
+      "screenshot": {
+        "android": "screenshots/android/liquidglassbutton/filled-bordered-plain-disabled/api35-phone.png",
+        "ios": "screenshots/ios/liquidglassbutton/filled-bordered-plain-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-LIQUID-002",
+      "module": "kira-ui",
+      "component": "LiquidGlassSwitch",
+      "variant": "on, off, disabled",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "LiquidGlass",
+      "setup": [],
+      "steps": [
+        "Open Liquid Glass on iOS 26",
+        "Toggle the glass switch"
+      ],
+      "expected": [
+        "The readout follows the switch",
+        "The disabled switch does not change"
+      ],
+      "flowId": "android-phone-liquidglassswitch-on-off-disabled",
+      "screenshot": {
+        "android": "screenshots/android/liquidglassswitch/on-off-disabled/api35-phone.png",
+        "ios": "screenshots/ios/liquidglassswitch/on-off-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-LIQUID-003",
+      "module": "kira-ui",
+      "component": "LiquidGlassSlider",
+      "variant": "continuous and disabled",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "LiquidGlass",
+      "setup": [],
+      "steps": [
+        "Open Liquid Glass on iOS 26",
+        "Drag the glass slider"
+      ],
+      "expected": [
+        "The percentage follows the thumb",
+        "The disabled slider does not move"
+      ],
+      "flowId": "android-phone-liquidglassslider-continuous-and-disabled",
+      "screenshot": {
+        "android": "screenshots/android/liquidglassslider/continuous-and-disabled/api35-phone.png",
+        "ios": "screenshots/ios/liquidglassslider/continuous-and-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-LIQUID-004",
+      "module": "kira-ui",
+      "component": "Liquid Glass fallback",
+      "variant": "non-iOS runtime",
+      "support": {
+        "android": "supported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "LiquidGlass",
+      "setup": [],
+      "steps": [
+        "Open Liquid Glass on Android",
+        "Read the fallback card"
+      ],
+      "expected": [
+        "The screen states that Liquid Glass is iOS 26 only",
+        "Adaptive controls are named as the fallback"
+      ],
+      "flowId": "android-phone-liquid-glass-fallback-non-ios-runtime",
+      "screenshot": {
+        "android": "screenshots/android/liquid-glass-fallback/non-ios-runtime/api35-phone.png",
+        "ios": "screenshots/ios/liquid-glass-fallback/non-ios-runtime/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-SMS-001",
+      "module": "kira-permissions",
+      "component": "ReadSms, ReceiveSms, SendSms",
+      "variant": "legacy SMS routes",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Inspect the three SMS rows",
+        "Request one SMS permission"
+      ],
+      "expected": [
+        "The rows render independently",
+        "Android reports its own status",
+        "iOS reports NotGranted for read/receive"
+      ],
+      "flowId": "android-phone-readsms-receivesms-sendsms-legacy-sms-routes",
+      "screenshot": {
+        "android": "screenshots/android/readsms-receivesms-sendsms/legacy-sms-routes/api35-phone.png",
+        "ios": "screenshots/ios/readsms-receivesms-sendsms/legacy-sms-routes/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ICON-004",
+      "module": "kira-cupertino-icons",
+      "component": "CupertinoIcon catalog",
+      "variant": "category filters",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "CupertinoIconsCatalog",
+      "setup": [],
+      "steps": [
+        "Open Cupertino Icons",
+        "Select Arrows",
+        "Select another category"
+      ],
+      "expected": [
+        "The count changes from the All value",
+        "Representative glyphs remain rendered"
+      ],
+      "flowId": "android-phone-cupertinoicon-catalog-category-filters",
+      "screenshot": {
+        "android": "screenshots/android/cupertinoicon-catalog/category-filters/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoicon-catalog/category-filters/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-005",
+      "module": "kira-ui",
+      "component": "AdaptiveBasicAlertDialog",
+      "variant": "text field and critical severity",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open Alert Dialog on iOS",
+        "Show the text-field dialog",
+        "Type a name"
+      ],
+      "expected": [
+        "The confirm action enables after typing",
+        "Critical severity is applied"
+      ],
+      "flowId": "android-phone-adaptivebasicalertdialog-text-field-and-critical-severity",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebasicalertdialog/text-field-and-critical-severity/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebasicalertdialog/text-field-and-critical-severity/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-006",
+      "module": "kira-ui",
+      "component": "AlertDialogIosStyle.ActionSheet",
+      "variant": "iPad popover",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "tablet",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open Alert Dialog on iPad",
+        "Show the ActionSheet"
+      ],
+      "expected": [
+        "The action sheet is a centred popover",
+        "Cancel is reachable"
+      ],
+      "flowId": "android-phone-alertdialogiosstyle-actionsheet-ipad-popover",
+      "screenshot": {
+        "android": "screenshots/android/alertdialogiosstyle-actionsheet/ipad-popover/api35-phone.png",
+        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-SHEET-002",
+      "module": "kira-ui",
+      "component": "AdaptiveSheetState",
+      "variant": "detents, veto and dismissal",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "BottomSheet",
+      "setup": [],
+      "steps": [
+        "Open the sheet",
+        "Try to dismiss after the content veto",
+        "Close from the button"
+      ],
+      "expected": [
+        "The vetoed dismissal keeps the sheet",
+        "The close button dismisses it"
+      ],
+      "flowId": "android-phone-adaptivesheetstate-detents-veto-and-dismissal",
+      "screenshot": {
+        "android": "screenshots/android/adaptivesheetstate/detents-veto-and-dismissal/api35-phone.png",
+        "ios": "screenshots/ios/adaptivesheetstate/detents-veto-and-dismissal/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-DATE-006",
+      "module": "kira-ui",
+      "component": "AdaptiveDatePicker",
+      "variant": "picker and input display modes",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker",
+        "Switch the Material display mode",
+        "Inspect the iOS wheels state"
+      ],
+      "expected": [
+        "The mode changes on Material",
+        "The iOS wheels state is fixed at creation"
+      ],
+      "flowId": "android-phone-adaptivedatepicker-picker-and-input-display-modes",
+      "screenshot": {
+        "android": "screenshots/android/adaptivedatepicker/picker-and-input-display-modes/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedatepicker/picker-and-input-display-modes/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-TIME-002",
+      "module": "kira-ui",
+      "component": "AdaptiveTimePicker",
+      "variant": "24-hour state",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "TimePicker",
+      "setup": [],
+      "steps": [
+        "Open the Time Picker",
+        "Inspect the 24-hour state"
+      ],
+      "expected": [
+        "The 24-hour readout renders",
+        "iOS follows the device locale"
+      ],
+      "flowId": "android-phone-adaptivetimepicker-24-hour-state",
+      "screenshot": {
+        "android": "screenshots/android/adaptivetimepicker/24-hour-state/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetimepicker/24-hour-state/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-005",
+      "module": "kira-ui",
+      "component": "UIKitNavigationBarConfiguration",
+      "variant": "large titles and tint",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "TopBarDemo",
+      "setup": [],
+      "steps": [
+        "Open Top Bar on iOS",
+        "Inspect the large-title configuration"
+      ],
+      "expected": [
+        "The native bar renders large titles",
+        "The tint is applied"
+      ],
+      "flowId": "android-phone-uikitnavigationbarconfiguration-large-titles-and-tint",
+      "screenshot": {
+        "android": "screenshots/android/uikitnavigationbarconfiguration/large-titles-and-tint/api35-phone.png",
+        "ios": "screenshots/ios/uikitnavigationbarconfiguration/large-titles-and-tint/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-006",
+      "module": "kira-ui",
+      "component": "UIKitTabBarConfiguration",
+      "variant": "selected and unselected tint",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "NavigationBar",
+      "setup": [],
+      "steps": [
+        "Open Navigation Bar on iOS",
+        "Inspect the tab tint"
+      ],
+      "expected": [
+        "The native tab bar renders",
+        "The selected item is tinted"
+      ],
+      "flowId": "android-phone-uikittabbarconfiguration-selected-and-unselected-tint",
+      "screenshot": {
+        "android": "screenshots/android/uikittabbarconfiguration/selected-and-unselected-tint/api35-phone.png",
+        "ios": "screenshots/ios/uikittabbarconfiguration/selected-and-unselected-tint/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-007",
+      "module": "kira-ui",
+      "component": "UIKitUIBarButtonItem",
+      "variant": "system item, fixed and flexible space",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Toolbar",
+      "setup": [],
+      "steps": [
+        "Open Toolbar on iOS",
+        "Inspect the spacing patterns"
+      ],
+      "expected": [
+        "System items render",
+        "Flexible and fixed spaces position the items"
+      ],
+      "flowId": "android-phone-uikituibarbuttonitem-system-item-fixed-and-flexible-space",
+      "screenshot": {
+        "android": "screenshots/android/uikituibarbuttonitem/system-item-fixed-and-flexible-space/api35-phone.png",
+        "ios": "screenshots/ios/uikituibarbuttonitem/system-item-fixed-and-flexible-space/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-006",
+      "module": "kira-webview",
+      "component": "WebSettings",
+      "variant": "JavaScript off and on",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Toggle JavaScript",
+        "Evaluate a title"
+      ],
+      "expected": [
+        "JavaScript is off by default",
+        "Enabling it allows the evaluation"
+      ],
+      "flowId": "android-phone-websettings-javascript-off-and-on",
+      "screenshot": {
+        "android": "screenshots/android/websettings/javascript-off-and-on/api35-phone.png",
+        "ios": "screenshots/ios/websettings/javascript-off-and-on/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-PICK-004",
+      "module": "kira-file-picker",
+      "component": "FilePickerFileType.Custom/Extension",
+      "variant": "filter modes",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open File Picker",
+        "Choose a custom MIME filter",
+        "Choose an extension filter"
+      ],
+      "expected": [
+        "The filter reaches the picker",
+        "Unknown desktop MIME fails explicitly"
+      ],
+      "flowId": "android-phone-filepickerfiletype-custom-extension-filter-modes",
+      "screenshot": {
+        "android": "screenshots/android/filepickerfiletype-custom-extension/filter-modes/api35-phone.png",
+        "ios": "screenshots/ios/filepickerfiletype-custom-extension/filter-modes/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-SAVE-002",
+      "module": "kira-file-picker",
+      "component": "FileSaverLauncher",
+      "variant": "file and stream save",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ProfilePicture",
+      "setup": [],
+      "steps": [
+        "Open File Saver",
+        "Save from a KmpFile",
+        "Save generated bytes"
+      ],
+      "expected": [
+        "Supported targets return a readable file",
+        "Cancel returns null"
+      ],
+      "flowId": "android-phone-filesaverlauncher-file-and-stream-save",
+      "screenshot": {
+        "android": "screenshots/android/filesaverlauncher/file-and-stream-save/api35-phone.png",
+        "ios": "screenshots/ios/filesaverlauncher/file-and-stream-save/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "NAV-003",
+      "module": "kira-navigation",
+      "component": "rememberNavController",
+      "variant": "saveable state restoration",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Open a screen",
+        "Navigate back",
+        "Reopen the screen"
+      ],
+      "expected": [
+        "The route stack is restored",
+        "Popped destination state is dropped"
+      ],
+      "flowId": "android-phone-remembernavcontroller-saveable-state-restoration",
+      "screenshot": {
+        "android": "screenshots/android/remembernavcontroller/saveable-state-restoration/api35-phone.png",
+        "ios": "screenshots/ios/remembernavcontroller/saveable-state-restoration/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "GEO-003",
+      "module": "kira-geo",
+      "component": "ExtendedLocation types",
+      "variant": "altitude, speed, azimuth",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Geo",
+      "setup": [],
+      "steps": [
+        "Open Geo Maths",
+        "Inspect the value types"
+      ],
+      "expected": [
+        "Types remain inspectable data",
+        "No live tracker values are implied"
+      ],
+      "flowId": "android-phone-extendedlocation-types-altitude-speed-azimuth",
+      "screenshot": {
+        "android": "screenshots/android/extendedlocation-types/altitude-speed-azimuth/api35-phone.png",
+        "ios": "screenshots/ios/extendedlocation-types/altitude-speed-azimuth/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
     },
     {
       "id": "EXCL-MAPS-001",
@@ -4891,23 +4756,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "EXCL-MEDIA-001",
@@ -4961,23 +4810,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     },
     {
       "id": "EXCL-NOTIF-001",
@@ -5031,23 +4864,7 @@
         }
       },
       "defect": null,
-      "limitations": [],
-      "evidence": [
-        {
-          "platform": "android",
-          "run": "45957524569",
-          "attempt": "1",
-          "job": "140367856551",
-          "capture": "screenshots/android/limitations/known-limitations/api35-phone.png"
-        },
-        {
-          "platform": "ios",
-          "run": "45968953555",
-          "attempt": "1",
-          "job": "140404371284",
-          "capture": "screenshots/ios/limitations/known-limitations/iphone-simulator.png"
-        }
-      ]
+      "limitations": []
     }
   ]
 }
