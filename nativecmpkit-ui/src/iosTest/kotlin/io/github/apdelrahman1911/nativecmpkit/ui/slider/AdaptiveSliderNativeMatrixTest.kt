@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.SliderColors
 import androidx.compose.runtime.AbstractApplier
 import androidx.compose.runtime.Composition
 import androidx.compose.runtime.CompositionLocalProvider
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
@@ -178,6 +180,12 @@ class AdaptiveSliderNativeMatrixTest {
 
     private fun rejectsNegativeSteps(branch: AdaptiveControlBranch) {
         requireAdaptiveControlHost(branch)
+        val color = Color.Black
+        val colors = SliderColors(thumbColor = color, activeTrackColor = color, activeTickColor = color,
+            inactiveTrackColor = color, inactiveTickColor = color, disabledThumbColor = color,
+            disabledActiveTrackColor = color, disabledActiveTickColor = color,
+            disabledInactiveTrackColor = color, disabledInactiveTickColor = color)
+        val interactions = MutableInteractionSource()
         fun trace(phase: String) {
             if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE $phase")
         }
@@ -198,7 +206,8 @@ class AdaptiveSliderNativeMatrixTest {
                     trace("set-content-enter")
                     composition.setContent {
                         trace("adaptive-slider-enter")
-                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1)
+                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1,
+                            colors = colors, interactionSource = interactions)
                     }
                     trace("set-content-returned")
                 }
