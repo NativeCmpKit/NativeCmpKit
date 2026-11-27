@@ -216,7 +216,8 @@ PRE26_NEGATIVE_STEPS_CASE = (
 )
 PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
 PRE26_NEGATIVE_STEPS_PHASES = (
-    "compose-enter", "set-content-enter", "adaptive-slider-enter", "set-content-returned", "public-validation-verified",
+    "compose-enter", "main-throw-control-verified", "set-content-enter", "adaptive-slider-enter",
+    "set-content-returned", "public-validation-verified",
 )
 PRE26_TOOLBAR_CASE = (
     "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest",
@@ -859,7 +860,7 @@ class NativeProtocol:
             return
         progress = self.pre26_negative_steps_progress
         phase = line.removeprefix(PRE26_NEGATIVE_STEPS_PREFIX)
-        if phase == "public-validation-verified" and progress == list(PRE26_NEGATIVE_STEPS_PHASES[:3]):
+        if phase == "public-validation-verified" and progress == list(PRE26_NEGATIVE_STEPS_PHASES[:-2]):
             progress.append(phase)
         elif len(progress) < len(PRE26_NEGATIVE_STEPS_PHASES) and phase == PRE26_NEGATIVE_STEPS_PHASES[len(progress)]:
             progress.append(phase)

@@ -190,6 +190,29 @@ class AdaptiveSliderNativeMatrixTest {
             if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE $phase")
         }
         trace("compose-enter")
+        if (branch == AdaptiveControlBranch.Pre26) {
+            onApplicationMain {
+                val control = assertFailsWith<IllegalArgumentException> { throw IllegalArgumentException("validation control") }
+                assertEquals("validation control", control.message)
+            }
+            trace("main-throw-control-verified")
+            val failure = assertFailsWith<IllegalArgumentException> {
+                runComposeUiTest {
+                    trace("set-content-enter")
+                    setContent {
+                        trace("adaptive-slider-enter")
+                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1,
+                            colors = colors, interactionSource = interactions)
+                    }
+                    trace("set-content-returned")
+                    waitForIdle()
+                }
+            }
+            assertEquals("steps should be >= 0", failure.message,
+                "Only the public invalid-steps contract satisfies this test")
+            trace("public-validation-verified")
+            return
+        }
         onApplicationMain {
             // Exercise the public argument check synchronously in Compose. This
             // deliberately invalid input must throw before any layout is created.

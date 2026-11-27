@@ -147,11 +147,13 @@ class PartialProtocolTests(unittest.TestCase):
         protocol.feed(f.frame("testStdOut", name="foreign", out=prefix + "set-content-enter"))
         protocol.feed(prefix + "adaptive-slider-enter")
         self.assertEqual(["compose-enter"], protocol.partial()["pre26_negative_steps_progress"])
+        protocol.feed(prefix + "main-throw-control-verified")
         protocol.feed(prefix + "set-content-enter")
         protocol.feed(f.frame("testStdOut", name=method, out=prefix + "adaptive-slider-enter"))
         protocol.feed(prefix + "public-validation-verified")
         result = protocol.partial()
-        self.assertEqual(["compose-enter", "set-content-enter", "adaptive-slider-enter", "public-validation-verified"],
+        self.assertEqual(["compose-enter", "main-throw-control-verified", "set-content-enter",
+                          "adaptive-slider-enter", "public-validation-verified"],
                          result["pre26_negative_steps_progress"])
         self.assertEqual(0, result["counts"]["passed"])
 
