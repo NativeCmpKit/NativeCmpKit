@@ -9,7 +9,7 @@ import android_camera_home_baseline as home
 import test_android_camera_developer_prerequisite as fixtures
 
 ROOT = Path(__file__).resolve().parents[2]
-NATIVE = ROOT / "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt"
+NATIVE = ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt"
 
 
 def canonical() -> list[str]:

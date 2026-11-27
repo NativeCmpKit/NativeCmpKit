@@ -20,16 +20,16 @@ class PreviewBoundaryBatchTests(unittest.TestCase):
 
     def test_maps_has_no_source_api_or_publisher_and_media_scheduler_are_excluded_not_permissions(self):
         settings = (ROOT / "settings.gradle.kts").read_text()
-        self.assertIn('\":calf-maps\"', settings)
-        for name in ('calf-media', 'calf-notifications'):
+        self.assertIn('\":nativecmpkit-maps\"', settings)
+        for name in ('nativecmpkit-media', 'nativecmpkit-notifications'):
             self.assertNotIn(f'\":{name}\"', settings)
-        self.assertIn('\":calf-permissions:notifications\"', settings)
-        maps = (ROOT / "calf-maps/build.gradle.kts").read_text()
+        self.assertIn('\":nativecmpkit-permissions:notifications\"', settings)
+        maps = (ROOT / "nativecmpkit-maps/build.gradle.kts").read_text()
         self.assertNotIn('module.publication', maps)
-        self.assertEqual([], list((ROOT / "calf-maps/src").rglob('*.kt')))
-        modules = json.loads((ROOT / "docs/migration/identity.json").read_text())['modules']
+        self.assertEqual([], list((ROOT / "nativecmpkit-maps/src").rglob('*.kt')))
+        modules = json.loads((ROOT / "docs/migration/current-identity.json").read_text())['modules']
         self.assertEqual(21, len(modules))
-        self.assertTrue(all(module['source_directory'] not in {'calf-maps', 'calf-media', 'calf-notifications'} for module in modules))
+        self.assertTrue(all(module['source_directory'] not in {'nativecmpkit-maps', 'nativecmpkit-media', 'nativecmpkit-notifications'} for module in modules))
 
     def test_future_experimental_enabling_keeps_explicit_upstream_references_and_release_gates(self):
         roadmap = (ROOT / "docs/roadmap/README.md").read_text()

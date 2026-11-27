@@ -1,6 +1,6 @@
 # Permissions and geolocation: implementation reference
 
-Baseline reviewed: `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6` (Calf main imported into nativeCmpkit). Public packages and `calf-*` module paths below are intentionally retained for compatibility. Line references are to that commit, not to later migration edits.
+Baseline reviewed: `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6` (NativeCmpKit main imported into nativeCmpkit). Public packages and `nativecmpkit-*` module paths below are intentionally retained for compatibility. Line references are to that commit, not to later migration edits.
 
 Related: [findings and complete source coverage](../audit/permissions-and-geo.md), [machine-readable findings](../audit/findings/PERM.json), [verification and runnable reproduction](../testing/permissions-and-geo.md).
 
@@ -10,8 +10,8 @@ There are **12 permissions Gradle projects**, not 12 child modules: the umbrella
 
 | Project | Responsibility | Baseline build dependency surface |
 |---|---|---|
-| `calf-permissions` | Compatibility umbrella; a comment-only `Permission.kt` keeps publishing tooling happy | `api` on core and all 10 feature projects; no independent implementation |
-| `calf-permissions/core` | Public state API, Android mapping registry, iOS helper registry, lifecycle effects; storage/audio-read/call/SMS permissions | `api(compose.foundation)`; Android `implementation(activity-compose)` |
+| `nativecmpkit-permissions` | Compatibility umbrella; a comment-only `Permission.kt` keeps publishing tooling happy | `api` on core and all 10 feature projects; no independent implementation |
+| `nativecmpkit-permissions/core` | Public state API, Android mapping registry, iOS helper registry, lifecycle effects; storage/audio-read/call/SMS permissions | `api(compose.foundation)`; Android `implementation(activity-compose)` |
 | `camera` | `Camera` | `api(core)`; iOS AVFoundation video |
 | `microphone` | `RecordAudio` | `api(core)`; iOS AVFoundation audio |
 | `gallery` | `Gallery`, `ReadImage`, `ReadVideo` | `api(core)`; iOS Photos |
@@ -22,7 +22,7 @@ There are **12 permissions Gradle projects**, not 12 child modules: the umbrella
 | `calendar` | `ReadCalendar`, `WriteCalendar` | `api(core)`; iOS EventKit |
 | `notifications` | `Notification`, `RemoteNotification` | `api(core)`; iOS UserNotifications/UIKit; Android manifest merges POST_NOTIFICATIONS |
 | `wifi` | `WifiAccessState`, `WifiChangeState`, `WifiNearbyDevices` | `api(core)`; iOS Foundation NSNetService/UIKit |
-| `calf-geo` | Coordinate types/math and an incomplete location tracker | Common `implementation(compose.foundation)`; Android AppCompat, lifecycle-extensions, Play Services Location. **No permission-module dependency. No publication plugin.** |
+| `nativecmpkit-geo` | Coordinate types/math and an incomplete location tracker | Common `implementation(compose.foundation)`; Android AppCompat, lifecycle-extensions, Play Services Location. **No permission-module dependency. No publication plugin.** |
 
 Every permissions project applies `compose.multiplatform` and `module.publication`; geo applies only the former. None declares its own tests, resource processor, cinterop definition, custom compiler flags, or framework binary. Native integrations use Kotlin/Native platform bindings rather than bundled native binaries. Public geo `State` types should have an explicit consumer/API dependency contract before publishing; currently foundation is an implementation dependency.
 
@@ -210,7 +210,7 @@ All three iOS Wi-Fi properties use `WifiPermissionHelper`, which does not config
 `LocalNetworkPermissionDelegate.startCheck`:
 
 1. If UIApplication is not Active, immediately complete false.
-2. Create NSNetService(domain=`local.`, type=`_lnp._tcp.`, name=`CalfWifiPermissionCheck`, port0); nullable failure -> false.
+2. Create NSNetService(domain=`local.`, type=`_lnp._tcp.`, name=`NativeCmpKitWifiPermissionCheck`, port0); nullable failure -> false.
 3. Assign retained delegate, schedule a3-second NSTimer, publish.
 4. `netServiceDidPublish` -> true; `didNotPublish`, timer, or cancel -> false.
 5. `cleanupAndComplete` checks `isCompleted`, invalidates/releases timer, stops service, clears delegate/service, then invokes completion. This clean-before-callback ordering and identity check before clearing the current delegate are good safeguards.

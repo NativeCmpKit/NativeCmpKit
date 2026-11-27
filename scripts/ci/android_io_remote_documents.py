@@ -21,27 +21,27 @@ PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments
 AUTHORITY = PACKAGE + ".documents"
 PERMISSION = PACKAGE + ".CONTROL_REMOTE_IO"
 FIXTURE = "tests/consumer/android-io-remote-documents"
-REPORTER = "com.mohamedrejeb.calf.calfio.test"
-KOTLIN = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitio.test"
+KOTLIN = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/"
 JAVA = FIXTURE + "/src/main/java/" + PACKAGE.replace(".", "/") + "/"
 JAVA_NAMES = ("RemoteIoContract", "RemoteIoHttpBackend", "RemoteIoHttpTransport", "RemoteIoControlService",
               "RemoteIoDocumentsProvider", "RemoteIoProviderWitnessService")
 KOTLIN_NAMES = ("AndroidIoRemoteDocumentsTest", "AndroidIoRemoteTreeGrantActivity", "RemoteIoEndpoint")
-CLASS = "com.mohamedrejeb.calf.io.AndroidIoRemoteDocumentsTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoRemoteDocumentsTest"
 METHODS = ("controlledRemoteTreeMetadataAndBoundedSourceCloseAreBackedByLiveHttp",
            "nativePendingRemoteOpenCancellationReleasesHttpSocketWithoutTransferringDescriptor")
 FOCUSES = {"android-io-controlled-remote": METHODS,
            "android-io-controlled-remote-positive": METHODS[:1],
            "android-io-controlled-remote-cancel": METHODS[1:]}
 ANDROID = "{http://schemas.android.com/apk/res/android}"
-REPORTER_MANIFEST = "calf-io/src/androidDeviceTest/AndroidManifest.xml"
+REPORTER_MANIFEST = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
 OLD_REPORTER_SHA256 = "397d45d9201637e6a696b3c4148376bb02fe5c4bb1070c541616bdcdaefeeb19"
 # Exactly four reversible additions; neither the old reporter nor the accepted helper is generically repinned.
 REPORTER_FRAGMENTS = (
     b'    <uses-permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.CONTROL_REMOTE_IO" />\n',
     b'        <package android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments" />\n',
     b'        <provider android:authorities="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.documents" />\n',
-    b'        <activity android:name="com.mohamedrejeb.calf.io.AndroidIoRemoteTreeGrantActivity" android:exported="false"\n'
+    b'        <activity android:name="io.github.apdelrahman1911.nativecmpkit.io.AndroidIoRemoteTreeGrantActivity" android:exported="false"\n'
     b'            android:theme="@android:style/Theme.Material.Light.NoActionBar" />\n',
 )
 REUSED_PINS = {
@@ -50,14 +50,14 @@ REUSED_PINS = {
     KOTLIN + "AndroidIoSystemTreeGrantActivity.kt": "760634c61aa94ffb04b16f94fc20ceb67f4c58aa06477ee6dde14c3dda24fdde",
     KOTLIN + "OwnedIoEndpoint.kt": "c2180ba34f3c825e9060ddc68272b41c9d847f13cd91de7f7e2be54b496216a6",
 }
-SOURCE_FILES = tuple(sorted((REPORTER_MANIFEST, "calf-io/build.gradle.kts", "gradle/libs.versions.toml",
+SOURCE_FILES = tuple(sorted((REPORTER_MANIFEST, "nativecmpkit-io/build.gradle.kts", "gradle/libs.versions.toml",
     FIXTURE + "/build.gradle.kts", FIXTURE + "/settings.gradle.kts", FIXTURE + "/gradle.properties",
     FIXTURE + "/src/main/AndroidManifest.xml", *(JAVA + name + ".java" for name in JAVA_NAMES),
     *(KOTLIN + name + ".kt" for name in KOTLIN_NAMES), *REUSED_PINS,
-    "calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/KmpFile.android.kt",
-    "calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/KmpFileSource.android.kt",
-    "calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/KmpFileBookmark.android.kt",
-    "calf-io/src/commonMain/kotlin/com.mohamedrejeb.calf/io/BoundedRead.kt",
+    "nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFile.android.kt",
+    "nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileSource.android.kt",
+    "nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileBookmark.android.kt",
+    "nativecmpkit-io/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/BoundedRead.kt",
     "scripts/ci/android_geo_probe.py", "scripts/ci/android_io_documents.py", "scripts/ci/android_share_recipient.py", "scripts/ci/library_tests.py",
     "scripts/ci/android_io_remote_documents.py", "scripts/ci/test_android_io_remote_documents.py",
     "scripts/ci/android_device_tests.py", "scripts/ci/workflow_matrix.py", ".github/workflows/gradle.yml",
@@ -245,7 +245,7 @@ def validate_direct_native_population(test: str) -> None:
             if cleaned[position] != "\n":
                 cleaned[position] = " "
     source = "".join(cleaned)
-    require(re.findall(r"(?m)^package[ \t]+([^\n]+)$", source) == ["com.mohamedrejeb.calf.io"] and
+    require(re.findall(r"(?m)^package[ \t]+([^\n]+)$", source) == ["io.github.apdelrahman1911.nativecmpkit.io"] and
             re.findall(r"(?m)^import[ \t]+(org\.junit\.[^\n]+)$", source) == ["org.junit.Test", "org.junit.runner.RunWith"] and
             re.findall(r"(?m)^import[ \t]+androidx\.test\.ext\.junit\.runners\.AndroidJUnit4[ \t]*$", source) ==
                 ["import androidx.test.ext.junit.runners.AndroidJUnit4"] and

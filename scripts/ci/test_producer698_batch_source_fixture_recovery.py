@@ -236,4 +236,4 @@ class Producer698BatchSourceFixtureRecoveryControls(unittest.TestCase):
         self.assertEqual(r"[0-9a-f]{64}\Z", ast.literal_eval(regex[0].args[0]))
         self.assertFalse(any(isinstance(node, ast.Call) and ast.unparse(node.func).rsplit(".", 1)[-1] in prohibited and
                              ast.unparse(node.func) != "re.compile" for node in ast.walk(source)))
-        self.assertEqual("7f83bd970329ad885821f80a0f56cf9a8d27a58e8e5a8c8b354a124e544ee8a4", sha((ROOT / "calf-ui/build.gradle.kts").read_bytes()))
+        self.assertEqual("7f83bd970329ad885821f80a0f56cf9a8d27a58e8e5a8c8b354a124e544ee8a4", sha((ROOT / "nativecmpkit-ui/build.gradle.kts").read_bytes()))

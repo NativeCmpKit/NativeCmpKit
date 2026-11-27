@@ -1,6 +1,6 @@
 // Metadata-only audit task. Does not build/download runtime binaries or invoke Cargo.
 // Run explicitly with --init-script and --no-configuration-cache. Coordinates describe
-// this host's audit-time resolution, not historical Calf binaries or other platforms.
+// this host's audit-time resolution, not historical NativeCmpKit binaries or other platforms.
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.gradle.api.GradleException

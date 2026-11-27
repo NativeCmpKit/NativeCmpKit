@@ -16,9 +16,9 @@ import unittest
 import xml.etree.ElementTree as ET
 
 TREE = Path(os.environ.get("IO_REPORTER_MANIFEST_UNION_TREE", Path(__file__).resolve().parents[2])).resolve()
-MANIFEST = "calf-io/src/androidDeviceTest/AndroidManifest.xml"
+MANIFEST = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
 ANDROID = "{http://schemas.android.com/apk/res/android}"
-NAMED_CALLER = "com.mohamedrejeb.calf.io.AndroidIoSystemTreeGrantActivity"
+NAMED_CALLER = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoSystemTreeGrantActivity"
 
 
 def owning_reporter_guard():

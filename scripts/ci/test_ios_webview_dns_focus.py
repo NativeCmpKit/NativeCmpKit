@@ -26,14 +26,14 @@ from test_ios_io_profile import profile_options
 
 PROFILE = "ios-webview-provisional-dns"
 FOCUS = "webview-ios-native-provisional-dns"
-CLASS = "com.mohamedrejeb.calf.ui.web.IosWebViewProvisionalDnsAcceptanceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewProvisionalDnsAcceptanceTest"
 METHOD = "nativeProvisionalDnsFailFailResetsPreviousErrorBeforeCommitOnSameDocument"
-SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt"
+SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt"
 
 
 class IosWebViewDnsFocusTests(unittest.TestCase):
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "ios", only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, "ios", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def test_new_dns_profile_is_one_additive_genuine_application_selection(self):
         self.assertIn(PROFILE, matrix.PROFILES,
@@ -43,7 +43,7 @@ class IosWebViewDnsFocusTests(unittest.TestCase):
         self.assertEqual(1, options.count(PROFILE))
         self.assertEqual({PROFILE, "ios-webview-request-dns"}, {name for name in matrix.PROFILES if "dns" in name})
         row, = matrix.matrix(PROFILE)["include"]
-        self.assertEqual(("ios-iphone", "ios", "calf-webview", FOCUS),
+        self.assertEqual(("ios-iphone", "ios", "nativecmpkit-webview", FOCUS),
             tuple(row[k] for k in ("slot", "suite", "test-modules", "test-focus")))
         self.assertNotIn("serial-test-focus", row)
         self.assertNotIn("android-batch", row)
@@ -56,7 +56,7 @@ class IosWebViewDnsFocusTests(unittest.TestCase):
         selected, = self.plan()["expected"]
         self.assertEqual(1, len(selected["required_testcases"]))
         self.assertEqual("genuine-uikit-application", selected["native_test_host"])
-        self.assertEqual(":" + "calf-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
+        self.assertEqual(":" + "nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
         self.assertIn(SOURCE, selected["test_source_files"])
         self.assertNotIn("ios_webview_request_fixture", selected)
         self.assertIsNone(app.profile_debug_entitlements(FOCUS))
@@ -70,7 +70,7 @@ class IosWebViewDnsFocusTests(unittest.TestCase):
         plan = self.plan()
         selected, = plan["expected"]
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
         expected = [{"classname": "iosSimulatorArm64ApplicationTest." + CLASS,
                      "name": METHOD + "[iosSimulatorArm64]"}]
         self.assertEqual(expected, selected["required_testcases"])
@@ -82,25 +82,25 @@ class IosWebViewDnsFocusTests(unittest.TestCase):
         self.assertNotIn(lt.IOS_WEBVIEW_REQUEST_CLASS, selected["test_filter"])
         arguments = sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + selected["test_filter"]]
         self.assertEqual(FOCUS, app.application_test_focus(arguments))
-        binary = app.APPLICATION_HOSTS["calf-webview"]["binary_directory"] + "/test.kexe"
-        self.assertEqual("calf-webview", app.application_host(binary, FOCUS)["module"])
+        binary = app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"] + "/test.kexe"
+        self.assertEqual("nativecmpkit-webview", app.application_host(binary, FOCUS)["module"])
         for patterns in ("*", CLASS + ".wrongMethod", selected["test_filter"] + "," + selected["test_filter"],
                          lt.ui_application_focus_filter(lt.IOS_WEBVIEW_REQUEST_FOCUS).split(",")[0] + "," + selected["test_filter"]):
             with self.assertRaises(ValueError):
                 app.application_test_focus(sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + patterns])
-        for suite, modules in (("desktop", ("calf-webview",)), ("js", ("calf-webview",)),
-                               ("android-device", ("calf-webview",)), ("ios", ("calf-ui",)),
-                               ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-webview",)), ("js", ("nativecmpkit-webview",)),
+                               ("android-device", ("nativecmpkit-webview",)), ("ios", ("nativecmpkit-ui",)),
+                               ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
         for key, value in (("test_filter", "*"), ("required_testcases", []), ("native_test_host", "command-line"),
-                           ("task", ":calf-webview:publish"), ("test_source_files", [])):
+                           ("task", ":nativecmpkit-webview:publish"), ("test_source_files", [])):
             invalid = copy.deepcopy(plan)
             invalid["expected"][0][key] = value
             with self.assertRaises(ValueError): lt.validate_test_focus(invalid)
         invalid = copy.deepcopy(plan); invalid["complete_suite_requested"] = True
         with self.assertRaises(ValueError): lt.validate_test_focus(invalid)
         stream = io.StringIO()
-        with patch("sys.argv", ["library_tests.py", "plan", "--suite", "ios", "--module", "calf-webview", "--focus", FOCUS]), \
+        with patch("sys.argv", ["library_tests.py", "plan", "--suite", "ios", "--module", "nativecmpkit-webview", "--focus", FOCUS]), \
              patch("sys.stdout", stream):
             self.assertEqual(0, lt.main()) # In-process read-only parser, never subprocess/preflight/run.
         self.assertEqual(plan, json.loads(stream.getvalue()))
@@ -224,7 +224,7 @@ class IosWebViewDnsFocusTests(unittest.TestCase):
         original = copy.deepcopy(fixture.document)
         for change in (
             lambda d: d.update(explicit_test_focus=lt.IOS_WEBVIEW_REQUEST_FOCUS),
-            lambda d: d.update(task=":calf-webview:iosSimulatorArm64Test"),
+            lambda d: d.update(task=":nativecmpkit-webview:iosSimulatorArm64Test"),
             lambda d: d.update(binary_sha256_after="e" * 64),
             lambda d: d["steps"]["adhoc-sign-local-verification-app"].update(exit_code=1),
             lambda d: d["steps"]["install-owned-app"].update(installed_owned_bytes_verified=False),

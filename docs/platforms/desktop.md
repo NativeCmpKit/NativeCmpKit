@@ -53,7 +53,7 @@ documented action rather than imaginary recipient delivery.
 
 ## JavaFX-specific prerequisites
 
-`calf-webview/build.gradle.kts` uses six aligned JavaFX 21.0.13 artifacts from
+`nativecmpkit-webview/build.gradle.kts` uses six aligned JavaFX 21.0.13 artifacts from
 `convention-plugins/src/main/kotlin/DesktopJavaFx.kt`. Library Desktop dependencies
 are `compileOnly`, so published metadata does not impose the publisher's native
 classifier. Applications must explicitly supply the six matching host-runtime

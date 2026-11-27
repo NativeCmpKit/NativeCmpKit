@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.sharedocuments.SELECT_DOCUMENTS"
         android:protectionLevel="signature" />
-    <queries><package android:name="com.mohamedrejeb.calf.calfshare.test" /></queries>
+    <queries><package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitshare.test" /></queries>
     <application android:allowBackup="false" android:label="NativeCmpKit owned document grant source">
         <activity android:name=".ShareDocumentGrantActivity" android:exported="true"
             android:permission="io.github.apdelrahman1911.nativecmpkit.verification.sharedocuments.SELECT_DOCUMENTS"

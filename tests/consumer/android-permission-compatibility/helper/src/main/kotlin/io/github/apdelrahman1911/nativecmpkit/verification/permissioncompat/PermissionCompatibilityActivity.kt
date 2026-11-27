@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-@file:OptIn(com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi::class)
+@file:OptIn(io.github.apdelrahman1911.nativecmpkit.permissions.ExperimentalPermissionsApi::class)
 package io.github.apdelrahman1911.nativecmpkit.verification.permissioncompat
 
 import android.content.Context
@@ -17,7 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
-import com.mohamedrejeb.calf.permissions.*
+import io.github.apdelrahman1911.nativecmpkit.permissions.*
 import java.util.UUID
 
 /** Selected fresh helper role mounts real public library states, never a sample. */

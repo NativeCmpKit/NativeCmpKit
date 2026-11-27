@@ -13,7 +13,7 @@ import uuid
 import xml.etree.ElementTree as ET
 
 
-EXPECTED_CLASS = "nativecmpkit.consumer.PublishedNativeConsumerTest"
+EXPECTED_CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedNativeConsumerTest"
 EXPECTED_METHODS = (
     "pickerNativeLibraryLoadsAndInitializes",
     "packagedPickerCreatesAndReleasesValidHandles",

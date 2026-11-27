@@ -16,36 +16,36 @@ class AndroidVerificationContractTests(unittest.TestCase):
         self.fixture.setUp()
         self.addCleanup(self.fixture.doCleanups)
         self.root = self.fixture.root
-        self.fixture.write("calf-fixture/src/androidDeviceTest/kotlin/Device.kt", "// synthetic device test")
-        self.fixture.write("calf-empty/src/commonTest/kotlin/Common.kt", "// common tests are not a device host")
+        self.fixture.write("nativecmpkit-fixture/src/androidDeviceTest/kotlin/Device.kt", "// synthetic device test")
+        self.fixture.write("nativecmpkit-empty/src/commonTest/kotlin/Common.kt", "// common tests are not a device host")
 
     def plan(self):
-        plan = r.plan(self.root, "android-device", minimum_modules=("calf-fixture",),
-                      only_modules=("calf-fixture",))
-        self.assertEqual(["calf-fixture"], plan["explicit_module_subset"])
+        plan = r.plan(self.root, "android-device", minimum_modules=("nativecmpkit-fixture",),
+                      only_modules=("nativecmpkit-fixture",))
+        self.assertEqual(["nativecmpkit-fixture"], plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
         return plan
 
     def test_device_plan_requires_an_actual_authored_device_test_host(self):
         plan = self.plan()
-        self.assertEqual(["calf-fixture"], [item["module"] for item in plan["expected"]])
+        self.assertEqual(["nativecmpkit-fixture"], [item["module"] for item in plan["expected"]])
         self.assertEqual(["commonTest", "androidDeviceTest"], plan["expected"][0]["test_source_sets"])
-        self.assertEqual("calf-fixture/build/outputs/androidTest-results/connected/androidMain",
+        self.assertEqual("nativecmpkit-fixture/build/outputs/androidTest-results/connected/androidMain",
                          plan["expected"][0]["report_directory"])
-        self.assertEqual("calf-fixture/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest",
+        self.assertEqual("nativecmpkit-fixture/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest",
                          plan["expected"][0]["agp_declared_xml_directory"])
         self.assertEqual(plan["expected"][0]["report_directory"], plan["expected"][0]["utp_results_directory"])
-        self.assertEqual(":calf-fixture:connectedAndroidDeviceTest", plan["expected"][0]["task"])
-        self.assertEqual(["calf-fixture"], plan["explicit_module_subset"])
+        self.assertEqual(":nativecmpkit-fixture:connectedAndroidDeviceTest", plan["expected"][0]["task"])
+        self.assertEqual(["nativecmpkit-fixture"], plan["explicit_module_subset"])
         self.assertEqual([], plan["uncovered"])
-        self.assertNotIn("calf-empty", plan["test_bearing_modules_not_requested"])
+        self.assertNotIn("nativecmpkit-empty", plan["test_bearing_modules_not_requested"])
         # A common-only module is not an authored device host even if requested.
         with self.assertRaisesRegex(ValueError,
-                r"^Selected modules do not have android-device library test sources: \['calf-empty'\]$"):
-            r.plan(self.root, "android-device", minimum_modules=("calf-empty",), only_modules=("calf-empty",))
+                r"^Selected modules do not have android-device library test sources: \['nativecmpkit-empty'\]$"):
+            r.plan(self.root, "android-device", minimum_modules=("nativecmpkit-empty",), only_modules=("nativecmpkit-empty",))
 
     def test_deleting_device_sources_cannot_turn_common_tests_into_native_success(self):
-        (self.root / "calf-fixture/src/androidDeviceTest/kotlin/Device.kt").unlink()
+        (self.root / "nativecmpkit-fixture/src/androidDeviceTest/kotlin/Device.kt").unlink()
         with self.assertRaises(ValueError):
             self.plan()
 
@@ -56,14 +56,14 @@ class AndroidVerificationContractTests(unittest.TestCase):
         self.assertIn("--no-parallel", command)
         self.assertIn("--stacktrace", command)
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.timeout_msec=120000", command)
-        self.assertEqual(1, command.count(":calf-fixture:connectedAndroidDeviceTest"))
+        self.assertEqual(1, command.count(":nativecmpkit-fixture:connectedAndroidDeviceTest"))
         self.assertNotIn("--rerun-tasks", command)
 
     def test_repository_device_tasks_run_data_ownership_before_native_ui(self):
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), r.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), r.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             r.plan(r.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -71,13 +71,13 @@ class AndroidVerificationContractTests(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         plan = r.plan(r.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in plan["expected"]])
         self.assertEqual(list(unrelated), plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          plan["test_bearing_modules_not_requested"])
 
     def test_missing_physical_or_injected_serials_are_rejected_before_execution(self):
@@ -88,13 +88,13 @@ class AndroidVerificationContractTests(unittest.TestCase):
             r.gradle_command("desktop", self.fixture.plan(), android_serial="emulator-5588")
 
     def test_host_xml_cannot_satisfy_missing_native_report_and_marker(self):
-        self.fixture.write("calf-fixture/build/test-results/testAndroidHostTest/TEST-host.xml", self.fixture.report())
+        self.fixture.write("nativecmpkit-fixture/build/test-results/testAndroidHostTest/TEST-host.xml", self.fixture.report())
         result = self.fixture.collect(test_plan=self.plan())
         self.assertEqual(0, result["totals"]["executed"])
         self.assertTrue(result["errors"])
 
     def test_utp_protobuf_inventory_is_not_mistaken_for_actual_xml_results(self):
-        self.fixture.write("calf-fixture/build/outputs/androidTest-results/connected/androidMain/test-result.pb",
+        self.fixture.write("nativecmpkit-fixture/build/outputs/androidTest-results/connected/androidMain/test-result.pb",
                            b"synthetic inert protobuf; never interpreted as testcase evidence")
         result = self.fixture.collect(test_plan=self.plan())
         self.assertEqual(0, result["totals"]["executed"])
@@ -104,14 +104,14 @@ class AndroidVerificationContractTests(unittest.TestCase):
         # Actual run40434024680 inventories TEST-*.xml here, while the task's
         # getXmlResultsDirectory intermediate is empty. This is a modeled
         # collector regression, not an executed Android testcase.
-        self.fixture.write("calf-fixture/build/outputs/androidTest-results/connected/androidMain/TEST-device.xml",
+        self.fixture.write("nativecmpkit-fixture/build/outputs/androidTest-results/connected/androidMain/TEST-device.xml",
                            self.fixture.report())
         result = self.fixture.collect(test_plan=self.plan())
         self.assertEqual(1, result["totals"]["executed"])
         self.assertFalse(result["errors"])
 
     def test_declared_intermediate_xml_alone_cannot_replace_the_observed_utp_contract(self):
-        self.fixture.write("calf-fixture/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest/TEST-other.xml",
+        self.fixture.write("nativecmpkit-fixture/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest/TEST-other.xml",
                            self.fixture.report())
         result = self.fixture.collect(test_plan=self.plan())
         self.assertEqual(0, result["totals"]["executed"])
@@ -179,7 +179,7 @@ class AndroidVerificationContractTests(unittest.TestCase):
             self.assertEqual("emulator-5588", env["ANDROID_SERIAL"])
             self.assertEqual("synthetic-private", env["PRIVATE_FIXTURE_VALUE"])
             self.fixture.write(plan["expected"][0]["report_directory"] + "/TEST-fresh.xml", self.fixture.report())
-            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:calf-fixture:connectedAndroidDeviceTest gradle=9.7.1 java=17\n" +
+            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-fixture:connectedAndroidDeviceTest gradle=9.7.1 java=17\n" +
                                 r.daemon_jvm.PREFIX + json.dumps(SYNTHETIC_DAEMON) + "\n")
             return {"exit_code": 0}
 
@@ -206,7 +206,7 @@ class AndroidVerificationContractTests(unittest.TestCase):
             self.assertEqual(str(user), env["ANDROID_USER_HOME"])
             self.assertEqual("emulator-5588", env["ANDROID_SERIAL"])
             self.fixture.write(plan["expected"][0]["report_directory"] + "/TEST-fresh.xml", self.fixture.report())
-            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:calf-fixture:connectedAndroidDeviceTest gradle=9.7.1 java=17\n" +
+            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-fixture:connectedAndroidDeviceTest gradle=9.7.1 java=17\n" +
                                 r.daemon_jvm.PREFIX + json.dumps(SYNTHETIC_DAEMON) + "\n")
             return {"exit_code": 0}
         with patch.dict(r.os.environ, {"ANDROID_USER_HOME": "synthetic-parent-private"}, clear=True), \

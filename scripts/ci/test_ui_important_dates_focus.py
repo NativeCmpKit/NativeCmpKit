@@ -14,7 +14,7 @@ import workflow_matrix as matrix
 
 class ImportantDateFocus(unittest.TestCase):
     def plan(self):
-        return r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_IMPORTANT_FOCUS)
+        return r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_IMPORTANT_FOCUS)
 
     def collect(self, cases=None, **kwargs):
         fixture = bounds.DateBoundsFocus()
@@ -25,13 +25,13 @@ class ImportantDateFocus(unittest.TestCase):
     def test_one_real_iphone_application_replays_only_four_failed_plus_three_new_methods(self):
         row, = matrix.matrix("ios-dates-important")["include"]
         self.assertEqual("ios-iphone", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(r.UI_DATE_IMPORTANT_FOCUS, row["test-focus"])
         plan = self.plan()
         self.assertTrue(r.validate_test_focus(plan))
         self.assertFalse(plan["complete_suite_requested"])
         item, = plan["expected"]
-        self.assertEqual(":calf-ui:" + r.IOS_APPLICATION_TASK, item["task"])
+        self.assertEqual(":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK, item["task"])
         self.assertEqual("genuine-uikit-application", item["native_test_host"])
         self.assertEqual(7, len(item["required_testcases"]))
         groups = r.ui_application_focus_groups(r.UI_DATE_IMPORTANT_FOCUS)
@@ -45,7 +45,7 @@ class ImportantDateFocus(unittest.TestCase):
         selectors = r.ui_application_focus_filter(r.UI_DATE_IMPORTANT_FOCUS).split(",")
         self.assertEqual(7, command.count("--tests"))
         self.assertEqual([part for value in selectors for part in ("--tests", value)], command[-14:])
-        self.assertEqual([":calf-ui:" + r.IOS_APPLICATION_TASK], [v for v in command if v.startswith(":")])
+        self.assertEqual([":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK], [v for v in command if v.startswith(":")])
 
     def test_transport_accepts_the_exact_method_set_in_kgp_set_order(self):
         full = sorted(app.TEST_ARGUMENTS)
@@ -84,12 +84,12 @@ class ImportantDateFocus(unittest.TestCase):
                         self.plan()
 
     def test_wrong_task_host_scope_filter_source_or_inventory_is_rejected(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-io",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-io",)), ("ios", None)):
             with self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.UI_DATE_IMPORTANT_FOCUS)
         for section, key, value in (("plan", "complete_suite_requested", True),
                                     ("item", "native_test_host", "skiko-only"),
-                                    ("item", "task", ":calf-ui:iosSimulatorArm64Test"),
+                                    ("item", "task", ":nativecmpkit-ui:iosSimulatorArm64Test"),
                                     ("item", "test_filter", r.UI_DATE_BOUNDS_CLASS),
                                     ("item", "required_testcases", r.ui_date_bounds_identities()),
                                     ("item", "test_source_files", [])):
@@ -117,7 +117,7 @@ class ImportantDateFocus(unittest.TestCase):
 
     def test_successful_and_complete_profiles_have_not_been_silently_narrowed(self):
         for focus, count in ((r.UI_DATE_BOUNDS_FOCUS, 6), (r.UI_DATE_REPLACEMENT_FOCUS, 3)):
-            plan = r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertEqual(count, len(plan["expected"][0]["required_testcases"]))
         for profile in ("all", "ios", "ios-ui", "extended"):
             self.assertTrue(all("test-focus" not in row for row in matrix.matrix(profile)["include"]))
@@ -131,7 +131,7 @@ class ImportantDateApplicationEvidence(unittest.TestCase):
         f = self.fixture
         for group in r.ui_application_focus_groups(r.UI_DATE_IMPORTANT_FOCUS):
             f.write(group["source"], (r.ROOT / group["source"]).read_bytes())
-        f.plan = r.plan(f.root, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_IMPORTANT_FOCUS)
+        f.plan = r.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_IMPORTANT_FOCUS)
         f.cases = [{"classname": group["classname"], "name": method, "status": "passed"}
                    for group in r.ui_application_focus_groups(r.UI_DATE_IMPORTANT_FOCUS) for method in group["methods"]]
         f.document["explicit_test_focus"] = r.UI_DATE_IMPORTANT_FOCUS

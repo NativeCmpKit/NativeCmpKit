@@ -83,18 +83,18 @@ class MacOsShareLifecyclePolicy(unittest.TestCase):
         original = [{"classname": policy.CLASS, "name": method + "[desktop]",
                      "status": "skipped" if method == policy.MAC_GUI else "passed"}
                     for method in policy.REQUIRED_CASES]
-        old, errors = policy.apply("calf-share", "desktop", original, "Linux", False)
+        old, errors = policy.apply("nativecmpkit-share", "desktop", original, "Linux", False)
         self.assertEqual([], errors)
         self.assertEqual(4, len(old))
         complete = original + lifecycle_cases("skipped")
-        scenarios, errors = policy.apply("calf-share", "desktop", complete, "Linux", False)
+        scenarios, errors = policy.apply("nativecmpkit-share", "desktop", complete, "Linux", False)
         self.assertEqual([], errors)
         self.assertEqual(7, len(scenarios))
         self.assertEqual(4, sum(row.get("disposition") == "not-applicable" for row in complete))
         self.assertEqual(4, len(policy.REQUIRED_CASES))
 
     def test_unrelated_modules_suites_and_classes_receive_no_new_skip_exception(self):
-        for module, suite in (("calf-io", "desktop"), ("calf-share", "ios"), ("calf-share", "js")):
+        for module, suite in (("nativecmpkit-io", "desktop"), ("nativecmpkit-share", "ios"), ("nativecmpkit-share", "js")):
             actual = lifecycle_cases("skipped")
             self.assertEqual(([], []), policy.apply(module, suite, actual, "Linux", False))
             self.assertTrue(all("disposition" not in row for row in actual))
@@ -115,18 +115,18 @@ class MacOsShareLifecyclePolicy(unittest.TestCase):
         self.assertNotRegex(source, r"@(?:Ignore|Disabled)|TestDispatcher|runTest\(")
 
     def test_optin_native_harness_compiles_actual_source_without_new_release_dependency(self):
-        manifest = tomllib.loads((ROOT / "calf-share/native/Cargo.toml").read_text())
+        manifest = tomllib.loads((ROOT / "nativecmpkit-share/native/Cargo.toml").read_text())
         target = manifest["test"]
         self.assertEqual(1, len(target))
         self.assertEqual("appkit_lifecycle", target[0]["name"])
         self.assertIs(False, target[0]["harness"])
         self.assertEqual(["appkit-lifecycle-tests"], target[0]["required-features"])
         self.assertEqual([], manifest["features"]["appkit-lifecycle-tests"])
-        self.assertEqual('include!("../src/lib.rs");', (ROOT / "calf-share/native/tests/appkit_lifecycle_main.rs").read_text().splitlines()[1])
-        self.assertIn('#[cfg(all(test, feature = "appkit-lifecycle-tests"))]', (ROOT / "calf-share/native/src/macos.rs").read_text())
+        self.assertEqual('include!("../src/lib.rs");', (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs").read_text().splitlines()[1])
+        self.assertIn('#[cfg(all(test, feature = "appkit-lifecycle-tests"))]', (ROOT / "nativecmpkit-share/native/src/macos.rs").read_text())
 
     def test_native_control_failure_and_weak_lifetime_are_independent_of_result_cleanup(self):
-        source = (ROOT / "calf-share/native/tests/appkit_lifecycle/cases.rs").read_text()
+        source = (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs").read_text()
         self.assertIn("CONTROL_FAILED.store(true", source)
         self.assertIn("!CONTROL_FAILED.load(", source)
         self.assertIn("Weak::from_retained(&operation.delegate)", source)
@@ -144,10 +144,10 @@ class MacOsShareLifecycleFinalHarnessControls(unittest.TestCase):
     def test_actual_cargo_target_discovery_has_only_one_explicit_feature_gated_harness(self):
         result = subprocess.run(["cargo", "metadata", "--offline", "--locked", "--no-deps",
                                  "--format-version", "1", "--manifest-path",
-                                 "calf-share/native/Cargo.toml"], cwd=ROOT, check=True,
+                                 "nativecmpkit-share/native/Cargo.toml"], cwd=ROOT, check=True,
                                 capture_output=True, text=True, timeout=30,
                                 env={**os.environ, "PATH": str(Path.home() / ".cargo/bin") + os.pathsep + os.environ["PATH"]})
-        package = next(item for item in json.loads(result.stdout)["packages"] if item["name"] == "calf-share-native")
+        package = next(item for item in json.loads(result.stdout)["packages"] if item["name"] == "nativecmpkit-share-native")
         targets = [item for item in package["targets"] if "test" in item["kind"]]
         self.assertEqual(1, len(targets), "No root helper may become an ungated auto-discovered integration target")
         self.assertEqual("appkit_lifecycle", targets[0]["name"])
@@ -155,7 +155,7 @@ class MacOsShareLifecycleFinalHarnessControls(unittest.TestCase):
         self.assertTrue(targets[0]["src_path"].endswith("/tests/appkit_lifecycle_main.rs"))
 
     def test_finite_native_catalogue_has_exact_eight_cases_and_stress_is_separate(self):
-        source = (ROOT / "calf-share/native/tests/appkit_lifecycle/cases.rs").read_text()
+        source = (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs").read_text()
         catalogue = source.split("const FINITE:", 1)[1].split("];", 1)[0]
         names = re.findall(r'"([a-z_]+)"', catalogue)
         self.assertEqual([
@@ -171,7 +171,7 @@ class MacOsShareLifecycleFinalHarnessControls(unittest.TestCase):
         self.assertIn('assert!(!selected.is_empty()', source)
 
     def test_actual_native_reports_are_exclusively_fresh_reached_cases_with_red_cleanup(self):
-        source = (ROOT / "calf-share/native/tests/appkit_lifecycle/cases.rs").read_text()
+        source = (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs").read_text()
         report = source.split("pub(crate) fn run()", 1)[1]
         self.assertIn('format!("process-{}", std::process::id())', report)
         self.assertIn('std::fs::create_dir(&output)', report)
@@ -187,7 +187,7 @@ class MacOsShareLifecycleFinalHarnessControls(unittest.TestCase):
         self.assertNotRegex(report, r"<skipped|read_to_string|junit_cases|copy\(")
 
     def test_controlled_native_dismissal_calls_actual_receiver_and_terminal_result(self):
-        source = (ROOT / "calf-share/native/tests/appkit_lifecycle/cases.rs").read_text()
+        source = (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs").read_text()
         body = source.split("fn controlled_picker_dismissal()", 1)[1].split("fn controlled_service_failure()", 1)[0]
         self.assertIn('let id = begin()', body)
         self.assertIn('let observer = when_live(id,', body)

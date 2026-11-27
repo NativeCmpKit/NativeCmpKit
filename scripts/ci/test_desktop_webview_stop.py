@@ -9,11 +9,11 @@ import workflow_matrix as matrix
 
 class DesktopWebViewStopTests(unittest.TestCase):
     def cases(self):
-        stops = [{"classname": "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest",
+        stops = [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest",
                  "name": name + "[desktop]", "status": "passed"}
                 for name in ("stopCancelsRealSlowLoadWithoutFeedbackLoop",
                              "repeatedStopsAfterDetachAndReattachCancelOnlyTheCurrentRealLoad")]
-        return stops + [{"classname": "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest",
+        return stops + [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest",
                          "name": name + "[desktop]", "status": "passed"}
                         for name in policy.DESKTOP_WEBVIEW_LIFETIME_CASES]
 
@@ -23,17 +23,17 @@ class DesktopWebViewStopTests(unittest.TestCase):
         self.assertEqual("desktop-linux-x64", rows[0]["slot"])
         self.assertEqual("desktop", rows[0]["suite"])
         self.assertEqual("ubuntu-24.04", rows[0]["runner"])
-        self.assertEqual("calf-webview", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-webview", rows[0]["test-modules"])
         for profile in ("core", "browser", "apple", "windows", "all"):
             self.assertTrue(all("test-modules" not in row for row in matrix.matrix(profile)["include"]))
-        plan = runner.plan(runner.ROOT, "desktop", only_modules=("calf-webview",))
-        self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
-        self.assertEqual(["calf-webview"], [item["module"] for item in plan["expected"]])
+        plan = runner.plan(runner.ROOT, "desktop", only_modules=("nativecmpkit-webview",))
+        self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-webview"], [item["module"] for item in plan["expected"]])
         self.assertFalse(plan["complete_suite_requested"])
 
     def test_both_actual_native_cases_are_required_on_each_desktop_host(self):
         for system in ("Linux", "Darwin", "Windows"):
-            scenarios, errors = policy.apply("calf-webview", "desktop", self.cases(), system, False)
+            scenarios, errors = policy.apply("nativecmpkit-webview", "desktop", self.cases(), system, False)
             self.assertEqual([], errors)
             self.assertEqual(5, len(scenarios))
             self.assertTrue(all(row["required_on_host"] and row["disposition"] == "required-executed"
@@ -54,14 +54,14 @@ class DesktopWebViewStopTests(unittest.TestCase):
                 else:
                     cases[-1]["status"] = defect
                 before = [dict(row) for row in cases]
-                _, errors = policy.apply("calf-webview", "desktop", cases, "Linux", False)
+                _, errors = policy.apply("nativecmpkit-webview", "desktop", cases, "Linux", False)
                 self.assertTrue(errors)
                 self.assertEqual(before, cases, "Never promote or rewrite actual outcomes")
 
     def test_source_bound_profile_and_cases_cannot_become_a_compile_or_other_platform_pass(self):
-        self.assertEqual(([], []), policy.apply("calf-webview", "js", [], "Linux", False))
+        self.assertEqual(([], []), policy.apply("nativecmpkit-webview", "js", [], "Linux", False))
         for case in self.cases():
-            source = runner.ROOT / ("calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/" +
+            source = runner.ROOT / ("nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/" +
                                     case["classname"].rsplit(".", 1)[1] + ".kt")
             self.assertIn("fun " + case["name"].removesuffix("[desktop]") + "(", source.read_text())
         workflow = (runner.ROOT / ".github/workflows/gradle.yml").read_text()

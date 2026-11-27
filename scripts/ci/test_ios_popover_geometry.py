@@ -64,8 +64,8 @@ class PopoverGeometryControls(unittest.TestCase):
             focus = geometry.FOCUSES[index]
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26",
                 "arch": "arm64", "python": "python3", "simulator-kind": kind,
-                "test-modules": "calf-ui", "test-focus": focus}]}, workflow.matrix("ios-popover-geometry-" + kind))
-            plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+                "test-modules": "nativecmpkit-ui", "test-focus": focus}]}, workflow.matrix("ios-popover-geometry-" + kind))
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertEqual([{"classname": "iosSimulatorArm64ApplicationTest." + geometry.CLASS,
                 "name": geometry.METHODS[index] + "[iosSimulatorArm64]"}], plan["expected"][0]["required_testcases"])
             self.assertFalse(plan["complete_suite_requested"])
@@ -76,13 +76,13 @@ class PopoverGeometryControls(unittest.TestCase):
     def test_foreign_suite_module_and_modified_host_cannot_select_geometry(self):
         import ios_popover_geometry_plan as geometry
         for focus in geometry.FOCUSES:
-            for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+            for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
                 self.assertFalse(library.allowed_test_focus(suite, modules, focus))
         for kind in ("iphone", "ipad"):
             profile = "ios-popover-geometry-" + kind
             with patch.dict(workflow.PROFILES, {profile: ("desktop-macos-arm64",)}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError):
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
 
     def test_recorded_booted_idiom_and_minimum_native_os_are_required(self):
@@ -138,12 +138,12 @@ class PopoverGeometryControls(unittest.TestCase):
     def test_exact_four_input_compiler_and_one_method_filter(self):
         import ios_popover_geometry_plan as geometry
         source = (ROOT / geometry.INIT_SCRIPT).read_text()
-        self.assertEqual(list(geometry.SOURCES), re.findall(r'"(calf-ui/src/ios[^"\n]+\.kt)"', source))
+        self.assertEqual(list(geometry.SOURCES), re.findall(r'"(nativecmpkit-ui/src/ios[^"\n]+\.kt)"', source))
         self.assertIn('common.setFrom(emptyList<Any>())', source)
         self.assertIn('compilation.inputs.property("nativecmpkitPopoverGeometryFocus", focus!!)', source)
         self.assertNotIn('sourceSets.getByName', source)
         for index, focus in enumerate(geometry.FOCUSES):
-            plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             command = library.gradle_command("ios", plan, UDID)
             self.assertEqual(1, command.count(geometry.INIT_SCRIPT))
             self.assertIn("-PnativecmpkitPopoverGeometryFocus=" + focus, command)
@@ -158,7 +158,7 @@ class PopoverGeometryControls(unittest.TestCase):
                 target = root / name; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes((ROOT / name).read_bytes())
             receipt = root / geometry.RECEIPT; receipt.parent.mkdir(parents=True, exist_ok=True)
             focus = geometry.FOCUSES[0]
-            document = {"task": ":calf-ui:compileTestKotlinIosSimulatorArm64", "focus": focus,
+            document = {"task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64", "focus": focus,
                 "source_sha256": {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in geometry.SOURCES},
                 "effective_sources": list(geometry.SOURCES), "excluded_unrelated_test_sources": True,
                 "production_source_sets_changed": False, "native_tests_executed": 0,
@@ -267,7 +267,7 @@ class PopoverGeometryControls(unittest.TestCase):
         self.assertNotIn("iosGeometryTest", library.KNOWN_TEST_SETS)
         for suite, focus in (("ios", library.IOS_POPOVER_BAR_RECOVERY_FOCUS),
                              ("desktop", library.DATE_TRANSACTION_FOCUS)):
-            plan = library.plan(ROOT, suite, only_modules=("calf-ui",), focus=focus)
+            plan = library.plan(ROOT, suite, only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertNotIn(geometry.NATIVE, plan["expected"][0]["test_source_files"])
             self.assertNotIn(geometry.SCENE, plan["expected"][0]["test_source_files"])
             self.assertNotIn("iosGeometryTest", plan["expected"][0]["test_source_sets"])

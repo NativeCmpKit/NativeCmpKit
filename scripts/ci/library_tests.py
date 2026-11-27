@@ -54,18 +54,18 @@ SUITES = {
 }
 # Guard the current minimum, independently of discovery, so deleting a module's
 # last tests cannot turn a missing suite into a green "not applicable" entry.
-PERMISSION_MODULES = tuple("calf-permissions/" + name for name in (
+PERMISSION_MODULES = tuple("nativecmpkit-permissions/" + name for name in (
     "core", "camera", "gallery", "location", "background-location", "bluetooth",
     "contacts", "calendar", "notifications", "wifi", "microphone",
 ))
-SHARED_MINIMUM = ("calf-io", "calf-file-picker", "calf-ui", "calf-navigation", "calf-geo",
-                  "calf-camera-picker", "calf-share", "calf-webview", *PERMISSION_MODULES)
+SHARED_MINIMUM = ("nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-ui", "nativecmpkit-navigation", "nativecmpkit-geo",
+                  "nativecmpkit-camera-picker", "nativecmpkit-share", "nativecmpkit-webview", *PERMISSION_MODULES)
 MINIMUM_MODULES = {suite: SHARED_MINIMUM for suite in SUITES}
-MINIMUM_MODULES["desktop"] = (*SHARED_MINIMUM, "calf-file-picker-coil", "calf-cupertino-icons")
-MINIMUM_MODULES["ios"] = (*SHARED_MINIMUM, "calf-file-picker-coil")
-MINIMUM_MODULES["js"] = (*SHARED_MINIMUM, "calf-file-picker-coil")
-MINIMUM_MODULES["wasm"] = (*SHARED_MINIMUM, "calf-file-picker-coil")
-MINIMUM_MODULES["android-device"] = ("calf-io", "calf-file-picker", "calf-geo", "calf-webview", "calf-ui", "calf-navigation", "calf-share", "calf-camera-picker", "calf-permissions/core")
+MINIMUM_MODULES["desktop"] = (*SHARED_MINIMUM, "nativecmpkit-file-picker-coil", "nativecmpkit-cupertino-icons")
+MINIMUM_MODULES["ios"] = (*SHARED_MINIMUM, "nativecmpkit-file-picker-coil")
+MINIMUM_MODULES["js"] = (*SHARED_MINIMUM, "nativecmpkit-file-picker-coil")
+MINIMUM_MODULES["wasm"] = (*SHARED_MINIMUM, "nativecmpkit-file-picker-coil")
+MINIMUM_MODULES["android-device"] = ("nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-geo", "nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-navigation", "nativecmpkit-share", "nativecmpkit-camera-picker", "nativecmpkit-permissions/core")
 KNOWN_TEST_SETS = set(name for _, names in SUITES.values() for name in names) | {"androidDeviceTest", "iosArm64Test"}
 ROOT_INPUTS = (
     "build.gradle.kts", "settings.gradle.kts", "gradle.properties", "gradle.lockfile",
@@ -82,26 +82,26 @@ COUNTS = ("tests", "failures", "errors", "skipped")
 PROJECT_PATH = re.compile(r":[a-z][a-z0-9-]*(?::[a-z][a-z0-9-]*)*\Z")
 IOS_APPLICATION_TASK = "iosSimulatorArm64ApplicationTest"
 IOS_APPLICATION_SOURCES = (
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHostTest.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/UIImageConversionTest.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/RememberNativeAlertPropertiesTest.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/navigation/NativeBarOwnershipTest.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHostTest.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UIImageConversionTest.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/RememberNativeAlertPropertiesTest.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/navigation/NativeBarOwnershipTest.kt",
 )
 IOS_PICKER_APPLICATION_SOURCES = (
-    "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/internal/NativePickerApplicationHost.kt",
-    "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/internal/NativePickerApplicationHostTest.kt",
-    "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/internal/NativeObjectIdentity.kt",
+    "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/NativePickerApplicationHost.kt",
+    "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/NativePickerApplicationHostTest.kt",
+    "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/NativeObjectIdentity.kt",
 )
 IOS_SHARE_APPLICATION_SOURCES = (
-    "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/internal/NativeShareApplicationHost.kt",
-    "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/internal/NativeShareApplicationHostTest.kt",
-    "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/internal/NativeObjectIdentity.kt",
+    "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/internal/NativeShareApplicationHost.kt",
+    "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/internal/NativeShareApplicationHostTest.kt",
+    "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/internal/NativeObjectIdentity.kt",
 )
-IOS_APPLICATION_HOST_SOURCES = {"calf-ui": IOS_APPLICATION_SOURCES,
-                                "calf-file-picker": IOS_PICKER_APPLICATION_SOURCES,
-                                "calf-share": IOS_SHARE_APPLICATION_SOURCES}
+IOS_APPLICATION_HOST_SOURCES = {"nativecmpkit-ui": IOS_APPLICATION_SOURCES,
+                                "nativecmpkit-file-picker": IOS_PICKER_APPLICATION_SOURCES,
+                                "nativecmpkit-share": IOS_SHARE_APPLICATION_SOURCES}
 IOS_APPLICATION_CASES = (
     ("dialog.NativeAlertLifecycleTest", "presentedAlertUsesLatestActionAndTextFieldCallbacks"),
     ("dialog.NativeAlertLifecycleTest", "disposalDuringPresentationQueuesCleanupAndReplacement"),
@@ -121,9 +121,9 @@ IOS_APPLICATION_CASES = (
     ("navigation.NativeBarOwnershipTest", "selectionUsesCurrentNativeMembershipInsteadOfStaleOrMutableTags"),
 )
 NATIVE_SHARE_BOUNDARY_FOCUS = "native-share-boundaries"
-NATIVE_SHARE_BOUNDARY_MODULE = "calf-share"
-NATIVE_SHARE_BOUNDARY_CLASS = "com.mohamedrejeb.calf.share.platform.NativeLoaderBoundaryIntegrationTest"
-NATIVE_SHARE_BOUNDARY_SOURCE = "calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/platform/NativeLoaderBoundaryIntegrationTest.kt"
+NATIVE_SHARE_BOUNDARY_MODULE = "nativecmpkit-share"
+NATIVE_SHARE_BOUNDARY_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.platform.NativeLoaderBoundaryIntegrationTest"
+NATIVE_SHARE_BOUNDARY_SOURCE = "nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeLoaderBoundaryIntegrationTest.kt"
 NATIVE_SHARE_BOUNDARY_METHODS = (
     "missingBundledResourceFailsVisiblyWithoutPublishingOrRetryingANativeImage",
     "explicitExternalPackagerPathLoadsTheRealHostLibraryWithoutTouchingTheHomeCache",
@@ -132,16 +132,16 @@ NATIVE_SHARE_BOUNDARY_METHODS = (
     "redirectedHomeCacheCannotWriteOrLoadThroughTheActualDirectoryAlias",
 )
 DATE_TRANSACTION_FOCUS = "material-date-transaction"
-DATE_TRANSACTION_MODULE = "calf-ui"
-DATE_TRANSACTION_CLASS = "com.mohamedrejeb.calf.ui.datepicker.CompactDateTransactionAcceptanceTest"
-DATE_TRANSACTION_PACKAGE_PATH = "kotlin/com/mohamedrejeb/calf/ui/datepicker/"
+DATE_TRANSACTION_MODULE = "nativecmpkit-ui"
+DATE_TRANSACTION_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.CompactDateTransactionAcceptanceTest"
+DATE_TRANSACTION_PACKAGE_PATH = "kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/"
 DATE_TRANSACTION_SOURCE_SETS = {
     "desktop": "desktopTest", "android-host": "androidHostTest",
     # webTest is a sibling fragment of materialTest. Leaf test fragments depend
     # on both; put the thin runner wrappers there rather than changing hierarchy.
     "android-device": "androidDeviceTest", "js": "jsTest", "wasm": "wasmJsTest",
 }
-DATE_TRANSACTION_SCENARIOS_SOURCE = ("calf-ui/src/materialTest/" + DATE_TRANSACTION_PACKAGE_PATH +
+DATE_TRANSACTION_SCENARIOS_SOURCE = ("nativecmpkit-ui/src/materialTest/" + DATE_TRANSACTION_PACKAGE_PATH +
                                      "CompactDateTransactionScenarios.kt")
 DATE_TRANSACTION_METHODS = (
     "capturedConfirmRevalidatesTheLatestRules",
@@ -152,7 +152,7 @@ DATE_TRANSACTION_METHODS = (
 DROPDOWN_FOCUS = "material-dropdown-contract"
 DROPDOWN_ANDROID_RECOVERY_FOCUS = "material-dropdown-android-dismissal-recovery"
 DROPDOWN_FOCUSES = (DROPDOWN_FOCUS, DROPDOWN_ANDROID_RECOVERY_FOCUS)
-DROPDOWN_CLASS = "com.mohamedrejeb.calf.ui.dropdown.MaterialDropdownAcceptanceTest"
+DROPDOWN_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dropdown.MaterialDropdownAcceptanceTest"
 DROPDOWN_METHODS = (
     "offsetAndRtlMutationsMoveTheActualPopup",
     "callerScrollStateReachesBothEndsOfTheActualLongMenu",
@@ -161,17 +161,17 @@ DROPDOWN_METHODS = (
 )
 DROPDOWN_SOURCE_SETS = {"desktop": "desktopTest", "android-device": "androidDeviceTest",
                         "js": "jsTest", "wasm": "wasmJsTest"}
-DROPDOWN_PACKAGE_PATH = "/kotlin/com/mohamedrejeb/calf/ui/dropdown/"
-DROPDOWN_SCENARIOS_SOURCE = "calf-ui/src/materialTest" + DROPDOWN_PACKAGE_PATH + "MaterialDropdownAcceptanceScenarios.kt"
+DROPDOWN_PACKAGE_PATH = "/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dropdown/"
+DROPDOWN_SCENARIOS_SOURCE = "nativecmpkit-ui/src/materialTest" + DROPDOWN_PACKAGE_PATH + "MaterialDropdownAcceptanceScenarios.kt"
 ANDROID_PERMISSION_DEMO_FOCUS = "android-permission-demo-contracts"
 ANDROID_PERMISSION_DEMO_RECOVERY_FOCUS = "android-permission-demo-call-denial-recovery"
 ANDROID_PERMISSION_DEMO_DENIAL_RECOVERY_FOCUS = "android-permission-demo-denial-recovery"
-ANDROID_PERMISSION_DEMO_RECOVERY_ANNOTATION = "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoCallDenialVerification"
+ANDROID_PERMISSION_DEMO_RECOVERY_ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoCallDenialVerification"
 ANDROID_MEDIA_SELECTION_FOCUS = "android-media-selection"
 ANDROID_PERMISSION_DEVICE_SPECS = {
     ANDROID_PERMISSION_DEMO_FOCUS: {
-        "classname": "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest",
-        "source": "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionDemoDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest",
+        "source": "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionDemoDeviceTest.kt",
         "methods": (
             "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant",
             "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest",
@@ -180,8 +180,8 @@ ANDROID_PERMISSION_DEVICE_SPECS = {
         "scope": "Three new API35 library/source-app tests only: approved fresh Call grant, actual denial/permanent-denial, real document/photo picker and bounded synthetic reads. No sample UI, phone call, recording, Android13/14 selected-media or packaged/minimum/ABI/security/release inference.",
     },
     ANDROID_PERMISSION_DEMO_RECOVERY_FOCUS: {
-        "classname": "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest",
-        "source": "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionDemoDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest",
+        "source": "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionDemoDeviceTest.kt",
         "declared_methods": (
             "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant",
             "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest",
@@ -194,8 +194,8 @@ ANDROID_PERMISSION_DEVICE_SPECS = {
         "scope": "Only the two failed actual API35 Call/denial methods from the unchanged complete three-method source: genuine approved fresh Call request/grant and microphone denial/permanent-denial/rationale/one callback per request. Reuse the independently accepted document/photo picker; never replay it or broaden to storage/media/accepted suites. Timeout observations are finite scalars, not native dispatch/grant/callback proof. No phone call, recording, sample UI, packaged/minimum/ABI/security/release inference.",
     },
     ANDROID_PERMISSION_DEMO_DENIAL_RECOVERY_FOCUS: {
-        "classname": "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest",
-        "source": "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionDemoDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest",
+        "source": "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionDemoDeviceTest.kt",
         "declared_methods": (
             "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant",
             "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest",
@@ -205,8 +205,8 @@ ANDROID_PERMISSION_DEVICE_SPECS = {
         "scope": "Only the remaining failed actual API35 microphone denial/permanent-denial method: original public requests, actual system Deny controls, native denied/rationale true then false, exactly one callback per request, original absolute five-second third-request active-root/native-host absence admission and final Unknown. Reuse independently accepted Call C2 and document/photo picker C3; never replay them or expand to Android13/14 media, storage, all-files/SMS or other accepted suites. Null/stale/invisible/foreign/unready/late evidence is not no dialog; finite diagnostic scalars are not a cause or native proof. No recording, sample UI, packaged/minimum/ABI/security/release inference.",
     },
     ANDROID_MEDIA_SELECTION_FOCUS: {
-        "classname": "com.mohamedrejeb.calf.permissions.AndroidMediaSelectionDeviceTest",
-        "source": "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidMediaSelectionDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidMediaSelectionDeviceTest",
+        "source": "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidMediaSelectionDeviceTest.kt",
         "methods": ("realPlatformMediaSelectionIsReflectedByPublicLibraryStates",),
         "scope": "One media method on the exact actual API: API33 public-library image/video request/full scope; API34 real platform explicit selected-photo request followed by public library Limited/denied observation. Platform selection is not a library request result; no accepted Call/denial/picker replay or foreign-media/packaged/ABI/release inference.",
     },
@@ -215,10 +215,10 @@ ANDROID_PERMISSION_DEVICE_SPECS.update(permission_lifecycle.SPECS)
 # NEW controlled-loopback routes; no full/default fixture population is admitted.
 ANDROID_IO_REMOTE_FOCUSES = ("android-io-controlled-remote", "android-io-controlled-remote-positive",
                             "android-io-controlled-remote-cancel")
-ANDROID_IO_REMOTE_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoRemoteDocumentsTest.kt"
+ANDROID_IO_REMOTE_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoRemoteDocumentsTest.kt"
 ANDROID_IO_PROVIDER_FOCUS = "android-io-provider-lifecycle"
-ANDROID_IO_PROVIDER_CLASS = "com.mohamedrejeb.calf.io.AndroidIoProviderLifecycleTest"
-ANDROID_IO_PROVIDER_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoProviderLifecycleTest.kt"
+ANDROID_IO_PROVIDER_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoProviderLifecycleTest"
+ANDROID_IO_PROVIDER_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoProviderLifecycleTest.kt"
 ANDROID_IO_PROVIDER_METHODS = (
     "persistedTreeBookmarkSurvivesOwnedClientRestartAndExplicitRelease",
     "ownerRevocationDeniesTreeAndChildMetadataAndActualContentRead",
@@ -227,27 +227,27 @@ ANDROID_IO_PROVIDER_METHODS = (
     "nativeCoilCancellationClosesTransferredSourceWithoutLateSuccess",
 )
 ANDROID_IO_UNAVAILABLE_FOCUS = "android-io-provider-unavailable"
-ANDROID_IO_UNAVAILABLE_CLASS = "com.mohamedrejeb.calf.io.AndroidIoUnavailableProviderTest"
-ANDROID_IO_UNAVAILABLE_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoUnavailableProviderTest.kt"
+ANDROID_IO_UNAVAILABLE_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoUnavailableProviderTest"
+ANDROID_IO_UNAVAILABLE_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoUnavailableProviderTest.kt"
 ANDROID_IO_UNAVAILABLE_METHOD = "publicTreeAndChildLookupRefuseDuringOwnedProviderUnavailability"
 ANDROID_IO_UNAVAILABLE_SOURCE_DEPENDENCIES = (
     ANDROID_IO_UNAVAILABLE_SOURCE,
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/OwnedIoEndpoint.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoProviderContract.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoGrantActivity.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/KmpFileDeviceTest.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/OwnedIoEndpoint.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoProviderContract.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoGrantActivity.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileDeviceTest.kt",
 )
 ANDROID_IO_DEFAULT_DECODE_FOCUS = "android-io-default-decode"
-ANDROID_IO_DEFAULT_DECODE_CLASS = "com.mohamedrejeb.calf.io.AndroidIoDefaultDecodeTest"
-ANDROID_IO_DEFAULT_DECODE_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoDefaultDecodeTest.kt"
+ANDROID_IO_DEFAULT_DECODE_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoDefaultDecodeTest"
+ANDROID_IO_DEFAULT_DECODE_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoDefaultDecodeTest.kt"
 ANDROID_IO_DEFAULT_DECODE_METHODS = (
     "defaultPngDecodeStreamsUnknownSizeBinaryAndPreservesEveryPixel",
     "defaultJpegDecodeReplaysBoundsAndExifForRotationAndReflection",
     "repeatedDefaultCorruptDecodesReleaseActualCrossUidDescriptors",
 )
 ANDROID_IO_NAMED_SYSTEM_FOCUS = "android-io-named-system-providers"
-ANDROID_IO_NAMED_SYSTEM_CLASS = "com.mohamedrejeb.calf.io.AndroidIoNamedSystemProviderTest"
-ANDROID_IO_NAMED_SYSTEM_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoNamedSystemProviderTest.kt"
+ANDROID_IO_NAMED_SYSTEM_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoNamedSystemProviderTest"
+ANDROID_IO_NAMED_SYSTEM_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoNamedSystemProviderTest.kt"
 ANDROID_IO_NAMED_SYSTEM_METHODS = (
     "externalStorageProviderTreePreservesOwnedFolderMetadataAndBoundedReadOwnership",
     "downloadsProviderTreePreservesOwnedFolderMetadataAndBoundedReadOwnership",
@@ -256,13 +256,13 @@ ANDROID_IO_NAMED_EXTERNAL_FOCUS = "android-io-named-external-storage"
 ANDROID_IO_NAMED_SYSTEM_FOCUSES = (ANDROID_IO_NAMED_SYSTEM_FOCUS, ANDROID_IO_NAMED_EXTERNAL_FOCUS)
 ANDROID_IO_NAMED_SYSTEM_SOURCE_DEPENDENCIES = (
     ANDROID_IO_NAMED_SYSTEM_SOURCE,
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoSystemTreeGrantActivity.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/NamedSystemDocumentsUi.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/DeviceDescriptorProbe.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoSystemTreeGrantActivity.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/NamedSystemDocumentsUi.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/DeviceDescriptorProbe.kt",
 )
 ANDROID_IO_REFERENCE_FOCUS = "android-io-reference-regressions"
-ANDROID_IO_REFERENCE_CLASS = "com.mohamedrejeb.calf.io.AndroidIoReferenceRegressionTest"
-ANDROID_IO_REFERENCE_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoReferenceRegressionTest.kt"
+ANDROID_IO_REFERENCE_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoReferenceRegressionTest"
+ANDROID_IO_REFERENCE_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoReferenceRegressionTest.kt"
 ANDROID_IO_REFERENCE_METHODS = (
     "nativeFileProviderSingleFileMetadataAndNonPersistableAccessStayDistinctFromTrees",
     "nativeSandboxFileUriSupportsDecodedPathsBookmarksDirectoriesAndMissingReadFailures",
@@ -270,15 +270,15 @@ ANDROID_IO_REFERENCE_METHODS = (
 )
 ANDROID_IO_REFERENCE_SOURCE_DEPENDENCIES = (
     ANDROID_IO_REFERENCE_SOURCE,
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoSingleDocumentGrantActivity.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/DeviceDescriptorProbe.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/OwnedIoEndpoint.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoProviderContract.kt",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/instrumentation/DeviceIoFileProvider.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoSingleDocumentGrantActivity.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/DeviceDescriptorProbe.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/OwnedIoEndpoint.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoProviderContract.kt",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/instrumentation/DeviceIoFileProvider.kt",
 )
 ANDROID_IO_OVERSIZE_FOCUS = "io-device-known-oversize"
-ANDROID_IO_DEVICE_CLASS = "com.mohamedrejeb.calf.io.KmpFileDeviceTest"
-ANDROID_IO_DEVICE_SOURCE = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/KmpFileDeviceTest.kt"
+ANDROID_IO_DEVICE_CLASS = "io.github.apdelrahman1911.nativecmpkit.io.KmpFileDeviceTest"
+ANDROID_IO_DEVICE_SOURCE = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileDeviceTest.kt"
 ANDROID_IO_OVERSIZE_METHOD = "knownOversizeIsRejectedBeforeAnyNativeStreamIsOpened"
 ANDROID_IO_DEVICE_METHODS = (
     "nativeDescriptorProbeCountsFilesAndPipeEndsWithoutLeaksOrOffsetChanges",
@@ -297,13 +297,13 @@ ANDROID_IO_DEVICE_METHODS = (
 ANDROID_SAVE_IDENTITY_FOCUS = "save-device-identity"
 ANDROID_SAVE_IDENTITY_RECOVERY_FOCUS = "save-device-identity-missing"
 ANDROID_SAVE_IDENTITY_FOCUSES = (ANDROID_SAVE_IDENTITY_FOCUS, ANDROID_SAVE_IDENTITY_RECOVERY_FOCUS)
-ANDROID_SAVE_IDENTITY_ANNOTATION = "com.mohamedrejeb.calf.picker.SaveIdentityAcceptance"
-ANDROID_SAVE_CALIBRATION_ANNOTATION = "com.mohamedrejeb.calf.picker.SaveIdentityCalibration"
-ANDROID_SAVE_ANNOTATION_SOURCE = "calf-file-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/picker/SaveIdentityAcceptance.kt"
+ANDROID_SAVE_IDENTITY_ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.picker.SaveIdentityAcceptance"
+ANDROID_SAVE_CALIBRATION_ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.picker.SaveIdentityCalibration"
+ANDROID_SAVE_ANNOTATION_SOURCE = "nativecmpkit-file-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/SaveIdentityAcceptance.kt"
 ANDROID_SAVE_IDENTITY_GROUPS = (
     {
-        "classname": "com.mohamedrejeb.calf.picker.SaveDestinationDeviceTest",
-        "source": "calf-file-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/picker/SaveDestinationDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.picker.SaveDestinationDeviceTest",
+        "source": "nativecmpkit-file-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/SaveDestinationDeviceTest.kt",
         "declared_methods": (
             "nativeDescriptorProbeRejectsAKnownOpenFileWithoutChangingItsOffsetOrLeaking",
             "fdInfoParserRejectsMissingDuplicateAndMalformedKernelInodes",
@@ -330,8 +330,8 @@ ANDROID_SAVE_IDENTITY_GROUPS = (
         ),
     },
     {
-        "classname": "com.mohamedrejeb.calf.picker.FileSaverActivityDeviceTest",
-        "source": "calf-file-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/picker/FileSaverActivityDeviceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.picker.FileSaverActivityDeviceTest",
+        "source": "nativecmpkit-file-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FileSaverActivityDeviceTest.kt",
         "declared_methods": (
             "byteRequestSurvivesAnActualActivityResultRoundTrip",
             "publicFileOverloadStreamsFromARealFileProviderWithoutMovingTheSource",
@@ -376,7 +376,7 @@ def validate_save_identity_annotations(root: Path, test_sources: list[str]) -> N
     expected = {"SaveIdentityAcceptance", "SaveIdentityCalibration"}
     actual = re.findall(r"@Target\(AnnotationTarget.FUNCTION\)\s+"
                         r"@Retention\(AnnotationRetention.RUNTIME\)\s+annotation class ([A-Za-z_][A-Za-z0-9_]*)", source)
-    if set(actual) != expected or len(actual) != 2 or "package com.mohamedrejeb.calf.picker" not in source:
+    if set(actual) != expected or len(actual) != 2 or "package io.github.apdelrahman1911.nativecmpkit.picker" not in source:
         raise ValueError("Native saver selector annotations must retain method/runtime contracts")
     annotated, calibrations = [], []
     for relative in test_sources:
@@ -403,10 +403,10 @@ def validate_save_identity_annotations(root: Path, test_sources: list[str]) -> N
 
 
 UNSUPPORTED_PERMISSION_FOCUS = "permission-public-unsupported"
-UNSUPPORTED_PERMISSION_MODULE = "calf-permissions/core"
-UNSUPPORTED_PERMISSION_CLASS = "com.mohamedrejeb.calf.permissions.UnsupportedPublicFactoryTest"
+UNSUPPORTED_PERMISSION_MODULE = "nativecmpkit-permissions/core"
+UNSUPPORTED_PERMISSION_CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.UnsupportedPublicFactoryTest"
 UNSUPPORTED_PERMISSION_SOURCE_SETS = {"desktop": "desktopTest", "js": "jsTest", "wasm": "wasmJsTest"}
-UNSUPPORTED_PERMISSION_FIXTURE = "calf-permissions/core/src/commonTest/kotlin/com/mohamedrejeb/calf/permissions/UnsupportedPublicFactoryFixture.kt"
+UNSUPPORTED_PERMISSION_FIXTURE = "nativecmpkit-permissions/core/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/UnsupportedPublicFactoryFixture.kt"
 UNSUPPORTED_PERMISSION_METHODS = (
     "allNamedSingleRequestsCompleteOnceWithoutImplyingAuthorization",
     "publicBatchChildAndEmptyRequestsReturnExactUnsupportedMaps",
@@ -416,9 +416,9 @@ UNSUPPORTED_PERMISSION_METHODS = (
     "environmentAndLegacyFlagsCannotManufactureAuthorization",
 )
 IOS_PERMISSION_FOCUS = "permission-ios-factories"
-IOS_PERMISSION_MODULE = "calf-permissions/core"
-IOS_PERMISSION_CLASS = "com.mohamedrejeb.calf.permissions.IOSPublicPermissionFactoryTest"
-IOS_PERMISSION_SOURCE = "calf-permissions/core/src/iosTest/kotlin/com/mohamedrejeb/calf/permissions/IOSPublicPermissionFactoryTest.kt"
+IOS_PERMISSION_MODULE = "nativecmpkit-permissions/core"
+IOS_PERMISSION_CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.IOSPublicPermissionFactoryTest"
+IOS_PERMISSION_SOURCE = "nativecmpkit-permissions/core/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/IOSPublicPermissionFactoryTest.kt"
 IOS_PERMISSION_METHODS = (
     "unknownAndExplicitNoGateHaveDifferentCoherentOutcomes",
     "delayedSingleUsesLatestCallbackAndRealMainQueueWithoutReplacingOwner",
@@ -429,15 +429,15 @@ IOS_PERMISSION_METHODS = (
     "throwingRegisteredFactoryRemainsFailedRatherThanMasqueradingAsUnsupported",
 )
 IOS_PERMISSION_SAFETY_FOCUS = "permission-ios-safety"
-IOS_PERMISSION_SAFETY_CLASS = "com.mohamedrejeb.calf.permissions.IOSPermissionSafetyAcceptanceTest"
-IOS_PERMISSION_SAFETY_SOURCE = "calf-permissions/core/src/iosTest/kotlin/com/mohamedrejeb/calf/permissions/IOSPermissionSafetyAcceptanceTest.kt"
+IOS_PERMISSION_SAFETY_CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.IOSPermissionSafetyAcceptanceTest"
+IOS_PERMISSION_SAFETY_SOURCE = "nativecmpkit-permissions/core/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/IOSPermissionSafetyAcceptanceTest.kt"
 IOS_PERMISSION_SAFETY_METHODS = (
     "throwingBackgroundCompletionKeepsThePublicOwnerRecoverableAndStatusCurrent",
     "racedRealBackgroundQueriesAndPendingDisposalNeverPublishObsoleteState",
 )
 IOS_PERMISSION_BATCH_FOCUS = "permission-ios-empty-batch"
-IOS_PERMISSION_BATCH_CLASS = "com.mohamedrejeb.calf.permissions.IOSPermissionBatchSafetyAcceptanceTest"
-IOS_PERMISSION_BATCH_SOURCE = "calf-permissions/core/src/iosTest/kotlin/com/mohamedrejeb/calf/permissions/IOSPermissionBatchSafetyAcceptanceTest.kt"
+IOS_PERMISSION_BATCH_CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.IOSPermissionBatchSafetyAcceptanceTest"
+IOS_PERMISSION_BATCH_SOURCE = "nativecmpkit-permissions/core/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/IOSPermissionBatchSafetyAcceptanceTest.kt"
 IOS_PERMISSION_BATCH_METHODS = (
     "emptyCallbackFailurePreservesRecompositionLaterRequestsAndDisposal",
 )
@@ -454,8 +454,8 @@ IOS_PERMISSION_SAFETY_SPECS = {
     },
 }
 ANDROID_PERMISSION_COMPLETION_FOCUS = "permission-android-completion"
-ANDROID_PERMISSION_COMPLETION_CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionCompletionAcceptanceTest"
-ANDROID_PERMISSION_COMPLETION_SOURCE = "calf-permissions/core/src/androidHostTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionCompletionAcceptanceTest.kt"
+ANDROID_PERMISSION_COMPLETION_CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionCompletionAcceptanceTest"
+ANDROID_PERMISSION_COMPLETION_SOURCE = "nativecmpkit-permissions/core/src/androidHostTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionCompletionAcceptanceTest.kt"
 ANDROID_PERMISSION_COMPLETION_METHODS = (
     "emptyFilteredAndMixedBatchesReturnCompleteMapsIncludingRealNotificationBoundaries",
     "runtimeNotRequiredAndUnknownChildrenUseLatestCallbacksExactlyOnce",
@@ -467,16 +467,16 @@ UI_ALERT_DATE_IMPORTANT_FOCUS = "ui-native-alert-date-important"
 UI_ALERT_RECOVERY_FOCUS = "ui-native-alert-important-recovery"
 UI_DATE_YEAR_PREDICATE_RED_FOCUS = "ui-native-date-year-predicate-red"
 UI_DATE_YEAR_NATIVE_FOCUSES = (UI_ALERT_DATE_IMPORTANT_FOCUS, UI_DATE_YEAR_PREDICATE_RED_FOCUS)
-UI_ALERT_IMPORTANT_CLASS = "com.mohamedrejeb.calf.ui.dialog.NativeAlertImportantRegressionTest"
-UI_ALERT_IMPORTANT_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativeAlertImportantRegressionTest.kt"
+UI_ALERT_IMPORTANT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativeAlertImportantRegressionTest"
+UI_ALERT_IMPORTANT_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeAlertImportantRegressionTest.kt"
 UI_ALERT_IMPORTANT_METHODS = (
     "publicRecordSwapUpdatesVisibleIntentAndConfirmsOnlyB",
     "publicFieldCallbackAndEnabledChangesKeepControllerAndField",
     "actionReorderRebuildsAndRefusesStaleIndexDispatch",
     "publicConfirmAndCancelRemovalRemainOnceAndImmediatelyReopen",
 )
-UI_DATE_YEAR_NATIVE_CLASS = "com.mohamedrejeb.calf.ui.datepicker.NativeDateYearPolicyImportantTest"
-UI_DATE_YEAR_NATIVE_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/NativeDateYearPolicyImportantTest.kt"
+UI_DATE_YEAR_NATIVE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.NativeDateYearPolicyImportantTest"
+UI_DATE_YEAR_NATIVE_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/NativeDateYearPolicyImportantTest.kt"
 UI_DATE_YEAR_NATIVE_METHODS = (
     "publicInlineCalendarSelectsBothYearEndpointsAndRejectsAdjacentYears",
     "publicWheelsSelectBothYearEndpointsAndRejectAdjacentYears",
@@ -485,21 +485,21 @@ UI_DATE_YEAR_NATIVE_METHODS = (
     "publicRuleChangesNeverSnapBeyondYearRange",
     "publicNativeYearPredicateRejectsDateTrueUserPicksAndRecovers",
 )
-UI_DATE_YEAR_SHARED_SOURCE = "calf-ui/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/DateYearPolicyImportantScenarios.kt"
+UI_DATE_YEAR_SHARED_SOURCE = "nativecmpkit-ui/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/DateYearPolicyImportantScenarios.kt"
 UI_DATE_YEAR_MATERIAL_FOCUS = "ui-material-year-policy-important"
-UI_DATE_YEAR_MATERIAL_CLASS = "com.mohamedrejeb.calf.ui.datepicker.MaterialDateYearPolicyImportantTest"
-UI_DATE_YEAR_MATERIAL_SOURCE = "calf-ui/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/MaterialDateYearPolicyImportantTest.kt"
+UI_DATE_YEAR_MATERIAL_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.MaterialDateYearPolicyImportantTest"
+UI_DATE_YEAR_MATERIAL_SOURCE = "nativecmpkit-ui/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/MaterialDateYearPolicyImportantTest.kt"
 UI_DATE_YEAR_MATERIAL_METHODS = (
     "materialRuleChangesNeverSnapBeyondYearRange",
     "publicMaterialYearPredicateRejectsDateTruePicksAndRecovers",
 )
 UI_DATE_YEAR_MATERIAL_SOURCES = (
     UI_DATE_YEAR_MATERIAL_SOURCE, UI_DATE_YEAR_SHARED_SOURCE,
-    "calf-ui/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/DayCells.kt",
+    "nativecmpkit-ui/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/DayCells.kt",
 )
 UI_DATE_BOUNDS_FOCUS = "ui-native-date-bounds"
-UI_DATE_BOUNDS_CLASS = "com.mohamedrejeb.calf.ui.datepicker.NativeDateBoundsAcceptanceTest"
-UI_DATE_BOUNDS_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/NativeDateBoundsAcceptanceTest.kt"
+UI_DATE_BOUNDS_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.NativeDateBoundsAcceptanceTest"
+UI_DATE_BOUNDS_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/NativeDateBoundsAcceptanceTest.kt"
 UI_DATE_BOUNDS_METHODS = (
     "everyUidatePickerStyleHandlesEmptyIntradayExtremeAndNullBounds",
     "singleAndRangeCalendarsPreserveSafeIntervalsAndRecoverAtYearEndpoints",
@@ -509,8 +509,8 @@ UI_DATE_BOUNDS_METHODS = (
     "publicWheelsAndCompactKeepIndependentMonthIntentDuringNativeEditsAndClear",
 )
 UI_DATE_REPLACEMENT_FOCUS = "ui-native-date-replacement"
-UI_DATE_REPLACEMENT_CLASS = "com.mohamedrejeb.calf.ui.datepicker.NativeDateStateReplacementAcceptanceTest"
-UI_DATE_REPLACEMENT_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/NativeDateStateReplacementAcceptanceTest.kt"
+UI_DATE_REPLACEMENT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.NativeDateStateReplacementAcceptanceTest"
+UI_DATE_REPLACEMENT_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/NativeDateStateReplacementAcceptanceTest.kt"
 UI_DATE_REPLACEMENT_METHODS = (
     "inlineStateReplacementInitializesAllEqualSettings",
     "compactDisabledReplacementInitializesAllEqualSettings",
@@ -640,8 +640,8 @@ def ios_permission_safety_identities(focus: str = IOS_PERMISSION_SAFETY_FOCUS) -
 
 
 IOS_SAVE_WRITE_FOCUS = "ios-native-saver-write-failure"
-IOS_SAVE_WRITE_SOURCE = "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/FileSaverStagingTest.kt"
-IOS_SAVE_WRITE_CLASS = "com.mohamedrejeb.calf.picker.FileSaverStagingTest"
+IOS_SAVE_WRITE_SOURCE = "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FileSaverStagingTest.kt"
+IOS_SAVE_WRITE_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.FileSaverStagingTest"
 IOS_SAVE_WRITE_METHOD = "nativeWriteFalseCleansOnlyPrivateStagingAndNeverReturnsSuccess"
 IOS_SAVE_WRITE_DECLARATIONS = (
     "stagedFileKeepsTheRequestedName", "twoStagingsOfTheSameNameDoNotCollide",
@@ -657,8 +657,8 @@ def ios_save_write_identities() -> list[dict]:
 
 
 IOS_SWITCH_CANCELLATION_FOCUS = "ios-native-switch-cancellation"
-IOS_SWITCH_CANCELLATION_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/LiquidGlassControlTest.kt"
-IOS_SWITCH_CANCELLATION_CLASS = "com.mohamedrejeb.calf.ui.controls.LiquidGlassControlTest"
+IOS_SWITCH_CANCELLATION_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/LiquidGlassControlTest.kt"
+IOS_SWITCH_CANCELLATION_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.controls.LiquidGlassControlTest"
 IOS_SWITCH_CANCELLATION_METHODS = (
     "cancellationAcceptanceSecondPointerHandoffCommitsOnlyAtTheFinalUp",
     "cancellationAcceptanceDisposalCancelsTheDragAndCannotToggleTheReplacement",
@@ -684,8 +684,8 @@ def ios_switch_cancellation_identities() -> list[dict]:
 
 
 IOS_SWITCH_OWNERSHIP_FOCUS = "ios-native-switch-ownership"
-IOS_SWITCH_OWNERSHIP_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/LiquidGlassSwitchOwnershipTest.kt"
-IOS_SWITCH_OWNERSHIP_CLASS = "com.mohamedrejeb.calf.ui.controls.LiquidGlassSwitchOwnershipTest"
+IOS_SWITCH_OWNERSHIP_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/LiquidGlassSwitchOwnershipTest.kt"
+IOS_SWITCH_OWNERSHIP_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.controls.LiquidGlassSwitchOwnershipTest"
 IOS_SWITCH_OWNERSHIP_METHODS = (
     "delayedOwnerUpdateRestoresAuthoritativeThumbBeforeApplyingTheProposal",
     "thumbAndBothTrackEndsProposeOnceAndThresholdReturnDoesNotCommit",
@@ -699,8 +699,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_SWITCH_OWNERSHIP_FOCUS] = {
 
 
 IOS_SLIDER_NUMERIC_FOCUS = "ios-native-slider-numeric"
-IOS_SLIDER_NUMERIC_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/LiquidGlassSliderNumericTest.kt"
-IOS_SLIDER_NUMERIC_CLASS = "com.mohamedrejeb.calf.ui.slider.LiquidGlassSliderNumericTest"
+IOS_SLIDER_NUMERIC_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/LiquidGlassSliderNumericTest.kt"
+IOS_SLIDER_NUMERIC_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.slider.LiquidGlassSliderNumericTest"
 IOS_SLIDER_NUMERIC_METHODS = (
     "constantZeroNarrowAndUnboundedControlsRenderFiniteAndStayInert",
     "rangeGeometryAndRtlReplacementDuringLiveInputKeepsEveryFrameFinite",
@@ -712,20 +712,20 @@ UI_APPLICATION_FOCUS_SPECS[IOS_SLIDER_NUMERIC_FOCUS] = {
 }
 
 IOS_UI_STATE_FOCUS = "ios-native-remembered-state"
-IOS_TIME_STATE_CLASS = "com.mohamedrejeb.calf.ui.timepicker.NativeTimeStateLifecycleAcceptanceTest"
-IOS_TIME_STATE_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/timepicker/NativeTimeStateLifecycleAcceptanceTest.kt"
+IOS_TIME_STATE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.timepicker.NativeTimeStateLifecycleAcceptanceTest"
+IOS_TIME_STATE_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/timepicker/NativeTimeStateLifecycleAcceptanceTest.kt"
 IOS_TIME_STATE_METHODS = (
     "identicalStateAndLiveNativeZoneLocaleChangesKeepTheCurrentOwner",
     "hoistedTimeSurvivesRealControllerReplacementAndOldActionsAreDetached",
 )
-IOS_SHEET_STATE_CLASS = "com.mohamedrejeb.calf.ui.sheet.NativeSheetStateAcceptanceTest"
-IOS_SHEET_STATE_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/sheet/NativeSheetStateAcceptanceTest.kt"
+IOS_SHEET_STATE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.sheet.NativeSheetStateAcceptanceTest"
+IOS_SHEET_STATE_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/NativeSheetStateAcceptanceTest.kt"
 IOS_SHEET_STATE_METHODS = (
     "visibleRememberedSheetKeepsIdentityAndUsesTheNewPolicyAfterDensityChanges",
     "realSaveableRegistryRestoresTheVisibleSheetAndStructuralSkipChangesReplaceOnlyItsOwner",
 )
 IOS_UI_STATE_GROUPS = (
-    {"classname": "com.mohamedrejeb.calf.ui.internal.NativeUiApplicationHostTest", "source": IOS_APPLICATION_SOURCES[1],
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeUiApplicationHostTest", "source": IOS_APPLICATION_SOURCES[1],
      "methods": ("generatedBodyRunsOnOwnedWorkerWithActiveAttachedApplication",
                  "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects",
                  "repeatedRealComposeRootsRecomposeDisposeAndRestoreTheirOwner",
@@ -739,8 +739,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_UI_STATE_FOCUS] = {
 }
 
 IOS_POPOVER_ANCHOR_FOCUS = "ui-native-popover-anchor"
-IOS_POPOVER_ANCHOR_CLASS = "com.mohamedrejeb.calf.ui.dialog.NativePopoverAnchorTest"
-IOS_POPOVER_ANCHOR_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverAnchorTest.kt"
+IOS_POPOVER_ANCHOR_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverAnchorTest"
+IOS_POPOVER_ANCHOR_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverAnchorTest.kt"
 IOS_POPOVER_ANCHOR_METHODS = (
     "publicCompositionAnchorUsesLocalRectAndUpdatesWithoutRebuilding",
     "nativeBarButtonAndDetachedOrMissingViewUseTheDocumentedFallback",
@@ -762,9 +762,9 @@ UI_APPLICATION_FOCUS_SPECS[IOS_POPOVER_BAR_RECOVERY_FOCUS] = {
     "scope": "Only the original failed bar-button/detached/missing-view method: documented bar identity, attached native ownership and permissible presenter-provided source, followed by all original fallback/disposal assertions. Four accepted iPhone methods are reused only on unchanged applicable bodies, not selected again; iPad evidence has its own original source. Exact four-source compiler receipt, genuine ApplicationTest/Worker/native XML/runtime and owned cleanup remain mandatory. This is NOT actual OS rotation, split view, explicit regular/compact traits, physical/minimum-platform, consumer/API-ABI/security/release or whole UI-013 acceptance.",
 }
 
-IOS_POPOVER_GEOMETRY_CLASS = "com.mohamedrejeb.calf.ui.dialog.NativePopoverGeometryTest"
-IOS_POPOVER_GEOMETRY_SOURCE = "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverGeometryTest.kt"
-IOS_POPOVER_GEOMETRY_SCENE_SOURCE = "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativePopoverGeometryScene.kt"
+IOS_POPOVER_GEOMETRY_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverGeometryTest"
+IOS_POPOVER_GEOMETRY_SOURCE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt"
+IOS_POPOVER_GEOMETRY_SCENE_SOURCE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt"
 IOS_POPOVER_GEOMETRY_METHODS = (
     "nativePortraitTraitsAndViewLocalAnchorUseTheOwnedScene",
     "nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation",
@@ -780,8 +780,8 @@ for _focus, _method in zip(IOS_POPOVER_GEOMETRY_FOCUSES, IOS_POPOVER_GEOMETRY_ME
     }
 
 IOS_MODAL_OWNERSHIP_FOCUS = "ui-native-modal-ownership-batch"
-IOS_MODAL_OWNERSHIP_CLASS = "com.mohamedrejeb.calf.ui.internal.NativeModalOwnershipBatchTest"
-IOS_MODAL_OWNERSHIP_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeModalOwnershipBatchTest.kt"
+IOS_MODAL_OWNERSHIP_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeModalOwnershipBatchTest"
+IOS_MODAL_OWNERSHIP_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeModalOwnershipBatchTest.kt"
 IOS_MODAL_OWNERSHIP_METHODS = (
     "publicHideCancelsAQueuedSheetWithoutDismissingTheActualBlocker",
     "opposingPublicIntentsDuringNativePresentationCompleteTheirOwnWaiters",
@@ -800,8 +800,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_MODAL_OWNERSHIP_FOCUS] = {
 }
 
 IOS_MODAL_LIFECYCLE_FOCUS = "ui-native-modal-lifecycle-replacement"
-IOS_MODAL_LIFECYCLE_CLASS = "com.mohamedrejeb.calf.ui.internal.NativeModalLifecycleReplacementTest"
-IOS_MODAL_LIFECYCLE_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeModalLifecycleReplacementTest.kt"
+IOS_MODAL_LIFECYCLE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeModalLifecycleReplacementTest"
+IOS_MODAL_LIFECYCLE_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeModalLifecycleReplacementTest.kt"
 IOS_MODAL_LIFECYCLE_METHODS = (
     "publicCompositionDisposalDuringNativeHideReleasesContentAndCanReopen",
     "hoistedStateReattachesToANewRealPresenterAndStaleOwnersCannotDetachItsReplacement",
@@ -822,8 +822,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_MODAL_LIFECYCLE_MEMORY_FOCUS] = {
 }
 
 IOS_MODAL_WORKER_MEMORY_FOCUS = "ui-native-modal-worker-memory-recovery"
-IOS_WORKER_OWNERSHIP_CLASS = "com.mohamedrejeb.calf.ui.internal.NativeWorkerBridgeOwnershipTest"
-IOS_WORKER_OWNERSHIP_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeWorkerBridgeOwnershipTest.kt"
+IOS_WORKER_OWNERSHIP_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeWorkerBridgeOwnershipTest"
+IOS_WORKER_OWNERSHIP_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeWorkerBridgeOwnershipTest.kt"
 IOS_WORKER_OWNERSHIP_METHODS = (
     "replacedPlainCompositionReleasesAnOwnerCreatedOnTheWorker",
     "pooledWorkerBridgePreservesMainResultAndExactThrowableIdentity",
@@ -839,8 +839,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_MODAL_WORKER_MEMORY_FOCUS] = {
 }
 
 IOS_MODAL_XCUI_FOCUS = "ui-native-modal-xcui-batch"
-IOS_MODAL_XCUI_CLASS = "com.mohamedrejeb.calf.ui.internal.NativeModalXcuiBatchTest"
-IOS_MODAL_XCUI_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeModalXcuiBatchTest.kt"
+IOS_MODAL_XCUI_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeModalXcuiBatchTest"
+IOS_MODAL_XCUI_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeModalXcuiBatchTest.kt"
 IOS_MODAL_XCUI_METHODS = (
     "liveAlertCallbacksAndKeyboardUseOnlyCurrentDescriptors",
     "reorderedAlertActionsAndConfirmCancelRemovalAreExactlyOnce",
@@ -857,8 +857,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_MODAL_XCUI_FOCUS] = {
 }
 
 IOS_SHEET_REPEAT_FOCUS = "ui-native-sheet-cancellation-repeat"
-IOS_SHEET_REPEAT_CLASS = "com.mohamedrejeb.calf.ui.sheet.NativeSheetCancellationRepeatTest"
-IOS_SHEET_REPEAT_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/sheet/NativeSheetCancellationRepeatTest.kt"
+IOS_SHEET_REPEAT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.sheet.NativeSheetCancellationRepeatTest"
+IOS_SHEET_REPEAT_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/NativeSheetCancellationRepeatTest.kt"
 IOS_SHEET_REPEAT_METHODS = (
     "cancelledShowRepeatsWithANewNativeAnimationAndItsOwnCompletion",
     "cancelledHideRepeatsWithANewNativeAnimationAndItsOwnCompletion",
@@ -885,8 +885,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_TIME_STATE_RECOVERY_FOCUS] = {
 }
 
 IOS_SLIDER_LIFECYCLE_FOCUS = "ios-native-slider-input-lifecycle"
-IOS_SLIDER_LIFECYCLE_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/NativeSliderInputLifecycleAcceptanceTest.kt"
-IOS_SLIDER_LIFECYCLE_CLASS = "com.mohamedrejeb.calf.ui.slider.NativeSliderInputLifecycleAcceptanceTest"
+IOS_SLIDER_LIFECYCLE_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/NativeSliderInputLifecycleAcceptanceTest.kt"
+IOS_SLIDER_LIFECYCLE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.slider.NativeSliderInputLifecycleAcceptanceTest"
 IOS_SLIDER_LIFECYCLE_METHODS = (
     "liquidEnabledAndLiveCallbacksFollowOnlyTheCurrentGestureOwner",
     "cupertinoEnabledAndLiveCallbacksFollowOnlyTheCurrentGestureOwner",
@@ -922,8 +922,8 @@ for _focus, _methods, _scope in (
     }
 
 IOS_VECTOR_THEME_FOCUS = "ios-native-vector-theme-ownership"
-IOS_VECTOR_THEME_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/NativeVectorThemeAcceptanceTest.kt"
-IOS_VECTOR_THEME_CLASS = "com.mohamedrejeb.calf.ui.utils.NativeVectorThemeAcceptanceTest"
+IOS_VECTOR_THEME_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/NativeVectorThemeAcceptanceTest.kt"
+IOS_VECTOR_THEME_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.utils.NativeVectorThemeAcceptanceTest"
 IOS_VECTOR_THEME_METHODS = (
     "convertedVectorsKeepOriginalPixelsAndSupportActualNativeTemplateTint",
     "attachedOppositeAndInheritedThemesFollowOnlyTheirOwnNativeAppearanceOwner",
@@ -951,12 +951,12 @@ for _focus, _methods, _scope in (
     }
 # Full applications must retain the new real system-appearance acceptance case.
 IOS_APPLICATION_SOURCES += (IOS_VECTOR_THEME_SOURCE,)
-IOS_APPLICATION_HOST_SOURCES["calf-ui"] = IOS_APPLICATION_SOURCES
+IOS_APPLICATION_HOST_SOURCES["nativecmpkit-ui"] = IOS_APPLICATION_SOURCES
 IOS_APPLICATION_CASES += (("utils.NativeVectorThemeAcceptanceTest", IOS_VECTOR_THEME_METHODS[-1]),)
 
 IOS_IMAGE_MEMORY_FOCUS = "ios-native-image-memory"
-IOS_IMAGE_MEMORY_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/UIImageMemoryDiagnosticsTest.kt"
-IOS_IMAGE_MEMORY_CLASS = "com.mohamedrejeb.calf.ui.utils.UIImageMemoryDiagnosticsTest"
+IOS_IMAGE_MEMORY_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UIImageMemoryDiagnosticsTest.kt"
+IOS_IMAGE_MEMORY_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.utils.UIImageMemoryDiagnosticsTest"
 IOS_IMAGE_MEMORY_METHODS = (
     "oneMegapixelRetainedImageSurvivesGcAtTheActualSnapshotBoundary",
     "repeatedRealNativeFailuresAndSuccessesBalanceEveryOwnedAllocation",
@@ -980,48 +980,48 @@ UI_APPLICATION_FOCUS_SPECS[IOS_IMAGE_PROFILE_RECOVERY_FOCUS] = {
     "scope": "Only the failed actual allocation-profile workload after its owning PID/readiness repair. This finite recovery alone ad-hoc signs its disposable verification app with one explicit get-task-allow flag and requires signed readback/owned-input cleanup; no elevated permissions or public binary signing, and attachment authorization is not inferred. Two accepted large-buffer/GC/allocation-failure methods and nine accepted UIImage methods are reused, not replayed. Default-runtime Darwin/Instruments/leaks remains separate from the preserved strict-startup failure. Actual correlated native allocation rows and PID-specific zero leaks, not test passes, must certify profiling. No ASan/strict-runtime/physical/minimum/ABI/consumer/security/release certification.",
 }
 IOS_APPLICATION_SOURCES += (IOS_IMAGE_MEMORY_SOURCE,)
-IOS_APPLICATION_HOST_SOURCES["calf-ui"] = IOS_APPLICATION_SOURCES
+IOS_APPLICATION_HOST_SOURCES["nativecmpkit-ui"] = IOS_APPLICATION_SOURCES
 IOS_APPLICATION_CASES += (("utils.UIImageMemoryDiagnosticsTest", IOS_IMAGE_MEMORY_METHODS[-1]),)
 
 IOS_PICKER_BOUNDARY_FOCUS = "picker-ios-native-ownership"
 IOS_PICKER_BOUNDARY_GROUPS = (
-    {"classname": "com.mohamedrejeb.calf.picker.internal.NativePickerApplicationHostTest",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.internal.NativePickerApplicationHostTest",
      "source": IOS_PICKER_APPLICATION_SOURCES[1],
      "methods": ("generatedBodyRunsOnOwnedWorkerWithActiveAttachedApplication",
                  "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects",
                  "repeatedRealComposeRootsRecomposeDisposeAndRestoreTheirOwner",
                  "failedAssertionPreservesCauseAndReleasesRealCompositionAndPresenter")},
-    {"classname": "com.mohamedrejeb.calf.picker.IosPickerFilterAcceptanceTest",
-     "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/IosPickerFilterAcceptanceTest.kt",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.IosPickerFilterAcceptanceTest",
+     "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/IosPickerFilterAcceptanceTest.kt",
      "methods": ("applicationDocumentFilterAdmitsPdfOfficeAndZipNotJustApplicationBundles",
                  "explicitPdfWordAndSpreadsheetKeepSpecificNativeFilters",
                  "unknownAndMixedTypesFollowActualNativeRegistrationWithoutSilentWidening",
                  "emptyAndInvalidFiltersRejectBeforeAnyNativePickerIsConstructed")},
-    {"classname": "com.mohamedrejeb.calf.picker.IosPickerRuntimeOwnershipTest",
-     "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/IosPickerRuntimeOwnershipTest.kt",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.IosPickerRuntimeOwnershipTest",
+     "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/IosPickerRuntimeOwnershipTest.kt",
      "methods": ("actualAttachedCompetingAndDetachedPresentersCannotReplaceAnotherNativeOwner",
                  "cancellationDuringRealExportPresentationWaitsForNativeCompletionBeforeRemovingStaging",
                  "retainedPublicPhotoLauncherUsesFourNativeConfigurationSnapshotsAndCurrentCallback")},
-    {"classname": "com.mohamedrejeb.calf.picker.NativePickedCopyBoundaryTest",
-     "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/NativePickedCopyBoundaryTest.kt",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.NativePickedCopyBoundaryTest",
+     "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativePickedCopyBoundaryTest.kt",
      "methods": ("readableUnicodeCopySurvivesDeletedOriginAndUriRestorationDoesNotInventCopyAccess",
                  "sameNamesHaveIndependentBytesAndExplicitPersistenceOutlivesTemporaryRelease",
                  "repeatedRealCopyReadReleaseReturnsOwnedDirectoryAccountingToItsBaseline")},
     {"classname": IOS_SAVE_WRITE_CLASS, "source": IOS_SAVE_WRITE_SOURCE,
      "declared_methods": IOS_SAVE_WRITE_DECLARATIONS,
      "methods": IOS_SAVE_WRITE_DECLARATIONS[:-1]},
-    {"classname": "com.mohamedrejeb.calf.picker.PickedCopyOwnershipTest",
-     "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/PickedCopyOwnershipTest.kt",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.PickedCopyOwnershipTest",
+     "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/PickedCopyOwnershipTest.kt",
      "methods": ("oneHundredSelectionsWithLimitOneCreateOnlyOneOwnedDirectory",
                  "cancellationBetweenCopiesRemovesEveryUnreturnedCopy",
                  "releasedUnicodeCopyDisappearsButTheSourceRemainsAndReleaseIsIdempotent")},
-    {"classname": "com.mohamedrejeb.calf.picker.StagePickedUrlsTest",
-     "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/StagePickedUrlsTest.kt",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.picker.StagePickedUrlsTest",
+     "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/StagePickedUrlsTest.kt",
      "methods": ("everyReadableFileIsDeliveredWithoutAFailure",
                  "anUnreadableFileIsReportedAndTheOthersAreKept")},
 )
 UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_BOUNDARY_FOCUS] = {
-    "module": "calf-file-picker", "groups": IOS_PICKER_BOUNDARY_GROUPS,
+    "module": "nativecmpkit-file-picker", "groups": IOS_PICKER_BOUNDARY_GROUPS,
     "scope": "26 related actual UIKit/PhotosUI/type-database/Foundation/Compose picker methods, with real animation/admission and explicitly controlled delegate/source-removal inputs; no cloud-provider selection, swipe gesture, physical/minimum-platform or release certification. Accepted native write-failure/IO/Coil/other-host suites not replayed.",
 }
 
@@ -1031,32 +1031,32 @@ UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_BOUNDARY_FOCUS] = {
 IOS_PICKER_RECOVERY_FOCUS = "picker-ios-native-ownership-recovery"
 IOS_PICKER_RECOVERY_GROUPS = (IOS_PICKER_BOUNDARY_GROUPS[0], IOS_PICKER_BOUNDARY_GROUPS[2])
 UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_RECOVERY_FOCUS] = {
-    "module": "calf-file-picker", "groups": IOS_PICKER_RECOVERY_GROUPS,
+    "module": "nativecmpkit-file-picker", "groups": IOS_PICKER_RECOVERY_GROUPS,
     "scope": "Seven failed/changed actual UIKit/Compose picker ownership and full application-host methods only. Original26-method plan and all protocol/XML/Worker/runtime/cleanup gates retained; no19-method completed subset or successful other-host replay, cloud/swipe/physical/minimum/release certification.",
 }
 
 IOS_PICKER_ADMISSION_FOCUS = "picker-ios-deferred-admission"
 IOS_DEFERRED_PRESENTATION_GROUP = {
-    "classname": "com.mohamedrejeb.calf.picker.IosDeferredPresentationOwnershipTest",
-    "source": "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/IosDeferredPresentationOwnershipTest.kt",
+    "classname": "io.github.apdelrahman1911.nativecmpkit.picker.IosDeferredPresentationOwnershipTest",
+    "source": "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/IosDeferredPresentationOwnershipTest.kt",
     "methods": ("deferredVoidPresentationKeepsCancelledExportAndWeakDelegateUntilActualNativeCompletion",
                 "exceptionAfterQueuedPresentationCannotDeleteStagingBeforeActualNativeCompletion"),
 }
 IOS_PICKER_ADMISSION_GROUPS = (*IOS_PICKER_RECOVERY_GROUPS, IOS_DEFERRED_PRESENTATION_GROUP)
 UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_ADMISSION_FOCUS] = {
-    "module": "calf-file-picker", "groups": IOS_PICKER_ADMISSION_GROUPS,
+    "module": "nativecmpkit-file-picker", "groups": IOS_PICKER_ADMISSION_GROUPS,
     "scope": "Seven changed UIKit/Compose ownership and complete application-host methods plus two controlled deferred-call/real UIKit-completion regressions. Original26/7 selections, protocol/XML/Worker/runtime/binary/cleanup gates retained. No unchanged19-method Foundation/filter/copy/staging replay, OS-refusal/swipe/provider/physical/minimum/release certification.",
 }
 
 # Missing IO-013/#50 C3 only. Keep all accepted picker/admission/IO selections unchanged.
 IOS_PICKER_PROVIDER_CANCELLATION_FOCUS = "picker-ios-provider-cancellation"
-IOS_PICKER_PROVIDER_CANCELLATION_CLASS = "com.mohamedrejeb.calf.picker.NativePhotoProviderCancellationTest"
-IOS_PICKER_PROVIDER_CANCELLATION_SOURCE = "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/NativePhotoProviderCancellationTest.kt"
+IOS_PICKER_PROVIDER_CANCELLATION_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.NativePhotoProviderCancellationTest"
+IOS_PICKER_PROVIDER_CANCELLATION_SOURCE = "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativePhotoProviderCancellationTest.kt"
 IOS_PICKER_PROVIDER_CANCELLATION_METHODS = (
     "publicPhotoCancellationStopsAnInFlightNativeProviderCopyAndReleasesEarlierStaging",
 )
 UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_PROVIDER_CANCELLATION_FOCUS] = {
-    "module": "calf-file-picker",
+    "module": "nativecmpkit-file-picker",
     "groups": ({"classname": IOS_PICKER_PROVIDER_CANCELLATION_CLASS,
                 "source": IOS_PICKER_PROVIDER_CANCELLATION_SOURCE,
                 "methods": IOS_PICKER_PROVIDER_CANCELLATION_METHODS,
@@ -1067,8 +1067,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_PICKER_PROVIDER_CANCELLATION_FOCUS] = {
 # New owning Share presentation/disposal regressions only. The sample is not a library host;
 # no accepted picker/provider/IO/browser or other-platform methods are selected by this focus.
 IOS_SHARE_PRESENTATION_FOCUS = "share-ios-presentation-disposal"
-IOS_SHARE_PRESENTATION_CLASS = "com.mohamedrejeb.calf.share.IosSharePresentationOwnershipTest"
-IOS_SHARE_PRESENTATION_SOURCE = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/IosSharePresentationOwnershipTest.kt"
+IOS_SHARE_PRESENTATION_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.IosSharePresentationOwnershipTest"
+IOS_SHARE_PRESENTATION_SOURCE = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/IosSharePresentationOwnershipTest.kt"
 IOS_SHARE_PRESENTATION_METHODS = (
     "realAnimatedShareDisposalWaitsForNativePresentationAndDismissalBeforeLeaseRelease",
     "deferredNativeSharePresentationRetainsDisposedRequestWhileBothLinksAreNil",
@@ -1076,8 +1076,8 @@ IOS_SHARE_PRESENTATION_METHODS = (
     "disposedPublicShareLaunchersCalledFromDefaultAndIoCannotRestartNativeWork",
     "publicRememberedShareMainDefaultIoReentryAndDisposalUseCurrentCallbacks",
 )
-IOS_SHARE_REQUEST_CONTROL_CLASS = "com.mohamedrejeb.calf.share.IosShareRequestTest"
-IOS_SHARE_REQUEST_CONTROL_SOURCE = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/IosShareRequestTest.kt"
+IOS_SHARE_REQUEST_CONTROL_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.IosShareRequestTest"
+IOS_SHARE_REQUEST_CONTROL_SOURCE = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/IosShareRequestTest.kt"
 IOS_SHARE_REQUEST_CONTROL_METHODS = (
     "preparedCancellationReleasesOnlyTheNeverPresentedRequestOnce",
     "nilNativeLinksDuringControlledPresentationCannotReleaseOrDismissTheRequest",
@@ -1085,9 +1085,9 @@ IOS_SHARE_REQUEST_CONTROL_METHODS = (
     "releasedRequestIgnoresLateCompletionsAndThrowingOwnerNotificationCannotRepeatCleanup",
 )
 UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRESENTATION_FOCUS] = {
-    "module": "calf-share",
+    "module": "nativecmpkit-share",
     "groups": (
-        {"classname": "com.mohamedrejeb.calf.share.internal.NativeShareApplicationHostTest",
+        {"classname": "io.github.apdelrahman1911.nativecmpkit.share.internal.NativeShareApplicationHostTest",
          "source": IOS_SHARE_APPLICATION_SOURCES[1],
          "methods": ("generatedBodyRunsOnOwnedWorkerWithActiveAttachedApplication",
                      "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects",
@@ -1098,7 +1098,7 @@ UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRESENTATION_FOCUS] = {
         {"classname": IOS_SHARE_PRESENTATION_CLASS, "source": IOS_SHARE_PRESENTATION_SOURCE,
          "methods": IOS_SHARE_PRESENTATION_METHODS},
     ),
-    "scope": "Thirteen new calf-share library application methods only: four owning UIApplication/Worker/root/cleanup fixtures, four explicitly controlled Request transitions and five real UIKit/public ShareLauncher ownership regressions. Actual animated/deferred presentation and real dismissal callbacks own disposal cleanup; nil backlinks/timers do not. Main/Default/IO dispatch, current callbacks, reentry and stale/disposed suppression use genuine Compose/native controllers but controlled activity-terminal inputs, not user/recipient completion. Real sandbox-file scope objects execute, with no assumed successful security-scope start, bookmark grant, delayed/cross-process recipient access or original native occurrence. Sample saver tests are separate and never library evidence. No accepted picker/provider/IO/browser/other-host replay, #88/#81/#48/#100 closure, Main Thread Checker/concurrency-suite, physical/minimum/iPad/consumer/API-ABI/dependency/security/readiness/publishing certification.",
+    "scope": "Thirteen new nativecmpkit-share library application methods only: four owning UIApplication/Worker/root/cleanup fixtures, four explicitly controlled Request transitions and five real UIKit/public ShareLauncher ownership regressions. Actual animated/deferred presentation and real dismissal callbacks own disposal cleanup; nil backlinks/timers do not. Main/Default/IO dispatch, current callbacks, reentry and stale/disposed suppression use genuine Compose/native controllers but controlled activity-terminal inputs, not user/recipient completion. Real sandbox-file scope objects execute, with no assumed successful security-scope start, bookmark grant, delayed/cross-process recipient access or original native occurrence. Sample saver tests are separate and never library evidence. No accepted picker/provider/IO/browser/other-host replay, #88/#81/#48/#100 closure, Main Thread Checker/concurrency-suite, physical/minimum/iPad/consumer/API-ABI/dependency/security/readiness/publishing certification.",
 }
 
 IOS_SHARE_APPLICATION_REQUIRED_GROUPS = UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRESENTATION_FOCUS]["groups"]
@@ -1106,9 +1106,9 @@ IOS_SHARE_APPLICATION_REQUIRED_GROUPS = UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_PRE
 # Share188 failed FIRST/Main method only; all original thirteen bodies stay authored and enabled.
 IOS_SHARE_REMEMBERED_FAILURE_FOCUS = "share-ios-remembered-failure-observation"
 IOS_SHARE_REMEMBERED_FAILURE_METHOD = "publicRememberedShareMainDefaultIoReentryAndDisposalUseCurrentCallbacks"
-IOS_SHARE_TERMINAL_OBSERVATION_SOURCE = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/internal/ShareTerminalInputObservation.kt"
+IOS_SHARE_TERMINAL_OBSERVATION_SOURCE = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/internal/ShareTerminalInputObservation.kt"
 UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_REMEMBERED_FAILURE_FOCUS] = {
-    "module": "calf-share",
+    "module": "nativecmpkit-share",
     "groups": ({"classname": IOS_SHARE_PRESENTATION_CLASS, "source": IOS_SHARE_PRESENTATION_SOURCE,
                 "methods": (IOS_SHARE_REMEMBERED_FAILURE_METHOD,),
                 "declared_methods": IOS_SHARE_PRESENTATION_METHODS},),
@@ -1116,8 +1116,8 @@ UI_APPLICATION_FOCUS_SPECS[IOS_SHARE_REMEMBERED_FAILURE_FOCUS] = {
 }
 
 IOS_WEBVIEW_LIFECYCLE_FOCUS = "webview-ios-native-lifecycle"
-IOS_WEBVIEW_LIFECYCLE_CLASS = "com.mohamedrejeb.calf.ui.web.IosWebViewLifecycleAcceptanceTest"
-IOS_WEBVIEW_LIFECYCLE_SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewLifecycleAcceptanceTest.kt"
+IOS_WEBVIEW_LIFECYCLE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewLifecycleAcceptanceTest"
+IOS_WEBVIEW_LIFECYCLE_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewLifecycleAcceptanceTest.kt"
 IOS_WEBVIEW_LIFECYCLE_METHODS = (
     "creationHookSeesConfiguredCurrentNativeOwnerAndRemountCannotExposeThePriorView",
     "stableCompositionReplacementRebindsCallbacksStateNavigatorAndRealDocument",
@@ -1129,13 +1129,13 @@ IOS_WEBVIEW_LIFECYCLE_METHODS = (
 IOS_WEBVIEW_BRIDGE_METHOD = "nativeBridgeOwnershipAcceptsCurrentKvoAndDelegateButRejectsForeignAndNullViews"
 IOS_WEBVIEW_LIFECYCLE_DECLARATIONS = (IOS_WEBVIEW_BRIDGE_METHOD, *IOS_WEBVIEW_LIFECYCLE_METHODS)
 IOS_WEBVIEW_APPLICATION_SOURCES = (
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHost.kt",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHostTest.kt",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeObjectIdentity.kt",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt",
 )
-IOS_APPLICATION_HOST_SOURCES["calf-webview"] = IOS_WEBVIEW_APPLICATION_SOURCES
+IOS_APPLICATION_HOST_SOURCES["nativecmpkit-webview"] = IOS_WEBVIEW_APPLICATION_SOURCES
 IOS_WEBVIEW_LIFECYCLE_GROUPS = (
-    {"classname": "com.mohamedrejeb.calf.ui.web.internal.NativeWebViewApplicationHostTest",
+    {"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.internal.NativeWebViewApplicationHostTest",
      "source": IOS_WEBVIEW_APPLICATION_SOURCES[1],
      "methods": ("generatedBodyRunsOnOwnedWorkerWithActiveAttachedApplication",
                  "nativeObjectIdentityRejectsNullAndEqualButDistinctObjects",
@@ -1145,26 +1145,26 @@ IOS_WEBVIEW_LIFECYCLE_GROUPS = (
      "methods": IOS_WEBVIEW_LIFECYCLE_METHODS, "declared_methods": IOS_WEBVIEW_LIFECYCLE_DECLARATIONS},
 )
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_LIFECYCLE_FOCUS] = {
-    "module": "calf-webview", "groups": IOS_WEBVIEW_LIFECYCLE_GROUPS,
+    "module": "nativecmpkit-webview", "groups": IOS_WEBVIEW_LIFECYCLE_GROUPS,
     "scope": "Ten actual library UIKit-host/WebKit creation, replacement, Unicode HTML, JavaScript and configuration cases. Native configuration flags are not physical swipes/video playback; no network/authentication, full host/device/minimum/ABI/consumer/security/release certification. Accepted UIImage, picker, Android history and desktop/browser methods are not replayed.",
 }
 IOS_WEBVIEW_RECOVERY_FOCUS = "webview-ios-native-lifecycle-recovery"
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_RECOVERY_FOCUS] = {
-    "module": "calf-webview",
+    "module": "nativecmpkit-webview",
     "groups": ({"classname": IOS_WEBVIEW_LIFECYCLE_CLASS, "source": IOS_WEBVIEW_LIFECYCLE_SOURCE,
                 "methods": IOS_WEBVIEW_LIFECYCLE_DECLARATIONS},),
     "scope": "Six failed real WebKit lifecycle/document/value/configuration methods and one new controlled native bridge ownership method only. The four accepted unchanged application-host methods are reused, not replayed. All actual Worker/runtime/binary/install/owned cleanup and real document predicates remain required. No assertion/timeout relaxation, physical swipes/video/network/authentication/minimum/ABI/consumer/security/release certification.",
 }
 IOS_WEBVIEW_REMOUNT_RECOVERY_FOCUS = "webview-ios-native-remount-recovery"
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_REMOUNT_RECOVERY_FOCUS] = {
-    "module": "calf-webview",
+    "module": "nativecmpkit-webview",
     "groups": ({"classname": IOS_WEBVIEW_LIFECYCLE_CLASS, "source": IOS_WEBVIEW_LIFECYCLE_SOURCE,
                 "methods": IOS_WEBVIEW_LIFECYCLE_METHODS[:1], "declared_methods": IOS_WEBVIEW_LIFECYCLE_DECLARATIONS},),
     "scope": "Only the failed real native creation/remount method with deterministic final native child detachment and a retained actual Compose wrapper. All original null-parent/disposal/remount/configuration assertions remain. Six accepted native methods and four accepted host methods are reused, not replayed. Actual Worker/runtime/binary/install/owned cleanup remains required; no physical/network/playback/minimum/ABI/consumer/security/release certification.",
 }
 IOS_WEBVIEW_REQUEST_FOCUS = "webview-ios-native-request-state"
-IOS_WEBVIEW_REQUEST_CLASS = "com.mohamedrejeb.calf.ui.web.IosWebViewRequestAcceptanceTest"
-IOS_WEBVIEW_REQUEST_SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewRequestAcceptanceTest.kt"
+IOS_WEBVIEW_REQUEST_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewRequestAcceptanceTest"
+IOS_WEBVIEW_REQUEST_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt"
 IOS_WEBVIEW_REQUEST_FIXTURE = "scripts/ci/ios_webview_request_fixture.py"
 IOS_WEBVIEW_REQUEST_METHODS = (
     "nativeProvisionalTlsFailFailSuccessAndReloadResetOnlyCurrentPublicErrors",
@@ -1173,26 +1173,26 @@ IOS_WEBVIEW_REQUEST_METHODS = (
 IOS_WEBVIEW_REQUEST_GROUP = {"classname": IOS_WEBVIEW_REQUEST_CLASS, "source": IOS_WEBVIEW_REQUEST_SOURCE,
                              "methods": IOS_WEBVIEW_REQUEST_METHODS}
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_REQUEST_FOCUS] = {
-    "module": "calf-webview", "groups": (IOS_WEBVIEW_REQUEST_GROUP,),
+    "module": "nativecmpkit-webview", "groups": (IOS_WEBVIEW_REQUEST_GROUP,),
     "scope": "Exactly two new genuine UIApplication/library-WK methods: certificate-free actual provisional TLS fail/fail, public state/native link/recovery/Reload, native-link HTTP302 and precommit Stop/client EOF/recovery. Accepted eleven WK/application-host methods reused, not selected. Owned localhost only; no DNS/system-offline, certificate trust, physical/minimum/ABI/consumer/security/release certification.",
 }
 IOS_WEBVIEW_DNS_FOCUS = "webview-ios-native-provisional-dns"
-IOS_WEBVIEW_DNS_CLASS = "com.mohamedrejeb.calf.ui.web.IosWebViewProvisionalDnsAcceptanceTest"
-IOS_WEBVIEW_DNS_SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt"
+IOS_WEBVIEW_DNS_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewProvisionalDnsAcceptanceTest"
+IOS_WEBVIEW_DNS_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt"
 IOS_WEBVIEW_DNS_METHOD = "nativeProvisionalDnsFailFailResetsPreviousErrorBeforeCommitOnSameDocument"
 IOS_WEBVIEW_DNS_GROUP = {"classname": IOS_WEBVIEW_DNS_CLASS, "source": IOS_WEBVIEW_DNS_SOURCE,
                          "methods": (IOS_WEBVIEW_DNS_METHOD,)}
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_DNS_FOCUS] = {
-    "module": "calf-webview", "groups": (IOS_WEBVIEW_DNS_GROUP,),
+    "module": "nativecmpkit-webview", "groups": (IOS_WEBVIEW_DNS_GROUP,),
     "scope": "Exactly one genuine UIApplication/library-WK provisional DNS fail/fail method from two fresh reserved-nonce HTTPS .invalid document links. Actual forwarded NSURLErrorDomain/CannotFindHost/-1003, previous-error reset before zero commits, retained native document/current WK owner and exact delegate/Compose/application cleanup are required. Existing system resolver is nondeterministic; timeout/offline/TLS/other errors refuse. No controlled resolver, resolver override, injected NSError, localhost TLS replay, physical/minimum/ABI/consumer/security/release certification. The thirteen other WK/application-host methods are compiled but not selected.",
 }
 IOS_WEBVIEW_REQUEST_DNS_FOCUS = "webview-ios-native-request-dns"
 UI_APPLICATION_FOCUS_SPECS[IOS_WEBVIEW_REQUEST_DNS_FOCUS] = {
-    "module": "calf-webview", "groups": (IOS_WEBVIEW_REQUEST_GROUP, IOS_WEBVIEW_DNS_GROUP),
+    "module": "nativecmpkit-webview", "groups": (IOS_WEBVIEW_REQUEST_GROUP, IOS_WEBVIEW_DNS_GROUP),
     "scope": "Exactly three unexecuted genuine UIApplication/library-WK methods in one existing iPhone/Mac job: the unchanged two localhost request/TLS/Stop/redirect/Reload methods and one reserved-nonce provisional DNS fail/fail method. The localhost fixture/ATS lease is required only for the request group; DNS keeps its existing HTTPS .invalid/system-resolver and actual NSURLErrorDomain/CannotFindHost/-1003/zero-commit/previous-error-reset criteria. Eleven accepted WK/application-host methods are compiled but not selected. Exact Worker/runtime/binary/install/native/XML/owned application and fixture cleanup gates remain. No controlled resolver, resolver override, injected errors, arbitrary loads/certificate trust bypass, physical/minimum/ABI/consumer/security/release certification.",
 }
 UI_APPLICATION_FOCUS_SPECS[content_policy.IOS_FOCUS] = {
-    "module": "calf-webview", "groups": content_policy.groups(content_policy.IOS_FOCUS),
+    "module": "nativecmpkit-webview", "groups": content_policy.groups(content_policy.IOS_FOCUS),
     "scope": content_policy.scope(content_policy.IOS_FOCUS),
 }
 IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS = (
@@ -1203,8 +1203,8 @@ IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS = (
 )
 
 ANDROID_NAV_BACK_FOCUS = "android-adaptive-navigation-back"
-ANDROID_NAV_BACK_CLASS = "com.mohamedrejeb.calf.navigation.AndroidAdaptiveNavigationBackTest"
-ANDROID_NAV_BACK_SOURCE = "calf-navigation/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/navigation/AndroidAdaptiveNavigationBackTest.kt"
+ANDROID_NAV_BACK_CLASS = "io.github.apdelrahman1911.nativecmpkit.navigation.AndroidAdaptiveNavigationBackTest"
+ANDROID_NAV_BACK_SOURCE = "nativecmpkit-navigation/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/navigation/AndroidAdaptiveNavigationBackTest.kt"
 ANDROID_NAV_BACK_METHOD = "nativeSystemBackPopsOneVisitUsesCurrentOwnerAndUnregistersOnDispose"
 
 
@@ -1213,8 +1213,8 @@ def android_nav_back_identities() -> list[dict]:
 
 
 ANDROID_GEO_OWNERSHIP_FOCUS = "geo-android-owner-lifetime"
-ANDROID_GEO_OWNERSHIP_CLASS = "com.mohamedrejeb.calf.geo.AndroidLocationOwnershipTest"
-ANDROID_GEO_OWNERSHIP_SOURCE = "calf-geo/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/geo/AndroidLocationOwnershipTest.kt"
+ANDROID_GEO_OWNERSHIP_CLASS = "io.github.apdelrahman1911.nativecmpkit.geo.AndroidLocationOwnershipTest"
+ANDROID_GEO_OWNERSHIP_SOURCE = "nativecmpkit-geo/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/geo/AndroidLocationOwnershipTest.kt"
 ANDROID_GEO_OWNERSHIP_METHOD = "nativeRebindingRestartAndTerminalCleanupReleaseOwnersDespiteRetainedCallbacks"
 
 
@@ -1225,9 +1225,9 @@ def android_geo_ownership_identities() -> list[dict]:
 ANDROID_GEO_PROVIDER_FOCUS = "geo-android-provider-contracts"
 ANDROID_GEO_PREREQUISITES_FOCUS = "geo-android-real-prerequisites"
 ANDROID_GEO_PROVIDER_FOCUSES = (ANDROID_GEO_PROVIDER_FOCUS, ANDROID_GEO_PREREQUISITES_FOCUS)
-ANDROID_GEO_PROVIDER_CLASS = "com.mohamedrejeb.calf.geo.AndroidLocationProviderTest"
-ANDROID_GEO_PROVIDER_SOURCE = "calf-geo/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/geo/AndroidLocationProviderTest.kt"
-ANDROID_GEO_PREREQUISITES_ANNOTATION = "com.mohamedrejeb.calf.geo.AndroidGeoPrerequisiteVerification"
+ANDROID_GEO_PROVIDER_CLASS = "io.github.apdelrahman1911.nativecmpkit.geo.AndroidLocationProviderTest"
+ANDROID_GEO_PROVIDER_SOURCE = "nativecmpkit-geo/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/geo/AndroidLocationProviderTest.kt"
+ANDROID_GEO_PREREQUISITES_ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.geo.AndroidGeoPrerequisiteVerification"
 ANDROID_GEO_PROVIDER_METHODS = (
     "nativeForegroundDeniedCoarseAndFinePermissionsUseRealGmsRegistration",
     "nativeRevocationKillsOnlyOwnedProbeAndRestartReportsDenied",
@@ -1252,14 +1252,14 @@ def android_geo_provider_filter(focus: str) -> str:
 def android_geo_probe_required(test_plan: dict) -> bool:
     return (test_plan.get("suite") == "android-device" and
             test_plan.get("explicit_test_focus") != ANDROID_GEO_OWNERSHIP_FOCUS and
-            any(item.get("module") == "calf-geo" for item in test_plan["expected"]))
+            any(item.get("module") == "nativecmpkit-geo" for item in test_plan["expected"]))
 
 
 ANDROID_CAMERA_PROVIDER_FOCUS = "android-camera-provider-contracts"
 ANDROID_CAMERA_NO_HANDLER_FOCUS = "android-camera-no-handler-recovery"
 ANDROID_CAMERA_PROVIDER_FOCUSES = (ANDROID_CAMERA_PROVIDER_FOCUS, ANDROID_CAMERA_NO_HANDLER_FOCUS)
-ANDROID_CAMERA_PROVIDER_CLASS = "com.mohamedrejeb.calf.camerapicker.AndroidCameraNativeProviderTest"
-ANDROID_CAMERA_PROVIDER_SOURCE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraProviderTest.kt"
+ANDROID_CAMERA_PROVIDER_CLASS = "io.github.apdelrahman1911.nativecmpkit.camerapicker.AndroidCameraNativeProviderTest"
+ANDROID_CAMERA_PROVIDER_SOURCE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraProviderTest.kt"
 ANDROID_CAMERA_PROVIDER_METHODS = (
     "nativeCustomAndLegacyProvidersGrantForeignUidOutputAndRetainExactlyOneSuccess",
     "nativeMissingAuthorityWrongRootAndAbsentCameraHandlerFailWithoutOrphanOrDelivery",
@@ -1284,11 +1284,11 @@ def android_camera_provider_filter(focus: str) -> str:
 ANDROID_CAMERA_RESTORATION_FOCUS = "android-camera-real-restoration"
 ANDROID_CAMERA_DONT_KEEP_FOCUS = "android-camera-real-restoration-dont-keep"
 ANDROID_CAMERA_RESTORATION_FOCUSES = (ANDROID_CAMERA_RESTORATION_FOCUS, ANDROID_CAMERA_DONT_KEEP_FOCUS)
-ANDROID_CAMERA_RESTORATION_CLASS = "com.mohamedrejeb.calf.camerapicker.AndroidCameraRestorationTest"
-ANDROID_CAMERA_RESTORATION_SOURCE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraRestorationTest.kt"
-ANDROID_CAMERA_RESTORATION_CLIENT_SOURCE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/CameraRestorationVerificationActivity.kt"
-ANDROID_CAMERA_ALWAYS_FINISH_SOURCE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedAlwaysFinish.kt"
-ANDROID_CAMERA_SETTINGS_UI_SOURCE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt"
+ANDROID_CAMERA_RESTORATION_CLASS = "io.github.apdelrahman1911.nativecmpkit.camerapicker.AndroidCameraRestorationTest"
+ANDROID_CAMERA_RESTORATION_SOURCE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraRestorationTest.kt"
+ANDROID_CAMERA_RESTORATION_CLIENT_SOURCE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/CameraRestorationVerificationActivity.kt"
+ANDROID_CAMERA_ALWAYS_FINISH_SOURCE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedAlwaysFinish.kt"
+ANDROID_CAMERA_SETTINGS_UI_SOURCE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt"
 ANDROID_CAMERA_RESTORATION_METHODS = (
     "nativeDontKeepActivitiesRestoresOneReadableCapturedFile",
     "nativeRotationRecreatesCallerWhileExternalCaptureIsForeground",
@@ -1313,12 +1313,12 @@ def android_camera_restoration_filter(focus: str) -> str:
 
 def android_camera_receiver_required(test_plan: dict) -> bool:
     return (test_plan.get("suite") == "android-device" and
-            any(item.get("module") == "calf-camera-picker" for item in test_plan["expected"]))
+            any(item.get("module") == "nativecmpkit-camera-picker" for item in test_plan["expected"]))
 
 
 ANDROID_SHARE_GRANT_FOCUS = "android-share-uri-grants"
-ANDROID_SHARE_GRANT_CLASS = "com.mohamedrejeb.calf.share.AndroidShareGrantTest"
-ANDROID_SHARE_GRANT_SOURCE = "calf-share/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/share/AndroidShareGrantTest.kt"
+ANDROID_SHARE_GRANT_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.AndroidShareGrantTest"
+ANDROID_SHARE_GRANT_SOURCE = "nativecmpkit-share/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/AndroidShareGrantTest.kt"
 ANDROID_SHARE_GRANT_METHODS = (
     "nativeLocalFileConversionIsReadableAfterPresentationAndRevocationIsEnforced",
     "nativeSafDocumentsAndMixedMimeClipDataRetainReadOnlyAccessAndCloseRealDescriptors",
@@ -1332,12 +1332,12 @@ def android_share_grant_identities() -> list[dict]:
 
 def android_share_recipient_required(test_plan: dict) -> bool:
     return (test_plan.get("suite") == "android-device" and
-            any(item.get("module") == "calf-share" for item in test_plan["expected"]))
+            any(item.get("module") == "nativecmpkit-share" for item in test_plan["expected"]))
 
 
 ANDROID_POPUP_FOCUS = "android-webview-popup-policy"
-ANDROID_POPUP_CLASS = "com.mohamedrejeb.calf.ui.web.AndroidWebViewPopupPolicyTest"
-ANDROID_POPUP_SOURCE = "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewPopupPolicyTest.kt"
+ANDROID_POPUP_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewPopupPolicyTest"
+ANDROID_POPUP_SOURCE = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewPopupPolicyTest.kt"
 ANDROID_POPUP_METHODS = (
     "defaultPolicyRejectsSameCrossOriginAndUntrustedBlankLinksAndKeepsParentHistory",
     "javascriptAutomaticAndMultipleWindowCombinationsHaveExplicitNativeOutcomes",
@@ -1350,15 +1350,15 @@ def android_popup_identities() -> list[dict]:
 
 
 ANDROID_WEBVIEW_REQUEST_FOCUS = "android-webview-request-state"
-ANDROID_WEBVIEW_REQUEST_CLASS = "com.mohamedrejeb.calf.ui.web.AndroidWebViewRequestStateDeviceTest"
-ANDROID_WEBVIEW_REQUEST_ANNOTATION = "com.mohamedrejeb.calf.ui.web.AndroidWebViewRequestVerification"
-ANDROID_WEBVIEW_REQUEST_SOURCE = "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewRequestStateDeviceTest.kt"
+ANDROID_WEBVIEW_REQUEST_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewRequestStateDeviceTest"
+ANDROID_WEBVIEW_REQUEST_ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewRequestVerification"
+ANDROID_WEBVIEW_REQUEST_SOURCE = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewRequestStateDeviceTest.kt"
 ANDROID_WEBVIEW_REQUEST_METHOD = "twoHeldNativeTransportFailuresResetErrorsAndNativeReloadUsesCurrentOwnerUrl"
 ANDROID_WEBVIEW_REQUEST_METHODS = (
     ANDROID_WEBVIEW_REQUEST_METHOD,
     "publicNavigatorStopClosesHeldTransportAndActual302RedirectReloadUsesCurrentOwner",
 )
-ANDROID_WEBVIEW_REQUEST_HELPER = "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt"
+ANDROID_WEBVIEW_REQUEST_HELPER = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt"
 ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_FOCUS = "android-webview-stop-redirect-recovery"
 ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_METHOD = ANDROID_WEBVIEW_REQUEST_METHODS[1]
 
@@ -1414,10 +1414,10 @@ def android_webview_request_fixtures() -> list[str]:
 
 
 WEBVIEW_CONTENT_FOCUS = "webview-browser-content-transitions"
-WEBVIEW_CONTENT_MODULE = "calf-webview"
-WEBVIEW_CONTENT_CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewContentAcceptanceTest"
-WEBVIEW_CONTENT_SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewContentAcceptanceTest.kt"
-WEBVIEW_CONTENT_FIXTURE = "calf-webview/karma.config.d/nativecmpkit-iframe-fixture.js"
+WEBVIEW_CONTENT_MODULE = "nativecmpkit-webview"
+WEBVIEW_CONTENT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewContentAcceptanceTest"
+WEBVIEW_CONTENT_SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentAcceptanceTest.kt"
+WEBVIEW_CONTENT_FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-iframe-fixture.js"
 WEBVIEW_CONTENT_METHODS = (
     "directAndRememberedContentTransitionsMatchNavigatorAttributesAndDocuments",
     "realCrossOriginCspAndFrameOptionsRefusalsCannotRetainOrReportTheOldDocument",
@@ -1444,10 +1444,10 @@ def webview_content_case_inventory(suite: str, cases: list[dict]) -> bool:
 
 
 WEBVIEW_REQUEST_FOCUS = "webview-browser-request-state"
-WEBVIEW_REQUEST_MODULE = "calf-webview"
-WEBVIEW_REQUEST_CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewRequestAcceptanceTest"
-WEBVIEW_REQUEST_SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewRequestAcceptanceTest.kt"
-WEBVIEW_REQUEST_FIXTURE = "calf-webview/karma.config.d/nativecmpkit-request-fixture.js"
+WEBVIEW_REQUEST_MODULE = "nativecmpkit-webview"
+WEBVIEW_REQUEST_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewRequestAcceptanceTest"
+WEBVIEW_REQUEST_SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewRequestAcceptanceTest.kt"
+WEBVIEW_REQUEST_FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-request-fixture.js"
 WEBVIEW_REQUEST_METHODS = (
     "rejectedOptionsRetryAndNativeReloadResetErrorsAndRequestedMetadata",
     "realRedirectReloadAndOwnedNativeStopHaveDistinctRequestAndTerminalMetadata",
@@ -1475,11 +1475,11 @@ def webview_request_case_inventory(suite: str, cases: list[dict]) -> bool:
 
 
 WEBVIEW_OFFLINE_FOCUS = "webview-browser-offline-destination"
-WEBVIEW_OFFLINE_CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewOfflineDestinationAcceptanceTest"
+WEBVIEW_OFFLINE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewOfflineDestinationAcceptanceTest"
 WEBVIEW_OFFLINE_METHOD = "previouslyReachableOwnedDestinationBecomesOfflineWithoutStoppingKarmaOrRetainingRequestState"
-WEBVIEW_OFFLINE_SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewOfflineDestinationAcceptanceTest.kt"
+WEBVIEW_OFFLINE_SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewOfflineDestinationAcceptanceTest.kt"
 WEBVIEW_OFFLINE_SOURCE_SHA256 = "3e58d2a06a083c66ba4ce04071bca3f37bb96a21f45a1fbad212b01166c8d885"
-WEBVIEW_OFFLINE_FIXTURE = "calf-webview/karma.config.d/nativecmpkit-offline-fixture.js"
+WEBVIEW_OFFLINE_FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-offline-fixture.js"
 WEBVIEW_OFFLINE_FIXTURE_SHA256 = "176fed5c2c7661cd4a0b9ad9171d156ac1fc43f4922c0e947d2040d6b57f8111"
 
 
@@ -1498,20 +1498,20 @@ def webview_offline_case_inventory(suite: str, cases: list[dict]) -> bool:
 
 
 SHARE_CLIPBOARD_NATIVE_FOCUS = "web-share-clipboard-native-contexts"
-SHARE_CLIPBOARD_NATIVE_CLASS = "com.mohamedrejeb.calf.share.WebClipboardEnvironmentAcceptanceTest"
+SHARE_CLIPBOARD_NATIVE_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.WebClipboardEnvironmentAcceptanceTest"
 SHARE_CLIPBOARD_NATIVE_METHODS = (
     "secureContextWithAbsentClipboardApiReportsUnavailableWithoutPlatformCalls",
     "genuinelyInsecureHttpContextHasNoClipboardApiAndReportsUnavailable",
     "actualDeniedClipboardPermissionRejectsOneTrustedGestureWriteWithoutSuccess",
     "directTrustedGesturePreservesActivationAndCompletesOneActualOwnedTextWrite",
 )
-SHARE_CLIPBOARD_NATIVE_SOURCE = "calf-share/src/webTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardEnvironmentAcceptanceTest.kt"
+SHARE_CLIPBOARD_NATIVE_SOURCE = "nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt"
 SHARE_CLIPBOARD_NATIVE_SOURCE_SHA256 = "10bf06a15f4d840779aa494122d42c24ed6bbd76ec6926d72eedf982c7cebc60"
-SHARE_CLIPBOARD_NATIVE_FIXTURE = "calf-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
+SHARE_CLIPBOARD_NATIVE_FIXTURE = "nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
 SHARE_CLIPBOARD_NATIVE_FIXTURE_SHA256 = "e2f95d99ff2dd89fa95bd4de8fbedf9f3b60748284fed87ae6fe2ab3d2278a89"
 SHARE_CLIPBOARD_NATIVE_HELPERS = {
-    "js": ("calf-share/src/jsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.js.kt", "9d33398d366466f41a3d4a46198a7c8e02e3c23fbfd73af1216aa6b0915ebc05"),
-    "wasm": ("calf-share/src/wasmJsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.wasmJs.kt", "b24a367d8c3e45e896559f1ce7a44d627c8825023ebfd9e9f66c6eb34c64ba59"),
+    "js": ("nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt", "9d33398d366466f41a3d4a46198a7c8e02e3c23fbfd73af1216aa6b0915ebc05"),
+    "wasm": ("nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt", "b24a367d8c3e45e896559f1ce7a44d627c8825023ebfd9e9f66c6eb34c64ba59"),
 }
 
 
@@ -1556,16 +1556,16 @@ WEBVIEW_DESKTOP_STOP_ONLY_FOCUSES = (WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS
 WEBVIEW_DESKTOP_REQUEST_FOCUSES = (WEBVIEW_DESKTOP_REQUEST_FOCUS, WEBVIEW_DESKTOP_REQUEST_STOP_FOCUS,
                                  WEBVIEW_DESKTOP_REQUEST_STOP_REDIRECT_FOCUS,
                                  *WEBVIEW_DESKTOP_STOP_ONLY_FOCUSES)
-WEBVIEW_DESKTOP_REQUEST_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest"
+WEBVIEW_DESKTOP_REQUEST_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 WEBVIEW_DESKTOP_REQUEST_METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
-WEBVIEW_DESKTOP_REQUEST_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
+WEBVIEW_DESKTOP_REQUEST_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
 WEBVIEW_DESKTOP_REQUEST_SOURCE_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
-WEBVIEW_DESKTOP_STOP_REDIRECT_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
+WEBVIEW_DESKTOP_STOP_REDIRECT_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 WEBVIEW_DESKTOP_STOP_METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 WEBVIEW_DESKTOP_REDIRECT_METHOD = "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct"
-WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
+WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
 WEBVIEW_DESKTOP_STOP_REDIRECT_SOURCE_SHA256 = "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3"
-WEBVIEW_DESKTOP_AWT_OWNER_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/BoundedDesktopAwtWindow.kt"
+WEBVIEW_DESKTOP_AWT_OWNER_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindow.kt"
 WEBVIEW_DESKTOP_AWT_OWNER_SHA256 = "c7bccc89f020490ea6198b837c7a9e386b051a0926ec22e17b3557699420b082"
 # Same five classifier identities as DesktopJavaFx.kt; declaration, not runtime acceptance.
 WEBVIEW_DESKTOP_REQUEST_HOSTS = frozenset({
@@ -1635,21 +1635,21 @@ WEBVIEW_IDENTITY_FOCUSES = (WEBVIEW_IDENTITY_FOCUS, WEBVIEW_IDENTITY_RECOVERY_FO
 WEBVIEW_IDENTITY_METHOD = "publicCreationReplacementAndRetainedRemountUseOnlyTheCurrentNativeOwner"
 WEBVIEW_IDENTITY_SPECS = {
     "desktop": {
-        "classname": "com.mohamedrejeb.calf.ui.web.DesktopWebViewIdentityAcceptanceTest",
-        "source": "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewIdentityAcceptanceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewIdentityAcceptanceTest",
+        "source": "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewIdentityAcceptanceTest.kt",
         "methods": (WEBVIEW_IDENTITY_METHOD,
                     "rapidReplacementBeforeRealFxCreationAndNavigationCannotResurrectDiscardedOwners",
                     "actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"),
     },
     "android-device": {
-        "classname": "com.mohamedrejeb.calf.ui.web.AndroidWebViewIdentityAcceptanceTest",
-        "source": "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewIdentityAcceptanceTest.kt",
+        "classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewIdentityAcceptanceTest",
+        "source": "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewIdentityAcceptanceTest.kt",
         "methods": (WEBVIEW_IDENTITY_METHOD, "actualChromiumTypedValuesOffMainAndDetachedCallbacksAreExactlyOnce"),
     },
 }
 _BROWSER_IDENTITY_SPEC = {
-    "classname": "com.mohamedrejeb.calf.ui.web.BrowserWebViewIdentityAcceptanceTest",
-    "source": "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewIdentityAcceptanceTest.kt",
+    "classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewIdentityAcceptanceTest",
+    "source": "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewIdentityAcceptanceTest.kt",
     "methods": ("publicCreationReplacementAndRetainedRemountUseOnlyTheCurrentIframeOwner",
                 "actualTrustedIframeTypedValuesAndCurrentOrDetachedCallbacksAreExactlyOnce"),
 }
@@ -1697,9 +1697,9 @@ def webview_identity_case_inventory(suite: str, cases: list[dict], focus: str = 
 
 
 BROWSER_COIL_READ_FOCUS = "browser-file-read-coil"
-BROWSER_COIL_READ_MODULE = "calf-file-picker-coil"
-BROWSER_COIL_READ_CLASS = "com.mohamedrejeb.calf.picker.coil.BrowserFileReadCoilAcceptanceTest"
-BROWSER_COIL_READ_SOURCE = "calf-file-picker-coil/src/webTest/kotlin/com/mohamedrejeb/calf/picker/coil/BrowserFileReadCoilAcceptanceTest.kt"
+BROWSER_COIL_READ_MODULE = "nativecmpkit-file-picker-coil"
+BROWSER_COIL_READ_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.coil.BrowserFileReadCoilAcceptanceTest"
+BROWSER_COIL_READ_SOURCE = "nativecmpkit-file-picker-coil/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/coil/BrowserFileReadCoilAcceptanceTest.kt"
 BROWSER_COIL_READ_METHODS = (
     "publicEmptyAndAllByteValuesCompleteOnceDespiteLateLoadAndAbort",
     "disposingActualCoilRequestDuringLargeReadAbortsAndDetachesTheRealReader",
@@ -1714,7 +1714,7 @@ def browser_coil_read_identities() -> list[dict]:
 
 def browser_coil_read_fixture(suite: str) -> str:
     target = "jsTest" if suite == "js" else "wasmJsTest"
-    return BROWSER_COIL_READ_MODULE + "/src/" + target + "/kotlin/com/mohamedrejeb/calf/picker/coil/BrowserReaderProbe.kt"
+    return BROWSER_COIL_READ_MODULE + "/src/" + target + "/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/coil/BrowserReaderProbe.kt"
 
 
 def browser_coil_read_case_inventory(suite: str, cases: list[dict]) -> bool:
@@ -1738,8 +1738,8 @@ PICKER_LIFETIME_SOURCE = native_test_policy.PICKER_COMPOSE_SOURCE
 PICKER_LIFETIME_METHODS = native_test_policy.PICKER_COMPOSE_METHODS
 
 DESKTOP_SAVER_STATE_FOCUS = picker_dialog_context.SAVER_STATE_FOCUS
-DESKTOP_SAVER_STATE_CLASS = "com.mohamedrejeb.calf.picker.NativeDesktopSaverStateTest"
-DESKTOP_SAVER_STATE_SOURCE = "calf-file-picker/src/desktopTest/kotlin/com/mohamedrejeb/calf/picker/NativeDesktopSaverStateTest.kt"
+DESKTOP_SAVER_STATE_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.NativeDesktopSaverStateTest"
+DESKTOP_SAVER_STATE_SOURCE = "nativecmpkit-file-picker/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativeDesktopSaverStateTest.kt"
 DESKTOP_SAVER_STATE_METHOD = "retainedSaverSnapshotsExplicitAndCompositionLocalParentsSettingsAndCurrentCallbacks"
 
 LINUX_PICKER_PORTAL_FOCUS = "picker-linux-portal-functionality"
@@ -1774,22 +1774,22 @@ WEBVIEW_LIFETIME_FOCUS = "webview-native-lifetime"
 WEBVIEW_MEDIA_FOCUS = "webview-native-media"
 WEBVIEW_ANDROID_MEDIA_FOCUS = "webview-android-native-media"
 WEBVIEW_LIFETIME_FOCUSES = {WEBVIEW_LIFETIME_FOCUS, WEBVIEW_MEDIA_FOCUS, WEBVIEW_ANDROID_MEDIA_FOCUS}
-WEBVIEW_LIFETIME_MODULE = "calf-webview"
+WEBVIEW_LIFETIME_MODULE = "nativecmpkit-webview"
 WEBVIEW_DEVICE_FIXTURES = (
-    "calf-webview/src/androidDeviceTest/AndroidManifest.xml",
-    "calf-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml",
+    "nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml",
+    "nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml",
 )
 WEBVIEW_LIFETIME_SPECS = {
     "desktop": (
-        {"classname": "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest",
-         "source": "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewLifetimeTest.kt",
+        {"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest",
+         "source": "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewLifetimeTest.kt",
          "methods": (
              "retainedStateCannotRetainRepeatedRealNativeViewsOrEngines",
              "throwingDisposeCannotKeepItsViewOrStopAnotherRealWindow",
              "disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument",
          )},
-        {"classname": "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest",
-         "source": "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/JavaFxWebViewTest.kt",
+        {"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest",
+         "source": "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxWebViewTest.kt",
          "methods": ("disposalBeforeQueuedCreationCannotResurrectState",
                      "nativeLinkRedirectReloadAndHistoryKeepRequestedAndRestoredUrlsCurrent"),
          "declared_methods": (
@@ -1801,8 +1801,8 @@ WEBVIEW_LIFETIME_SPECS = {
          )},
     ),
     "android-device": (
-        {"classname": "com.mohamedrejeb.calf.ui.web.AndroidWebViewLifetimeDeviceTest",
-         "source": "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt",
+        {"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewLifetimeDeviceTest",
+         "source": "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt",
          "methods": (
              "retainedStateReleasesRepeatedRealActivitiesAndViewsAndRestoresSerializedNativeState",
              "compositionDisposalClosesItsRealSlowConnectionAndStopsTheLiveMediaDocument",
@@ -1852,7 +1852,7 @@ def validate_webview_device_network_fixture(root: Path) -> None:
     activities = apps[0].findall("activity") if len(apps) == 1 else []
     if (len(apps) != 1 or apps[0].get(ns + "usesCleartextTraffic") != "false" or
             apps[0].get(ns + "networkSecurityConfig") != "@xml/nativecmpkit_webview_test_network_security" or
-            not any(a.get(ns + "name") == "com.mohamedrejeb.calf.ui.web.WebViewLifetimeActivity" and
+            not any(a.get(ns + "name") == "io.github.apdelrahman1911.nativecmpkit.ui.web.WebViewLifetimeActivity" and
                     a.get(ns + "exported") == "false" for a in activities) or
             not any(p.get(ns + "name") == "android.permission.INTERNET" for p in manifest.findall("uses-permission"))):
         raise ValueError("Device networking must remain test-only with a nonexported real Activity")
@@ -1869,11 +1869,11 @@ def validate_webview_device_network_fixture(root: Path) -> None:
 # These incompatible API/flavor methods are finite-only, never a hidden skipped
 # addition to unrestricted API35/default authored-suite execution.
 ANDROID_STORAGE_MODULE = storage_plan.MODULE
-ANDROID_STORAGE_PROJECT = ":calf-permissions:calf-permissions-core"
+ANDROID_STORAGE_PROJECT = ":nativecmpkit-permissions:nativecmpkit-permissions-core"
 ANDROID_STORAGE_CLASS = storage_plan.CLASS
 ANDROID_STORAGE_FOCUSES = frozenset(row.profile for row in storage_plan.ROWS)
-ANDROID_STORAGE_SOURCE = ANDROID_STORAGE_MODULE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidStorageCompatibilityTest.kt"
-ANDROID_STORAGE_SOURCES = tuple(ANDROID_STORAGE_MODULE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/" + name + ".kt"
+ANDROID_STORAGE_SOURCE = ANDROID_STORAGE_MODULE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidStorageCompatibilityTest.kt"
+ANDROID_STORAGE_SOURCES = tuple(ANDROID_STORAGE_MODULE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/" + name + ".kt"
     for name in ("AndroidStorageCompatibilityTest", "OwnedStorageProbe", "StorageTestDocumentsProvider"))
 FINITE_ONLY_DEVICE_MODULES = (ANDROID_STORAGE_MODULE,)
 # Shared core hosts require one exact storage or permission/media focus.
@@ -1919,27 +1919,27 @@ def allowed_test_focus(suite: str, modules: tuple[str, ...] | None, focus: str) 
             (focus == calendar_native.FOCUS and suite == "ios" and modules == (calendar_native.MODULE,)) or
             (focus == macos_share_native.FOCUS and suite == "desktop" and modules == (macos_share_native.MODULE,)) or
             (focus == share_missing.FOCUS and suite == "desktop" and modules == (share_missing.MODULE,)) or
-            (focus == PICKER_LIFETIME_FOCUS and suite == "desktop" and modules == ("calf-file-picker",)) or
-            (focus in ANDROID_PERMISSION_DEVICE_SPECS and suite == "android-device" and modules == ("calf-permissions/core",)) or
-            (focus == ANDROID_NAV_BACK_FOCUS and suite == "android-device" and modules == ("calf-navigation",)) or
-            (focus == ANDROID_GEO_OWNERSHIP_FOCUS and suite == "android-device" and modules == ("calf-geo",)) or
-            (focus in ANDROID_GEO_PROVIDER_FOCUSES and suite == "android-device" and modules == ("calf-geo",)) or
-            (focus in ANDROID_CAMERA_FOCUSES and suite == "android-device" and modules == ("calf-camera-picker",)) or
-            (focus == ANDROID_SHARE_GRANT_FOCUS and suite == "android-device" and modules == ("calf-share",)) or
-            (focus == ANDROID_POPUP_FOCUS and suite == "android-device" and modules == ("calf-webview",)) or
-            (focus == ANDROID_WEBVIEW_REQUEST_FOCUS and suite == "android-device" and modules == ("calf-webview",)) or
-            (focus == ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_FOCUS and suite == "android-device" and modules == ("calf-webview",)) or
+            (focus == PICKER_LIFETIME_FOCUS and suite == "desktop" and modules == ("nativecmpkit-file-picker",)) or
+            (focus in ANDROID_PERMISSION_DEVICE_SPECS and suite == "android-device" and modules == ("nativecmpkit-permissions/core",)) or
+            (focus == ANDROID_NAV_BACK_FOCUS and suite == "android-device" and modules == ("nativecmpkit-navigation",)) or
+            (focus == ANDROID_GEO_OWNERSHIP_FOCUS and suite == "android-device" and modules == ("nativecmpkit-geo",)) or
+            (focus in ANDROID_GEO_PROVIDER_FOCUSES and suite == "android-device" and modules == ("nativecmpkit-geo",)) or
+            (focus in ANDROID_CAMERA_FOCUSES and suite == "android-device" and modules == ("nativecmpkit-camera-picker",)) or
+            (focus == ANDROID_SHARE_GRANT_FOCUS and suite == "android-device" and modules == ("nativecmpkit-share",)) or
+            (focus == ANDROID_POPUP_FOCUS and suite == "android-device" and modules == ("nativecmpkit-webview",)) or
+            (focus == ANDROID_WEBVIEW_REQUEST_FOCUS and suite == "android-device" and modules == ("nativecmpkit-webview",)) or
+            (focus == ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_FOCUS and suite == "android-device" and modules == ("nativecmpkit-webview",)) or
             (focus == WEBVIEW_CONTENT_FOCUS and suite in {"js", "wasm"} and modules == (WEBVIEW_CONTENT_MODULE,)) or
             (focus == WEBVIEW_REQUEST_FOCUS and suite in {"js", "wasm"} and modules == (WEBVIEW_REQUEST_MODULE,)) or
-            (focus == WEBVIEW_OFFLINE_FOCUS and suite in {"js", "wasm"} and modules == ("calf-webview",)) or
-            (focus == SHARE_CLIPBOARD_NATIVE_FOCUS and suite in {"js", "wasm"} and modules == ("calf-share",)) or
-            (focus in WEBVIEW_DESKTOP_REQUEST_FOCUSES and suite == "desktop" and modules == ("calf-webview",)) or
-            (focus in desktop_security_plan.FOCUSES and suite == "desktop" and modules == ("calf-webview",)) or
-            (focus in WEBVIEW_IDENTITY_FOCUSES and suite in WEBVIEW_IDENTITY_SPECS and modules == ("calf-webview",) and
+            (focus == WEBVIEW_OFFLINE_FOCUS and suite in {"js", "wasm"} and modules == ("nativecmpkit-webview",)) or
+            (focus == SHARE_CLIPBOARD_NATIVE_FOCUS and suite in {"js", "wasm"} and modules == ("nativecmpkit-share",)) or
+            (focus in WEBVIEW_DESKTOP_REQUEST_FOCUSES and suite == "desktop" and modules == ("nativecmpkit-webview",)) or
+            (focus in desktop_security_plan.FOCUSES and suite == "desktop" and modules == ("nativecmpkit-webview",)) or
+            (focus in WEBVIEW_IDENTITY_FOCUSES and suite in WEBVIEW_IDENTITY_SPECS and modules == ("nativecmpkit-webview",) and
              (focus != WEBVIEW_IDENTITY_RECOVERY_FOCUS or suite in {"desktop", "android-device"}) and
              (focus != WEBVIEW_REMOUNT_RECOVERY_FOCUS or suite == "android-device")) or
-            (focus == DESKTOP_SAVER_STATE_FOCUS and suite == "desktop" and modules == ("calf-file-picker",)) or
-            (focus in LINUX_PICKER_PORTAL_FOCUSES and suite == "desktop" and modules == ("calf-file-picker",)) or
+            (focus == DESKTOP_SAVER_STATE_FOCUS and suite == "desktop" and modules == ("nativecmpkit-file-picker",)) or
+            (focus in LINUX_PICKER_PORTAL_FOCUSES and suite == "desktop" and modules == ("nativecmpkit-file-picker",)) or
             (focus == WEBVIEW_LIFETIME_FOCUS and suite in WEBVIEW_LIFETIME_SPECS and
              modules == (WEBVIEW_LIFETIME_MODULE,)) or
             (focus == WEBVIEW_MEDIA_FOCUS and suite == "desktop" and modules == (WEBVIEW_LIFETIME_MODULE,)) or
@@ -1948,34 +1948,34 @@ def allowed_test_focus(suite: str, modules: tuple[str, ...] | None, focus: str) 
              modules == (NATIVE_SHARE_BOUNDARY_MODULE,)) or
             (focus == DATE_TRANSACTION_FOCUS and suite in DATE_TRANSACTION_SOURCE_SETS and
              modules == (DATE_TRANSACTION_MODULE,)) or
-            (focus == UI_DATE_YEAR_MATERIAL_FOCUS and suite == "desktop" and modules == ("calf-ui",)) or
-            (focus in DROPDOWN_FOCUSES and suite in DROPDOWN_SOURCE_SETS and modules == ("calf-ui",) and
+            (focus == UI_DATE_YEAR_MATERIAL_FOCUS and suite == "desktop" and modules == ("nativecmpkit-ui",)) or
+            (focus in DROPDOWN_FOCUSES and suite in DROPDOWN_SOURCE_SETS and modules == ("nativecmpkit-ui",) and
              (focus != DROPDOWN_ANDROID_RECOVERY_FOCUS or suite == "android-device")) or
-            (focus in ANDROID_IO_REMOTE_FOCUSES and suite == "android-device" and modules == ("calf-io",)) or
-            (focus == ANDROID_IO_PROVIDER_FOCUS and suite == "android-device" and modules == ("calf-io",)) or
-            (focus == ANDROID_IO_UNAVAILABLE_FOCUS and suite == "android-device" and modules == ("calf-io",)) or
-            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == "android-device" and modules == ("calf-io",)) or
-            (focus in ANDROID_IO_NAMED_SYSTEM_FOCUSES and suite == "android-device" and modules == ("calf-io",)) or
-            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == "android-device" and modules == ("calf-io",)) or
+            (focus in ANDROID_IO_REMOTE_FOCUSES and suite == "android-device" and modules == ("nativecmpkit-io",)) or
+            (focus == ANDROID_IO_PROVIDER_FOCUS and suite == "android-device" and modules == ("nativecmpkit-io",)) or
+            (focus == ANDROID_IO_UNAVAILABLE_FOCUS and suite == "android-device" and modules == ("nativecmpkit-io",)) or
+            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == "android-device" and modules == ("nativecmpkit-io",)) or
+            (focus in ANDROID_IO_NAMED_SYSTEM_FOCUSES and suite == "android-device" and modules == ("nativecmpkit-io",)) or
+            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == "android-device" and modules == ("nativecmpkit-io",)) or
             (focus == ANDROID_IO_OVERSIZE_FOCUS and suite == "android-device" and
-             modules == ("calf-io",)) or
+             modules == ("nativecmpkit-io",)) or
             (focus in ANDROID_SAVE_IDENTITY_FOCUSES and suite == "android-device" and
-             modules == ("calf-file-picker",)) or
+             modules == ("nativecmpkit-file-picker",)) or
             (focus == UNSUPPORTED_PERMISSION_FOCUS and suite in UNSUPPORTED_PERMISSION_SOURCE_SETS and
              modules == (UNSUPPORTED_PERMISSION_MODULE,)) or
             ((focus == IOS_PERMISSION_FOCUS or focus in IOS_PERMISSION_SAFETY_SPECS) and suite == "ios" and
              modules == (IOS_PERMISSION_MODULE,)) or
             (focus == ANDROID_PERMISSION_COMPLETION_FOCUS and suite == "android-host" and
              modules == (IOS_PERMISSION_MODULE,)) or
-            (focus == IOS_SAVE_WRITE_FOCUS and suite == "ios" and modules == ("calf-file-picker",)) or
+            (focus == IOS_SAVE_WRITE_FOCUS and suite == "ios" and modules == ("nativecmpkit-file-picker",)) or
             (focus == BROWSER_COIL_READ_FOCUS and suite in {"js", "wasm"} and modules == (BROWSER_COIL_READ_MODULE,)) or
             (focus in UI_APPLICATION_FOCUS_SPECS and suite == "ios" and
-             modules == (UI_APPLICATION_FOCUS_SPECS[focus].get("module", "calf-ui"),)))
+             modules == (UI_APPLICATION_FOCUS_SPECS[focus].get("module", "nativecmpkit-ui"),)))
 
 
 def unsupported_permission_source(suite: str) -> str:
-    return ("calf-permissions/core/src/" + UNSUPPORTED_PERMISSION_SOURCE_SETS[suite] +
-            "/kotlin/com/mohamedrejeb/calf/permissions/UnsupportedPublicFactoryTest.kt")
+    return ("nativecmpkit-permissions/core/src/" + UNSUPPORTED_PERMISSION_SOURCE_SETS[suite] +
+            "/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/UnsupportedPublicFactoryTest.kt")
 
 
 def unsupported_permission_identities() -> list[dict]:
@@ -2001,7 +2001,7 @@ def unsupported_permission_case_inventory(suite: str, cases: list[dict]) -> bool
 
 
 def date_transaction_source(suite: str) -> str:
-    return ("calf-ui/src/" + DATE_TRANSACTION_SOURCE_SETS[suite] + "/" +
+    return ("nativecmpkit-ui/src/" + DATE_TRANSACTION_SOURCE_SETS[suite] + "/" +
             DATE_TRANSACTION_PACKAGE_PATH + "CompactDateTransactionAcceptanceTest.kt")
 
 
@@ -2011,11 +2011,11 @@ def date_transaction_identities() -> list[dict]:
 
 
 def dropdown_source(suite: str) -> str:
-    return "calf-ui/src/" + DROPDOWN_SOURCE_SETS[suite] + DROPDOWN_PACKAGE_PATH + "MaterialDropdownAcceptanceTest.kt"
+    return "nativecmpkit-ui/src/" + DROPDOWN_SOURCE_SETS[suite] + DROPDOWN_PACKAGE_PATH + "MaterialDropdownAcceptanceTest.kt"
 
 
 def dropdown_platform_source(suite: str) -> str:
-    return "calf-ui/src/" + DROPDOWN_SOURCE_SETS[suite] + DROPDOWN_PACKAGE_PATH + "MaterialDropdownPlatformTest.kt"
+    return "nativecmpkit-ui/src/" + DROPDOWN_SOURCE_SETS[suite] + DROPDOWN_PACKAGE_PATH + "MaterialDropdownPlatformTest.kt"
 
 
 def dropdown_methods(focus: str = DROPDOWN_FOCUS) -> tuple[str, ...]:
@@ -2105,16 +2105,16 @@ def validate_android_io_remote_documents_plan(test_plan: dict) -> None:
     if (type(contract) is not dict or set(contract) != {"package", "source_fixture", "verification_api_level", "source_contract"} or
             contract.get("package") != remote.PACKAGE or contract.get("source_fixture") != remote.FIXTURE or
             type(contract.get("verification_api_level")) is not int or contract["verification_api_level"] != 35 or
-            type(expected) is not list or len(expected) != 1 or test_plan.get("explicit_module_subset") != ["calf-io"] or
+            type(expected) is not list or len(expected) != 1 or test_plan.get("explicit_module_subset") != ["nativecmpkit-io"] or
             test_plan.get("complete_suite_requested") is not False or test_plan.get("android_io_documents") is not None):
-        raise ValueError("Only the separate exact API35 calf-io remote source/fixture plan is admitted")
+        raise ValueError("Only the separate exact API35 nativecmpkit-io remote source/fixture plan is admitted")
     item = expected[0]
     dependencies = tuple(remote.KOTLIN + name + ".kt" for name in remote.KOTLIN_NAMES) + tuple(remote.REUSED_PINS)
-    if (type(item) is not dict or item.get("module") != "calf-io" or item.get("project") != ":calf-io" or
-            item.get("task") != ":calf-io:connectedAndroidDeviceTest" or
-            item.get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+    if (type(item) is not dict or item.get("module") != "nativecmpkit-io" or item.get("project") != ":nativecmpkit-io" or
+            item.get("task") != ":nativecmpkit-io:connectedAndroidDeviceTest" or
+            item.get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
             item.get("utp_results_directory") != item.get("report_directory") or
-            item.get("agp_declared_xml_directory") != "calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+            item.get("agp_declared_xml_directory") != "nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
             item.get("test_filter") != remote.instrumentation_filter(focus) or item.get("test_filter_argument") != "class" or
             item.get("test_exclusion_annotation") is not None or item.get("required_testcases") != list(remote.identities(focus)) or
             type(item.get("verification_api_level")) is not int or item["verification_api_level"] != 35 or
@@ -2130,7 +2130,7 @@ def android_io_documents_required(test_plan: dict) -> bool:
     return (test_plan.get("suite") == "android-device" and
             (test_plan.get("explicit_test_focus") in {ANDROID_IO_PROVIDER_FOCUS, ANDROID_IO_UNAVAILABLE_FOCUS, ANDROID_IO_DEFAULT_DECODE_FOCUS, ANDROID_IO_REFERENCE_FOCUS} or
              (test_plan.get("explicit_test_focus") is None and any(
-                 item.get("module") == "calf-io" and ANDROID_IO_PROVIDER_SOURCE in item.get("test_source_files", [])
+                 item.get("module") == "nativecmpkit-io" and ANDROID_IO_PROVIDER_SOURCE in item.get("test_source_files", [])
                  for item in test_plan.get("expected", [])))))
 
 
@@ -2251,7 +2251,7 @@ def projects(root: Path) -> dict[str, str]:
             raise ValueError("Unrecognized included Gradle project path")
         if original.startswith(":sample:"):
             continue
-        if not original.startswith(":calf-"):
+        if not original.startswith(":nativecmpkit-"):
             raise ValueError("Unknown non-sample project; classify its library test coverage explicitly")
         parts = original[1:].split(":")
         module = "/".join(parts)
@@ -2275,7 +2275,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         camera_callback.validate_discovery(suite, only_modules, focus, ANDROID_CAMERA_FOCUSES)
     if suite == "android-device" and only_modules and ANDROID_STORAGE_MODULE in only_modules and focus not in ANDROID_FINITE_CORE_DEVICE_FOCUSES:
         raise ValueError("Explicit storage device requests require one exact finite API/flavor profile")
-    if suite == "android-device" and focus is None and (not only_modules or "calf-io" in only_modules):
+    if suite == "android-device" and focus is None and (not only_modules or "nativecmpkit-io" in only_modules):
         # Requested-domain admission is independent of class/file existence or a synthetic minimum.
         raise ValueError("Unfiltered Android discovery requires a qualified remote IO fixture route; full aggregate is blocked")
     task_name, inherited = SUITES[suite]
@@ -2292,7 +2292,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
                        # This owner-only opt-in input tree is excluded from ordinary
                        # source-set inheritance. Its exact four-file init script and
                        # geometry focus must admit it explicitly before compilation.
-                       and not (module == "calf-ui" and path.name == "iosGeometryTest")
+                       and not (module == "nativecmpkit-ui" and path.name == "iosGeometryTest")
                        and source_files(root, path.relative_to(root).as_posix())}
             if unknown:
                 raise ValueError(f"Unknown test source sets in {module}: {sorted(unknown)}; update hierarchy mapping")
@@ -2316,7 +2316,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
             # is an empty intermediate. Preserve both contracts explicitly;
             # do not discover arbitrary XML or count protobuf inventories as tests.
             actual_task = (IOS_APPLICATION_TASK if suite == "ios" and (
-                           (module in IOS_APPLICATION_HOST_SOURCES and not (module == "calf-file-picker" and focus == IOS_SAVE_WRITE_FOCUS)) or
+                           (module in IOS_APPLICATION_HOST_SOURCES and not (module == "nativecmpkit-file-picker" and focus == IOS_SAVE_WRITE_FOCUS)) or
                            (module == camera_ios.MODULE and focus == camera_ios.FOCUS)) else task_name)
             if suite == "ios" and module == ui_related.MODULE and focus in ui_related.SPLIT_FOCUSES:
                 actual_task = ui_related.task_name(focus)
@@ -2370,7 +2370,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         for item in selected:
             if item["module"] == native_test_policy.MODULE and native_test_policy.SOURCE not in item["test_source_files"]:
                 raise ValueError("Required native share scenario source is missing; do not silently reduce native coverage")
-            if item["module"] == "calf-file-picker" and PICKER_LIFETIME_SOURCE not in item["test_source_files"]:
+            if item["module"] == "nativecmpkit-file-picker" and PICKER_LIFETIME_SOURCE not in item["test_source_files"]:
                 raise ValueError("Required picker Compose/JNI scenario source is missing; do not silently reduce native coverage")
     result = {"schema_version": 1, "suite": suite, "inherited_test_source_sets": list(inherited),
             "expected": selected, "uncovered": uncovered,
@@ -2489,7 +2489,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_CAMERA_RESTORATION_METHODS) or
                 "class AndroidCameraRestorationTest" not in source or
-                "package com.mohamedrejeb.calf.camerapicker" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.camerapicker" not in source or
                 "class CameraRestorationVerificationActivity" not in client or
                 any(name not in selected[0]["test_source_files"] for name in
                     (ANDROID_CAMERA_RESTORATION_SOURCE, ANDROID_CAMERA_RESTORATION_CLIENT_SOURCE, ANDROID_CAMERA_ALWAYS_FINISH_SOURCE, ANDROID_CAMERA_SETTINGS_UI_SOURCE)) or
@@ -2506,7 +2506,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_CAMERA_PROVIDER_METHODS) or
                 "class AndroidCameraNativeProviderTest" not in source or
-                "package com.mohamedrejeb.calf.camerapicker" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.camerapicker" not in source or
                 ANDROID_CAMERA_PROVIDER_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android camera declarations changed; review the exact four-method selection")
@@ -2521,7 +2521,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_SHARE_GRANT_METHODS) or
                 "class AndroidShareGrantTest" not in source or
-                "package com.mohamedrejeb.calf.share" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.share" not in source or
                 ANDROID_SHARE_GRANT_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android sharing declarations changed; review the exact three-method selection")
@@ -2534,7 +2534,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_GEO_PROVIDER_METHODS) or
                 "class AndroidLocationProviderTest" not in source or
-                "package com.mohamedrejeb.calf.geo" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.geo" not in source or
                 ANDROID_GEO_PROVIDER_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android geo provider declarations changed; review the exact five-method inventory and finite subset")
@@ -2549,7 +2549,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != [ANDROID_GEO_OWNERSHIP_METHOD] or
                 "class AndroidLocationOwnershipTest" not in source or
-                "package com.mohamedrejeb.calf.geo" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.geo" not in source or
                 ANDROID_GEO_OWNERSHIP_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android geo declarations changed; review the exact one-method ownership selection")
@@ -2562,7 +2562,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != [ANDROID_NAV_BACK_METHOD] or
                 "class AndroidAdaptiveNavigationBackTest" not in source or
-                "package com.mohamedrejeb.calf.navigation" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.navigation" not in source or
                 ANDROID_NAV_BACK_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android navigation declarations changed; review the exact one-method native selection")
@@ -2575,7 +2575,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_WEBVIEW_REQUEST_METHODS) or
                 "class AndroidWebViewRequestStateDeviceTest" not in source or
-                "package com.mohamedrejeb.calf.ui.web" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.ui.web" not in source or
                 not {ANDROID_WEBVIEW_REQUEST_SOURCE, ANDROID_WEBVIEW_REQUEST_HELPER} <= set(selected[0]["test_source_files"]) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android WebView Stop recovery retains both original declarations; review the exact one-method API35 selection")
@@ -2593,7 +2593,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_WEBVIEW_REQUEST_METHODS) or
                 "class AndroidWebViewRequestStateDeviceTest" not in source or
-                "package com.mohamedrejeb.calf.ui.web" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.ui.web" not in source or
                 not {ANDROID_WEBVIEW_REQUEST_SOURCE, ANDROID_WEBVIEW_REQUEST_HELPER} <= set(selected[0]["test_source_files"]) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android WebView request declarations changed; review the exact two-method API35 selection")
@@ -2611,7 +2611,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(ANDROID_POPUP_METHODS) or set(methods) != set(ANDROID_POPUP_METHODS) or
                 "class AndroidWebViewPopupPolicyTest" not in source or
-                "package com.mohamedrejeb.calf.ui.web" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.ui.web" not in source or
                 ANDROID_POPUP_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android popup declarations changed; review the exact three-method native selection")
@@ -2765,12 +2765,12 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         result["android_io_remote_documents"] = {"package": remote.PACKAGE, "source_fixture": remote.FIXTURE,
             "verification_api_level": 35, "source_contract": remote.source_contract(root)}
         validate_android_io_remote_documents_plan(result)
-        result["scope"] = "Only the two NEW controlled-loopback TCP DocumentsProvider methods, or one justified missing-only follow-up, on exact owned API35 calf-io. Real system tree grants/live HTTP/public bounded source and separate framework pending-open CancellationSignal before PFD transfer remain native assertions. Not commercial cloud/account, Downloads, process restart, automatic coroutine/post-transfer cancellation, TLS/security, full IO/device/consumer/API-ABI or issue/release acceptance; Downloads remains unresolved, not N/A."
+        result["scope"] = "Only the two NEW controlled-loopback TCP DocumentsProvider methods, or one justified missing-only follow-up, on exact owned API35 nativecmpkit-io. Real system tree grants/live HTTP/public bounded source and separate framework pending-open CancellationSignal before PFD transfer remain native assertions. Not commercial cloud/account, Downloads, process restart, automatic coroutine/post-transfer cancellation, TLS/security, full IO/device/consumer/API-ABI or issue/release acceptance; Downloads remains unresolved, not N/A."
     elif focus == ANDROID_IO_PROVIDER_FOCUS:
         source = safe_path(root, ANDROID_IO_PROVIDER_SOURCE).read_text(encoding="utf-8")
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_IO_PROVIDER_METHODS) or
-                "class AndroidIoProviderLifecycleTest" not in source or "package com.mohamedrejeb.calf.io" not in source or
+                "class AndroidIoProviderLifecycleTest" not in source or "package io.github.apdelrahman1911.nativecmpkit.io" not in source or
                 ANDROID_IO_PROVIDER_SOURCE not in selected[0]["test_source_files"] or
                 ANDROID_IO_DEVICE_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
@@ -2784,7 +2784,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != [ANDROID_IO_UNAVAILABLE_METHOD] or
                 not re.search(r"\bclass\s+AndroidIoUnavailableProviderTest\b", source) or
-                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.calf\.io\s*$", source) or
+                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) or
                 any(relative not in selected[0]["test_source_files"] for relative in ANDROID_IO_UNAVAILABLE_SOURCE_DEPENDENCIES) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) or
                 source.count("= runBlocking(Dispatchers.IO)") != 1):
@@ -2797,7 +2797,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         source = safe_path(root, ANDROID_IO_DEFAULT_DECODE_SOURCE).read_text(encoding="utf-8")
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_IO_DEFAULT_DECODE_METHODS) or
-                "class AndroidIoDefaultDecodeTest" not in source or "package com.mohamedrejeb.calf.io" not in source or
+                "class AndroidIoDefaultDecodeTest" not in source or "package io.github.apdelrahman1911.nativecmpkit.io" not in source or
                 ANDROID_IO_DEFAULT_DECODE_SOURCE not in selected[0]["test_source_files"] or
                 ANDROID_IO_DEVICE_SOURCE not in selected[0]["test_source_files"] or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) or
@@ -2826,7 +2826,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(ANDROID_IO_REFERENCE_METHODS) or
                 not re.search(r"\bclass\s+AndroidIoReferenceRegressionTest\b", source) or
-                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.calf\.io\s*$", source) or
+                not re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) or
                 any(relative not in selected[0]["test_source_files"] for relative in ANDROID_IO_REFERENCE_SOURCE_DEPENDENCIES) or
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Android IO reference declarations or native dependencies changed; review the exact three methods")
@@ -2840,7 +2840,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         if (len(methods) != len(ANDROID_IO_DEVICE_METHODS) or
                 set(methods) != set(ANDROID_IO_DEVICE_METHODS) or
                 "class KmpFileDeviceTest" not in source or
-                "package com.mohamedrejeb.calf.io" not in source):
+                "package io.github.apdelrahman1911.nativecmpkit.io" not in source):
             raise ValueError("Android IO declarations changed; review the exact failed-method selection")
         result["explicit_test_focus"] = focus
         # AndroidJUnitRunner's supported class#method form, not a KGP filter or
@@ -2854,7 +2854,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != list(spec.get("declared_methods", spec["methods"])) or spec["source"] not in selected[0]["test_source_files"] or
                 "class " + spec["classname"].rsplit(".", 1)[1] not in source or
-                "package com.mohamedrejeb.calf.permissions" not in source or re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
+                "package io.github.apdelrahman1911.nativecmpkit.permissions" not in source or re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source)):
             raise ValueError("Native permission declarations changed; review the exact new finite selection")
         if focus == ANDROID_PERMISSION_DEMO_RECOVERY_FOCUS:
             validate_android_permission_demo_recovery_annotation(root, selected[0]["test_source_files"])
@@ -2911,7 +2911,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         source = safe_path(root, IOS_SAVE_WRITE_SOURCE).read_text(encoding="utf-8")
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(IOS_SAVE_WRITE_DECLARATIONS) or set(methods) != set(IOS_SAVE_WRITE_DECLARATIONS) or
-                "class FileSaverStagingTest" not in source or "package com.mohamedrejeb.calf.picker" not in source):
+                "class FileSaverStagingTest" not in source or "package io.github.apdelrahman1911.nativecmpkit.picker" not in source):
             raise ValueError("iOS saver declarations changed; review the exact native failure selection")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = IOS_SAVE_WRITE_CLASS + "." + IOS_SAVE_WRITE_METHOD
@@ -2922,7 +2922,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(IOS_PERMISSION_METHODS) or set(methods) != set(IOS_PERMISSION_METHODS) or
                 "class IOSPublicPermissionFactoryTest" not in source or
-                "package com.mohamedrejeb.calf.permissions" not in source):
+                "package io.github.apdelrahman1911.nativecmpkit.permissions" not in source):
             raise ValueError("iOS public permission declarations changed; review the seven-method selection")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = IOS_PERMISSION_CLASS
@@ -2933,7 +2933,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(DROPDOWN_METHODS) or set(methods) != set(DROPDOWN_METHODS) or
                 "class MaterialDropdownAcceptanceTest" not in source or
-                "package com.mohamedrejeb.calf.ui.dropdown" not in source or "@Ignore" in source or
+                "package io.github.apdelrahman1911.nativecmpkit.ui.dropdown" not in source or "@Ignore" in source or
                 DROPDOWN_SCENARIOS_SOURCE not in selected[0]["test_source_files"] or
                 dropdown_platform_source(suite) not in selected[0]["test_source_files"]):
             raise ValueError("Dropdown contract declarations changed; review the exact four-method selection")
@@ -2948,7 +2948,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(DATE_TRANSACTION_METHODS) or set(methods) != set(DATE_TRANSACTION_METHODS) or
                 "class CompactDateTransactionAcceptanceTest" not in source or
-                "package com.mohamedrejeb.calf.ui.datepicker" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.ui.datepicker" not in source or
                 DATE_TRANSACTION_SCENARIOS_SOURCE not in selected[0]["test_source_files"]):
             raise ValueError("Date transaction declarations changed; review the exact four-method selection")
         result["explicit_test_focus"] = focus
@@ -2988,7 +2988,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         source = safe_path(root, DESKTOP_SAVER_STATE_SOURCE).read_text(encoding="utf-8")
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (methods != [DESKTOP_SAVER_STATE_METHOD] or "class NativeDesktopSaverStateTest" not in source or
-                "package com.mohamedrejeb.calf.picker" not in source or DESKTOP_SAVER_STATE_SOURCE not in selected[0]["test_source_files"]):
+                "package io.github.apdelrahman1911.nativecmpkit.picker" not in source or DESKTOP_SAVER_STATE_SOURCE not in selected[0]["test_source_files"]):
             raise ValueError("Desktop saver state declarations changed; review the exact owning method")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = DESKTOP_SAVER_STATE_CLASS
@@ -2998,7 +2998,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         source = safe_path(root, LINUX_PICKER_PORTAL_SOURCE).read_text(encoding="utf-8")
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (tuple(methods) != LINUX_PICKER_PORTAL_METHODS or "class NativeLinuxPortalFunctionalityTest" not in source or
-                "package com.mohamedrejeb.calf.picker" not in source or LINUX_PICKER_PORTAL_SOURCE not in selected[0]["test_source_files"]):
+                "package io.github.apdelrahman1911.nativecmpkit.picker" not in source or LINUX_PICKER_PORTAL_SOURCE not in selected[0]["test_source_files"]):
             raise ValueError("Real Linux GTK functionality declarations changed; review all three owning methods")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = linux_picker_portal_filter(focus)
@@ -3010,7 +3010,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(PICKER_LIFETIME_METHODS) or set(methods) != set(PICKER_LIFETIME_METHODS) or
                 "class NativePickerComposeLifetimeTest" not in source or
-                "package com.mohamedrejeb.calf.picker" not in source or PICKER_LIFETIME_SOURCE not in selected[0]["test_source_files"]):
+                "package io.github.apdelrahman1911.nativecmpkit.picker" not in source or PICKER_LIFETIME_SOURCE not in selected[0]["test_source_files"]):
             raise ValueError("Picker Compose/JNI declarations changed; review the exact six-method batch")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = PICKER_LIFETIME_CLASS
@@ -3021,7 +3021,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(BROWSER_COIL_READ_METHODS) or set(methods) != set(BROWSER_COIL_READ_METHODS) or
                 "class BrowserFileReadCoilAcceptanceTest" not in source or
-                "package com.mohamedrejeb.calf.picker.coil" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.picker.coil" not in source or
                 browser_coil_read_fixture(suite) not in selected[0]["test_source_files"]):
             raise ValueError("Browser IO/Coil declarations or real reader fixture changed; review the exact four methods")
         result["explicit_test_focus"] = focus
@@ -3033,7 +3033,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
         if (len(methods) != len(UNSUPPORTED_PERMISSION_METHODS) or set(methods) != set(UNSUPPORTED_PERMISSION_METHODS) or
                 "class UnsupportedPublicFactoryTest" not in source or
-                "package com.mohamedrejeb.calf.permissions" not in source or
+                "package io.github.apdelrahman1911.nativecmpkit.permissions" not in source or
                 UNSUPPORTED_PERMISSION_FIXTURE not in selected[0]["test_source_files"]):
             raise ValueError("Public unsupported permission declarations changed; review the six-method selection")
         result["explicit_test_focus"] = focus
@@ -3046,7 +3046,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
         if (len(methods) != len(NATIVE_SHARE_BOUNDARY_METHODS) or
                 set(methods) != set(NATIVE_SHARE_BOUNDARY_METHODS) or
                 "class NativeLoaderBoundaryIntegrationTest" not in source or
-                "package com.mohamedrejeb.calf.share.platform" not in source):
+                "package io.github.apdelrahman1911.nativecmpkit.share.platform" not in source):
             raise ValueError("Native boundary test declarations changed; review the exact finite selection")
         result["explicit_test_focus"] = focus
         selected[0]["test_filter"] = NATIVE_SHARE_BOUNDARY_CLASS
@@ -3119,7 +3119,7 @@ def android_permission_demo_required(test_plan: dict) -> bool:
     return (test_plan.get("suite") == "android-device" and
         test_plan.get("explicit_test_focus") in ANDROID_PERMISSION_DEVICE_SPECS and
         test_plan.get("explicit_test_focus") not in permission_lifecycle.FOCUSES and any(
-            item.get("module") == "calf-permissions/core" for item in test_plan.get("expected", [])))
+            item.get("module") == "nativecmpkit-permissions/core" for item in test_plan.get("expected", [])))
 
 
 def android_permission_lifecycle_required(test_plan: dict) -> bool:
@@ -3179,10 +3179,10 @@ def validate_test_focus(test_plan: dict) -> bool:
         spec = ANDROID_PERMISSION_DEVICE_SPECS[focus]
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-permissions/core" or
-                expected[0].get("project") != ":calf-permissions:calf-permissions-core" or
-                expected[0].get("task") != ":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest" or
-                expected[0].get("report_directory") != "calf-permissions/core/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-permissions/core" or
+                expected[0].get("project") != ":nativecmpkit-permissions:nativecmpkit-permissions-core" or
+                expected[0].get("task") != ":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest" or
+                expected[0].get("report_directory") != "nativecmpkit-permissions/core/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("test_filter") != android_permission_device_filter(focus) or
                 expected[0].get("test_filter_argument") != ("annotation" if focus == ANDROID_PERMISSION_DEMO_RECOVERY_FOCUS else None) or
                 expected[0].get("test_exclusion_annotation") is not None or
@@ -3207,9 +3207,9 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_IO_PROVIDER_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or expected[0].get("project") != ":calf-io" or
-                expected[0]["task"] != ":calf-io:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-io" or expected[0].get("project") != ":nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("test_filter") != ANDROID_IO_PROVIDER_CLASS or
                 expected[0].get("required_testcases") != android_io_provider_identities() or
                 any(source not in expected[0]["test_source_files"] for source in (ANDROID_IO_PROVIDER_SOURCE, ANDROID_IO_DEVICE_SOURCE))):
@@ -3218,11 +3218,11 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_IO_UNAVAILABLE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or expected[0].get("project") != ":calf-io" or
-                expected[0]["task"] != ":calf-io:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-io" or expected[0].get("project") != ":nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("utp_results_directory") != expected[0].get("report_directory") or
-                expected[0].get("agp_declared_xml_directory") != "calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+                expected[0].get("agp_declared_xml_directory") != "nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != ANDROID_IO_UNAVAILABLE_CLASS + "#" + ANDROID_IO_UNAVAILABLE_METHOD or
                 expected[0].get("test_filter_argument") is not None or expected[0].get("test_exclusion_annotation") is not None or
                 expected[0].get("required_testcases") != android_io_unavailable_identities() or
@@ -3232,9 +3232,9 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_IO_DEFAULT_DECODE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or expected[0].get("project") != ":calf-io" or
-                expected[0]["task"] != ":calf-io:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-io" or expected[0].get("project") != ":nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("test_filter") != ANDROID_IO_DEFAULT_DECODE_CLASS or
                 expected[0].get("required_testcases") != android_io_default_decode_identities() or
                 any(source not in expected[0]["test_source_files"] for source in (ANDROID_IO_DEFAULT_DECODE_SOURCE, ANDROID_IO_DEVICE_SOURCE))):
@@ -3245,11 +3245,11 @@ def validate_test_focus(test_plan: dict) -> bool:
         named_system.validate_source_receipt(test_plan.get("android_io_named_system_source"))
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or expected[0].get("project") != ":calf-io" or
-                expected[0]["task"] != ":calf-io:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-io" or expected[0].get("project") != ":nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("utp_results_directory") != expected[0].get("report_directory") or
-                expected[0].get("agp_declared_xml_directory") != "calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+                expected[0].get("agp_declared_xml_directory") != "nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != android_io_named_system_filter(focus) or
                 expected[0].get("test_filter_argument") is not None or expected[0].get("test_exclusion_annotation") is not None or
                 expected[0].get("required_testcases") != android_io_named_system_identities(focus) or
@@ -3260,11 +3260,11 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_IO_REFERENCE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or expected[0].get("project") != ":calf-io" or
-                expected[0]["task"] != ":calf-io:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-io/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-io" or expected[0].get("project") != ":nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("utp_results_directory") != expected[0].get("report_directory") or
-                expected[0].get("agp_declared_xml_directory") != "calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+                expected[0].get("agp_declared_xml_directory") != "nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != ANDROID_IO_REFERENCE_CLASS or
                 expected[0].get("test_filter_argument") is not None or expected[0].get("test_exclusion_annotation") is not None or
                 expected[0].get("required_testcases") != android_io_reference_identities() or
@@ -3274,7 +3274,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus in ANDROID_CAMERA_RESTORATION_FOCUSES:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-camera-picker" or expected[0]["task"] != ":calf-camera-picker:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-camera-picker" or expected[0]["task"] != ":nativecmpkit-camera-picker:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != android_camera_restoration_filter(focus) or
                 expected[0].get("required_testcases") != android_camera_restoration_identities(focus) or
                 any(name not in expected[0]["test_source_files"] for name in
@@ -3284,7 +3284,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus in ANDROID_CAMERA_PROVIDER_FOCUSES:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-camera-picker" or expected[0]["task"] != ":calf-camera-picker:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-camera-picker" or expected[0]["task"] != ":nativecmpkit-camera-picker:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != android_camera_provider_filter(focus) or
                 expected[0].get("required_testcases") != android_camera_provider_identities(focus) or
                 ANDROID_CAMERA_PROVIDER_SOURCE not in expected[0]["test_source_files"]):
@@ -3293,7 +3293,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_SHARE_GRANT_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-share" or expected[0]["task"] != ":calf-share:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-share" or expected[0]["task"] != ":nativecmpkit-share:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != ANDROID_SHARE_GRANT_CLASS or
                 expected[0].get("required_testcases") != android_share_grant_identities() or
                 ANDROID_SHARE_GRANT_SOURCE not in expected[0]["test_source_files"]):
@@ -3302,7 +3302,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus in ANDROID_GEO_PROVIDER_FOCUSES:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-geo" or expected[0]["task"] != ":calf-geo:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-geo" or expected[0]["task"] != ":nativecmpkit-geo:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != android_geo_provider_filter(focus) or
                 expected[0].get("required_testcases") != android_geo_provider_identities(focus) or
                 ANDROID_GEO_PROVIDER_SOURCE not in expected[0]["test_source_files"]):
@@ -3311,7 +3311,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_GEO_OWNERSHIP_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-geo" or expected[0]["task"] != ":calf-geo:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-geo" or expected[0]["task"] != ":nativecmpkit-geo:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != ANDROID_GEO_OWNERSHIP_CLASS or
                 expected[0].get("required_testcases") != android_geo_ownership_identities() or
                 ANDROID_GEO_OWNERSHIP_SOURCE not in expected[0]["test_source_files"]):
@@ -3320,7 +3320,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_NAV_BACK_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-navigation" or expected[0]["task"] != ":calf-navigation:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-navigation" or expected[0]["task"] != ":nativecmpkit-navigation:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != ANDROID_NAV_BACK_CLASS or
                 expected[0].get("required_testcases") != android_nav_back_identities() or
                 ANDROID_NAV_BACK_SOURCE not in expected[0]["test_source_files"]):
@@ -3329,11 +3329,11 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0].get("project") != ":calf-webview" or
-                expected[0]["task"] != ":calf-webview:" + SUITES["android-device"][0] or
-                expected[0].get("report_directory") != "calf-webview/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0].get("project") != ":nativecmpkit-webview" or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES["android-device"][0] or
+                expected[0].get("report_directory") != "nativecmpkit-webview/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("utp_results_directory") != expected[0].get("report_directory") or
-                expected[0].get("agp_declared_xml_directory") != "calf-webview/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+                expected[0].get("agp_declared_xml_directory") != "nativecmpkit-webview/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != android_webview_stop_redirect_recovery_filter() or
                 expected[0].get("test_filter_argument") != "class" or expected[0].get("test_exclusion_annotation") is not None or
                 expected[0].get("required_testcases") != android_webview_stop_redirect_recovery_identities() or
@@ -3345,9 +3345,9 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_WEBVIEW_REQUEST_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or
-                expected[0]["task"] != ":calf-webview:" + SUITES["android-device"][0] or
-                expected[0]["report_directory"] != "calf-webview/build/outputs/androidTest-results/connected/androidMain" or
+                expected[0]["module"] != "nativecmpkit-webview" or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES["android-device"][0] or
+                expected[0]["report_directory"] != "nativecmpkit-webview/build/outputs/androidTest-results/connected/androidMain" or
                 expected[0].get("test_filter") != android_webview_request_filter() or
                 expected[0].get("test_filter_argument") != "annotation" or
                 expected[0].get("required_testcases") != android_webview_request_identities() or
@@ -3359,7 +3359,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_POPUP_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0]["task"] != ":calf-webview:" + SUITES["android-device"][0] or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0]["task"] != ":nativecmpkit-webview:" + SUITES["android-device"][0] or
                 expected[0].get("test_filter") != ANDROID_POPUP_CLASS or
                 expected[0].get("required_testcases") != android_popup_identities() or
                 ANDROID_POPUP_SOURCE not in expected[0]["test_source_files"]):
@@ -3370,7 +3370,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != WEBVIEW_CONTENT_MODULE or
-                expected[0]["task"] != ":calf-webview:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != WEBVIEW_CONTENT_CLASS or
                 expected[0].get("required_testcases") != webview_content_identities() or
                 WEBVIEW_CONTENT_SOURCE not in expected[0]["test_source_files"] or
@@ -3382,7 +3382,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != WEBVIEW_REQUEST_MODULE or
-                expected[0]["task"] != ":calf-webview:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != WEBVIEW_REQUEST_CLASS or
                 expected[0].get("required_testcases") != webview_request_identities() or
                 WEBVIEW_REQUEST_SOURCE not in expected[0]["test_source_files"] or
@@ -3394,9 +3394,9 @@ def validate_test_focus(test_plan: dict) -> bool:
         sources = share_clipboard_native_sources(suite)
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-share" or expected[0].get("project") != ":calf-share" or
-                expected[0]["task"] != ":calf-share:" + SUITES[suite][0] or
-                expected[0].get("report_directory") != "calf-share/build/test-results/" + SUITES[suite][0] or
+                expected[0]["module"] != "nativecmpkit-share" or expected[0].get("project") != ":nativecmpkit-share" or
+                expected[0]["task"] != ":nativecmpkit-share:" + SUITES[suite][0] or
+                expected[0].get("report_directory") != "nativecmpkit-share/build/test-results/" + SUITES[suite][0] or
                 expected[0].get("test_filter") != SHARE_CLIPBOARD_NATIVE_CLASS or
                 expected[0].get("required_testcases") != share_clipboard_native_identities() or
                 type(expected[0].get("required_original_xml")) is not int or expected[0]["required_original_xml"] != 1 or
@@ -3412,9 +3412,9 @@ def validate_test_focus(test_plan: dict) -> bool:
         suite = test_plan["suite"]
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0].get("project") != ":calf-webview" or
-                expected[0]["task"] != ":calf-webview:" + SUITES[suite][0] or
-                expected[0].get("report_directory") != "calf-webview/build/test-results/" + SUITES[suite][0] or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0].get("project") != ":nativecmpkit-webview" or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES[suite][0] or
+                expected[0].get("report_directory") != "nativecmpkit-webview/build/test-results/" + SUITES[suite][0] or
                 expected[0].get("test_filter") != WEBVIEW_OFFLINE_CLASS + "." + WEBVIEW_OFFLINE_METHOD or
                 expected[0].get("required_testcases") != webview_offline_identities() or
                 expected[0].get("test_source_files") != [WEBVIEW_OFFLINE_SOURCE, WEBVIEW_OFFLINE_FIXTURE] or
@@ -3431,9 +3431,9 @@ def validate_test_focus(test_plan: dict) -> bool:
         sources = desktop_security_plan.selected_sources(focus)
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0].get("project") != ":calf-webview" or
-                expected[0]["task"] != ":calf-webview:desktopTest" or
-                expected[0].get("report_directory") != "calf-webview/build/test-results/desktopTest" or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0].get("project") != ":nativecmpkit-webview" or
+                expected[0]["task"] != ":nativecmpkit-webview:desktopTest" or
+                expected[0].get("report_directory") != "nativecmpkit-webview/build/test-results/desktopTest" or
                 expected[0].get("test_filter") != ",".join(route["selectors"]) or
                 expected[0].get("required_testcases") != list(route["required_testcases"]) or
                 type(expected[0].get("required_original_xml")) is not int or
@@ -3449,9 +3449,9 @@ def validate_test_focus(test_plan: dict) -> bool:
         sources = webview_desktop_request_sources(focus)
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0].get("project") != ":calf-webview" or
-                expected[0]["task"] != ":calf-webview:desktopTest" or
-                expected[0].get("report_directory") != "calf-webview/build/test-results/desktopTest" or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0].get("project") != ":nativecmpkit-webview" or
+                expected[0]["task"] != ":nativecmpkit-webview:desktopTest" or
+                expected[0].get("report_directory") != "nativecmpkit-webview/build/test-results/desktopTest" or
                 expected[0].get("test_filter") != webview_desktop_request_filter(focus) or
                 expected[0].get("required_testcases") != webview_desktop_request_identities(focus) or
                 expected[0].get("test_source_files") != list(sources) or
@@ -3468,7 +3468,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         spec = WEBVIEW_IDENTITY_SPECS.get(suite)
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or spec is None or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-webview" or expected[0]["task"] != ":calf-webview:" + SUITES[suite][0] or
+                expected[0]["module"] != "nativecmpkit-webview" or expected[0]["task"] != ":nativecmpkit-webview:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != webview_identity_filter(suite, focus) or
                 expected[0].get("required_testcases") != webview_identity_identities(suite, focus) or
                 spec["source"] not in expected[0]["test_source_files"]):
@@ -3477,7 +3477,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == DESKTOP_SAVER_STATE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-file-picker" or expected[0]["task"] != ":calf-file-picker:desktopTest" or
+                expected[0]["module"] != "nativecmpkit-file-picker" or expected[0]["task"] != ":nativecmpkit-file-picker:desktopTest" or
                 expected[0].get("test_filter") != DESKTOP_SAVER_STATE_CLASS or
                 expected[0].get("required_testcases") != desktop_saver_state_identities() or
                 DESKTOP_SAVER_STATE_SOURCE not in expected[0]["test_source_files"]):
@@ -3486,7 +3486,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus in LINUX_PICKER_PORTAL_FOCUSES:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-file-picker" or expected[0]["task"] != ":calf-file-picker:desktopTest" or
+                expected[0]["module"] != "nativecmpkit-file-picker" or expected[0]["task"] != ":nativecmpkit-file-picker:desktopTest" or
                 expected[0].get("test_filter") != linux_picker_portal_filter(focus) or
                 expected[0].get("required_testcases") != linux_picker_portal_identities(focus) or
                 LINUX_PICKER_PORTAL_SOURCE not in expected[0]["test_source_files"]):
@@ -3495,7 +3495,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == PICKER_LIFETIME_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-file-picker" or expected[0]["task"] != ":calf-file-picker:desktopTest" or
+                expected[0]["module"] != "nativecmpkit-file-picker" or expected[0]["task"] != ":nativecmpkit-file-picker:desktopTest" or
                 expected[0].get("test_filter") != PICKER_LIFETIME_CLASS or
                 expected[0].get("required_testcases") != picker_lifetime_identities() or
                 PICKER_LIFETIME_SOURCE not in expected[0]["test_source_files"]):
@@ -3506,7 +3506,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != BROWSER_COIL_READ_MODULE or
-                expected[0]["task"] != ":calf-file-picker-coil:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-file-picker-coil:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != BROWSER_COIL_READ_CLASS or
                 expected[0].get("required_testcases") != browser_coil_read_identities() or
                 BROWSER_COIL_READ_SOURCE not in expected[0]["test_source_files"] or
@@ -3516,8 +3516,8 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus in ANDROID_SAVE_IDENTITY_FOCUSES:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-file-picker" or
-                expected[0]["task"] != ":calf-file-picker:connectedAndroidDeviceTest" or
+                expected[0]["module"] != "nativecmpkit-file-picker" or
+                expected[0]["task"] != ":nativecmpkit-file-picker:connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != android_save_identity_filter() or
                 expected[0].get("test_filter_argument") != "annotation" or
                 expected[0].get("test_exclusion_annotation") != (ANDROID_SAVE_CALIBRATION_ANNOTATION
@@ -3530,8 +3530,8 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == ANDROID_IO_OVERSIZE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-io" or
-                expected[0]["task"] != ":calf-io:connectedAndroidDeviceTest" or
+                expected[0]["module"] != "nativecmpkit-io" or
+                expected[0]["task"] != ":nativecmpkit-io:connectedAndroidDeviceTest" or
                 expected[0].get("test_filter") != ANDROID_IO_DEVICE_CLASS + "#" + ANDROID_IO_OVERSIZE_METHOD or
                 expected[0].get("required_testcases") != android_io_oversize_identities() or
                 ANDROID_IO_DEVICE_SOURCE not in expected[0]["test_source_files"]):
@@ -3540,9 +3540,9 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == UI_DATE_YEAR_MATERIAL_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-ui" or expected[0].get("project") != ":calf-ui" or
-                expected[0].get("task") != ":calf-ui:desktopTest" or
-                expected[0].get("report_directory") != "calf-ui/build/test-results/desktopTest" or
+                expected[0]["module"] != "nativecmpkit-ui" or expected[0].get("project") != ":nativecmpkit-ui" or
+                expected[0].get("task") != ":nativecmpkit-ui:desktopTest" or
+                expected[0].get("report_directory") != "nativecmpkit-ui/build/test-results/desktopTest" or
                 expected[0].get("native_test_host") is not None or
                 expected[0].get("test_filter") != UI_DATE_YEAR_MATERIAL_CLASS or
                 expected[0].get("required_testcases") != ui_date_year_material_identities() or
@@ -3566,16 +3566,16 @@ def validate_test_focus(test_plan: dict) -> bool:
             raise ValueError("Invalid finite two-method native WK loopback fixture identity")
         if focus in UI_DATE_YEAR_NATIVE_FOCUSES and (len(expected) != 1 or
                 UI_DATE_YEAR_SHARED_SOURCE not in expected[0].get("test_source_files", []) or
-                expected[0].get("project") != ":calf-ui" or
-                expected[0].get("report_directory") != "calf-ui/build/test-results/" + IOS_APPLICATION_TASK):
+                expected[0].get("project") != ":nativecmpkit-ui" or
+                expected[0].get("report_directory") != "nativecmpkit-ui/build/test-results/" + IOS_APPLICATION_TASK):
             raise ValueError("Invalid finite important alert/year application source/report plan")
         if focus == UI_ALERT_RECOVERY_FOCUS and (len(expected) != 1 or
-                expected[0].get("project") != ":calf-ui" or
-                expected[0].get("report_directory") != "calf-ui/build/test-results/" + IOS_APPLICATION_TASK):
+                expected[0].get("project") != ":nativecmpkit-ui" or
+                expected[0].get("report_directory") != "nativecmpkit-ui/build/test-results/" + IOS_APPLICATION_TASK):
             raise ValueError("Invalid finite four-method important alert recovery source/report plan")
         if focus in (IOS_SHARE_PRESENTATION_FOCUS, IOS_SHARE_REMEMBERED_FAILURE_FOCUS) and (len(expected) != 1 or
-                expected[0].get("project") != ":calf-share" or
-                expected[0].get("report_directory") != "calf-share/build/test-results/" + IOS_APPLICATION_TASK or
+                expected[0].get("project") != ":nativecmpkit-share" or
+                expected[0].get("report_directory") != "nativecmpkit-share/build/test-results/" + IOS_APPLICATION_TASK or
                 any(path not in expected[0].get("test_source_files", []) for path in IOS_SHARE_APPLICATION_SOURCES)):
             raise ValueError("New Share disposal plan requires its exact owning app sources/project/report tree")
         if focus == IOS_SHARE_REMEMBERED_FAILURE_FOCUS and (len(expected) != 1 or
@@ -3585,7 +3585,7 @@ def validate_test_focus(test_plan: dict) -> bool:
                 any(name not in expected[0].get("test_source_files", []) for name in
                     (IOS_POPOVER_GEOMETRY_SOURCE, IOS_POPOVER_GEOMETRY_SCENE_SOURCE))):
             raise ValueError("OS geometry plan requires both exact opt-in library test inputs")
-        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get("module", "calf-ui")
+        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get("module", "nativecmpkit-ui")
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != application_module or
@@ -3602,7 +3602,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != IOS_PERMISSION_MODULE or
-                expected[0]["task"] != ":calf-permissions:calf-permissions-core:testAndroidHostTest" or
+                expected[0]["task"] != ":nativecmpkit-permissions:nativecmpkit-permissions-core:testAndroidHostTest" or
                 expected[0].get("test_filter") != ANDROID_PERMISSION_COMPLETION_CLASS or
                 expected[0].get("required_testcases") != android_permission_completion_identities() or
                 ANDROID_PERMISSION_COMPLETION_SOURCE not in expected[0]["test_source_files"]):
@@ -3631,9 +3631,9 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == share_missing.FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != share_missing.MODULE or expected[0].get("project") != ":calf-share" or
+                expected[0]["module"] != share_missing.MODULE or expected[0].get("project") != ":nativecmpkit-share" or
                 expected[0]["task"] != share_missing.TASK or
-                expected[0].get("report_directory") != "calf-share/build/test-results/desktopTest" or
+                expected[0].get("report_directory") != "nativecmpkit-share/build/test-results/desktopTest" or
                 expected[0].get("test_filter") != share_missing.FILTER or
                 expected[0].get("test_filter_argument") is not None or
                 expected[0].get("test_exclusion_annotation") is not None or
@@ -3648,7 +3648,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != IOS_PERMISSION_MODULE or
-                expected[0]["task"] != ":calf-permissions:calf-permissions-core:iosSimulatorArm64Test" or
+                expected[0]["task"] != ":nativecmpkit-permissions:nativecmpkit-permissions-core:iosSimulatorArm64Test" or
                 expected[0].get("test_filter") != spec["classname"] or
                 expected[0].get("required_testcases") != ios_permission_safety_identities(focus) or
                 spec["source"] not in expected[0]["test_source_files"]):
@@ -3659,7 +3659,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != WEBVIEW_LIFETIME_MODULE or
-                expected[0]["task"] != ":calf-webview:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-webview:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != webview_lifetime_filter(suite, focus) or
                 expected[0].get("required_testcases") != webview_lifetime_identities(suite, focus) or
                 not all(g["source"] in expected[0]["test_source_files"] for g in webview_lifetime_groups(suite, focus)) or
@@ -3669,8 +3669,8 @@ def validate_test_focus(test_plan: dict) -> bool:
     if focus == IOS_SAVE_WRITE_FOCUS:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-file-picker" or
-                expected[0]["task"] != ":calf-file-picker:iosSimulatorArm64Test" or
+                expected[0]["module"] != "nativecmpkit-file-picker" or
+                expected[0]["task"] != ":nativecmpkit-file-picker:iosSimulatorArm64Test" or
                 expected[0].get("test_filter") != IOS_SAVE_WRITE_CLASS + "." + IOS_SAVE_WRITE_METHOD or
                 expected[0].get("required_testcases") != ios_save_write_identities() or
                 IOS_SAVE_WRITE_SOURCE not in expected[0]["test_source_files"]):
@@ -3680,7 +3680,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(test_plan["suite"], tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != IOS_PERMISSION_MODULE or
-                expected[0]["task"] != ":calf-permissions:calf-permissions-core:iosSimulatorArm64Test" or
+                expected[0]["task"] != ":nativecmpkit-permissions:nativecmpkit-permissions-core:iosSimulatorArm64Test" or
                 expected[0].get("test_filter") != IOS_PERMISSION_CLASS or
                 expected[0].get("required_testcases") != ios_permission_identities() or
                 IOS_PERMISSION_SOURCE not in expected[0]["test_source_files"]):
@@ -3691,7 +3691,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != UNSUPPORTED_PERMISSION_MODULE or
-                expected[0]["task"] != ":calf-permissions:calf-permissions-core:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-permissions:nativecmpkit-permissions-core:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != UNSUPPORTED_PERMISSION_CLASS or
                 expected[0].get("required_testcases") != unsupported_permission_identities() or
                 unsupported_permission_source(suite) not in expected[0]["test_source_files"] or
@@ -3702,7 +3702,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         suite = test_plan["suite"]
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
-                expected[0]["module"] != "calf-ui" or expected[0]["task"] != ":calf-ui:" + SUITES[suite][0] or
+                expected[0]["module"] != "nativecmpkit-ui" or expected[0]["task"] != ":nativecmpkit-ui:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != dropdown_filter(focus) or
                 expected[0].get("required_testcases") != dropdown_identities(focus) or
                 dropdown_source(suite) not in expected[0]["test_source_files"] or
@@ -3715,7 +3715,7 @@ def validate_test_focus(test_plan: dict) -> bool:
         if (not allowed_test_focus(suite, tuple(test_plan["explicit_module_subset"]), focus) or
                 test_plan["complete_suite_requested"] is not False or len(expected) != 1 or
                 expected[0]["module"] != DATE_TRANSACTION_MODULE or
-                expected[0]["task"] != ":calf-ui:" + SUITES[suite][0] or
+                expected[0]["task"] != ":nativecmpkit-ui:" + SUITES[suite][0] or
                 expected[0].get("test_filter") != DATE_TRANSACTION_CLASS or
                 expected[0].get("required_testcases") != date_transaction_identities() or
                 date_transaction_source(suite) not in expected[0]["test_source_files"] or
@@ -3725,7 +3725,7 @@ def validate_test_focus(test_plan: dict) -> bool:
     if (focus != NATIVE_SHARE_BOUNDARY_FOCUS or test_plan["suite"] != "desktop" or
             test_plan["complete_suite_requested"] is not False or
             test_plan["explicit_module_subset"] != [NATIVE_SHARE_BOUNDARY_MODULE] or len(expected) != 1 or
-            expected[0]["module"] != NATIVE_SHARE_BOUNDARY_MODULE or expected[0]["task"] != ":calf-share:desktopTest" or
+            expected[0]["module"] != NATIVE_SHARE_BOUNDARY_MODULE or expected[0]["task"] != ":nativecmpkit-share:desktopTest" or
             expected[0].get("test_filter") != NATIVE_SHARE_BOUNDARY_CLASS or
             expected[0].get("required_testcases") != native_share_boundary_identities() or
             NATIVE_SHARE_BOUNDARY_SOURCE not in expected[0]["test_source_files"]):
@@ -4645,8 +4645,8 @@ def collect_ios_application_receipts(root: Path, test_plan: dict, output: Path, 
     # Full iOS plans can own both independent UI and picker test applications.
     # Never merge their protocol/XML/binary/session identities or count them twice.
     for expected in test_plan["expected"]:
-        if (expected["module"] == "calf-ui" or
-                (expected["module"] == "calf-file-picker" and test_plan.get("explicit_test_focus") != IOS_SAVE_WRITE_FOCUS) or
+        if (expected["module"] == "nativecmpkit-ui" or
+                (expected["module"] == "nativecmpkit-file-picker" and test_plan.get("explicit_test_focus") != IOS_SAVE_WRITE_FOCUS) or
                 expected.get("native_test_host") == "genuine-uikit-application"):
             review = collect_one_ios_application_receipt(root, test_plan, output, started_ns, ended_ns,
                                                          context, modules, expected)
@@ -4863,14 +4863,14 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
         counts = case_counts(protocol["testcases"])
         need(protocol.get("counts") == counts and all(type(v) is int for v in protocol["counts"].values()) and counts["executed"] > 0,
              "Application counts differ from complete actual testcase elements")
-        full_groups = ({"calf-file-picker": IOS_PICKER_BOUNDARY_GROUPS,
-                        "calf-webview": IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS,
-                        "calf-share": IOS_SHARE_APPLICATION_REQUIRED_GROUPS}.get(expected["module"], ()))
+        full_groups = ({"nativecmpkit-file-picker": IOS_PICKER_BOUNDARY_GROUPS,
+                        "nativecmpkit-webview": IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS,
+                        "nativecmpkit-share": IOS_SHARE_APPLICATION_REQUIRED_GROUPS}.get(expected["module"], ()))
         required = ({(group["classname"], name)
                      for group in ui_application_focus_groups(test_plan["explicit_test_focus"])
                      for name in group["methods"]} if focused_ui else
                     {(group["classname"], name) for group in full_groups for name in group["methods"]}
-                    if full_groups else {("com.mohamedrejeb.calf.ui." + c, n) for c, n in IOS_APPLICATION_CASES})
+                    if full_groups else {("io.github.apdelrahman1911.nativecmpkit.ui." + c, n) for c, n in IOS_APPLICATION_CASES})
         if focused_ui:
             need(cases.keys() == required, "Focused application must execute exactly all selected methods")
         need(required <= cases.keys(), "Required native presenter/host/identity/image-lifetime cases were not discovered")

@@ -164,7 +164,7 @@ def archive_focused_reports(root: Path, output: Path, receipt: dict, plan: dict)
     if destination.exists() or not destination.is_relative_to(base) or len(receipt.get("modules", [])) != 1:
         raise ValueError("Use one new owned camera evidence directory")
     module = receipt["modules"][0]
-    if module.get("module") != "calf-camera-picker" or len(module.get("reports", [])) != 1:
+    if module.get("module") != "nativecmpkit-camera-picker" or len(module.get("reports", [])) != 1:
         raise ValueError("Expected exactly one nonempty actual camera XML")
     row, = module["reports"]
     path = lt.safe_path(root, row["path"])

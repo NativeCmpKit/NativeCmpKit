@@ -44,7 +44,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
             raise AssertionError("The held source inputs changed during NEW controls")
 
     def plan(self):
-        return library.plan(ROOT, "desktop", only_modules=("calf-webview",), focus=FOCUS)
+        return library.plan(ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def test_only_missing_creation_wait_changes_the_original_native_policy_body(self):
         source = self.current[POLICY].decode()
@@ -116,7 +116,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
         plan = self.plan()
         item, = plan["expected"]
         self.assertEqual("desktop", plan["suite"])
-        self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
         self.assertEqual([{"classname": security.POLICY_CLASS, "name": security.POLICY_METHOD + "[desktop]"}], item["required_testcases"])
         self.assertEqual(1, item["required_original_xml"])
@@ -133,7 +133,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
                 self.assertEqual([security.POLICY_CLASS + "." + security.POLICY_METHOD], selectors)
                 self.assertEqual(1, command.count(security.INIT_SCRIPT))
                 self.assertEqual(1, command.count("-PnativecmpkitDesktopSecurityFocus=" + FOCUS))
-                self.assertEqual(1, command.count(":calf-webview:desktopTest"))
+                self.assertEqual(1, command.count(":nativecmpkit-webview:desktopTest"))
                 self.assertIn("scripts/ci/fresh-tests.init.gradle.kts", command)
         for system, arch in (("Linux", "x86_64"), ("Linux", "aarch64"), ("Windows", "AMD64"), ("Darwin", "other"), (None, "arm64")):
             with self.subTest(system=system, arch=arch), self.assertRaises(ValueError):
@@ -155,9 +155,9 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
         for changed in (("desktop-windows-x64",), ("desktop-macos-arm64",), ("desktop-macos-arm64", "desktop-macos-x64", "desktop-linux-x64")):
             with self.subTest(slots=changed), patch.dict(matrix.PROFILES, {PROFILE: changed}), self.assertRaises(ValueError):
                 matrix.matrix(PROFILE)
-        with patch.dict(matrix.MODULE_SUBSETS, {PROFILE: "calf-io"}), self.assertRaises(ValueError):
+        with patch.dict(matrix.MODULE_SUBSETS, {PROFILE: "nativecmpkit-io"}), self.assertRaises(ValueError):
             matrix.matrix(PROFILE)
-        for key, value in (("module", "calf-io"), ("task", ":calf-webview:publish"), ("test_filter", "*"), ("required_original_xml", 2), ("test_source_sha256", {})):
+        for key, value in (("module", "nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"), ("required_original_xml", 2), ("test_source_sha256", {})):
             plan = copy.deepcopy(self.plan()); plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
                 library.validate_test_focus(plan)
@@ -180,7 +180,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
                 import os
                 os.utime(file, ns=(now - 20_000_000_000, now - 20_000_000_000))
             return library.collect_reports(root, plan, now - 1_000_000_000, now + 1_000_000_000,
-                                           Counter({":calf-webview:desktopTest": markers}), host_system="Darwin")
+                                           Counter({":nativecmpkit-webview:desktopTest": markers}), host_system="Darwin")
 
     def test_fresh_exact_one_policy_xml_is_required_and_failures_remain_red(self):
         good = self.collect()
@@ -194,7 +194,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
 
     def test_original_strict_public_worker_parser_is_retained_for_policy_recovery(self):
         prefix = "NATIVECMPKIT_DESKTOP_SECURITY_"
-        lines = [prefix + "SETUP task=:calf-webview:desktopTest focus=" + FOCUS + " forks=1 forkEvery=1 classes=1",
+        lines = [prefix + "SETUP task=:nativecmpkit-webview:desktopTest focus=" + FOCUS + " forks=1 forkEvery=1 classes=1",
                  prefix + "WORKER phase=start worker=7",
                  prefix + "CASE phase=start worker=7 classname=" + security.POLICY_CLASS,
                  prefix + "CASE phase=finish worker=7 classname=" + security.POLICY_CLASS + " tests=1 passed=1 failed=0 skipped=0 result=SUCCESS",
@@ -215,7 +215,7 @@ class DesktopPolicyCreationRecoveryControls(unittest.TestCase):
         for system, arch, focus, count in (("Windows", "AMD64", "tls-rendering-cookies-policy", 3),
                                          ("Linux", "aarch64", "tls-rendering-cookies-policy-media", 4)):
             security.validate_host(system, arch, focus)
-            plan = library.plan(ROOT, "desktop", only_modules=("calf-webview",), focus=focus)
+            plan = library.plan(ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
             self.assertEqual(count, len(plan["expected"][0]["required_testcases"]))
             self.assertEqual(security.SOURCE_SHA256[POLICY], plan["expected"][0]["test_source_sha256"][POLICY])
             self.assertEqual(1, plan["desktop_security_fixture"]["max_parallel_forks"])

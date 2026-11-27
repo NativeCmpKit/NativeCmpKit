@@ -88,8 +88,8 @@ def args(operation="plan"):
 
 
 def declared_native_names(names):
-    return {name for name in names if name.startswith(("calf-share/native/", "calf-share/src/desktopMain/")) or
-            name in {"calf-share/build.gradle.kts", "rust-toolchain.toml", "scripts/native/artifacts.py",
+    return {name for name in names if name.startswith(("nativecmpkit-share/native/", "nativecmpkit-share/src/desktopMain/")) or
+            name in {"nativecmpkit-share/build.gradle.kts", "rust-toolchain.toml", "scripts/native/artifacts.py",
                      "convention-plugins/src/main/kotlin/NativeLibraries.kt"}}
 
 
@@ -139,9 +139,9 @@ def model():
                     "cleanup": {"leader_reaped": True, "group_empty": True, "clean": True,
                                 "forced": False, "term_sent": False, "kill_sent": False}}
         compilation = execution(route.PARENT, "cargo", 900001, base, b"UNEXECUTED cargo fixture; not a compiler result\n")
-        artifact = {"relative_path": binary_name, "package": "calf-share-native@0.1.0", "test_target": "appkit_lifecycle",
-                    "source_path": "calf-share/native/tests/appkit_lifecycle_main.rs",
-                    "source_sha256": before["calf-share/native/tests/appkit_lifecycle_main.rs"], "rust_target": "aarch64-apple-darwin",
+        artifact = {"relative_path": binary_name, "package": "nativecmpkit-share-native@0.1.0", "test_target": "appkit_lifecycle",
+                    "source_path": "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs",
+                    "source_sha256": before["nativecmpkit-share/native/tests/appkit_lifecycle_main.rs"], "rust_target": "aarch64-apple-darwin",
                     "macho_file_type": "MH_EXECUTE", "fresh_cargo_artifact": True, "diagnostics": {"errors": 0, "warnings": 0}, **file}
         cases, reports, runs = [], [], []
         for index, case in enumerate(route.CASES):
@@ -193,8 +193,8 @@ def model():
                    "native_inputs_after": {"count": len(native), "sha256": digest("".join(f"{d}  {n}\n" for n, d in sorted(native.items())).encode())},
                    "runtime_before": runtime, "runtime_after": runtime, "compilation": compilation,
                    "artifact_before": artifact, "artifact_after": file,
-                   "control_failure_witness": {"source_path": "calf-share/native/tests/appkit_lifecycle/cases.rs",
-                                               "source_sha256": before["calf-share/native/tests/appkit_lifecycle/cases.rs"],
+                   "control_failure_witness": {"source_path": "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs",
+                                               "source_sha256": before["nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"],
                                                "compiled_with_admitted_executable": True, "source_bound_failed_control_gate_verified": True,
                                                "raw_control_flag_exported": False, "raw_control_flag_independently_observed": False},
                    "native_reports": summary, "native_case_runs": runs, "reports_after": {"inventory_captured": True}}
@@ -252,7 +252,7 @@ class AppKitOnly607Tests(unittest.TestCase):
                 forward = forward.replace(fragment["before"].encode(), fragment["after"].encode(), 1)
             self.assertEqual(forward, raw)
         import macos_share_ci668_composition as latest
-        for name in (".github/workflows/gradle.yml", "scripts/ci/workflow_matrix.py", "calf-share/native/tests/appkit_lifecycle/cases.rs"):
+        for name in (".github/workflows/gradle.yml", "scripts/ci/workflow_matrix.py", "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"):
             self.assertIn(name, manifest["unchanged_inputs"])
             raw = (ROOT / name).read_bytes()
             qualified = latest.current_source_in_view(name, raw, latest.SHARE_VIEW, ROOT)
@@ -281,7 +281,7 @@ class AppKitOnly607Tests(unittest.TestCase):
         old = json.loads((ROOT / "scripts/ci/fixtures/macos-share-key-wait-observation-source-inverse.json").read_bytes())
         self.assertEqual(document["predecessor609"]["manifest_sha256"], digest((ROOT / "scripts/ci/fixtures/macos-share-key-wait-observation-source-inverse.json").read_bytes()))
         self.assertFalse(document["predecessor609"]["native_readiness_fix_included"])
-        cases = "calf-share/native/tests/appkit_lifecycle/cases.rs"
+        cases = "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"
         self.assertEqual(digest((ROOT / cases).read_bytes()), old["bindings"][cases]["after_sha256"])
         self.assertIn('pump_until("Owned AppKit window did not become key", || {', (ROOT / cases).read_text())
         self.assertIn('assert!(Instant::now() < deadline, "{reason}");', (ROOT / cases).read_text())
@@ -635,7 +635,7 @@ class AppKitOnly607Tests(unittest.TestCase):
             self.assertFalse(stored["fresh_JVM_XML_created"])
             self.assertEqual(list((root / route.OUTPUT).iterdir()), [root / route.OUTPUT / "receipt.json"])
             self.assertEqual(stored["JNI_tests_executed_here"], 0); self.assertFalse(stored["release_ready"])
-        for key, value in (("module", ["calf-ui"]), ("suite", "ios"), ("output", "build/ci-verification/foreign"),
+        for key, value in (("module", ["nativecmpkit-ui"]), ("suite", "ios"), ("output", "build/ci-verification/foreign"),
                            ("reserve_mib", True), ("timeout", True), ("simulator", "fake-udid")):
             arguments = args("run"); setattr(arguments, key, value)
             with self.subTest(key=key), self.assertRaises(ValueError):

@@ -16,7 +16,7 @@ import java.util.UUID;
 /** Only fixed synthetic fixtures, native identities and bounded diagnostic values. */
 final class IoFixture {
     static final String PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.iodocuments";
-    static final String REPORTER = "com.mohamedrejeb.calf.calfio.test";
+    static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitio.test";
     static final String AUTHORITY = PACKAGE + ".documents";
     static final String ROOT = "nativecmpkit-owned-root";
     static final String ROOT_NAME = "NativeCmpKit owned IO folder";

@@ -171,7 +171,7 @@ class IssueSyncTests(unittest.TestCase):
             "https://github.com/MohamedRejeb/Calf/issues/99not-a-number",
             "https://not-github.example/MohamedRejeb/Calf/issues/999",
         ]
-        self.assertEqual(sync.calf_upstream_numbers(references), [12, 34])
+        self.assertEqual(sync.original_upstream_numbers(references), [12, 34])
         f = finding()
         f["upstream_refs"] = references
         self.write_inputs(findings=[f])

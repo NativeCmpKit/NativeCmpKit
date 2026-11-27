@@ -6,18 +6,18 @@ import java.security.MessageDigest
 
 // Independent opt-in compiler selection only; no ordinary source-set/routing/policy change.
 gradle.projectsEvaluated {
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
-    val desktopClass = "com.mohamedrejeb.calf.ui.toggle.CupertinoSwitchThumbContentColorTest"
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
+    val desktopClass = "io.github.apdelrahman1911.nativecmpkit.ui.toggle.CupertinoSwitchThumbContentColorTest"
     val desktopMethods = listOf(
         "currentCallerIconColorsFollowEveryStateAndDoNotLeakToSiblingContent",
         "disabledCustomThumbInDarkLargeTextActuallyDrawsTheSuppliedIconColor",
     )
-    val desktopRequest = listOf(":calf-ui:desktopTest") + desktopMethods.flatMap { listOf("--tests", "$desktopClass.$it") }
+    val desktopRequest = listOf(":nativecmpkit-ui:desktopTest") + desktopMethods.flatMap { listOf("--tests", "$desktopClass.$it") }
     val desktop = gradle.startParameter.taskNames == desktopRequest
     val paths: List<String>
     val taskName: String
     if (desktop) {
-        paths = listOf("calf-ui/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/toggle/CupertinoSwitchThumbContentColorTest.kt")
+        paths = listOf("nativecmpkit-ui/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toggle/CupertinoSwitchThumbContentColorTest.kt")
         taskName = "compileTestKotlinDesktop"
         project.tasks.withType<Test>().matching { it.name == "desktopTest" }.configureEach {
             doFirst {
@@ -30,16 +30,16 @@ gradle.projectsEvaluated {
             }
         }
     } else {
-        check(gradle.startParameter.taskNames == listOf(":calf-ui:compileTestKotlinIosSimulatorArm64")) {
+        check(gradle.startParameter.taskNames == listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64")) {
             "Adaptive controls compiler accepts only its exact Desktop2 or iOS test compiler; no default/full native execution"
         }
         paths = listOf(
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlNativeHost.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
         )
         taskName = "compileTestKotlinIosSimulatorArm64"
     }

@@ -196,7 +196,7 @@ class ShareCi668CompositionTests(unittest.TestCase):
 
     def test09_whole_current_validation_rejects_guard_library_and_unrelated_tail(self):
         for relative in (latest.CI_OWNER, latest.SHARE_OWNER, latest.LIBRARY,
-                         "calf-share/native/tests/appkit_lifecycle/cases.rs"):
+                         "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"):
             with source_model() as root:
                 target = root / relative
                 target.write_bytes(target.read_bytes() + b"\n# unknown complete-source tail\n")
@@ -283,7 +283,7 @@ class ShareCi668CompositionTests(unittest.TestCase):
         self.assertEqual(value["JNI_tests_executed_here"], 0)
         self.assertFalse(value["native_cause_verified"])
         self.assertFalse(value["release_ready"])
-        cases = (ROOT / "calf-share/native/tests/appkit_lifecycle/cases.rs").read_bytes()
+        cases = (ROOT / "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs").read_bytes()
         self.assertEqual(sha(cases), "2ee076e833b1cdc619a5aa94194d5d23e3b62d2da1a9797ebe37ac377361b790")
         self.assertIn(b'pump_until("Owned AppKit window did not become key", || {', cases)
         self.assertIn(b'let deadline = Instant::now() + Duration::from_secs(10);', cases)
@@ -293,7 +293,7 @@ class ShareCi668CompositionTests(unittest.TestCase):
         import macos_share_missing_ci as historical
         self.assertEqual(len(historical.SOURCE_SHA256), 9)
         self.assertEqual(historical.SOURCE_SHA256["scripts/ci/macos_share_appkit_lifecycle.py"], "b04a67a0a8b80e6d335ee6408e6149db0f3616f353b38b984b6cf39406415455")
-        self.assertEqual(historical.SOURCE_SHA256["calf-share/native/tests/appkit_lifecycle/cases.rs"], "9e038b83b4e2e4d3d4718869ec05c9eaa198ce1f3c886a38b97b7c13ff83842b")
+        self.assertEqual(historical.SOURCE_SHA256["nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"], "9e038b83b4e2e4d3d4718869ec05c9eaa198ce1f3c886a38b97b7c13ff83842b")
         self.assertEqual(historical.SOURCE_SHA256["scripts/ci/fresh-tests.init.gradle.kts"], "bc14e3ac5105e6a337c896f4f7e88dd565e8862b2b2dc0d8ff055f40ab8cb9d4")
         with self.assertRaisesRegex(ValueError, "The unchanged Share630 recovery input differs: scripts/ci/macos_share_appkit_lifecycle.py"):
             historical.source_contract(ROOT, [historical.SOURCE])

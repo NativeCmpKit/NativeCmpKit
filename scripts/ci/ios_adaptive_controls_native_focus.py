@@ -11,13 +11,13 @@ from pathlib import Path
 import re
 
 FOCUSES = ("ui-native-adaptive-pre26", "ui-native-adaptive-ios26plus")
-MODULE = "calf-ui"
+MODULE = "nativecmpkit-ui"
 TASK_NAME = "iosSimulatorArm64ApplicationTest"
-TASK = ":calf-ui:" + TASK_NAME
+TASK = ":nativecmpkit-ui:" + TASK_NAME
 INIT_SCRIPT = "scripts/ci/ios_adaptive_controls_native.init.gradle.kts"
 FOCUS_PROPERTY = "nativecmpkitAdaptiveControlsFocus"
-PREFIX = "com.mohamedrejeb.calf.ui."
-BASE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/"
+PREFIX = "io.github.apdelrahman1911.nativecmpkit.ui."
+BASE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/"
 SLIDER_CLASS = PREFIX + "slider.AdaptiveSliderNativeMatrixTest"
 CUSTOM_CLASS = PREFIX + "controls.AdaptiveControlCustomizationMatrixTest"
 TOOLBAR_CLASS = PREFIX + "toolbar.AdaptiveToolbarFallbackNativeTest"

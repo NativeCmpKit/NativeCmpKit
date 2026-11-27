@@ -9,23 +9,23 @@ audit. Raw per-build-file declaration lists and the complete catalog are in
 
 | Consumer | `api(projects...)` edges | `implementation(projects...)` edges |
 |---|---|---|
-| `calf-core` | — | — |
-| `calf-io` | `calf-core` | — |
-| `calf-file-picker` | `calf-io` | — |
-| `calf-camera-picker` | `calf-io` | — |
-| `calf-share` | `calf-io` | — |
-| `calf-file-picker-coil` | `calf-core`, `calf-io` | — |
-| `calf-ui` | — | `calf-core` |
-| Ten permission features | `calf-permissions-core` | — |
-| `calf-permissions` umbrella | Core and all ten feature projects | — |
+| `nativecmpkit-core` | — | — |
+| `nativecmpkit-io` | `nativecmpkit-core` | — |
+| `nativecmpkit-file-picker` | `nativecmpkit-io` | — |
+| `nativecmpkit-camera-picker` | `nativecmpkit-io` | — |
+| `nativecmpkit-share` | `nativecmpkit-io` | — |
+| `nativecmpkit-file-picker-coil` | `nativecmpkit-core`, `nativecmpkit-io` | — |
+| `nativecmpkit-ui` | — | `nativecmpkit-core` |
+| Ten permission features | `nativecmpkit-permissions-core` | — |
+| `nativecmpkit-permissions` umbrella | Core and all ten feature projects | — |
 | WebView, navigation, geo, maps, icons | — | — |
-| `sample/common` | `calf-ui` | File picker, Coil adapter, permissions aggregate, WebView, navigation, camera, share, Cupertino icons |
+| `sample/common` | `nativecmpkit-ui` | File picker, Coil adapter, permissions aggregate, WebView, navigation, camera, share, Cupertino icons |
 
 Transitive edges matter: selecting picker/camera/share exposes file and context
 types; selecting every permission through the umbrella can introduce iOS API
 references unrelated to the one permission an app intended to request. Gradle
 artifact names of nested permission projects are renamed in settings, so
-generated type-safe accessors read `projects.calfPermissions.calfPermissionsCore`
+generated type-safe accessors read `projects.nativecmpkitPermissions.nativecmpkitPermissionsCore`
 rather than the directory path. The maintained module paths are not Maven group
 names.
 
@@ -37,8 +37,8 @@ names.
 | Material3 1.12.0-alpha03 | UI controls/state/types, WebView's common UI context, navigation/sample; icons render via Material icon infrastructure |
 | Compose resources 1.12.0 | Cupertino font loading; generated `Res` is a build output |
 | kotlinx-coroutines 1.11.0 | UI/WebView common effects, Android main dispatcher, JVM Swing dispatcher, tests and sample; additional coroutine usage can arrive transitively |
-| kotlinx-io 0.9.1 | `calf-io` exports `RawSource` (`api`); common consumers can stream without pretending content URIs are paths |
-| Coil 3.6.2 | `calf-file-picker-coil` fetcher implementation; sample adds Compose rendering and Ktor network fetcher |
+| kotlinx-io 0.9.1 | `nativecmpkit-io` exports `RawSource` (`api`); common consumers can stream without pretending content URIs are paths |
+| Coil 3.6.2 | `nativecmpkit-file-picker-coil` fetcher implementation; sample adds Compose rendering and Ktor network fetcher |
 | kotlinx-browser 0.5.0 | Browser File/DOM/Promise APIs for IO, picker, share and WebView |
 | Android activity-compose 1.13.0 | ActivityResult launchers and back handling used by Android integrations |
 | Android documentfile 1.1.0 | Metadata for content/document URIs in IO |
@@ -57,9 +57,9 @@ infer a transitive dependency's exact selected version from this table.
 
 ## Desktop native dependencies
 
-`calf-file-picker/native/Cargo.toml` builds a `cdylib` with `jni = 0.21`,
+`nativecmpkit-file-picker/native/Cargo.toml` builds a `cdylib` with `jni = 0.21`,
 `rfd = 0.15`, `raw-window-handle = 0.6`; macOS adds `objc2 = 0.6` and
-`objc2-app-kit = 0.3`. `calf-share/native/Cargo.toml` uses `jni = 0.21`;
+`objc2-app-kit = 0.3`. `nativecmpkit-share/native/Cargo.toml` uses `jni = 0.21`;
 macOS additionally uses `objc2`, `objc2-foundation`, `objc2-app-kit` and `block2`.
 These semver ranges are declarations, not exact reproducible resolved graphs.
 There is no baseline tracked `Cargo.lock` for either crate.
@@ -107,7 +107,7 @@ requirements.
 
 Upstream package aliases in the catalog are not proof they are still used; the
 migration must audit consumer references instead of blindly downloading old
-Calf packages. Independent Git history and metadata remove the GitHub-host
+NativeCmpKit packages. Independent Git history and metadata remove the GitHub-host
 dependency, not the normal dependency on Maven, Cargo, SDK distributions or
 third-party licenses. Never claim the project is an offline/vendored build
 without recording and reproducing those additional artifacts.

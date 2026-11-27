@@ -14,14 +14,14 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-TEST = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt"
-HELPER = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt"
+TEST = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt"
+HELPER = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt"
 PLAN = "scripts/ci/desktop_security_plan.py"
-FILE_HASHES = {'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt': {'after_bytes': 14057,
+FILE_HASHES = {'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt': {'after_bytes': 14057,
                                                                                                                   'after_sha256': '00698c638a729549c890240b000e64cbd88be9f6ac32d4ca067b304b1443187c',
                                                                                                                   'before_bytes': 13932,
                                                                                                                   'before_sha256': 'd6351562894951442fec8258dc95452251530e6df10d04c3e106f535a1391696'},
- 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt': {'after_bytes': 25897,
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt': {'after_bytes': 25897,
                                                                                                 'after_sha256': 'a7c8b3fe15c94ef5f30ccb648cdbe5a52770aad1b0bf5eeed6415a802a05c703',
                                                                                                 'before_bytes': 20741,
                                                                                                 'before_sha256': '1636c150d21b2a5d15d6659c04f840e4bc2a2852287e835c912aaf43271de9ea'},
@@ -31,7 +31,7 @@ FILE_HASHES = {'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web
                                          'before_sha256': '22dc3b4438873c25363dee6adf81080487211c9ef405ffd6399c87d072f7bf1d'}}
 LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketException\n',
   'old': 'import java.net.InetAddress\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '    fun assertTrustLease() = lease.assertInstalled()\n'
          '    // Called only after every original native SSL/error and zero-HTTP assertion.\n'
          '    // This confirms the endpoint-level witness, never invents a native outcome.\n'
@@ -41,7 +41,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
          '        untrusted.confirmNativeCertificateRejection()\n'
          '    }\n',
   'old': '    fun assertTrustLease() = lease.assertInstalled()\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '        private val connections = AtomicInteger()\n'
          '        private enum class FailurePhase { Accept, Handshake, RequestHeaders, ResponseWrite, '
          'SocketClose }\n'
@@ -55,7 +55,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
   'old': '        private val connections = AtomicInteger()\n'
          '        private val failure = AtomicReference<Throwable>()\n'
          '        private val acceptor =',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '        private fun endpointFailure(error: Throwable, phase: String) = AssertionError(\n'
          '            "Owned TLS fixture failed: endpoint=${if (trusted) "trusted" else "untrusted"} '
          'phase=$phase", error)\n'
@@ -118,7 +118,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
          '            val caller = listOf(\n'
          '                "sun.security.ssl.SSLSocketImpl" to "startHandshake",\n'
          '                "sun.security.ssl.SSLSocketImpl" to "startHandshake",\n'
-         '                "com.mohamedrejeb.calf.ui.web.OwnedDesktopTlsFixture\\$Endpoint" to "respond",\n'
+         '                "io.github.apdelrahman1911.nativecmpkit.ui.web.OwnedDesktopTlsFixture\\$Endpoint" to "respond",\n'
          '            )\n'
          '            return frames.windowed(caller.size).any { it == caller }\n'
          '        }\n'
@@ -150,14 +150,14 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
          '            try { socket.close(); check(socket.isClosed); sockets.remove(socket) }\n'
          '            catch (error: Throwable) { failure.compareAndSet(null, error); throw error }\n'
          '        }\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '                } catch (error: Throwable) {\n'
          '                    record(error, FailurePhase.Accept)\n'
          '                    socket?.let { runCatching { closeOwned(it) } }\n',
   'old': '                } catch (error: Throwable) {\n'
          '                    record(error)\n'
          '                    socket?.let { runCatching { closeOwned(it) } }\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '        private fun respond(socket: SSLSocket) {\n'
          '            var handshaken = false\n'
          '            var phase = FailurePhase.Handshake\n'
@@ -165,7 +165,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
   'old': '        private fun respond(socket: SSLSocket) {\n'
          '            var handshaken = false\n'
          '            try {\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '                handshaken = true\n'
          '                handshakeSuccesses.incrementAndGet()\n'
          '                phase = FailurePhase.RequestHeaders\n'
@@ -173,13 +173,13 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
   'old': '                handshaken = true\n'
          '                handshakeSuccesses.incrementAndGet()\n'
          '                val bytes =',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '                phase = FailurePhase.ResponseWrite\n'
          '                socket.outputStream.apply { write(headers.toByteArray(StandardCharsets.US_ASCII)); '
          'write(data); flush() }\n',
   'old': '                socket.outputStream.apply { write(headers.toByteArray(StandardCharsets.US_ASCII)); '
          'write(data); flush() }\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '                // Keep the original negative pre-handshake SSLException/EOF boundary.\n'
          '                // The one observed Finished-write abort remains pending until ALL original\n'
          '                // native SSL/error and zero-HTTP assertions confirm this same owned endpoint.\n'
@@ -195,7 +195,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
          '                // observation alone is labelled certificate acceptance/rejection.\n'
          '                if (trusted || handshaken || (error !is SSLException && error !is EOFException)) '
          'record(error)\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt'},
  {'new': '                assertEquals(0, tls.httpRequests(DesktopTlsStage.Untrusted), "Certificate '
          'rejection precedes the HTTP request")\n'
          '                tls.confirmNativeCertificateRejection() // Only after the unchanged native witness '
@@ -206,7 +206,7 @@ LITERALS = ({'new': 'import java.net.InetAddress\nimport java.net.SocketExceptio
          'rejection precedes the HTTP request")\n'
          '\n'
          '                load(DesktopTlsStage.Recovery)\n',
-  'path': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt'},
+  'path': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt'},
  {'new': "'00698c638a729549c890240b000e64cbd88be9f6ac32d4ca067b304b1443187c'",
   'old': "'d6351562894951442fec8258dc95452251530e6df10d04c3e106f535a1391696'",
   'path': 'scripts/ci/desktop_security_plan.py'},
@@ -260,7 +260,7 @@ OBSERVED_PREFIX = (
 OBSERVED_CALLER = (
     ("sun.security.ssl.SSLSocketImpl", "startHandshake"),
     ("sun.security.ssl.SSLSocketImpl", "startHandshake"),
-    ("com.mohamedrejeb.calf.ui.web.OwnedDesktopTlsFixture$Endpoint", "respond"),
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.OwnedDesktopTlsFixture$Endpoint", "respond"),
 )
 OBSERVED_FRAMES = OBSERVED_PREFIX + (("sun.security.ssl.SSLHandshake", "produce"),) + OBSERVED_CALLER
 

@@ -18,7 +18,7 @@ import test_ios_webview_lifecycle_focus as webview_fixture
 
 class IosWebViewNativeIdentityTests(unittest.TestCase):
     def test_native_callbacks_match_the_retained_objc_owner_not_a_kotlin_wrapper(self):
-        source = (lt.ROOT / "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.ios.kt").read_text()
+        source = (lt.ROOT / "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt").read_text()
         self.assertIn("hasSameNativeWebView", source,
                       "KVO/delegate ownership cannot depend on referential equality of Objective-C wrappers")
         self.assertNotIn("this.webView !== webView", source)
@@ -26,10 +26,10 @@ class IosWebViewNativeIdentityTests(unittest.TestCase):
         self.assertNotIn("webView !== view", source)
 
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "ios", only_modules=("calf-webview",), focus=lt.IOS_WEBVIEW_RECOVERY_FOCUS)
+        return lt.plan(root, "ios", only_modules=("nativecmpkit-webview",), focus=lt.IOS_WEBVIEW_RECOVERY_FOCUS)
 
     def test_identity_compares_live_native_pointers_and_nulls_never_form_a_lease(self):
-        source = (lt.ROOT / "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/NativeWebViewIdentity.ios.kt").read_text()
+        source = (lt.ROOT / "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/NativeWebViewIdentity.ios.kt").read_text()
         self.assertIn("first != null && second != null && first.objcPtr() == second.objcPtr()", source)
         self.assertNotIn("first == second", source)
         self.assertNotIn("first === second", source)
@@ -37,7 +37,7 @@ class IosWebViewNativeIdentityTests(unittest.TestCase):
 
     def test_recovery_runs_six_failed_cases_and_one_new_bridge_case_not_four_accepted_hosts(self):
         row, = matrix.matrix("ios-webview-recovery")["include"]
-        self.assertEqual(("ios-iphone", "calf-webview", lt.IOS_WEBVIEW_RECOVERY_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-webview", lt.IOS_WEBVIEW_RECOVERY_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan()
         selected, = plan["expected"]
@@ -48,20 +48,20 @@ class IosWebViewNativeIdentityTests(unittest.TestCase):
         self.assertNotIn("NativeWebViewApplicationHostTest", selected["test_filter"])
         command = lt.gradle_command("ios", plan, simulator=runtime_fixture.DEVICE)
         self.assertEqual(7, command.count("--tests"))
-        self.assertEqual(":calf-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
+        self.assertEqual(":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
 
     def test_original_ten_case_profile_and_unfiltered_fourteen_case_contract_are_retained(self):
-        original = lt.plan(lt.ROOT, "ios", only_modules=("calf-webview",), focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)
+        original = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-webview",), focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)
         self.assertEqual(10, len(original["expected"][0]["required_testcases"]))
-        full = lt.plan(lt.ROOT, "ios", only_modules=("calf-webview",))
+        full = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-webview",))
         self.assertNotIn("test_filter", full["expected"][0])
         self.assertEqual(14, sum(len(g["methods"]) for g in lt.IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS))
         self.assertNotIn("publish", " ".join(lt.gradle_command("ios", self.plan(), simulator=runtime_fixture.DEVICE)))
 
     def test_real_cli_transports_exact_recovery_and_native_registry_identities(self):
         command = [lt.sys.executable, "-B", str(lt.ROOT / "scripts/ci/library_tests.py"), "plan", "--suite", "ios",
-                   "--module", "calf-webview", "--focus", lt.IOS_WEBVIEW_RECOVERY_FOCUS]
+                   "--module", "nativecmpkit-webview", "--focus", lt.IOS_WEBVIEW_RECOVERY_FOCUS]
         result = subprocess.run(command, capture_output=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(self.plan(), json.loads(result.stdout))
@@ -73,10 +73,10 @@ class IosWebViewNativeIdentityTests(unittest.TestCase):
                 app.application_test_focus(sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + ",".join(changed)])
 
     def test_unrelated_suites_owners_or_changed_filter_task_inventory_cannot_use_recovery(self):
-        for suite, modules in (("ios", ("calf-ui",)), ("ios", None), ("desktop", ("calf-webview",)),
-                               ("android-device", ("calf-webview",)), ("js", ("calf-webview",))):
+        for suite, modules in (("ios", ("nativecmpkit-ui",)), ("ios", None), ("desktop", ("nativecmpkit-webview",)),
+                               ("android-device", ("nativecmpkit-webview",)), ("js", ("nativecmpkit-webview",))):
             with self.assertRaises(ValueError): lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.IOS_WEBVIEW_RECOVERY_FOCUS)
-        for key, value in (("task", ":calf-webview:publish"), ("test_filter", "*"), ("required_testcases", [])):
+        for key, value in (("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"), ("required_testcases", [])):
             plan = self.plan(); plan["expected"][0][key] = value
             with self.assertRaises(ValueError): lt.validate_test_focus(plan)
 

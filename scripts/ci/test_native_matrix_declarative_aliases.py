@@ -83,7 +83,7 @@ class NativeMatrixDeclarativeAliasTests(unittest.TestCase):
         actual = aliases()
         for alias in actual:
             bad = deepcopy(actual)
-            bad[alias] = SimpleNamespace(PROFILE="unqualified", MODULE="calf-share", FOCUS="wrong")
+            bad[alias] = SimpleNamespace(PROFILE="unqualified", MODULE="nativecmpkit-share", FOCUS="wrong")
             with self.subTest(alias=alias), self.assertRaises(AssertionError):
                 reader.literal_metadata(ast.parse(alias + ".PROFILE", mode="eval").body, bad)
         for invalid in (None, b"not text", "", "x" * (reader.MAX_DECLARATION_BYTES + 1)):
@@ -95,8 +95,8 @@ class NativeMatrixDeclarativeAliasTests(unittest.TestCase):
     def test_duplicate_literal_and_aliased_mapping_keys_never_silently_collapse(self):
         actual = aliases()
         for expression in ('{"same": 1, "same": 2}',
-                           '{calendar_native.PROFILE: "calf-permissions/calendar", "permissions-ios-calendar-configuration": "calf-share"}',
-                           '{macos_share_native.PROFILE: "calf-share", macos_share_native.PROFILE: "calf-ui"}'):
+                           '{calendar_native.PROFILE: "nativecmpkit-permissions/calendar", "permissions-ios-calendar-configuration": "nativecmpkit-share"}',
+                           '{macos_share_native.PROFILE: "nativecmpkit-share", macos_share_native.PROFILE: "nativecmpkit-ui"}'):
             with self.subTest(expression=expression), self.assertRaises(AssertionError):
                 reader.literal_metadata(ast.parse(expression, mode="eval").body, actual)
 

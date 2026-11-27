@@ -43,10 +43,10 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwayland-dev
       - name: File-picker native checks
-        working-directory: calf-file-picker/native
+        working-directory: nativecmpkit-file-picker/native
         run: cargo test --locked
       - name: Share native checks
-        working-directory: calf-share/native
+        working-directory: nativecmpkit-share/native
         run: cargo test --locked
 
   native-lock-tooling:

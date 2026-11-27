@@ -46,7 +46,7 @@ class IosImageMemoryFocusTests(unittest.TestCase):
         f = receipts.IosApplicationReceipts("test_exact_app_protocol_xml_runtime_binary_and_cleanup_are_required")
         self.addCleanup(f.doCleanups); f.setUp()
         f.write(lt.IOS_IMAGE_MEMORY_SOURCE, (lt.ROOT / lt.IOS_IMAGE_MEMORY_SOURCE).read_bytes())
-        f.plan = lt.plan(f.root, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        f.plan = lt.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         f.cases = [{"classname": lt.IOS_IMAGE_MEMORY_CLASS, "name": name, "status": "passed"}
                    for name in lt.IOS_IMAGE_MEMORY_METHODS]
         f.document["explicit_test_focus"] = lt.IOS_IMAGE_MEMORY_FOCUS
@@ -71,9 +71,9 @@ class IosImageMemoryFocusTests(unittest.TestCase):
     def test_one_host_selects_only_new_memory_cases_not_the_nine_accepted_cases(self):
         row, = matrix.matrix("ios-image-memory")["include"]
         self.assertEqual("ios-iphone", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(lt.IOS_IMAGE_MEMORY_FOCUS, row["test-focus"])
-        plan = lt.plan(lt.ROOT, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        plan = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         self.assertEqual(3, len(plan["expected"][0]["required_testcases"]))
         self.assertFalse(plan["complete_suite_requested"])
         selectors = lt.ui_application_focus_filter(lt.IOS_IMAGE_MEMORY_FOCUS).split(",")
@@ -83,7 +83,7 @@ class IosImageMemoryFocusTests(unittest.TestCase):
             self.assertEqual(lt.IOS_IMAGE_MEMORY_FOCUS, app.application_test_focus(
                 sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + ",".join(values)]))
         result = subprocess.run([lt.sys.executable, "-B", str(lt.ROOT / "scripts/ci/library_tests.py"),
-                                 "plan", "--suite", "ios", "--module", "calf-ui",
+                                 "plan", "--suite", "ios", "--module", "nativecmpkit-ui",
                                  "--focus", lt.IOS_IMAGE_MEMORY_FOCUS], capture_output=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(plan, json.loads(result.stdout))
@@ -91,14 +91,14 @@ class IosImageMemoryFocusTests(unittest.TestCase):
         self.assertEqual(360, app.application_timeout_seconds(lt.IOS_IMAGE_MEMORY_FOCUS))
 
     def test_real_memory_plan_owns_diagnostics_without_changing_other_commands(self):
-        plan = lt.plan(lt.ROOT, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        plan = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         command = lt.gradle_command("ios", plan, "11111111-1111-1111-1111-111111111111")
         self.assertIn("-PnativecmpkitImageMemoryDiagnostics=true", command)
         self.assertEqual(3, command.count("--tests"))
-        other = lt.plan(lt.ROOT, "ios", only_modules=("calf-ui",), focus=lt.IOS_SLIDER_TAP_FOCUS)
+        other = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_SLIDER_TAP_FOCUS)
         self.assertNotIn("-PnativecmpkitImageMemoryDiagnostics=true", lt.gradle_command(
             "ios", other, "11111111-1111-1111-1111-111111111111"))
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.IOS_IMAGE_MEMORY_FOCUS)
 
@@ -150,7 +150,7 @@ class IosImageMemoryFocusTests(unittest.TestCase):
                          "CFStringCompare", "CGColorSpaceGetName", "asSkiaBitmap().close()",
                          "assertBalanced()", "4096", "NATIVECMPKIT_IMAGE_PROFILE"):
             self.assertIn(required, source)
-        build = (lt.ROOT / "calf-ui/build.gradle.kts").read_text()
+        build = (lt.ROOT / "nativecmpkit-ui/build.gradle.kts").read_text()
         self.assertIn('binaryOption("runtimeAssertionsMode", "panic")', build)
         self.assertIn('binaryOption("checkStateAtExternalCalls", "true")', build)
         self.assertIn('nativecmpkitImageMemoryDiagnostics', build)

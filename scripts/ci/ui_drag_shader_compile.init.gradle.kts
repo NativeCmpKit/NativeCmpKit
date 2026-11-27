@@ -9,11 +9,11 @@ import java.security.MessageDigest
 gradle.projectsEvaluated {
     // The init also reaches included plugin builds. They do not own this module
     // or its requested task, so only the actual root may perform admission.
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
-    check(gradle.startParameter.taskNames == listOf(":calf-ui:compileTestKotlinIosSimulatorArm64")) {
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
+    check(gradle.startParameter.taskNames == listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64")) {
         "Drag/shader compiler accepts only its exact test KLIB task; no native/full/publish task"
     }
-    val prefix = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/"
+    val prefix = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/"
     val paths = listOf(
         prefix + "utils/DampedDragLifecycleRegressionTest.kt",
         prefix + "utils/InteractiveHighlightResourceLifecycleTest.kt",

@@ -18,15 +18,15 @@ kotlin {
 
     sourceSets.jvmMain.dependencies {
         implementation(projects.sample.common)
-        implementation(projects.calfFilePicker)
-        implementation(projects.calfShare)
+        implementation(projects.nativecmpkitFilePicker)
+        implementation(projects.nativecmpkitShare)
         implementation(compose.desktop.currentOs)
     }
 }
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "io.github.apdelrahman1911.nativecmpkit.sample.desktop.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "nativeCmpkit"

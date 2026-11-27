@@ -29,7 +29,7 @@ SUPPORTED_PLATFORMS = {
     "macos-arm64": {"rustTarget": "aarch64-apple-darwin", "format": "macho", "machine": 0x0100000C},
     "windows-x64": {"rustTarget": "x86_64-pc-windows-msvc", "format": "pe", "machine": 0x8664},
 }
-MODULE_STEMS = {"calf-file-picker": "calf_filepicker_native", "calf-share": "calf_share_native"}
+MODULE_STEMS = {"nativecmpkit-file-picker": "nativecmpkit_filepicker_native", "nativecmpkit-share": "nativecmpkit_share_native"}
 SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 GIT_SHA = re.compile(r"[0-9a-f]{40}\Z")
 VERSION = re.compile(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?\Z")

@@ -14,11 +14,11 @@ class DateTransactionFocusTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-ui",\n)\n')
-        self.write("calf-ui/build.gradle.kts", "// synthetic build, never executed\n")
-        self.write("calf-ui/src/commonTest/kotlin/Unrelated.kt", "// retained, not requested\n")
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-ui",\n)\n')
+        self.write("nativecmpkit-ui/build.gradle.kts", "// synthetic build, never executed\n")
+        self.write("nativecmpkit-ui/src/commonTest/kotlin/Unrelated.kt", "// retained, not requested\n")
         self.write(r.DATE_TRANSACTION_SCENARIOS_SOURCE, "// synthetic scenario declarations\n")
-        self.source = "package com.mohamedrejeb.calf.ui.datepicker\nclass CompactDateTransactionAcceptanceTest {\n" + \
+        self.source = "package io.github.apdelrahman1911.nativecmpkit.ui.datepicker\nclass CompactDateTransactionAcceptanceTest {\n" + \
             "\n".join("@Test fun " + method + "(): TestResult = fake()" for method in r.DATE_TRANSACTION_METHODS) + "\n}\n"
         for source in set(r.date_transaction_source(suite) for suite in r.DATE_TRANSACTION_SOURCE_SETS):
             self.write(source, self.source)
@@ -29,7 +29,7 @@ class DateTransactionFocusTests(unittest.TestCase):
         path.write_text(payload)
 
     def plan(self, suite):
-        return r.plan(self.root, suite, only_modules=("calf-ui",), focus=r.DATE_TRANSACTION_FOCUS)
+        return r.plan(self.root, suite, only_modules=("nativecmpkit-ui",), focus=r.DATE_TRANSACTION_FOCUS)
 
     def cases(self, suite):
         prefix = r.SUITES[suite][0] + "." if suite in {"js", "wasm"} else ""
@@ -57,25 +57,25 @@ class DateTransactionFocusTests(unittest.TestCase):
                 self.assertTrue(r.validate_test_focus(plan))
                 self.assertFalse(plan["complete_suite_requested"])
                 self.assertEqual(r.date_transaction_identities(), plan["expected"][0]["required_testcases"])
-                self.assertIn("calf-ui/src/commonTest/kotlin/Unrelated.kt", plan["expected"][0]["test_source_files"])
+                self.assertIn("nativecmpkit-ui/src/commonTest/kotlin/Unrelated.kt", plan["expected"][0]["test_source_files"])
 
     def test_host_and_browser_use_KGP_filters_and_device_uses_instrumentation_argument(self):
         for suite in ("desktop", "android-host", "js", "wasm"):
             with self.subTest(suite=suite):
                 command = r.gradle_command(suite, self.plan(suite), root=self.root)
-                self.assertEqual([":calf-ui:" + r.SUITES[suite][0], "--tests", r.DATE_TRANSACTION_CLASS], command[-3:])
+                self.assertEqual([":nativecmpkit-ui:" + r.SUITES[suite][0], "--tests", r.DATE_TRANSACTION_CLASS], command[-3:])
                 self.assertEqual(1, command.count("--tests"))
         command = r.gradle_command("android-device", self.plan("android-device"), root=self.root,
                                    android_serial="emulator-5554")
         self.assertNotIn("--tests", command)
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + r.DATE_TRANSACTION_CLASS, command)
-        self.assertEqual(":calf-ui:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-ui:connectedAndroidDeviceTest", command[-1])
 
     def test_unreviewed_suite_module_and_freeform_filters_are_rejected(self):
-        for suite, modules, focus in (("ios", ("calf-ui",), r.DATE_TRANSACTION_FOCUS),
-                                     ("desktop", ("calf-share",), r.DATE_TRANSACTION_FOCUS),
-                                     ("desktop", ("calf-ui", "calf-io"), r.DATE_TRANSACTION_FOCUS),
-                                     ("js", ("calf-ui",), "arbitrary.*")):
+        for suite, modules, focus in (("ios", ("nativecmpkit-ui",), r.DATE_TRANSACTION_FOCUS),
+                                     ("desktop", ("nativecmpkit-share",), r.DATE_TRANSACTION_FOCUS),
+                                     ("desktop", ("nativecmpkit-ui", "nativecmpkit-io"), r.DATE_TRANSACTION_FOCUS),
+                                     ("js", ("nativecmpkit-ui",), "arbitrary.*")):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
 
@@ -118,7 +118,7 @@ class DateTransactionFocusTests(unittest.TestCase):
                 self.assertTrue(self.collect("wasm", cases)["errors"])
 
     def test_full_suite_requests_remain_unfiltered(self):
-        plan = r.plan(self.root, "desktop", only_modules=("calf-ui",))
+        plan = r.plan(self.root, "desktop", only_modules=("nativecmpkit-ui",))
         self.assertFalse(r.validate_test_focus(plan))
         self.assertNotIn("--tests", r.gradle_command("desktop", plan, root=self.root))
 

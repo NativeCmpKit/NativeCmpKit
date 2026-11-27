@@ -1,0 +1,11 @@
+package io.github.apdelrahman1911.nativecmpkit.navigation
+
+import androidx.compose.runtime.Composable
+
+@Composable
+actual fun AndroidBackHandler(
+    enabled: Boolean,
+    onBack: () -> Unit
+) {
+    // This is a no-op on desktop
+}

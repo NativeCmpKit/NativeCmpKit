@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 import apple_image_profile as p
 import test_apple_image_profile as fixtures
 
-NAMESPACE = "com.mohamedrejeb.calf.ui.utils"
+NAMESPACE = "io.github.apdelrahman1911.nativecmpkit.ui.utils"
 CONVERSION = "kfun:" + NAMESPACE + ".ImageBitmap.toUIImage(){}"
 WORKLOAD = ("kfun:" + NAMESPACE + ".UIImageMemoryDiagnosticsTest#"
             "actualLibraryConversionsRemainBoundedDuringOwnedAllocationProfile(){}")

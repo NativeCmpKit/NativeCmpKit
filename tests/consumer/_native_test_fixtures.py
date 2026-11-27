@@ -2,7 +2,7 @@
 from verify_artifacts import NATIVE_CRATE_NAMES, NATIVE_METADATA_SCOPE
 
 
-def metadata_fixture(module="calf-file-picker", checksum="3" * 64,
+def metadata_fixture(module="nativecmpkit-file-picker", checksum="3" * 64,
                      manifest_hash="1" * 64, lock_hash="2" * 64):
     root = NATIVE_CRATE_NAMES[module]
     return {

@@ -24,18 +24,18 @@ body:
     id: module
     attributes:
       label: Module
-      description: Which nativeCmpkit source module should this feature be added to? Existing calf-* paths are retained.
+      description: Which nativeCmpkit source module should this feature be added to? Existing nativecmpkit-* paths are retained.
       options:
-        - calf-ui
-        - calf-file-picker
-        - calf-file-picker-coil
-        - calf-io
-        - calf-camera-picker
-        - calf-share
-        - calf-webview
-        - calf-permissions
-        - calf-cupertino-icons
-        - calf-core
+        - nativecmpkit-ui
+        - nativecmpkit-file-picker
+        - nativecmpkit-file-picker-coil
+        - nativecmpkit-io
+        - nativecmpkit-camera-picker
+        - nativecmpkit-share
+        - nativecmpkit-webview
+        - nativecmpkit-permissions
+        - nativecmpkit-cupertino-icons
+        - nativecmpkit-core
         - other
     validations:
       required: true
@@ -45,7 +45,7 @@ body:
     attributes:
       label: Specify Other Module (if you selected "other" above)
       description: Only fill this if you chose "other" in the Module dropdown.
-      placeholder: e.g., calf-geo, calf-navigation
+      placeholder: e.g., nativecmpkit-geo, nativecmpkit-navigation
 
   - type: dropdown
     id: target

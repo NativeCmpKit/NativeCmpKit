@@ -36,7 +36,7 @@ OPTIONAL_LIBRARIES = frozenset({"androidx.window.extensions", "androidx.window.s
 SIGNER_REVISION = "36.0.0"
 MAX_HOST_BYTES = 1024**2
 FLAVORS = tuple(dict.fromkeys(row.flavor for row in storage.ROWS))
-KOTLIN = MODULE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/"
+KOTLIN = MODULE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/"
 HELPER_KOTLIN = FIXTURE + "/src/main/kotlin/" + PACKAGE.replace(".", "/") + "/"
 REPORTER_NAMES = ("AndroidStorageCompatibilityTest", "OwnedStorageProbe", "StorageTestDocumentsProvider")
 HELPER_NAMES = ("StorageProbe", "StorageProbeIdentity", "StorageProbeControlProvider")
@@ -241,7 +241,7 @@ def validate_reporter_manifest(payload: bytes) -> dict:
     require(app.get(ANDROID + "debuggable") == "true" and app.get(ANDROID + "process") is None and
             app.get(ANDROID + "permission") is None, "Wrong reporter debug/process/permission boundary")
     providers = [node for node in app.findall("provider") if node.get(ANDROID + "name") ==
-                 "com.mohamedrejeb.calf.permissions.StorageTestDocumentsProvider"]
+                 "io.github.apdelrahman1911.nativecmpkit.permissions.StorageTestDocumentsProvider"]
     require(len(providers) == 1, "Missing or duplicate owned reporter document provider")
     provider = providers[0]
     require(provider.get(ANDROID + "authorities") == REPORTER + ".storage-documents" and
@@ -289,7 +289,7 @@ def source_contract(root: Path) -> dict:
     app = reporter.find("application")
     require(app is not None and app.get(ANDROID + "permission") is None and app.get(ANDROID + "process") is None and
             len(app) == 1 and app[0].tag == "provider" and app[0].get(ANDROID + "name") ==
-            "com.mohamedrejeb.calf.permissions.StorageTestDocumentsProvider" and
+            "io.github.apdelrahman1911.nativecmpkit.permissions.StorageTestDocumentsProvider" and
             app[0].get(ANDROID + "authorities") == "${applicationId}.storage-documents" and
             app[0].get(ANDROID + "permission") == "android.permission.MANAGE_DOCUMENTS" and
             app[0].get(ANDROID + "readPermission") is None and app[0].get(ANDROID + "writePermission") is None and
@@ -303,7 +303,7 @@ def source_contract(root: Path) -> dict:
                 '"legacy28" to 28', '"legacyTarget28" to 28', '"legacy29" to 29', '"scoped29" to 29',
                 '"modern" to 35', '"allFiles" to 35', 'implementation("verification.nativecmpkit:unpublished-permissions-core")')) and
             'from(files("../../../gradle/libs.versions.toml"))' in texts[FIXTURE + "/settings.gradle.kts"] and
-            'project(":calf-permissions:calf-permissions-core")' in texts[FIXTURE + "/settings.gradle.kts"] and
+            'project(":nativecmpkit-permissions:nativecmpkit-permissions-core")' in texts[FIXTURE + "/settings.gradle.kts"] and
             'android-minSdk = "23"' in texts['gradle/libs.versions.toml'] and
             'android-compileSdk = "37"' in texts['gradle/libs.versions.toml'], "Exact storage build/source substitution/SDK declarations changed")
     test = texts[KOTLIN + "AndroidStorageCompatibilityTest.kt"]

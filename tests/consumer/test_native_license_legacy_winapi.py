@@ -37,7 +37,7 @@ class LegacyWinapiLicenseTest(unittest.TestCase):
         self.catalog = self.root / "public-catalog"
         self.entry = self.catalog / (NAMES[0] + "-0.4.0")
         shutil.copytree(ROOT / supplements.CATALOG_RELATIVE / self.entry.name, self.entry)
-        self.metadata_bytes = (ORIGINALS / "metadata-current606/calf-file-picker.json").read_bytes()
+        self.metadata_bytes = (ORIGINALS / "metadata-current606/nativecmpkit-file-picker.json").read_bytes()
         self.metadata = json.loads(self.metadata_bytes)
         self.packages = {package["name"]: package for package in self.metadata["packages"]}
         self.package = copy.deepcopy(self.packages[NAMES[0]])
@@ -203,9 +203,9 @@ class LegacyWinapiLicenseTest(unittest.TestCase):
         self.assertTrue(any(gap.get("package") == NAMES[0] + "-0.4.0" for gap in report["gaps"]))
 
     def notice_fixture(self):
-        prefix = "META-INF/nativecmpkit/native-dependencies/calf-file-picker/"
+        prefix = "META-INF/nativecmpkit/native-dependencies/nativecmpkit-file-picker/"
         payloads = {prefix + "metadata.json": self.metadata_bytes}
-        report = {"schema_version": 1, "module": "calf-file-picker",
+        report = {"schema_version": 1, "module": "nativecmpkit-file-picker",
             "metadata_sha256": hashlib.sha256(self.metadata_bytes).hexdigest(),
             "cargo_toml_sha256": self.metadata["cargo_toml_sha256"],
             "cargo_lock_sha256": self.metadata["cargo_lock_sha256"],
@@ -234,7 +234,7 @@ class LegacyWinapiLicenseTest(unittest.TestCase):
         inspector = gate.ArtifactVerifier(ROOT, self.root / "inert-repository", "0.1.0-preview.1",
             modules=["nativecmpkit-file-picker"], targets=["metadata"], native_platforms=["linux-x64"])
         with zipfile.ZipFile(container) as archive:
-            inspector.native_notices(archive, set(archive.namelist()), "calf-file-picker", "legacy-fixture")
+            inspector.native_notices(archive, set(archive.namelist()), "nativecmpkit-file-picker", "legacy-fixture")
         return inspector.checks
 
     def test_notice_inspector_independently_compares_real_legacy_proofs_not_full_consumer(self):

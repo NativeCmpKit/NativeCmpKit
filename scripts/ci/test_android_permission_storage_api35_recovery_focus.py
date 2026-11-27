@@ -15,7 +15,7 @@ TREE = Path(os.environ.get("API35_RECOVERY_FOCUS_TREE", Path(__file__).resolve()
 METADATA = Path(os.environ.get("API35_RECOVERY_FOCUS_METADATA", TREE / "scripts/ci")).resolve()
 PROFILE = "android-permission-storage-api35-recovery"
 ROUTES = ("android-permission-demo", "android-storage-api35-normal", "android-storage-api35-all-files")
-MODULE = "calf-permissions/core"
+MODULE = "nativecmpkit-permissions/core"
 SDK = "cmdline-tools;23.0 platforms;android-37.0 build-tools;36.0.0 emulator system-images;android-35;google_apis;x86_64"
 WORKFLOW = (TREE / ".github/workflows/gradle.yml").read_text()
 MATRIX_SOURCE = (TREE / "scripts/ci/workflow_matrix.py").read_text()
@@ -98,11 +98,11 @@ class Api35PermissionStorageRecoveryFocusTests(unittest.TestCase):
         cases = [(permission["classname"], method) for method in permission["methods"]]
         cases += [(storage.CLASS, storage.row_for(name).method) for name in ROUTES[1:]]
         self.assertEqual(cases, [
-            ("com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest", "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant"),
-            ("com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest", "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest"),
-            ("com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest", "pickersReadRealDocumentsAndImagesWithoutAllFilesOrSmsPermissions"),
-            ("com.mohamedrejeb.calf.permissions.AndroidStorageCompatibilityTest", "modernAppScopedAndSafDoNotNeedAllFiles"),
-            ("com.mohamedrejeb.calf.permissions.AndroidStorageCompatibilityTest", "modernManifestAloneDoesNotGrantAllFilesAndOwnedSettingRestores"),
+            ("io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest", "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant"),
+            ("io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest", "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest"),
+            ("io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest", "pickersReadRealDocumentsAndImagesWithoutAllFilesOrSmsPermissions"),
+            ("io.github.apdelrahman1911.nativecmpkit.permissions.AndroidStorageCompatibilityTest", "modernAppScopedAndSafDoNotNeedAllFiles"),
+            ("io.github.apdelrahman1911.nativecmpkit.permissions.AndroidStorageCompatibilityTest", "modernManifestAloneDoesNotGrantAllFilesAndOwnedSettingRestores"),
         ])
         self.assertEqual(len(cases), 5)
         self.assertEqual(len(set(cases)), 5)

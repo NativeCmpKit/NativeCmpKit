@@ -109,7 +109,7 @@ class NamedSystemButtonRenderingControls(unittest.TestCase):
 class NamedExternalFiniteSelectionControls(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.plan = lt.plan(ROOT, "android-device", only_modules=("calf-io",), focus=lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)
+        cls.plan = lt.plan(ROOT, "android-device", only_modules=("nativecmpkit-io",), focus=lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)
 
     def test_single_original_external_method_and_canonical_pair_remain_distinct(self):
         row = self.plan["expected"][0]
@@ -137,9 +137,9 @@ class NamedExternalFiniteSelectionControls(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     lt.validate_test_focus(plan)
 
-    def test_controller_enforces_API35_only_calf_io_without_helper_or_grant_bootstrap(self):
-        device.validate_api_selection(35, ("calf-io",), lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)
-        for api, modules in [(34, ("calf-io",)), (35, None), (35, ("calf-io", "calf-share")), (True, ("calf-io",))]:
+    def test_controller_enforces_API35_only_nativecmpkit_io_without_helper_or_grant_bootstrap(self):
+        device.validate_api_selection(35, ("nativecmpkit-io",), lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)
+        for api, modules in [(34, ("nativecmpkit-io",)), (35, None), (35, ("nativecmpkit-io", "nativecmpkit-share")), (True, ("nativecmpkit-io",))]:
             with self.subTest(api=api, modules=modules):
                 with self.assertRaises(ValueError):
                     device.validate_api_selection(api, modules, lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)
@@ -149,7 +149,7 @@ class NamedExternalFiniteSelectionControls(unittest.TestCase):
     def test_actual_Gradle_argv_has_one_method_not_class_and_one_original_task(self):
         argv = lt.gradle_command("android-device", self.plan, android_serial="emulator-5588")
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + self.plan["expected"][0]["test_filter"], argv)
-        self.assertEqual(1, argv.count(":calf-io:connectedAndroidDeviceTest"))
+        self.assertEqual(1, argv.count(":nativecmpkit-io:connectedAndroidDeviceTest"))
         self.assertNotIn("--tests", argv)
         with self.assertRaises(ValueError):
             lt.android_io_named_system_identities("unknown-or-broad")
@@ -158,7 +158,7 @@ class NamedExternalFiniteSelectionControls(unittest.TestCase):
         rows = matrix.matrix(lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS)["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual({"slot": "android-device-api35", "suite": "android-device", "runner": "ubuntu-24.04",
-                          "arch": "x64", "emulator-api": "35", "test-modules": "calf-io",
+                          "arch": "x64", "emulator-api": "35", "test-modules": "nativecmpkit-io",
                           "test-focus": lt.ANDROID_IO_NAMED_EXTERNAL_FOCUS},
                          {key: rows[0][key] for key in ["slot", "suite", "runner", "arch", "emulator-api", "test-modules", "test-focus"]})
         workflow = (ROOT / ".github/workflows/gradle.yml").read_text()
@@ -181,7 +181,7 @@ class NamedExternalFiniteSelectionControls(unittest.TestCase):
                 path.write_bytes(ET.tostring(suite))
                 now = time.time_ns()
                 return lt.collect_reports(root, self.plan, now - 1_000_000_000, now + 1_000_000_000,
-                                          Counter({":calf-io:connectedAndroidDeviceTest": 1}), host_system="Linux")
+                                          Counter({":nativecmpkit-io:connectedAndroidDeviceTest": 1}), host_system="Linux")
             accepted = report(lt.ANDROID_IO_NAMED_SYSTEM_METHODS[:1])
             self.assertEqual(1, accepted["modules"][0]["passed"])
             self.assertFalse(accepted["errors"])

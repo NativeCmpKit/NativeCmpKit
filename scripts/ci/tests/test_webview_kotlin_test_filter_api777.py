@@ -11,15 +11,15 @@ import unittest
 import cookie_ci668_outer_source_projection as outer
 
 ROOT = Path(__file__).resolve().parents[3]
-BUILD = "calf-webview/build.gradle.kts"
+BUILD = "nativecmpkit-webview/build.gradle.kts"
 BEFORE = (9474, "01801ef71db7b6b404a663eaf3a4585745b7e9fa8decad81dcb601f2b11d66c8")
 AFTER = (9466, "8e369014dc60efb7a91d7fffe61e6d431bf573dc560ceda5d519fc32b2f19822")
-IOS_BEFORE = b'    filter { excludeTestsMatching("com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*") }\n'
-IOS_AFTER = b'    filter.excludeTestsMatching("com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*")\n'
-JS_BEFORE = b'    filter { excludeTestsMatching("com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*") }\n'
-JS_AFTER = b'    filter.excludeTestsMatching("com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*")\n'
+IOS_BEFORE = b'    filter { excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*") }\n'
+IOS_AFTER = b'    filter.excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*")\n'
+JS_BEFORE = b'    filter { excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*") }\n'
+JS_AFTER = b'    filter.excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*")\n'
 FRAGMENTS = ((IOS_BEFORE, IOS_AFTER), (JS_BEFORE, JS_AFTER))
-JVM_ACTION = b'    filter { excludeTestsMatching("com.mohamedrejeb.calf.ui.web.DesktopCookieWireAcceptanceTest.*") }\n'
+JVM_ACTION = b'    filter { excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieWireAcceptanceTest.*") }\n'
 
 
 def _identity(payload):
@@ -49,7 +49,7 @@ class WebViewKotlinTestFilterApi777Tests(unittest.TestCase):
         self.assertEqual(1, payload.count(JVM_ACTION))
         # Both original desktop matching headers remain; neither material fragment touches them.
         self.assertEqual(2, payload.count(b'tasks.withType<Test>().matching { it.name == "desktopTest" }'))
-        self.assertEqual(1, payload.count(b'"com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*"'))
+        self.assertEqual(1, payload.count(b'"io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*"'))
         self.assertNotIn(b"excludePatterns.add", payload)
 
     def test_js_inherited_filter_property_preserves_exact_browser_class_and_other_tests(self):
@@ -58,7 +58,7 @@ class WebViewKotlinTestFilterApi777Tests(unittest.TestCase):
         js = b"tasks.withType<KotlinJsTest>().configureEach {\n" + JS_AFTER + b"}\n"
         self.assertEqual(1, payload.count(js))
         self.assertEqual(0, payload.count(JS_BEFORE))
-        self.assertEqual(1, payload.count(b'"com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*"'))
+        self.assertEqual(1, payload.count(b'"io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*"'))
         self.assertEqual(1, payload.count(JVM_ACTION))
         self.assertIn(b'cookieCommonJdkFocus == "common-jdk4"', payload)
         for forbidden in (b"@Ignore", b"enabled = false", b"setSrcDirs", b"excludePatterns.add"):

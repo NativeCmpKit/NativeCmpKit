@@ -40,7 +40,7 @@ Generated from every audit finding plus actionable historical requests. See [roa
 | 27 | **UI-020** — Native bar measurement permanently stops after several stable frames | High | M | — | open | [#32](https://github.com/Apdelrahman1911/nativeCmpkit/issues/32) |
 | 28 | **UI-021** — Native bars live outside the Compose layout/transition hierarchy | High | L | UI-020 | open | [#33](https://github.com/Apdelrahman1911/nativeCmpkit/issues/33) |
 | 29 | **UI-027** — Liquid Glass slider retains stale enabled, range, geometry and direction inside drag callbacks | High | M | — | closed | [#34](https://github.com/Apdelrahman1911/nativeCmpkit/issues/34) |
-| 30 | **UI-040** — calf-ui test coverage omits all native managers and most interactive control families | High | L | — | open | [#37](https://github.com/Apdelrahman1911/nativeCmpkit/issues/37) |
+| 30 | **UI-040** — nativecmpkit-ui test coverage omits all native managers and most interactive control families | High | L | — | open | [#37](https://github.com/Apdelrahman1911/nativeCmpkit/issues/37) |
 | 31 | **BUILD-004** — Packaged native platform matrix omits Linux arm64 and Windows arm64 paths expected by loaders | Medium | L | BUILD-003 | open | [#38](https://github.com/Apdelrahman1911/nativeCmpkit/issues/38) |
 | 32 | **BUILD-005** — Native release binaries have unlocked Rust dependencies and a floating compiler | Medium | M | — | closed | [#39](https://github.com/Apdelrahman1911/nativeCmpkit/issues/39) |
 | 33 | **BUILD-007** — Dependency and workflow trust is not reproducibly verified beyond the wrapper | Medium | L | — | open | [#40](https://github.com/Apdelrahman1911/nativeCmpkit/issues/40) |

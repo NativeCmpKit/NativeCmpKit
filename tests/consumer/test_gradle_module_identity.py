@@ -76,7 +76,7 @@ class GradleOwningComponentTest(RepositoryFixtureBase):
     def test_owning_coordinates_cannot_change_group_module_or_version(self):
         self.owning_fixture()
         original = self.read_metadata(self.TARGET_MODULE)
-        for key, value in [("group", "com.mohamedrejeb.calf"),
+        for key, value in [("group", "io.github.apdelrahman1911.nativecmpkit"),
                            ("module", "nativecmpkit-io"), ("version", "0.1.0-preview.2")]:
             with self.subTest(key=key):
                 target = json.loads(json.dumps(original))
@@ -114,7 +114,7 @@ class GradleOwningComponentTest(RepositoryFixtureBase):
     def test_owner_must_have_exact_direct_root_coordinates_and_attributes(self):
         self.owning_fixture()
         original = self.read_metadata(self.ROOT_MODULE)
-        mutations = [("group", "com.mohamedrejeb.calf"), ("module", self.TARGET_MODULE),
+        mutations = [("group", "io.github.apdelrahman1911.nativecmpkit"), ("module", self.TARGET_MODULE),
                      ("version", "0.1.0-preview.2"), ("url", "./self.module"),
                      ("attributes", {"org.gradle.status": "integration"})]
         for key, value in mutations:
@@ -127,7 +127,7 @@ class GradleOwningComponentTest(RepositoryFixtureBase):
     def test_owner_redirect_must_match_exact_target_coordinate_and_url(self):
         self.owning_fixture()
         original = self.read_metadata(self.ROOT_MODULE)
-        for key, value in [("group", "com.mohamedrejeb.calf"), ("module", "nativecmpkit-io-desktop"),
+        for key, value in [("group", "io.github.apdelrahman1911.nativecmpkit"), ("module", "nativecmpkit-io-desktop"),
                            ("version", "0.1.0-preview.2"), ("url", "https://example.invalid/target.module")]:
             with self.subTest(key=key):
                 root = json.loads(json.dumps(original))
@@ -177,12 +177,12 @@ class GradleOwningComponentTest(RepositoryFixtureBase):
         self.assertFalse(self.target_identity_passes())
 
     def test_unstaged_apple_redirects_still_require_independent_candidate_coordinates(self):
-        # A partial desktop build must not admit Calf-named Apple redirects just
+        # A partial desktop build must not admit NativeCmpKit-named Apple redirects just
         # because their native cinterop cannot execute on the producer's host.
         original = self.read_metadata(self.ROOT_MODULE)
         for target, suffix in (("iosArm64", "iosarm64"), ("iosSimulatorArm64", "iossimulatorarm64")):
             root = json.loads(json.dumps(original))
-            old = "calf-core-" + suffix
+            old = "nativecmpkit-core-" + suffix
             redirect = {"group": gate.GROUP, "module": old, "version": self.VERSION,
                         "url": f"../../{old}/{self.VERSION}/{old}-{self.VERSION}.module"}
             root["variants"].append({"name": target + "ApiElements-published",

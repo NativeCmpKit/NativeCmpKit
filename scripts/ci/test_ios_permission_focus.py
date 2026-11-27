@@ -28,7 +28,7 @@ class IOSPermissionFocusTests(unittest.TestCase):
         self.assertFalse(plan["complete_suite_requested"])
 
     def test_filters_cannot_escape_the_reviewed_native_scope_or_drop_a_method(self):
-        for suite, modules in (("desktop", (r.IOS_PERMISSION_MODULE,)), ("ios", ("calf-ui",))):
+        for suite, modules in (("desktop", (r.IOS_PERMISSION_MODULE,)), ("ios", ("nativecmpkit-ui",))):
             with self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PERMISSION_FOCUS)
         plan = copy.deepcopy(self.plan())
@@ -71,17 +71,17 @@ class IOSPermissionFocusTests(unittest.TestCase):
             for case in identities) + "</testsuite>").encode()
 
     def test_expected_native_identities_are_exact_without_changing_gradle_filter(self):
-        expected = [{"classname": "iosSimulatorArm64Test.com.mohamedrejeb.calf.permissions.IOSPublicPermissionFactoryTest",
+        expected = [{"classname": "iosSimulatorArm64Test.io.github.apdelrahman1911.nativecmpkit.permissions.IOSPublicPermissionFactoryTest",
                      "name": method + "[iosSimulatorArm64]"} for method in r.IOS_PERMISSION_METHODS]
         self.assertEqual(expected, r.ios_permission_identities())
-        self.assertEqual(["--tests", "com.mohamedrejeb.calf.permissions.IOSPublicPermissionFactoryTest"],
+        self.assertEqual(["--tests", "io.github.apdelrahman1911.nativecmpkit.permissions.IOSPublicPermissionFactoryTest"],
                          r.gradle_command("ios", self.plan(),
                                           simulator="00000000-0000-4000-8000-000000000001")[-2:])
 
     def test_held_actual_native_xml_passes_the_strict_collector_without_runtime_replay(self):
         report = r.ROOT / ("docs/development/evidence/permission-ios-important-20261028/"
                            "fixed001-attempt2/reports/TEST-iosSimulatorArm64Test."
-                           "com.mohamedrejeb.calf.permissions.IOSPublicPermissionFactoryTest.xml")
+                           "io.github.apdelrahman1911.nativecmpkit.permissions.IOSPublicPermissionFactoryTest.xml")
         result = self.collect_xml([report.read_bytes()])
         self.assertFalse(result["errors"])
         self.assertEqual(7, result["totals"]["passed"])

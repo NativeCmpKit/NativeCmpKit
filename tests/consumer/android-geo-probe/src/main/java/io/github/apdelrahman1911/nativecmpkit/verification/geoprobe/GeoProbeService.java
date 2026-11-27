@@ -19,10 +19,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.location.LocationManagerCompat;
 import androidx.lifecycle.Lifecycle;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
-import com.mohamedrejeb.calf.geo.LocationStartResult;
-import com.mohamedrejeb.calf.geo.LocationTracker;
-import com.mohamedrejeb.calf.geo.LocationTrackingError;
-import com.mohamedrejeb.calf.geo.LocationTrackingSnapshot;
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationStartResult;
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTracker;
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTrackingError;
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTrackingSnapshot;
 import java.util.Arrays;
 import java.util.UUID;
 import kotlin.ResultKt;
@@ -33,7 +33,7 @@ import kotlin.coroutines.intrinsics.IntrinsicsKt;
 
 /** Finite signature-protected probe of the real public tracker, not a fake provider. */
 public final class GeoProbeService extends Service {
-    private static final String REPORTER = "com.mohamedrejeb.calf.calfgeo.test";
+    private static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitgeo.test";
     private final Handler main = new Handler(Looper.getMainLooper());
     private final String generation = UUID.randomUUID().toString();
     private LocationTracker tracker;

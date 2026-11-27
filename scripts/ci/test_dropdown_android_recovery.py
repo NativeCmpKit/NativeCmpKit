@@ -27,7 +27,7 @@ class DropdownAndroidRecoveryTests(unittest.TestCase):
         self.assertNotIn('time +', outside)
 
     def plan(self):
-        return lt.plan(lt.ROOT, 'android-device', only_modules=('calf-ui',), focus=lt.DROPDOWN_ANDROID_RECOVERY_FOCUS)
+        return lt.plan(lt.ROOT, 'android-device', only_modules=('nativecmpkit-ui',), focus=lt.DROPDOWN_ANDROID_RECOVERY_FOCUS)
 
     def cases(self):
         return [{'classname': lt.DROPDOWN_CLASS, 'name': lt.DROPDOWN_METHODS[-1], 'status': 'passed'}]
@@ -47,7 +47,7 @@ class DropdownAndroidRecoveryTests(unittest.TestCase):
 
     def test_exact_one_failed_android_method_without_replaying_fifteen_accepted_executions(self):
         row, = wm.matrix('ui-dropdown-android-recovery')['include']
-        self.assertEqual(('android-device-api35', 'android-device', 'calf-ui', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS),
+        self.assertEqual(('android-device-api35', 'android-device', 'nativecmpkit-ui', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS),
                          (row['slot'], row['suite'], row['test-modules'], row['test-focus']))
         plan = self.plan()
         self.assertTrue(lt.validate_test_focus(plan))
@@ -55,13 +55,13 @@ class DropdownAndroidRecoveryTests(unittest.TestCase):
         self.assertEqual(lt.DROPDOWN_CLASS+'#'+lt.DROPDOWN_METHODS[-1], plan['expected'][0]['test_filter'])
         self.assertEqual(11, len(wm.matrix('all')['include']))
         for row in wm.matrix('ui-dropdown-platforms')['include']:
-            full = lt.plan(lt.ROOT, row['suite'], only_modules=('calf-ui',), focus=lt.DROPDOWN_FOCUS)
+            full = lt.plan(lt.ROOT, row['suite'], only_modules=('nativecmpkit-ui',), focus=lt.DROPDOWN_FOCUS)
             self.assertEqual(4, len(full['expected'][0]['required_testcases']))
 
     def test_actual_library_device_and_workflow_cli_preflights_allow_only_the_finite_recovery(self):
         import android_device_tests as device
-        for module, args in [(lt, ['library_tests.py', 'plan', '--suite', 'android-device', '--module', 'calf-ui', '--focus', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS]),
-                             (device, ['android_device_tests.py', 'plan', '--api-level', '35', '--module', 'calf-ui', '--focus', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS,
+        for module, args in [(lt, ['library_tests.py', 'plan', '--suite', 'android-device', '--module', 'nativecmpkit-ui', '--focus', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS]),
+                             (device, ['android_device_tests.py', 'plan', '--api-level', '35', '--module', 'nativecmpkit-ui', '--focus', lt.DROPDOWN_ANDROID_RECOVERY_FOCUS,
                                        '--output', 'build/ci-verification/recovery-fixture'])]:
             with patch('sys.argv', args), patch('sys.stdout', io.StringIO()):
                 self.assertEqual(0, module.main())
@@ -70,8 +70,8 @@ class DropdownAndroidRecoveryTests(unittest.TestCase):
         self.assertEqual(0, preflight['slots'][0]['exit_code'])
 
     def test_foreign_suite_modules_wildcards_and_full_suite_claims_are_rejected(self):
-        for suite, modules in [('desktop', ('calf-ui',)), ('js', ('calf-ui',)), ('wasm', ('calf-ui',)), ('ios', ('calf-ui',)),
-                               ('android-host', ('calf-ui',)), ('android-device', ('calf-io',)), ('android-device', ('calf-ui', 'calf-io'))]:
+        for suite, modules in [('desktop', ('nativecmpkit-ui',)), ('js', ('nativecmpkit-ui',)), ('wasm', ('nativecmpkit-ui',)), ('ios', ('nativecmpkit-ui',)),
+                               ('android-host', ('nativecmpkit-ui',)), ('android-device', ('nativecmpkit-io',)), ('android-device', ('nativecmpkit-ui', 'nativecmpkit-io'))]:
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.DROPDOWN_ANDROID_RECOVERY_FOCUS)
         plan = self.plan()
@@ -99,7 +99,7 @@ class DropdownAndroidRecoveryTests(unittest.TestCase):
 
     def test_accepted_skiko_shared_material_and_wrapper_bytes_remain_unchanged(self):
         paths = [lt.DROPDOWN_SCENARIOS_SOURCE,
-                 'calf-ui/src/materialMain/kotlin/com/mohamedrejeb/calf/ui/dropdown/AdaptiveDropDown.material.kt']
+                 'nativecmpkit-ui/src/materialMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dropdown/AdaptiveDropDown.material.kt']
         for suite in ['desktop', 'js', 'wasm']:
             paths += [lt.dropdown_source(suite), lt.dropdown_platform_source(suite)]
         paths += [lt.dropdown_source('android-device')]

@@ -8,8 +8,8 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-MANAGER = ROOT / "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/dialog/AlertDialogManager.kt"
-NATIVE_TESTS = ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativeAlertLifecycleTest.kt"
+MANAGER = ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/AlertDialogManager.kt"
+NATIVE_TESTS = ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeAlertLifecycleTest.kt"
 METHOD = "outsideDismissRequestsAndDisposalRemainExactlyOnce"
 
 

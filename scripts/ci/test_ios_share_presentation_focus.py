@@ -16,11 +16,11 @@ import library_tests as lt
 import workflow_matrix as wm
 
 FOCUS = "share-ios-presentation-disposal"
-MODULE = "calf-share"
+MODULE = "nativecmpkit-share"
 PROFILE = "ios-share-presentation-disposal"
-SOURCE = "calf-share/src/iosMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.ios.kt"
-NATIVE = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/IosSharePresentationOwnershipTest.kt"
-CONTROLS = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/IosShareRequestTest.kt"
+SOURCE = "nativecmpkit-share/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.ios.kt"
+NATIVE = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/IosSharePresentationOwnershipTest.kt"
+CONTROLS = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/IosShareRequestTest.kt"
 
 
 class IosSharePresentationFocusTests(unittest.TestCase):
@@ -71,19 +71,19 @@ class IosSharePresentationFocusTests(unittest.TestCase):
         self.assertTrue(lt.validate_test_focus(plan))
         self.assertIn(NATIVE, item["test_source_files"])
         self.assertIn(CONTROLS, item["test_source_files"])
-        self.assertTrue(all(path.startswith("calf-share/") for path in item["test_source_files"]))
-        self.assertNotIn("com.mohamedrejeb.calf.picker.", item["test_filter"])
+        self.assertTrue(all(path.startswith("nativecmpkit-share/") for path in item["test_source_files"]))
+        self.assertNotIn("io.github.apdelrahman1911.nativecmpkit.picker.", item["test_filter"])
         self.assertNotIn("sample", item["test_filter"])
 
     def test_cross_module_platform_wildcard_and_mutated_plan_refusals_stay_strict(self):
         plan = self.plan()
         for suite, modules in (("desktop", (MODULE,)), ("js", (MODULE,)), ("wasm", (MODULE,)),
-                               ("android-device", (MODULE,)), ("ios", ("calf-ui",)),
-                               ("ios", ("calf-file-picker",)), ("ios", None)):
+                               ("android-device", (MODULE,)), ("ios", ("nativecmpkit-ui",)),
+                               ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
-        for key, value in (("task", ":calf-share:publish"), ("project", ":calf-file-picker"),
-                           ("report_directory", "calf-share/build/test-results/wrongTask"), ("native_test_host", "sample"),
+        for key, value in (("task", ":nativecmpkit-share:publish"), ("project", ":nativecmpkit-file-picker"),
+                           ("report_directory", "nativecmpkit-share/build/test-results/wrongTask"), ("native_test_host", "sample"),
                            ("test_filter", "*"), ("required_testcases", []), ("test_source_files", [])):
             mutated = copy.deepcopy(plan)
             mutated["expected"][0][key] = value
@@ -109,7 +109,7 @@ class IosSharePresentationFocusTests(unittest.TestCase):
         for slots in (("ios-iphone", "ios-ipad"), ("ios-ipad",), ("browser-wasm",), ()):
             with self.subTest(slots=slots), mock.patch.dict(wm.PROFILES, {PROFILE: slots}), self.assertRaises(ValueError):
                 wm.matrix(PROFILE)
-        with mock.patch.dict(wm.MODULE_SUBSETS, {PROFILE: "calf-ui"}), self.assertRaises(ValueError):
+        with mock.patch.dict(wm.MODULE_SUBSETS, {PROFILE: "nativecmpkit-ui"}), self.assertRaises(ValueError):
             wm.matrix(PROFILE)
         for key, value in (("runner", "macos-26-intel"), ("arch", "x64"), ("suite", "desktop"),
                            ("python", "python"), ("simulator-kind", "ipad")):
@@ -131,7 +131,7 @@ class IosSharePresentationFocusTests(unittest.TestCase):
         self.assertEqual(lt.ui_application_focus_groups(FOCUS), lt.IOS_SHARE_APPLICATION_REQUIRED_GROUPS)
         self.assertEqual(13, sum(len(group["methods"]) for group in lt.IOS_SHARE_APPLICATION_REQUIRED_GROUPS))
         runner_source = (lt.ROOT / "scripts/ci/library_tests.py").read_text()
-        self.assertIn('"calf-share": IOS_SHARE_APPLICATION_REQUIRED_GROUPS}.get(expected["module"], ()))', runner_source)
+        self.assertIn('"nativecmpkit-share": IOS_SHARE_APPLICATION_REQUIRED_GROUPS}.get(expected["module"], ()))', runner_source)
         self.assertIn('host = app.APPLICATION_HOSTS[expected["module"]]', runner_source)
         self.assertIn('folder = safe_path(root, (output / host["receipt_subdirectory"]).relative_to(root).as_posix())', runner_source)
         self.assertIn('need(cases.keys() == required, "Focused application must execute exactly all selected methods")', runner_source)
@@ -146,22 +146,22 @@ class IosSharePresentationFocusTests(unittest.TestCase):
             with mock.patch.object(lt, "collect_one_ios_application_receipt", return_value=control) as collect:
                 self.assertEqual(control, lt.collect_ios_application_receipts(lt.ROOT, plan, output, 1, 2, {}, []))
                 collect.assert_called_once_with(lt.ROOT, plan, output, 1, 2, {}, [], selected)
-        binary = "calf-share/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
+        binary = "nativecmpkit-share/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
         self.assertEqual(MODULE, app.application_host(binary, None)["module"])
 
     def test_application_transport_binds_exact_share_directory_and_cannot_broaden_filter(self):
         selected, = self.plan()["expected"]
         args = sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + selected["test_filter"]]
         self.assertEqual(FOCUS, app.application_test_focus(args))
-        binary = "calf-share/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
+        binary = "nativecmpkit-share/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
         self.assertEqual(MODULE, app.application_host(binary, FOCUS)["module"])
         self.assertEqual("native-share-application", app.application_host(binary, FOCUS)["receipt_subdirectory"])
-        for patterns in ("*", "com.mohamedrejeb.calf.share.Wrong.method",
+        for patterns in ("*", "io.github.apdelrahman1911.nativecmpkit.share.Wrong.method",
                          selected["test_filter"] + "," + selected["test_filter"],
                          selected["test_filter"] + "," + lt.IOS_WEBVIEW_REQUEST_CLASS + "." + lt.IOS_WEBVIEW_REQUEST_METHODS[0]):
             with self.subTest(patterns=patterns), self.assertRaises(ValueError):
                 app.application_test_focus(sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + patterns])
-        for other in ("calf-ui", "calf-file-picker", "calf-webview"):
+        for other in ("nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-webview"):
             path = app.APPLICATION_HOSTS[other]["binary_directory"] + "/application.kexe"
             with self.subTest(module=other), self.assertRaises(ValueError):
                 app.application_host(path, FOCUS)
@@ -170,9 +170,9 @@ class IosSharePresentationFocusTests(unittest.TestCase):
     def test_ignored_or_missing_native_declarations_cannot_admit_the_new_focus(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-share",\n)\n')
-            (root / "calf-share").mkdir()
-            (root / "calf-share/build.gradle.kts").write_text("// synthetic owning module only\n")
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-share",\n)\n')
+            (root / "nativecmpkit-share").mkdir()
+            (root / "nativecmpkit-share/build.gradle.kts").write_text("// synthetic owning module only\n")
             paths = (*lt.IOS_SHARE_APPLICATION_SOURCES, NATIVE, CONTROLS)
             for relative in paths:
                 target = root / relative

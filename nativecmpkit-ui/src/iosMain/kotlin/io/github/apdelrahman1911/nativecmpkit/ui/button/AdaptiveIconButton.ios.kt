@@ -1,0 +1,65 @@
+// Modified for nativeCmpkit (2026-10-24): correctness, lifecycle, testing and build hardening.
+package io.github.apdelrahman1911.nativecmpkit.ui.button
+
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import io.github.apdelrahman1911.nativecmpkit.ui.utils.isIOS26OrAbove
+
+@Composable
+actual fun AdaptiveIconButton(
+    onClick: () -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    colors: IconButtonColors,
+    liquidGlassColors: LiquidGlassButtonColors?,
+    interactionSource: MutableInteractionSource,
+    content: @Composable () -> Unit,
+) {
+    if (isIOS26OrAbove()) {
+        LiquidGlassButtonImpl(
+            onClick = onClick,
+            modifier = modifier.size(LiquidGlassButtonDefaults.IconSize),
+            enabled = enabled,
+            colors = liquidGlassColors ?: LiquidGlassButtonDefaults.plainButtonColors(
+                surfaceColor = if (enabled) colors.containerColor else colors.disabledContainerColor,
+                contentColor = colors.contentColor,
+                disabledContentColor = colors.disabledContentColor,
+            ),
+            shape = LiquidGlassButtonDefaults.Shape,
+            contentPadding = PaddingValues(),
+            interactionSource = interactionSource,
+            disabledAlpha = if (liquidGlassColors == null) 1f else LiquidGlassButtonDefaults.DisabledAlpha,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                content()
+            }
+        }
+    } else {
+        CupertinoButton(
+            onClick = onClick,
+            modifier = modifier.size(CupertinoButtonDefaults.IconSize),
+            enabled = enabled,
+            colors = CupertinoButtonDefaults.plainButtonColors(
+                containerColor = colors.containerColor,
+                contentColor = colors.contentColor,
+                disabledContainerColor = colors.disabledContainerColor,
+                disabledContentColor = colors.disabledContentColor,
+            ),
+            shape = CupertinoButtonDefaults.Shape,
+            contentPadding = PaddingValues(),
+            interactionSource = interactionSource,
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                content()
+            }
+        }
+    }
+}

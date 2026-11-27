@@ -74,8 +74,8 @@ all Git blobs, especially for files without a terminating newline.
 
 | Owner | Assigned implementation areas |
 |---|---|
-| `audit_ui` | `calf-ui` controls/managers/state/helpers; SF constants also cross-reviewed by icons reviewer |
-| `audit_io_picker` | `calf-io`, `calf-file-picker`, `calf-file-picker-coil`, including native Rust and MIME database |
+| `audit_ui` | `nativecmpkit-ui` controls/managers/state/helpers; SF constants also cross-reviewed by icons reviewer |
+| `audit_io_picker` | `nativecmpkit-io`, `nativecmpkit-file-picker`, `nativecmpkit-file-picker-coil`, including native Rust and MIME database |
 | `audit_permissions_geo` | Permission core, all ten features, compatibility aggregate, geo |
 | `audit_native_features` | WebView/cookies/KVO, camera, share/Rust, maps/media/notification stubs |
 | `audit_navigation_core_icons` | Core, navigation, symbols/font, runtime sample code |

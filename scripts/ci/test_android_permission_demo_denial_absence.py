@@ -16,11 +16,11 @@ import unittest
 from native_matrix_declarative_aliases import literal_metadata, native_aliases
 
 TREE = Path(os.environ.get("PERMISSION_DENIAL_ABSENCE_REVIEW_TREE", Path(__file__).resolve().parents[2])).resolve()
-CORE = "calf-permissions/core"
-KOTLIN = CORE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/"
+CORE = "nativecmpkit-permissions/core"
+KOTLIN = CORE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/"
 PROFILE = "android-permission-demo-denial-recovery"
 FOCUS_NAME = "ANDROID_PERMISSION_DEMO_DENIAL_RECOVERY_FOCUS"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest"
 DENIAL = "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest"
 CALL = "callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant"
 PICKER = "pickersReadRealDocumentsAndImagesWithoutAllFilesOrSmsPermissions"
@@ -243,7 +243,7 @@ def validate_denial_route(library, matrix, workflow):
             not generator.generators[0].ifs and generator.generators[0].is_async == 0,
             "Original complete matrix generator must not omit or substitute slots")
     require(ast.literal_eval(profile_node('ios-picker-provider-cancellation')) == ('ios-iphone',) and
-            modules['ios-picker-provider-cancellation'] == 'calf-file-picker',
+            modules['ios-picker-provider-cancellation'] == 'nativecmpkit-file-picker',
             "Never overwrite the integrated #50 missing-only route")
     require(ast.literal_eval(assignment(lib, 'IOS_PICKER_PROVIDER_CANCELLATION_METHODS')) ==
             ('publicPhotoCancellationStopsAnInFlightNativeProviderCopyAndReleasesEarlierStaging',),
@@ -421,7 +421,7 @@ class AndroidPermissionDemoDenialAbsenceSourceGuards(unittest.TestCase):
             (0, 'return spec["classname"] + "#" + spec["methods"][0]', 'return spec["classname"]'),
             (0, '"methods": ("' + DENIAL + '",),', '"methods": ("' + CALL + '",),'),
             (1, '"' + PROFILE + '": ("android-device-api35",),', '"' + PROFILE + '": ("android-device-api23",),'),
-            (1, '"' + PROFILE + '": "calf-permissions/core",', '"' + PROFILE + '": "calf-io",'),
+            (1, '"' + PROFILE + '": "nativecmpkit-permissions/core",', '"' + PROFILE + '": "nativecmpkit-io",'),
             (1, 'if profile == "' + PROFILE + '":', 'if profile == "unknown-denial-profile":'),
             (2, PROFILE + ', android-io-permission-storage-api35', PROFILE + ', ' + PROFILE + ', android-io-permission-storage-api35'),
             (2, "inputs.profile == '" + PROFILE + "' && '" + SDK + "'", "inputs.profile == '" + PROFILE + "' && '" + SDK.replace('build-tools;36.0.0 ', '') + "'"),

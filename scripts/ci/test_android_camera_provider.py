@@ -210,11 +210,11 @@ class CameraMinimumInstallerTests(unittest.TestCase):
 
 
 class CameraProviderPlanTests(unittest.TestCase):
-    def plan(self): return l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=l.ANDROID_CAMERA_PROVIDER_FOCUS)
+    def plan(self): return l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=l.ANDROID_CAMERA_PROVIDER_FOCUS)
 
     def test_exact_four_methods_and_two_serial_real_api_plans_preserve_all_prior_slots(self):
         row, = w.matrix("android-camera-provider")["include"]
-        self.assertEqual(("android-device-api35", "android-device", "calf-camera-picker", "35", "23", l.ANDROID_CAMERA_PROVIDER_FOCUS),
+        self.assertEqual(("android-device-api35", "android-device", "nativecmpkit-camera-picker", "35", "23", l.ANDROID_CAMERA_PROVIDER_FOCUS),
                          tuple(row[k] for k in ("slot", "suite", "test-modules", "emulator-api", "serial-emulator-api", "test-focus")))
         p = self.plan(); self.assertTrue(l.validate_test_focus(p)); self.assertTrue(l.android_camera_receiver_required(p))
         self.assertFalse(p["complete_suite_requested"]); self.assertEqual(4, len(p["expected"][0]["required_testcases"]))
@@ -241,11 +241,11 @@ class CameraProviderPlanTests(unittest.TestCase):
         fixture = (l.ROOT / l.ANDROID_CAMERA_PROVIDER_SOURCE).read_text()
         self.assertIn("var delayedCallbackCapture = false", fixture)
         self.assertIn("if (missingHandler) \"NonexistentCameraActivity\" else if (delayedCallbackCapture) \"CameraDelayedReceiverActivity\" else \"CameraReceiverActivity\"", fixture)
-        self.assertEqual(":calf-camera-picker:connectedAndroidDeviceTest", c[-1])
+        self.assertEqual(":nativecmpkit-camera-picker:connectedAndroidDeviceTest", c[-1])
 
     def test_minimum_only_recovery_selects_api23_and_never_replays_accepted_api35(self):
         row, = w.matrix("android-camera-provider-minimum")["include"]
-        self.assertEqual(("android-device-api23-camera", "android-device", "23", "calf-camera-picker", l.ANDROID_CAMERA_PROVIDER_FOCUS),
+        self.assertEqual(("android-device-api23-camera", "android-device", "23", "nativecmpkit-camera-picker", l.ANDROID_CAMERA_PROVIDER_FOCUS),
                          tuple(row[k] for k in ("slot", "suite", "emulator-api", "test-modules", "test-focus")))
         self.assertNotIn("serial-emulator-api", row)
         receipt = w.preflight_plans("android-camera-provider-minimum")
@@ -256,10 +256,10 @@ class CameraProviderPlanTests(unittest.TestCase):
 
     def test_no_handler_recovery_selects_only_failed_native_method_on_minimum_api(self):
         row, = w.matrix("android-camera-no-handler-minimum")["include"]
-        self.assertEqual(("android-device-api23-camera", "23", "calf-camera-picker", l.ANDROID_CAMERA_NO_HANDLER_FOCUS),
+        self.assertEqual(("android-device-api23-camera", "23", "nativecmpkit-camera-picker", l.ANDROID_CAMERA_NO_HANDLER_FOCUS),
                          tuple(row[k] for k in ("slot", "emulator-api", "test-modules", "test-focus")))
         self.assertNotIn("serial-emulator-api", row)
-        plan = l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=l.ANDROID_CAMERA_NO_HANDLER_FOCUS)
+        plan = l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=l.ANDROID_CAMERA_NO_HANDLER_FOCUS)
         expected, = plan["expected"]
         self.assertEqual(l.android_camera_provider_identities()[-1:], expected["required_testcases"])
         self.assertEqual(l.ANDROID_CAMERA_PROVIDER_CLASS + "#" + l.ANDROID_CAMERA_PROVIDER_METHODS[-1], expected["test_filter"])
@@ -274,7 +274,7 @@ class CameraProviderPlanTests(unittest.TestCase):
             with self.assertRaises(ValueError): l.validate_test_focus(bad)
 
     def test_recovery_xml_never_counts_replayed_passes_or_missing_failed_skipped_case(self):
-        plan = l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=l.ANDROID_CAMERA_NO_HANDLER_FOCUS)
+        plan = l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=l.ANDROID_CAMERA_NO_HANDLER_FOCUS)
         expected, = plan["expected"]; cases = expected["required_testcases"]
         variants = [cases, [], l.android_camera_provider_identities(), cases * 2,
                     [cases[0] | {"outcome": "<failure/>"}], [cases[0] | {"outcome": "<skipped/>"}]]
@@ -301,7 +301,7 @@ class CameraProviderPlanTests(unittest.TestCase):
 
     def test_preflight_origin_reports_only_exact_public_source_symbol_and_line(self):
         try:
-            device.validate_api_selection(24, ("calf-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
+            device.validate_api_selection(24, ("nativecmpkit-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
         except ValueError as error:
             error.args = ("PRIVATE_ERROR_TEXT_NOT_FOR_RECEIPT",)
             origin = device.preflight_error_origin(error)
@@ -312,18 +312,18 @@ class CameraProviderPlanTests(unittest.TestCase):
         self.assertNotIn(str(l.ROOT), json.dumps(origin))
 
     def test_api23_never_escapes_exact_camera_focus_and_default_api35_stays_available(self):
-        device.validate_api_selection(35, ("calf-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
-        device.validate_api_selection(35, ("calf-io",), None)
+        device.validate_api_selection(35, ("nativecmpkit-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
+        device.validate_api_selection(35, ("nativecmpkit-io",), None)
         with patch.object(device, "require_host") as host:
             with self.assertRaises(ValueError): device.run(l.ROOT, "build/ci-verification/unfiltered-camera-refusal")
             host.assert_not_called()
-        device.validate_api_selection(23, ("calf-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
-        for api, modules, focus in [(23, None, None), (23, ("calf-io",), l.ANDROID_CAMERA_PROVIDER_FOCUS),
-                                    (23, ("calf-camera-picker",), None), (24, ("calf-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS),
-                                    (23, ("calf-camera-picker", "calf-io"), l.ANDROID_CAMERA_PROVIDER_FOCUS)]:
+        device.validate_api_selection(23, ("nativecmpkit-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS)
+        for api, modules, focus in [(23, None, None), (23, ("nativecmpkit-io",), l.ANDROID_CAMERA_PROVIDER_FOCUS),
+                                    (23, ("nativecmpkit-camera-picker",), None), (24, ("nativecmpkit-camera-picker",), l.ANDROID_CAMERA_PROVIDER_FOCUS),
+                                    (23, ("nativecmpkit-camera-picker", "nativecmpkit-io"), l.ANDROID_CAMERA_PROVIDER_FOCUS)]:
             with self.assertRaises(ValueError): device.validate_api_selection(api, modules, focus)
         for api in (23, 35):
-            args = ["android_device_tests.py", "plan", "--api-level", str(api), "--module", "calf-camera-picker", "--focus", l.ANDROID_CAMERA_PROVIDER_FOCUS, "--output", "build/ci-plan"]
+            args = ["android_device_tests.py", "plan", "--api-level", str(api), "--module", "nativecmpkit-camera-picker", "--focus", l.ANDROID_CAMERA_PROVIDER_FOCUS, "--output", "build/ci-plan"]
             output = io.StringIO()
             with patch("sys.argv", args), patch("sys.stdout", output): self.assertEqual(0, device.main())
             self.assertEqual(self.plan(), json.loads(output.getvalue()))
@@ -393,11 +393,11 @@ class CameraProviderPlanTests(unittest.TestCase):
 class CameraRestorationPlanTests(unittest.TestCase):
     """Synthetic finite-selection/ownership source checks, not native outcomes."""
     def plan(self):
-        return l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=l.ANDROID_CAMERA_RESTORATION_FOCUS)
+        return l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=l.ANDROID_CAMERA_RESTORATION_FOCUS)
 
     def test_restoration_runs_only_four_new_real_os_methods_on_owned_api35(self):
         row, = w.matrix("android-camera-restoration")["include"]
-        self.assertEqual(("android-device-api35", "35", "calf-camera-picker", l.ANDROID_CAMERA_RESTORATION_FOCUS),
+        self.assertEqual(("android-device-api35", "35", "nativecmpkit-camera-picker", l.ANDROID_CAMERA_RESTORATION_FOCUS),
                          tuple(row[k] for k in ("slot", "emulator-api", "test-modules", "test-focus")))
         self.assertNotIn("serial-emulator-api", row)
         plan = self.plan(); expected, = plan["expected"]
@@ -406,7 +406,7 @@ class CameraRestorationPlanTests(unittest.TestCase):
         self.assertTrue(l.validate_test_focus(plan)); self.assertTrue(l.android_camera_receiver_required(plan))
         self.assertEqual(0, w.preflight_plans("android-camera-restoration")["slots"][0]["exit_code"])
         self.assertEqual(11, len(w.matrix("all")["include"])); self.assertEqual(9, len(l.MINIMUM_MODULES["android-device"]))
-        with self.assertRaises(ValueError): device.validate_api_selection(23, ("calf-camera-picker",), l.ANDROID_CAMERA_RESTORATION_FOCUS)
+        with self.assertRaises(ValueError): device.validate_api_selection(23, ("nativecmpkit-camera-picker",), l.ANDROID_CAMERA_RESTORATION_FOCUS)
         for filter_ in (l.ANDROID_CAMERA_PROVIDER_CLASS, l.ANDROID_CAMERA_RESTORATION_CLASS + "#onlyOne", "Foreign"):
             bad = deepcopy(plan); bad["expected"][0]["test_filter"] = filter_
             with self.assertRaises(ValueError): l.validate_test_focus(bad)
@@ -442,7 +442,7 @@ class CameraRestorationPlanTests(unittest.TestCase):
         self.assertIn("killOwnedClient", source); self.assertIn("processName, ownedClientCommandline(pid)", source)
         self.assertIn('assertNotNull(task.taskInfo, "Unknown native task; do not infer absence")', source)
         self.assertIn('assertEquals("Deleted 1 rows"', source)
-        self.assertIn('android:process=":nativecmpkit_camera_client"', (l.ROOT / "calf-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_text())
+        self.assertIn('android:process=":nativecmpkit_camera_client"', (l.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_text())
         self.assertIn('android:enabled="false"', (l.ROOT / "tests/consumer/android-camera-receiver/src/main/AndroidManifest.xml").read_text())
         self.assertIn("getCallingPackage()", activity); self.assertIn("checkSignatures", activity)
         self.assertIn("getPackagesForUid(request.sendingUid)", service)
@@ -455,7 +455,7 @@ class CameraRestorationComponentOwnershipTests(unittest.TestCase):
     def sources(self):
         service = (l.ROOT / "tests/consumer/android-camera-receiver/src/main/java/io/github/apdelrahman1911/nativecmpkit/verification/camerareceiver/CameraReceiverService.java").read_text()
         client = (l.ROOT / l.ANDROID_CAMERA_RESTORATION_SOURCE).read_text()
-        binding = (l.ROOT / "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedCameraReceiver.kt").read_text()
+        binding = (l.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedCameraReceiver.kt").read_text()
         return service, client, binding
 
     def test_only_native_receiver_uid_controls_its_fixed_component_without_killing_binding(self):
@@ -662,7 +662,7 @@ class CameraRestorationForegroundTests(unittest.TestCase):
 class CameraRestorationShellEntryTests(unittest.TestCase):
     """Synthetic protected native-entry guards; never an Android runtime pass."""
     def sources(self):
-        manifest = ET.fromstring((l.ROOT / "calf-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_bytes())
+        manifest = ET.fromstring((l.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_bytes())
         source = (l.ROOT / l.ANDROID_CAMERA_RESTORATION_SOURCE).read_text()
         client = (l.ROOT / l.ANDROID_CAMERA_RESTORATION_CLIENT_SOURCE).read_text()
         return manifest, source, client
@@ -671,13 +671,13 @@ class CameraRestorationShellEntryTests(unittest.TestCase):
         manifest, _, _ = self.sources()
         android = "{http://schemas.android.com/apk/res/android}"
         activities = {node.get(android + "name"): node for node in manifest.findall("application/activity")}
-        client = activities["com.mohamedrejeb.calf.camerapicker.CameraRestorationVerificationActivity"]
+        client = activities["io.github.apdelrahman1911.nativecmpkit.camerapicker.CameraRestorationVerificationActivity"]
         self.assertEqual("true", client.get(android + "exported"))
         self.assertEqual("android.permission.DUMP", client.get(android + "permission"))
         self.assertEqual(":nativecmpkit_camera_client", client.get(android + "process"))
         self.assertIsNone(client.get(android + "configChanges"))
         self.assertIn("com.android.shell", [node.get(android + "name") for node in manifest.findall("queries/package")])
-        self.assertEqual("false", activities["com.mohamedrejeb.calf.camerapicker.CameraProviderVerificationActivity"].get(android + "exported"))
+        self.assertEqual("false", activities["io.github.apdelrahman1911.nativecmpkit.camerapicker.CameraProviderVerificationActivity"].get(android + "exported"))
         self.assertTrue(all(node.get(android + "exported") == "false" for node in manifest.findall("application/provider")))
 
     def test_native_entry_checks_actual_fixed_shell_uid_and_permission_not_a_guessed_bypass(self):
@@ -809,7 +809,7 @@ class CameraRestorationObservationHostTests(unittest.TestCase):
 class CameraArchiveTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(); self.addCleanup(self.temp.cleanup); self.root = Path(self.temp.name)
-        self.plan = l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=l.ANDROID_CAMERA_PROVIDER_FOCUS)
+        self.plan = l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=l.ANDROID_CAMERA_PROVIDER_FOCUS)
         expected = self.plan["expected"][0]
         self.path = self.root / expected["report_directory"] / "TEST-synthetic.xml"; self.path.parent.mkdir(parents=True)
         self.path.write_text('<testsuite><properties><property name="private" value="not-for-archive"/></properties>' +
@@ -819,7 +819,7 @@ class CameraArchiveTests(unittest.TestCase):
         self.receipt = {"suite": "android-device", "explicit_test_focus": l.ANDROID_CAMERA_PROVIDER_FOCUS,
             "source_tree_dirty": False, "source_revision": "a"*40, "source_revision_after": "a"*40, "changed_inputs": [], "passed": True,
             "task_execution_markers": {expected["task"]: 1}, "totals": l.case_counts(cases),
-            "modules": [{"module": "calf-camera-picker", "testcases": cases, "reports": [{"path": self.path.relative_to(self.root).as_posix(), "sha256": l.sha256(self.path)}]}]}
+            "modules": [{"module": "nativecmpkit-camera-picker", "testcases": cases, "reports": [{"path": self.path.relative_to(self.root).as_posix(), "sha256": l.sha256(self.path)}]}]}
         self.output = self.root / "build/ci-verification/synthetic-camera"; self.output.mkdir(parents=True)
 
     def test_archive_preserves_actual_outcomes_and_original_hash_while_removing_only_console_properties(self):
@@ -841,7 +841,7 @@ class CameraArchiveTests(unittest.TestCase):
         self.assertEqual(self.receipt['modules'][0]['testcases'], archived['actual_testcases'])
 
     def test_each_native_provider_authority_has_a_distinct_android_component_identity(self):
-        manifest = ET.fromstring((l.ROOT / 'calf-camera-picker/src/androidDeviceTest/AndroidManifest.xml').read_bytes())
+        manifest = ET.fromstring((l.ROOT / 'nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml').read_bytes())
         providers = manifest.findall('application/provider')
         names = [p.attrib['{http://schemas.android.com/apk/res/android}name'] for p in providers]
         self.assertEqual(3, len(names)); self.assertEqual(3, len(set(names)))

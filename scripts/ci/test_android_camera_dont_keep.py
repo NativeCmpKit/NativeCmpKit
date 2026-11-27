@@ -13,7 +13,7 @@ import library_tests as l
 import workflow_matrix as w
 
 
-HELPER = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedAlwaysFinish.kt"
+HELPER = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedAlwaysFinish.kt"
 FOCUS = "android-camera-real-restoration-dont-keep"
 PROFILE = "android-camera-restoration-dont-keep"
 
@@ -62,7 +62,7 @@ def modeled_native_readback(source, text):
 
 class CameraDontKeepFocusTests(unittest.TestCase):
     def plan(self):
-        return l.plan(l.ROOT, "android-device", only_modules=("calf-camera-picker",), focus=FOCUS)
+        return l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-camera-picker",), focus=FOCUS)
 
     def report(self, cases, *, marked=True, stale=False):
         plan = self.plan(); expected, = plan["expected"]
@@ -99,7 +99,7 @@ class CameraDontKeepFocusTests(unittest.TestCase):
 
     def test_profile_is_one_owned_api35_camera_slot_and_preserves_diagnostics(self):
         row, = w.matrix(PROFILE)["include"]
-        self.assertEqual(("android-device-api35", "35", "calf-camera-picker", FOCUS),
+        self.assertEqual(("android-device-api35", "35", "nativecmpkit-camera-picker", FOCUS),
                          tuple(row[k] for k in ("slot", "emulator-api", "test-modules", "test-focus")))
         self.assertNotIn("serial-emulator-api", row)
         self.assertIn(FOCUS, l.ANDROID_CAMERA_FOCUSES)
@@ -107,13 +107,13 @@ class CameraDontKeepFocusTests(unittest.TestCase):
         self.assertIn("plan.get(\"explicit_test_focus\") not in lt.ANDROID_CAMERA_FOCUSES", (l.ROOT / "scripts/ci/android_camera_receiver.py").read_text())
         workflow = (l.ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn(PROFILE, workflow.split("options: [", 1)[1].split("]", 1)[0].split(", "))
-        with self.assertRaises(ValueError): device.validate_api_selection(23, ("calf-camera-picker",), FOCUS)
+        with self.assertRaises(ValueError): device.validate_api_selection(23, ("nativecmpkit-camera-picker",), FOCUS)
 
     def test_unknown_focus_wrong_suite_and_module_escape_are_refused(self):
-        for suite, modules, focus in (("android-host", ("calf-camera-picker",), FOCUS),
-                                      ("android-device", ("calf-io",), FOCUS),
-                                      ("android-device", ("calf-camera-picker", "calf-io"), FOCUS),
-                                      ("android-device", ("calf-camera-picker",), FOCUS + "-foreign")):
+        for suite, modules, focus in (("android-host", ("nativecmpkit-camera-picker",), FOCUS),
+                                      ("android-device", ("nativecmpkit-io",), FOCUS),
+                                      ("android-device", ("nativecmpkit-camera-picker", "nativecmpkit-io"), FOCUS),
+                                      ("android-device", ("nativecmpkit-camera-picker",), FOCUS + "-foreign")):
             with self.subTest(suite=suite, modules=modules, focus=focus):
                 with self.assertRaises(ValueError): l.plan(l.ROOT, suite, only_modules=modules, focus=focus)
         with self.assertRaises(ValueError): l.android_camera_restoration_identities("foreign")
@@ -178,7 +178,7 @@ class CameraAlwaysFinishSourceTests(unittest.TestCase):
 
     def test_public_settings_identity_ui_and_native_readback_replace_inaccessible_binder_before_mutation(self):
         source = helper_source()
-        ui = (l.ROOT / "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt").read_text()
+        ui = (l.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt").read_text()
         self.assertIn("OwnedDeveloperSettingsUi(pm, ui, shell)", source)
         for token in ('checkSignatures("android", SETTINGS_PACKAGE)', "applicationInfo.uid == 1000",
                       "Intent(SETTINGS_ACTION)", "activeLease = lease", "assertOwned(rows.single(), lease)",
@@ -233,7 +233,7 @@ class CameraAlwaysFinishSourceTests(unittest.TestCase):
 
     def test_native_scalar_ui_agreement_is_required_and_primary_cleanup_failures_are_preserved(self):
         source = helper_source()
-        ui = (l.ROOT / "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt").read_text()
+        ui = (l.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt").read_text()
         self.assertIn("check(readStableState() == expected)", source)
         self.assertIn("check(expected.native == enabled)", source)
         self.assertIn("check(selected.widget.isChecked == enabled)", ui)
@@ -275,7 +275,7 @@ class CameraAlwaysFinishBoundaryModelTests(unittest.TestCase):
 
     def test_unbounded_control_encoded_and_foreign_header_queries_are_refused(self):
         source = helper_source(); text = native_dump(source)
-        for candidate in (text + "x" * 1_048_577, text.replace("processes)", "processes calf-camera-picker)"),
+        for candidate in (text + "x" * 1_048_577, text.replace("processes)", "processes nativecmpkit-camera-picker)"),
                           text.replace("\n", "\r\n"), text + "\x00", text + "\x1b"):
             with self.subTest(kind=len(candidate)):
                 with self.assertRaises(ValueError): modeled_native_readback(source, candidate)

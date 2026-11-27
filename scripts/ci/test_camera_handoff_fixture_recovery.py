@@ -51,7 +51,7 @@ class CameraHandoffFixtureRecoveryControls(unittest.TestCase):
         self.assertEqual(recovery.SPEC_SHA256, sha(self.spec_bytes))
         self.assertEqual(ORIGINAL_BOOT_SPEC_SHA256, boot.SPEC_SHA256)
         self.assertEqual(ORIGINAL_BOOT_SPEC_SHA256, sha(boot.SPEC_PATH.read_bytes()))
-        self.assertFalse(any(path.startswith("calf-") for path in self.bindings))
+        self.assertFalse(any(path.startswith("nativecmpkit-") for path in self.bindings))
 
     def test_every_current_source_restores_full_prior_bytes_and_forward_roundtrip(self):
         for relative, binding in self.bindings.items():

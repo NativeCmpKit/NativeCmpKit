@@ -15,7 +15,7 @@ announcement or a control-policy change.
 - Independent nativeCmpkit repository, preserved original Git history and public
   metadata, Apache-2.0 license/copyright/attribution and third-party notices.
 - New Maven group `io.github.apdelrahman1911.nativecmpkit`, artifacts
-  `nativecmpkit-*`; retained `com.mohamedrejeb.calf.*` source/API/JNI/resource names.
+  `nativecmpkit-*`; retained `io.github.apdelrahman1911.nativecmpkit.*` source/API/JNI/resource names.
 - Current upstream open-issue descriptions, labels and relevant public history
   synchronized onto existing destination issues without duplicates.
 
@@ -36,7 +36,7 @@ announcement or a control-policy change.
 
 ### Compatibility notes to carry into the first release
 
-- Do not combine nativeCmpkit and old Calf Maven artifacts on one classpath.
+- Do not combine nativeCmpkit and old NativeCmpKit Maven artifacts on one classpath.
 - Desktop WebView now requires an explicitly consumer-selected JavaFX21.0.13
   runtime/compile dependency set instead of inherited publisher-host classifiers.
   See [the dependency migration](compatibility.md).

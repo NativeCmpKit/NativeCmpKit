@@ -46,7 +46,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         selected = re.search(r"val candidateModules = listOf\((.*?)\n\)", full, re.S)
         self.assertIsNotNone(selected)
         names = set(re.findall(r'"([a-z0-9-]+)"', selected.group(1)))
-        identity = json.loads((ROOT / "docs/migration/identity.json").read_bytes())
+        identity = json.loads((ROOT / "docs/migration/current-identity.json").read_bytes())
         expected = {x["new_artifact"].removeprefix("nativecmpkit-") for x in identity["modules"]}
         self.assertEqual(21, len(names))
         self.assertEqual(expected, names)
@@ -63,7 +63,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         for call in ["includeBuild", "project", "mavenLocal", "dependencySubstitution", "srcDir"]:
             self.assertNotRegex(code, r"\b" + call + r"\s*\(")
         self.assertIn('check(id !is ProjectComponentIdentifier)', code)
-        self.assertIn('check(id.group != "com.mohamedrejeb.calf")', code)
+        self.assertIn('check(id.group != "io.github.apdelrahman1911.nativecmpkit")', code)
 
     def test_every_selected_classpath_requires_two_roots_and_exact_staged_bytes(self):
         build = self.code("build.gradle.kts")
@@ -77,8 +77,8 @@ class CoreIoFixtureContractTest(unittest.TestCase):
     def test_test_task_cannot_succeed_using_old_results_or_missing_matching_methods(self):
         build = self.code("build.gradle.kts")
         self.assertIn('dependsOn(verifyCandidateResolution)', build)
-        self.assertIn('includeTestsMatching("nativecmpkit.consumer.PublishedIoConsumerTest")', build)
-        self.assertIn('includeTestsMatching("nativecmpkit.consumer.PublishedArtifactOriginTest")', build)
+        self.assertIn('includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedIoConsumerTest")', build)
+        self.assertIn('includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedArtifactOriginTest")', build)
         self.assertIn('isFailOnNoMatchingTests = true', build)
         self.assertIn('outputs.upToDateWhen { false }', build)
         self.assertIn('maxParallelForks = 1', build)
@@ -104,7 +104,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
 
     def test_partial_stage_adapter_does_not_change_the_full_producer_or_remote_guards(self):
         init = (ROOT / "scripts/ci/stage-core-io.init.gradle.kts").read_text()
-        self.assertIn('listOf(root.project(":calf-core"), root.project(":calf-io"))', init)
+        self.assertIn('listOf(root.project(":nativecmpkit-core"), root.project(":nativecmpkit-io"))', init)
         self.assertIn('check(selected.size == 4)', init)
         self.assertIn('url.scheme == "file" && url.authority.isNullOrEmpty()', init)
         self.assertIn('stageCoreIoVerificationPublications', init)
@@ -123,7 +123,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         guard = 'if (root.projectDir.canonicalFile != stagingRoot) return@projectsEvaluated'
         self.assertIn(guard, init)
         self.assertLess(init.index(guard), init.index('root.providers.gradleProperty("nativecmpkitVerification")'))
-        self.assertLess(init.index(guard), init.index('root.project(":calf-core")'))
+        self.assertLess(init.index(guard), init.index('root.project(":nativecmpkit-core")'))
         self.assertIn('check(root.name == "NativeCmpKit")', init)
 
     def test_java_types_are_imported_instead_of_resolved_through_a_java_extension_receiver(self):

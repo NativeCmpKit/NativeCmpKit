@@ -14,7 +14,7 @@ On iOS, this provides the system drop-down experience with `showsMenuAsPrimaryAc
 ## Usage
 
 ```kotlin
-@OptIn(ExperimentalCalfUiApi::class)
+@OptIn(ExperimentalNativeCmpKitUiApi::class)
 @Composable
 fun MyDropDown() {
     var expanded by remember { mutableStateOf(false) }
@@ -87,7 +87,7 @@ AdaptiveDropDownItem(
 ```
 
 !!! tip
-    Use type-safe `SFSymbol` constants from `calf-ui` instead of raw strings. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.
+    Use type-safe `SFSymbol` constants from `nativecmpkit-ui` instead of raw strings. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.
 
 ## Sections
 

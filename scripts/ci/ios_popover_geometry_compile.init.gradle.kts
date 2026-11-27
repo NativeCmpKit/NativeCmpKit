@@ -9,7 +9,7 @@ import java.security.MessageDigest
 gradle.projectsEvaluated {
     // Init scripts also visit convention/included builds. They do not own UI's
     // compilation and must not reject their independent plugin-resolution tasks.
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     // Gradle retains task-specific --tests options in startParameter.taskNames.
     // Admit only the explicit authored phone-portrait OR iPad-rotation method.
     val focus = rootProject.providers.gradleProperty("nativecmpkitPopoverGeometryFocus").orNull
@@ -18,16 +18,16 @@ gradle.projectsEvaluated {
         "ui-native-popover-os-rotation" to "nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation",
     )
     check(focus in methods) { "Select the exact native OS geometry focus; no implicit/default host" }
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest", "--tests",
-        "com.mohamedrejeb.calf.ui.dialog.NativePopoverGeometryTest." + methods.getValue(focus!!))
-    check(gradle.startParameter.taskNames in setOf(listOf(":calf-ui:compileTestKotlinIosSimulatorArm64"), applicationRequest)) {
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest", "--tests",
+        "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverGeometryTest." + methods.getValue(focus!!))
+    check(gradle.startParameter.taskNames in setOf(listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"), applicationRequest)) {
         "OS geometry compilation accepts only its exact test compiler or one native method"
     }
     val paths = listOf(
-        "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverGeometryTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
-        "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativePopoverGeometryScene.kt",
+        "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

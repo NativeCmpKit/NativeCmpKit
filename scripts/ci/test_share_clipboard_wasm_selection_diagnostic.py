@@ -21,14 +21,14 @@ import share_clipboard_wasm_framework_recovery as framework
 
 
 ROOT = Path(__file__).resolve().parents[2]
-FIXTURE = "calf-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
+FIXTURE = "nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
 OLD_GUARD = "scripts/ci/test_share_clipboard_wasm_recovery.py"
 NATIVE_PINS = {
-    "calf-share/src/webTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardEnvironmentAcceptanceTest.kt":
+    "nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt":
         "10bf06a15f4d840779aa494122d42c24ed6bbd76ec6926d72eedf982c7cebc60",
-    "calf-share/src/jsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.js.kt":
+    "nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt":
         "9d33398d366466f41a3d4a46198a7c8e02e3c23fbfd73af1216aa6b0915ebc05",
-    "calf-share/src/wasmJsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.wasmJs.kt":
+    "nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt":
         "b24a367d8c3e45e896559f1ce7a44d627c8825023ebfd9e9f66c6eb34c64ba59",
 }
 OLD_GUARD_METHOD_SHA256 = "506687292d6a8e03086323c971357b4dd2fb382bb503146a12c2e5bcb784defb"

@@ -14,13 +14,13 @@ import xml.etree.ElementTree as ET
 
 API = 35
 TARGET = 37
-MODULE = "calf-permissions/core"
+MODULE = "nativecmpkit-permissions/core"
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.permissionlifecycle"
-REPORTER = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test"
 FIXTURE = "tests/consumer/android-permission-lifecycle"
 PERMISSION = PACKAGE + ".CONTROL_LIFECYCLE"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionLifecycleDeviceTest"
-KOTLIN = MODULE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionLifecycleDeviceTest"
+KOTLIN = MODULE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/"
 SOURCE = KOTLIN + "AndroidPermissionLifecycleDeviceTest.kt"
 APPLICATION_KOTLIN = FIXTURE + "/src/main/kotlin/" + PACKAGE.replace(".", "/") + "/"
 METHODS = (
@@ -59,16 +59,16 @@ SOURCE_FILES = tuple(sorted((
     *(FIXTURE + "/" + p for p in ("settings.gradle.kts", "build.gradle.kts", "gradle.properties", "src/main/AndroidManifest.xml")),
     *(APPLICATION_KOTLIN + name + ".kt" for name in ("PermissionLifecycleActivity", "PermissionLifecycleService")),
     *(KOTLIN + name + ".kt" for name in ("AndroidPermissionLifecycleDeviceTest", "OwnedPermissionLifecycle", "PermissionLifecycleSystemUi")),
-    *(MODULE + "/src/androidMain/kotlin/com/mohamedrejeb/calf/permissions/" + name + ".kt" for name in
+    *(MODULE + "/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/" + name + ".kt" for name in
       ("AndroidPermissionRegistry", "AndroidPermissionRequestPlan", "MutablePermissionState.android", "MutableMultiplePermissionsState.android", "PermissionsUtil.android")),
-    *(MODULE + "/src/commonMain/kotlin/com.mohamedrejeb.calf/permissions/" + name + ".kt" for name in
+    *(MODULE + "/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/" + name + ".kt" for name in
       ("PermissionState", "MultiplePermissionsState", "PermissionDetails", "PermissionRequestGate",
        "MutablePermissionState", "MutableMultiplePermissionsState")),
-    *("calf-permissions/" + module + "/src/" + source_set + "/kotlin/" + package_path + "/permissions/" + file
+    *("nativecmpkit-permissions/" + module + "/src/" + source_set + "/kotlin/" + package_path + "/permissions/" + file
       for module, file in (("location", "LocationPermissions"), ("background-location", "BackgroundLocationPermissions"),
                            ("camera", "CameraPermissions"), ("notifications", "NotificationPermissions"))
-      for source_set, package_path, file in (("commonMain", "com.mohamedrejeb.calf", file + ".kt"),
-                                           ("androidMain", "com/mohamedrejeb/calf", file + ".android.kt"))),
+      for source_set, package_path, file in (("commonMain", "io.github.apdelrahman1911.nativecmpkit", file + ".kt"),
+                                           ("androidMain", "io/github/apdelrahman1911/nativecmpkit", file + ".android.kt"))),
 )))
 
 

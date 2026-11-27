@@ -111,7 +111,7 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
         self.context = {"source_revision": SOURCE, "source_tree_dirty": False,
                         "simulator": {"udid": DEVICE, "state": "Booted"},
                         "host": {"system": "Darwin", "architecture": "arm64"}}
-        self.document = {"schema_version": 1, "task": ":calf-ui:" + library.IOS_APPLICATION_TASK,
+        self.document = {"schema_version": 1, "task": ":nativecmpkit-ui:" + library.IOS_APPLICATION_TASK,
                          "source_revision": SOURCE, "source_tree_dirty": False, "explicit_test_focus": FOCUS,
                          "bundle_id": BUNDLE, "signed_application_executable_sha256": "c" * 64,
                          "packages_published": False, "release_readiness_certified": False, INLINE: self.record}
@@ -127,7 +127,7 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
             self.sidecar.write_bytes(canonical(self.record))
             self.sidecar.chmod(0o600)
 
-    def validate(self, *, context=None, payload=None, focus=FOCUS, module="calf-ui"):
+    def validate(self, *, context=None, payload=None, focus=FOCUS, module="nativecmpkit-ui"):
         return boundary.validate_retained(self.session, self.document, context or self.context,
             self.started, self.ended, module, focus,
             receipt_payload=self.receipt_payload if payload is None else payload)
@@ -156,19 +156,19 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
         imports |= {node.module.split(".")[0] for node in ast.walk(source) if isinstance(node, ast.ImportFrom)}
         self.assertLessEqual(imports, {"__future__", "hashlib", "json", "math", "os", "pathlib", "re", "stat"})
 
-    def test_only_exact_calf_ui_profile_session_admits_retained_sidecar(self):
-        boundary.require_session_membership(self.session, "calf-ui", FOCUS)
+    def test_only_exact_nativecmpkit_ui_profile_session_admits_retained_sidecar(self):
+        boundary.require_session_membership(self.session, "nativecmpkit-ui", FOCUS)
         self.assertEqual(hashlib.sha256(self.sidecar.read_bytes()).hexdigest(), self.validate())
-        for module, focus in (("calf-file-picker", FOCUS), ("calf-share", FOCUS), ("calf-ui", None),
-                              ("calf-ui", "ios-native-image-darwin-tools"), ("calf-ui", FOCUS + "-unknown")):
+        for module, focus in (("nativecmpkit-file-picker", FOCUS), ("nativecmpkit-share", FOCUS), ("nativecmpkit-ui", None),
+                              ("nativecmpkit-ui", "ios-native-image-darwin-tools"), ("nativecmpkit-ui", FOCUS + "-unknown")):
             with self.subTest(module=module, focus=focus):
                 self.assert_preserved_refusal(lambda: boundary.require_session_membership(self.session, module, focus))
         self.sidecar.unlink()  # Only this known temporary model file.
         del self.document[INLINE]
         self.receipt_payload = canonical(self.document); self.receipt.write_bytes(self.receipt_payload)
-        boundary.require_session_membership(self.session, "calf-ui", None)
+        boundary.require_session_membership(self.session, "nativecmpkit-ui", None)
         self.assertIsNone(self.validate(focus=None))
-        self.assert_preserved_refusal(lambda: boundary.require_session_membership(self.session, "calf-ui", FOCUS))
+        self.assert_preserved_refusal(lambda: boundary.require_session_membership(self.session, "nativecmpkit-ui", FOCUS))
 
     def test_links_modes_types_extra_entries_and_ancestor_aliases_refuse_without_deletion(self):
         self.validate()
@@ -194,7 +194,7 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
         self.receipt.unlink(); self.save()
         redirected = self.root / "redirected"; redirected.symlink_to(self.output, target_is_directory=True)
         with self.assertRaises(ValueError):
-            boundary.require_session_membership(redirected / "native-ui-application" / TOKEN, "calf-ui", FOCUS)
+            boundary.require_session_membership(redirected / "native-ui-application" / TOKEN, "nativecmpkit-ui", FOCUS)
 
     def test_bounds_freshness_canonical_json_duplicate_nonfinite_and_changed_read_refuse(self):
         self.validate()
@@ -300,12 +300,12 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
         context.update(java={"major": 17}, rust={"release": "synthetic"}, xcode={"version": "synthetic"},
                        apple_sdks={"iphonesimulator": "synthetic"})
         self.context = context
-        binary = self.root / "calf-ui/build/bin/iosSimulatorArm64/applicationDebugTest/model.kexe"
+        binary = self.root / "nativecmpkit-ui/build/bin/iosSimulatorArm64/applicationDebugTest/model.kexe"
         binary.parent.mkdir(parents=True)
         command = struct.pack("<6I", 0x32, 24, 7, 15 << 16, 26 << 16, 0)
         binary.write_bytes(struct.pack("<8I", 0xFEEDFACF, 0x0100000C, 0, 2, 1, len(command), 0, 0) + command)
         binary.chmod(0o700)
-        classname = "com.mohamedrejeb.calf.ui.utils.UIImageMemoryDiagnosticsTest"
+        classname = "io.github.apdelrahman1911.nativecmpkit.ui.utils.UIImageMemoryDiagnosticsTest"
         method = "actualLibraryConversionsRemainBoundedDuringOwnedAllocationProfile"
         cases = [{"classname": classname, "name": method, "status": "passed"}]
         xml = [{"classname": library.IOS_APPLICATION_TASK + "." + classname,
@@ -340,14 +340,14 @@ class ImageSidecarEvidenceTests(unittest.TestCase):
                 "testcases": cases, "counts": counts, "observed_launch_pid": 12345,
                 "image_profile_observations": [{"phase": "ready", "process_id": 12345}, {"phase": "complete", "rounds": 1}]},
             image_memory_profile=profile)
-        expected = {"module": "calf-ui", "task": ":calf-ui:" + library.IOS_APPLICATION_TASK,
+        expected = {"module": "nativecmpkit-ui", "task": ":nativecmpkit-ui:" + library.IOS_APPLICATION_TASK,
                     "native_test_host": "genuine-uikit-application", "test_filter": classname + "." + method,
                     "required_testcases": [{"classname": library.IOS_APPLICATION_TASK + "." + classname,
                                              "name": method + "[iosSimulatorArm64]"}],
                     "test_source_files": [library.IOS_IMAGE_MEMORY_SOURCE]}
-        self.plan = {"suite": "ios", "explicit_test_focus": FOCUS, "explicit_module_subset": ["calf-ui"],
+        self.plan = {"suite": "ios", "explicit_test_focus": FOCUS, "explicit_module_subset": ["nativecmpkit-ui"],
                      "complete_suite_requested": False, "expected": [expected]}
-        self.modules = [{"module": "calf-ui", "task": expected["task"], "testcases": xml}]
+        self.modules = [{"module": "nativecmpkit-ui", "task": expected["task"], "testcases": xml}]
         self.save()
 
     def collect_model(self):

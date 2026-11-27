@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /** Actual third-UID read-only DocumentsProvider with finite fixed synthetic bytes. */
 public final class OwnedShareDocumentsProvider extends DocumentsProvider {
-    static final String REPORTER = "com.mohamedrejeb.calf.calfshare.test";
+    static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitshare.test";
     static final String[] IDS = {"nativecmpkit-owned.txt", "nativecmpkit-owned.png"};
     private static final String[] COLUMNS = {Document.COLUMN_DOCUMENT_ID, Document.COLUMN_DISPLAY_NAME,
         Document.COLUMN_MIME_TYPE, Document.COLUMN_SIZE, Document.COLUMN_FLAGS};

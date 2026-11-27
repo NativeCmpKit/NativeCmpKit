@@ -19,7 +19,7 @@ class WebViewIdentityFocusTests(unittest.TestCase):
     SUITES = ("desktop", "android-device", "js", "wasm")
 
     def plan(self, suite="desktop", root=lt.ROOT):
-        return lt.plan(root, suite, only_modules=("calf-webview",), focus=lt.WEBVIEW_IDENTITY_FOCUS)
+        return lt.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=lt.WEBVIEW_IDENTITY_FOCUS)
 
     def identities(self, suite):
         cases = copy.deepcopy(lt.webview_identity_identities(suite))
@@ -51,8 +51,8 @@ class WebViewIdentityFocusTests(unittest.TestCase):
 
     def source_root(self, directory, suite):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicit synthetic model, never executed\n")
         source = lt.WEBVIEW_IDENTITY_SPECS[suite]["source"]
@@ -72,7 +72,7 @@ class WebViewIdentityFocusTests(unittest.TestCase):
         rows = matrix.matrix("webview-identity")["include"]
         self.assertEqual({"desktop-linux-x64", "browser-js", "browser-wasm", "android-device-api35"},
                          {row["slot"] for row in rows})
-        self.assertTrue(all(row["test-modules"] == "calf-webview" and
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-webview" and
                             row["test-focus"] == lt.WEBVIEW_IDENTITY_FOCUS for row in rows))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         self.assertEqual(9, sum(len(self.plan(row["suite"])["expected"][0]["required_testcases"]) for row in rows))
@@ -89,7 +89,7 @@ class WebViewIdentityFocusTests(unittest.TestCase):
             plan = self.plan(suite)
             selected, = plan["expected"]
             self.assertFalse(plan["complete_suite_requested"])
-            self.assertEqual(":calf-webview:" + lt.SUITES[suite][0], selected["task"])
+            self.assertEqual(":nativecmpkit-webview:" + lt.SUITES[suite][0], selected["task"])
             self.assertEqual(lt.WEBVIEW_IDENTITY_SPECS[suite]["classname"], selected["test_filter"])
             command = lt.gradle_command(suite, plan, android_serial="emulator-5588" if suite == "android-device" else None)
             if suite == "android-device":
@@ -104,7 +104,7 @@ class WebViewIdentityFocusTests(unittest.TestCase):
 
     def test_real_cli_plans_each_exact_suite_and_rejects_an_unreviewed_focus(self):
         for suite in self.SUITES:
-            args = ["library_tests.py", "plan", "--suite", suite, "--module", "calf-webview", "--focus", lt.WEBVIEW_IDENTITY_FOCUS]
+            args = ["library_tests.py", "plan", "--suite", suite, "--module", "nativecmpkit-webview", "--focus", lt.WEBVIEW_IDENTITY_FOCUS]
             stream = io.StringIO()
             with patch("sys.argv", args), patch("sys.stdout", stream): self.assertEqual(0, lt.main())
             self.assertEqual(self.plan(suite), json.loads(stream.getvalue()))
@@ -112,11 +112,11 @@ class WebViewIdentityFocusTests(unittest.TestCase):
             lt.main()
 
     def test_wrong_suite_module_filter_inventory_source_task_or_full_suite_claim_is_rejected(self):
-        for suite, modules in (("ios", ("calf-webview",)), ("android-host", ("calf-webview",)),
-                               ("desktop", ("calf-ui",)), ("desktop", None), ("js", ("calf-io",))):
+        for suite, modules in (("ios", ("nativecmpkit-webview",)), ("android-host", ("nativecmpkit-webview",)),
+                               ("desktop", ("nativecmpkit-ui",)), ("desktop", None), ("js", ("nativecmpkit-io",))):
             with self.assertRaises(ValueError): lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.WEBVIEW_IDENTITY_FOCUS)
         for suite in self.SUITES:
-            for key, value in (("module", "calf-io"), ("task", ":calf-webview:publish"), ("test_filter", "*"),
+            for key, value in (("module", "nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"),
                                ("required_testcases", []), ("test_source_files", [])):
                 plan = self.plan(suite); plan["expected"][0][key] = value
                 with self.assertRaises(ValueError): lt.validate_test_focus(plan)

@@ -24,7 +24,7 @@ private const val ANDROID_LIBRARY_EXTENSION_NAME = "android"
 fun Project.androidLibrarySetup() {
     val libs = the<LibrariesForLibs>()
     // Public Android resource namespaces must not silently follow a Maven group rename.
-    val androidNamespace = "com.mohamedrejeb.calf" + path.replace("-", "").split(":").joinToString(".")
+    val androidNamespace = "io.github.apdelrahman1911.nativecmpkit" + path.replace("-", "").split(":").joinToString(".")
     val jvmTarget = JvmTarget.fromTarget(libs.versions.java.get())
 
     extensions.configure<KotlinMultiplatformExtension> {

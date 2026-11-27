@@ -20,7 +20,7 @@ require(candidateDirectory.isAbsolute && candidateDirectory.isDirectory) {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // Missing candidate coordinates MUST fail, not resolve Calf/a previous package remotely.
+        // Missing candidate coordinates MUST fail, not resolve NativeCmpKit/a previous package remotely.
         exclusiveContent {
             forRepository {
                 maven {

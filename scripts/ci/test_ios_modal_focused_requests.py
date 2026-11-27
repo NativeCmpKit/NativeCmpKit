@@ -8,8 +8,8 @@ import library_tests as library
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = "scripts/ci/ios_modal_focused_compile.init.gradle.kts"
-TASK = ":calf-ui:iosSimulatorArm64ApplicationTest"
-COMPILER = ":calf-ui:compileTestKotlinIosSimulatorArm64"
+TASK = ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"
+COMPILER = ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"
 
 
 def requests(source):
@@ -45,8 +45,8 @@ class IosModalFocusedRequestsTests(unittest.TestCase):
         wrong = [self.request + ["--tests", "*"], self.request[:-2],
                  self.request + self.request[-2:], self.request[:1] + self.request[3:] + self.request[1:3],
                  [TASK, "--tests", library.IOS_MODAL_LIFECYCLE_CLASS + ".*"],
-                 [":calf-ui:publish"], [COMPILER, "--tests", "*"],
-                 self.request + [":calf-ui:desktopTest"], ["iosSimulatorArm64ApplicationTest"],
+                 [":nativecmpkit-ui:publish"], [COMPILER, "--tests", "*"],
+                 self.request + [":nativecmpkit-ui:desktopTest"], ["iosSimulatorArm64ApplicationTest"],
                  self.request[:-1] + ["foreign.Test.case"]]
         for candidate in wrong:
             with self.subTest(candidate=candidate):
@@ -58,7 +58,7 @@ class IosModalFocusedRequestsTests(unittest.TestCase):
         self.assertNotIn(COMPILER, self.request)
 
     def test_included_builds_return_before_any_task_or_source_admission(self):
-        scoped = self.source.index('rootProject.findProject(":calf-ui") ?: return@projectsEvaluated')
+        scoped = self.source.index('rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated')
         self.assertLess(scoped, self.source.index("val applicationRequest"))
         self.assertLess(scoped, self.source.index("check(gradle.startParameter.taskNames"))
 
@@ -69,7 +69,7 @@ class IosModalFocusedRequestsTests(unittest.TestCase):
             self.assertNotIn(forbidden, self.source)
 
     def test_live_gradle_command_delivers_the_exact_admitted_request(self):
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
         command = library.gradle_command("ios", plan, "726D52AF-426A-408A-974D-CA8B9BE8A479")
         self.assertEqual(self.request, command[command.index(TASK):])
         self.assertEqual(1, command.count(SCRIPT))

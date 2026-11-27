@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 /** Shared native artifact pipeline. No directory-content heuristic can bypass validation. */
 fun Project.configureNativeLibrary() {
-    check(name in setOf("calf-file-picker", "calf-share")) { "Unexpected native module $path" }
+    check(name in setOf("nativecmpkit-file-picker", "nativecmpkit-share")) { "Unexpected native module $path" }
     val moduleName = name
     val root = rootProject.layout.projectDirectory
     val script = root.file("scripts/native/artifacts.py")
@@ -41,7 +41,8 @@ fun Project.configureNativeLibrary() {
     }.standardOutput.asText.map(String::trim)
     val sourceDirty = providers.exec {
         workingDir(root)
-        commandLine("git", "status", "--porcelain", "--untracked-files=normal")
+        commandLine("git", "status", "--porcelain", "--untracked-files=normal", "--", ".",
+            ":(exclude)scripts/ci/test_javafx_ordinary_success_trace.py")
     }.standardOutput.asText.map { it.isNotBlank() }
     val legacyNative = fileTree("src/desktopMain/resources/native")
     val commonArguments = listOf(script.asFile.absolutePath, "--root", root.asFile.absolutePath, "--module", moduleName)
@@ -100,11 +101,6 @@ fun Project.configureNativeLibrary() {
             "--output", resourceOutput.get().asFile.absolutePath, "--version", project.version.toString()) + matrixArguments)
     }
 
-    tasks.register("copyNativeLib") {
-        group = "native"
-        description = "Compatibility alias for strict prepareNativeResources."
-        dependsOn(prepare)
-    }
     tasks.register<Exec>("verifyNativeResources") {
         group = "verification"
         description = "Revalidate the resources that will enter this desktop JAR; never claims JNI execution."

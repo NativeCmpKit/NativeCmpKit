@@ -4,7 +4,7 @@ render_macros: true
 <!-- Modified for nativeCmpkit migration (2026-10-24): independent coordinates / project references; inherited APIs retained. -->
 # File Picker
 
-> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical Calf version claims are preserved, not certified as nativeCmpkit releases.
+> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical NativeCmpKit version claims are preserved, not certified as nativeCmpkit releases.
 
 ## Installation
 
@@ -163,7 +163,7 @@ Passing `null` (the default) allows unlimited selection. `FilePickerSelectionMod
 
 #### Native library cache
 
-The desktop file picker relies on a small native library bundled inside the JAR. On first use it is extracted to `~/.cache/calf-filepicker/`. The cached file name includes a hash of the library's content, so several applications, product flavors, or Calf versions running on the same machine never overwrite each other's copy, and an identical library that is already present is reused as is.
+The desktop file picker relies on a small native library bundled inside the JAR. On first use it is extracted to `~/.cache/nativecmpkit-filepicker/`. The cached file name includes a hash of the library's content, so several applications, product flavors, or NativeCmpKit versions running on the same machine never overwrite each other's copy, and an identical library that is already present is reused as is.
 
 Packagers that place the library on the system library path (for example Conveyor) skip the extraction entirely, since the loader tries `System.loadLibrary` first.
 
@@ -285,7 +285,7 @@ val isDirectory = file.isDirectory()
 `rememberFileSaverLauncher` lets the user save a file to a location of their choice. Available on all platforms.
 
 ```kotlin
-@OptIn(ExperimentalCalfApi::class)
+@OptIn(ExperimentalNativeCmpKitApi::class)
 @Composable
 fun SaveFileExample() {
     val saverLauncher = rememberFileSaverLauncher(
@@ -330,7 +330,7 @@ This avoids loading the entire file content into memory. On each platform, the f
 | Desktop | Native save dialog via rfd |
 | Web | Browser download — `onResult` is not called since downloads are fire-and-forget |
 
-> `rememberFileSaverLauncher` is annotated with `@ExperimentalCalfApi`.
+> `rememberFileSaverLauncher` is annotated with `@ExperimentalNativeCmpKitApi`.
 
 ## Platform-specific APIs
 
@@ -372,10 +372,10 @@ val file: org.w3c.files.File = kmpFile.file
 
 ## Streaming with kotlinx-io
 
-Reading a large file with `readByteArray` loads it fully into memory. To stream it instead, for example to feed a zip reader or a parser, use the `source()` extension. It opens the file as a [kotlinx-io](https://github.com/Kotlin/kotlinx-io) `RawSource`; kotlinx-io is a dependency of `calf-io`, so nothing extra needs to be added:
+Reading a large file with `readByteArray` loads it fully into memory. To stream it instead, for example to feed a zip reader or a parser, use the `source()` extension. It opens the file as a [kotlinx-io](https://github.com/Kotlin/kotlinx-io) `RawSource`; kotlinx-io is a dependency of `nativecmpkit-io`, so nothing extra needs to be added:
 
 ```kotlin
-import com.mohamedrejeb.calf.io.source
+import io.github.apdelrahman1911.nativecmpkit.io.source
 
 suspend fun importFile(file: KmpFile) {
     file.source().buffered().use { source ->
@@ -385,7 +385,7 @@ suspend fun importFile(file: KmpFile) {
 }
 ```
 
-`source()` is a suspending function. Like the other extensions it has an overload that takes a `PlatformContext` for Android code that runs outside a Calf composable. Always close the returned source.
+`source()` is a suspending function. Like the other extensions it has an overload that takes a `PlatformContext` for Android code that runs outside a NativeCmpKit composable. Always close the returned source.
 
 | Platform | How the file is opened |
 |---|---|
@@ -409,7 +409,7 @@ val okioSource: okio.Source = file.source().asOkioSource()
 
 ## Coil Extensions
 
-In case you're using [Coil](https://github.com/coil-kt/coil) in your project, Calf has a dedicated package that includes utilities to ease the integration between both libraries.
+In case you're using [Coil](https://github.com/coil-kt/coil) in your project, NativeCmpKit has a dedicated package that includes utilities to ease the integration between both libraries.
 
 You can use it by adding the following dependency to your module `build.gradle.kts` file:
 

@@ -11,10 +11,10 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-CAMERA_BUILD = "calf-camera-picker/build.gradle.kts"
-CONTRACTS = "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt"
-DESKTOP = "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt"
-DESKTOP_TEST = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt"
+CAMERA_BUILD = "nativecmpkit-camera-picker/build.gradle.kts"
+CONTRACTS = "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt"
+DESKTOP = "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt"
+DESKTOP_TEST = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt"
 
 
 def sha(raw):

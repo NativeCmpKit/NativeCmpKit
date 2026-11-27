@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.permissiondemo.BIND_DEMO"
         android:protectionLevel="signature" />
-    <queries><package android:name="com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test" /></queries>
+    <queries><package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test" /></queries>
     <application android:allowBackup="false" android:label="NativeCmpKit approved Call permission test variant">
         <activity android:name=".PermissionDemoActivity" android:exported="true"
             android:permission="io.github.apdelrahman1911.nativecmpkit.verification.permissiondemo.BIND_DEMO"

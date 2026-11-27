@@ -9,10 +9,10 @@ import stat
 
 FOCUS = "ui-native-popover-anchor"
 SOURCES = (
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverAnchorTest.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeXcuiInput.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverAnchorTest.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeXcuiInput.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
 )
 RECEIPT = "build/ci-verification/ios-focused-compilation.json"
 MAX_BYTES = 2 * 1024 * 1024
@@ -56,7 +56,7 @@ def validate_compilation(root: Path, started_ns: int, ended_ns: int) -> bool:
         document = json.loads(raw, object_pairs_hook=_unique_object,
                               parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite compiler receipt")))
         expected = {
-            "task": ":calf-ui:compileTestKotlinIosSimulatorArm64",
+            "task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64",
             "focus": FOCUS,
             "source_sha256": {name: hashlib.sha256(_ordinary_bytes(root, name)[0]).hexdigest() for name in SOURCES},
             "effective_sources": list(SOURCES),

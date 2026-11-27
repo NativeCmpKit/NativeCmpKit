@@ -14,7 +14,7 @@ class FailureDiagnosticsTests(unittest.TestCase):
             root = Path(directory)
             output = root / "build/ci-verification/sample-platforms-apple"
             output.mkdir(parents=True)
-            line = "/owned/sample/ios/Calf/ContentView.swift:18:13: error: cannot find 'Common' in scope"
+            line = "/owned/sample/ios/NativeCmpKit/ContentView.swift:18:13: error: cannot find 'Common' in scope"
             (output / "xcode.log").write_text("arbitrary application output\n" + line + "\n** BUILD FAILED **\n")
             result = d.capture(root, "build/ci-verification/sample-platforms-apple")
             row, = result["logs"]
@@ -35,10 +35,10 @@ class FailureDiagnosticsTests(unittest.TestCase):
 
     def test_browser_startup_and_webpack_failure_precede_missing_xml_without_a_full_log(self):
         for task in ("jsBrowserTest", "wasmJsBrowserTest"):
-            lines = [f"> Task :calf-file-picker-coil:{task}",
+            lines = [f"> Task :nativecmpkit-file-picker-coil:{task}",
                      "Module not found: Error: Can't resolve './skiko.mjs'",
                      "Cannot start ChromeHeadless", "password=private",
-                     "> Task :calf-io:compileKotlinJs", "unrelated compilation output"]
+                     "> Task :nativecmpkit-io:compileKotlinJs", "unrelated compilation output"]
             selected = [s for s in d.sections(lines) if s["kind"] == "browser-task"]
             self.assertEqual(1, len(selected))
             self.assertIn("./skiko.mjs", selected[0]["text"])
@@ -54,8 +54,8 @@ class FailureDiagnosticsTests(unittest.TestCase):
             root = Path(directory)
             output = root / "build/ci-verification/slot"; output.mkdir(parents=True)
             (output / "apk-assembly.log").write_text(
-                "> Task :calf-webview:compileAndroidDeviceTest FAILED\n"
-                "e: file:///owned/calf-webview/src/androidDeviceTest/Fixture.kt:1:2 Unresolved reference 'click'.\n"
+                "> Task :nativecmpkit-webview:compileAndroidDeviceTest FAILED\n"
+                "e: file:///owned/nativecmpkit-webview/src/androidDeviceTest/Fixture.kt:1:2 Unresolved reference 'click'.\n"
                 "* What went wrong:\nOwning compilation failure\n* Try:\nUnrelated advice\n")
             result = d.capture(root, "build/ci-verification/slot")
             excerpts = result["logs"][0]["excerpts"]
@@ -65,8 +65,8 @@ class FailureDiagnosticsTests(unittest.TestCase):
             self.assertFalse(result["test_success_inferred"])
 
     def test_kotlin_source_error_is_selected_even_without_a_gradle_summary(self):
-        result = d.sections(["> Task :calf-webview:compileAndroidDeviceTest FAILED",
-                             "e: file:///owned/calf-webview/src/androidDeviceTest/Fixture.kt:1:2 Unresolved reference 'click'.",
+        result = d.sections(["> Task :nativecmpkit-webview:compileAndroidDeviceTest FAILED",
+                             "e: file:///owned/nativecmpkit-webview/src/androidDeviceTest/Fixture.kt:1:2 Unresolved reference 'click'.",
                              "arbitrary application output"])
         self.assertTrue(result)
         self.assertIn("Unresolved reference 'click'", "".join(e["text"] for e in result))
@@ -81,7 +81,7 @@ class FailureDiagnosticsTests(unittest.TestCase):
     def test_actual_objc_initializer_exception_is_not_hidden_by_task_exit(self):
         line = ("*** Terminating app due to uncaught exception 'Initializer is not implemented', "
                 "reason: 'init is not implemented in NativecmpkitUIKitLibraryTestDelegate'")
-        result = d.sections(["> Task :calf-ui:iosSimulatorArm64ApplicationTest",
+        result = d.sections(["> Task :nativecmpkit-ui:iosSimulatorArm64ApplicationTest",
                              "unrelated application output", line,
                              "*** First throw call stack:", "private surrounding text",
                              "* What went wrong:", "application test exited with errors", "* Try:"])
@@ -107,14 +107,14 @@ class FailureDiagnosticsTests(unittest.TestCase):
             root = Path(directory)
             output = root / "build/ci-verification/slot"; output.mkdir(parents=True)
             (output / "apk-assembly.log").write_text(
-                "> Task :calf-webview:compileAndroidDeviceTest\narbitrary application output\n")
+                "> Task :nativecmpkit-webview:compileAndroidDeviceTest\narbitrary application output\n")
             result = d.capture(root, "build/ci-verification/slot")
             self.assertEqual([], result["logs"][0]["excerpts"])
             self.assertEqual("", result["logs"][0]["tail"])
 
     def test_an_early_connected_failure_is_not_hidden_by_the_final_stack(self):
-        lines = ["> Task :calf-io:connectedAndroidDeviceTest", "First actual failure",
-                 "> Task :calf-webview:connectedAndroidDeviceTest", "Last failure"]
+        lines = ["> Task :nativecmpkit-io:connectedAndroidDeviceTest", "First actual failure",
+                 "> Task :nativecmpkit-webview:connectedAndroidDeviceTest", "Last failure"]
         lines += ["Final unrelated stack frame"] * 400
         result = d.sections(lines)
         self.assertEqual(2, len(result))
@@ -129,7 +129,7 @@ class FailureDiagnosticsTests(unittest.TestCase):
         self.assertNotIn("unrelated body", result[0]["text"])
 
     def test_non_connected_task_output_is_not_an_arbitrary_full_log(self):
-        self.assertEqual([], d.sections(["> Task :calf-io:desktopTest", "arbitrary application output"]))
+        self.assertEqual([], d.sections(["> Task :nativecmpkit-io:desktopTest", "arbitrary application output"]))
 
     def test_explicit_failure_summary_stops_before_retry_advice(self):
         result = d.sections(["* What went wrong:", "Actual task error", "", "* Try:", "do not archive me"])
@@ -204,7 +204,7 @@ class FailureDiagnosticsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             output = root / "build/ci-verification/slot"; output.mkdir(parents=True)
-            (output / "gradle.log").write_text("> Task :calf-io:connectedAndroidDeviceTest\nActual error\n")
+            (output / "gradle.log").write_text("> Task :nativecmpkit-io:connectedAndroidDeviceTest\nActual error\n")
             result = d.capture(root, "build/ci-verification/slot")
             self.assertFalse(result["test_success_inferred"])
             self.assertFalse(result["full_logs_uploaded"])
@@ -212,9 +212,9 @@ class FailureDiagnosticsTests(unittest.TestCase):
             # public UTP and declared XML trees each. Assert the exact paths;
             # inventories are still never inferred as test passes.
             expected_modules = (
-                "calf-io", "calf-file-picker", "calf-geo", "calf-webview", "calf-ui",
-                "calf-navigation", "calf-share", "calf-camera-picker",
-                "calf-permissions/core",
+                "nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-geo", "nativecmpkit-webview", "nativecmpkit-ui",
+                "nativecmpkit-navigation", "nativecmpkit-share", "nativecmpkit-camera-picker",
+                "nativecmpkit-permissions/core",
             )
             self.assertEqual([
                 relative

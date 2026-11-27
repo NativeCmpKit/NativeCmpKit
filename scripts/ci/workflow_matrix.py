@@ -251,219 +251,219 @@ PROFILES = {
     "tooling": (),
 }
 MODULE_SUBSETS = {
-    "android-permission-location-api35": "calf-permissions/core",
-    "android-permission-lifecycle-grant-api35": "calf-permissions/core",
-    "android-permission-lifecycle-revoke-api35": "calf-permissions/core",
-    "android-io-permission-storage-api35": "calf-io,calf-permissions/core",
-    "android-permission-storage-api35-recovery": "calf-permissions/core",
-    "android-permission-storage-compatibility": "calf-permissions/core",
-    "android-media-selection-compatibility": "calf-permissions/core",
-    "android-storage-compatibility": "calf-permissions/core",
-    "android-storage-api28": "calf-permissions/core",
-    "android-storage-api29-target28": "calf-permissions/core",
-    "android-storage-api29-legacy": "calf-permissions/core",
-    "android-storage-api29-scoped": "calf-permissions/core",
-    "android-storage-api30-normal": "calf-permissions/core",
-    "android-storage-api30-all-files": "calf-permissions/core",
-    "android-storage-api35-normal": "calf-permissions/core",
-    "android-storage-api35-all-files": "calf-permissions/core",
-    "android-geo-ownership": "calf-geo",
-    "android-geo-provider": "calf-geo",
-    "android-geo-prerequisites": "calf-geo",
-    "android-share-grants": "calf-share",
-    "android-io-provider-lifecycle": "calf-io",
-    "android-io-provider-unavailable": "calf-io",
-    "android-io-default-decode": "calf-io",
-    "android-io-named-system-providers": "calf-io",
-    "android-io-named-external-storage": "calf-io",
-    "android-io-reference-regressions": "calf-io",
-    "android-io-controlled-remote": "calf-io",
-    "android-io-controlled-remote-positive": "calf-io",
-    "android-io-controlled-remote-cancel": "calf-io",
-    "android-permission-demo": "calf-permissions/core",
-    "android-permission-demo-call-denial-recovery": "calf-permissions/core",
-    "android-permission-demo-denial-recovery": "calf-permissions/core",
-    "android-media-selection-api33": "calf-permissions/core",
-    "android-media-selection-api34": "calf-permissions/core",
-    "android-camera-provider": "calf-camera-picker",
-    "android-camera-provider-minimum": "calf-camera-picker",
-    "android-camera-no-handler-minimum": "calf-camera-picker",
-    "android-camera-restoration": "calf-camera-picker",
-    "android-camera-restoration-dont-keep": "calf-camera-picker",
-    "android-camera-callback-substitution": "calf-camera-picker",
-    "android-navigation-back": "calf-navigation",
-    "ios-webview-lifecycle": "calf-webview",
-    "ios-webview-recovery": "calf-webview",
-    "ios-webview-request-state": "calf-webview",
-    "ios-webview-provisional-dns": "calf-webview",
-    "ios-webview-request-dns": "calf-webview",
-    "ios-secure-alert-input": "calf-ui",
-    "ios-image-memory-darwin": "calf-ui",
-    "ios-image-profile-recovery": "calf-ui",
+    "android-permission-location-api35": "nativecmpkit-permissions/core",
+    "android-permission-lifecycle-grant-api35": "nativecmpkit-permissions/core",
+    "android-permission-lifecycle-revoke-api35": "nativecmpkit-permissions/core",
+    "android-io-permission-storage-api35": "nativecmpkit-io,nativecmpkit-permissions/core",
+    "android-permission-storage-api35-recovery": "nativecmpkit-permissions/core",
+    "android-permission-storage-compatibility": "nativecmpkit-permissions/core",
+    "android-media-selection-compatibility": "nativecmpkit-permissions/core",
+    "android-storage-compatibility": "nativecmpkit-permissions/core",
+    "android-storage-api28": "nativecmpkit-permissions/core",
+    "android-storage-api29-target28": "nativecmpkit-permissions/core",
+    "android-storage-api29-legacy": "nativecmpkit-permissions/core",
+    "android-storage-api29-scoped": "nativecmpkit-permissions/core",
+    "android-storage-api30-normal": "nativecmpkit-permissions/core",
+    "android-storage-api30-all-files": "nativecmpkit-permissions/core",
+    "android-storage-api35-normal": "nativecmpkit-permissions/core",
+    "android-storage-api35-all-files": "nativecmpkit-permissions/core",
+    "android-geo-ownership": "nativecmpkit-geo",
+    "android-geo-provider": "nativecmpkit-geo",
+    "android-geo-prerequisites": "nativecmpkit-geo",
+    "android-share-grants": "nativecmpkit-share",
+    "android-io-provider-lifecycle": "nativecmpkit-io",
+    "android-io-provider-unavailable": "nativecmpkit-io",
+    "android-io-default-decode": "nativecmpkit-io",
+    "android-io-named-system-providers": "nativecmpkit-io",
+    "android-io-named-external-storage": "nativecmpkit-io",
+    "android-io-reference-regressions": "nativecmpkit-io",
+    "android-io-controlled-remote": "nativecmpkit-io",
+    "android-io-controlled-remote-positive": "nativecmpkit-io",
+    "android-io-controlled-remote-cancel": "nativecmpkit-io",
+    "android-permission-demo": "nativecmpkit-permissions/core",
+    "android-permission-demo-call-denial-recovery": "nativecmpkit-permissions/core",
+    "android-permission-demo-denial-recovery": "nativecmpkit-permissions/core",
+    "android-media-selection-api33": "nativecmpkit-permissions/core",
+    "android-media-selection-api34": "nativecmpkit-permissions/core",
+    "android-camera-provider": "nativecmpkit-camera-picker",
+    "android-camera-provider-minimum": "nativecmpkit-camera-picker",
+    "android-camera-no-handler-minimum": "nativecmpkit-camera-picker",
+    "android-camera-restoration": "nativecmpkit-camera-picker",
+    "android-camera-restoration-dont-keep": "nativecmpkit-camera-picker",
+    "android-camera-callback-substitution": "nativecmpkit-camera-picker",
+    "android-navigation-back": "nativecmpkit-navigation",
+    "ios-webview-lifecycle": "nativecmpkit-webview",
+    "ios-webview-recovery": "nativecmpkit-webview",
+    "ios-webview-request-state": "nativecmpkit-webview",
+    "ios-webview-provisional-dns": "nativecmpkit-webview",
+    "ios-webview-request-dns": "nativecmpkit-webview",
+    "ios-secure-alert-input": "nativecmpkit-ui",
+    "ios-image-memory-darwin": "nativecmpkit-ui",
+    "ios-image-profile-recovery": "nativecmpkit-ui",
     # Public Compose/DOM picker lifetime only; no replay of unchanged IO/other suites.
-    "browser-picker": "calf-file-picker",
-    "browser-coil-io": "calf-file-picker-coil",
-    "browser-coil-io-js": "calf-file-picker-coil",
-    "browser-coil-io-wasm": "calf-file-picker-coil",
+    "browser-picker": "nativecmpkit-file-picker",
+    "browser-coil-io": "nativecmpkit-file-picker-coil",
+    "browser-coil-io-js": "nativecmpkit-file-picker-coil",
+    "browser-coil-io-wasm": "nativecmpkit-file-picker-coil",
     # Real public WebView/Compose viewport disposal on both browser backends only.
-    "webview-browser": "calf-webview",
+    "webview-browser": "nativecmpkit-webview",
     # Two missing original iframe criteria methods only; accepted Browser004 stays reusable.
-    "webview-content-transitions": "calf-webview",
-    "webview-request-state": "calf-webview",
-    "webview-content-policy-linux": "calf-webview",
-    "webview-content-policy-android": "calf-webview",
-    "webview-content-policy-js": "calf-webview",
-    "webview-content-policy-wasm": "calf-webview",
-    "ios-webview-content-policy": "calf-webview",
-    "webview-offline-destination": "calf-webview",
-    "webview-desktop-request-state": "calf-webview",
-    "webview-desktop-security-regressions": "calf-webview",
-    "webview-desktop-request-state-linux-pair": "calf-webview",
-    "webview-desktop-request-state-macos-pair": "calf-webview",
-    "webview-desktop-request-state-windows-single": "calf-webview",
-    "webview-desktop-stop-windows-recovery": "calf-webview",
-    "webview-desktop-security-linux-arm64-windows-pair": "calf-webview",
-    "webview-desktop-security-macos-pair": "calf-webview",
-    "webview-desktop-policy-macos-recovery": "calf-webview",
-    "webview-desktop-tls-windows-recovery": "calf-webview",
+    "webview-content-transitions": "nativecmpkit-webview",
+    "webview-request-state": "nativecmpkit-webview",
+    "webview-content-policy-linux": "nativecmpkit-webview",
+    "webview-content-policy-android": "nativecmpkit-webview",
+    "webview-content-policy-js": "nativecmpkit-webview",
+    "webview-content-policy-wasm": "nativecmpkit-webview",
+    "ios-webview-content-policy": "nativecmpkit-webview",
+    "webview-offline-destination": "nativecmpkit-webview",
+    "webview-desktop-request-state": "nativecmpkit-webview",
+    "webview-desktop-security-regressions": "nativecmpkit-webview",
+    "webview-desktop-request-state-linux-pair": "nativecmpkit-webview",
+    "webview-desktop-request-state-macos-pair": "nativecmpkit-webview",
+    "webview-desktop-request-state-windows-single": "nativecmpkit-webview",
+    "webview-desktop-stop-windows-recovery": "nativecmpkit-webview",
+    "webview-desktop-security-linux-arm64-windows-pair": "nativecmpkit-webview",
+    "webview-desktop-security-macos-pair": "nativecmpkit-webview",
+    "webview-desktop-policy-macos-recovery": "nativecmpkit-webview",
+    "webview-desktop-tls-windows-recovery": "nativecmpkit-webview",
     # Recover a Wasm-only fixture/compiler failure without replaying accepted JS.
-    "webview-wasm": "calf-webview",
+    "webview-wasm": "nativecmpkit-webview",
     # Share/clipboard callback boundaries only; unchanged Android results are reusable.
-    "share-browser": "calf-share",
-    "share-clipboard-native": "calf-share",
-    "share-clipboard-native-wasm": "calf-share",
+    "share-browser": "nativecmpkit-share",
+    "share-clipboard-native": "nativecmpkit-share",
+    "share-clipboard-native-wasm": "nativecmpkit-share",
     # Four important public dialog transactions, not an unrelated UI suite replay.
-    "ui-date-browser": "calf-ui",
-    "ui-date-js": "calf-ui",
-    "ui-date-platforms": "calf-ui",
-    "ui-date-wasm": "calf-ui",
-    "ui-date-android": "calf-ui",
-    "ui-dropdown-platforms": "calf-ui",
-    "ui-dropdown-android-recovery": "calf-ui",
+    "ui-date-browser": "nativecmpkit-ui",
+    "ui-date-js": "nativecmpkit-ui",
+    "ui-date-platforms": "nativecmpkit-ui",
+    "ui-date-wasm": "nativecmpkit-ui",
+    "ui-date-android": "nativecmpkit-ui",
+    "ui-dropdown-platforms": "nativecmpkit-ui",
+    "ui-dropdown-android-recovery": "nativecmpkit-ui",
     # Immutable portable argument/saver/numerical checks without repeating the
     # entire19-module browser suite. Does not change full browser/all coverage.
-    "navigation-geo": "calf-navigation,calf-geo",
+    "navigation-geo": "nativecmpkit-navigation,nativecmpkit-geo",
     # JVM-only allocation/work probes need an immutable desktop run, not replay
     # of unchanged JS/Wasm/Apple/geo or full-library results.
-    "navigation-desktop": "calf-navigation",
+    "navigation-desktop": "nativecmpkit-navigation",
     # Real JavaFX/window cancellation and reattachment; never replay unrelated
     # passed platform, consumer, native-picker or shared UI suites.
-    "webview-desktop": "calf-webview",
-    "webview-identity": "calf-webview",
-    "webview-identity-linux": "calf-webview",
-    "webview-identity-browser": "calf-webview",
-    "webview-identity-wasm": "calf-webview",
-    "webview-identity-android": "calf-webview",
-    "webview-identity-recovery": "calf-webview",
-    "webview-identity-remount-recovery": "calf-webview",
-    "webview-identity-ios-remount-recovery": "calf-webview",
-    "webview-lifetime": "calf-webview",
-    "webview-lifetime-android": "calf-webview",
-    "webview-lifetime-android-media": "calf-webview",
-    "webview-lifetime-linux": "calf-webview",
-    "webview-lifetime-macos-arm64": "calf-webview",
-    "webview-lifetime-macos-x64": "calf-webview",
-    "webview-lifetime-macos-media": "calf-webview",
-    "webview-lifetime-windows": "calf-webview",
-    "picker-batch": "calf-file-picker",
-    "picker-batch-recovery": "calf-file-picker",
-    "picker-batch-linux": "calf-file-picker",
-    "picker-batch-macos": "calf-file-picker",
-    "picker-batch-windows": "calf-file-picker",
-    "picker-saver-state": "calf-file-picker",
-    "picker-linux-portal": "calf-file-picker",
-    "picker-linux-portal-save": "calf-file-picker",
+    "webview-desktop": "nativecmpkit-webview",
+    "webview-identity": "nativecmpkit-webview",
+    "webview-identity-linux": "nativecmpkit-webview",
+    "webview-identity-browser": "nativecmpkit-webview",
+    "webview-identity-wasm": "nativecmpkit-webview",
+    "webview-identity-android": "nativecmpkit-webview",
+    "webview-identity-recovery": "nativecmpkit-webview",
+    "webview-identity-remount-recovery": "nativecmpkit-webview",
+    "webview-identity-ios-remount-recovery": "nativecmpkit-webview",
+    "webview-lifetime": "nativecmpkit-webview",
+    "webview-lifetime-android": "nativecmpkit-webview",
+    "webview-lifetime-android-media": "nativecmpkit-webview",
+    "webview-lifetime-linux": "nativecmpkit-webview",
+    "webview-lifetime-macos-arm64": "nativecmpkit-webview",
+    "webview-lifetime-macos-x64": "nativecmpkit-webview",
+    "webview-lifetime-macos-media": "nativecmpkit-webview",
+    "webview-lifetime-windows": "nativecmpkit-webview",
+    "picker-batch": "nativecmpkit-file-picker",
+    "picker-batch-recovery": "nativecmpkit-file-picker",
+    "picker-batch-linux": "nativecmpkit-file-picker",
+    "picker-batch-macos": "nativecmpkit-file-picker",
+    "picker-batch-windows": "nativecmpkit-file-picker",
+    "picker-saver-state": "nativecmpkit-file-picker",
+    "picker-linux-portal": "nativecmpkit-file-picker",
+    "picker-linux-portal-save": "nativecmpkit-file-picker",
     # Changed interruptible file-copy and no-open share policy: actual JVM tests
     # on all three desktop OS families, not unrelated browser/mobile/sample jobs.
-    "desktop-data-safety": "calf-file-picker,calf-share",
-    "android-resource-safety": "calf-io,calf-file-picker-coil",
+    "desktop-data-safety": "nativecmpkit-file-picker,nativecmpkit-share",
+    "android-resource-safety": "nativecmpkit-io,nativecmpkit-file-picker-coil",
     # Reuse unchanged accepted IO27 results; only the repaired Coil fixture runs.
-    "android-coil-resource": "calf-file-picker-coil",
+    "android-coil-resource": "nativecmpkit-file-picker-coil",
     # Actual builtin cold initialization in both orders at SDK28/32/33; core
     # host tests consume Gallery production code without rerunning other suites.
-    "android-permission-alias": "calf-permissions/core",
-    "permissions-unsupported": "calf-permissions/core",
-    "permissions-unsupported-windows": "calf-permissions/core",
-    "permissions-ios": "calf-permissions/core",
-    "permissions-ios-safety": "calf-permissions/core",
-    "permissions-ios-empty-batch": "calf-permissions/core",
+    "android-permission-alias": "nativecmpkit-permissions/core",
+    "permissions-unsupported": "nativecmpkit-permissions/core",
+    "permissions-unsupported-windows": "nativecmpkit-permissions/core",
+    "permissions-ios": "nativecmpkit-permissions/core",
+    "permissions-ios-safety": "nativecmpkit-permissions/core",
+    "permissions-ios-empty-batch": "nativecmpkit-permissions/core",
     calendar_native.PROFILE: calendar_native.MODULE,
     macos_share_native.PROFILE: macos_share_native.MODULE,
     share_missing.PROFILE: share_missing.MODULE,
-    "permissions-completion-android": "calf-permissions/core",
+    "permissions-completion-android": "nativecmpkit-permissions/core",
     # A changed common test requires its own JVM/browser/Native execution, not
     # reuse of the older source tests or repetition of unrelated UIKit/consumer
     # suites. The browser-only continuation remains a separate finite profile.
-    "navigation-geo-matrix": "calf-navigation,calf-geo",
-    "windows-cache": "calf-file-picker,calf-share",
+    "navigation-geo-matrix": "nativecmpkit-navigation,nativecmpkit-geo",
+    "windows-cache": "nativecmpkit-file-picker,nativecmpkit-share",
     # Preserve the accepted picker57; diagnose only the share read-only boundary.
-    "windows-share-loader": "calf-share",
+    "windows-share-loader": "nativecmpkit-share",
     # Five real boundary methods only; preserve all38 accepted unrelated share
     # methods and picker57 rather than rerun version/DLL/application suites.
-    "windows-share-boundaries": "calf-share",
-    "ios-ui": "calf-ui",
-    "ios-ui-adaptive-pre26": "calf-ui",
-    "ios-ui-adaptive-drag-shader-ios26plus": "calf-ui",
-    "ios-ui-related-nine-ios26plus": "calf-ui",
-    "ios-ui-adaptive-customization-ios26plus": "calf-ui",
-    "ios-date-bounds": "calf-ui",
-    "ios-date-replacement": "calf-ui",
-    "ios-date-compact": "calf-ui",
-    "ios-dates-important": "calf-ui",
-    "ios-alert-date-important": "calf-ui",
-    "ios-alert-important-recovery": "calf-ui",
-    "ios-modal-ownership-batch": "calf-ui",
-    "ios-modal-ownership-ipad": "calf-ui",
-    "ios-modal-lifecycle-replacement": "calf-ui",
-    "ios-modal-lifecycle-replacement-ipad": "calf-ui",
-    "ios-modal-worker-memory-recovery": "calf-ui",
-    "ios-sheet-cancellation-repeat": "calf-ui",
-    "ios-modal-completion-cancellation": "calf-ui",
-    "ios-modal-lifecycle-memory-recovery": "calf-ui",
-    "ios-modal-xcui-batch": "calf-ui",
-    "ios-modal-xcui-batch-ipad": "calf-ui",
-    "ios-popover-anchor": "calf-ui",
-    "ios-popover-anchor-ipad": "calf-ui",
-    "ios-popover-bar-recovery": "calf-ui",
-    "ios-popover-bar-ipad-recovery": "calf-ui",
-    "ios-popover-geometry-iphone": "calf-ui",
-    "ios-popover-geometry-ipad": "calf-ui",
-    "ios-date-year-predicate-red": "calf-ui",
+    "windows-share-boundaries": "nativecmpkit-share",
+    "ios-ui": "nativecmpkit-ui",
+    "ios-ui-adaptive-pre26": "nativecmpkit-ui",
+    "ios-ui-adaptive-drag-shader-ios26plus": "nativecmpkit-ui",
+    "ios-ui-related-nine-ios26plus": "nativecmpkit-ui",
+    "ios-ui-adaptive-customization-ios26plus": "nativecmpkit-ui",
+    "ios-date-bounds": "nativecmpkit-ui",
+    "ios-date-replacement": "nativecmpkit-ui",
+    "ios-date-compact": "nativecmpkit-ui",
+    "ios-dates-important": "nativecmpkit-ui",
+    "ios-alert-date-important": "nativecmpkit-ui",
+    "ios-alert-important-recovery": "nativecmpkit-ui",
+    "ios-modal-ownership-batch": "nativecmpkit-ui",
+    "ios-modal-ownership-ipad": "nativecmpkit-ui",
+    "ios-modal-lifecycle-replacement": "nativecmpkit-ui",
+    "ios-modal-lifecycle-replacement-ipad": "nativecmpkit-ui",
+    "ios-modal-worker-memory-recovery": "nativecmpkit-ui",
+    "ios-sheet-cancellation-repeat": "nativecmpkit-ui",
+    "ios-modal-completion-cancellation": "nativecmpkit-ui",
+    "ios-modal-lifecycle-memory-recovery": "nativecmpkit-ui",
+    "ios-modal-xcui-batch": "nativecmpkit-ui",
+    "ios-modal-xcui-batch-ipad": "nativecmpkit-ui",
+    "ios-popover-anchor": "nativecmpkit-ui",
+    "ios-popover-anchor-ipad": "nativecmpkit-ui",
+    "ios-popover-bar-recovery": "nativecmpkit-ui",
+    "ios-popover-bar-ipad-recovery": "nativecmpkit-ui",
+    "ios-popover-geometry-iphone": "nativecmpkit-ui",
+    "ios-popover-geometry-ipad": "nativecmpkit-ui",
+    "ios-date-year-predicate-red": "nativecmpkit-ui",
     # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged
     # UIKit, picker-dialog, browser, Windows or packaged-consumer execution.
-    "ios-io": "calf-io,calf-file-picker-coil",
-    "ios-saver-write-failure": "calf-file-picker",
-    "ios-picker-batch": "calf-file-picker",
-    "ios-picker-recovery": "calf-file-picker",
-    "ios-picker-admission": "calf-file-picker",
-    "ios-picker-provider-cancellation": "calf-file-picker",
-    "ios-camera-ownership-memory-callback": "calf-camera-picker",
-    "ios-share-presentation-disposal": "calf-share",
-    "ios-share-remembered-failure-observation": "calf-share",
-    "ios-switch-cancellation": "calf-ui",
-    "ios-switch-ownership": "calf-ui",
-    "ios-slider-numeric": "calf-ui",
-    "ios-ui-state": "calf-ui",
-    "ios-time-state-recovery": "calf-ui",
-    "ios-slider-lifecycle": "calf-ui",
-    "ios-slider-remaining": "calf-ui",
-    "ios-slider-structure": "calf-ui",
-    "ios-slider-tap": "calf-ui",
-    "ios-slider-pair-structure": "calf-ui",
-    "ios-vector-theme": "calf-ui",
-    "ios-vector-theme-recovery": "calf-ui",
-    "ios-vector-rendering-recovery": "calf-ui",
-    "ios-vector-rendering-iphone-recovery": "calf-ui",
-    "ios-vector-native-screen-pair": "calf-ui",
-    "ios-slider-recovery": "calf-ui",
-    "ios-image-memory": "calf-ui",
-    "android-webview": "calf-webview",
-    "android-webview-popups": "calf-webview",
-    "android-webview-request-state": "calf-webview",
-    "android-webview-stop-redirect-recovery": "calf-webview",
-    "android-io-oversize": "calf-io",
-    "android-saver-identity": "calf-file-picker",
-    "android-saver-identity-missing": "calf-file-picker",
+    "ios-io": "nativecmpkit-io,nativecmpkit-file-picker-coil",
+    "ios-saver-write-failure": "nativecmpkit-file-picker",
+    "ios-picker-batch": "nativecmpkit-file-picker",
+    "ios-picker-recovery": "nativecmpkit-file-picker",
+    "ios-picker-admission": "nativecmpkit-file-picker",
+    "ios-picker-provider-cancellation": "nativecmpkit-file-picker",
+    "ios-camera-ownership-memory-callback": "nativecmpkit-camera-picker",
+    "ios-share-presentation-disposal": "nativecmpkit-share",
+    "ios-share-remembered-failure-observation": "nativecmpkit-share",
+    "ios-switch-cancellation": "nativecmpkit-ui",
+    "ios-switch-ownership": "nativecmpkit-ui",
+    "ios-slider-numeric": "nativecmpkit-ui",
+    "ios-ui-state": "nativecmpkit-ui",
+    "ios-time-state-recovery": "nativecmpkit-ui",
+    "ios-slider-lifecycle": "nativecmpkit-ui",
+    "ios-slider-remaining": "nativecmpkit-ui",
+    "ios-slider-structure": "nativecmpkit-ui",
+    "ios-slider-tap": "nativecmpkit-ui",
+    "ios-slider-pair-structure": "nativecmpkit-ui",
+    "ios-vector-theme": "nativecmpkit-ui",
+    "ios-vector-theme-recovery": "nativecmpkit-ui",
+    "ios-vector-rendering-recovery": "nativecmpkit-ui",
+    "ios-vector-rendering-iphone-recovery": "nativecmpkit-ui",
+    "ios-vector-native-screen-pair": "nativecmpkit-ui",
+    "ios-slider-recovery": "nativecmpkit-ui",
+    "ios-image-memory": "nativecmpkit-ui",
+    "android-webview": "nativecmpkit-webview",
+    "android-webview-popups": "nativecmpkit-webview",
+    "android-webview-request-state": "nativecmpkit-webview",
+    "android-webview-stop-redirect-recovery": "nativecmpkit-webview",
+    "android-io-oversize": "nativecmpkit-io",
+    "android-saver-identity": "nativecmpkit-file-picker",
+    "android-saver-identity-missing": "nativecmpkit-file-picker",
 }
 
 
@@ -471,11 +471,11 @@ def matrix(profile: str) -> dict:
     if profile not in PROFILES:
         raise ValueError("Unknown verification profile; arbitrary runner/task input is prohibited")
     if profile == "webview-desktop-stop-windows-recovery":
-        if PROFILES[profile] != ("desktop-windows-x64",) or MODULE_SUBSETS.get(profile) != "calf-webview":
+        if PROFILES[profile] != ("desktop-windows-x64",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-webview":
             raise ValueError("Windows Stop recovery requires its exact single Windows slot and WebView module")
         inherited = matrix("webview-desktop-request-state-windows-single")["include"]
         canonical = {"slot": "desktop-windows-x64", "suite": "desktop", "runner": "windows-2025",
-                     "arch": "x64", "python": "python", "test-modules": "calf-webview",
+                     "arch": "x64", "python": "python", "test-modules": "nativecmpkit-webview",
                      "test-focus": "webview-desktop-request-state-stop"}
         if inherited != [canonical]:
             raise ValueError("Windows Stop recovery refuses canonical runner/architecture/suite/module/field drift")
@@ -483,19 +483,19 @@ def matrix(profile: str) -> dict:
         row["test-focus"] = "webview-desktop-stop-windows-recovery"
         return {"include": [row]}
     if profile == desktop_security_plan.WINDOWS_TLS_RECOVERY_PROFILE:
-        if PROFILES[profile] != ("desktop-windows-x64",) or MODULE_SUBSETS.get(profile) != "calf-webview":
+        if PROFILES[profile] != ("desktop-windows-x64",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-webview":
             raise ValueError("Windows TLS recovery requires its exact single host and WebView module")
         inherited = [row for row in matrix("webview-desktop-security-linux-arm64-windows-pair")["include"]
                      if row["slot"] == "desktop-windows-x64"]
         canonical = {"slot": "desktop-windows-x64", "suite": "desktop", "runner": "windows-2025",
-                     "arch": "x64", "python": "python", "test-modules": "calf-webview",
+                     "arch": "x64", "python": "python", "test-modules": "nativecmpkit-webview",
                      "test-focus": "tls-rendering-cookies-policy"}
         if inherited != [canonical]:
             raise ValueError("Windows TLS recovery refuses runner/architecture/suite/module/field drift")
         return {"include": [dict(inherited[0], **{"test-focus": desktop_security_plan.WINDOWS_TLS_RECOVERY_FOCUS})]}
     if profile == desktop_security_plan.POLICY_RECOVERY_PROFILE:
         slots = ("desktop-macos-arm64", "desktop-macos-x64")
-        if PROFILES[profile] != slots or MODULE_SUBSETS.get(profile) != "calf-webview":
+        if PROFILES[profile] != slots or MODULE_SUBSETS.get(profile) != "nativecmpkit-webview":
             raise ValueError("Policy recovery refuses host or module broadening")
         inherited = matrix("webview-desktop-security-macos-pair")["include"]
         if tuple(row["slot"] for row in inherited) != slots:
@@ -511,7 +511,7 @@ def matrix(profile: str) -> dict:
     }
     if profile in aliases:
         parent, slots = aliases[profile]
-        if PROFILES[profile] != slots or MODULE_SUBSETS.get(profile) != "calf-webview":
+        if PROFILES[profile] != slots or MODULE_SUBSETS.get(profile) != "nativecmpkit-webview":
             raise ValueError("Finite Desktop alias requires its exact slot tuple and WebView module; no arbitrary subset")
         # Inherit every existing canonical row field/focus without narrowing its full branch.
         inherited = [row for row in matrix(parent)["include"] if row["slot"] in slots]
@@ -519,7 +519,7 @@ def matrix(profile: str) -> dict:
             raise ValueError("Finite Desktop alias requires its exact inherited row order; no omitted or added host")
         desktop_security_plan.validate_rows(desktop_security_plan.ROWS)
         required = {row["slot"]: row for row in desktop_security_plan.ROWS}
-        if any(row.get("suite") != "desktop" or row.get("test-modules") != "calf-webview" or
+        if any(row.get("suite") != "desktop" or row.get("test-modules") != "nativecmpkit-webview" or
                any(row.get(key) != required[row["slot"]][key] for key in ("runner", "arch"))
                for row in inherited):
             raise ValueError("Finite Desktop alias runner/architecture/suite/module drift; no other-host fallback")
@@ -691,15 +691,15 @@ def matrix(profile: str) -> dict:
             row["test-focus"] = "permission-ios-empty-batch"
     if profile in {"ios-ui-adaptive-pre26", "ios-ui-adaptive-drag-shader-ios26plus"}:
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
             raise ValueError("Related adaptive UI verification requires its exact single iPhone native row")
         rows[0]["test-focus"] = ("ui-native-adaptive-pre26" if profile == "ios-ui-adaptive-pre26" else
                                 "ui-native-adaptive-drag-shader-ios26plus")
     if profile in {"ios-ui-related-nine-ios26plus", "ios-ui-adaptive-customization-ios26plus"}:
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
             raise ValueError("Split UI650 verification requires its exact independent single iPhone native row")
         rows[0]["test-focus"] = ("ui-native-related-nine-ios26plus" if profile == "ios-ui-related-nine-ios26plus" else
                                 "ui-native-adaptive-customization-ios26plus")
@@ -742,84 +742,84 @@ def matrix(profile: str) -> dict:
         for row in rows:
             row["test-focus"] = "ui-native-important-dates"
     if profile in ("ios-alert-date-important", "ios-date-year-predicate-red"):
-        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or
+        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or
                 len(rows) != 1 or tuple(rows[0].get(key) for key in ("slot", "suite", "runner", "arch", "simulator-kind", "test-modules")) !=
-                ("ios-iphone", "ios", "macos-26", "arm64", "iphone", "calf-ui")):
-            raise ValueError("Important alert/year profiles require the one fixed Arm64 iPhone host and calf-ui module")
+                ("ios-iphone", "ios", "macos-26", "arm64", "iphone", "nativecmpkit-ui")):
+            raise ValueError("Important alert/year profiles require the one fixed Arm64 iPhone host and nativecmpkit-ui module")
         rows[0]["test-focus"] = ("ui-native-alert-date-important" if profile == "ios-alert-date-important" else
                                 "ui-native-date-year-predicate-red")
     if profile == "ios-alert-important-recovery":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or
                 rows != [canonical]):
-            raise ValueError("Important alert recovery requires the exact single Arm64 iPhone row and calf-ui module")
+            raise ValueError("Important alert recovery requires the exact single Arm64 iPhone row and nativecmpkit-ui module")
         rows[0]["test-focus"] = "ui-native-alert-important-recovery"
     if profile in ("ios-modal-ownership-batch", "ios-modal-ownership-ipad"):
         kind = "iphone" if profile == "ios-modal-ownership-batch" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Modal ownership batches require one fixed genuine Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Modal ownership batches require one fixed genuine Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-modal-ownership-batch"
     if profile in ("ios-modal-lifecycle-replacement", "ios-modal-lifecycle-replacement-ipad"):
         kind = "iphone" if profile == "ios-modal-lifecycle-replacement" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Modal lifecycle replacement requires one fixed genuine Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Modal lifecycle replacement requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-modal-lifecycle-replacement"
     if profile in ("ios-modal-xcui-batch", "ios-modal-xcui-batch-ipad"):
         kind = "iphone" if profile == "ios-modal-xcui-batch" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Native modal XCTest batches require one fixed real Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Native modal XCTest batches require one fixed real Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-modal-xcui-batch"
     if profile in ("ios-popover-anchor", "ios-popover-anchor-ipad"):
         kind = "iphone" if profile == "ios-popover-anchor" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Popover anchor verification requires one fixed genuine Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Popover anchor verification requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-popover-anchor"
     if profile in ("ios-popover-bar-recovery", "ios-popover-bar-ipad-recovery"):
         kind = "iphone" if profile == "ios-popover-bar-recovery" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Failed bar-anchor recovery requires one fixed genuine Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Failed bar-anchor recovery requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-popover-bar-recovery"
     if profile in ("ios-popover-geometry-iphone", "ios-popover-geometry-ipad"):
         kind = "iphone" if profile == "ios-popover-geometry-iphone" else "ipad"
         canonical = {"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("OS geometry requires one fixed genuine Arm64 UIKit host and calf-ui only")
+                     "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-" + kind,) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("OS geometry requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only")
         rows[0]["test-focus"] = "ui-native-popover-portrait-traits" if kind == "iphone" else "ui-native-popover-os-rotation"
     if profile == "ios-modal-worker-memory-recovery":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Worker ownership recovery requires one genuine iPhone calf-ui host")
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Worker ownership recovery requires one genuine iPhone nativecmpkit-ui host")
         rows[0]["test-focus"] = "ui-native-modal-worker-memory-recovery"
     if profile == "ios-sheet-cancellation-repeat":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Same-operation cancellation requires one genuine iPhone calf-ui host")
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Same-operation cancellation requires one genuine iPhone nativecmpkit-ui host")
         rows[0]["test-focus"] = "ui-native-sheet-cancellation-repeat"
     if profile == "ios-modal-completion-cancellation":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Combined completion/cancellation requires one genuine iPhone calf-ui host")
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Combined completion/cancellation requires one genuine iPhone nativecmpkit-ui host")
         rows[0]["test-focus"] = "ui-native-modal-completion-cancellation"
     if profile == "ios-modal-lifecycle-memory-recovery":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui"}
-        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-ui" or rows != [canonical]:
-            raise ValueError("Failed-only modal memory recovery requires one genuine iPhone calf-ui host")
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui"}
+        if PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-ui" or rows != [canonical]:
+            raise ValueError("Failed-only modal memory recovery requires one genuine iPhone nativecmpkit-ui host")
         rows[0]["test-focus"] = "ui-native-modal-lifecycle-memory-recovery"
     if profile == "ios-saver-write-failure":
         for row in rows:
@@ -838,14 +838,14 @@ def matrix(profile: str) -> dict:
             row["test-focus"] = "picker-ios-provider-cancellation"
     if profile == "ios-camera-ownership-memory-callback":
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-camera-picker"}
-        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-camera-picker" or rows != [canonical]):
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-camera-picker"}
+        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-camera-picker" or rows != [canonical]):
             raise ValueError("Camera requires exactly one genuine iPhone library row; no alternate runner/module/host")
         rows[0]["test-focus"] = "ios-camera-ownership-memory-callback"
     if profile in ("ios-share-presentation-disposal", "ios-share-remembered-failure-observation"):
         canonical = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                     "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-share"}
-        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "calf-share" or
+                     "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-share"}
+        if (PROFILES[profile] != ("ios-iphone",) or MODULE_SUBSETS.get(profile) != "nativecmpkit-share" or
                 rows != [canonical]):
             raise ValueError("New Share disposal profile requires its exact single genuine iPhone library host")
         rows[0]["test-focus"] = ("share-ios-remembered-failure-observation"

@@ -53,8 +53,8 @@ BUNDLE = re.compile(r"io\.github\.apdelrahman1911\.nativecmpkit\.verification\.u
 HEX64 = re.compile(r"[0-9a-f]{64}\Z")
 IOS_METHODS = ("restore", "replay", "headers", "resources")
 SOURCE = "scripts/ci/webview_content_policy_fixture.py"
-NATIVE_SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewContentPolicyAcceptanceTest.kt"
-NATIVE_HELPER = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosContentPolicyFixture.kt"
+NATIVE_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt"
+NATIVE_HELPER = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt"
 
 
 def process_sha256(pid: int) -> str:

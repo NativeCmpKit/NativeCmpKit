@@ -13,7 +13,7 @@ import test_ios_ui_application as frames
 
 class IosPickerRecoveryTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-file-picker",), focus=r.IOS_PICKER_RECOVERY_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-file-picker",), focus=r.IOS_PICKER_RECOVERY_FOCUS)
 
     def helper(self):
         helper = batch.IosPickerBatchTests("test_one_slot_exact_26_methods_no_replay_or_publishing_tasks")
@@ -22,7 +22,7 @@ class IosPickerRecoveryTests(unittest.TestCase):
 
     def test_seven_changed_host_and_runtime_methods_disjoint_from_19_completed_methods(self):
         row, = m.matrix("ios-picker-recovery")["include"]
-        self.assertEqual(("ios-iphone", "calf-file-picker", r.IOS_PICKER_RECOVERY_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-file-picker", r.IOS_PICKER_RECOVERY_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         selected = self.plan()["expected"][0]
         self.assertEqual(7, len(selected["required_testcases"]))
@@ -40,20 +40,20 @@ class IosPickerRecoveryTests(unittest.TestCase):
     def test_exact_command_and_cli_keep_native_application_not_standalone_or_unrelated_replay(self):
         plan = self.plan()
         expected = plan["expected"][0]
-        self.assertEqual(":calf-file-picker:" + r.IOS_APPLICATION_TASK, expected["task"])
+        self.assertEqual(":nativecmpkit-file-picker:" + r.IOS_APPLICATION_TASK, expected["task"])
         self.assertEqual("genuine-uikit-application", expected["native_test_host"])
         selectors = [v for g in r.IOS_PICKER_RECOVERY_GROUPS for method in g["methods"]
                      for v in ("--tests", g["classname"] + "." + method)]
         self.assertEqual(selectors, r.gradle_command("ios", plan, simulator=batch.fixtures.DEVICE)[-14:])
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-file-picker", "--focus", r.IOS_PICKER_RECOVERY_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-file-picker", "--focus", r.IOS_PICKER_RECOVERY_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertNotIn("FileSaverStagingTest", expected["test_filter"])
         self.assertNotIn("NativePickedCopyBoundaryTest", expected["test_filter"])
 
     def test_declaration_host_drift_or_wrong_suite_cannot_reduce_recovery_coverage(self):
-        for suite, modules in (("desktop", ("calf-file-picker",)), ("ios", ("calf-ui",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-file-picker",)), ("ios", ("nativecmpkit-ui",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PICKER_RECOVERY_FOCUS)
         f, _, _, _ = self.helper().fixture()
@@ -90,7 +90,7 @@ class IosPickerRecoveryTests(unittest.TestCase):
         document["application_protocol"].update(testcases=cases, counts=r.case_counts(cases))
         f.document = document
         f.receipt_path = f.output / "native-picker-application" / batch.fixtures.TOKEN / "receipt.json"
-        f.modules = [{"module": "calf-file-picker", "task": document["task"], "testcases": f.xml_cases(cases)}]
+        f.modules = [{"module": "nativecmpkit-file-picker", "task": document["task"], "testcases": f.xml_cases(cases)}]
         f.save()
         accepted = f.collect()
         self.assertEqual([], accepted["errors"])
@@ -109,7 +109,7 @@ class IosPickerRecoveryTests(unittest.TestCase):
         f.save(); self.assertTrue(f.collect()["errors"])
 
     def test_picker_projection_observes_exact_forward_ancestor_and_back_links_on_every_safe_point(self):
-        path = r.ROOT / "calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/IosDialogPresentation.kt"
+        path = r.ROOT / "nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/IosDialogPresentation.kt"
         source = path.read_text()
         observation = source.split("internal fun iosDialogHasNoPresentation", 1)[1].split("private fun dismissOwnedIosDialog", 1)[0]
         for phrase in ("check(NSThread.isMainThread)", "controller.presentingViewController != null",
@@ -143,7 +143,7 @@ class IosPickerRecoveryTests(unittest.TestCase):
 class NativeFailureAndPickerDiagnosticTests(unittest.TestCase):
     def begun(self, method="cancellationDuringRealExportPresentationWaitsForNativeCompletionBeforeRemovingStaging"):
         protocol = app.NativeProtocol()
-        for line in (frames.ACTIVE, frames.frame("testSuiteStarted", name="com.mohamedrejeb.calf.picker.IosPickerRuntimeOwnershipTest"),
+        for line in (frames.ACTIVE, frames.frame("testSuiteStarted", name="io.github.apdelrahman1911.nativecmpkit.picker.IosPickerRuntimeOwnershipTest"),
                      frames.frame("testStarted", name=method)):
             protocol.feed(line)
         return protocol

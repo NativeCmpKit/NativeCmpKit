@@ -12,8 +12,8 @@ rootProject.name = "nativecmpkit-unpublished-navigation-geo-consumer"
 includeBuild("../../..") {
     dependencySubstitution {
         substitute(module("verification.nativecmpkit:unpublished-navigation"))
-            .using(project(":calf-navigation"))
+            .using(project(":nativecmpkit-navigation"))
         substitute(module("verification.nativecmpkit:unpublished-geo"))
-            .using(project(":calf-geo"))
+            .using(project(":nativecmpkit-geo"))
     }
 }

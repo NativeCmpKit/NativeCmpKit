@@ -18,13 +18,13 @@ import tempfile
 BASELINE = "af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6"
 ROOT = Path(__file__).resolve().parents[2]
 SOURCES = [
-    "calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/NativeLibCache.kt",
-    "calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/PlatformFilePicker.kt",
-    "calf-file-picker/src/desktopMain/kotlin/jodd/io/IOUtil.kt",
-    "calf-file-picker/src/desktopMain/kotlin/jodd/net/MimeTypes.kt",
-    "calf-file-picker/src/desktopMain/kotlin/jodd/util/Wildcard.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeLibCache.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/PlatformFilePicker.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/io/IOUtil.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/net/MimeTypes.kt",
+    "nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/util/Wildcard.kt",
 ]
-RESOURCE = "calf-file-picker/src/desktopMain/resources/jodd/net/MimeTypes.properties"
+RESOURCE = "nativecmpkit-file-picker/src/desktopMain/resources/jodd/net/MimeTypes.properties"
 
 STUBS = {
     "ComposeWindow.kt": """
@@ -32,7 +32,7 @@ package androidx.compose.ui.awt
 class ComposeWindow(val windowHandle: Long = 0)
 """,
     "PickerTypes.kt": """
-package com.mohamedrejeb.calf.picker
+package io.github.apdelrahman1911.nativecmpkit.picker
 sealed class FilePickerFileType(vararg val value: String) {
     data object All: FilePickerFileType("*/*")
     data object Folder: FilePickerFileType("folder")
@@ -46,7 +46,7 @@ sealed class FilePickerSelectionMode {
 }
 """,
     "NativeFilePickerBridge.kt": """
-package com.mohamedrejeb.calf.picker.platform
+package io.github.apdelrahman1911.nativecmpkit.picker.platform
 internal object NativeFilePickerBridge {
     var chosenPath: String? = null
     var lastExtensions: Array<String>? = null
@@ -68,11 +68,11 @@ internal object NativeFilePickerBridge {
 }
 
 HARNESS = r'''
-import com.mohamedrejeb.calf.picker.FilePickerFileType
-import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
-import com.mohamedrejeb.calf.picker.platform.*
-import jodd.net.MimeTypes
-import jodd.util.Wildcard
+import io.github.apdelrahman1911.nativecmpkit.picker.FilePickerFileType
+import io.github.apdelrahman1911.nativecmpkit.picker.FilePickerSelectionMode
+import io.github.apdelrahman1911.nativecmpkit.picker.platform.*
+import io.github.apdelrahman1911.nativecmpkit.picker.internal.jodd.net.MimeTypes
+import io.github.apdelrahman1911.nativecmpkit.picker.internal.jodd.util.Wildcard
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
@@ -201,7 +201,7 @@ def main():
         compile_sources.append(str(harness))
         classes = work / "classes"
         classes.mkdir()
-        resource = classes / "jodd/net/MimeTypes.properties"
+        resource = classes / "io/github/apdelrahman1911/nativecmpkit/picker/internal/jodd/net/MimeTypes.properties"
         resource.parent.mkdir(parents=True)
         resource.write_bytes(subprocess.check_output(["git", "show", f"{BASELINE}:{RESOURCE}"], cwd=ROOT))
         cp = os.pathsep.join(map(str, [stdlib, coroutines]))

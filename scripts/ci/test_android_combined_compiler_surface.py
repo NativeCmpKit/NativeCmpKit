@@ -11,7 +11,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 HELPER = ROOT / "tests/consumer/android-storage-probe/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/storageprobe"
 LOOKUP = "checkNotNull(AppOpsManager.permissionToOp(Manifest.permission.MANAGE_EXTERNAL_STORAGE))"
-OPT_IN = "@file:OptIn(com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi::class)"
+OPT_IN = "@file:OptIn(io.github.apdelrahman1911.nativecmpkit.permissions.ExperimentalPermissionsApi::class)"
 
 
 def require(condition, reason):
@@ -122,7 +122,7 @@ class StorageSdkSurfaceGuards(unittest.TestCase):
                 control_opt_in_and_cleanup(mutant)
 
 
-CORE = ROOT / 'calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions'
+CORE = ROOT / 'nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions'
 ASSERTION_RECIPES = {'AndroidPermissionDemoDeviceTest.kt': ['for (name in OwnedPermissionDemo.FORBIDDEN) assertNotContains(declared, "android.permission.$name")', 'for (name in OwnedPermissionDemo.FORBIDDEN) assertFalse("android.permission.$name" in declared,\n            "Forbidden permission android.permission.$name is declared: $declared")'], 'OwnedPermissionDemo.kt': ['for (permission in FORBIDDEN) assertNotContains(declarations, "android.permission.$permission")', 'for (permission in FORBIDDEN) assertFalse("android.permission.$permission" in declarations,\n            "Forbidden permission android.permission.$permission is declared: $declarations")']}
 ROOT_VALUES = 'val values = mapOf(Root.COLUMN_ROOT_ID to "storage-root", Root.COLUMN_DOCUMENT_ID to "root",\n                Root.COLUMN_TITLE to "NativeCmpKit storage test", Root.COLUMN_FLAGS to 0,\n                Root.COLUMN_MIME_TYPES to "application/octet-stream")'
 DOCUMENT_VALUES = 'val values = mapOf(Document.COLUMN_DOCUMENT_ID to id,\n            Document.COLUMN_DISPLAY_NAME to if (isRoot) "NativeCmpKit storage test" else id,\n            Document.COLUMN_MIME_TYPE to if (isRoot) Document.MIME_TYPE_DIR else "application/octet-stream",\n            Document.COLUMN_FLAGS to 0, Document.COLUMN_SIZE to (file?.length() ?: 0),\n            Document.COLUMN_LAST_MODIFIED to (file?.lastModified() ?: 0))'

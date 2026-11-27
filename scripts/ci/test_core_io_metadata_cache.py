@@ -29,7 +29,7 @@ class MetadataAndCacheTests(unittest.TestCase):
                 component = {"group": c.GROUP, "module": module, "version": c.VERSION}
                 if suffix:
                     component['url'] = f'../../{module}/{c.VERSION}/{module}-{c.VERSION}.module'
-                entry = {"name": coordinate.replace('nativecmpkit-', 'calf-', 1) + '-' + c.VERSION + '.jar',
+                entry = {"name": coordinate.replace('nativecmpkit-', 'nativecmpkit-', 1) + '-' + c.VERSION + '.jar',
                          "url": primary, "size": len(payload), "sha256": hashlib.sha256(payload).hexdigest()}
                 variants = [{"name": name, "attributes": {"org.gradle.category": "library",
                              "org.gradle.libraryelements": "jar", "org.gradle.usage": usage,
@@ -72,7 +72,7 @@ class MetadataAndCacheTests(unittest.TestCase):
         staged = c.staged_inputs(self.repository)
         self.assertEqual({module + '-desktop' for module in c.ROOTS}, set(values))
         for module, value in values.items():
-            self.assertTrue(value['declared_file_name'].startswith('calf-'))
+            self.assertTrue(value['declared_file_name'].startswith('nativecmpkit-'))
             self.assertTrue(value['declared_file_url'].startswith('nativecmpkit-'))
             self.assertEqual(staged[value['staged_file']], {key: value[key] for key in ('bytes', 'sha256')})
             self.assertEqual(staged[value['metadata_file']]['sha256'], value['metadata_sha256'])
@@ -89,7 +89,7 @@ class MetadataAndCacheTests(unittest.TestCase):
         c.resolution_contract(self.resolution(values), c.staged_inputs(self.repository), values)
 
     def test_arbitrary_old_group_or_unrelated_display_aliases_are_rejected(self):
-        for name in ('unrelated.jar', 'calf-share-desktop-' + c.VERSION + '.jar',
+        for name in ('unrelated.jar', 'nativecmpkit-share-desktop-' + c.VERSION + '.jar',
                      'nativecmpkit-core-desktop-' + c.VERSION + '-sources.jar', '../escape.jar', 'C:\\escape.jar'):
             with self.subTest(name=name):
                 self.change('name', name)
@@ -115,7 +115,7 @@ class MetadataAndCacheTests(unittest.TestCase):
 
     def test_metadata_identity_and_root_redirect_cannot_change(self):
         path, original = self.metadata[c.ROOTS[0] + '-desktop']
-        for key, value in (('group', 'com.mohamedrejeb.calf'), ('module', 'nativecmpkit-io'),
+        for key, value in (('group', 'io.github.apdelrahman1911.nativecmpkit'), ('module', 'nativecmpkit-io'),
                            ('version', '0.1.0-preview.2'), ('url', '../../elsewhere.module')):
             with self.subTest(key=key):
                 changed = deepcopy(original)

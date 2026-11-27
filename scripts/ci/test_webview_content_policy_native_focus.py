@@ -22,11 +22,11 @@ ROOT = Path(__file__).resolve().parents[2]
 
 def copy_model_checkout(root):
     """Ordinary source discovery fixture only; never built or launched."""
-    (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-    module = root / "calf-webview"; module.mkdir()
+    (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+    module = root / "nativecmpkit-webview"; module.mkdir()
     (module / "build.gradle.kts").write_text("// Synthetic discovery only; never compiled\n")
     sources = set()
-    for tree in ("calf-webview/src", "calf-webview/karma.config.d"):
+    for tree in ("nativecmpkit-webview/src", "nativecmpkit-webview/karma.config.d"):
         sources.update(path.relative_to(ROOT).as_posix() for path in r.source_files(ROOT, tree))
     sources.update((policy.SOURCE, policy.SPEC_RELATIVE, policy.IOS_FIXTURE))
     from webview_current_contract667_source_projection import contract_input_paths
@@ -94,7 +94,7 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         for focus in policy.FOCUSES:
             row = policy.spec(focus); plan = native_plan(self.root, focus); item = plan["expected"][0]
             inherited = {path.relative_to(self.root).as_posix() for source_set in r.SUITES[row["suite"]][1]
-                         for path in r.source_files(self.root, "calf-webview/src/" + source_set) if path.suffix in (".kt", ".java")}
+                         for path in r.source_files(self.root, "nativecmpkit-webview/src/" + source_set) if path.suffix in (".kt", ".java")}
             self.assertTrue(inherited <= set(item["test_source_files"]))
             required = {(case["classname"], case["name"]) for case in item["required_testcases"]}
             self.assertEqual(len(policy.identities(focus)), len(required))
@@ -107,7 +107,7 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         for focus in policy.FOCUSES:
             row = policy.spec(focus)
             self.assertTrue(policy.allowed(row["suite"], (policy.MODULE,), focus))
-            for modules in (None, (), (policy.MODULE, "calf-share"), ("calf-share",), (policy.MODULE, policy.MODULE)):
+            for modules in (None, (), (policy.MODULE, "nativecmpkit-share"), ("nativecmpkit-share",), (policy.MODULE, policy.MODULE)):
                 self.assertFalse(policy.allowed(row["suite"], modules, focus))
                 with self.assertRaises(ValueError): r.plan(self.root, row["suite"], only_modules=modules, focus=focus)
             for suite in set(r.SUITES) - {row["suite"]}:
@@ -138,14 +138,14 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         for focus in policy.FOCUSES:
             plan = native_plan(self.root, focus)
             def variants():
-                for key, value in (("test_filter", "*"), ("task", ":calf-share:desktopTest"),
-                                   ("report_directory", "calf-webview/build/foreign"), ("required_original_xml", True),
+                for key, value in (("test_filter", "*"), ("task", ":nativecmpkit-share:desktopTest"),
+                                   ("report_directory", "nativecmpkit-webview/build/foreign"), ("required_original_xml", True),
                                    ("required_testcases", plan["expected"][0]["required_testcases"][:-1]),
                                    ("test_exclusion_annotation", "unreviewed.Ignore")):
                     bad = copy.deepcopy(plan); bad["expected"][0][key] = value; yield bad
                 for key, value in (("schema_version", True), ("new_methods", True), ("native_executions_attested", False)):
                     bad = copy.deepcopy(plan); bad["expected"][0][policy.CONTRACT_FIELD][key] = value; yield bad
-                bad = copy.deepcopy(plan); bad["explicit_module_subset"].append("calf-ui"); yield bad
+                bad = copy.deepcopy(plan); bad["explicit_module_subset"].append("nativecmpkit-ui"); yield bad
                 bad = copy.deepcopy(plan); bad["expected"][0]["test_source_files"].remove(policy.SOURCE); yield bad
             for bad in variants():
                 with self.assertRaises(ValueError): r.validate_test_focus(bad)
@@ -179,13 +179,13 @@ class WebViewContentPolicyNativeFocusControls(unittest.TestCase):
         self.assertEqual(1, command.count(policy.spec(policy.ANDROID_FOCUS)["task"]))
         self.assertIn("-PnativecmpkitAndroidDeviceSerial=emulator-5588", command)
         assembly = r.gradle_command("android-device", plan, root=self.root, android_serial="emulator-5588", for_assembly=True)
-        self.assertIn(":calf-webview:assembleAndroidDeviceTest", assembly)
+        self.assertIn(":nativecmpkit-webview:assembleAndroidDeviceTest", assembly)
         self.assertNotIn(policy.spec(policy.ANDROID_FOCUS)["task"], assembly)
 
     def test_android_controller_requires_api35_and_only_the_finite_webview_module(self):
         import android_device_tests as controller
         controller.validate_api_selection(35, (policy.MODULE,), policy.ANDROID_FOCUS)
-        for api, modules in ((23, (policy.MODULE,)), (34, (policy.MODULE,)), (36, (policy.MODULE,)), (True, (policy.MODULE,)), (35, None), (35, ("calf-ui",))):
+        for api, modules in ((23, (policy.MODULE,)), (34, (policy.MODULE,)), (36, (policy.MODULE,)), (True, (policy.MODULE,)), (35, None), (35, ("nativecmpkit-ui",))):
             with self.assertRaises(ValueError): controller.validate_api_selection(api, modules, policy.ANDROID_FOCUS)
         source = (ROOT / "scripts/ci/android_device_tests.py").read_text()
         self.assertIn('choices=[lt.content_policy.ANDROID_FOCUS,', source)

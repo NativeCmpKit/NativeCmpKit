@@ -16,7 +16,7 @@ class MaterialDropdownFocusTests(unittest.TestCase):
     SUITES = ('desktop', 'android-device', 'js', 'wasm')
 
     def plan(self, suite):
-        return lt.plan(lt.ROOT, suite, only_modules=('calf-ui',), focus=lt.DROPDOWN_FOCUS)
+        return lt.plan(lt.ROOT, suite, only_modules=('nativecmpkit-ui',), focus=lt.DROPDOWN_FOCUS)
 
     def cases(self, suite):
         prefix = lt.SUITES[suite][0] + '.' if suite in {'js', 'wasm'} else ''
@@ -56,12 +56,12 @@ class MaterialDropdownFocusTests(unittest.TestCase):
 
     def test_real_library_and_controller_cli_accept_exact_focus(self):
         for suite in self.SUITES:
-            args = ['library_tests.py', 'plan', '--suite', suite, '--module', 'calf-ui', '--focus', lt.DROPDOWN_FOCUS]
+            args = ['library_tests.py', 'plan', '--suite', suite, '--module', 'nativecmpkit-ui', '--focus', lt.DROPDOWN_FOCUS]
             stream = io.StringIO()
             with patch('sys.argv', args), patch('sys.stdout', stream):
                 self.assertEqual(0, lt.main())
         import android_device_tests as device
-        args = ['android_device_tests.py', 'plan', '--api-level', '35', '--module', 'calf-ui',
+        args = ['android_device_tests.py', 'plan', '--api-level', '35', '--module', 'nativecmpkit-ui',
                 '--focus', lt.DROPDOWN_FOCUS, '--output', 'build/ci-verification/dropdown-fixture']
         with patch('sys.argv', args), patch('sys.stdout', io.StringIO()):
             self.assertEqual(0, device.main())
@@ -86,8 +86,8 @@ class MaterialDropdownFocusTests(unittest.TestCase):
                 self.assertTrue(self.collect(suite, cases, marker)['errors'])
 
     def test_foreign_suite_module_filter_and_full_suite_claim_are_rejected(self):
-        for suite, modules in (('ios', ('calf-ui',)), ('android-host', ('calf-ui',)),
-                               ('desktop', ('calf-share',)), ('js', ('calf-ui', 'calf-io'))):
+        for suite, modules in (('ios', ('nativecmpkit-ui',)), ('android-host', ('nativecmpkit-ui',)),
+                               ('desktop', ('nativecmpkit-share',)), ('js', ('nativecmpkit-ui', 'nativecmpkit-io'))):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.DROPDOWN_FOCUS)
         plan = self.plan('desktop')
@@ -135,7 +135,7 @@ class MaterialDropdownFocusTests(unittest.TestCase):
 
     def test_skiko_back_uses_the_real_navigation_input_not_an_unbridged_semantics_escape_key(self):
         shared = (lt.ROOT / lt.DROPDOWN_SCENARIOS_SOURCE).read_text()
-        build = (lt.ROOT / 'calf-ui/build.gradle.kts').read_text()
+        build = (lt.ROOT / 'nativecmpkit-ui/build.gradle.kts').read_text()
         self.assertIn('implementation(libs.jetbrains.navigationevent.compose)', build)
         for required in ('NavigationEventInput()', 'dispatchOnBackCompleted()',
                          'dispatcher.addInput(input)', 'dispatcher.removeInput(input)'):

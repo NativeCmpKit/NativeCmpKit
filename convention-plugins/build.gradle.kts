@@ -16,7 +16,7 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-group = "com.mohamedrejeb.gradle"
+group = "io.github.apdelrahman1911.nativecmpkit.gradle"
 version = "0.1.0"
 
 dependencies {

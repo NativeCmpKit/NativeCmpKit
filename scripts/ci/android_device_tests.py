@@ -717,31 +717,31 @@ def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focu
         lt.camera_callback.validate_api(api_level, modules)
         return
     if focus == lt.content_policy.ANDROID_FOCUS:
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-webview",):
-            raise ValueError("Content-policy NEW4 plus affected saver1 requires exact API35 calf-webview only")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-webview",):
+            raise ValueError("Content-policy NEW4 plus affected saver1 requires exact API35 nativecmpkit-webview only")
         return
     if focus in permission_lifecycle_contract.FOCUSES:
         permission_lifecycle_contract.validate_request(api_level, modules, focus)
         return
     if focus in lt.ANDROID_IO_REMOTE_FOCUSES:
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-io",):
-            raise ValueError("Controlled remote IO requires exact integer API35 calf-io-only focus")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-io",):
+            raise ValueError("Controlled remote IO requires exact integer API35 nativecmpkit-io-only focus")
         return
     if focus in (lt.ANDROID_IO_NAMED_SYSTEM_FOCUS, "android-io-named-external-storage"):
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-io",):
-            raise ValueError("Named local system providers require the exact API35 calf-io-only selector")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-io",):
+            raise ValueError("Named local system providers require the exact API35 nativecmpkit-io-only selector")
         return
     if focus == lt.ANDROID_IO_UNAVAILABLE_FOCUS:
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-io",):
-            raise ValueError("The exact one-method unavailable-provider selection requires API35 and calf-io only")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-io",):
+            raise ValueError("The exact one-method unavailable-provider selection requires API35 and nativecmpkit-io only")
         return
     if focus == lt.ANDROID_WEBVIEW_REQUEST_FOCUS:
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-webview",):
-            raise ValueError("The exact two-method Android WebView request selection requires API35 and calf-webview only")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-webview",):
+            raise ValueError("The exact two-method Android WebView request selection requires API35 and nativecmpkit-webview only")
         return
     if focus == lt.ANDROID_WEBVIEW_STOP_REDIRECT_RECOVERY_FOCUS:
-        if type(api_level) is not int or api_level != 35 or modules != ("calf-webview",):
-            raise ValueError("The exact one-method Android WebView Stop recovery requires API35 and calf-webview only")
+        if type(api_level) is not int or api_level != 35 or modules != ("nativecmpkit-webview",):
+            raise ValueError("The exact one-method Android WebView Stop recovery requires API35 and nativecmpkit-webview only")
         return
     if focus in lt.ANDROID_STORAGE_FOCUSES:
         row = lt.storage_plan.row_for(focus)
@@ -750,9 +750,9 @@ def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focu
         return
     if type(api_level) is not int or api_level not in (23, 33, 34, API):
         raise ValueError("Only the exact reviewed Android SDK selections are permitted")
-    if api_level == 23 and (modules != ("calf-camera-picker",) or focus not in lt.ANDROID_CAMERA_PROVIDER_FOCUSES):
+    if api_level == 23 and (modules != ("nativecmpkit-camera-picker",) or focus not in lt.ANDROID_CAMERA_PROVIDER_FOCUSES):
         raise ValueError("API23 is permitted only for the exact camera-provider minimum-platform fixture")
-    if api_level in (33, 34) and (modules != ("calf-permissions/core",) or focus != lt.ANDROID_MEDIA_SELECTION_FOCUS):
+    if api_level in (33, 34) and (modules != ("nativecmpkit-permissions/core",) or focus != lt.ANDROID_MEDIA_SELECTION_FOCUS):
         raise ValueError("API33/34 are permitted only for the exact single media-selection library method")
 
 

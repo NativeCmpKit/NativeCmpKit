@@ -8,11 +8,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 import xml.etree.ElementTree as ET
 
-MODULES = ("calf-permissions/core", "calf-permissions/location", "calf-permissions/background-location", "calf-permissions/camera")
+MODULES = ("nativecmpkit-permissions/core", "nativecmpkit-permissions/location", "nativecmpkit-permissions/background-location", "nativecmpkit-permissions/camera")
 FIXTURE = "tests/consumer/android-permission-compatibility"
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.permissioncompat"
 REPORTER = PACKAGE + ".reporter"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionCompatibilityDeviceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionCompatibilityDeviceTest"
 NAMESPACE = "{http://schemas.android.com/apk/res/android}"
 MIN_SDK = 23
 CURRENT_TARGET = 37

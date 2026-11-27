@@ -98,9 +98,9 @@ class WebViewFinalInteropReleaseTests(unittest.TestCase):
     def test_recovery_only_selects_the_failed_apple_remount_not_the_accepted_android_or_other_methods(self):
         profile = 'webview-identity-ios-remount-recovery'
         row, = wm.matrix(profile)['include']
-        self.assertEqual(('ios-iphone', 'ios', 'calf-webview', lt.IOS_WEBVIEW_REMOUNT_RECOVERY_FOCUS),
+        self.assertEqual(('ios-iphone', 'ios', 'nativecmpkit-webview', lt.IOS_WEBVIEW_REMOUNT_RECOVERY_FOCUS),
                          (row['slot'], row['suite'], row['test-modules'], row['test-focus']))
-        plan = lt.plan(lt.ROOT, 'ios', only_modules=('calf-webview',), focus=row['test-focus'])
+        plan = lt.plan(lt.ROOT, 'ios', only_modules=('nativecmpkit-webview',), focus=row['test-focus'])
         self.assertTrue(lt.validate_test_focus(plan))
         self.assertEqual(1, len(plan['expected'][0]['required_testcases']))
         self.assertEqual(lt.IOS_WEBVIEW_LIFECYCLE_METHODS[0] + '[iosSimulatorArm64]',

@@ -15,7 +15,7 @@ from camera_home_affinity_source_projection import current_source_before_home_af
 
 ROOT = Path(__file__).resolve().parents[2]
 HELPER = "scripts/ci/android_camera_developer_prerequisite.py"
-NATIVE = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt"
+NATIVE = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt"
 OWNING = {HELPER, NATIVE, "scripts/ci/camera_boot_busy_source_projection.py",
           "scripts/ci/camera_scalar_failfast_source_projection.py", "scripts/ci/test_android_camera_boot_busy.py",
           "scripts/ci/android_external328_source_projection.py"}

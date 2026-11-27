@@ -35,7 +35,7 @@ PLATFORMS = {"windows": ("win", FOCUS),
              "macos-x64": ("mac", "webview-desktop-stop-macos-recovery")}
 INIT = "tests/dependency/javafx-http2-cancellation/library-runtime-candidate.init.gradle.kts"
 WORKFLOW = ".github/workflows/javafx-library-candidate.yml"
-SELECTOR = ("com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest."
+SELECTOR = ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest."
             "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner")
 
 
@@ -61,10 +61,10 @@ def seed_official_cache(destination, pins, home, classifier="win"):
 
 def focused_plan(root, focus=FOCUS):
     probe.need(focus in {value[1] for value in PLATFORMS.values()}, "Unknown failed-only candidate focus")
-    plan = library.plan(root, "desktop", only_modules=("calf-webview",), focus=focus)
+    plan = library.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
     probe.need(library.validate_test_focus(plan) and plan["explicit_test_focus"] == focus and len(plan["expected"]) == 1
                and plan["expected"][0]["test_filter"] == SELECTOR
-               and plan["expected"][0]["task"] == ":calf-webview:desktopTest",
+               and plan["expected"][0]["task"] == ":nativecmpkit-webview:desktopTest",
                "Existing finite library selection changed")
     return plan
 
@@ -95,7 +95,7 @@ def marker(log, manifest):
     rows = [line.split("NATIVECMPKIT_JAVAFX_CANDIDATE ", 1)[1]
             for line in log.read_text(encoding="utf-8", errors="replace").splitlines()
             if "NATIVECMPKIT_JAVAFX_CANDIDATE " in line]
-    expected = ("task=:calf-webview:desktopTest originalRemoved=1 candidateCount=1 "
+    expected = ("task=:nativecmpkit-webview:desktopTest originalRemoved=1 candidateCount=1 "
                 "originalSha256=" + manifest["original_web_sha256"] + " candidateSha256=" + manifest["jar_sha256"]
                 + " runtimeModulePatch=false privateRouteOverride=false")
     probe.need(rows == [expected], "Actual one-provider full-JAR replacement marker missing/duplicate/different")

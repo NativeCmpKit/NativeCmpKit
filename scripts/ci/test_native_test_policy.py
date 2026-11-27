@@ -94,7 +94,7 @@ class NativeScenarioPolicy(unittest.TestCase):
         actual[-1]["classname"] = "SomeOtherTest"
         _, errors = policy.apply(policy.MODULE, "desktop", actual, "Linux", False)
         self.assertTrue(errors)
-        for module, suite in (("calf-io", "desktop"), (policy.MODULE, "js")):
+        for module, suite in (("nativecmpkit-io", "desktop"), (policy.MODULE, "js")):
             actual = cases()
             self.assertEqual(([], []), policy.apply(module, suite, actual, "Linux", False))
             self.assertEqual(1, runner.case_counts(actual)["unexpected_skipped"])
@@ -106,8 +106,8 @@ class NativeScenarioReports(unittest.TestCase):
         self.fixture.setUp()
         self.addCleanup(self.fixture.doCleanups)
         self.root = self.fixture.root
-        self.fixture.write("settings.gradle.kts", 'include(\n    ":calf-share",\n)\n')
-        self.fixture.write("calf-share/build.gradle.kts", "// fixture")
+        self.fixture.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-share",\n)\n')
+        self.fixture.write("nativecmpkit-share/build.gradle.kts", "// fixture")
         self.fixture.write(policy.SOURCE, "// source-bound synthetic scenario fixture")
 
     def collect(self, extra_skip=False):
@@ -117,11 +117,11 @@ class NativeScenarioReports(unittest.TestCase):
         payload = '<testsuite name="share">' + ''.join(
             f'<testcase classname="{case["classname"]}" name="{case["name"]}">' +
             ('<skipped/>' if case["status"] == "skipped" else '') + '</testcase>' for case in actual) + '</testsuite>'
-        self.fixture.write("calf-share/build/test-results/desktopTest/TEST-share.xml", payload)
-        plan = runner.plan(self.root, "desktop", minimum_modules=("calf-share",))
+        self.fixture.write("nativecmpkit-share/build/test-results/desktopTest/TEST-share.xml", payload)
+        plan = runner.plan(self.root, "desktop", minimum_modules=("nativecmpkit-share",))
         now = time.time_ns()
         return runner.collect_reports(self.root, plan, now-1_000_000_000, now+1_000_000_000,
-                                      Counter({":calf-share:desktopTest": 1}), host_system="Linux")
+                                      Counter({":nativecmpkit-share:desktopTest": 1}), host_system="Linux")
 
     def test_synthetic_collector_counts_na_separately_per_report_and_total(self):
         result = self.collect()
@@ -138,9 +138,9 @@ class NativeScenarioReports(unittest.TestCase):
 
     def test_deleting_native_source_cannot_silently_drop_scenarios(self):
         (self.root / policy.SOURCE).unlink()
-        self.fixture.write("calf-share/src/commonTest/kotlin/Other.kt", "// unrelated tests")
+        self.fixture.write("nativecmpkit-share/src/commonTest/kotlin/Other.kt", "// unrelated tests")
         with self.assertRaisesRegex(ValueError, "scenario source is missing"):
-            runner.plan(self.root, "desktop", minimum_modules=("calf-share",))
+            runner.plan(self.root, "desktop", minimum_modules=("nativecmpkit-share",))
 
 
 if __name__ == "__main__":

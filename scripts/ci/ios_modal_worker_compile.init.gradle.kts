@@ -9,27 +9,27 @@ import java.security.MessageDigest
 gradle.projectsEvaluated {
     // Init scripts also visit convention/included builds. They do not own UI's
     // compilation and must not reject their independent plugin-resolution tasks.
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     // Gradle retains task-specific --tests options in startParameter.taskNames.
     // Admit only these three authored native methods, not a filtered approximation.
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest") + listOf(
-        "com.mohamedrejeb.calf.ui.internal.NativeModalLifecycleReplacementTest.publicCompositionDisposalDuringNativeHideReleasesContentAndCanReopen",
-        "com.mohamedrejeb.calf.ui.internal.NativeWorkerBridgeOwnershipTest.replacedPlainCompositionReleasesAnOwnerCreatedOnTheWorker",
-        "com.mohamedrejeb.calf.ui.internal.NativeWorkerBridgeOwnershipTest.pooledWorkerBridgePreservesMainResultAndExactThrowableIdentity",
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") + listOf(
+        "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeModalLifecycleReplacementTest.publicCompositionDisposalDuringNativeHideReleasesContentAndCanReopen",
+        "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeWorkerBridgeOwnershipTest.replacedPlainCompositionReleasesAnOwnerCreatedOnTheWorker",
+        "io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeWorkerBridgeOwnershipTest.pooledWorkerBridgePreservesMainResultAndExactThrowableIdentity",
     ).flatMap { identity -> listOf("--tests", identity) }
     val permittedTasks = setOf(
-        listOf(":calf-ui:compileTestKotlinIosSimulatorArm64"),
-        listOf(":calf-ui:iosSimulatorArm64ApplicationTest"),
+        listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"),
+        listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"),
         applicationRequest,
     )
     check(gradle.startParameter.taskNames in permittedTasks) {
         "Focused modal compilation accepts only its exact test compiler or application task"
     }
     val paths = listOf(
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeModalLifecycleReplacementTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeWorkerBridgeOwnershipTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeModalLifecycleReplacementTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeWorkerBridgeOwnershipTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

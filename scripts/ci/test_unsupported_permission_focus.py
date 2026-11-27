@@ -18,10 +18,10 @@ class UnsupportedPermissionFocusTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-permissions:core",\n)\nproject(":calf-permissions:core").name = "calf-permissions-core"\n')
-        self.write("calf-permissions/core/build.gradle.kts", "// synthetic fixture\n")
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-permissions:core",\n)\nproject(":nativecmpkit-permissions:core").name = "nativecmpkit-permissions-core"\n')
+        self.write("nativecmpkit-permissions/core/build.gradle.kts", "// synthetic fixture\n")
         self.write(r.UNSUPPORTED_PERMISSION_FIXTURE, "// synthetic shared fixture\n")
-        self.source = "package com.mohamedrejeb.calf.permissions\nclass UnsupportedPublicFactoryTest {\n" + \
+        self.source = "package io.github.apdelrahman1911.nativecmpkit.permissions\nclass UnsupportedPublicFactoryTest {\n" + \
             "\n".join("@Test fun " + name + "(): TestResult = fake()" for name in r.UNSUPPORTED_PERMISSION_METHODS) + "\n}\n"
         for suite in r.UNSUPPORTED_PERMISSION_SOURCE_SETS:
             self.write(r.unsupported_permission_source(suite), self.source)
@@ -84,7 +84,7 @@ class UnsupportedPermissionFocusTests(unittest.TestCase):
     def test_wrong_suite_module_or_freeform_focus_is_rejected(self):
         for suite, modules, focus in (("ios", (r.UNSUPPORTED_PERMISSION_MODULE,), r.UNSUPPORTED_PERMISSION_FOCUS),
                                      ("android-host", (r.UNSUPPORTED_PERMISSION_MODULE,), r.UNSUPPORTED_PERMISSION_FOCUS),
-                                     ("js", ("calf-ui",), r.UNSUPPORTED_PERMISSION_FOCUS),
+                                     ("js", ("nativecmpkit-ui",), r.UNSUPPORTED_PERMISSION_FOCUS),
                                      ("js", (r.UNSUPPORTED_PERMISSION_MODULE,), "arbitrary.*")):
             with self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)

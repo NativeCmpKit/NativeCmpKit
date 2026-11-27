@@ -28,7 +28,7 @@ BOUND_PATHS = {
 }
 ADDED_PATHS = {
     "scripts/ci/webview_content_policy_native_focus.py",
-    "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidContentPolicyVerificationFilter.kt",
+    "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt",
     "scripts/ci/test_webview_content_policy_native_focus.py",
     "scripts/ci/test_webview_content_policy_application_routing.py",
 }
@@ -148,7 +148,7 @@ def _appkit_key_wait_source(relative, payload, *, current):
     if type(current) is not bool:
         raise ValueError("An exact AppKit content-boundary source mode is required")
     if relative not in (
-        "calf-share/native/tests/appkit_lifecycle/cases.rs",
+        "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs",
         "scripts/ci/macos_share_appkit_lifecycle.py",
         "scripts/ci/test_macos_share_missing_only.py",
     ):
@@ -204,7 +204,7 @@ def current_source_before_content_policy(relative, payload):
     """One raw newest ingress; old/partial/unknown images cannot be current."""
     _identity(relative, payload)
     payload = _appkit_key_wait_source(relative, payload, current=True)
-    if relative == "calf-share/native/tests/appkit_lifecycle/cases.rs":
+    if relative == "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs":
         return source_before_content_policy(relative, payload)
     from camera_ios_ownership_source_projection import current_source_before_camera_ios_ownership
     payload = current_source_before_camera_ios_ownership(relative, payload)

@@ -22,7 +22,7 @@ def validate_compilation(root: Path, started_ns: int, ended_ns: int) -> bool:
         document = json.loads(raw, object_pairs_hook=_unique_object,
                               parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite compiler receipt")))
         expected = {
-            "task": ":calf-ui:compileTestKotlinIosSimulatorArm64",
+            "task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64",
             "focus": FOCUS,
             "source_sha256": {name: hashlib.sha256(_ordinary_bytes(root, name)[0]).hexdigest() for name in SOURCES},
             "effective_sources": list(SOURCES),

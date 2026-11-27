@@ -24,7 +24,7 @@ import java.util.UUID;
 
 /** Finite nonce-correlated native grant observer; no arbitrary URI or file-writing RPC. */
 public final class ShareRecipientService extends Service {
-    static final String REPORTER = "com.mohamedrejeb.calf.calfshare.test";
+    static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitshare.test";
     private static Intent received;
     private static String caller;
     private static String packet;

@@ -10,7 +10,7 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-OWNER = "calf-camera-picker/src/iosMain/kotlin/com.mohamedrejeb.calf/camerapicker/CameraPickerLauncher.ios.kt"
+OWNER = "nativecmpkit-camera-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.ios.kt"
 
 
 def kotlin_code(source):

@@ -19,14 +19,14 @@ fun candidateDigest(file: java.io.File): String {
 
 gradle.projectsEvaluated {
     if (rootProject.name == "NativeCmpKit") {
-        val selected = "com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest." +
+        val selected = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest." +
             "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
         // Gradle9.7.1 getTaskNames flattens TaskExecutionRequest.args, including
         // task-specific --tests and its value; it is not a task-path-only list.
-        check(startParameter.taskNames == listOf(":calf-webview:desktopTest", "--tests", selected)) {
+        check(startParameter.taskNames == listOf(":nativecmpkit-webview:desktopTest", "--tests", selected)) {
             "Private JavaFX candidate permits only the failed library Desktop Stop task"
         }
-        val project = rootProject.project(":calf-webview")
+        val project = rootProject.project(":nativecmpkit-webview")
         val directory = project.providers.gradleProperty("nativecmpkitJavaFxCandidateRoot").get()
         val expected = project.providers.gradleProperty("nativecmpkitJavaFxCandidateSha256").get()
         val classifier = project.providers.gradleProperty("nativecmpkitJavaFxCandidateClassifier").orElse("win").get()

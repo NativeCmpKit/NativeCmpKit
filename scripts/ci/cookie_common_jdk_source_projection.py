@@ -24,24 +24,24 @@ ORIGINAL_SPEC_SHA256 = "c44400087570740d3248704c2165c3222229f2c05ff1a2a3840dbda9
 READER = "scripts/ci/webview_content_policy_fixture.py"
 READER_SHA256 = "7ef8dfd4e8eee68a8d584e91d3ea231daa46b15a68f36cf762ee4409c8b4d571"
 PREIMAGES = {
-    "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt":
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt":
         "e1150ad896682e8ab1cc94042cace63917ab1e84d52dc7d70d840ea69ea4800f",
-    "calf-webview/build.gradle.kts": "6e924d26f988f960ff828383a41901b79d7692d3eea6a07cb38230866b86e908",
+    "nativecmpkit-webview/build.gradle.kts": "6e924d26f988f960ff828383a41901b79d7692d3eea6a07cb38230866b86e908",
     "scripts/ci/ios_ui_application.py": "b3d0f2c2986e42a5e662ba8c2521393f7564916e27084b9473c354b7328b9605",
     "scripts/ci/webview_content_policy_source_projection.py":
         "bb0b63b32a41667c0c33401f44873bd20426524ece52caaa3cfa41ffd880f60d",
 }
 ADDED_PATHS = frozenset({
-    "calf-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/CookieHeaderMultiplicityTest.kt",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/CookieWireContract.kt",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/NativeCookieWireScenario.kt",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieRequestParityTest.kt",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireAcceptanceTest.kt",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireFixture.kt",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireAcceptanceTest.kt",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireFixture.kt",
-    "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserCookieWireAcceptanceTest.kt",
+    "nativecmpkit-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieHeaderMultiplicityTest.kt",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieWireContract.kt",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/NativeCookieWireScenario.kt",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieRequestParityTest.kt",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireAcceptanceTest.kt",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireFixture.kt",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireAcceptanceTest.kt",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireFixture.kt",
+    "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserCookieWireAcceptanceTest.kt",
     "scripts/ci/cookie_native_wire_fixture.py", "scripts/ci/cookie_wire_material.py",
     "scripts/ci/fixtures/cookie-wire-v1.json",
     "scripts/ci/tests/test_cookie_wire_fixtures671.py",
@@ -49,9 +49,9 @@ ADDED_PATHS = frozenset({
     "scripts/ci/cookie_common_jdk_plan.py", "scripts/ci/tests/test_cookie_common_jdk_scope681.py",
 })
 UNCHANGED_PATHS = frozenset({
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/Cookie.kt",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieRules.kt",
-    "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.ios.kt",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/Cookie.kt",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieRules.kt",
+    "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.ios.kt",
     "gradle/libs.versions.toml", "scripts/ci/test_webview_content_policy_fixture.py", READER,
     ORIGINAL_SPEC, "scripts/ci/fresh-tests.init.gradle.kts", "gradlew",
     "gradle/wrapper/gradle-wrapper.jar", "gradle/wrapper/gradle-wrapper.properties",
@@ -265,8 +265,8 @@ def validate_current_sources(root: Path = ROOT) -> dict:
             raise ValueError("Exact current cookie source input changed: " + name)
         current[name] = sha(payload)
     original = json.loads(ordinary_bytes(root, ORIGINAL_SPEC))
-    for name in ("calf-webview/build.gradle.kts",
-                 "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt"):
+    for name in ("nativecmpkit-webview/build.gradle.kts",
+                 "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt"):
         if original["unchanged_inputs"].get(name) != PREIMAGES[name]:
             raise ValueError("Cookie context cannot rewrite original WebView production/build pins")
         source_before_cookie(name, ordinary_bytes(root, name), root)

@@ -9,8 +9,8 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-PACKAGE = "com.mohamedrejeb.calf.ui.web."
-PREFIX = "calf-webview/src/{set}/kotlin/com/mohamedrejeb/calf/ui/web/"
+PACKAGE = "io.github.apdelrahman1911.nativecmpkit.ui.web."
+PREFIX = "nativecmpkit-webview/src/{set}/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/"
 CORE_METHODS = (
     "savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory",
     "documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved",
@@ -26,22 +26,22 @@ CLASSES = {
     "DesktopWebViewContentPolicyAcceptanceTest": ("desktopTest", OTHER_METHODS),
     "BrowserWebViewContentPolicyAcceptanceTest": ("webTest", OTHER_METHODS),
 }
-ANDROID_SOURCE = "calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt"
+ANDROID_SOURCE = "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt"
 ANDROID_PREIMAGE_SHA256 = "3d32645991c56f523087a3cf60a5aba5bbd567b9c9686768157cf7e01875b9f7"
 ANDROID_PREIMAGE = "                this.pageTitle = it[pageTitleKey] as String?\n                this.lastLoadedUrl = it[lastLoadedUrlKey] as String?\n"
 ANDROID_POSTIMAGE = "                // Native history is not a displayed document. Actual native callbacks\n                // repopulate metadata; never paint an old title/URL over a new blank view.\n"
 UNCHANGED_INPUTS = {
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
-    "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.ios.kt": "508c28c1fe336e01537e8ff62bd6249712c3d0eaa4fb591c89b1289f972b773f",
-    "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
-    "calf-webview/src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.web.kt": "798710ff9b6ce32685e25f3cd13042d13e3568fc36d5e1438bf2e6df6991727f",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
+    "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt": "508c28c1fe336e01537e8ff62bd6249712c3d0eaa4fb591c89b1289f972b773f",
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
+    "nativecmpkit-webview/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.web.kt": "798710ff9b6ce32685e25f3cd13042d13e3568fc36d5e1438bf2e6df6991727f",
     "scripts/ci/ios_webview_request_fixture.py": "a5b4780ab39822a4ee261c07d434bacb9ce9fe72943c1924eeaddcbbeb1e17a7",
-    "calf-webview/build.gradle.kts": "6e924d26f988f960ff828383a41901b79d7692d3eea6a07cb38230866b86e908",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHost.kt": "0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHostTest.kt": "7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
-    "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt": "eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23",
+    "nativecmpkit-webview/build.gradle.kts": "6e924d26f988f960ff828383a41901b79d7692d3eea6a07cb38230866b86e908",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt": "0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt": "7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
+    "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt": "eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23",
 }
 
 
@@ -55,7 +55,7 @@ def proposal():
 
 class WebViewContentPolicySourceTest(unittest.TestCase):
     def test_android_saver_restoration_does_not_paint_saved_metadata_before_native_document(self):
-        path = ROOT / "calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt"
+        path = ROOT / "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt"
         source = path.read_text()
         saver = source.split("actual val WebStateSaver: Saver<WebViewState, Any> = run {", 1)[1]
         restore = saver.split("restore = {", 1)[1]
@@ -81,16 +81,16 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
 
     def test_proposal_has_exact_five_single_host_tasks_and_no_all_host_alias(self):
         expected = (
-            ("webview-content-policy-linux", "desktop-linux-x64", "desktop", ":calf-webview:desktopTest", "DesktopWebViewContentPolicyAcceptanceTest"),
-            ("webview-content-policy-android", "android-device-api35", "android-device", ":calf-webview:connectedAndroidDeviceTest", "AndroidWebViewContentPolicyAcceptanceTest"),
-            ("webview-content-policy-js", "browser-js", "js", ":calf-webview:jsBrowserTest", "BrowserWebViewContentPolicyAcceptanceTest"),
-            ("webview-content-policy-wasm", "browser-wasm", "wasm", ":calf-webview:wasmJsBrowserTest", "BrowserWebViewContentPolicyAcceptanceTest"),
-            ("ios-webview-content-policy", "ios-iphone", "ios", ":calf-webview:iosSimulatorArm64ApplicationTest", "IosWebViewContentPolicyAcceptanceTest"),
+            ("webview-content-policy-linux", "desktop-linux-x64", "desktop", ":nativecmpkit-webview:desktopTest", "DesktopWebViewContentPolicyAcceptanceTest"),
+            ("webview-content-policy-android", "android-device-api35", "android-device", ":nativecmpkit-webview:connectedAndroidDeviceTest", "AndroidWebViewContentPolicyAcceptanceTest"),
+            ("webview-content-policy-js", "browser-js", "js", ":nativecmpkit-webview:jsBrowserTest", "BrowserWebViewContentPolicyAcceptanceTest"),
+            ("webview-content-policy-wasm", "browser-wasm", "wasm", ":nativecmpkit-webview:wasmJsBrowserTest", "BrowserWebViewContentPolicyAcceptanceTest"),
+            ("ios-webview-content-policy", "ios-iphone", "ios", ":nativecmpkit-webview:iosSimulatorArm64ApplicationTest", "IosWebViewContentPolicyAcceptanceTest"),
         )
         plan = proposal()
         self.assertEqual("finite-source-proposal-not-runner-registration", plan["kind"])
         self.assertEqual([66, 73], plan["issues"])
-        self.assertEqual("calf-webview", plan["module"])
+        self.assertEqual("nativecmpkit-webview", plan["module"])
         self.assertEqual(len(expected), len(plan["profiles"]))
         for row, (focus, slot, suite, task, klass) in zip(plan["profiles"], expected, strict=True):
             self.assertEqual((focus, focus, slot, suite, task, PACKAGE + klass),
@@ -228,7 +228,7 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
         text = source("BrowserWebViewContentPolicyAcceptanceTest")
         self.assertIn("state.iframe == null && state.owner == null && native?.isConnected != true", text)
         self.assertIn("BrowserSandboxPolicy.Trusted", text)
-        middleware = (ROOT / "calf-webview/karma.config.d/nativecmpkit-content-policy-fixture.js").read_text()
+        middleware = (ROOT / "nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js").read_text()
         for value in ("Object.prototype.hasOwnProperty.call", "!owns(stages, method)", "!owns(session.rows, action)",
                       "owns(session.rows, extra)", "session.pending.size >= 16", "++session.connections > 512", "counts.get + counts.post >= 12",
                       "lease.response.destroy()", "Promise.all(pending.map(lease => lease.closed))", ", 2000)",

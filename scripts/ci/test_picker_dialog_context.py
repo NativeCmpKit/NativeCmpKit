@@ -24,7 +24,7 @@ class FakeProcess:
 
 class PickerDialogContextTests(unittest.TestCase):
     def plan(self, suite="desktop", selected=True):
-        return {"suite": suite, "expected": [{"module": "calf-file-picker" if selected else "calf-io",
+        return {"suite": suite, "expected": [{"module": "nativecmpkit-file-picker" if selected else "nativecmpkit-io",
                 "test_source_files": [portal.SOURCE] if selected else []}]}
 
     def test_nonlinux_other_suite_and_unselected_module_start_nothing(self):

@@ -21,7 +21,7 @@ class NativeLockReproducibilityTest(unittest.TestCase):
         for platform in controller.native.SUPPORTED_PLATFORMS:
             with self.subTest(platform=platform):
                 plan = controller.plan(controller.ROOT, platform)
-                self.assertEqual(["calf-file-picker", "calf-share"], plan["modules"])
+                self.assertEqual(["nativecmpkit-file-picker", "nativecmpkit-share"], plan["modules"])
                 self.assertEqual(2, plan["attempts_per_module"])
                 self.assertEqual("1.98.0", plan["rust_toolchain"])
                 self.assertEqual(controller.native.SUPPORTED_PLATFORMS[platform]["rustTarget"], plan["rust_target"])
@@ -59,7 +59,7 @@ class NativeLockReproducibilityTest(unittest.TestCase):
     def test_no_missing_or_duplicate_dependency_line_can_fake_the_negative_fixture(self):
         for text in ("[dependencies]\nother = '1'\n", "jni = '0.21'\njni = '0.21'\n"):
             with self.assertRaises(ValueError):
-                controller.remove_root_dependency(text, "calf-share")
+                controller.remove_root_dependency(text, "nativecmpkit-share")
 
     def test_full_graph_features_are_sorted_and_native_cache_paths_not_exported(self):
         raw = {"packages": [{"id": "/private/cache/root", "name": "root", "version": "1"},
@@ -98,7 +98,7 @@ class NativeLockReproducibilityTest(unittest.TestCase):
 
     def test_dependency_controls_are_offline_restored_and_do_not_edit_production(self):
         with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp); crate = root / "calf-share/native"; crate.mkdir(parents=True)
+            root = Path(tmp); crate = root / "nativecmpkit-share/native"; crate.mkdir(parents=True)
             original = b'[package]\nname="fixture"\nversion="1.0.0"\n[dependencies]\njni = "0.21"\n'
             (crate / "Cargo.toml").write_bytes(original); (crate / "Cargo.lock").write_text("unchanged lock")
             (root / "rust-toolchain.toml").write_text('[toolchain]\nchannel="1.98.0"\n')
@@ -107,7 +107,7 @@ class NativeLockReproducibilityTest(unittest.TestCase):
             refusal = subprocess.CompletedProcess([], 101, b"", b"cannot update the lock file because --locked was passed")
             with patch.object(controller, "capture_metadata", return_value=graph) as metadata, \
                     patch.object(controller.subprocess, "run", return_value=refusal) as command:
-                receipt = controller.dependency_refusal(root, "calf-share", ["rustup", "run", "1.98.0"], {}, private, graph)
+                receipt = controller.dependency_refusal(root, "nativecmpkit-share", ["rustup", "run", "1.98.0"], {}, private, graph)
             self.assertEqual(original, (crate / "Cargo.toml").read_bytes())
             self.assertTrue(receipt["production_manifest_never_modified"])
             self.assertTrue(receipt["lock_bytes_unchanged"])
@@ -130,7 +130,7 @@ class NativeLockReproducibilityTest(unittest.TestCase):
     def test_output_cannot_replace_source_previous_evidence_or_other_projects(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(controller.native, "current_platform", return_value="linux-x64"):
             root = Path(tmp); prior = root / "build/ci-verification/prior"; prior.mkdir(parents=True)
-            for relative in ("build/ci-verification", "build/ci-verification/prior", "calf-share/native", "../other-project"):
+            for relative in ("build/ci-verification", "build/ci-verification/prior", "nativecmpkit-share/native", "../other-project"):
                 with self.assertRaises(ValueError): controller.run(root, "linux-x64", relative, 8192)
 
     def orchestration(self, *, failed=False, changed=False):

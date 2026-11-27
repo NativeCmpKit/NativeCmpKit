@@ -26,7 +26,7 @@ gradle.projectsEvaluated {
     check(root.providers.gradleProperty("nativeCmpkit.version").orNull == "0.1.0-preview.1") {
         "The contained fixture accepts only the exact unpublished draft version"
     }
-    val modules = listOf(root.project(":calf-core"), root.project(":calf-io"))
+    val modules = listOf(root.project(":nativecmpkit-core"), root.project(":nativecmpkit-io"))
     val repository = root.layout.buildDirectory.dir("verification-repo").get().asFile.canonicalFile
     val selected = modules.flatMap { module ->
         val publications = module.tasks.withType<PublishToMavenRepository>().filter {
@@ -41,7 +41,7 @@ gradle.projectsEvaluated {
             }
             check(task.publication.groupId == "io.github.apdelrahman1911.nativecmpkit" &&
                 task.publication.version == "0.1.0-preview.1") { "Unexpected partial publication identity" }
-            val artifactRoot = "nativecmpkit-" + module.name.removePrefix("calf-")
+            val artifactRoot = module.name
             val expectedArtifact = artifactRoot + if (task.publication.name == "desktop") "-desktop" else ""
             check(task.publication.artifactId == expectedArtifact) { "Unexpected partial publication artifact" }
             task.doLast {

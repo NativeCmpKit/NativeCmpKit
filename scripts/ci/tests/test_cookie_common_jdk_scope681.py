@@ -28,7 +28,7 @@ class CookieCommonJdkScope681Tests(unittest.TestCase):
         self.assertFalse(any(owner in selector for owner in plan.PARKED for selector in result["selectors"]))
 
     def test_new_unknown_focus_module_and_wire_labels_refuse_before_source_planning(self):
-        for focus, module in [("all", plan.MODULE), ("remaining-v1", plan.MODULE), ("common-jdk4", "calf-ui"),
+        for focus, module in [("all", plan.MODULE), ("remaining-v1", plan.MODULE), ("common-jdk4", "nativecmpkit-ui"),
                               (True, plan.MODULE), (None, plan.MODULE)]:
             with self.subTest(focus=focus, module=module), self.assertRaises(ValueError):
                 plan.plan(ROOT, focus, module)
@@ -82,8 +82,8 @@ class CookieCommonJdkScope681Tests(unittest.TestCase):
         raw = history.ordinary_bytes(ROOT, history.ORIGINAL_SPEC)
         self.assertEqual(history.ORIGINAL_SPEC_SHA256, history.sha(raw))
         original = json.loads(raw)
-        for name in ["calf-webview/build.gradle.kts",
-                     "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt"]:
+        for name in ["nativecmpkit-webview/build.gradle.kts",
+                     "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt"]:
             self.assertEqual(history.PREIMAGES[name], original["unchanged_inputs"][name])
         self.assertNotIn("AGENTS.md", history.fixture_inputs())
 
@@ -128,7 +128,7 @@ class CookieCommonJdkScope681Tests(unittest.TestCase):
                     history.ordinary_bytes(owned, relative)
 
     def test_new_each_platform_excludes_only_its_one_environment_dependent_class(self):
-        build = history.ordinary_bytes(ROOT, "calf-webview/build.gradle.kts").decode()
+        build = history.ordinary_bytes(ROOT, "nativecmpkit-webview/build.gradle.kts").decode()
         self.assertIn('tasks.withType<Test>().matching { it.name == "desktopTest" }', build)
         self.assertIn('tasks.withType<KotlinNativeTest>().configureEach', build)
         self.assertIn('tasks.withType<KotlinJsTest>().configureEach', build)
@@ -148,14 +148,14 @@ class CookieCommonJdkScope681Tests(unittest.TestCase):
         foreign = original + ["--ktest_negative_gradle_filter=foreign.*"]
         self.assertIs(foreign, plan.native_argument_view(foreign))
         # That unchanged old parser, not this source helper, must refuse foreign flags.
-        plan.validate_native_exclusion_owner("calf-ui", original)
+        plan.validate_native_exclusion_owner("nativecmpkit-ui", original)
         with self.assertRaises(ValueError):
-            plan.validate_native_exclusion_owner("calf-webview", original)
+            plan.validate_native_exclusion_owner("nativecmpkit-webview", original)
 
     def test_new_native_cookie_exclusion_cannot_be_duplicated_or_lent_to_foreign_owners(self):
         arguments = ["--ktest_logger=TEAMCITY", "--ktest_no_exit_code", plan.NATIVE_EXCLUSION]
-        plan.validate_native_exclusion_owner("calf-webview", arguments)
-        for module in ["calf-ui", "calf-share", True, None]:
+        plan.validate_native_exclusion_owner("nativecmpkit-webview", arguments)
+        for module in ["nativecmpkit-ui", "nativecmpkit-share", True, None]:
             with self.subTest(module=module), self.assertRaises(ValueError):
                 plan.validate_native_exclusion_owner(module, arguments)
         for values in [arguments + [plan.NATIVE_EXCLUSION], arguments + [arguments[0]], [True], tuple(arguments)]:

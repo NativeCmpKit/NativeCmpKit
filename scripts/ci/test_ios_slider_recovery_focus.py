@@ -12,7 +12,7 @@ import workflow_matrix as matrix
 
 class IosSliderRecoveryFocusTests(unittest.TestCase):
     def plan(self, focus, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=focus)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
 
     def test_real_drag_and_cancellation_wait_for_asynchronous_flow_observers_without_weakening_assertions(self):
         source = (r.ROOT / r.IOS_SLIDER_LIFECYCLE_SOURCE).read_text()
@@ -31,7 +31,7 @@ class IosSliderRecoveryFocusTests(unittest.TestCase):
     def test_one_host_serial_recovery_preflights_only_four_unfinished_methods_and_preserves_independent_results(self):
         row, = matrix.matrix("ios-slider-recovery")["include"]
         self.assertEqual("ios-iphone", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(r.IOS_SLIDER_PAIR_STRUCTURE_FOCUS, row["test-focus"])
         self.assertEqual(r.IOS_SLIDER_TAP_FOCUS, row["serial-test-focus"])
         preflight = matrix.preflight_plans("ios-slider-recovery")
@@ -57,7 +57,7 @@ class IosSliderRecoveryFocusTests(unittest.TestCase):
             ("ios-slider-pair-structure", r.IOS_SLIDER_PAIR_STRUCTURE_FOCUS, r.IOS_SLIDER_LIFECYCLE_METHODS[2:4]),
         ):
             row, = matrix.matrix(profile)["include"]
-            self.assertEqual(("ios-iphone", "calf-ui", focus), tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
+            self.assertEqual(("ios-iphone", "nativecmpkit-ui", focus), tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
             plan = self.plan(focus)
             self.assertTrue(r.validate_test_focus(plan))
             self.assertEqual(tuple(method + "[iosSimulatorArm64]" for method in methods),
@@ -132,7 +132,7 @@ class IosSliderRecoveryFocusTests(unittest.TestCase):
     def test_every_registered_native_application_focus_reaches_the_real_cli_and_keeps_its_suite_module_interlock(self):
         # Exercise the workflow's subprocess boundary, not only plan() in-process.
         for focus, spec in r.UI_APPLICATION_FOCUS_SPECS.items():
-            module = spec.get("module", "calf-ui")
+            module = spec.get("module", "nativecmpkit-ui")
             command = [r.sys.executable, "-B", str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
                        "--suite", "ios", "--module", module, "--focus", focus]
             with self.subTest(focus=focus):
@@ -165,7 +165,7 @@ class IosSliderRecoveryFocusTests(unittest.TestCase):
             ("ios-slider-structure", r.IOS_SLIDER_STRUCTURE_FOCUS, r.IOS_SLIDER_LIFECYCLE_METHODS[2:3]),
         ):
             row, = matrix.matrix(profile)["include"]
-            self.assertEqual(("ios-iphone", "calf-ui", focus), tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
+            self.assertEqual(("ios-iphone", "nativecmpkit-ui", focus), tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
             plan = self.plan(focus)
             self.assertFalse(plan["complete_suite_requested"])
             self.assertTrue(r.validate_test_focus(plan))

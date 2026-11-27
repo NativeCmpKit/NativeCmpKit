@@ -13,7 +13,7 @@ gradle.projectsEvaluated {
     check(root.providers.gradleProperty("nativecmpkitVerificationTargets").orNull == "desktop") { "WebView staging requires the desktop-only verification target" }
     check(root.providers.gradleProperty("nativeCmpkit.version").orNull == "0.1.0-preview.1") { "Unexpected WebView staging candidate version" }
     val repository = root.layout.buildDirectory.dir("verification-repo").get().asFile.canonicalFile
-    val module = root.project(":calf-webview")
+    val module = root.project(":nativecmpkit-webview")
     val selected = module.tasks.withType<PublishToMavenRepository>().filter {
         it.repository.name == "NativecmpkitVerification" && it.publication.name in setOf("kotlinMultiplatform", "desktop")
     }

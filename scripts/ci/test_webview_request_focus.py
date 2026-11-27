@@ -18,10 +18,10 @@ import workflow_matrix as matrix
 
 FOCUS = "webview-browser-request-state"
 PROFILE = "webview-request-state"
-CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewRequestAcceptanceTest"
-SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewRequestAcceptanceTest.kt"
-FIXTURE = "calf-webview/karma.config.d/nativecmpkit-request-fixture.js"
-PRODUCTION = "calf-webview/src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.web.kt"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewRequestAcceptanceTest"
+SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewRequestAcceptanceTest.kt"
+FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-request-fixture.js"
+PRODUCTION = "nativecmpkit-webview/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.web.kt"
 METHODS = (
     "rejectedOptionsRetryAndNativeReloadResetErrorsAndRequestedMetadata",
     "realRedirectReloadAndOwnedNativeStopHaveDistinctRequestAndTerminalMetadata",
@@ -176,12 +176,12 @@ main().catch(error => { process.stderr.write(error.message + '\n'); process.exit
 
 class WebViewRequestFocusTests(unittest.TestCase):
     def plan(self, suite="js", root=lt.ROOT):
-        return lt.plan(root, suite, only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def source_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root; never built\n")
         for relative in (SOURCE, FIXTURE):
@@ -221,12 +221,12 @@ class WebViewRequestFocusTests(unittest.TestCase):
     def test_exact_three_method_browser_plan_preserves_all_slots_and_existing_profiles(self):
         rows = matrix.matrix(PROFILE)["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-webview" and row["test-focus"] == FOCUS for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-webview" and row["test-focus"] == FOCUS for row in rows))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), lt.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), lt.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             lt.plan(lt.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -234,13 +234,13 @@ class WebViewRequestFocusTests(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         plan = lt.plan(lt.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in plan["expected"]])
         self.assertEqual(list(unrelated), plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          plan["test_bearing_modules_not_requested"])
         for suite in ("js", "wasm"):
             plan = self.plan(suite)
@@ -260,11 +260,11 @@ class WebViewRequestFocusTests(unittest.TestCase):
     def test_readonly_cli_and_validation_reject_wrong_suite_module_filter_fixture_and_full_claim(self):
         for suite in ("js", "wasm"):
             command = [sys.executable, "-B", str(lt.ROOT / "scripts/ci/library_tests.py"), "plan",
-                       "--suite", suite, "--module", "calf-webview", "--focus", FOCUS]
+                       "--suite", suite, "--module", "nativecmpkit-webview", "--focus", FOCUS]
             result = subprocess.run(command, cwd=lt.ROOT, capture_output=True, text=True, timeout=30)
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertEqual(self.plan(suite), json.loads(result.stdout))
-            for key, value in (("module", "calf-ui"), ("task", ":calf-webview:publish"), ("test_filter", "*"),
+            for key, value in (("module", "nativecmpkit-ui"), ("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"),
                                ("required_testcases", []), ("test_source_files", []), ("browser_http_fixture", "foreign.js")):
                 plan = self.plan(suite)
                 plan["expected"][0][key] = value
@@ -274,9 +274,9 @@ class WebViewRequestFocusTests(unittest.TestCase):
             plan["complete_suite_requested"] = True
             with self.assertRaises(ValueError):
                 lt.validate_test_focus(plan)
-        for suite, modules in (("ios", ("calf-webview",)), ("desktop", ("calf-webview",)),
-                               ("android-host", ("calf-webview",)), ("js", None), ("wasm", ("calf-io",)),
-                               ("js", ("calf-webview", "calf-ui"))):
+        for suite, modules in (("ios", ("nativecmpkit-webview",)), ("desktop", ("nativecmpkit-webview",)),
+                               ("android-host", ("nativecmpkit-webview",)), ("js", None), ("wasm", ("nativecmpkit-io",)),
+                               ("js", ("nativecmpkit-webview", "nativecmpkit-ui"))):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
 

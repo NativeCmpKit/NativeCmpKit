@@ -9,24 +9,24 @@ import java.security.MessageDigest
 gradle.projectsEvaluated {
     // Init scripts also visit convention/included builds. They do not own UI's
     // compilation and must not reject their independent plugin-resolution tasks.
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     // Gradle retains task-specific --tests options in startParameter.taskNames.
     // Admit only this failed authored method; no unfiltered application invocation.
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest") + listOf(
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") + listOf(
         "nativeBarButtonAndDetachedOrMissingViewUseTheDocumentedFallback",
-    ).flatMap { method -> listOf("--tests", "com.mohamedrejeb.calf.ui.dialog.NativePopoverAnchorTest.$method") }
+    ).flatMap { method -> listOf("--tests", "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverAnchorTest.$method") }
     val permittedTasks = setOf(
-        listOf(":calf-ui:compileTestKotlinIosSimulatorArm64"),
+        listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"),
         applicationRequest,
     )
     check(gradle.startParameter.taskNames in permittedTasks) {
         "Focused popover compilation accepts only its exact test compiler or application task"
     }
     val paths = listOf(
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverAnchorTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeXcuiInput.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverAnchorTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeXcuiInput.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

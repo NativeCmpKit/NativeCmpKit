@@ -193,7 +193,7 @@ class ControllerReceipts(unittest.TestCase):
         self.relative = "build/ci-verification/synthetic-device"
         self.revision = "a" * 40
         self.context = {"source_revision": self.revision, "source_tree_dirty": False}
-        self.plan = {"expected": [{"project": ":calf-io"}, {"project": ":calf-file-picker"}, {"project": ":calf-webview"}],
+        self.plan = {"expected": [{"project": ":nativecmpkit-io"}, {"project": ":nativecmpkit-file-picker"}, {"project": ":nativecmpkit-webview"}],
                      "complete_suite_requested": True, "explicit_module_subset": [],
                      "test_bearing_modules_not_requested": []}
         self.receipt = {"passed": True, "totals": {"executed": 3, "passed": 3, "failures": 0}}
@@ -238,22 +238,22 @@ class ControllerReceipts(unittest.TestCase):
 
     def test_finite_focus_reaches_both_plan_and_actual_library_execution(self):
         with self.controlled() as mocks:
-            result = c.run(self.root, self.relative, only_modules=("calf-ui",),
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-ui",),
                            focus=c.lt.DATE_TRANSACTION_FOCUS)
         self.assertTrue(result["passed"])
         self.assertEqual(c.lt.DATE_TRANSACTION_FOCUS, result["explicit_test_focus"])
         self.assertEqual(c.lt.DATE_TRANSACTION_FOCUS, mocks["plan"].call_args.kwargs["focus"])
         self.assertEqual(c.lt.DATE_TRANSACTION_FOCUS, mocks["tests"].call_args.kwargs["focus"])
-        self.assertEqual(("calf-ui",), mocks["tests"].call_args.kwargs["only_modules"])
+        self.assertEqual(("nativecmpkit-ui",), mocks["tests"].call_args.kwargs["only_modules"])
 
     def test_wrong_focus_fails_before_host_or_engine_setup(self):
         with patch.object(c, "require_host") as host, self.assertRaises(ValueError):
-            c.run(self.root, self.relative, only_modules=("calf-webview",),
+            c.run(self.root, self.relative, only_modules=("nativecmpkit-webview",),
                   focus=c.lt.DATE_TRANSACTION_FOCUS)
         host.assert_not_called()
 
     def test_separate_geo_probe_prepares_after_owned_boot_before_native_suite_and_uninstalls_before_shutdown(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-geo", "module": "calf-geo"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-geo", "module": "nativecmpkit-geo"}],
                          explicit_test_focus=c.lt.ANDROID_GEO_PREREQUISITES_FOCUS)
         order = []
         with self.controlled() as mocks, patch.object(c.android_geo_probe, "OwnedGeoProbe") as factory:
@@ -263,7 +263,7 @@ class ControllerReceipts(unittest.TestCase):
             mocks["tests"].side_effect = lambda *args, **kwargs: order.append("tests") or self.receipt
             probe.close.side_effect = lambda: order.append("uninstall") or {"owned_probe_removed": True}
             mocks["shutdown"].side_effect = lambda *args: order.append("shutdown") or {"clean_shutdown": True}
-            result = c.run(self.root, self.relative, only_modules=("calf-geo",), focus=c.lt.ANDROID_GEO_PREREQUISITES_FOCUS)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-geo",), focus=c.lt.ANDROID_GEO_PREREQUISITES_FOCUS)
         self.assertEqual(["boot", "probe", "tests", "uninstall", "shutdown"], order)
         self.assertTrue(result["passed"])
         self.assertEqual(c.SERIAL, factory.call_args.args[3])
@@ -273,7 +273,7 @@ class ControllerReceipts(unittest.TestCase):
         self.assertEqual(c.lt.ANDROID_GEO_PREREQUISITES_FOCUS, mocks["tests"].call_args.kwargs["focus"])
 
     def test_geo_probe_prepare_failure_has_zero_test_claims_and_still_removes_owned_app_and_emulator(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-geo", "module": "calf-geo"}])
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-geo", "module": "nativecmpkit-geo"}])
         with self.controlled() as mocks, patch.object(c.android_geo_probe, "OwnedGeoProbe") as factory:
             probe = factory.return_value; probe.prepare.side_effect = RuntimeError("SYNTHETIC_PRIVATE_PROBE_ERROR")
             probe.close.return_value = {"owned_probe_removed": True}
@@ -283,7 +283,7 @@ class ControllerReceipts(unittest.TestCase):
         self.assertNotIn("SYNTHETIC_PRIVATE_PROBE_ERROR", json.dumps(result))
 
     def test_geo_probe_cleanup_error_cannot_promote_native_passes_or_skip_owned_emulator_shutdown(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-geo", "module": "calf-geo"}])
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-geo", "module": "nativecmpkit-geo"}])
         with self.controlled() as mocks, patch.object(c.android_geo_probe, "OwnedGeoProbe") as factory:
             probe = factory.return_value; probe.prepare.return_value = {"probe_installed": True}
             probe.close.side_effect = ValueError("SYNTHETIC_PRIVATE_PROBE_ERROR")
@@ -298,7 +298,7 @@ class ControllerReceipts(unittest.TestCase):
             owner = factory.return_value
             owner.prepare.return_value = owner
             owner.close.return_value = {"clean_monitor_shutdown": True, "capture_found": False}
-            result = c.run(self.root, self.relative, only_modules=("calf-webview",), focus=c.lt.WEBVIEW_ANDROID_MEDIA_FOCUS)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-webview",), focus=c.lt.WEBVIEW_ANDROID_MEDIA_FOCUS)
         self.assertTrue(result["passed"])
         owner.prepare.assert_called_once(); owner.start.assert_called_once(); owner.close.assert_called_once()
         self.assertEqual(c.SERIAL, factory.call_args.args[3])
@@ -311,7 +311,7 @@ class ControllerReceipts(unittest.TestCase):
             owner = factory.return_value
             owner.prepare.return_value = owner
             owner.close.side_effect = ValueError("synthetic private failure, not exported")
-            result = c.run(self.root, self.relative, only_modules=("calf-webview",), focus=c.lt.WEBVIEW_ANDROID_MEDIA_FOCUS)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-webview",), focus=c.lt.WEBVIEW_ANDROID_MEDIA_FOCUS)
         mocks["shutdown"].assert_called_once()
         self.assertTrue(result["emulator_shutdown"]["clean_shutdown"])
         self.assertFalse(result["passed"])
@@ -326,8 +326,8 @@ class ControllerReceipts(unittest.TestCase):
         self.assertTrue(result["passed"])
         calls = mocks["execute"].call_args_list
         self.assertEqual(2, len(calls))
-        self.assertEqual([":calf-io:assembleAndroidDeviceTest", ":calf-file-picker:assembleAndroidDeviceTest",
-                          ":calf-webview:assembleAndroidDeviceTest"], calls[0].args[1][-3:])
+        self.assertEqual([":nativecmpkit-io:assembleAndroidDeviceTest", ":nativecmpkit-file-picker:assembleAndroidDeviceTest",
+                          ":nativecmpkit-webview:assembleAndroidDeviceTest"], calls[0].args[1][-3:])
         self.assertEqual(c.SERIAL, calls[0].kwargs["env"]["ANDROID_SERIAL"])
         self.assertTrue(Path(calls[1].kwargs["env"]["ANDROID_AVD_HOME"]).is_relative_to(self.root / self.relative))
         mocks["tests"].assert_called_once()
@@ -337,12 +337,12 @@ class ControllerReceipts(unittest.TestCase):
         self.assertNotIn("-selinux", mocks["popen"].call_args.args[0])
 
     def test_camera_minimum_uses_official_device_id_and_creates_owned_avd_before_compilation(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-camera-picker", "module": "calf-camera-picker"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-camera-picker", "module": "nativecmpkit-camera-picker"}],
                          explicit_test_focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS)
         with self.controlled() as mocks, patch.object(c.android_camera_receiver, "OwnedCameraReceiver") as factory, \
                 patch.object(c.android_camera_receiver, "archive_focused_reports", return_value={}):
             factory.return_value.close.return_value = {"owned_recipient_removed": True}
-            result = c.run(self.root, self.relative, only_modules=("calf-camera-picker",),
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-camera-picker",),
                            focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
         self.assertTrue(result["passed"])
         plan = json.loads((self.root / self.relative / "plan.json").read_text())
@@ -350,13 +350,13 @@ class ControllerReceipts(unittest.TestCase):
         calls = mocks["execute"].call_args_list
         self.assertEqual(2, len(calls))
         self.assertEqual(plan["create_avd_command"], calls[0].args[1])
-        self.assertEqual(":calf-camera-picker:assembleAndroidDeviceTest", calls[1].args[1][-1])
+        self.assertEqual(":nativecmpkit-camera-picker:assembleAndroidDeviceTest", calls[1].args[1][-1])
         self.assertEqual(c.SERIAL, calls[0].kwargs["env"]["ANDROID_SERIAL"])
         self.assertEqual(c.SERIAL, calls[1].kwargs["env"]["ANDROID_SERIAL"])
         self.assertEqual(23, factory.call_args.kwargs["api_level"])
 
     def test_camera_failed_prepare_and_cleanup_preserve_partial_installer_receipt_and_safe_source_origins(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-camera-picker", "module": "calf-camera-picker"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-camera-picker", "module": "nativecmpkit-camera-picker"}],
                          explicit_test_focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS)
         partial = {"assembly": {"exit_code": 0}, "source_apk_sha256": "b" * 64, "source_apk_bytes": 123,
                    "install_exit_code": 0, "recipient_installed": False, "owned_recipient_removed": False,
@@ -365,7 +365,7 @@ class ControllerReceipts(unittest.TestCase):
             owner = factory.return_value; owner.receipt = partial
             owner.prepare.side_effect = ValueError("PRIVATE_PREPARE_BODY")
             owner.close.side_effect = ValueError("PRIVATE_CLEANUP_BODY")
-            result = c.run(self.root, self.relative, only_modules=("calf-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
         self.assertFalse(result["passed"]); mocks["tests"].assert_not_called(); mocks["shutdown"].assert_called_once()
         self.assertEqual(partial, result["camera_receiver"])
         self.assertEqual({"source", "symbol", "line"}, set(result["controller_error_origin"]))
@@ -373,13 +373,13 @@ class ControllerReceipts(unittest.TestCase):
         self.assertNotIn("PRIVATE_", json.dumps(result))
 
     def test_camera_API23_receiver_guard_runs_before_expensive_reporter_compile_without_native_or_cleanup_waiver(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-camera-picker", "module": "calf-camera-picker"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-camera-picker", "module": "nativecmpkit-camera-picker"}],
                          explicit_test_focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS)
         with self.controlled() as mocks, patch.object(c.android_camera_receiver, "OwnedCameraReceiver") as factory:
             owner = factory.return_value; owner.receipt = {"owned_recipient_removed": False}
             owner.prepare.side_effect = ValueError("PRIVATE_PREPARE_GUARD")
             owner.close.return_value = {"owned_recipient_removed": True}
-            result = c.run(self.root, self.relative, only_modules=("calf-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
         self.assertFalse(result["passed"]); self.assertFalse(result["test_suite_passed"])
         self.assertEqual(1, mocks["execute"].call_count)
         self.assertEqual({"owned-avd-create"}, set(result["setup_stages"]))
@@ -387,7 +387,7 @@ class ControllerReceipts(unittest.TestCase):
         self.assertNotIn("PRIVATE_", json.dumps(result))
 
     def test_camera_API23_compiles_reporter_only_after_boot_and_receiver_and_cleans_both_on_compile_refusal(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-camera-picker", "module": "calf-camera-picker"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-camera-picker", "module": "nativecmpkit-camera-picker"}],
                          explicit_test_focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS)
         order = []
         with self.controlled() as mocks, patch.object(c.android_camera_receiver, "OwnedCameraReceiver") as factory:
@@ -397,7 +397,7 @@ class ControllerReceipts(unittest.TestCase):
             owner.prepare.side_effect = lambda: order.append("receiver") or {"recipient_installed": True}
             owner.close.side_effect = lambda: order.append("recipient-remove") or {"owned_recipient_removed": True}
             mocks["shutdown"].side_effect = lambda *a: order.append("engine-remove") or {"clean_shutdown": True}
-            result = c.run(self.root, self.relative, only_modules=("calf-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-camera-picker",), focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
         self.assertEqual(["create", "boot", "receiver", "reporter", "recipient-remove", "engine-remove"], order)
         self.assertFalse(result["passed"]); mocks["tests"].assert_not_called()
         self.assertEqual(1, result["setup_stages"]["apk-assembly"]["exit_code"])
@@ -405,11 +405,11 @@ class ControllerReceipts(unittest.TestCase):
         self.assertTrue(result["reporter_compile_deferred_until_receiver_byte_identity"])
 
     def test_camera_avd_refusal_never_starts_compilation_receiver_emulator_or_native_suite(self):
-        self.plan.update(suite="android-device", expected=[{"project": ":calf-camera-picker", "module": "calf-camera-picker"}],
+        self.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-camera-picker", "module": "nativecmpkit-camera-picker"}],
                          explicit_test_focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS)
         with self.controlled() as mocks, patch.object(c.android_camera_receiver, "OwnedCameraReceiver") as factory:
             mocks["execute"].return_value = {"exit_code": 1}
-            result = c.run(self.root, self.relative, only_modules=("calf-camera-picker",),
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-camera-picker",),
                            focus=c.lt.ANDROID_CAMERA_PROVIDER_FOCUS, api_level=23)
         self.assertFalse(result["passed"])
         self.assertEqual({"owned-avd-create"}, set(result["setup_stages"]))
@@ -420,30 +420,30 @@ class ControllerReceipts(unittest.TestCase):
         factory.assert_not_called()
 
     def test_explicit_subset_is_identical_for_assembly_discovery_execution_and_receipts(self):
-        self.plan = {"expected": [{"project": ":calf-webview"}], "complete_suite_requested": False,
-                     "explicit_module_subset": ["calf-webview"],
-                     "test_bearing_modules_not_requested": ["calf-file-picker", "calf-io"]}
+        self.plan = {"expected": [{"project": ":nativecmpkit-webview"}], "complete_suite_requested": False,
+                     "explicit_module_subset": ["nativecmpkit-webview"],
+                     "test_bearing_modules_not_requested": ["nativecmpkit-file-picker", "nativecmpkit-io"]}
         with self.controlled() as mocks:
-            mocks["command"].return_value = ["./gradlew", "--no-parallel", ":calf-webview:connectedAndroidDeviceTest"]
-            result = c.run(self.root, self.relative, only_modules=("calf-webview",))
-        expected_admission = unittest.mock.call(self.root, "android-device", only_modules=("calf-webview",))
+            mocks["command"].return_value = ["./gradlew", "--no-parallel", ":nativecmpkit-webview:connectedAndroidDeviceTest"]
+            result = c.run(self.root, self.relative, only_modules=("nativecmpkit-webview",))
+        expected_admission = unittest.mock.call(self.root, "android-device", only_modules=("nativecmpkit-webview",))
         self.assertEqual([expected_admission, expected_admission], mocks["plan"].call_args_list,
                          "One independent public pre-host and one fresh internal source admission; no cached plan")
-        self.assertEqual(["./gradlew", "--no-parallel", ":calf-webview:assembleAndroidDeviceTest"],
+        self.assertEqual(["./gradlew", "--no-parallel", ":nativecmpkit-webview:assembleAndroidDeviceTest"],
                          mocks["execute"].call_args_list[0].args[1])
-        self.assertEqual(("calf-webview",), mocks["tests"].call_args.kwargs["only_modules"])
+        self.assertEqual(("nativecmpkit-webview",), mocks["tests"].call_args.kwargs["only_modules"])
         stored = json.loads((self.root / self.relative / "plan.json").read_text())
         self.assertEqual(self.plan, stored["source_suite"])
         self.assertFalse(result["complete_suite_requested"])
-        self.assertEqual(["calf-webview"], result["explicit_module_subset"])
-        self.assertEqual(["calf-file-picker", "calf-io"], result["test_bearing_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-webview"], result["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-file-picker", "nativecmpkit-io"], result["test_bearing_modules_not_requested"])
         self.assertTrue(result["passed"], "A scoped pass must not be mislabeled complete coverage")
 
     def test_invalid_source_subset_cannot_start_gradle_or_emulator_and_releases_owned_lock(self):
         with self.controlled() as mocks:
             mocks["plan"].side_effect = ValueError("invalid authored-device module selection")
             with self.assertRaises(ValueError):
-                c.run(self.root, self.relative, only_modules=("calf-missing",))
+                c.run(self.root, self.relative, only_modules=("nativecmpkit-missing",))
         mocks["execute"].assert_not_called()
         mocks["popen"].assert_not_called()
         mocks["tests"].assert_not_called()
@@ -538,12 +538,12 @@ class ControllerReceipts(unittest.TestCase):
         lock.write_text("unrelated-owner")
         with patch.object(c, "require_host"):
             with self.assertRaises(FileExistsError):
-                c.run(self.root, self.relative, only_modules=("calf-webview",),
+                c.run(self.root, self.relative, only_modules=("nativecmpkit-webview",),
                       focus=c.lt.ANDROID_WEBVIEW_REQUEST_FOCUS)
             self.assertEqual("unrelated-owner", lock.read_text())
             for relative in ("build/ci-verification", "build/ci-verification/../other", "/tmp/escape"):
                 with self.subTest(relative=relative), self.assertRaises(ValueError):
-                    c.run(self.root, relative, only_modules=("calf-webview",),
+                    c.run(self.root, relative, only_modules=("nativecmpkit-webview",),
                           focus=c.lt.ANDROID_WEBVIEW_REQUEST_FOCUS)
 
 

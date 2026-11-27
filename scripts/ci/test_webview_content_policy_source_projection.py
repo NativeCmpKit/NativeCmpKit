@@ -84,9 +84,9 @@ class WebViewContentPolicySourceProjectionControls(unittest.TestCase):
         # fixtures or other docs, production, dependencies, guards or new inputs.
         representatives = (
             fixture, "docs/testing/webview-content-policy.md", "gradle/libs.versions.toml",
-            "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt",
+            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt",
             "scripts/ci/android_external328_source_projection.py", "scripts/ci/library_tests.py",
-            "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidContentPolicyVerificationFilter.kt",
+            "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt",
         )
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary).resolve(); copy_fixture(root)
@@ -288,7 +288,7 @@ class WebViewContentPolicySourceProjectionControls(unittest.TestCase):
         self.assertNotIn("AGENTS.md", history.BOUND_PATHS)
         self.assertNotIn("scripts/ci/runtime_context.py", history.BOUND_PATHS)
         self.assertNotIn("scripts/ci/android_external328_source_projection.py", history.BOUND_PATHS)
-        self.assertFalse(any(name.startswith("calf-share/") or name.startswith("calf-ui/") for name in history.BOUND_PATHS))
+        self.assertFalse(any(name.startswith("nativecmpkit-share/") or name.startswith("nativecmpkit-ui/") for name in history.BOUND_PATHS))
         classes = {policy.spec(focus)["classname"]: policy.spec(focus)["source"] for focus in policy.FOCUSES}
         self.assertEqual(4, len(classes))
         self.assertEqual(14, sum(len(policy._METHOD.findall((ROOT / name).read_text())) for name in classes.values()))

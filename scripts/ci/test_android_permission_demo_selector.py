@@ -18,10 +18,10 @@ from android_permission_selected_context import permission_lifecycle_context, pe
 
 TREE = Path(os.environ.get("PERMISSION_SELECTOR_REVIEW_TREE", Path(__file__).resolve().parents[2])).resolve()
 PROFILE = "android-permission-demo-call-denial-recovery"
-CORE = "calf-permissions/core"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest"
-SOURCE = CORE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionDemoDeviceTest.kt"
-ANNOTATION = "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoCallDenialVerification"
+CORE = "nativecmpkit-permissions/core"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest"
+SOURCE = CORE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionDemoDeviceTest.kt"
+ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoCallDenialVerification"
 NAME = ANNOTATION.rsplit(".", 1)[1]
 METHODS = ("callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant",
            "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest")
@@ -111,8 +111,8 @@ class AndroidPermissionDemoSelectorGuards(unittest.TestCase):
     def plan(self):
         tree, env = owning_environment()
         result, expected = env["selected_source"](TREE, PROFILE, [{"test_source_files": [SOURCE]}], {})
-        expected[0].update(module=CORE, project=":calf-permissions:calf-permissions-core",
-                           task=":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest",
+        expected[0].update(module=CORE, project=":nativecmpkit-permissions:nativecmpkit-permissions-core",
+                           task=":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest",
                            report_directory=CORE + "/build/outputs/androidTest-results/connected/androidMain")
         return env, {"suite": "android-device", "explicit_test_focus": result["explicit_test_focus"],
             "explicit_module_subset": [CORE], "complete_suite_requested": False, "expected": expected}

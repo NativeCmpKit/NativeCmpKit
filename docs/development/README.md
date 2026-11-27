@@ -1,5 +1,7 @@
 # NativeCmpKit development after the audit
 
+[Namespace migration and upstream PR review](nativecmpkit-identity-migration.md)
+
 ## CI source recovery and source plans accepted — 2026-11-06
 
 [The R10–R12 checkpoint](evidence/current-platform-recovery-20261101/ci659-r10-r12-20261106/README.md)
@@ -707,7 +709,7 @@ and read back before docs, **not closed**: Downloads/cloud C1 remain missing.
 This accepted method is excluded from future unchanged replay.
 
 [Fresh upstream sync](../migration/upstream-updates/20261102T193139Z/README.md)
-finds16 open Calf issues, all already mapped; zero missing imports/duplicates.
+finds16 open NativeCmpKit issues, all already mapped; zero missing imports/duplicates.
 Descriptions/author/labels/IDs/links/timestamps/counts agree with earlier records;
 discussion/timeline bodies were not reacquired.97closed/75open/172total unchanged.
 Next finite Desktop Linux/macOS missing-only pairs, with two combined hosted
@@ -904,7 +906,7 @@ new local native executions**. Share227/camera227/Windows199 stay failed. Missin
 Windows Stop1/Share public1 need genuine hosted acceptance;97closed/75open/172total
 remains the last verified issue state. Work is solo; all publication/security gates
 remain. The [fresh upstream snapshot](upstream-refresh-20261102T050936Z/README.md)
-maps all16 open Calf issues: zero missing/duplicate imports or mutations, with no
+maps all16 open NativeCmpKit issues: zero missing/duplicate imports or mutations, with no
 fresh comment/timeline acquisition.
 
 ## Shared camera/Share CI recovery — actual213–221, 2026-11-02
@@ -1107,7 +1109,7 @@ qualified first16 reused without replay. Original preflight123 stays dated.
 
 **94closed/78open/172total;25implemented/42partial/92verified/five unresolved.**
 [Fresh upstream refresh](upstream-refresh-20261101T131519Z/README.md) maps all16
-currently open Calf issues; no new import or mutation is required. Discussion
+currently open NativeCmpKit issues; no new import or mutation is required. Discussion
 history remains its prior dated archive, not a fresh discussion-body acquisition.
 
 Related original-results batch atdf5fd436:
@@ -1424,7 +1426,7 @@ is not acceptance; #13 remains open pending source/results/original-criteria rev
 [Apple diagnostic observations](evidence/apple-launch-error-identities-20261031/README.md)
 pass sixteen distinct modeled checks, zero Apple/profile executions; an independent
 allocation-frame ownership correction is required before the next profile request.
-All16 open Calf issues already have unique current contexts in the
+All16 open NativeCmpKit issues already have unique current contexts in the
 [fresh upstream review](upstream-refresh-20261031T195715Z/README.md); zero imports
 or source-driven closures required. Original
 [author bytes and whitespace red/green](evidence/upstream-refresh-attributes-20261031/README.md)
@@ -2044,7 +2046,7 @@ all publishing/Pages/main/history and independent release/security gates unchang
 
 ## Shared sample-platform candidate; no accepted test replay — 2026-10-29
 
-[Owning important checks](evidence/sample-data-safety-batch-important-20261029/platforms-tools001/README.md) pass81/81 with960 held sample/library/workflow inputs; original836 remains FAILED835pass/one stale cache guard. Counts overlap. Four original codec bodies move byte-identically to nonAndroidTest; three Android native-graphics host methods are new, not devices. Finite Linux one-host plan builds four real app targets/graphs and50 previously unaccepted cases; Apple one-host plan adds17cases/both frameworks/real unsigned Calf Xcode integration. ZERO local Gradle/native/library tests; root below8GiB. Native-screen reducer uses actual redacted device_type instead of nonexistent private name; running08713991/40956332036 is neither changed nor redispatched. #139/#100/#154 stay open pending original-criteria review; accepted desktop/theme/component cases are not replayed.76closed/96open; single-agent/max2 combined heavy requests, no publishing/Pages/main/history or independent release/security gate changes.
+[Owning important checks](evidence/sample-data-safety-batch-important-20261029/platforms-tools001/README.md) pass81/81 with960 held sample/library/workflow inputs; original836 remains FAILED835pass/one stale cache guard. Counts overlap. Four original codec bodies move byte-identically to nonAndroidTest; three Android native-graphics host methods are new, not devices. Finite Linux one-host plan builds four real app targets/graphs and50 previously unaccepted cases; Apple one-host plan adds17cases/both frameworks/real unsigned NativeCmpKit Xcode integration. ZERO local Gradle/native/library tests; root below8GiB. Native-screen reducer uses actual redacted device_type instead of nonexistent private name; running08713991/40956332036 is neither changed nor redispatched. #139/#100/#154 stay open pending original-criteria review; accepted desktop/theme/component cases are not replayed.76closed/96open; single-agent/max2 combined heavy requests, no publishing/Pages/main/history or independent release/security gate changes.
 
 ## Shared native-screen pair; prior failure retained — 2026-10-29
 
@@ -2424,7 +2426,7 @@ executions of8 authored methods +3 host =26 accepted executions**, not a fresh
 whole matrix or Apple/physical/minimum/ABI/full-consumer/security/release gate.
 
 Fresh [upstream reconciliation](upstream-sync-20261029T012644Z/README.md) finds all16
-currently open Calf contexts already current, no missing/duplicate/changed import
+currently open NativeCmpKit contexts already current, no missing/duplicate/changed import
 and zero proposed GitHub mutations; original metadata remains immutable. Current
 **62closed/110open/172**, **47implemented/51partial/59verified/seven unresolved**.
 Continue high-priority Compose/JNI picker cancellation and resource ownership;
@@ -2982,7 +2984,7 @@ removal, late-handler suppression, overlap/relaunch, cancellation and same
 File/native DataTransfer/FileList verified; only OS chooser opening intercepted.
 All741 own-Git inputs reviewed.26 total closures; ledger63implemented/71partial/
 22verified/8unresolved. Initial collection omission retained and reconciled
-read-only, no repeated mutations. Fresh Calf snapshot20261028T003555Z confirms
+read-only, no repeated mutations. Fresh NativeCmpKit snapshot20261028T003555Z confirms
 all16 open issues already mapped,0 new issues/comments. Next three focused
 JDK cookie-expiry copy/session/boundary/overflow methods need actual runtime;
 no broader native/browser/device/ABI/security/legal/consumer/release waiver.

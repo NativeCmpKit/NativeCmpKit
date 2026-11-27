@@ -41,7 +41,7 @@ class IosVectorThemeRecoveryTests(unittest.TestCase):
         row, = matrix.matrix("ios-vector-rendering-iphone-recovery")["include"]
         self.assertEqual("ios-iphone", row["slot"])
         self.assertEqual("iphone", row["simulator-kind"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(tests.IOS_VECTOR_RENDERING_FOCUS, row["test-focus"])
         self.assertNotIn("serial-test-focus", row)
         self.assertEqual(1, len(matrix.preflight_plans("ios-vector-rendering-iphone-recovery")["slots"]))
@@ -64,7 +64,7 @@ class IosVectorThemeRecoveryTests(unittest.TestCase):
     def test_rendering_only_recovery_never_replays_accepted_theme_methods(self):
         row, = matrix.matrix("ios-vector-rendering-recovery")["include"]
         self.assertEqual("ios-ipad", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(tests.IOS_VECTOR_RENDERING_FOCUS, row["test-focus"])
         self.assertNotIn("serial-test-focus", row)
         preflight = matrix.preflight_plans("ios-vector-rendering-recovery")
@@ -92,7 +92,7 @@ class IosVectorThemeRecoveryTests(unittest.TestCase):
     def test_one_host_preflights_two_exact_independent_methods_not_accepted_replay(self):
         row, = matrix.matrix("ios-vector-theme-recovery")["include"]
         self.assertEqual("ios-ipad", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(tests.IOS_VECTOR_RENDERING_FOCUS, row["test-focus"])
         self.assertEqual(tests.IOS_SYSTEM_APPEARANCE_FOCUS, row["serial-test-focus"])
         preflight = matrix.preflight_plans("ios-vector-theme-recovery")
@@ -100,7 +100,7 @@ class IosVectorThemeRecoveryTests(unittest.TestCase):
         self.assertEqual({"ios-ipad"}, {slot["slot"] for slot in preflight["slots"]})
         for slot, focus in zip(preflight["slots"], (tests.IOS_VECTOR_RENDERING_FOCUS, tests.IOS_SYSTEM_APPEARANCE_FOCUS)):
             self.assertEqual(focus, slot["command"][slot["command"].index("--focus") + 1])
-            plan = tests.plan(tests.ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = tests.plan(tests.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertEqual(1, len(plan["expected"][0]["required_testcases"]))
             self.assertTrue(tests.validate_test_focus(plan))
             self.assertEqual(300, app.application_timeout_seconds(focus))
@@ -117,7 +117,7 @@ class IosVectorThemeRecoveryTests(unittest.TestCase):
             fixture.setUp()
             try:
                 fixture.write(tests.IOS_VECTOR_THEME_SOURCE, (tests.ROOT / tests.IOS_VECTOR_THEME_SOURCE).read_bytes())
-                fixture.plan = tests.plan(fixture.root, "ios", only_modules=("calf-ui",), focus=focus)
+                fixture.plan = tests.plan(fixture.root, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
                 method = tests.IOS_VECTOR_THEME_METHODS[0 if focus == tests.IOS_VECTOR_RENDERING_FOCUS else -1]
                 cases = [{"classname": tests.IOS_VECTOR_THEME_CLASS, "name": method, "status": "passed"}]
                 fixture.document["explicit_test_focus"] = focus

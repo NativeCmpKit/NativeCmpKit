@@ -114,7 +114,7 @@ class Arm64StopHistoryTests(unittest.TestCase):
             "DesktopWebViewStopRedirectAcceptanceTest.kt": "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3",
             "BoundedDesktopAwtWindow.kt": "c7bccc89f020490ea6198b837c7a9e386b051a0926ec22e17b3557699420b082",
         }
-        path = ROOT / "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web"
+        path = ROOT / "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web"
         for name, expected in native.items():
             self.assertEqual(hashlib.sha256((path / name).read_bytes()).hexdigest(), expected)
 

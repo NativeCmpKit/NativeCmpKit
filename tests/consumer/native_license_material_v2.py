@@ -28,7 +28,7 @@ MIT_ONLY = frozenset({"block2", "objc2", "objc2-encode", "objc2-foundation"})
 SELECTED_NAMES = MIT_ONLY | frozenset({"dispatch2", "objc2-app-kit", "objc2-cloud-kit",
     "objc2-core-data", "objc2-core-foundation", "objc2-core-graphics", "objc2-core-image",
     "objc2-core-text", "objc2-core-video", "objc2-io-surface", "objc2-quartz-core"})
-INPUT_PATHS = frozenset(f"{module}/native/{name}" for module in ("calf-file-picker", "calf-share")
+INPUT_PATHS = frozenset(f"{module}/native/{name}" for module in ("nativecmpkit-file-picker", "nativecmpkit-share")
                         for name in ("Cargo.toml", "Cargo.lock"))
 OR_TERMS = "Zlib OR Apache-2.0 OR MIT"
 OBLIGATIONS = {"exact_release_text_applicability": "unreviewed", "contributor_notices": "unreviewed",

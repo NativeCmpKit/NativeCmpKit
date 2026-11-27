@@ -20,7 +20,7 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-PROBE = "com.mohamedrejeb.calf.picker.platform.NativeLoaderBoundaryProbe"
+PROBE = "io.github.apdelrahman1911.nativecmpkit.picker.platform.NativeLoaderBoundaryProbe"
 MODES = ("foreign-cache", "noexec", "loaded", "read-only-home", "missing-home", "bad-abi", "bundled-preference")
 
 
@@ -63,7 +63,7 @@ def main() -> int:
     assert any((path / (PROBE.replace(".", "/") + ".class")).is_file() for path in paths if path.is_dir())
     classpath = os.pathsep.join(map(str, paths))
     arch = {"x86_64": "x64", "aarch64": "arm64"}[os.uname().machine]
-    resource = f"native/linux-{arch}/libcalf_filepicker_native.so"
+    resource = f"native/linux-{arch}/libnativecmpkit_filepicker_native.so"
     payload = None
     for path in paths:
         if path.is_dir() and (path / resource).is_file():
@@ -76,12 +76,12 @@ def main() -> int:
                     break
     assert payload is not None and payload.startswith(b"\x7fELF"), "Actual compiled host resource is required"
     digest = hashlib.sha256(payload).hexdigest()
-    identity = f"libcalf_filepicker_native-{digest[:16]}.so"
+    identity = f"libnativecmpkit_filepicker_native-{digest[:16]}.so"
     root = Path(tempfile.mkdtemp(prefix="nativecmpkit-picker-boundaries-", dir="/tmp")).resolve()
     shared = root / "shared-temp"
     shared.mkdir(mode=0o700)
     os.chmod(shared, 0o1777)
-    legacy = shared / ".cache/calf-filepicker"
+    legacy = shared / ".cache/nativecmpkit-filepicker"
     legacy.mkdir(parents=True)
     sentinel = legacy / "not-a-library"
     sentinel.write_bytes(b"legacy-untrusted-data-must-stay-unchanged")
@@ -175,13 +175,13 @@ def main() -> int:
         assert one["private_image_path"] != two["private_image_path"]
         assert sentinel.read_bytes() == b"legacy-untrusted-data-must-stay-unchanged" and len(list(legacy.iterdir())) == 1
 
-        source = ROOT / "calf-file-picker/src/desktopTest/resources/NativeRejectedAbiPayload.rs"
+        source = ROOT / "nativecmpkit-file-picker/src/desktopTest/resources/NativeRejectedAbiPayload.rs"
         channel = re.search(r'(?m)^channel\s*=\s*"([0-9.]+)"', (ROOT / "rust-toolchain.toml").read_text()).group(1)
         rust = command(["rustc", "--version"], ROOT, output / "rust-version.private.log", 10)
         assert rust["exit_code"] == 0 and (output / "rust-version.private.log").read_text().startswith("rustc " + channel + " ")
         bad = root / "bad-system-path"
         bad.mkdir(mode=0o700)
-        library = bad / "libcalf_filepicker_native.so"
+        library = bad / "libnativecmpkit_filepicker_native.so"
         compiled = command(["rustc", "--edition=2021", "--crate-type=cdylib", "--crate-name", "nativecmpkit_bad_abi_fixture",
                             "-C", "panic=abort", "-C", "opt-level=2", str(source), "-o", str(library)], ROOT,
                            output / "bad-abi-rust.private.log")

@@ -16,7 +16,7 @@ import webview_content_policy_source_projection as content
 from ios_popover_anchor_plan import _ordinary_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
-CASES = "calf-share/native/tests/appkit_lifecycle/cases.rs"
+CASES = "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"
 CONTENT_BEFORE = ("ad544703072bd892274a08b29304f313d1915d8c24840f6d136474ea1e560253", 14440)
 CASES_BEFORE = ("9e038b83b4e2e4d3d4718869ec05c9eaa198ce1f3c886a38b97b7c13ff83842b", 20272)
 CASES_AFTER = ("2ee076e833b1cdc619a5aa94194d5d23e3b62d2da1a9797ebe37ac377361b790", 24072)
@@ -71,9 +71,9 @@ class CalendarAppKitContentBoundary740Controls(unittest.TestCase):
             def visit_If(self, node):
                 if (self.function == "current_source_before_content_policy" and
                         ast.dump(node.test, include_attributes=False) == ast.dump(ast.parse(
-                            'relative == "calf-share/native/tests/appkit_lifecycle/cases.rs"',
+                            'relative == "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"',
                             mode="eval").body, include_attributes=False)):
-                    exact = ast.parse('if relative == "calf-share/native/tests/appkit_lifecycle/cases.rs":\n'
+                    exact = ast.parse('if relative == "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs":\n'
                                       '    return source_before_content_policy(relative, payload)\n').body[0]
                     if ast.dump(node, include_attributes=False) != ast.dump(exact, include_attributes=False):
                         raise AssertionError("Only the exact cases-only after/history branch is allowed")

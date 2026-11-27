@@ -29,7 +29,7 @@ def host_line(step):
 
 class IosPickerAdmissionFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-file-picker",), focus=r.IOS_PICKER_ADMISSION_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-file-picker",), focus=r.IOS_PICKER_ADMISSION_FOCUS)
 
     def helper(self):
         helper = batch.IosPickerBatchTests("test_one_slot_exact_26_methods_no_replay_or_publishing_tasks")
@@ -47,19 +47,19 @@ class IosPickerAdmissionFocusTests(unittest.TestCase):
                                                 picker_host_observations=host_observations())
         f.document = document
         f.receipt_path = f.output / "native-picker-application" / batch.fixtures.TOKEN / "receipt.json"
-        f.modules = [{"module": "calf-file-picker", "task": document["task"], "testcases": f.xml_cases(cases)}]
+        f.modules = [{"module": "nativecmpkit-file-picker", "task": document["task"], "testcases": f.xml_cases(cases)}]
         f.save()
         return f
 
     def test_nine_changed_new_methods_keep_original26_and7_and_all_host_slots(self):
         row, = m.matrix("ios-picker-admission")["include"]
-        self.assertEqual(("ios-iphone", "calf-file-picker", r.IOS_PICKER_ADMISSION_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-file-picker", r.IOS_PICKER_ADMISSION_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
         self.assertEqual(9, len(plan["expected"][0]["required_testcases"]))
         self.assertEqual(26, len(self.helper().plan()["expected"][0]["required_testcases"]))
-        old = r.plan(r.ROOT, "ios", only_modules=("calf-file-picker",), focus=r.IOS_PICKER_RECOVERY_FOCUS)
+        old = r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-file-picker",), focus=r.IOS_PICKER_RECOVERY_FOCUS)
         self.assertEqual(7, len(old["expected"][0]["required_testcases"]))
         selected = {(c["classname"], c["name"]) for c in r.ui_application_focus_identities(r.IOS_PICKER_ADMISSION_FOCUS)}
         original = {(c["classname"], c["name"]) for c in r.ui_application_focus_identities(r.IOS_PICKER_BOUNDARY_FOCUS)}
@@ -70,7 +70,7 @@ class IosPickerAdmissionFocusTests(unittest.TestCase):
     def test_exact_task_cli_and_native_filters_never_replay_foundation_or_unrelated_tasks(self):
         plan = self.plan()
         expected = plan["expected"][0]
-        self.assertEqual(":calf-file-picker:" + r.IOS_APPLICATION_TASK, expected["task"])
+        self.assertEqual(":nativecmpkit-file-picker:" + r.IOS_APPLICATION_TASK, expected["task"])
         self.assertEqual("genuine-uikit-application", expected["native_test_host"])
         selectors = [v for g in r.IOS_PICKER_ADMISSION_GROUPS for method in g["methods"]
                      for v in ("--tests", g["classname"] + "." + method)]
@@ -81,12 +81,12 @@ class IosPickerAdmissionFocusTests(unittest.TestCase):
         self.assertEqual(r.IOS_PICKER_ADMISSION_FOCUS, app.application_test_focus(
             args + ["--ktest_gradle_filter=" + ",".join(reversed(expected["test_filter"].split(",")))]))
         process = subprocess.run([sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan", "--suite", "ios",
-                                  "--module", "calf-file-picker", "--focus", r.IOS_PICKER_ADMISSION_FOCUS],
+                                  "--module", "nativecmpkit-file-picker", "--focus", r.IOS_PICKER_ADMISSION_FOCUS],
                                  stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, process.returncode, process.stderr)
 
     def test_wrong_suite_module_missing_declaration_or_host_cannot_shrink_coverage(self):
-        for suite, modules in (("desktop", ("calf-file-picker",)), ("ios", ("calf-ui",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-file-picker",)), ("ios", ("nativecmpkit-ui",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PICKER_ADMISSION_FOCUS)
         f = self.fixture()
@@ -138,7 +138,7 @@ class IosPickerAdmissionFocusTests(unittest.TestCase):
             self.assertTrue(f.collect()["errors"])
 
     def test_owning_source_never_treats_nil_links_or_exception_as_rejection_acknowledgement(self):
-        production = (r.ROOT / "calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/IosDialogPresentation.kt").read_text()
+        production = (r.ROOT / "nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/IosDialogPresentation.kt").read_text()
         admission = production.split("internal fun iosDialogHasNoPresentation", 1)[0]
         self.assertNotIn("session.presentationRejected()", admission)
         self.assertNotIn("if (iosDialogHasNoPresentation", admission)

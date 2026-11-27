@@ -19,7 +19,7 @@ SHARED = "scripts/ci/macos_share_ci668_composition.py"
 EXTERNAL328 = "scripts/ci/test_android_external328_source_projection.py"
 EXTERNAL337 = "scripts/ci/test_android_external337_fixture_recovery.py"
 CONTROLLER = "scripts/ci/android_device_tests.py"
-IO_MANIFEST = "calf-io/src/androidDeviceTest/AndroidManifest.xml"
+IO_MANIFEST = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
 
 
 def sha(payload):

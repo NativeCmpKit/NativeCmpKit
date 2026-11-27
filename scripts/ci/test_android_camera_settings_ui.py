@@ -10,8 +10,8 @@ ROOT = Path(os.environ.get("NATIVECMPKIT_CAMERA_UI_ROOT", Path(__file__).resolve
 PACKAGE = "com.android.settings"
 COMPONENT = PACKAGE + "/.Settings$DevelopmentSettingsActivity"
 ACTION = "android.settings.APPLICATION_DEVELOPMENT_SETTINGS"
-HELPER = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedAlwaysFinish.kt"
-UI = "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt"
+HELPER = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedAlwaysFinish.kt"
+UI = "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt"
 NONCE = "a" * 32
 MARKER = "nativecmpkit-settings-" + NONCE
 HEADER = "ACTIVITY MANAGER RECENT TASKS (dumpsys activity recents)"
@@ -218,7 +218,7 @@ class CameraSettingsUiSourceTests(unittest.TestCase):
         text = source()
         for token in ('"com.android.settings.Settings\\$DevelopmentSettingsActivity"', '"com.android.settings.development.DevelopmentSettingsDashboardFragment"', "applicationInfo.uid == 1000", "ApplicationInfo.FLAG_SYSTEM", 'checkSignatures("android", SETTINGS_PACKAGE)', "ActivityInfo.LAUNCH_MULTIPLE", "info.enabled", "info.exported", "info.permission == null", "getComponentEnabledSetting(component)", "getApplicationEnabledSetting(SETTINGS_PACKAGE)"):
             self.assertIn(token, text)
-        manifest = (ROOT / "calf-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_text()
+        manifest = (ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml").read_text()
         self.assertEqual(1, manifest.count('<package android:name="com.android.settings" />'))
 
     def test_native_shell_task_permissions_are_observed_not_adopted_or_granted(self):

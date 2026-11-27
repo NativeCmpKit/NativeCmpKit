@@ -4,7 +4,7 @@ render_macros: true
 <!-- Modified for nativeCmpkit migration (2026-10-24): independent coordinates / project references; inherited APIs retained. -->
 # Adaptive UI
 
-> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical Calf version claims are preserved, not certified as nativeCmpkit releases.
+> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical NativeCmpKit version claims are preserved, not certified as nativeCmpkit releases.
 
 ## Installation
 
@@ -27,7 +27,7 @@ render_macros: true
 | 1.9.20         | 1.5.10          | 0.2.0        |
 | 1.9.0          | 1.5.0           | 0.1.1        |
 
-> **Android:** Calf 0.14.0+ is built on Compose Multiplatform 1.12, whose Android artifacts require `compileSdk = 37` (Android Gradle Plugin 9.4 is the first release that supports it). Calf's Android `minSdk` stays 23.
+> **Android:** NativeCmpKit 0.14.0+ is built on Compose Multiplatform 1.12, whose Android artifacts require `compileSdk = 37` (Android Gradle Plugin 9.4 is the first release that supports it). NativeCmpKit's Android `minSdk` stays 23.
 
 Add the following dependency to your module `build.gradle.kts` file:
 
@@ -35,7 +35,7 @@ Add the following dependency to your module `build.gradle.kts` file:
 api("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-ui:{{ nativecmpkit_version }}")
 ```
 
-If you are using `calf-ui` artifact, make sure to export it to binaries:
+If you are using `nativecmpkit-ui` artifact, make sure to export it to binaries:
 
 #### Regular Framework
 ```kotlin
@@ -62,11 +62,11 @@ kotlin {
 }
 ```
 
-> **Important:** Exporting `calf-ui` to binaries is required to make it work on iOS.
+> **Important:** Exporting `nativecmpkit-ui` to binaries is required to make it work on iOS.
 
 ## Components
 
-Calf UI provides a set of adaptive UI components that adapt to the platform they are running on. Here's a list of available components:
+NativeCmpKit UI provides a set of adaptive UI components that adapt to the platform they are running on. Here's a list of available components:
 
 - [AdaptiveAlertDialog](ui/adaptive-alert-dialog.md) - A dialog that adapts to the platform it is running on
 - [AdaptiveBottomSheet](ui/adaptive-bottom-sheet.md) - A bottom sheet that adapts to the platform it is running on

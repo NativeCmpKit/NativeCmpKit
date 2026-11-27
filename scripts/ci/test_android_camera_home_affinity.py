@@ -156,7 +156,7 @@ class ManifestHomeAffinityParserControls(unittest.TestCase):
         self.assertEqual([], parser_calls)
 
     def test_python_kotlin_header_affinity_and_stable_row_contracts_have_exact_parity(self):
-        kotlin = (ROOT / "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaseline.kt").read_text()
+        kotlin = (ROOT / "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaseline.kt").read_text()
         heading = kotlin.split('private val header = Regex("""', 1)[1].split('""")', 1)[0]
         self.assertEqual(home.HEADER.pattern, heading.replace("$positiveInt", home.POSITIVE_INT))
         self.assertIn('check(rows[2] == "    affinity=" + heading.groupValues[4])', kotlin)

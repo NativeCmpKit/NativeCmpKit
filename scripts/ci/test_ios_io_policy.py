@@ -16,7 +16,7 @@ class IosIoPolicyTests(unittest.TestCase):
                 for classname, method, _ in policy.IOS_IO_CASES[module]]
 
     def test_every_required_native_case_must_execute_once_on_apple(self):
-        self.assertEqual({"calf-io", "calf-file-picker-coil"}, set(policy.IOS_IO_CASES))
+        self.assertEqual({"nativecmpkit-io", "nativecmpkit-file-picker-coil"}, set(policy.IOS_IO_CASES))
         self.assertEqual(22, sum(len(rows) for rows in policy.IOS_IO_CASES.values()))
         for module in policy.IOS_IO_CASES:
             cases = self.cases(module)
@@ -59,7 +59,7 @@ class IosIoPolicyTests(unittest.TestCase):
             _, errors = policy.apply(module, "ios", self.cases(module), "Linux", False)
             self.assertTrue(errors)
             self.assertEqual(([], []), policy.apply(module, "desktop", [], "Linux", False))
-        self.assertEqual(([], []), policy.apply("calf-ui", "ios", [], "Darwin", False))
+        self.assertEqual(([], []), policy.apply("nativecmpkit-ui", "ios", [], "Darwin", False))
 
     def test_real_sources_and_report_collector_enforce_required_cases(self):
         for module, requirements in policy.IOS_IO_CASES.items():

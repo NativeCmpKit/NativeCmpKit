@@ -177,9 +177,9 @@ fun bindCandidateArtifact(id: ModuleComponentIdentifier, resolved: File): Map<St
     val rootUrl = if (id.module == root) null else "../../$root/$candidateVersion/$root-$candidateVersion.module"
     check(component["url"] == rootUrl) { "Module metadata redirects outside the exact candidate root: $id" }
     val canonicalName = "${id.module}-$candidateVersion.${resolved.extension}"
-    // These explicit roots/target suffixes map to the retained public Calf Gradle project names.
+    // These explicit roots/target suffixes map to the retained public NativeCmpKit Gradle project names.
     // Never accept an arbitrary filename, another group/module, sources or a URL/path alias.
-    val retainedName = "calf-${id.module.removePrefix("nativecmpkit-")}-$candidateVersion.${resolved.extension}"
+    val retainedName = "nativecmpkit-${id.module.removePrefix("nativecmpkit-")}-$candidateVersion.${resolved.extension}"
     val variants = metadata["variants"] as? List<*> ?: error("Missing metadata variants: $id")
     check(variants.size in 1..128)
     val primaryBindings = variants.mapNotNull { entry ->
@@ -276,7 +276,7 @@ tasks.withType<Test>().configureEach {
             val methods = listOf("pickerNativeLibraryLoadsAndInitializes", "packagedPickerCreatesAndReleasesValidHandles",
                 "shareNativeLibraryLoadsAndReportsActualHostCapability")
             filter {
-                methods.forEach { includeTestsMatching("nativecmpkit.consumer.PublishedNativeConsumerTest.$it") }
+                methods.forEach { includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedNativeConsumerTest.$it") }
                 isFailOnNoMatchingTests = true
             }
             failOnNoDiscoveredTests.set(true)

@@ -9,25 +9,25 @@ import java.security.MessageDigest
 gradle.projectsEvaluated {
     // Init scripts also visit convention/included builds. They do not own UI's
     // compilation and must not reject their independent plugin-resolution tasks.
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     // Gradle retains task-specific --tests options in startParameter.taskNames.
     // Admit the exact authored selection, not arbitrary options or wildcards.
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest") + listOf(
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") + listOf(
         "cancelledShowRepeatsWithANewNativeAnimationAndItsOwnCompletion",
         "cancelledHideRepeatsWithANewNativeAnimationAndItsOwnCompletion",
-    ).flatMap { method -> listOf("--tests", "com.mohamedrejeb.calf.ui.sheet.NativeSheetCancellationRepeatTest.$method") }
+    ).flatMap { method -> listOf("--tests", "io.github.apdelrahman1911.nativecmpkit.ui.sheet.NativeSheetCancellationRepeatTest.$method") }
     val permittedTasks = setOf(
-        listOf(":calf-ui:compileTestKotlinIosSimulatorArm64"),
-        listOf(":calf-ui:iosSimulatorArm64ApplicationTest"),
+        listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"),
+        listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"),
         applicationRequest,
     )
     check(gradle.startParameter.taskNames in permittedTasks) {
         "Focused modal compilation accepts only its exact test compiler or application task"
     }
     val paths = listOf(
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/sheet/NativeSheetCancellationRepeatTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/NativeSheetCancellationRepeatTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

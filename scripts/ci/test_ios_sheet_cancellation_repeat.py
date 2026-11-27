@@ -45,7 +45,7 @@ class SheetCancellationRepeatControls(unittest.TestCase):
         self.assertNotRegex(source, r"@(Ignore|Disabled|IgnoredTest)\b|Thread\.sleep|delay\(|usleep\(|performSelector")
 
     def test_exact_two_method_plan_and_three_source_compiler_exclude_all_accepted_populations(self):
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_SHEET_REPEAT_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_SHEET_REPEAT_FOCUS)
         required = library.ui_application_focus_identities(library.IOS_SHEET_REPEAT_FOCUS)
         self.assertEqual(2, len(required))
         self.assertEqual(required, plan["expected"][0]["required_testcases"])
@@ -56,14 +56,14 @@ class SheetCancellationRepeatControls(unittest.TestCase):
              *library.IOS_MODAL_LIFECYCLE_METHODS, *library.IOS_WORKER_OWNERSHIP_METHODS, *library.IOS_MODAL_XCUI_METHODS)}))
         command = library.gradle_command("ios", plan, DEVICE)
         self.assertEqual(1, command.count(COMPILER))
-        self.assertEqual([":calf-ui:iosSimulatorArm64ApplicationTest"] + [arg
+        self.assertEqual([":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"] + [arg
             for name in library.IOS_SHEET_REPEAT_METHODS for arg in ("--tests", library.IOS_SHEET_REPEAT_CLASS + "." + name)],
-            command[command.index(":calf-ui:iosSimulatorArm64ApplicationTest"):])
+            command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         compiler = (ROOT / COMPILER).read_text()
-        paths = re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', compiler)
+        paths = re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', compiler)
         self.assertEqual([library.IOS_SHEET_REPEAT_SOURCE,
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt"], paths)
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt"], paths)
         request = compiler.split("val applicationRequest", 1)[1].split("val permittedTasks", 1)[0]
         self.assertEqual(list(library.IOS_SHEET_REPEAT_METHODS), re.findall(r'"(cancelled\w+)"', request))
         for marker in ("common.setFrom(emptyList<Any>())", "actual.files.map { it.canonicalFile }.toSet() == files.toSet()",
@@ -80,19 +80,19 @@ class SheetCancellationRepeatControls(unittest.TestCase):
                 mutated.write_text(body)
                 with patch.object(library, "safe_path", side_effect=lambda root, relative:
                         mutated if relative == library.IOS_SHEET_REPEAT_SOURCE else real_safe(root, relative)), self.assertRaises(ValueError):
-                    library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_SHEET_REPEAT_FOCUS)
+                    library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_SHEET_REPEAT_FOCUS)
 
     def test_profile_reserves_one_real_iphone_and_refuses_other_hosts_or_modules(self):
         profile = "ios-sheet-cancellation-repeat"
         self.assertEqual({"include": [{"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-            "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui",
+            "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui",
             "test-focus": library.IOS_SHEET_REPEAT_FOCUS}]}, workflow.matrix(profile))
         for slots in (("ios-ipad",), ("desktop-macos-arm64",), ("ios-iphone", "ios-ipad")):
             with patch.dict(workflow.PROFILES, {profile: slots}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-        with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError):
+        with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError):
             workflow.matrix(profile)
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, library.IOS_SHEET_REPEAT_FOCUS))
         source = (ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn("ios-sheet-cancellation-repeat", source)

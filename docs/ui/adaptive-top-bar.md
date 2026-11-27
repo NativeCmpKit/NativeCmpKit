@@ -14,7 +14,7 @@ On iOS, a native UINavigationBar is created using the `iosTitle`, `iosLeadingIte
 ## Usage
 
 ```kotlin
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalCalfUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalNativeCmpKitUiApi::class)
 @Composable
 fun MyScreen() {
     AdaptiveTopBar(
@@ -111,7 +111,7 @@ UIKitUIBarButtonItem.fixedSpace(width = 16.0)
 ```
 
 !!! tip
-    Use type-safe `SFSymbol` constants from `calf-ui` instead of raw strings for icon names. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.
+    Use type-safe `SFSymbol` constants from `nativecmpkit-ui` instead of raw strings for icon names. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.
 
 ### Bar Button Item with Menu
 
@@ -125,7 +125,7 @@ On Material platforms, use a standard `DropdownMenu` inside the `actions` slot.
 | ![AdaptiveTopBarDropdown Material](../images/gif/AdaptiveTopBarDropdown-material.gif) | ![AdaptiveTopBarDropdown iOS](../images/gif/AdaptiveTopBarDropdown-ios.gif) | ![AdaptiveTopBarDropdown Liquid Glass](../images/gif/AdaptiveTopBarDropdown-ios-liquid-glass.gif) |
 
 ```kotlin
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalCalfUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalNativeCmpKitUiApi::class)
 @Composable
 fun MyScreen() {
     var expanded by remember { mutableStateOf(false) }

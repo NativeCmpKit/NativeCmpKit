@@ -15,22 +15,22 @@ import workflow_matrix as w
 
 class AndroidShareGrantPlanTests(unittest.TestCase):
     def plan(self):
-        return l.plan(l.ROOT, "android-device", only_modules=("calf-share",), focus="android-share-uri-grants")
+        return l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-share",), focus="android-share-uri-grants")
 
     def test_one_exact_three_method_native_job_preserves_all_prior_device_modules_and_full_slots(self):
         row, = w.matrix("android-share-grants")["include"]
-        self.assertEqual(("android-device-api35", "android-device", "calf-share", "android-share-uri-grants"),
+        self.assertEqual(("android-device-api35", "android-device", "nativecmpkit-share", "android-share-uri-grants"),
                          (row["slot"], row["suite"], row["test-modules"], row["test-focus"]))
         plan = self.plan(); self.assertTrue(l.validate_test_focus(plan))
         self.assertTrue(l.android_share_recipient_required(plan)); self.assertFalse(l.android_geo_probe_required(plan))
-        self.assertFalse(plan["complete_suite_requested"]); self.assertEqual(["calf-share"], plan["explicit_module_subset"])
+        self.assertFalse(plan["complete_suite_requested"]); self.assertEqual(["nativecmpkit-share"], plan["explicit_module_subset"])
         self.assertEqual(3, len(plan["expected"][0]["required_testcases"]))
-        self.assertEqual({"calf-io", "calf-file-picker", "calf-geo", "calf-webview", "calf-ui", "calf-navigation", "calf-share", "calf-camera-picker", "calf-permissions/core"},
+        self.assertEqual({"nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-geo", "nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-navigation", "nativecmpkit-share", "nativecmpkit-camera-picker", "nativecmpkit-permissions/core"},
                          set(l.MINIMUM_MODULES["android-device"]))
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), l.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), l.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             l.plan(l.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -38,13 +38,13 @@ class AndroidShareGrantPlanTests(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         unrelated_plan = l.plan(l.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in unrelated_plan["expected"]])
         self.assertEqual(list(unrelated), unrelated_plan["explicit_module_subset"])
         self.assertFalse(unrelated_plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], unrelated_plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], unrelated_plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          unrelated_plan["test_bearing_modules_not_requested"])
         self.assertEqual(9, len(l.MINIMUM_MODULES["android-device"]))
         self.assertEqual(11, len(w.matrix("all")["include"]))
@@ -52,15 +52,15 @@ class AndroidShareGrantPlanTests(unittest.TestCase):
     def test_single_class_selector_carries_no_ate_comma_and_only_the_owned_recipient_marker(self):
         plan = self.plan(); command = l.gradle_command("android-device", plan, android_serial="emulator-5588")
         self.assertEqual(1, command.count("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedShareRecipient=true"))
-        self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=com.mohamedrejeb.calf.share.AndroidShareGrantTest", command)
+        self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=io.github.apdelrahman1911.nativecmpkit.share.AndroidShareGrantTest", command)
         self.assertFalse(any("," in arg for arg in command if arg.startswith("-Pandroid.testInstrumentationRunnerArguments.")))
         self.assertNotIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedGeoProbe=true", command)
-        self.assertEqual(":calf-share:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-share:connectedAndroidDeviceTest", command[-1])
 
     def test_actual_controller_and_library_clis_agree_on_source_plan_not_native_success(self):
         import android_device_tests as device
-        for module, args in [(l, ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-share", "--focus", "android-share-uri-grants"]),
-                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "calf-share", "--focus", "android-share-uri-grants",
+        for module, args in [(l, ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-share", "--focus", "android-share-uri-grants"]),
+                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "nativecmpkit-share", "--focus", "android-share-uri-grants",
                                        "--output", "build/ci-verification/synthetic-share-grants"])]:
             output = io.StringIO()
             with patch("sys.argv", args), patch("sys.stdout", output): self.assertEqual(0, module.main())
@@ -87,10 +87,10 @@ class AndroidShareGrantPlanTests(unittest.TestCase):
         with self.assertRaises(ValueError): l.validate_test_focus(invalid)
 
     def test_native_fixture_preserves_os_grants_distinct_uid_bounded_reads_owned_streams_and_no_manual_grant(self):
-        native = (l.ROOT / "calf-share/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/share/AndroidShareGrantTest.kt").read_text()
+        native = (l.ROOT / "nativecmpkit-share/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/AndroidShareGrantTest.kt").read_text()
         recipient = l.ROOT / "tests/consumer/android-share-recipient"
         service = (recipient / "src/main/java/io/github/apdelrahman1911/nativecmpkit/verification/sharerecipient/ShareRecipientService.java").read_text()
-        helper = (l.ROOT / "calf-share/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/share/OwnedShareRecipient.kt").read_text()
+        helper = (l.ROOT / "nativecmpkit-share/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/OwnedShareRecipient.kt").read_text()
         self.assertEqual(3, len(re.findall(r"@Test fun [A-Za-z0-9_]+", native)))
         for token in ["file.toKmpFile()", "ShareOutcome.Presented", "DocumentsContract.isDocumentUri", "FLAG_GRANT_WRITE_URI_PERMISSION",
                       "context.revokeUriPermission", "startActivityForResult", "ShareFailureReason.Permission", "closeErrors", "No manual grant"]:

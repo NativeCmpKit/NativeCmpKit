@@ -32,7 +32,7 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
         self.assertEqual({'ios-iphone', 'android-device-api35'}, {r['slot'] for r in rows})
         self.assertEqual(2, len(rows))
         for row in rows:
-            plan = lt.plan(lt.ROOT, row['suite'], only_modules=('calf-webview',), focus=row['test-focus'])
+            plan = lt.plan(lt.ROOT, row['suite'], only_modules=('nativecmpkit-webview',), focus=row['test-focus'])
             selected, = plan['expected']
             self.assertEqual(1, len(selected['required_testcases']))
             command = lt.gradle_command(row['suite'], plan,
@@ -45,7 +45,7 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
                               lt.WEBVIEW_IDENTITY_SPECS['android-device']['classname'] + '#' + lt.WEBVIEW_IDENTITY_METHOD,
                               command)
                 args = ['android_device_tests.py', 'plan', '--api-level', '35', '--output', 'build/ci-plan',
-                        '--module', 'calf-webview', '--focus', row['test-focus']]
+                        '--module', 'nativecmpkit-webview', '--focus', row['test-focus']]
                 with patch('sys.argv', args), patch('sys.stdout', io.StringIO()), \
                         patch.object(android, 'run', side_effect=AssertionError('No emulator/Gradle during plan')):
                     self.assertEqual(0, android.main())
@@ -54,7 +54,7 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
                 self.assertEqual(lt.IOS_WEBVIEW_LIFECYCLE_METHODS[0] + '[iosSimulatorArm64]',
                                  selected['required_testcases'][0]['name'])
         self.assertEqual(11, len(matrix.matrix('all')['include']))
-        self.assertFalse(lt.allowed_test_focus('desktop', ('calf-webview',), 'webview-public-remount-recovery'))
+        self.assertFalse(lt.allowed_test_focus('desktop', ('nativecmpkit-webview',), 'webview-public-remount-recovery'))
 
     def test_android_readiness_checks_the_current_real_document_not_only_restored_metadata(self):
         source = (lt.ROOT / lt.WEBVIEW_IDENTITY_SPECS['android-device']['source']).read_text()
@@ -79,13 +79,13 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
     def test_android_real_controller_cli_plans_the_selected_new_focus_before_any_native_setup(self):
         for focus in (lt.WEBVIEW_IDENTITY_FOCUS, FOCUS):
             args = ['android_device_tests.py', 'plan', '--api-level', '35', '--output', 'build/ci-plan',
-                    '--module', 'calf-webview', '--focus', focus]
+                    '--module', 'nativecmpkit-webview', '--focus', focus]
             output = io.StringIO()
             with patch('sys.argv', args), patch('sys.stdout', output), \
                     patch.object(android, 'run', side_effect=AssertionError('No emulator/Gradle allowed during source plan')), \
                     patch.object(android.signal, 'signal', side_effect=AssertionError('No process-control changes during source plan')):
                 self.assertEqual(0, android.main())
-            self.assertEqual(lt.plan(lt.ROOT, 'android-device', only_modules=('calf-webview',), focus=focus),
+            self.assertEqual(lt.plan(lt.ROOT, 'android-device', only_modules=('nativecmpkit-webview',), focus=focus),
                              json.loads(output.getvalue()))
 
     def test_recovery_requests_only_failed_or_never_executed_methods_not_twelve_successful_executions(self):
@@ -93,10 +93,10 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
         self.assertEqual({'desktop-linux-x64', 'ios-iphone', 'android-device-api35'}, {r['slot'] for r in rows})
         requested = []
         for row in rows:
-            self.assertEqual('calf-webview', row['test-modules'])
+            self.assertEqual('nativecmpkit-webview', row['test-modules'])
             focus = IOS_FOCUS if row['suite'] == 'ios' else FOCUS
             self.assertEqual(focus, row['test-focus'])
-            plan = lt.plan(lt.ROOT, row['suite'], only_modules=('calf-webview',), focus=focus)
+            plan = lt.plan(lt.ROOT, row['suite'], only_modules=('nativecmpkit-webview',), focus=focus)
             self.assertFalse(plan['complete_suite_requested'])
             self.assertTrue(lt.validate_test_focus(plan))
             selected, = plan['expected']
@@ -116,12 +116,12 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
         self.assertEqual(4, len(requested))
         self.assertFalse(any('rapidReplacement' in c['name'] or 'actualFxTyped' in c['name'] or 'Browser' in c['classname'] for c in requested))
         self.assertEqual(11, len(matrix.matrix('all')['include']))
-        self.assertEqual(9, sum(len(lt.plan(lt.ROOT, suite, only_modules=('calf-webview',), focus=lt.WEBVIEW_IDENTITY_FOCUS)['expected'][0]['required_testcases'])
+        self.assertEqual(9, sum(len(lt.plan(lt.ROOT, suite, only_modules=('nativecmpkit-webview',), focus=lt.WEBVIEW_IDENTITY_FOCUS)['expected'][0]['required_testcases'])
                                 for suite in ('desktop', 'android-device', 'js', 'wasm')))
         self.assertEqual(7, len(lt.ui_application_focus_identities(lt.IOS_WEBVIEW_RECOVERY_FOCUS)))
 
     def test_final_ios_release_detaches_owned_view_before_owner_reset_and_keeps_failed_parent_predicate(self):
-        source = (lt.ROOT / 'calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.ios.kt').read_text()
+        source = (lt.ROOT / 'nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt').read_text()
         release = source.split('private fun releaseIosWebView', 1)[1].split('internal fun runOnIosMain', 1)[0]
         self.assertIn('{ view.removeFromSuperview() }', release,
                       'Final release must not depend on Compose wrapper deallocation to detach the retained child')
@@ -145,7 +145,7 @@ class WebViewIdentityRecoveryTests(unittest.TestCase):
         self.assertIn('Initial common settings cannot overwrite creation customization', source)
 
     def test_recovery_xml_requires_one_fresh_exact_desktop_case_no_unrequested_successes_or_skips(self):
-        plan = lt.plan(lt.ROOT, 'desktop', only_modules=('calf-webview',), focus=FOCUS)
+        plan = lt.plan(lt.ROOT, 'desktop', only_modules=('nativecmpkit-webview',), focus=FOCUS)
         required = plan['expected'][0]['required_testcases']
         self.assertEqual(1, len(required))
         for invalid in ('missing', 'foreign', 'duplicate', 'skipped', 'failure', 'no-marker'):

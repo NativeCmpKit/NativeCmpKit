@@ -36,9 +36,9 @@ REQUEST_FOCI = {
 REQUEST_COUNTS = {"desktop-linux-x64": (1, 1), "desktop-macos-arm64": (2, 2),
                   "desktop-windows-x64": (2, 2), "desktop-linux-arm64": (3, 2), "desktop-macos-x64": (2, 2)}
 REQUEST_CASES = (
-    ("com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest", "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner[desktop]"),
-    ("com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest", "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner[desktop]"),
-    ("com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest", "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct[desktop]"),
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest", "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner[desktop]"),
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest", "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner[desktop]"),
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest", "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct[desktop]"),
 )
 CAPTURE = "if: ${{ !cancelled() && steps.plan.outcome == 'success' && (inputs.profile == 'webview-desktop-security-regressions' || inputs.profile == 'webview-desktop-security-linux-arm64-windows-pair' || inputs.profile == 'webview-desktop-security-macos-pair') }}"
 
@@ -64,7 +64,7 @@ class DesktopFiniteAliasModels(unittest.TestCase):
         for name, (parent, slots) in ALIASES.items():
             with self.subTest(alias=name):
                 self.assertEqual(slots, matrix.PROFILES[name])
-                self.assertEqual("calf-webview", matrix.MODULE_SUBSETS[name])
+                self.assertEqual("nativecmpkit-webview", matrix.MODULE_SUBSETS[name])
                 rows = matrix.matrix(name)["include"]
                 inherited = [row for row in matrix.matrix(parent)["include"] if row["slot"] in slots]
                 self.assertEqual(inherited, rows)
@@ -72,7 +72,7 @@ class DesktopFiniteAliasModels(unittest.TestCase):
                 self.assertLessEqual(len(rows), 2)
                 for row in rows:
                     self.assertEqual("desktop", row["suite"])
-                    self.assertEqual("calf-webview", row["test-modules"])
+                    self.assertEqual("nativecmpkit-webview", row["test-modules"])
                     self.assertEqual(original[row["slot"]]["runner"], row["runner"])
                     self.assertEqual(original[row["slot"]]["arch"], row["arch"])
                     expected = REQUEST_FOCI[row["slot"]] if name in REQUEST else original[row["slot"]]["focus"]
@@ -85,16 +85,16 @@ class DesktopFiniteAliasModels(unittest.TestCase):
             cells = []
             reports = 0
             for row in matrix.matrix(name)["include"]:
-                plan = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=row["test-focus"])
+                plan = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=row["test-focus"])
                 item, = plan["expected"]
                 count, expected_xml = REQUEST_COUNTS[row["slot"]]
                 expected_cases = REQUEST_CASES[:count]
                 self.assertEqual(list(expected_cases), [(case["classname"], case["name"]) for case in item["required_testcases"]])
-                self.assertEqual(":calf-webview:desktopTest", item["task"])
+                self.assertEqual(":nativecmpkit-webview:desktopTest", item["task"])
                 self.assertNotIn("required_original_xml", item)
                 self.assertEqual(expected_xml, len({case["classname"] for case in item["required_testcases"]}))
                 self.assertFalse(plan["complete_suite_requested"])
-                self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+                self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
                 cells.extend((row["slot"], *case) for case in expected_cases)
                 reports += expected_xml
             selected.extend(cells)
@@ -119,12 +119,12 @@ class DesktopFiniteAliasModels(unittest.TestCase):
             for row in matrix.matrix(name)["include"]:
                 self.assertNotEqual("desktop-linux-x64", row["slot"])
                 required = original[row["slot"]]
-                plan = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=row["test-focus"])
+                plan = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=row["test-focus"])
                 item, = plan["expected"]
                 expected = [(security.SPECS[key][0], security.SPECS[key][1] + "[desktop]") for key in required["selected"]]
                 self.assertEqual(expected, [(case["classname"], case["name"]) for case in item["required_testcases"]])
                 self.assertEqual(len(expected), item["required_original_xml"])
-                self.assertEqual(":calf-webview:desktopTest", item["task"])
+                self.assertEqual(":nativecmpkit-webview:desktopTest", item["task"])
                 self.assertEqual(1, plan["desktop_security_fixture"]["max_parallel_forks"])
                 self.assertEqual(1, plan["desktop_security_fixture"]["fork_every"])
                 self.assertFalse(plan["complete_suite_requested"])
@@ -152,10 +152,10 @@ class DesktopFiniteAliasModels(unittest.TestCase):
 
     def test_alias_module_and_selected_suite_runner_architecture_drift_are_refused(self):
         for name, (parent, slots) in ALIASES.items():
-            for value in ("calf-io", None, "calf-webview,calf-io"):
+            for value in ("nativecmpkit-io", None, "nativecmpkit-webview,nativecmpkit-io"):
                 with self.subTest(alias=name, module=value), patch.dict(matrix.MODULE_SUBSETS, {name: value}), self.assertRaises(ValueError):
                     matrix.matrix(name)
-            with self.subTest(alias=name, canonical_parent_module=True), patch.dict(matrix.MODULE_SUBSETS, {parent: "calf-io"}), self.assertRaises(ValueError):
+            with self.subTest(alias=name, canonical_parent_module=True), patch.dict(matrix.MODULE_SUBSETS, {parent: "nativecmpkit-io"}), self.assertRaises(ValueError):
                 matrix.matrix(name)
             for field, value in (("suite", "android-device"), ("runner", "self-hosted"), ("arch", "foreign-arch")):
                 changed = tuple(dict(row) for row in matrix.SLOTS)
@@ -238,8 +238,8 @@ class DesktopFiniteAliasModels(unittest.TestCase):
             self.assertNotIn(forbidden, upload)
 
     def test_alias_cache_keys_equal_inherited_slot_keys_without_new_graph_or_trust_claims(self):
-        selection = cache.selection_contract(lt.ROOT, "calf-webview")
-        self.assertEqual(["calf-webview"], selection["modules"])
+        selection = cache.selection_contract(lt.ROOT, "nativecmpkit-webview")
+        self.assertEqual(["nativecmpkit-webview"], selection["modules"])
         self.assertRegex(selection["cache_key"], r"\Asubset-[0-9a-f]{64}\Z")
         systems = {"ubuntu-24.04": "Linux", "ubuntu-24.04-arm": "Linux", "macos-26": "macOS",
                    "macos-26-intel": "macOS", "windows-2025": "Windows"}
@@ -253,7 +253,7 @@ class DesktopFiniteAliasModels(unittest.TestCase):
             for row in rows:
                 self.assertLessEqual(len(key(row)), 512)
                 self.assertRegex(key(row), r"\A[A-Za-z0-9_-]+\Z")
-                self.assertNotIn("calf-webview", key(row))
+                self.assertNotIn("nativecmpkit-webview", key(row))
 
 
 if __name__ == "__main__":

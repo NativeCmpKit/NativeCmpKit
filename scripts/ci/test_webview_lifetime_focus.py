@@ -18,7 +18,7 @@ import workflow_matrix as matrix
 
 class WebViewLifetimeFocusTests(unittest.TestCase):
     def plan(self, suite="desktop", root=r.ROOT, focus=r.WEBVIEW_LIFETIME_FOCUS):
-        return r.plan(root, suite, only_modules=("calf-webview",), focus=focus)
+        return r.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=focus)
 
     def collect(self, suite="desktop", cases=None, outcome="", markers=1, stale=False, duplicate=False,
                 focus=r.WEBVIEW_LIFETIME_FOCUS):
@@ -47,7 +47,7 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
         self.assertEqual(["android-device-api35", "desktop-linux-x64", "desktop-macos-arm64",
                           "desktop-macos-x64", "desktop-windows-x64"], [row["slot"] for row in rows])
         for row in rows:
-            self.assertEqual("calf-webview", row["test-modules"])
+            self.assertEqual("nativecmpkit-webview", row["test-modules"])
             self.assertEqual(r.WEBVIEW_LIFETIME_FOCUS, row["test-focus"])
         for profile, slot in (("android", "android-device-api35"), ("linux", "desktop-linux-x64"),
                               ("macos-arm64", "desktop-macos-arm64"), ("macos-x64", "desktop-macos-x64"),
@@ -74,7 +74,7 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
     def test_intel_media_failure_only_profile_preserves_four_accepted_methods_and_other_hosts(self):
         row, = matrix.matrix("webview-lifetime-macos-media")["include"]
         self.assertEqual("desktop-macos-x64", row["slot"])
-        self.assertEqual("calf-webview", row["test-modules"])
+        self.assertEqual("nativecmpkit-webview", row["test-modules"])
         self.assertEqual(r.WEBVIEW_MEDIA_FOCUS, row["test-focus"])
         plan = self.plan(focus=r.WEBVIEW_MEDIA_FOCUS)
         identity, = plan["expected"][0]["required_testcases"]
@@ -99,14 +99,14 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
                         {"duplicate": True}, {"stale": True}, {"markers": 0}, {"markers": 2},
                         {"outcome": "failure"}, {"outcome": "error"}, {"outcome": "skipped"}):
             with self.subTest(invalid=invalid): self.assertTrue(self.collect(focus=focus, **invalid)["errors"])
-        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":calf-webview:publish")):
+        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":nativecmpkit-webview:publish")):
             plan = self.plan(focus=focus); plan["expected"][0][key] = value
             with self.assertRaises(ValueError): r.validate_test_focus(plan)
         plan = self.plan(focus=focus); plan["complete_suite_requested"] = True
         with self.assertRaises(ValueError): r.validate_test_focus(plan)
 
     def test_one_media_focus_is_transportable_through_real_cli_not_only_python_planner(self):
-        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "calf-webview", "--focus", r.WEBVIEW_MEDIA_FOCUS]
+        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "nativecmpkit-webview", "--focus", r.WEBVIEW_MEDIA_FOCUS]
         stream = io.StringIO()
         with patch("sys.argv", args), patch("sys.stdout", stream): self.assertEqual(0, r.main())
         document = json.loads(stream.getvalue())
@@ -131,7 +131,7 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitWebViewHeapDiagnostic=true", command)
         self.assertNotIn("--tests", command)
         self.assertNotIn("nativecmpkitWebViewHeapDiagnostic", " ".join(r.gradle_command("android-device", self.plan("android-device"), android_serial="emulator-5588")))
-        args = ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-webview", "--focus", focus]
+        args = ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-webview", "--focus", focus]
         stream = io.StringIO()
         with patch("sys.argv", args), patch("sys.stdout", stream): self.assertEqual(0, r.main())
         self.assertEqual(focus, json.loads(stream.getvalue())["explicit_test_focus"])
@@ -183,7 +183,7 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.plan(suite)
         for suite in ("desktop", "android-device"):
-            for key, value in (("module", "calf-io"), ("task", ":calf-webview:publish"), ("test_filter", "*"),
+            for key, value in (("module", "nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"),
                                ("required_testcases", []), ("test_source_files", [])):
                 plan = self.plan(suite); plan["expected"][0][key] = value
                 with self.subTest(suite=suite, key=key), self.assertRaises(ValueError):
@@ -196,8 +196,8 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
 
     def temporary_root(self, directory, suite):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        module = root / "calf-webview"; module.mkdir()
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        module = root / "nativecmpkit-webview"; module.mkdir()
         (module / "build.gradle.kts").write_text("// synthetic build, never executed\n")
         for group in r.WEBVIEW_LIFETIME_SPECS[suite]:
             path = root / group["source"]; path.parent.mkdir(parents=True, exist_ok=True)
@@ -247,28 +247,28 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
             with self.assertRaises(ValueError): self.plan("android-device", root)
 
     def test_full_native_suites_still_require_stop_history_and_all_new_lifetime_cases(self):
-        desktop = [{"classname": "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest", "name": m + "[desktop]", "status": "passed"}
+        desktop = [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest", "name": m + "[desktop]", "status": "passed"}
                    for m in policy.DESKTOP_WEBVIEW_STOP_CASES]
-        desktop += [{"classname": "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest", "name": m + "[desktop]", "status": "passed"}
+        desktop += [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest", "name": m + "[desktop]", "status": "passed"}
                     for m in policy.DESKTOP_WEBVIEW_LIFETIME_CASES]
-        device = [{"classname": "com.mohamedrejeb.calf.ui.web.AndroidWebViewHistoryDeviceTest",
+        device = [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewHistoryDeviceTest",
                    "name": "navigatorReplacementReadsRealBrowserHistoryWithoutAnotherPageEvent", "status": "passed"}]
         device += [{"classname": c["classname"], "name": c["name"], "status": "passed"} for c in r.webview_lifetime_identities("android-device")]
         for suite, cases in (("desktop", desktop), ("android-device", device)):
-            scenarios, errors = policy.apply("calf-webview", suite, cases, "Linux", False)
+            scenarios, errors = policy.apply("nativecmpkit-webview", suite, cases, "Linux", False)
             self.assertEqual([], errors); self.assertEqual(len(cases), len(scenarios))
             for index in range(len(cases)):
                 changed = copy.deepcopy(cases); changed.pop(index)
-                self.assertTrue(policy.apply("calf-webview", suite, changed, "Linux", False)[1])
+                self.assertTrue(policy.apply("nativecmpkit-webview", suite, changed, "Linux", False)[1])
             for status in ("failed", "error", "skipped"):
                 changed = copy.deepcopy(cases); changed[-1]["status"] = status
-                self.assertTrue(policy.apply("calf-webview", suite, changed, "Linux", False)[1])
-        self.assertTrue(policy.apply("calf-webview", "android-device", device, "Windows", False)[1])
-        self.assertEqual(([], []), policy.apply("calf-webview", "js", [], "Linux", False))
+                self.assertTrue(policy.apply("nativecmpkit-webview", suite, changed, "Linux", False)[1])
+        self.assertTrue(policy.apply("nativecmpkit-webview", "android-device", device, "Windows", False)[1])
+        self.assertEqual(([], []), policy.apply("nativecmpkit-webview", "js", [], "Linux", False))
 
     def test_native_storage_and_fixtures_keep_live_handles_observability_real_engines_and_minimum_permissions(self):
-        for relative in ("calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt",
-                         "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt"):
+        for relative in ("nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt",
+                         "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt"):
             source = (r.ROOT / relative).read_text()
             self.assertIn("AtomicReference<WebView?>(null)", source)
             self.assertIn("attachmentVersion by mutableLongStateOf", source)
@@ -294,7 +294,7 @@ class WebViewLifetimeFocusTests(unittest.TestCase):
         self.assertIn("fixture.activityReferences.single().wasCollected()", device)
         self.assertIn("bFixture.nativeReferences.single().wasCollected()", device)
         self.assertIn("Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK", device)
-        self.assertIn('.setAction("com.mohamedrejeb.calf.ui.web.NATIVE_LIFETIME.$key")', device)
+        self.assertIn('.setAction("io.github.apdelrahman1911.nativecmpkit.ui.web.NATIVE_LIFETIME.$key")', device)
         self.assertIn('it.intent.getStringExtra("nativecmpkit-lifetime") == key', device)
         self.assertIn("assertNotEquals(a.taskId(), activeSecond.taskId()", device)
         workflow = (r.ROOT / ".github/workflows/gradle.yml").read_text()

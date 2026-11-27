@@ -227,7 +227,7 @@ class ActiveObjc2MaterialTest(unittest.TestCase):
     def test_exact_shared_public_pool_is_emitted_once_per_module(self):
         outputs = []
         for value in self.values.values():
-            prefix = 'META-INF/nativecmpkit/native-dependencies/calf-share/' + value.identity + '/'
+            prefix = 'META-INF/nativecmpkit/native-dependencies/nativecmpkit-share/' + value.identity + '/'
             pool = value.provenance_payloads(prefix)
             self.assertEqual(147, len(pool))
             self.assertTrue(all('/_reviewed-objc2/' in path for path in pool))
@@ -282,10 +282,10 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
             path = cache / (value.identity + '.crate'); path.write_bytes(raw)
             values[package['id']], archives[package['id']] = value, path
             packages.append(package)
-        source = self.root / 'synthetic-source'; native = source / 'calf-file-picker/native'
+        source = self.root / 'synthetic-source'; native = source / 'nativecmpkit-file-picker/native'
         native.mkdir(parents=True)
         (source / supplements.CATALOG_RELATIVE).mkdir(parents=True)
-        (native / 'Cargo.toml').write_text('[package]\nname="calf-filepicker-native"\nversion="0.1.0"\n')
+        (native / 'Cargo.toml').write_text('[package]\nname="nativecmpkit-filepicker-native"\nversion="0.1.0"\n')
         lock = 'version = 4\n'
         for package in packages:
             lock += ('[[package]]\nname="' + package['name'] + '"\nversion="' + package['version'] + '"\n'
@@ -343,12 +343,12 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
     def test_synthetic_verifier_compares_records_text_and_shared_proofs_without_repeat_reads(self):
         source, _, metadata_path, values, _, packages = self.fixture()
         metadata = metadata_path.read_bytes()
-        prefix = 'META-INF/nativecmpkit/native-dependencies/calf-file-picker/'
+        prefix = 'META-INF/nativecmpkit/native-dependencies/nativecmpkit-file-picker/'
         payloads = {prefix + 'metadata.json': metadata}
-        report = {'schema_version': 1, 'module': 'calf-file-picker', 'complete_material_collection': True,
+        report = {'schema_version': 1, 'module': 'nativecmpkit-file-picker', 'complete_material_collection': True,
                   'gaps': [], 'license_obligations_reviewed': False, 'metadata_sha256': supplements.digest(metadata),
-                  'cargo_toml_sha256': gate.sha256(source / 'calf-file-picker/native/Cargo.toml'),
-                  'cargo_lock_sha256': gate.sha256(source / 'calf-file-picker/native/Cargo.lock'), 'packages': []}
+                  'cargo_toml_sha256': gate.sha256(source / 'nativecmpkit-file-picker/native/Cargo.toml'),
+                  'cargo_lock_sha256': gate.sha256(source / 'nativecmpkit-file-picker/native/Cargo.lock'), 'packages': []}
         for package in packages:
             value = values[package['id']]; own = prefix + value.identity + '/'
             report['packages'].append({key: package[key] for key in ('name', 'version', 'source_kind', 'license', 'checksum')}
@@ -366,7 +366,7 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
             verifier.root, verifier.checks = source, []
             archive = HeldArchive(current)
             with mock.patch.object(supplements, 'load_supplements', return_value=values):
-                verifier.native_notices(archive, set(current), 'calf-file-picker', 'synthetic-not-artifact-acceptance')
+                verifier.native_notices(archive, set(current), 'nativecmpkit-file-picker', 'synthetic-not-artifact-acceptance')
             return verifier.checks, archive.reads
         checks, reads = inspect(payloads)
         self.assertTrue(checks and all(item['passed'] for item in checks), checks)
@@ -408,10 +408,10 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
 
     def test_known_gap_cannot_use_missing_foreign_or_inert_v2_material(self):
         value, _, package = synthetic_supplement()
-        own = 'META-INF/nativecmpkit/native-dependencies/calf-share/'
+        own = 'META-INF/nativecmpkit/native-dependencies/nativecmpkit-share/'
         report = {'packages': [{key: package[key] for key in ('name', 'version', 'source_kind', 'license', 'checksum')}
                                 | {'files': []}], 'gaps': [{'package': value.identity}], 'license_obligations_reviewed': False}
-        held = carry.AcceptedOriginal('calf-share', report, {}, {own + 'licenses-report.json': b'Synthetic original failure.\n'}, {})
+        held = carry.AcceptedOriginal('nativecmpkit-share', report, {}, {own + 'licenses-report.json': b'Synthetic original failure.\n'}, {})
         altered = primitives._plain(value.manifest); altered['package']['checksum'] = '0' * 64
         foreign = active.AdoptedObjc2Supplement(value.identity, altered, value.contents)
         inert = supplements.Supplement(value.identity, dict(value.manifest, schema_version=2), dict(value.contents))
@@ -424,12 +424,12 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
     def test_synthetic_assembly_preserves_original_failed_state_and_final_aggregate_bound(self):
         value, raw, package = synthetic_supplement()
         path = self.root / 'synthetic.crate'; path.write_bytes(raw)
-        prefix = 'META-INF/nativecmpkit/native-dependencies/calf-share/'
+        prefix = 'META-INF/nativecmpkit/native-dependencies/nativecmpkit-share/'
         record = {key: package[key] for key in ('name', 'version', 'source_kind', 'license', 'checksum')} | {'files': []}
         report = {'packages': [record], 'gaps': [{'package': value.identity}],
                   'complete_material_collection': False, 'license_obligations_reviewed': False}
         payloads = {prefix + 'licenses-report.json': b'Synthetic failed original.\n', prefix + 'ordinary/LICENSE': b'Synthetic accepted old notice.\n'}
-        held = carry.AcceptedOriginal('calf-share', report, {}, payloads, {})
+        held = carry.AcceptedOriginal('nativecmpkit-share', report, {}, payloads, {})
         with mock.patch('tarfile.open', side_effect=AssertionError('No tar replay')):
             derived, outputs = carry.assemble(held, {package['id']: value}, {package['id']: path})
         self.assertIs(held.report['complete_material_collection'], False)
@@ -466,7 +466,7 @@ class SyntheticFlowAndOriginalRefusalTest(unittest.TestCase):
         with mock.patch.object(carry, 'capture_original', side_effect=AssertionError('No original read for overlapping output')):
             for output in (source / 'output', self.root, source):
                 with self.subTest(overlap=str(output)), self.assertRaises(gate.InvalidArtifact):
-                    carry.carry_forward(self.root / 'original', 'calf-share', source, [self.root / 'cache'], output)
+                    carry.carry_forward(self.root / 'original', 'nativecmpkit-share', source, [self.root / 'cache'], output)
 
     def test_owned_inventory_rejects_foreign_files_directories_and_links_without_deleting_them(self):
         self.output.mkdir(); (self.output / 'LICENSE').write_bytes(b'Synthetic owned notice.\n')

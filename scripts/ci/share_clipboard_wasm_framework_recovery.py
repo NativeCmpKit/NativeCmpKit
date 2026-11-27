@@ -13,8 +13,8 @@ QUALIFIED_FRAMEWORK_FIXTURE_SHA256 = "e2f95d99ff2dd89fa95bd4de8fbedf9f3b60748284
 FRAMEWORK_DELTAS = (
     ("      const loadPath = path.join(basePath, 'static', 'load.mjs');",
      "      const loadPath = path.join(basePath, 'static', 'load.mjs');\n      // Exactly the real framework:mocha asset already inserted by karma-mocha; no discovery shim.\n      const frameworkRequire = require('node:module').createRequire(require.resolve('karma-mocha'));\n      const mochaPath = path.join(path.dirname(frameworkRequire.resolve('mocha')), 'mocha.js');\n      if (!path.isAbsolute(mochaPath) || path.normalize(mochaPath) !== mochaPath ||\n          path.basename(path.dirname(mochaPath)) !== 'mocha') refused();"),
-    ("        return ['runtime.js', 'commons.js', 'load.mjs'].includes(original) || /-calf-share-test\\.m?js$/.test(original);",
-     "        return file.originalPath === mochaPath || ['runtime.js', 'commons.js', 'load.mjs'].includes(original) || /-calf-share-test\\.m?js$/.test(original);"),
+    ("        return ['runtime.js', 'commons.js', 'load.mjs'].includes(original) || /-nativecmpkit-share-test\\.m?js$/.test(original);",
+     "        return file.originalPath === mochaPath || ['runtime.js', 'commons.js', 'load.mjs'].includes(original) || /-nativecmpkit-share-test\\.m?js$/.test(original);"),
     ("      if (chosen.length !== 3 || path.basename(chosen[0].originalPath) !== 'runtime.js' ||\n          path.basename(chosen[1].originalPath) !== 'commons.js' || chosen[2].originalPath !== loadPath ||",
      "      if (chosen.length !== 4 || path.basename(chosen[0].originalPath) !== 'runtime.js' ||\n          path.basename(chosen[1].originalPath) !== 'commons.js' || chosen[2].originalPath !== mochaPath ||\n          chosen[3].originalPath !== loadPath ||"),
     ('          chosen[0].path !== chosen[0].originalPath || chosen[1].path !== chosen[1].originalPath ||\n          chosen[2].path !== entryPath) refused();',

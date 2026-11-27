@@ -44,8 +44,8 @@ INIT_CURRENT_SHA256 = "e0c82a5c9c2461e5e18ce4e71e495c5cbdf5f3694d2bd19bbfbe85513
 READER = "scripts/ci/webview_content_policy_fixture.py"
 READER_SHA256 = "7ef8dfd4e8eee68a8d584e91d3ea231daa46b15a68f36cf762ee4409c8b4d571"
 COOKIE_BOUND_PATHS = frozenset({
-    "calf-webview/build.gradle.kts",
-    "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt",
+    "nativecmpkit-webview/build.gradle.kts",
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt",
     "scripts/ci/ios_ui_application.py",
     "scripts/ci/webview_content_policy_source_projection.py",
 })
@@ -327,7 +327,7 @@ def _content_owner_source(relative, payload, root, *, current):
         if relative == SOURCE_RELATIVE:
             return fixture_successor.peel_fixture_successor_for_history(relative, payload, root)
         return payload  # Generic history never peels either owning control.
-    if relative == "calf-webview/build.gradle.kts":
+    if relative == "nativecmpkit-webview/build.gradle.kts":
         # Only the two exact inherited TestFilter calls cross the original build
         # pin. Current refuses old/partial data; history leaves it uncertified.
         before_endpoint = (9474, "01801ef71db7b6b404a663eaf3a4585745b7e9fa8decad81dcb601f2b11d66c8")
@@ -337,10 +337,10 @@ def _content_owner_source(relative, payload, root, *, current):
                 raise ValueError("Exact complete WebView Kotlin TestFilter successor is required")
             return payload
         fragments = (
-            (b'    filter { excludeTestsMatching("com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*") }\n',
-             b'    filter.excludeTestsMatching("com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*")\n'),
-            (b'    filter { excludeTestsMatching("com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*") }\n',
-             b'    filter.excludeTestsMatching("com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*")\n'),
+            (b'    filter { excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*") }\n',
+             b'    filter.excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*")\n'),
+            (b'    filter { excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*") }\n',
+             b'    filter.excludeTestsMatching("io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*")\n'),
         )
         restored = payload
         for before, after in reversed(fragments):

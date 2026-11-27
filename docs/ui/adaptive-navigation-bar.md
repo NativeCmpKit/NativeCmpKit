@@ -14,7 +14,7 @@ On iOS, the native UITabBar is created using the `iosItems`, `iosSelectedIndex`,
 ## Usage
 
 ```kotlin
-@OptIn(ExperimentalCalfUiApi::class)
+@OptIn(ExperimentalNativeCmpKitUiApi::class)
 @Composable
 fun MyNavigationBar() {
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -94,4 +94,4 @@ UIKitUITabBarItem(
 ```
 
 !!! tip
-    Use type-safe `SFSymbol` constants from `calf-ui` instead of raw strings. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.
+    Use type-safe `SFSymbol` constants from `nativecmpkit-ui` instead of raw strings. See [SF Symbols & Cupertino Icons](../sf-symbols.md) for details.

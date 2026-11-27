@@ -144,7 +144,7 @@ class AndroidCameraCallbackConfigureOnce793Controls(unittest.TestCase):
             target.parent.mkdir(parents=True)
             mutations = [
                 native.replace(b"class AndroidCameraCallbackSubstitutionTest", b"class ForeignCallbackTest", 1),
-                native.replace(b"package com.mohamedrejeb.calf.camerapicker", b"package foreign.caller", 1),
+                native.replace(b"package io.github.apdelrahman1911.nativecmpkit.camerapicker", b"package foreign.caller", 1),
                 native + b"\n@Test fun foreignDuplicate() {}\n",
                 *[native + b"\n" + token + b"\n"
                   for token in (b"@Ignore", b"@Disabled", b"@IgnoredTest", b"assumeTrue", b"assumeFalse", b"Assume")],

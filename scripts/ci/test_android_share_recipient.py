@@ -125,7 +125,7 @@ class AndroidShareControllerOwnershipTests(unittest.TestCase):
         from test_android_device_controller import ControllerReceipts
         self.fixture = ControllerReceipts(methodName="runTest")
         self.fixture.setUp(); self.addCleanup(self.fixture.doCleanups)
-        self.fixture.plan.update(suite="android-device", expected=[{"project": ":calf-share", "module": "calf-share"}],
+        self.fixture.plan.update(suite="android-device", expected=[{"project": ":nativecmpkit-share", "module": "nativecmpkit-share"}],
                                  explicit_test_focus=p.lt.ANDROID_SHARE_GRANT_FOCUS)
 
     def test_recipient_prepares_after_boot_shares_exact_signing_environment_and_uninstalls_before_shutdown(self):
@@ -141,7 +141,7 @@ class AndroidShareControllerOwnershipTests(unittest.TestCase):
             mocks["tests"].side_effect = lambda *a, **k: order.append("tests") or self.fixture.receipt
             recipient.close.side_effect = lambda: order.append("remove") or {"owned_recipient_removed": True}
             mocks["shutdown"].side_effect = lambda *a: order.append("shutdown") or {"clean_shutdown": True}
-            result = c.run(self.fixture.root, self.fixture.relative, only_modules=("calf-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
+            result = c.run(self.fixture.root, self.fixture.relative, only_modules=("nativecmpkit-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
         self.assertTrue(result["passed"]); self.assertEqual(["boot", "recipient", "tests", "remove", "shutdown"], order)
         self.assertEqual(mocks["execute"].call_args_list[0].kwargs["env"], factory.call_args.kwargs["environment"])
         self.assertEqual(c.SERIAL, factory.call_args.args[3]); self.assertTrue(callable(factory.call_args.args[4]))
@@ -155,7 +155,7 @@ class AndroidShareControllerOwnershipTests(unittest.TestCase):
             documents_factory.return_value.close.return_value = {"owned_recipient_removed": True}
             recipient = factory.return_value; recipient.prepare.side_effect = RuntimeError("SYNTHETIC_PRIVATE_ERROR")
             recipient.close.return_value = {"owned_recipient_removed": True}
-            result = self.fixture.invoke(only_modules=("calf-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
+            result = self.fixture.invoke(only_modules=("nativecmpkit-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
         self.assertFalse(result["passed"]); mocks["tests"].assert_not_called()
         recipient.close.assert_called_once(); mocks["shutdown"].assert_called_once()
         self.assertNotIn("SYNTHETIC_PRIVATE_ERROR", json.dumps(result))
@@ -168,7 +168,7 @@ class AndroidShareControllerOwnershipTests(unittest.TestCase):
             documents_factory.return_value.close.return_value = {"owned_recipient_removed": True}
             recipient = factory.return_value; recipient.prepare.return_value = {"recipient_installed": True}
             recipient.close.side_effect = ValueError("SYNTHETIC_PRIVATE_ERROR")
-            result = self.fixture.invoke(only_modules=("calf-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
+            result = self.fixture.invoke(only_modules=("nativecmpkit-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
         self.assertTrue(result["test_suite_passed"]); self.assertFalse(result["passed"])
         self.assertFalse(result["share_recipient"]["owned_recipient_removed"])
         self.assertEqual("ValueError", result["share_recipient"]["cleanup_error"])
@@ -183,7 +183,7 @@ class AndroidShareControllerOwnershipTests(unittest.TestCase):
             documents_factory.return_value.close.side_effect = ValueError("SYNTHETIC_PRIVATE_DOCUMENT_ERROR")
             factory.return_value.prepare.return_value = {"recipient_installed": True}
             factory.return_value.close.return_value = {"owned_recipient_removed": True}
-            result = self.fixture.invoke(only_modules=("calf-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
+            result = self.fixture.invoke(only_modules=("nativecmpkit-share",), focus=c.lt.ANDROID_SHARE_GRANT_FOCUS)
         self.assertTrue(result["test_suite_passed"]); self.assertFalse(result["passed"])
         self.assertFalse(result["share_documents"]["owned_recipient_removed"])
         factory.return_value.close.assert_called_once(); mocks["shutdown"].assert_called_once()

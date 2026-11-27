@@ -27,7 +27,7 @@ public final class OwnedAndroidWebViewRoots {
         Heap heap = HeapFactory.createHeap(new File(args[0]));
         List<String> targets = new ArrayList<>();
         for (String name : List.of("android.webkit.WebView",
-                "com.mohamedrejeb.calf.ui.web.WebViewLifetimeActivity")) {
+                "io.github.apdelrahman1911.nativecmpkit.ui.web.WebViewLifetimeActivity")) {
             JavaClass cls = heap.getJavaClassByName(name);
             if (cls == null) continue;
             if (cls.getInstancesCount() > 16) throw new IllegalStateException("Unexpected unbounded native target population");

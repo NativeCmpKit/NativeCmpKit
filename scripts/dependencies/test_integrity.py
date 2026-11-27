@@ -267,20 +267,20 @@ class FileAndSnapshotTests(TemporaryCase):
         source = self.root / "source"
         source.mkdir()
         contents = {
-            "settings.gradle.kts": 'pluginManagement { includeBuild("convention-plugins") }\ninclude(\n":calf-one",\n":sample:app",\n)\n',
+            "settings.gradle.kts": 'pluginManagement { includeBuild("convention-plugins") }\ninclude(\n":nativecmpkit-one",\n":sample:app",\n)\n',
             "build.gradle.kts": "// offline snapshot fixture\n", "gradlew": "NOT EXECUTED\n",
             "gradle/wrapper/gradle-wrapper.properties": "distributionUrl=fixture-only\n",
             "convention-plugins/settings.gradle.kts": 'rootProject.name = "convention-plugins"\n',
-            "convention-plugins/build.gradle.kts": "// fixture\n", "calf-one/build.gradle.kts": "// fixture\n",
+            "convention-plugins/build.gradle.kts": "// fixture\n", "nativecmpkit-one/build.gradle.kts": "// fixture\n",
             "sample/app/build.gradle.kts": "// fixture\n", "scripts/dependencies/resolve-graphs.init.gradle": "// fixture\n",
             "scripts/dependencies/integrity.py": "# fixture\n", "local.properties": "DO_NOT_COPY=fixture-secret\n",
-            "calf-one/key.properties": "DO_NOT_COPY=fixture-secret\n",
+            "nativecmpkit-one/key.properties": "DO_NOT_COPY=fixture-secret\n",
         }
         for name, data in contents.items():
             path = source / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(data)
-        (source / "calf-one/src/androidDeviceTest").mkdir(parents=True)
+        (source / "nativecmpkit-one/src/androidDeviceTest").mkdir(parents=True)
         return source
 
     def test_snapshot_copies_dirty_inputs_not_head_and_preserves_empty_device_topology(self):
@@ -293,19 +293,19 @@ class FileAndSnapshotTests(TemporaryCase):
         self.assertEqual(2, command.call_count)
         self.assertTrue(result["source_tree_dirty"])
         self.assertFalse(result["gradle_executed"])
-        self.assertTrue((destination / "calf-one/src/androidDeviceTest").is_dir())
+        self.assertTrue((destination / "nativecmpkit-one/src/androidDeviceTest").is_dir())
         self.assertFalse((destination / "local.properties").exists())
-        self.assertFalse((destination / "calf-one/key.properties").exists())
+        self.assertFalse((destination / "nativecmpkit-one/key.properties").exists())
         marker = driver.load_workspace(destination)
         self.assertIn(":sample", marker["expected_projects"]["."])
-        self.assertIn("calf-one/src/androidDeviceTest", marker["source_directories"])
+        self.assertIn("nativecmpkit-one/src/androidDeviceTest", marker["source_directories"])
 
     def test_empty_source_directory_topology_drift_fails(self):
         source = self.mini_source()
         files, _, topology, _ = driver.selected_inputs(source, "source-snapshot")
         marker = {"kind": "source-snapshot", "source_files": files, "source_directories": topology,
                   "source_input_digest": driver.source_digest(files, topology)}
-        (source / "calf-one/src/androidDeviceTest").rmdir()
+        (source / "nativecmpkit-one/src/androidDeviceTest").rmdir()
         with self.assertRaises(m.IntegrityError):
             driver.check_source(source, marker)
 

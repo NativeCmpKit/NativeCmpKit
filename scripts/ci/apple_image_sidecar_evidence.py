@@ -80,7 +80,7 @@ def _membership(session, module, focus):
           re.fullmatch(r"[0-9a-f]{32}", session.name), "An ordinary exact owned application session is required")
     directory = session.lstat()
     _need(stat.S_ISDIR(directory.st_mode) and directory.st_uid == os.getuid(), "Invalid owned application session directory")
-    allowed = {"receipt.json", RECORD_NAME} if module == "calf-ui" and focus == FOCUS else {"receipt.json"}
+    allowed = {"receipt.json", RECORD_NAME} if module == "nativecmpkit-ui" and focus == FOCUS else {"receipt.json"}
     entries = {}
     for path in session.iterdir():
         _need(path.name in allowed and path.name not in entries and len(entries) < len(allowed),
@@ -95,7 +95,7 @@ def _membership(session, module, focus):
 
 
 def require_session_membership(session: Path, module: str, focus: str | None):
-    """Only calf-ui's exact allocation recovery adds its one named evidence file."""
+    """Only nativecmpkit-ui's exact allocation recovery adds its one named evidence file."""
     _membership(session, module, focus)
 
 
@@ -287,7 +287,7 @@ def validate_retained(session: Path, document: dict, context: dict, started_ns: 
                       module: str, focus: str | None, *, receipt_payload: bytes) -> str | None:
     """Return the retained canonical hash only; original native/profile gates follow."""
     _need(type(document) is dict, "An owning application receipt object is required")
-    if module != "calf-ui" or focus != FOCUS:
+    if module != "nativecmpkit-ui" or focus != FOCUS:
         _need(INLINE_KEY not in document, "Unexpected image prelaunch observation on another application focus")
         return None
     snapshot = _membership(session, module, focus)
@@ -300,7 +300,7 @@ def validate_retained(session: Path, document: dict, context: dict, started_ns: 
           re.fullmatch(r"[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}", device) and
           context.get("source_tree_dirty") is False and document.get("source_tree_dirty") is False and
           document.get("source_revision") == source and document.get("explicit_test_focus") == FOCUS and
-          document.get("task") == ":calf-ui:iosSimulatorArm64ApplicationTest", "Unbound source or selected image application origin")
+          document.get("task") == ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest", "Unbound source or selected image application origin")
     bundle = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + source[:12] + ".t" + session.name
     _need(document.get("bundle_id") == bundle, "Retained image evidence is not this source/session bundle")
     signed_hash = document.get("signed_application_executable_sha256"); _digest(signed_hash)

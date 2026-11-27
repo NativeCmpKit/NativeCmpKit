@@ -8,25 +8,25 @@ import java.security.MessageDigest
 // Compile-only adaptive/drag scripts, old native selections and normal sources stay unchanged.
 // This exact eleven-file union is not certified by either prior six/seven-source test KLIB.
 gradle.projectsEvaluated {
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     val focus = rootProject.providers.gradleProperty("nativecmpkitUiRelatedFocus").orNull
     val branches = mapOf(
         "ui-native-adaptive-drag-shader-ios26plus" to listOf(
-            "com.mohamedrejeb.calf.ui.slider.AdaptiveSliderNativeMatrixTest.ios26PublicStepsTapDragAndAccessibilityMatrix",
-            "com.mohamedrejeb.calf.ui.slider.AdaptiveSliderNativeMatrixTest.ios26PublicNegativeStepsAreRejected",
-            "com.mohamedrejeb.calf.ui.controls.AdaptiveControlCustomizationMatrixTest.ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
-            "com.mohamedrejeb.calf.ui.toolbar.AdaptiveToolbarFallbackNativeTest.ios26EmptyItemsRenderMaterialSlotsAndCallerPlacement",
-            "com.mohamedrejeb.calf.ui.utils.DampedDragLifecycleRegressionTest.cancellationFromActualStartAndStopCallbacksCannotRecreateFeedbackAndNextGestureRecovers",
-            "com.mohamedrejeb.calf.ui.utils.DampedDragLifecycleRegressionTest.removingAnActiveActualModifierLeavesNoReleaseWorkInTheCallerScopeAndRangeReplacementRecovers",
-            "com.mohamedrejeb.calf.ui.utils.DampedDragLifecycleRegressionTest.thousandSustainedUpdatesTraceActualJobTreesAcrossFramesAndRepressWithoutCancellingSiblingWork",
-            "com.mohamedrejeb.calf.ui.utils.InteractiveHighlightResourceLifecycleTest.disposingAPressedRetainedModifierClosesItsRealBuilderStopsPixelsAndNeverRestartsItsJobs",
-            "com.mohamedrejeb.calf.ui.utils.InteractiveHighlightResourceLifecycleTest.removingAnActualPressedHighlightClosesItsBuilderAndNewCompositionUsesANewOwnedResource",
-            "com.mohamedrejeb.calf.ui.button.LiquidButtonConstructionTraceTest.hundredActualPublicButtonsKeepOptionalShaderConstructionAtZeroThroughInputDisableAndRecreation",
+            "io.github.apdelrahman1911.nativecmpkit.ui.slider.AdaptiveSliderNativeMatrixTest.ios26PublicStepsTapDragAndAccessibilityMatrix",
+            "io.github.apdelrahman1911.nativecmpkit.ui.slider.AdaptiveSliderNativeMatrixTest.ios26PublicNegativeStepsAreRejected",
+            "io.github.apdelrahman1911.nativecmpkit.ui.controls.AdaptiveControlCustomizationMatrixTest.ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
+            "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest.ios26EmptyItemsRenderMaterialSlotsAndCallerPlacement",
+            "io.github.apdelrahman1911.nativecmpkit.ui.utils.DampedDragLifecycleRegressionTest.cancellationFromActualStartAndStopCallbacksCannotRecreateFeedbackAndNextGestureRecovers",
+            "io.github.apdelrahman1911.nativecmpkit.ui.utils.DampedDragLifecycleRegressionTest.removingAnActiveActualModifierLeavesNoReleaseWorkInTheCallerScopeAndRangeReplacementRecovers",
+            "io.github.apdelrahman1911.nativecmpkit.ui.utils.DampedDragLifecycleRegressionTest.thousandSustainedUpdatesTraceActualJobTreesAcrossFramesAndRepressWithoutCancellingSiblingWork",
+            "io.github.apdelrahman1911.nativecmpkit.ui.utils.InteractiveHighlightResourceLifecycleTest.disposingAPressedRetainedModifierClosesItsRealBuilderStopsPixelsAndNeverRestartsItsJobs",
+            "io.github.apdelrahman1911.nativecmpkit.ui.utils.InteractiveHighlightResourceLifecycleTest.removingAnActualPressedHighlightClosesItsBuilderAndNewCompositionUsesANewOwnedResource",
+            "io.github.apdelrahman1911.nativecmpkit.ui.button.LiquidButtonConstructionTraceTest.hundredActualPublicButtonsKeepOptionalShaderConstructionAtZeroThroughInputDisableAndRecreation",
         ),
     )
     check(focus in branches) { "Explicit related UI iOS26+ focus required; no default host or broad test selection" }
     val selectors = branches.getValue(focus!!)
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest") +
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") +
         selectors.flatMap { listOf("--tests", it) }
     check(gradle.startParameter.taskNames == applicationRequest) {
         "Adaptive native init accepts only its exact ten related application methods; no standalone compiler/full/publish task"
@@ -39,17 +39,17 @@ gradle.projectsEvaluated {
         "Adaptive native execution requires the same explicit recorded simulator UDID as the original transport"
     }
     val paths = listOf(
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlNativeHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/DampedDragLifecycleRegressionTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/InteractiveHighlightResourceLifecycleTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/button/LiquidButtonConstructionTraceTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/UiDragShaderTestHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/PointerCancellation.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/DampedDragLifecycleRegressionTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/InteractiveHighlightResourceLifecycleTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/LiquidButtonConstructionTraceTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UiDragShaderTestHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/PointerCancellation.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

@@ -94,7 +94,7 @@ def review_log(log: str, host: str, focus: str = "all") -> dict:
                 raise ValueError("Cargo message must be a JSON object")
             if entry.get("reason") == "build-finished":
                 finished.append(entry.get("success"))
-            if (entry.get("reason") == "compiler-artifact" and entry.get("target", {}).get("name") == "calf_filepicker_native"
+            if (entry.get("reason") == "compiler-artifact" and entry.get("target", {}).get("name") == "nativecmpkit_filepicker_native"
                     and entry.get("profile", {}).get("test") is True and entry.get("executable")):
                 artifacts.append(entry)
         match = METHOD_LINE.match(line)
@@ -160,7 +160,7 @@ def main() -> int:
         raise ValueError("Source revision changed while capturing actual JNI runtime")
     library.write_json(output / "runtime.json", context)
     method_filter = "jni_path_tests::macos_domain" if args.focus == "macos-domain" else "jni_path_tests"
-    command = ["cargo", "test", "--manifest-path", "calf-file-picker/native/Cargo.toml", "--locked", "--jobs", "1",
+    command = ["cargo", "test", "--manifest-path", "nativecmpkit-file-picker/native/Cargo.toml", "--locked", "--jobs", "1",
                "--message-format=json", method_filter, "--", "--test-threads=1", "--nocapture"]
     execution = library.execute(root, command, output / "cargo.private.log", 600, 8192)
     after = library.snapshot_inputs(root)
@@ -183,7 +183,7 @@ def main() -> int:
         artifact = result.pop("compiler_artifact")
         declared_executable = Path(artifact["executable"])
         executable = declared_executable.resolve(strict=True)
-        if (not executable.is_relative_to(root / "calf-file-picker/native/target") or
+        if (not executable.is_relative_to(root / "nativecmpkit-file-picker/native/target") or
                 any(p.is_symlink() for p in (declared_executable, *declared_executable.parents))):
             raise ValueError("Actual test executable must remain within this crate's owned target tree")
         result["native_test_executable_sha256"] = library.sha256(executable)

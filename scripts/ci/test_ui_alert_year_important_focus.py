@@ -24,18 +24,18 @@ class AlertYearImportantFocus(unittest.TestCase):
     def plan(self, suite="ios", red=False):
         focus = (r.UI_DATE_YEAR_MATERIAL_FOCUS if suite == "desktop" else
                  r.UI_DATE_YEAR_PREDICATE_RED_FOCUS if red else r.UI_ALERT_DATE_IMPORTANT_FOCUS)
-        return r.plan(r.ROOT, suite, only_modules=("calf-ui",), focus=focus)
+        return r.plan(r.ROOT, suite, only_modules=("nativecmpkit-ui",), focus=focus)
 
     def test_exact_new_ten_native_two_material_and_optional_red_one_are_finite(self):
         for suite, red, count, task in (
-            ("ios", False, 10, ":calf-ui:iosSimulatorArm64ApplicationTest"),
-            ("desktop", False, 2, ":calf-ui:desktopTest"),
-            ("ios", True, 1, ":calf-ui:iosSimulatorArm64ApplicationTest"),
+            ("ios", False, 10, ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"),
+            ("desktop", False, 2, ":nativecmpkit-ui:desktopTest"),
+            ("ios", True, 1, ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"),
         ):
             plan = self.plan(suite, red)
             self.assertTrue(r.validate_test_focus(plan))
             self.assertFalse(plan["complete_suite_requested"])
-            self.assertEqual(["calf-ui"], plan["explicit_module_subset"])
+            self.assertEqual(["nativecmpkit-ui"], plan["explicit_module_subset"])
             item, = plan["expected"]
             self.assertEqual(task, item["task"])
             self.assertEqual(count, len(item["required_testcases"]))
@@ -49,13 +49,13 @@ class AlertYearImportantFocus(unittest.TestCase):
 
     def test_one_fixed_host_preflights_both_real_suite_selectors_without_new_runner(self):
         row, = matrix.matrix("ios-alert-date-important")["include"]
-        self.assertEqual(("ios-iphone", "macos-26", "arm64", "calf-ui"),
+        self.assertEqual(("ios-iphone", "macos-26", "arm64", "nativecmpkit-ui"),
                          (row["slot"], row["runner"], row["arch"], row["test-modules"]))
         self.assertEqual(r.UI_ALERT_DATE_IMPORTANT_FOCUS, row["test-focus"])
         self.assertNotIn("serial-test-focus", row) # Not a second UIKit application.
         red_row, = matrix.matrix("ios-date-year-predicate-red")["include"]
         self.assertEqual(r.UI_DATE_YEAR_PREDICATE_RED_FOCUS, red_row["test-focus"])
-        self.assertEqual(("ios-iphone", "macos-26", "arm64", "calf-ui"),
+        self.assertEqual(("ios-iphone", "macos-26", "arm64", "nativecmpkit-ui"),
                          (red_row["slot"], red_row["runner"], red_row["arch"], red_row["test-modules"]))
         commands = []
         def fake_run(command, **kwargs):
@@ -63,7 +63,7 @@ class AlertYearImportantFocus(unittest.TestCase):
             suite = command[command.index("--suite") + 1]
             focus = command[command.index("--focus") + 1]
             return SimpleNamespace(returncode=0, stderr="", stdout=json.dumps(
-                r.plan(r.ROOT, suite, only_modules=("calf-ui",), focus=focus)))
+                r.plan(r.ROOT, suite, only_modules=("nativecmpkit-ui",), focus=focus)))
         with patch.object(matrix.subprocess, "run", side_effect=fake_run):
             matrix.preflight_plans("ios-alert-date-important", r.ROOT)
         self.assertEqual([("ios", r.UI_ALERT_DATE_IMPORTANT_FOCUS),
@@ -76,7 +76,7 @@ class AlertYearImportantFocus(unittest.TestCase):
         material = workflow.split("      - name: Plan two new Material year-policy companions on the same host", 1)[1]
         material = material.split("      - name: Preserve first fresh XML before the related same-host recovery", 1)[0]
         for literal in ("steps.plan.outcome == 'success'", "inputs.profile == 'ios-alert-date-important'",
-                        "steps.material_year_plan.outcome == 'success'", "--suite desktop --module calf-ui",
+                        "steps.material_year_plan.outcome == 'success'", "--suite desktop --module nativecmpkit-ui",
                         "--focus ui-material-year-policy-important", "$SLOT-material-year", "--reserve-mib 8192"):
             self.assertIn(literal, material)
         self.assertNotIn("--simulator", material)
@@ -110,17 +110,17 @@ class AlertYearImportantFocus(unittest.TestCase):
         for suite, focus in (("desktop", r.UI_ALERT_DATE_IMPORTANT_FOCUS),
                              ("ios", r.UI_DATE_YEAR_MATERIAL_FOCUS)):
             with self.assertRaises(ValueError):
-                r.plan(r.ROOT, suite, only_modules=("calf-ui",), focus=focus)
+                r.plan(r.ROOT, suite, only_modules=("nativecmpkit-ui",), focus=focus)
         for suite in ("ios", "desktop"):
             focus = self.plan(suite)["explicit_test_focus"]
-            for modules in (None, ("calf-io",), ("calf-ui", "calf-io")):
+            for modules in (None, ("nativecmpkit-io",), ("nativecmpkit-ui", "nativecmpkit-io")):
                 with self.assertRaises(ValueError):
                     r.plan(r.ROOT, suite, only_modules=modules, focus=focus)
             for section, key, value in (("plan", "complete_suite_requested", True),
                                         ("item", "test_filter", "*"),
                                         ("item", "required_testcases", []),
                                         ("item", "test_source_files", []),
-                                        ("item", "task", ":calf-ui:iosSimulatorArm64Test")):
+                                        ("item", "task", ":nativecmpkit-ui:iosSimulatorArm64Test")):
                 plan = copy.deepcopy(self.plan(suite))
                 (plan if section == "plan" else plan["expected"][0])[key] = value
                 with self.assertRaises(ValueError):
@@ -155,7 +155,7 @@ class AlertYearImportantFocus(unittest.TestCase):
         for forbidden in (".activateAction(", ".dismiss(", "performSelector", "valueForKey", "setValue(",
                           "UITouch(", "UIEvent(", "NSClassFromString"):
             self.assertNotIn(forbidden, body)
-        owner = (r.ROOT / "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/datepicker/AdaptiveDatePicker.ios.kt").read_text()
+        owner = (r.ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/AdaptiveDatePicker.ios.kt").read_text()
         resolver = owner.split("resolveSelection = { pickedMillis ->", 1)[1].split("},", 1)[0]
         self.assertIn(".takeIf { state.isDaySelectable(it) } ?: state.selectedDateMillis", resolver)
         self.assertNotIn(".takeIf { utcYearOf(it) in state.yearRange }", resolver)

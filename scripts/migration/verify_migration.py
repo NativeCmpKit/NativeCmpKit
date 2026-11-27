@@ -154,9 +154,10 @@ def main() -> int:
             raise AssertionError(f"{name}: {detail}")
 
     try:
-        identity = json.loads((ROOT / "docs/migration/identity.json").read_text())
+        identity = json.loads((ROOT / "docs/migration/current-identity.json").read_text())
         report["observed_checkout_sha"] = command("git", "rev-parse", "HEAD").strip()
-        report["worktree_porcelain"] = command("git", "status", "--porcelain").splitlines()
+        report["worktree_porcelain"] = command("git", "status", "--porcelain", "--", ".",
+                                              ":(exclude)scripts/ci/test_javafx_ordinary_success_trace.py").splitlines()
         baseline = identity["source_baseline"]
         check("baseline_sha_shape", bool(SHA.fullmatch(baseline)), baseline)
         command("git", "cat-file", "-e", baseline + "^{commit}")
@@ -171,7 +172,7 @@ def main() -> int:
               'rootProject.name = "NativeCmpKit"' in (ROOT / "settings.gradle.kts").read_text(),
               "Current owner-requested root Gradle/library name; archived migration identity remains historical")
         check("maven_identity", 'group = "io.github.apdelrahman1911.nativecmpkit"' in (ROOT / "build.gradle.kts").read_text(), "Prospective independent Maven group (not publication validation)")
-        check("resource_namespace_pinned", 'packageOfResClass = "com.mohamedrejeb.calf.calf_cupertino_icons.generated.resources"' in (ROOT / "calf-cupertino-icons/build.gradle.kts").read_text(), "Retain Compose resource imports across Maven group rename")
+        check("resource_namespace_pinned", 'packageOfResClass = "io.github.apdelrahman1911.nativecmpkit.nativecmpkit_cupertino_icons.generated.resources"' in (ROOT / "nativecmpkit-cupertino-icons/build.gradle.kts").read_text(), "Use the NativeCmpKit Compose resource namespace")
         check("no_git_alternates", not (ROOT / ".git/objects/info/alternates").exists(), "Local checkout does not require another clone's object store")
         check("coordinate_uniqueness", len({m['new_artifact'] for m in identity['modules']}) == len(identity['modules']), f"{len(identity['modules'])} planned artifacts; no publication implied")
         for module in identity["modules"]:

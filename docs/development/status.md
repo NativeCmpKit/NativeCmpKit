@@ -15,7 +15,7 @@ python3 -m unittest discover -s scripts/development -p 'test_validate_resolution
 
 Freshness covers only the listed metadata/ledger inputs and generator. Referenced source, tests, logs/XML and evidence files are **not rehashed or certified**. They can change while this ledger index remains `CURRENT`; owner acceptance review must still check exact source/evidence receipts.
 
-Baseline: `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`. Input fingerprint: `db1bca80a835f49bcda7ae332e14e315eee783fabd8f80e4d48676c27d4ca428`.
+Baseline: `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`. Input fingerprint: `b22ecbe5683db7965461769ed93f17bc562fa11768bf00c6c7f0b481b51f9032`.
 
 Generator SHA256: `82ad5502dbec4a5a151336a0e6d33eb97e7a1eb10bb099d2af242d4969fce982`.
 
@@ -3601,14 +3601,14 @@ The JSON also preserves all input sets/hashes and the generator hash. `--check` 
 | [docs/audit/findings/NAV.json](../audit/findings/NAV.json) | `6b17a05b029015297887dae425d9860aa9702489ef7a74c848c1fd5cdbb75157` |
 | [docs/audit/findings/PERM.json](../audit/findings/PERM.json) | `27ad1d47cad95bdb5943d6c776febf3e9fb713ba20a4a4b15fd398a968612cc8` |
 | [docs/audit/findings/UI.json](../audit/findings/UI.json) | `9a507808155d4d8c99047a15247f7450042762b985875262a7681dbd39ad8c3a` |
-| [docs/development/resolutions/BUILD.json](resolutions/BUILD.json) | `818e550c64c5aa0f7ebd5092ac1fe4d73824f8a5f1f37f1650d5453c1d82360c` |
-| [docs/development/resolutions/IO.json](resolutions/IO.json) | `3c74252fbf02a26388de7c53a80aaabc190a1e8aeffdbebd54ceb41f251b4dd1` |
-| [docs/development/resolutions/NATIVE.json](resolutions/NATIVE.json) | `a82cd101d2a629e7e83837e6f5e837b9abebcda2ae750ddc38f90032dc17dfa8` |
-| [docs/development/resolutions/NAV.json](resolutions/NAV.json) | `73424c5dffff0f05a981181d53c7edd690d15e7e6c4e60486572de46cd95e5a3` |
-| [docs/development/resolutions/PERM-geo.json](resolutions/PERM-geo.json) | `553cb93d8133e8b3107692bc3075d21d2a8f656ccd5252cd5ad5182fca3dd15b` |
-| [docs/development/resolutions/PERM-permissions.json](resolutions/PERM-permissions.json) | `0bd7764999081afea7b516bf214fef0a55f365d2605656da59012ba9b2767339` |
-| [docs/development/resolutions/UI-controls.json](resolutions/UI-controls.json) | `4815ff0798a380c6ae3ebd4d0092e129ce21bc7282b6621b467027e61a70a453` |
-| [docs/development/resolutions/UI-native.json](resolutions/UI-native.json) | `4e822554dcc612923415263e460524ecbb5da10754f88d7d5c7f1868d7f6e974` |
+| [docs/development/resolutions/BUILD.json](resolutions/BUILD.json) | `e4938fae044f868160523afa8aa90b671ae1ef74b521c4bcc7820d5b8c662448` |
+| [docs/development/resolutions/IO.json](resolutions/IO.json) | `c70d312fbbfa44576e5c6e38100cf132348b2e606873f6d74546f7b1fb34b909` |
+| [docs/development/resolutions/NATIVE.json](resolutions/NATIVE.json) | `813ed215b5cc021ab381c9588265d9a6221ca41391d3929104a8dde269ea512d` |
+| [docs/development/resolutions/NAV.json](resolutions/NAV.json) | `c4473e55a76f5c3eebb6055d170f8bbbd779102038d46063e92eb6cb71163a15` |
+| [docs/development/resolutions/PERM-geo.json](resolutions/PERM-geo.json) | `402459875a00f7873752652d42eb6844a0903d547ced3c22b90d69e460ea347c` |
+| [docs/development/resolutions/PERM-permissions.json](resolutions/PERM-permissions.json) | `957c57c0d2e08934d82c7e6638f28fbc507615cc976dce02cbac145944261e48` |
+| [docs/development/resolutions/UI-controls.json](resolutions/UI-controls.json) | `8838386ae0bc7dc5ab98a8d07b5e7300f00794b108d839b8a7d53812fca0c561` |
+| [docs/development/resolutions/UI-native.json](resolutions/UI-native.json) | `580f0dfb4db09bbdae5ed47ec88f14392c1054a9919aa308322c9aca2ac7cf07` |
 | [docs/migration/issue-map.json](../migration/issue-map.json) | `5ebc06ad6e81bd6a6953b9731fd617edfe1d99189bea236d9c2198daa48be861` |
 | [docs/roadmap/backlog.json](../roadmap/backlog.json) | `044eb0eb9f7f640035f26f15a86a0fb60887747f6a12e02dd2b94df371273e10` |
 

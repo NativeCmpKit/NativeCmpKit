@@ -15,7 +15,7 @@ import workflow_matrix as m
 
 class IOSUiStateFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_UI_STATE_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_UI_STATE_FOCUS)
 
     def collect(self, cases=None, outcome="", marker=1):
         plan = self.plan()
@@ -33,7 +33,7 @@ class IOSUiStateFocusTests(unittest.TestCase):
 
     def test_eight_exact_methods_single_real_application_and_cli_do_not_replay_dates(self):
         row, = m.matrix("ios-ui-state")["include"]
-        self.assertEqual(("ios-iphone", "calf-ui", r.IOS_UI_STATE_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-ui", r.IOS_UI_STATE_FOCUS),
                          tuple(row[key] for key in ("slot", "test-modules", "test-focus")))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
@@ -46,7 +46,7 @@ class IOSUiStateFocusTests(unittest.TestCase):
         self.assertEqual(selectors, r.gradle_command(
             "ios", plan, simulator="00000000-0000-4000-8000-000000000001")[-16:])
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_UI_STATE_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_UI_STATE_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         for selection in (filters, list(reversed(filters))):
@@ -69,7 +69,7 @@ class IOSUiStateFocusTests(unittest.TestCase):
         for outcome in ("<failure/>", "<error/>", "<skipped/>"):
             self.assertTrue(self.collect(outcome=outcome)["errors"])
         self.assertTrue(self.collect(marker=0)["errors"])
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_UI_STATE_FOCUS)
 
     def fixture(self):
@@ -114,12 +114,12 @@ class IOSUiStateFocusTests(unittest.TestCase):
         with self.assertRaises(ValueError): self.plan(f.root)
 
     def test_source_keeps_calendar_copy_picker_zone_explicit_action_cleanup_and_real_host_appearance(self):
-        manager = (r.ROOT / "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/timepicker/TimePickerManager.kt").read_text()
+        manager = (r.ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/timepicker/TimePickerManager.kt").read_text()
         self.assertIn("copyWithZone(null) as NSCalendar", manager)
         self.assertIn("timeZone = picker.timeZone ?: NSTimeZone.localTimeZone", manager)
         self.assertIn("datePicker.removeTarget(datePickerDelegate", manager)
         self.assertIn("if (disposed) return", manager)
-        composition = (r.ROOT / "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/timepicker/AdaptiveTimePicker.ios.kt").read_text()
+        composition = (r.ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/timepicker/AdaptiveTimePicker.ios.kt").read_text()
         self.assertIn("onDispose { datePickerManager.dispose() }", composition)
         time_state = (r.ROOT / r.IOS_TIME_STATE_SOURCE).read_text()
         for value in ("val composingEpoch = epoch", "SideEffect { committed = composingEpoch }",

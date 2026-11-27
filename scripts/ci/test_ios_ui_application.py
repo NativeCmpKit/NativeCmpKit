@@ -25,7 +25,7 @@ ACTIVE = "NATIVECMPKIT_UIKIT_ACTIVE mainWorker=1 ownedWorker=2"
 COMPLETE = "NATIVECMPKIT_UIKIT_COMPLETED runnerExit=0 workerTerminated=true"
 STARTUP_TIMEOUT = ("NATIVECMPKIT_UIKIT_STARTUP_TIMEOUT active=true key=true hidden=false "
                    "rootAttached=false rootNativeEqual=true workerStarted=false")
-SUITE = "com.mohamedrejeb.calf.ui.internal.SyntheticFixture"
+SUITE = "io.github.apdelrahman1911.nativecmpkit.ui.internal.SyntheticFixture"
 EXECUTABLE_UUID = "12345678-1234-5678-9abc-123456789abc"
 
 

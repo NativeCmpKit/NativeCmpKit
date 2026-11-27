@@ -196,9 +196,9 @@ for line in json.loads(sys.argv[3]): print(line,flush=True)
 
     def test_one_failed_profile_workload_has_an_exact_explicit_darwin_recovery_not_accepted_stress_replay(self):
         row, = matrix.matrix('ios-image-profile-recovery')['include']
-        self.assertEqual(('ios-iphone', 'calf-ui', lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS),
+        self.assertEqual(('ios-iphone', 'nativecmpkit-ui', lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS),
                          tuple(row[k] for k in ('slot', 'test-modules', 'test-focus')))
-        plan = lt.plan(lt.ROOT, 'ios', only_modules=('calf-ui',), focus=lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS)
+        plan = lt.plan(lt.ROOT, 'ios', only_modules=('nativecmpkit-ui',), focus=lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS)
         self.assertFalse(plan['complete_suite_requested'])
         command = lt.gradle_command('ios', plan, frames.DEVICE)
         self.assertEqual(1, command.count('--tests'))
@@ -216,7 +216,7 @@ for line in json.loads(sys.argv[3]): print(line,flush=True)
         fixture = receipt_fixtures.IosApplicationReceipts('test_exact_app_protocol_xml_runtime_binary_and_cleanup_are_required')
         self.addCleanup(fixture.doCleanups); fixture.setUp()
         fixture.write(lt.IOS_IMAGE_MEMORY_SOURCE, (lt.ROOT / lt.IOS_IMAGE_MEMORY_SOURCE).read_bytes())
-        fixture.plan = lt.plan(fixture.root, 'ios', only_modules=('calf-ui',), focus=lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS)
+        fixture.plan = lt.plan(fixture.root, 'ios', only_modules=('nativecmpkit-ui',), focus=lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS)
         cases = [{'classname': app.IMAGE_PROFILE_CASE[0], 'name': app.IMAGE_PROFILE_CASE[1], 'status': 'passed'}]
         fixture.document.update(explicit_test_focus=lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS, image_diagnostics_mode='darwin-tools',
                                 strict_runtime_assertions_attested=False)

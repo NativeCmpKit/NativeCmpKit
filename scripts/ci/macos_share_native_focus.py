@@ -8,8 +8,8 @@ import native_test_policy as policy
 
 FOCUS = "macos-share-coroutine-lifecycle"
 PROFILE = "macos-share-lifecycle"
-MODULE = "calf-share"
-TASK = ":calf-share:desktopTest"
+MODULE = "nativecmpkit-share"
+TASK = ":nativecmpkit-share:desktopTest"
 CLASS = policy.MAC_LIFECYCLE_CLASS
 SOURCE = policy.MAC_LIFECYCLE_SOURCE
 METHODS = policy.MAC_LIFECYCLE_METHODS

@@ -150,7 +150,7 @@ class AppleAppinfoShapeRouteTests(unittest.TestCase):
         cases = ((route.BINARY, list(application.TEST_ARGUMENTS), None, True),
                  (route.BINARY, ["--ktest_gradle_filter=foreign"], None, True),
                  (route.BINARY, [], "darwin-tools", True),
-                 (route.BINARY.replace("calf-ui", "calf-webview"), [], None, True),
+                 (route.BINARY.replace("nativecmpkit-ui", "nativecmpkit-webview"), [], None, True),
                  (route.BINARY, [], None, 1), (route.BINARY, [], None, False))
         with self.harness() as state:
             for binary, arguments, image, mode in cases:

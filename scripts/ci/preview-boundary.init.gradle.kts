@@ -10,7 +10,7 @@ gradle.projectsEvaluated {
         group = "verification"
         description = "Verify actual independent publication identities and excluded prototype boundaries without publishing."
         doLast {
-            val identity = JsonSlurper().parse(rootProject.file("docs/migration/identity.json")) as Map<*, *>
+            val identity = JsonSlurper().parse(rootProject.file("docs/migration/current-identity.json")) as Map<*, *>
             val modules = identity["modules"] as List<*>
             val expected = modules.associate { value ->
                 val module = value as Map<*, *>
@@ -24,7 +24,7 @@ gradle.projectsEvaluated {
             check(publishers.map { it.path }.toSet() == expected.keys) {
                 "Actual Maven publication projects differ from the explicit independent identity map"
             }
-            val excluded = listOf("calf-maps", "calf-media", "calf-notifications")
+            val excluded = listOf("nativecmpkit-maps", "nativecmpkit-media", "nativecmpkit-notifications")
                 .map { rootProject.file(it).canonicalFile }
             val records = publishers.sortedBy { it.path }.map { project ->
                 val kotlin = checkNotNull(project.extensions.findByName("kotlin"))
@@ -49,9 +49,9 @@ gradle.projectsEvaluated {
                             "artifact" to publication.artifactId, "version" to publication.version)
                     })
             }
-            check(rootProject.findProject(":calf-maps") != null)
-            check(rootProject.findProject(":calf-media") == null && rootProject.findProject(":calf-notifications") == null)
-            check(rootProject.findProject(":calf-maps")?.extensions?.findByType(PublishingExtension::class.java) == null)
+            check(rootProject.findProject(":nativecmpkit-maps") != null)
+            check(rootProject.findProject(":nativecmpkit-media") == null && rootProject.findProject(":nativecmpkit-notifications") == null)
+            check(rootProject.findProject(":nativecmpkit-maps")?.extensions?.findByType(PublishingExtension::class.java) == null)
             val output = rootProject.layout.buildDirectory.file("ci-verification/preview-boundary-model.json").get().asFile
             output.parentFile.mkdirs()
             output.writeText(JsonOutput.prettyPrint(JsonOutput.toJson(mapOf(

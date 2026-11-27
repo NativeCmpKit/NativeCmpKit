@@ -23,7 +23,7 @@ import java.util.UUID;
 
 /** Signature/UID/nonce-bound observation/completion only; no arbitrary URI, file access or grant command. */
 public final class CameraReceiverService extends Service {
-    static final String REPORTER = "com.mohamedrejeb.calf.calfcamerapicker.test";
+    static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitcamerapicker.test";
     static final byte[] BYTES = "NativeCmpKit synthetic native camera output".getBytes(StandardCharsets.UTF_8);
     private static Bundle received;
     private static int intents;

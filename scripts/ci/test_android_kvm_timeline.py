@@ -191,7 +191,7 @@ class KvmTimelineTests(unittest.TestCase):
         output = io.StringIO()
         with self.host(body=RuntimeError('private-unpublished-body')), patch.object(kvm.sys, 'stderr', output):
             with self.assertRaises(ValueError) as caught:
-                namespace['run'](Path('.'), 'unused-output', ('calf-permissions/core',), focus='android-permission-demo-contracts')
+                namespace['run'](Path('.'), 'unused-output', ('nativecmpkit-permissions/core',), focus='android-permission-demo-contracts')
         self.assertIs(primary, caught.exception); self.assertEqual(['selection', 'admission'], events)
         facts = kvm.child_observations(output.getvalue().encode()); self.assertEqual('retained', facts['status'])
         self.assertTrue(all(row['status'] == 'failed-observation' for row in facts['observations']))
@@ -200,12 +200,12 @@ class KvmTimelineTests(unittest.TestCase):
             def flush(self): raise OSError('private-unpublished-body')
         with self.host(), patch.object(kvm.sys, 'stderr', Broken()):
             with self.assertRaises(ValueError) as caught:
-                namespace['run'](Path('.'), 'unused-output', ('calf-permissions/core',), focus='android-permission-demo-contracts')
+                namespace['run'](Path('.'), 'unused-output', ('nativecmpkit-permissions/core',), focus='android-permission-demo-contracts')
         self.assertIs(primary, caught.exception)
         output = io.StringIO()
         with self.host(scope={}), patch.object(kvm.sys, 'stderr', output):
             with self.assertRaises(ValueError):
-                namespace['run'](Path('.'), 'unused-output', ('calf-permissions/core',), focus='android-permission-demo-contracts')
+                namespace['run'](Path('.'), 'unused-output', ('nativecmpkit-permissions/core',), focus='android-permission-demo-contracts')
         self.assertEqual('', output.getvalue())
 
     def test_child_transport_requires_two_ordered_exact_bounded_typed_rows_and_never_retains_private_output(self):

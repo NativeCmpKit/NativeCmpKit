@@ -3,7 +3,7 @@
   "source_repository": "https://github.com/flutter/packages",
   "source_commit": "23a05b6ad5d55bc0df5b9340623570b69064edf1",
   "source_path": "third_party/packages/cupertino_icons/assets/CupertinoIcons.ttf",
-  "local_path": "calf-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf",
+  "local_path": "nativecmpkit-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf",
   "bytes": 257628,
   "sha256": "67c44fe9183b002e79dde7f6977e2988661c9a3e4a3c5fce968787efdbed823c",
   "license": "MIT",

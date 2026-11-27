@@ -1,7 +1,7 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
-import com.mohamedrejeb.calf.core.PlatformContext
-import com.mohamedrejeb.calf.io.*
+import io.github.apdelrahman1911.nativecmpkit.core.PlatformContext
+import io.github.apdelrahman1911.nativecmpkit.io.*
 import kotlinx.coroutines.*
 import kotlinx.io.buffered
 import kotlinx.io.readByteArray

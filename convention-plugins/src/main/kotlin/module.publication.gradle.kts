@@ -20,10 +20,10 @@ mavenPublishing {
     // file repository mode; remote/Central tasks reject the mode outright.
     if (!localVerification) signAllPublications()
 
-    coordinates(group.toString(), "nativecmpkit-" + project.name.removePrefix("calf-"), version.toString())
+    coordinates(group.toString(), project.name, version.toString())
 
     pom {
-        name.set("NativeCmpKit - " + project.name.removePrefix("calf-"))
+        name.set("NativeCmpKit - " + project.name.removePrefix("nativecmpkit-"))
         description.set("Independent Kotlin Multiplatform native component toolkit, derived from Calf under Apache-2.0.")
         url.set("https://github.com/Apdelrahman1911/nativeCmpkit")
 

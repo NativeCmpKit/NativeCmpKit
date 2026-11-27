@@ -15,8 +15,8 @@ from test_android_webview_request_state import body_after
 import test_ios_picker_batch_focus as batch
 
 
-PHOTO_DELEGATE_SOURCE = "calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/PhotoPickerDelegate.kt"
-PHOTO_LAUNCHER_SOURCE = "calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/FilePickerLauncher.ios.kt"
+PHOTO_DELEGATE_SOURCE = "nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/PhotoPickerDelegate.kt"
+PHOTO_LAUNCHER_SOURCE = "nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/FilePickerLauncher.ios.kt"
 
 
 def _kotlin_tokens(source):
@@ -326,18 +326,18 @@ class IosPickerProviderCancellationFocusTests(unittest.TestCase):
                 (r.ROOT / PHOTO_LAUNCHER_SOURCE).read_text())
 
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-file-picker",),
+        return r.plan(root, "ios", only_modules=("nativecmpkit-file-picker",),
                       focus=r.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS)
 
     def test_one_missing_method_uses_existing_genuine_app_and_one_canonical_slot(self):
         row, = matrix.matrix("ios-picker-provider-cancellation")["include"]
-        self.assertEqual(("ios-iphone", "calf-file-picker", r.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-file-picker", r.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS),
                          tuple(row[key] for key in ("slot", "test-modules", "test-focus")))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
         item, = plan["expected"]
-        self.assertEqual(":calf-file-picker:" + r.IOS_APPLICATION_TASK, item["task"])
+        self.assertEqual(":nativecmpkit-file-picker:" + r.IOS_APPLICATION_TASK, item["task"])
         self.assertEqual("genuine-uikit-application", item["native_test_host"])
         self.assertEqual(1, len(item["required_testcases"]))
         self.assertIn(r.IOS_PICKER_PROVIDER_CANCELLATION_SOURCE, item["test_source_files"])
@@ -358,12 +358,12 @@ class IosPickerProviderCancellationFocusTests(unittest.TestCase):
             self.assertFalse(selected & old)
 
     def test_wrong_suite_module_omission_and_tampered_plan_refuse(self):
-        for suite, modules in (("desktop", ("calf-file-picker",)), ("ios", ("calf-ui",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-file-picker",)), ("ios", ("nativecmpkit-ui",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS)
         original = self.plan()
         for key, value in (("native_test_host", "command-line"), ("test_filter", r.IOS_PICKER_PROVIDER_CANCELLATION_CLASS),
-                           ("required_testcases", []), ("task", ":calf-file-picker:iosSimulatorArm64Test")):
+                           ("required_testcases", []), ("task", ":nativecmpkit-file-picker:iosSimulatorArm64Test")):
             changed = copy.deepcopy(original)
             changed["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):

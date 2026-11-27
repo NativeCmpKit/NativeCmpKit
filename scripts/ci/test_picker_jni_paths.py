@@ -7,7 +7,7 @@ import picker_jni_paths as r
 
 def positive(host="Linux", interleaved=True, focus="all"):
     methods = r.expected_methods(host, focus)
-    artifact = {"reason": "compiler-artifact", "target": {"name": "calf_filepicker_native"},
+    artifact = {"reason": "compiler-artifact", "target": {"name": "nativecmpkit_filepicker_native"},
                 "profile": {"test": True}, "executable": "/synthetic/owned/test-executable"}
     lines = [json.dumps(artifact), json.dumps({"reason": "build-finished", "success": True}),
              f"running {len(methods)} tests"]
@@ -70,7 +70,7 @@ class PickerJniPathReceipts(unittest.TestCase):
             with self.assertRaises(ValueError): r.review_log(log, "Linux")
 
     def test_real_source_macos_domain_probe_and_linux_owned_invalid_entries_are_not_generic_skip_fallbacks(self):
-        source = (r.library.ROOT / "calf-file-picker/native/src/jni_path_tests.rs").read_text()
+        source = (r.library.ROOT / "nativecmpkit-file-picker/native/src/jni_path_tests.rs").read_text()
         self.assertIn('#[cfg(target_os = "macos")]\nmod macos_domain', source)
         self.assertNotIn('#[cfg(unix)]', source)
         for expression in ('std::fs::write(&invalid,', 'std::fs::create_dir(&invalid)',

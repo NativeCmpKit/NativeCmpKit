@@ -71,12 +71,12 @@ class CalendarNativeFocusTests(unittest.TestCase):
         self.assertEqual(0, result["totals"]["not_applicable"])
 
     def test_other_modules_targets_broad_filters_and_publish_tasks_are_refused(self):
-        for suite, modules in (("desktop", (calendar.MODULE,)), ("ios", ("calf-permissions/core",)),
-                               ("ios", ("calf-ui",)), ("ios", None)):
+        for suite, modules in (("desktop", (calendar.MODULE,)), ("ios", ("nativecmpkit-permissions/core",)),
+                               ("ios", ("nativecmpkit-ui",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 runner.plan(runner.ROOT, suite, only_modules=modules, focus=calendar.FOCUS)
         for key, value in (("test_filter", "*"), ("required_testcases", []),
-                           ("task", ":calf-permissions:calf-permissions-calendar:publish")):
+                           ("task", ":nativecmpkit-permissions:nativecmpkit-permissions-calendar:publish")):
             plan = copy.deepcopy(self.plan())
             plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):

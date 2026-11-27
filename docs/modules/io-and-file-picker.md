@@ -2,8 +2,8 @@
 
 Reviewed baseline: **`af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`**. Paths and line
 references in the findings refer to this imported commit, not later migration
-edits. Scope is all **62 tracked files / 5,360 physical lines** in `calf-io`,
-`calf-file-picker`, and `calf-file-picker-coil`: 51 production Kotlin files,
+edits. Scope is all **62 tracked files / 5,360 physical lines** in `nativecmpkit-io`,
+`nativecmpkit-file-picker`, and `nativecmpkit-file-picker-coil`: 51 production Kotlin files,
 one Rust file, three Kotlin test files, and seven build/resource/auxiliary files.
 This is source-review coverage, **not executed platform coverage**.
 
@@ -31,11 +31,11 @@ or rewrite the baseline observations below.
 ## 1. Boundaries and dependency graph
 
 ```text
-calf-file-picker-coil ──api──> calf-io ──api──> calf-core
+nativecmpkit-file-picker-coil ──api──> nativecmpkit-io ──api──> nativecmpkit-core
         │                       └──api──> kotlinx-io-core
         └──implementation──> Coil 3 / its Okio integration
 
-calf-file-picker ──api──> calf-io
+nativecmpkit-file-picker ──api──> nativecmpkit-io
         ├──implementation──> Compose foundation
         ├──Android──> activity-compose / AndroidX ActivityResult contracts
         ├──Desktop──> JVM IO + embedded Jodd MIME data
@@ -52,7 +52,7 @@ Baseline dependency declarations: Kotlin 2.4.20, Compose 1.12.0, AGP 9.4.0,
 kotlinx-io 0.9.1, kotlinx-browser 0.5.0, DocumentFile 1.1.0, Coil 3.6.2,
 activity-compose 1.13.0, coroutines 1.11.0. Root/convention build analysis owns
 resolution and compatibility verification; a version declaration alone is not a
-successful build. `calf-file-picker-coil` declares Coil as `implementation` while
+successful build. `nativecmpkit-file-picker-coil` declares Coil as `implementation` while
 its public types implement Coil interfaces: consumers need compatible Coil APIs
 on their own compile classpath; publication/API exposure deserves binary tests.
 
@@ -65,11 +65,11 @@ are not the library's compatibility guarantee. PHPicker and UniformTypeIdentifie
 are iOS-14-era APIs; runtime/deployment compatibility must be tested rather than
 inferred from the sample's newer deployment target.
 
-The compatibility packages remain `com.mohamedrejeb.calf.io` and
-`com.mohamedrejeb.calf.picker[.coil]`. Retaining project paths and JNI symbols
+The compatibility packages remain `io.github.apdelrahman1911.nativecmpkit.io` and
+`io.github.apdelrahman1911.nativecmpkit.picker[.coil]`. Retaining project paths and JNI symbols
 does not imply a dependency on the upstream repository at runtime.
 
-## 2. `calf-io`: representations and contracts
+## 2. `nativecmpkit-io`: representations and contracts
 
 ### Public API inventory
 
@@ -84,7 +84,7 @@ owned-temp-file disposal, write API, stable identity, or directory traversal API
 |---|---|---|
 | Android | `KmpFile(uri: Uri)`; `Uri.toKmpFile()`; `java.io.File.toKmpFile()` converts via `Uri.fromFile` | Resolver stream for read/source; `DocumentFile.fromSingleUri` for name/kind; getPath returns a URI string; exists opens/closes a stream and catches any `Exception`. |
 | Desktop | `KmpFile(file: java.io.File)`; `File.toKmpFile()` | `File.exists/isDirectory/name/path/readBytes`; source opens `SystemFileSystem.source(Path(file.absolutePath))`. Path may be relative for getPath but source uses an absolute path. |
-| iOS | Public `KmpFile(url: NSURL)` / `NSURL.toKmpFile()`; two-URL constructor marked `InternalCalfApi` | `url` is the readable copy for picker-produced nonfolders; `originalUrl` is metadata identity. Exists/read/source use `url`, but name/path/kind inspect `originalUrl`. A manually wrapped URL is not automatically copied or granted access. |
+| iOS | Public `KmpFile(url: NSURL)` / `NSURL.toKmpFile()`; two-URL constructor marked `InternalNativeCmpKitApi` | `url` is the readable copy for picker-produced nonfolders; `originalUrl` is metadata identity. Exists/read/source use `url`, but name/path/kind inspect `originalUrl`. A manually wrapped URL is not automatically copied or granted access. |
 | JS/Wasm | Shared `KmpFile(file: org.w3c.files.File)`; `File.toKmpFile()` | exists always true, name/path both File.name, directory guessed from absence of a dot; read uses platform FileReader implementation; source is a filled in-memory kotlinx-io Buffer. |
 
 **Do not treat getPath as a portable filesystem path.** It is a URI on Android
@@ -96,7 +96,7 @@ portable content route. IO-010, IO-014, and IO-019 detail metadata defects.
 `resolveContext` is expected internally. Non-Android actuals return
 `PlatformContext.INSTANCE`. Android returns the application context from
 `AndroidContextHolder`, a volatile singleton initialized through
-`initializeKmpFileContext` (`InternalCalfApi`). The Android file-picker composable
+`initializeKmpFileContext` (`InternalNativeCmpKitApi`). The Android file-picker composable
 initializes it. A context-free call made earlier throws a descriptive error;
 the saver alone does **not** initialize it. Standalone IO users should pass a
 context instead of depending on a UI initialization side effect.
@@ -300,11 +300,11 @@ testable without a native dialog. `destroyDialog` forwards the handle unchanged.
 
 1. NativeFilePickerBridge object initialization loads the library once per class
    loader. The external `init` symbol itself does no work.
-2. Try System.loadLibrary(`calf_filepicker_native`) first for external packagers.
+2. Try System.loadLibrary(`nativecmpkit_filepicker_native`) first for external packagers.
 3. Determine OS (`macos`, `windows`, `linux`) and arch (`arm64`, `x64`) from system
    properties, find `native/<os>-<arch>/<libname>` in classpath resources, read
    all bytes, and hash with SHA-256 truncated to 16 hex characters.
-4. Use `~/.cache/calf-filepicker/<library>-<hash>.<extension>`. Reuse an existing
+4. Use `~/.cache/nativecmpkit-filepicker/<library>-<hash>.<extension>`. Reuse an existing
    same-length/same-hash file unchanged; otherwise create a unique temp file,
    write bytes, try atomic replacement and then plain replacement. If both fail,
    load the unique temp file and schedule deletion on exit.
@@ -380,7 +380,7 @@ or decoder CVE assessment was inferred from these wrappers alone.
 ## 8. Jodd utilities and resources
 
 The embedded Jodd code/resources retain a two-clause BSD-style notice. Keep that
-notice in source and binary redistributions in addition to Calf's Apache-2.0
+notice in source and binary redistributions in addition to NativeCmpKit's Apache-2.0
 attribution. The code is internal but remains compiled as `jodd.*` JVM classes;
 classpath collision tests are prudent for applications also using Jodd.
 
@@ -410,7 +410,7 @@ classpath collision tests are prudent for applications also using Jodd.
 
 ## 9. Build/native-resource boundary
 
-`calf-io` and Coil apply the Kotlin/publication conventions; picker additionally
+`nativecmpkit-io` and Coil apply the Kotlin/publication conventions; picker additionally
 applies Compose. Only IO/picker declare test dependencies here. No Android, iOS,
 JS, Wasm, Coil or Rust test source exists in these three baseline modules.
 
@@ -444,67 +444,67 @@ required tests live in `docs/audit/findings/IO.json`.
 
 | Baseline file | Reviewed range | Symbols, flow and review result |
 |---|---|---|
-| `calf-file-picker-coil/build.gradle.kts` | 1–12 | KMP/publication; API core+IO; implementation Coil exposes fetcher interfaces through public types; no picker dependency or tests. |
-| `calf-file-picker-coil/src/androidMain/kotlin/com.mohamedrejeb.calf/picker/coil/KmpFileFetcher.android.kt` | 1–6 | toCalfPlatformContext actual returns Android Coil context unchanged; it does not depend on global AndroidContextHolder initialization. |
-| `calf-file-picker-coil/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/coil/KmpFileFetcher.kt` | 1–44 | toCalfPlatformContext expect, KmpFileFetcher.fetch, nested Factory.create: unconditional readByteArray→Okio Buffer→ImageSource, null MIME, MEMORY source; size/caching/close implications (IO-021). |
-| `calf-file-picker-coil/src/nonAndroidMain/kotlin/com.mohamedrejeb.calf/picker/coil/KmpFileFetcher.nonAndroid.kt` | 1–6 | toCalfPlatformContext actual uses singleton PlatformContext.INSTANCE across desktop/iOS/web; no native context conversion side effect. |
-| `calf-file-picker/build.gradle.kts` | 1–103 | API IO + Compose/Activity/browser/test dependencies; host target mapper; any-prebuilt bypass; buildNativeLib/copyNativeLib/resources task wiring. Build audit owns lock/matrix/reproducibility findings. |
-| `calf-file-picker/native/.gitignore` | 1–2 | Both /target and Cargo.lock ignored; output hygiene positive but ignored lock prevents reproducible cdylib transitive resolution. |
-| `calf-file-picker/native/Cargo.toml` | 1–22 | cdylib package0.14.0, edition2021; jni/rfd/raw-window-handle and macOS objc2 dependencies, size/LTO/strip/codegen profile; no explicit lock/toolchain or native tests. |
-| `calf-file-picker/native/build-all-targets.sh` | 1–66 | set-euo-pipefail; build_target cargo→copy→size; all/macos/windows/linux selectors; macOSarm64+x64, Windowsx64, Linuxx64 only; cross-toolchain prerequisite not installed by helper; unknown selector not rejected. |
-| `calf-file-picker/native/src/lib.rs` | 1–453 | All helpers, parent handle impls, DialogKind/DialogConfig, box/ref/drop and seven JNI exports plus init reviewed individually in section6 table; ownership/UTF-8/exception/threading findings IO-003/023/024. |
-| `calf-file-picker/src/androidMain/kotlin/com/mohamedrejeb/calf/picker/ComposeResource.android.kt` | 1–14 | toImageBitmap→toAndroidBitmap→BitmapFactory.decodeByteArray; requireNotNull rejects corrupt/unsupported data with explicit message; synchronous full decode. |
-| `calf-file-picker/src/androidMain/kotlin/com/mohamedrejeb/calf/picker/FilePickerLauncher.android.kt` | 1–321 | All seven composable entry/helper paths; ActivityResult callbacks/fallbacks; type/mode routing; CSV MIME map; toMimeTypes/toVisualMediaMimeTypes/toPickVisualMediaRequest/isVisualMedia; launcher delegation. IO-018/019. |
-| `calf-file-picker/src/androidMain/kotlin/com/mohamedrejeb/calf/picker/FileSaverLauncher.android.kt` | 1–146 | remember saver; pendingSource capture, CreateDocument callback/coroutines, ByteArray/KmpFile/Uri/File overloads; null stream handling/ignored settings/MIME; IO-002/006. |
-| `calf-file-picker/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/ComposeResource.kt` | 1–5 | ByteArray.toImageBitmap expected synchronous conversion API; no error/size/context policy specified. |
-| `calf-file-picker/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/FilePickerLauncher.kt` | 1–171 | rememberFilePickerLauncher expect; every FilePickerFileType object/MIME constant, Custom/Extension, selection Single/Multiple(maxItems) companion compatibility, FilePickerLauncher constructor/launch; IO-018/025. |
-| `calf-file-picker/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/FilePickerSettings.kt` | 1–112 | FilePickerSettings interface/default representation, ImageRepresentationMode enum, FilePickerSettingsImpl, same-name factory/default/remember helper; helper keys complete, backend support differs. |
-| `calf-file-picker/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/FileSaverLauncher.kt` | 1–62 | Experimental rememberFileSaverLauncher and both launch overloads, bytes-null empty-file and streaming-file contracts, result/cancellation docs; IO-004/006/011 compare implementations. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/ComposeResource.desktop.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/FilePickerLauncher.desktop.kt` | 1–187 | Top-level and FrameWindowScope parent resolution, internal LaunchedEffect handle replacement, DisposableEffect free, Mutex show, readiness early-return, stale maxItems, launcher delegation. IO-003/017. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/FilePickerParentWindow.kt` | 1–39 | LocalFilePickerParentWindow nullable static local and FrameWindowScope.ProvideFilePickerParentWindow scoped provider; explicit settings override in callers; no global native pointer ownership. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/FilePickerSettings.desktop.kt` | 1–57 | DesktopFilePickerSettings data class; factory and remember overload include representation+parent; parentWindow cast extension returns null for other implementations; parent lifetime belongs to caller. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/FileSaverLauncher.desktop.kt` | 1–119 | Remembered byte/file launch paths allocate per-call handle, show/write then finally destroy; updated callback/settings but stale parent; File overload delegates; initial native load may run on UI scope. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/NativeFilePickerBridge.kt` | 1–86 | Object initialization→loader; static JNI init/createFile/createDirectory/createSave/showFile/showDirectory/showSave/destroy signatures reviewed against Rust exports; internal raw Long contract. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/NativeLibCache.kt` | 1–71 | nativeLibraryContentHash, filename insertion, extractNativeLibrary, hasIdenticalContent, moveReplacing; short SHA cache naming, identical reuse, unique temp/atomic+plain move/fallback deletion. Original six tests and additional probes passed. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/NativeLibLoader.kt` | 1–70 | loadNativeLibrary system-first/classpath fallback/hash/cache/System.load; bundledLibraryLocation OS/arch mapping; userCacheDir fixed fallback; init error policy, IO-022 hardening. |
-| `calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/platform/PlatformFilePicker.kt` | 1–146 | warmup; three handle factories; picker/directory/save byte/save file show functions; destroy; resolveExtensions. Real file-write/filter code executed with fake JNI selection (IO-004/015). |
-| `calf-file-picker/src/desktopMain/kotlin/jodd/io/IOUtil.kt` | 1–56 | BSD notice; IOUtil.close handles null, flush-before-close and IOException suppression while still closing after flush IOException; no broader shutdown/resource owner. |
-| `calf-file-picker/src/desktopMain/kotlin/jodd/net/MimeTypes.kt` | 1–168 | BSD notice; constant set and eager Properties→extension map; duplicate-extension reject; register/get/lookup/find/isRegistered functions; 981-entry initialization passed; IO-015/016. |
-| `calf-file-picker/src/desktopMain/kotlin/jodd/util/Wildcard.kt` | 1–142 | BSD notice; public/private match recursion and matchOne first-index behavior, star/question/escape/double-star/empty matching; positive probe and recursive complexity review. |
-| `calf-file-picker/src/desktopMain/resources/jodd/net/MimeTypes.properties` | 1–789 | All763data records/981extensions parsed; abbreviated MIME expansion, no duplicate extensions, legacy media/Office categories and missing AVIF/HEIC/HEIF identified; original BSD resource notice retained. |
-| `calf-file-picker/src/desktopTest/kotlin/com/mohamedrejeb/calf/picker/platform/NativeLibCacheTest.kt` | 1–103 | Six original tests: filename insertion, deterministic16hexhash, new extraction, reuse timestamp unchanged, changed-byte replacement, nonempty-directory blocked-target temp fallback; Before/After temp isolation; all executed. |
-| `calf-file-picker/src/desktopTest/kotlin/jodd/net/MimeTypesTest.kt` | 1–77 | Three original tests: scalar/fallback lookups, exact/multi-type extensions, wildcard image set; no locale/unknown-format/adversarial cases; all executed unchanged. |
-| `calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/ComposeResource.ios.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
-| `calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/FilePickerLauncher.ios.kt` | 1–374 | All document/photo entrypoints and delegates, settings/state capture, AtomicInt guard, adaptive photo dismissal, NSItemProvider suspension/progress cancel/copy, UTI/controller builders, launcher. IO-007/008/013/017/018/025. |
-| `calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/FileSaverLauncher.ios.kt` | 1–228 | All byte/file/NSData/NSURL paths, launchWithData, remembered delegate/list, writeTempFile, cleanUpTempFiles, presentExportPicker, overload forwarding; empty pin guard positive; IO-005/006/007/008. |
-| `calf-file-picker/src/iosMain/kotlin/com.mohamedrejeb.calf.picker/TempFile.kt` | 1–26 | NSURL.createTempFile copies synchronously into UUID+extension NSTemporaryDirectory and returns null on NSError-discarded failure; original-name/ownership/cancel-copy limitations (IO-013/014). |
-| `calf-file-picker/src/jsMain/kotlin/com.mohamedrejeb.calf.picker/ComposeResource.js.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
-| `calf-file-picker/src/jsMain/kotlin/com.mohamedrejeb.calf.picker/FilePickerLauncher.js.kt` | 1–107 | remember picker and launcher delegation; updated type/mode/result, unsupported folder, new hidden input/accept/multiple, limit and event conversion, callback+catch/cancel cleanup, DOM click; IO-026 completion/disposal gap. |
-| `calf-file-picker/src/jsMain/kotlin/com.mohamedrejeb.calf.picker/WebBlob.js.kt` | 1–18 | createBlob copies signed Kotlin bytes into JS Int8Array then unsigned view, Blob MIME options; bit patterns preserved but allocation is full-buffer. |
-| `calf-file-picker/src/wasmJsMain/kotlin/com.mohamedrejeb.calf/picker/ComposeResource.wasmJs.kt` | 1–7 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
-| `calf-file-picker/src/wasmJsMain/kotlin/com.mohamedrejeb.calf/picker/FilePickerLauncher.wasmJs.kt` | 1–104 | remember picker and launcher delegation; updated type/mode/result, unsupported folder, new hidden input/accept/multiple, limit and event conversion, callback+catch/cancel cleanup, DOM click; IO-026 completion/disposal gap. |
-| `calf-file-picker/src/wasmJsMain/kotlin/com.mohamedrejeb.calf/picker/WebBlob.wasmJs.kt` | 1–15 | createBlob ByteArray→UByteArray→Uint8Array and JsArray Blob parts; opt-ins and MIME options inspected; full-buffer conversion with browser-specific interop unexecuted. |
-| `calf-file-picker/src/webMain/kotlin/com.mohamedrejeb.calf/picker/FileSaverLauncher.web.kt` | 1–160 | createBlob expect, saver byte/File/Blob paths, triggerDownload DOM/objectURL lifetime, extensionToMimeType allswitch branches, platform overloads; onResult/settings unused (IO-011/012). |
-| `calf-io/build.gradle.kts` | 1–27 | KMP/publication plugins; API core+kotlinx-io; DocumentFile/browser platform dependencies and desktop coroutines test dependency reviewed. |
-| `calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/AndroidContextHolder.kt` | 1–40 | AndroidContextHolder.context/initialize and initializeKmpFileContext: volatile app-only reference, fail-fast missing initialization, benign repeated app-context initialization; saver-only initialization gap documented. |
-| `calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/InternalContext.android.kt` | 1–5 | resolveContext actual: read AndroidContextHolder.context; missing initialization propagates. |
-| `calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/KmpFile.android.kt` | 1–62 | Uri wrapper; exists open/close+catch; readByteArray close-only-on-success; DocumentFile single-URI name/kind; URI path; Uri/File adapters. IO-019/020 and file:// interoperability. |
-| `calf-io/src/androidMain/kotlin/com/mohamedrejeb/calf/io/KmpFileSource.android.kt` | 1–10 | source opens ContentResolver input stream, wraps as RawSource, null→FileNotFoundException; returned resource is caller-owned, not eagerly closed. |
-| `calf-io/src/commonMain/kotlin/com.mohamedrejeb.calf/io/InternalContext.kt` | 1–10 | resolveContext expect and the context-free delegation contract. |
-| `calf-io/src/commonMain/kotlin/com.mohamedrejeb.calf/io/KmpFile.kt` | 1–126 | Opaque KmpFile expect; context and context-free exists/readByteArray/getName/getPath/isDirectory/source-adjacent contracts; both isFile negations reviewed (IO-010), no common construction/equality/persistence API. |
-| `calf-io/src/commonMain/kotlin/com.mohamedrejeb.calf/io/KmpFileSource.kt` | 1–40 | source(context)/source() expect/delegation; explicit blocking dispatcher, caller-close, native streaming versus web eager-buffer documentation reviewed; positive ownership guidance. |
-| `calf-io/src/desktopMain/kotlin/com/mohamedrejeb/calf/io/InternalContext.desktop.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
-| `calf-io/src/desktopMain/kotlin/com/mohamedrejeb/calf/io/KmpFile.desktop.kt` | 1–23 | File wrapper; exists/readBytes/name/path/isDirectory direct delegates and File.toKmpFile; blocking and relative-path semantics inspected. |
-| `calf-io/src/desktopMain/kotlin/com/mohamedrejeb/calf/io/KmpFileSource.desktop.kt` | 1–9 | source opens absolute Path through SystemFileSystem; no hidden dispatcher or memory copy; covered by six original tests. |
-| `calf-io/src/desktopTest/kotlin/com/mohamedrejeb/calf/io/KmpFileSourceTest.kt` | 1–104 | Six tests: full 100003-byte content, 4096-byte chunks, context-free source, missing file, empty EOF, use closes stream; fixture @AfterTest delete. Executed unchanged in extracted-source run. |
-| `calf-io/src/iosMain/kotlin/com.mohamedrejeb.calf/io/InternalContext.ios.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
-| `calf-io/src/iosMain/kotlin/com.mohamedrejeb.calf/io/KmpFile.ios.kt` | 1–63 | Two-URL/internal and single-URL constructors, exists, NSData read+unsafe memcpy, original-URL name/path/kind, NSURL adapter. IO-001/008/014; no security-scope or ownership disposer. |
-| `calf-io/src/iosMain/kotlin/com.mohamedrejeb.calf/io/KmpFileSource.ios.kt` | 1–12 | source validates url.path then opens SystemFileSystem source; readable-copy path is used, security scope not acquired; caller-close contract. |
-| `calf-io/src/jsMain/kotlin/com.mohamedrejeb.calf/io/KmpFile.js.kt` | 1–28 | readFileAsBytes JS actual uses FileReader/onloadend, Uint8Array and byte copy; DONE/error conflation and noncancellable suspension (IO-009). |
-| `calf-io/src/wasmJsMain/kotlin/com.mohamedrejeb.calf/io/KmpFile.wasmJs.kt` | 1–34 | readFileAsBytes Wasm actual and getReadyState/getResult JS helpers: same FileReader state machine, copies and cancellation/error gap as JS (IO-009). |
-| `calf-io/src/webMain/kotlin/com.mohamedrejeb.calf/io/InternalContext.web.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
-| `calf-io/src/webMain/kotlin/com.mohamedrejeb.calf/io/KmpFile.web.kt` | 1–26 | Shared File wrapper/adapter; exists=true; asynchronous byte read; name/path=filename; dot-heuristic isDirectory; expect readFileAsBytes. IO-009/010/014. |
-| `calf-io/src/webMain/kotlin/com.mohamedrejeb.calf/io/KmpFileSource.web.kt` | 1–8 | source eagerly reads full browser File and writes into kotlinx-io Buffer; documented nonstreaming exception, plus copied allocation and inherited read errors. |
+| `nativecmpkit-file-picker-coil/build.gradle.kts` | 1–12 | KMP/publication; API core+IO; implementation Coil exposes fetcher interfaces through public types; no picker dependency or tests. |
+| `nativecmpkit-file-picker-coil/src/androidMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/coil/KmpFileFetcher.android.kt` | 1–6 | toNativeCmpKitPlatformContext actual returns Android Coil context unchanged; it does not depend on global AndroidContextHolder initialization. |
+| `nativecmpkit-file-picker-coil/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/coil/KmpFileFetcher.kt` | 1–44 | toNativeCmpKitPlatformContext expect, KmpFileFetcher.fetch, nested Factory.create: unconditional readByteArray→Okio Buffer→ImageSource, null MIME, MEMORY source; size/caching/close implications (IO-021). |
+| `nativecmpkit-file-picker-coil/src/nonAndroidMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/coil/KmpFileFetcher.nonAndroid.kt` | 1–6 | toNativeCmpKitPlatformContext actual uses singleton PlatformContext.INSTANCE across desktop/iOS/web; no native context conversion side effect. |
+| `nativecmpkit-file-picker/build.gradle.kts` | 1–103 | API IO + Compose/Activity/browser/test dependencies; host target mapper; any-prebuilt bypass; buildNativeLib/copyNativeLib/resources task wiring. Build audit owns lock/matrix/reproducibility findings. |
+| `nativecmpkit-file-picker/native/.gitignore` | 1–2 | Both /target and Cargo.lock ignored; output hygiene positive but ignored lock prevents reproducible cdylib transitive resolution. |
+| `nativecmpkit-file-picker/native/Cargo.toml` | 1–22 | cdylib package0.14.0, edition2021; jni/rfd/raw-window-handle and macOS objc2 dependencies, size/LTO/strip/codegen profile; no explicit lock/toolchain or native tests. |
+| `nativecmpkit-file-picker/native/build-all-targets.sh` | 1–66 | set-euo-pipefail; build_target cargo→copy→size; all/macos/windows/linux selectors; macOSarm64+x64, Windowsx64, Linuxx64 only; cross-toolchain prerequisite not installed by helper; unknown selector not rejected. |
+| `nativecmpkit-file-picker/native/src/lib.rs` | 1–453 | All helpers, parent handle impls, DialogKind/DialogConfig, box/ref/drop and seven JNI exports plus init reviewed individually in section6 table; ownership/UTF-8/exception/threading findings IO-003/023/024. |
+| `nativecmpkit-file-picker/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/ComposeResource.android.kt` | 1–14 | toImageBitmap→toAndroidBitmap→BitmapFactory.decodeByteArray; requireNotNull rejects corrupt/unsupported data with explicit message; synchronous full decode. |
+| `nativecmpkit-file-picker/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FilePickerLauncher.android.kt` | 1–321 | All seven composable entry/helper paths; ActivityResult callbacks/fallbacks; type/mode routing; CSV MIME map; toMimeTypes/toVisualMediaMimeTypes/toPickVisualMediaRequest/isVisualMedia; launcher delegation. IO-018/019. |
+| `nativecmpkit-file-picker/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FileSaverLauncher.android.kt` | 1–146 | remember saver; pendingSource capture, CreateDocument callback/coroutines, ByteArray/KmpFile/Uri/File overloads; null stream handling/ignored settings/MIME; IO-002/006. |
+| `nativecmpkit-file-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/ComposeResource.kt` | 1–5 | ByteArray.toImageBitmap expected synchronous conversion API; no error/size/context policy specified. |
+| `nativecmpkit-file-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FilePickerLauncher.kt` | 1–171 | rememberFilePickerLauncher expect; every FilePickerFileType object/MIME constant, Custom/Extension, selection Single/Multiple(maxItems) companion compatibility, FilePickerLauncher constructor/launch; IO-018/025. |
+| `nativecmpkit-file-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FilePickerSettings.kt` | 1–112 | FilePickerSettings interface/default representation, ImageRepresentationMode enum, FilePickerSettingsImpl, same-name factory/default/remember helper; helper keys complete, backend support differs. |
+| `nativecmpkit-file-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FileSaverLauncher.kt` | 1–62 | Experimental rememberFileSaverLauncher and both launch overloads, bytes-null empty-file and streaming-file contracts, result/cancellation docs; IO-004/006/011 compare implementations. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/ComposeResource.desktop.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FilePickerLauncher.desktop.kt` | 1–187 | Top-level and FrameWindowScope parent resolution, internal LaunchedEffect handle replacement, DisposableEffect free, Mutex show, readiness early-return, stale maxItems, launcher delegation. IO-003/017. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FilePickerParentWindow.kt` | 1–39 | LocalFilePickerParentWindow nullable static local and FrameWindowScope.ProvideFilePickerParentWindow scoped provider; explicit settings override in callers; no global native pointer ownership. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FilePickerSettings.desktop.kt` | 1–57 | DesktopFilePickerSettings data class; factory and remember overload include representation+parent; parentWindow cast extension returns null for other implementations; parent lifetime belongs to caller. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FileSaverLauncher.desktop.kt` | 1–119 | Remembered byte/file launch paths allocate per-call handle, show/write then finally destroy; updated callback/settings but stale parent; File overload delegates; initial native load may run on UI scope. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeFilePickerBridge.kt` | 1–86 | Object initialization→loader; static JNI init/createFile/createDirectory/createSave/showFile/showDirectory/showSave/destroy signatures reviewed against Rust exports; internal raw Long contract. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeLibCache.kt` | 1–71 | nativeLibraryContentHash, filename insertion, extractNativeLibrary, hasIdenticalContent, moveReplacing; short SHA cache naming, identical reuse, unique temp/atomic+plain move/fallback deletion. Original six tests and additional probes passed. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeLibLoader.kt` | 1–70 | loadNativeLibrary system-first/classpath fallback/hash/cache/System.load; bundledLibraryLocation OS/arch mapping; userCacheDir fixed fallback; init error policy, IO-022 hardening. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/PlatformFilePicker.kt` | 1–146 | warmup; three handle factories; picker/directory/save byte/save file show functions; destroy; resolveExtensions. Real file-write/filter code executed with fake JNI selection (IO-004/015). |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/io/IOUtil.kt` | 1–56 | BSD notice; IOUtil.close handles null, flush-before-close and IOException suppression while still closing after flush IOException; no broader shutdown/resource owner. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/net/MimeTypes.kt` | 1–168 | BSD notice; constant set and eager Properties→extension map; duplicate-extension reject; register/get/lookup/find/isRegistered functions; 981-entry initialization passed; IO-015/016. |
+| `nativecmpkit-file-picker/src/desktopMain/kotlin/jodd/util/Wildcard.kt` | 1–142 | BSD notice; public/private match recursion and matchOne first-index behavior, star/question/escape/double-star/empty matching; positive probe and recursive complexity review. |
+| `nativecmpkit-file-picker/src/desktopMain/resources/jodd/net/MimeTypes.properties` | 1–789 | All763data records/981extensions parsed; abbreviated MIME expansion, no duplicate extensions, legacy media/Office categories and missing AVIF/HEIC/HEIF identified; original BSD resource notice retained. |
+| `nativecmpkit-file-picker/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/platform/NativeLibCacheTest.kt` | 1–103 | Six original tests: filename insertion, deterministic16hexhash, new extraction, reuse timestamp unchanged, changed-byte replacement, nonempty-directory blocked-target temp fallback; Before/After temp isolation; all executed. |
+| `nativecmpkit-file-picker/src/desktopTest/kotlin/jodd/net/MimeTypesTest.kt` | 1–77 | Three original tests: scalar/fallback lookups, exact/multi-type extensions, wildcard image set; no locale/unknown-format/adversarial cases; all executed unchanged. |
+| `nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/ComposeResource.ios.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
+| `nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/FilePickerLauncher.ios.kt` | 1–374 | All document/photo entrypoints and delegates, settings/state capture, AtomicInt guard, adaptive photo dismissal, NSItemProvider suspension/progress cancel/copy, UTI/controller builders, launcher. IO-007/008/013/017/018/025. |
+| `nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/FileSaverLauncher.ios.kt` | 1–228 | All byte/file/NSData/NSURL paths, launchWithData, remembered delegate/list, writeTempFile, cleanUpTempFiles, presentExportPicker, overload forwarding; empty pin guard positive; IO-005/006/007/008. |
+| `nativecmpkit-file-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/TempFile.kt` | 1–26 | NSURL.createTempFile copies synchronously into UUID+extension NSTemporaryDirectory and returns null on NSError-discarded failure; original-name/ownership/cancel-copy limitations (IO-013/014). |
+| `nativecmpkit-file-picker/src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/ComposeResource.js.kt` | 1–8 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
+| `nativecmpkit-file-picker/src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/FilePickerLauncher.js.kt` | 1–107 | remember picker and launcher delegation; updated type/mode/result, unsupported folder, new hidden input/accept/multiple, limit and event conversion, callback+catch/cancel cleanup, DOM click; IO-026 completion/disposal gap. |
+| `nativecmpkit-file-picker/src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit.picker/WebBlob.js.kt` | 1–18 | createBlob copies signed Kotlin bytes into JS Int8Array then unsigned view, Blob MIME options; bit patterns preserved but allocation is full-buffer. |
+| `nativecmpkit-file-picker/src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/ComposeResource.wasmJs.kt` | 1–7 | toImageBitmap actual uses Skia Image.makeFromEncoded→toComposeImageBitmap; synchronous full decode, runtime codec/heap limits remain unverified on this target. |
+| `nativecmpkit-file-picker/src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FilePickerLauncher.wasmJs.kt` | 1–104 | remember picker and launcher delegation; updated type/mode/result, unsupported folder, new hidden input/accept/multiple, limit and event conversion, callback+catch/cancel cleanup, DOM click; IO-026 completion/disposal gap. |
+| `nativecmpkit-file-picker/src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/WebBlob.wasmJs.kt` | 1–15 | createBlob ByteArray→UByteArray→Uint8Array and JsArray Blob parts; opt-ins and MIME options inspected; full-buffer conversion with browser-specific interop unexecuted. |
+| `nativecmpkit-file-picker/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FileSaverLauncher.web.kt` | 1–160 | createBlob expect, saver byte/File/Blob paths, triggerDownload DOM/objectURL lifetime, extensionToMimeType allswitch branches, platform overloads; onResult/settings unused (IO-011/012). |
+| `nativecmpkit-io/build.gradle.kts` | 1–27 | KMP/publication plugins; API core+kotlinx-io; DocumentFile/browser platform dependencies and desktop coroutines test dependency reviewed. |
+| `nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidContextHolder.kt` | 1–40 | AndroidContextHolder.context/initialize and initializeKmpFileContext: volatile app-only reference, fail-fast missing initialization, benign repeated app-context initialization; saver-only initialization gap documented. |
+| `nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/InternalContext.android.kt` | 1–5 | resolveContext actual: read AndroidContextHolder.context; missing initialization propagates. |
+| `nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFile.android.kt` | 1–62 | Uri wrapper; exists open/close+catch; readByteArray close-only-on-success; DocumentFile single-URI name/kind; URI path; Uri/File adapters. IO-019/020 and file:// interoperability. |
+| `nativecmpkit-io/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileSource.android.kt` | 1–10 | source opens ContentResolver input stream, wraps as RawSource, null→FileNotFoundException; returned resource is caller-owned, not eagerly closed. |
+| `nativecmpkit-io/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/InternalContext.kt` | 1–10 | resolveContext expect and the context-free delegation contract. |
+| `nativecmpkit-io/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFile.kt` | 1–126 | Opaque KmpFile expect; context and context-free exists/readByteArray/getName/getPath/isDirectory/source-adjacent contracts; both isFile negations reviewed (IO-010), no common construction/equality/persistence API. |
+| `nativecmpkit-io/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFileSource.kt` | 1–40 | source(context)/source() expect/delegation; explicit blocking dispatcher, caller-close, native streaming versus web eager-buffer documentation reviewed; positive ownership guidance. |
+| `nativecmpkit-io/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/InternalContext.desktop.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
+| `nativecmpkit-io/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFile.desktop.kt` | 1–23 | File wrapper; exists/readBytes/name/path/isDirectory direct delegates and File.toKmpFile; blocking and relative-path semantics inspected. |
+| `nativecmpkit-io/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileSource.desktop.kt` | 1–9 | source opens absolute Path through SystemFileSystem; no hidden dispatcher or memory copy; covered by six original tests. |
+| `nativecmpkit-io/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/KmpFileSourceTest.kt` | 1–104 | Six tests: full 100003-byte content, 4096-byte chunks, context-free source, missing file, empty EOF, use closes stream; fixture @AfterTest delete. Executed unchanged in extracted-source run. |
+| `nativecmpkit-io/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/InternalContext.ios.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
+| `nativecmpkit-io/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFile.ios.kt` | 1–63 | Two-URL/internal and single-URL constructors, exists, NSData read+unsafe memcpy, original-URL name/path/kind, NSURL adapter. IO-001/008/014; no security-scope or ownership disposer. |
+| `nativecmpkit-io/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFileSource.ios.kt` | 1–12 | source validates url.path then opens SystemFileSystem source; readable-copy path is used, security scope not acquired; caller-close contract. |
+| `nativecmpkit-io/src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFile.js.kt` | 1–28 | readFileAsBytes JS actual uses FileReader/onloadend, Uint8Array and byte copy; DONE/error conflation and noncancellable suspension (IO-009). |
+| `nativecmpkit-io/src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFile.wasmJs.kt` | 1–34 | readFileAsBytes Wasm actual and getReadyState/getResult JS helpers: same FileReader state machine, copies and cancellation/error gap as JS (IO-009). |
+| `nativecmpkit-io/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/InternalContext.web.kt` | 1–5 | resolveContext actual: return PlatformContext.INSTANCE; no IO or native state. |
+| `nativecmpkit-io/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFile.web.kt` | 1–26 | Shared File wrapper/adapter; exists=true; asynchronous byte read; name/path=filename; dot-heuristic isDirectory; expect readFileAsBytes. IO-009/010/014. |
+| `nativecmpkit-io/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/io/KmpFileSource.web.kt` | 1–8 | source eagerly reads full browser File and writes into kotlinx-io Buffer; documented nonstreaming exception, plus copied allocation and inherited read errors. |
 
-Ledger completeness check: **62/62 baseline scope paths**, including all tests, resources and native build auxiliaries. Supporting `calf-core` PlatformContext expect/nonAndroid actual were also read and compiled for the original-test harness; their main audit ownership remains with core.
+Ledger completeness check: **62/62 baseline scope paths**, including all tests, resources and native build auxiliaries. Supporting `nativecmpkit-core` PlatformContext expect/nonAndroid actual were also read and compiled for the original-test harness; their main audit ownership remains with core.

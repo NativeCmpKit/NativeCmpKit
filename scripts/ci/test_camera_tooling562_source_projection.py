@@ -128,9 +128,9 @@ class CameraTooling562Controls(unittest.TestCase):
         archive = ROOT / "docs/development/evidence/current-platform-recovery-20261101/camera-home-baseline556-559/final-inputs.json"
         inputs = json.loads(archive.read_text())
         for path in (HELPER, "scripts/ci/android_device_tests.py",
-                     "calf-camera-picker/build.gradle.kts",
-                     "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt",
-                     "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraRestorationTest.kt"):
+                     "nativecmpkit-camera-picker/build.gradle.kts",
+                     "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt",
+                     "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraRestorationTest.kt"):
             self.assertEqual(inputs[path], digest(content_history.current_source_before_content_policy(
                 path, (ROOT / path).read_bytes())))
         # Workflow is separately held own-Git provenance, not a library input map.

@@ -166,7 +166,7 @@ class CookieWireSource671Tests(unittest.TestCase):
         self.assertNotIn("CookieHandler.setDefault", source)
 
     def test_browser_native_transport_and_independent_restoration_remain_explicit(self):
-        source = (ROOT / "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserCookieWireAcceptanceTest.kt").read_text()
+        source = (ROOT / "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserCookieWireAcceptanceTest.kt").read_text()
         self.assertNotRegex(source, r"\.setRequestHeader\s*\(")
         self.assertNotRegex(source, r"(?:document|window)\.cookie\s*=(?!=)")
         self.assertIn("native.withCredentials = true", source)

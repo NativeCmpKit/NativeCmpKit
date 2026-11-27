@@ -17,10 +17,10 @@ import workflow_matrix as workflow
 
 ROOT = lt.ROOT
 PROFILE = "android-media-selection-compatibility"
-MODULE = "calf-permissions/core"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidMediaSelectionDeviceTest"
+MODULE = "nativecmpkit-permissions/core"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidMediaSelectionDeviceTest"
 METHOD = "realPlatformMediaSelectionIsReflectedByPublicLibraryStates"
-SOURCE = "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidMediaSelectionDeviceTest.kt"
+SOURCE = "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidMediaSelectionDeviceTest.kt"
 ROUTES = ("android-media-selection-api33", "android-media-selection-api34")
 SDK = "cmdline-tools;23.0 platforms;android-37.0 build-tools;36.0.0 emulator system-images;android-33;google_apis;x86_64 system-images;android-34;google_apis;x86_64"
 ORIGINAL_BATCHES = {'android-io-permission-storage-api35': ('android-io-reference-regressions',
@@ -69,7 +69,7 @@ class AndroidMediaSelectionCompatibilityFiniteProfileTests(unittest.TestCase):
             self.assertIs(source["complete_suite_requested"], False)
             self.assertEqual([MODULE], source["explicit_module_subset"])
             item, = source["expected"]
-            self.assertEqual(":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest", item["task"])
+            self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest", item["task"])
             self.assertEqual(MODULE + "/build/outputs/androidTest-results/connected/androidMain", item["report_directory"])
             self.assertEqual(CLASS, item["test_filter"])
             self.assertEqual([{"classname": CLASS, "name": METHOD}], item["required_testcases"])
@@ -140,14 +140,14 @@ class AndroidMediaSelectionCompatibilityFiniteProfileTests(unittest.TestCase):
 
     def test_media_api_module_focus_or_host_overrides_refuse_before_source_or_process_work(self):
         first = ROUTES[0]
-        for index, value in ((0, 35), (0, "33"), (0, True), (1, "calf-io"), (2, "android-storage-api28")):
+        for index, value in ((0, 35), (0, "33"), (0, True), (1, "nativecmpkit-io"), (2, "android-storage-api28")):
             changed = list(fixed.SELECTIONS[first]); changed[index] = value
             with patch.dict(fixed.SELECTIONS, {first: tuple(changed)}), \
                     patch.object(lt, "plan", side_effect=AssertionError("No source plan after refusal")), self.assertRaises(ValueError):
                 batch.plan(ROOT, PROFILE)
         matrix_function = workflow.matrix
         for key, value in (("suite", "android-host"), ("runner", "self-hosted"), ("arch", "arm64"),
-            ("python", "python"), ("emulator-api", "35"), ("test-modules", "calf-io"),
+            ("python", "python"), ("emulator-api", "35"), ("test-modules", "nativecmpkit-io"),
             ("test-focus", "android-storage-api28"), ("serial-emulator-api", "35")):
             def changed_matrix(name, key=key, value=value):
                 document = matrix_function(name)
@@ -156,7 +156,7 @@ class AndroidMediaSelectionCompatibilityFiniteProfileTests(unittest.TestCase):
             with patch.object(workflow, "matrix", side_effect=changed_matrix), \
                     patch.object(lt, "plan", side_effect=AssertionError("No source plan after refusal")), self.assertRaises(ValueError):
                 batch.plan(ROOT, PROFILE)
-        for name in (PROFILE + ";all", PROFILE + "-api35", PROFILE + " --module calf-io"):
+        for name in (PROFILE + ";all", PROFILE + "-api35", PROFILE + " --module nativecmpkit-io"):
             with patch.object(lt, "execute") as execute, self.assertRaises(ValueError): batch.plan(ROOT, name)
             execute.assert_not_called()
 
@@ -164,12 +164,12 @@ class AndroidMediaSelectionCompatibilityFiniteProfileTests(unittest.TestCase):
         for route in self.selection["routes"]:
             for mutation in ("task", "report", "filter", "extra-case", "missing-case", "module", "suite"):
                 source = copy.deepcopy(route["source_suite"]);item = source["expected"][0]
-                if mutation == "task":item["task"] = ":calf-permissions:calf-permissions-core:test"
+                if mutation == "task":item["task"] = ":nativecmpkit-permissions:nativecmpkit-permissions-core:test"
                 elif mutation == "report":item["report_directory"] = MODULE + "/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest"
                 elif mutation == "filter":item["test_filter"] = CLASS + "#unrelated"
                 elif mutation == "extra-case":item["required_testcases"].append({"classname": CLASS, "name": "unrelated"})
                 elif mutation == "missing-case":item["required_testcases"] = []
-                elif mutation == "module":item["module"] = "calf-io"
+                elif mutation == "module":item["module"] = "nativecmpkit-io"
                 else:source["suite"] = "android-host"
                 with self.assertRaises(ValueError):lt.validate_test_focus(source)
             relative = "build/ci-verification/symbolic-media/routes/" + route["profile"]

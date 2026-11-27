@@ -56,8 +56,8 @@ def artifact(root: Path, target: Path, *, file_type=2):
     header = struct.pack("<8I", 0xFEEDFACF, 0x0100000C, 0, file_type, 0, 0, 0, 0)
     path.write_bytes(header + b"source/mock-control-not-a-native-program")
     path.chmod(0o700)
-    value = {"reason": "compiler-artifact", "package_id": "path+" + (root / "calf-share/native").as_uri()
-             + "#calf-share-native@0.1.0", "target": {"name": "appkit_lifecycle", "kind": ["test"],
+    value = {"reason": "compiler-artifact", "package_id": "path+" + (root / "nativecmpkit-share/native").as_uri()
+             + "#nativecmpkit-share-native@0.1.0", "target": {"name": "appkit_lifecycle", "kind": ["test"],
              "crate_types": ["bin"], "src_path": str(root / runner.MAIN), "edition": "2021"},
              "profile": {"test": True, "opt_level": "0", "debug_assertions": True},
              "features": ["appkit-lifecycle-tests"], "fresh": False,

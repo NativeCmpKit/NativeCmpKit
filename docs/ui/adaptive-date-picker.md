@@ -3,7 +3,7 @@
 
 > **nativeCmpkit migration:** this inherited API guide is being maintained in the independent repository. New coordinates are **unpublished**; see [installation](../installation.md) and the source audit. Platform behavior and historical version claims are not all verified.
 
-Calf provides three date pickers that adapt to the platform they run on:
+NativeCmpKit provides three date pickers that adapt to the platform they run on:
 
 1. **AdaptiveDatePicker**: the full calendar, always visible. Material3 `DatePicker` on Android, Desktop and Web; `UICalendarView` (iOS 16+) or `UIDatePicker` on iOS.
 2. **AdaptiveCompactDatePicker**: a field showing the selected date that opens the calendar on tap. A `DatePickerDialog` on Material platforms; the system compact `UIDatePicker` on iOS.
@@ -42,7 +42,7 @@ The examples use [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) 
 
 ## Restricting selectable dates
 
-Every picker takes a Material3 `SelectableDates` rule through `selectableDates`. Calf ships `DateBounds` for the common case of a minimum and maximum day, and an infix `and` to combine rules.
+Every picker takes a Material3 `SelectableDates` rule through `selectableDates`. NativeCmpKit ships `DateBounds` for the common case of a minimum and maximum day, and an infix `and` to combine rules.
 
 ### Bounds
 

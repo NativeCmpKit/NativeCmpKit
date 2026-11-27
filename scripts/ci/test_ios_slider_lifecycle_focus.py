@@ -11,7 +11,7 @@ import workflow_matrix as m
 
 class IosSliderLifecycleTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_SLIDER_LIFECYCLE_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SLIDER_LIFECYCLE_FOCUS)
 
     def helper(self):
         helper = batch.IOSUiStateFocusTests("test_eight_exact_methods_single_real_application_and_cli_do_not_replay_dates")
@@ -20,7 +20,7 @@ class IosSliderLifecycleTests(unittest.TestCase):
 
     def test_six_new_both_renderer_methods_share_one_app_and_never_replay_accepted_controls(self):
         row, = m.matrix("ios-slider-lifecycle")["include"]
-        self.assertEqual(("ios-iphone", "calf-ui", r.IOS_SLIDER_LIFECYCLE_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-ui", r.IOS_SLIDER_LIFECYCLE_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan(); required = plan["expected"][0]
         self.assertFalse(plan["complete_suite_requested"])
@@ -39,7 +39,7 @@ class IosSliderLifecycleTests(unittest.TestCase):
         self.assertEqual(r.IOS_SLIDER_LIFECYCLE_FOCUS, app.application_test_focus(
             sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + ",".join(reversed(filters))]))
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_SLIDER_LIFECYCLE_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_SLIDER_LIFECYCLE_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(11, len(m.matrix("all")["include"]))
@@ -86,7 +86,7 @@ class IosSliderLifecycleTests(unittest.TestCase):
         self.assertTrue(f.collect()["errors"])
 
     def test_declaration_host_and_module_drift_cannot_reduce_the_related_selection(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_SLIDER_LIFECYCLE_FOCUS)
         f = self.fixture(); source = f.root / r.IOS_SLIDER_LIFECYCLE_SOURCE; original = source.read_text()
         for changed in (original.replace("@Test", "@IgnoredTest", 1), original + "\n@Test fun unrelated() {}\n"):

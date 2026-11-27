@@ -158,7 +158,7 @@ class CookieCi668OuterDerivative609Test(unittest.TestCase):
         matrix = "scripts/ci/workflow_matrix.py"
         changed = {owning, outer.LIBRARY, offline, split, ci.WORKFLOW, provenance, device, matrix}
         self.assertEqual(8, len(changed))  # Preserve the original finite207 difference base.
-        added_changes = {"calf-webview/build.gradle.kts", outer.NEW_CONTROL_RELATIVE,
+        added_changes = {"nativecmpkit-webview/build.gradle.kts", outer.NEW_CONTROL_RELATIVE,
                           outer.OWNING_CONTROL_RELATIVE, cookie.SOURCE_RELATIVE}
         self.assertEqual(4, len(added_changes))  # Exact original recovery-owned common guard is the fourth descendant.
         self.assertFalse(changed & added_changes)
@@ -291,7 +291,7 @@ class CookieCi668OuterDerivative609Test(unittest.TestCase):
                    "scripts/ci/offline_tooling_reuse.py", "scripts/ci/test_ios_ui_split664_native_routing.py",
                    ci.WORKFLOW, "scripts/ci/offline_tooling_provenance.py",
                    "scripts/ci/android_device_tests.py", "scripts/ci/workflow_matrix.py"}
-        added = {"calf-webview/build.gradle.kts", outer.NEW_CONTROL_RELATIVE,
+        added = {"nativecmpkit-webview/build.gradle.kts", outer.NEW_CONTROL_RELATIVE,
                  outer.OWNING_CONTROL_RELATIVE, cookie.SOURCE_RELATIVE}
         self.assertEqual((8, 4), (len(changed), len(added)))
         predecessors = _finite207_predecessors()

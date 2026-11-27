@@ -27,7 +27,7 @@ def zip_bytes(entries: dict[str, bytes]) -> bytes:
 class CupertinoFontResourceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.font = (gate.ROOT / "calf-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf").read_bytes()
+        cls.font = (gate.ROOT / "nativecmpkit-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf").read_bytes()
         cls.license = (gate.ROOT / "licenses/cupertino-icons-MIT.txt").read_bytes()
         cls.provenance = (gate.ROOT / "licenses/cupertino-icons-provenance.json").read_bytes()
 
@@ -76,7 +76,7 @@ class CupertinoFontResourceTest(unittest.TestCase):
                 self.inspect(entries)
 
     def test_committed_resource_copies_are_canonical_and_public_font_is_unchanged(self):
-        resource = gate.ROOT / "calf-cupertino-icons/src/commonMain/composeResources/files/nativecmpkit"
+        resource = gate.ROOT / "nativecmpkit-cupertino-icons/src/commonMain/composeResources/files/nativecmpkit"
         self.assertEqual(self.license, (resource / "cupertino-icons-MIT.txt").read_bytes())
         self.assertEqual(self.provenance, (resource / "cupertino-icons-provenance.json").read_bytes())
         self.assertEqual(gate.CUPERTINO_FONT_SHA256, hashlib.sha256(self.font).hexdigest())
@@ -240,8 +240,8 @@ class NativeHeaderTest(unittest.TestCase):
                 self.assertFalse(gate.binary_platform(b"not-a-native-library", platform))
 
     def test_native_name_module_isolation(self):
-        self.assertEqual("libcalf_filepicker_native.so", gate.native_filename("calf-file-picker", "linux-x64"))
-        self.assertEqual("calf_share_native.dll", gate.native_filename("calf-share", "windows-x64"))
+        self.assertEqual("libnativecmpkit_filepicker_native.so", gate.native_filename("nativecmpkit-file-picker", "linux-x64"))
+        self.assertEqual("nativecmpkit_share_native.dll", gate.native_filename("nativecmpkit-share", "windows-x64"))
 
 
 class RepositoryFixtureBase(unittest.TestCase):
@@ -254,7 +254,7 @@ class RepositoryFixtureBase(unittest.TestCase):
         self.repo.mkdir()
         (self.root / "docs/migration").mkdir(parents=True)
         (self.root / "licenses").mkdir()
-        (self.root / "docs/migration/identity.json").write_text(json.dumps({"modules": [{"new_artifact": "nativecmpkit-core"}]}))
+        (self.root / "docs/migration/current-identity.json").write_text(json.dumps({"modules": [{"new_artifact": "nativecmpkit-core"}]}))
         for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md", "licenses/fixture.txt"):
             (self.root / name).write_text("complete fixture notice " + name)
         self.make_publication("nativecmpkit-core", metadata=True)
@@ -272,7 +272,7 @@ class RepositoryFixtureBase(unittest.TestCase):
         prefix = f"{coordinate}-{self.VERSION}"
         notices = {gate.NOTICE_PREFIX + name: (self.root / name).read_bytes() for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md", "licenses/fixture.txt")}
         (directory / (prefix + "-notices.zip")).write_bytes(zip_bytes(notices))
-        embedded = {name.replace(gate.NOTICE_PREFIX, gate.NOTICE_PREFIX + "calf-core/", 1): data for name, data in notices.items()}
+        embedded = {name.replace(gate.NOTICE_PREFIX, gate.NOTICE_PREFIX + "nativecmpkit-core/", 1): data for name, data in notices.items()}
         (directory / (prefix + ".jar")).write_bytes(zip_bytes(embedded | {"fixture.txt": b"artifact-body"}))
         (directory / (prefix + ".pom")).write_text(f'''<project xmlns="http://maven.apache.org/POM/4.0.0">
 <groupId>{gate.GROUP}</groupId><artifactId>{coordinate}</artifactId><version>{self.VERSION}</version>
@@ -305,7 +305,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
         for coordinate in ("nativecmpkit-core", "nativecmpkit-core-desktop"):
             path = self.directory(coordinate) / f"{coordinate}-{self.VERSION}.pom"
             original = path.read_text()
-            for replacement in ("<name>Calf - core</name>", "<name>nativeCmpkit - core</name>",
+            for replacement in ("<name>NativeCmpKit - core</name>", "<name>nativeCmpkit - core</name>",
                                 "<name>NativeCmpKit - another-module</name>", ""):
                 with self.subTest(coordinate=coordinate, replacement=replacement):
                     path.write_text(original.replace("<name>NativeCmpKit - core</name>", replacement))
@@ -328,7 +328,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
 
     def test_wrong_pom_group_fails(self):
         path = self.directory("nativecmpkit-core") / f"nativecmpkit-core-{self.VERSION}.pom"
-        path.write_text(path.read_text().replace(gate.GROUP, "com.mohamedrejeb.calf"))
+        path.write_text(path.read_text().replace(gate.GROUP, "io.github.apdelrahman1911.nativecmpkit"))
         self.assertFalse(self.run_gate()["success"])
 
     def test_missing_companion_notice_fails(self):
@@ -344,7 +344,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
         directory = self.directory("nativecmpkit-core-desktop")
         path = directory / f"nativecmpkit-core-desktop-{self.VERSION}.jar"
         with zipfile.ZipFile(path, "a") as archive:
-            archive.writestr("native/linux-x64/libcalf_share_native.so", b"bogus")
+            archive.writestr("native/linux-x64/libnativecmpkit_share_native.so", b"bogus")
         self.assertFalse(self.run_gate()["success"])
 
     def test_tampered_jar_module_hash_fails(self):
@@ -356,7 +356,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
     def test_upstream_transitive_coordinate_fails(self):
         path = self.directory("nativecmpkit-core-desktop") / f"nativecmpkit-core-desktop-{self.VERSION}.module"
         data = json.loads(path.read_text())
-        data["variants"][0]["dependencies"] = [{"group": "com.mohamedrejeb.calf", "module": "calf-io", "version": {"requires": "1.0.0"}}]
+        data["variants"][0]["dependencies"] = [{"group": "io.github.apdelrahman1911.nativecmpkit", "module": "nativecmpkit-io", "version": {"requires": "1.0.0"}}]
         path.write_text(json.dumps(data))
         self.assertFalse(self.run_gate()["success"])
 
@@ -405,7 +405,7 @@ class RepositoryFixtureTest(RepositoryFixtureBase):
 class NativeContractFixtureTest(RepositoryFixtureBase):
     """Synthetic ELF/oracle/Cargo fixtures. Never counted as native execution."""
 
-    MODULE = "calf-file-picker"
+    MODULE = "nativecmpkit-file-picker"
     PLATFORM = "linux-x64"
 
     def setUp(self):
@@ -413,10 +413,10 @@ class NativeContractFixtureTest(RepositoryFixtureBase):
         (self.root / self.MODULE / "native").mkdir(parents=True)
         manifest = self.root / self.MODULE / "native/Cargo.toml"
         lock = self.root / self.MODULE / "native/Cargo.lock"
-        manifest.write_text('[package]\nname="calf-filepicker-native"\nversion="0.1.0"\n')
+        manifest.write_text('[package]\nname="nativecmpkit-filepicker-native"\nversion="0.1.0"\n')
         lock.write_text('''version = 4
 [[package]]
-name = "calf-filepicker-native"
+name = "nativecmpkit-filepicker-native"
 version = "0.1.0"
 [[package]]
 name = "example"
@@ -438,7 +438,7 @@ checksum = "''' + "3" * 64 + '"\n')
         self.payload = bytes(payload)
         self.manifest = {
             "schemaVersion": 1, "module": self.MODULE, "platform": self.PLATFORM,
-            "rustTarget": "x86_64-unknown-linux-gnu", "filename": "libcalf_filepicker_native.so",
+            "rustTarget": "x86_64-unknown-linux-gnu", "filename": "libnativecmpkit_filepicker_native.so",
             "sha256": hashlib.sha256(self.payload).hexdigest(), "size": len(self.payload),
             "abiVersion": 1, "crateVersion": "0.1.0", "libraryVersion": self.VERSION,
             "rustToolchain": "1.98.0", "rustcVersion": "rustc 1.98.0 (fixture)",
@@ -467,7 +467,7 @@ checksum = "''' + "3" * 64 + '"\n')
                                      expected_native_revision="a" * 40, allow_dirty_native_diagnostic=True)
 
     def check_native(self, without=None):
-        entries = {"native/linux-x64/libcalf_filepicker_native.so": self.payload,
+        entries = {"native/linux-x64/libnativecmpkit_filepicker_native.so": self.payload,
                    f"META-INF/nativecmpkit/native/{self.MODULE}/linux-x64.json": json.dumps(self.manifest).encode()}
         if without:
             entries.pop(without)

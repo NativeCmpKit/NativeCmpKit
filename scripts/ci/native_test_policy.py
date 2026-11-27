@@ -9,9 +9,9 @@ native case must execute on the Apple host with the observed KGP task/target ide
 """
 from __future__ import annotations
 
-MODULE = "calf-share"
-CLASS = "com.mohamedrejeb.calf.share.platform.NativeShareBridgeTest"
-SOURCE = "calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/platform/NativeShareBridgeTest.kt"
+MODULE = "nativecmpkit-share"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.share.platform.NativeShareBridgeTest"
+SOURCE = "nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridgeTest.kt"
 ALL_HOSTS = (
     "nativeAbiAndDiagnosticsLoadOnTheActualHost",
     "borrowedNativeWindowPointersAreRejectedWithoutDereference",
@@ -19,8 +19,8 @@ ALL_HOSTS = (
 NON_MAC = "unsupportedHostRequestsAndCancellationNeverRetainNativeOwners"
 MAC_GUI = "macOsPickerCancellationReleasesRealMainThreadOwners"
 REQUIRED_CASES = (*ALL_HOSTS, NON_MAC, MAC_GUI)
-MAC_LIFECYCLE_CLASS = "com.mohamedrejeb.calf.share.MacOsShareCoroutineLifecycleTest"
-MAC_LIFECYCLE_SOURCE = "calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/MacOsShareCoroutineLifecycleTest.kt"
+MAC_LIFECYCLE_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.MacOsShareCoroutineLifecycleTest"
+MAC_LIFECYCLE_SOURCE = "nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/MacOsShareCoroutineLifecycleTest.kt"
 MAC_LIFECYCLE_METHODS = (
     "cancellingRetainedAppKitRequestFreesOwnersAndDoesNotOccupySingleCoroutineWorker",
     "realNativeTimeoutReportsOnceWithoutFallbackAndAllowsFreshRequestAfterMainCleanup",
@@ -41,9 +41,9 @@ ANDROID_WEBVIEW_LIFETIME_CASES = (
     "throwingNativeReleaseCannotRetainItsActivityViewOrClearTheLiveReplacement",
 )
 IOS_IO_CASES = {
-    "calf-io": tuple(
-        ("com.mohamedrejeb.calf.io." + classname, method,
-         "calf-io/src/iosTest/kotlin/com/mohamedrejeb/calf/io/" + classname + ".kt")
+    "nativecmpkit-io": tuple(
+        ("io.github.apdelrahman1911.nativecmpkit.io." + classname, method,
+         "nativecmpkit-io/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/" + classname + ".kt")
         for classname, methods in (
             ("NativeReadSafetyTest", (
                 "readsARealEmptyNSDataFileWithoutAddressOfZero",
@@ -68,9 +68,9 @@ IOS_IO_CASES = {
             )),
         ) for method in methods
     ),
-    "calf-file-picker-coil": tuple(
-        ("com.mohamedrejeb.calf.picker.coil.NativeKmpFileFetcherTest", method,
-         "calf-file-picker-coil/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/coil/NativeKmpFileFetcherTest.kt")
+    "nativecmpkit-file-picker-coil": tuple(
+        ("io.github.apdelrahman1911.nativecmpkit.picker.coil.NativeKmpFileFetcherTest", method,
+         "nativecmpkit-file-picker-coil/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/coil/NativeKmpFileFetcherTest.kt")
         for method in (
             "realCoilStreamingSourceHasExactBytesAndOwnedDescriptor",
             "missingAndUnreadableFilesPropagateThroughActualCoilRequests",
@@ -157,8 +157,8 @@ def macos_lifecycle_cases(cases: list[dict], system: str,
     return scenarios, errors
 
 
-PICKER_COMPOSE_CLASS = "com.mohamedrejeb.calf.picker.NativePickerComposeLifetimeTest"
-PICKER_COMPOSE_SOURCE = "calf-file-picker/src/desktopTest/kotlin/com/mohamedrejeb/calf/picker/NativePickerComposeLifetimeTest.kt"
+PICKER_COMPOSE_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.NativePickerComposeLifetimeTest"
+PICKER_COMPOSE_SOURCE = "nativecmpkit-file-picker/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativePickerComposeLifetimeTest.kt"
 PICKER_COMPOSE_METHODS = (
     "composeDisposalBeforeQueuedJniEntryDoesNotAllocateOrShow",
     "composeDisposalInsideRealJniCreationHandoffClosesExactlyOnce",
@@ -169,8 +169,8 @@ PICKER_COMPOSE_METHODS = (
 )
 PICKER_LINUX_PORTAL_METHODS = set(PICKER_COMPOSE_METHODS[3:])
 
-PICKER_PORTAL_CLASS = "com.mohamedrejeb.calf.picker.NativeLinuxPortalFunctionalityTest"
-PICKER_PORTAL_SOURCE = "calf-file-picker/src/desktopTest/kotlin/com/mohamedrejeb/calf/picker/NativeLinuxPortalFunctionalityTest.kt"
+PICKER_PORTAL_CLASS = "io.github.apdelrahman1911.nativecmpkit.picker.NativeLinuxPortalFunctionalityTest"
+PICKER_PORTAL_SOURCE = "nativecmpkit-file-picker/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativeLinuxPortalFunctionalityTest.kt"
 PICKER_PORTAL_METHODS = (
     "singleAndMultipleOpenReturnExactRealFilesWithoutChangingTheirBytes",
     "folderAndSaveDialogsReturnTheSelectedDirectoryAndExactEmptyAndBinaryFiles",
@@ -231,20 +231,20 @@ def picker_compose_cases(cases: list[dict], system: str) -> tuple[list[dict], li
 
 def apply(module: str, suite: str, cases: list[dict], system: str,
           native_ui_opt_in: bool) -> tuple[list[dict], list[str]]:
-    if module == "calf-file-picker" and suite == "desktop":
+    if module == "nativecmpkit-file-picker" and suite == "desktop":
         scenarios, errors = picker_compose_cases(cases, system)
         portal_scenarios, portal_errors = picker_portal_cases(cases, system)
         return scenarios + portal_scenarios, errors + portal_errors
     if suite == "ios" and module in IOS_IO_CASES:
         return ios_io_cases(module, cases, system)
-    if module == "calf-webview" and suite == "desktop":
+    if module == "nativecmpkit-webview" and suite == "desktop":
         host = canonical_host(system)
         scenarios, errors = [], []
-        classname = "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest"
-        source = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/JavaFxWebViewTest.kt"
+        classname = "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest"
+        source = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxWebViewTest.kt"
         registry = [(classname, method, source) for method in DESKTOP_WEBVIEW_STOP_CASES]
-        registry += [("com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest", method,
-                      "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewLifetimeTest.kt")
+        registry += [("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest", method,
+                      "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewLifetimeTest.kt")
                      for method in DESKTOP_WEBVIEW_LIFETIME_CASES]
         for classname, method, source in registry:
             matching = [case for case in cases if case["classname"] == classname
@@ -260,16 +260,16 @@ def apply(module: str, suite: str, cases: list[dict], system: str,
                     errors.append(f"Required JavaFX window/stop scenario {method} did not pass; headless/skipped is not N/A")
             scenarios.append(scenario)
         return scenarios, errors
-    if module == "calf-webview" and suite == "android-device":
+    if module == "nativecmpkit-webview" and suite == "android-device":
         host = canonical_host(system)
         scenarios, errors = [], []
         if host != "linux":
             errors.append("Android device WebView policy requires the explicit Linux enforcing-emulator slot")
-        registry = [("com.mohamedrejeb.calf.ui.web.AndroidWebViewHistoryDeviceTest",
+        registry = [("io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewHistoryDeviceTest",
                      "navigatorReplacementReadsRealBrowserHistoryWithoutAnotherPageEvent",
-                     "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewHistoryDeviceTest.kt")]
-        registry += [("com.mohamedrejeb.calf.ui.web.AndroidWebViewLifetimeDeviceTest", method,
-                      "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt")
+                     "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewHistoryDeviceTest.kt")]
+        registry += [("io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewLifetimeDeviceTest", method,
+                      "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt")
                      for method in ANDROID_WEBVIEW_LIFETIME_CASES]
         for classname, method, source in registry:
             matching = [c for c in cases if c["classname"] == classname and c["name"] == method]

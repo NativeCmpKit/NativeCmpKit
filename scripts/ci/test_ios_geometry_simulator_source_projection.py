@@ -140,7 +140,7 @@ class OwnedGeometrySourceControls(unittest.TestCase):
         from ios_ui_split664_source_projection import current_source_before_ui_split664
         for name, expected in (document["unchanged_native_compiler_inputs"] | document["unchanged_dated_manifests"]).items():
             current = (ROOT / name).read_bytes()
-            if name == "calf-ui/build.gradle.kts":
+            if name == "nativecmpkit-ui/build.gradle.kts":
                 current = current_source_before_ui_split664(name, current)
             self.assertEqual(expected, sha(current), name)
         self.assertTrue(all(name not in PATHS for name in document["unchanged_native_compiler_inputs"]))

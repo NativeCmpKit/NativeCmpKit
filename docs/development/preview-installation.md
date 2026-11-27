@@ -66,12 +66,12 @@ acceptance remains a release gate rather than a property inferred from a POM.
 ## Retained source imports
 
 ```kotlin
-import com.mohamedrejeb.calf.io.KmpFile
-import com.mohamedrejeb.calf.io.source
-import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
+import io.github.apdelrahman1911.nativecmpkit.io.KmpFile
+import io.github.apdelrahman1911.nativecmpkit.io.source
+import io.github.apdelrahman1911.nativecmpkit.picker.rememberFilePickerLauncher
 ```
 
-Keep the public namespaces deliberately. Remove the old `com.mohamedrejeb.calf`
+Keep the public namespaces deliberately. Remove the old `io.github.apdelrahman1911.nativecmpkit`
 Maven artifacts when replacing them: adding old and new artifacts together
 creates duplicate public classes. Core/resource/JNI/framework names are not a
 reason to perform a global search-and-replace.

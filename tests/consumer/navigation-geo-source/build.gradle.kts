@@ -20,7 +20,7 @@ kotlin {
     if ("desktop" in selected) jvm("desktop") { compilerOptions.jvmTarget.set(JvmTarget.JVM_17) }
     if ("android" in selected) {
         (this as ExtensionAware).extensions.configure<KotlinMultiplatformAndroidLibraryTarget>("android") {
-            namespace = "nativecmpkit.consumer.unpublished"
+            namespace = "io.github.apdelrahman1911.nativecmpkit.consumer.unpublished"
             compileSdk = 37
             minSdk = 23
             compilerOptions.jvmTarget.set(JvmTarget.JVM_17)

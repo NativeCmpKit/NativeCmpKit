@@ -56,7 +56,7 @@ class AndroidCameraCallbackSourceRoutingTests(unittest.TestCase):
         native = (callback.ROOT / callback.SOURCE).read_text()
         self.assertEqual([callback.METHOD], re.findall(r"@Test\s+fun\s+(\w+)\s*\(", native))
         self.assertNotRegex(native, r"@(Ignore|Disabled|IgnoredTest)\b|\b(?:assumeTrue|assumeFalse|Assume)\b")
-        restoration = (callback.ROOT / "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraRestorationTest.kt").read_text()
+        restoration = (callback.ROOT / "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraRestorationTest.kt").read_text()
         helpers = [
             ("    private fun assertDelayedControl(", "\n    private fun clientTaskSnapshots", restoration),
             ("    private fun clientTaskSnapshots()", "\n    private fun tasks(nonce:", restoration),
@@ -168,8 +168,8 @@ class AndroidCameraCallbackSourceRoutingTests(unittest.TestCase):
             root = Path(directory)
             invalid = [(35, None, None), (35, (callback.MODULE,), None), (23, (callback.MODULE,), callback.FOCUS),
                        (34, (callback.MODULE,), callback.FOCUS), (True, (callback.MODULE,), callback.FOCUS),
-                       (35, None, callback.FOCUS), (35, (callback.MODULE, "calf-io"), callback.FOCUS),
-                       (35, ("calf-io",), callback.FOCUS)]
+                       (35, None, callback.FOCUS), (35, (callback.MODULE, "nativecmpkit-io"), callback.FOCUS),
+                       (35, ("nativecmpkit-io",), callback.FOCUS)]
             for api, modules, focus in invalid:
                 with patch.object(device, "require_host") as host, patch.object(device, "_run") as native:
                     with self.assertRaises(ValueError):
@@ -182,7 +182,7 @@ class AndroidCameraCallbackSourceRoutingTests(unittest.TestCase):
             self.assertFalse((root / "build").exists())
         device.validate_api_selection(23, (callback.MODULE,), library.ANDROID_CAMERA_PROVIDER_FOCUS)
         device.validate_api_selection(35, (callback.MODULE,), library.ANDROID_CAMERA_DONT_KEEP_FOCUS)
-        device.validate_api_selection(35, ("calf-io",), None)
+        device.validate_api_selection(35, ("nativecmpkit-io",), None)
         plan = self.plan()
         changed = deepcopy(plan); changed["explicit_test_focus"] = library.ANDROID_CAMERA_PROVIDER_FOCUS
         with self.assertRaises(ValueError): library.validate_test_focus(changed)
@@ -216,74 +216,74 @@ class AndroidCameraCallbackSourceRoutingTests(unittest.TestCase):
                 return path
             def includes(*modules):
                 write("settings.gradle.kts", "include(\n" + "".join('    ":' + module + '",\n' for module in modules) + ")\n")
-            includes("calf-fixture", "calf-empty")
-            write("calf-fixture/build.gradle.kts", "// synthetic build declaration\n")
-            write("calf-empty/build.gradle.kts", "// synthetic uncovered declaration\n")
-            write("calf-fixture/src/commonTest/kotlin/Common.kt", "// synthetic common input, not native evidence\n")
-            host_source = write("calf-fixture/src/androidDeviceTest/kotlin/Device.kt", "// synthetic authored device-host input, not execution\n")
+            includes("nativecmpkit-fixture", "nativecmpkit-empty")
+            write("nativecmpkit-fixture/build.gradle.kts", "// synthetic build declaration\n")
+            write("nativecmpkit-empty/build.gradle.kts", "// synthetic uncovered declaration\n")
+            write("nativecmpkit-fixture/src/commonTest/kotlin/Common.kt", "// synthetic common input, not native evidence\n")
+            host_source = write("nativecmpkit-fixture/src/androidDeviceTest/kotlin/Device.kt", "// synthetic authored device-host input, not execution\n")
             # The inert typed Camera declaration rule still admits only the complete
             # non-Camera scope. Public unfiltered planning independently refuses IO.
             self.assertIsNone(callback.validate_discovery(
                 "android-device", None, None, library.ANDROID_CAMERA_FOCUSES,
-                declared_modules=("calf-fixture", "calf-empty"), minimum_modules=("calf-fixture",)))
+                declared_modules=("nativecmpkit-fixture", "nativecmpkit-empty"), minimum_modules=("nativecmpkit-fixture",)))
             with patch.object(library, "projects") as declarations, patch.object(library, "source_files") as sources:
                 with self.assertRaisesRegex(ValueError, "^Unfiltered Android discovery requires a qualified remote IO fixture route; full aggregate is blocked$"):
-                    library.plan(root, "android-device", minimum_modules=("calf-fixture",))
+                    library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",))
                 declarations.assert_not_called(); sources.assert_not_called()
             with patch.object(library, "projects", wraps=library.projects) as declarations:
-                source_plan = library.plan(root, "android-device", minimum_modules=("calf-fixture",),
-                                           only_modules=("calf-fixture",))
+                source_plan = library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",),
+                                           only_modules=("nativecmpkit-fixture",))
                 declarations.assert_called_once_with(root)
-            self.assertEqual(["calf-fixture"], [item["module"] for item in source_plan["expected"]])
+            self.assertEqual(["nativecmpkit-fixture"], [item["module"] for item in source_plan["expected"]])
             self.assertEqual(["commonTest", "androidDeviceTest"], source_plan["expected"][0]["test_source_sets"])
             self.assertEqual([], source_plan["uncovered"])  # Explicit subset cannot claim an unrequested uncovered module.
             self.assertFalse(source_plan["complete_suite_requested"])
-            self.assertEqual(["calf-fixture"], source_plan["explicit_module_subset"])
-            self.assertEqual({"calf-empty", "calf-fixture"}, set(library.projects(root)))
-            self.assertFalse((root / "calf-empty/src/androidDeviceTest").exists())
+            self.assertEqual(["nativecmpkit-fixture"], source_plan["explicit_module_subset"])
+            self.assertEqual({"nativecmpkit-empty", "nativecmpkit-fixture"}, set(library.projects(root)))
+            self.assertFalse((root / "nativecmpkit-empty/src/androidDeviceTest").exists())
             self.assertNotIn(callback.SOURCE, source_plan["expected"][0]["test_source_files"])
             self.assertFalse((root / "build").exists())
             host_source.unlink()
             with self.assertRaisesRegex(ValueError, "Selected modules do not have android-device library test sources"):
-                library.plan(root, "android-device", minimum_modules=("calf-fixture",), only_modules=("calf-fixture",))
+                library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",), only_modules=("nativecmpkit-fixture",))
             host_source.write_text("// restored synthetic device input\n")
-            for minimum in (None, (), ("calf-missing",), ("calf-fixture", "calf-fixture"),
-                            (callback.MODULE,), ["calf-fixture"]):
+            for minimum in (None, (), ("nativecmpkit-missing",), ("nativecmpkit-fixture", "nativecmpkit-fixture"),
+                            (callback.MODULE,), ["nativecmpkit-fixture"]):
                 with self.subTest(minimum=minimum), patch.object(library, "source_files") as sources:
                     with self.assertRaises(ValueError):
                         callback.validate_discovery("android-device", None, None, library.ANDROID_CAMERA_FOCUSES,
-                                                    declared_modules=("calf-fixture", "calf-empty"), minimum_modules=minimum)
+                                                    declared_modules=("nativecmpkit-fixture", "nativecmpkit-empty"), minimum_modules=minimum)
                     with self.assertRaises(ValueError): library.plan(root, "android-device", minimum_modules=minimum)
                     sources.assert_not_called()
-            for declared in (None, (), ["calf-fixture"], ("calf-fixture", "calf-fixture"), ("calf-fixture", object())):
+            for declared in (None, (), ["nativecmpkit-fixture"], ("nativecmpkit-fixture", "nativecmpkit-fixture"), ("nativecmpkit-fixture", object())):
                 with self.assertRaises(ValueError):
                     callback.validate_discovery("android-device", None, None, library.ANDROID_CAMERA_FOCUSES,
-                                                declared_modules=declared, minimum_modules=("calf-fixture",))
-            includes("calf-fixture", "calf-empty", callback.MODULE)
+                                                declared_modules=declared, minimum_modules=("nativecmpkit-fixture",))
+            includes("nativecmpkit-fixture", "nativecmpkit-empty", callback.MODULE)
             camera_build = write(callback.MODULE + "/build.gradle.kts", "// synthetic declared Camera with no callback class\n")
             self.assertFalse((root / callback.SOURCE).exists())
             with patch.object(library, "source_files") as sources:
-                with self.assertRaises(ValueError): library.plan(root, "android-device", minimum_modules=("calf-fixture",))
+                with self.assertRaises(ValueError): library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",))
                 sources.assert_not_called()
-            subset = library.plan(root, "android-device", only_modules=("calf-fixture",))
+            subset = library.plan(root, "android-device", only_modules=("nativecmpkit-fixture",))
             self.assertFalse(subset["complete_suite_requested"])
-            self.assertEqual(["calf-fixture"], subset["explicit_module_subset"])
-            self.assertEqual(["calf-fixture"], [item["module"] for item in subset["expected"]])
+            self.assertEqual(["nativecmpkit-fixture"], subset["explicit_module_subset"])
+            self.assertEqual(["nativecmpkit-fixture"], [item["module"] for item in subset["expected"]])
             camera_build.unlink()
             with patch.object(library, "source_files") as sources:
                 with self.assertRaisesRegex(ValueError, "Included library build file is missing"):
-                    library.plan(root, "android-device", minimum_modules=("calf-fixture",), only_modules=("calf-fixture",))
+                    library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",), only_modules=("nativecmpkit-fixture",))
                 sources.assert_not_called()
-            includes("calf-fixture", "calf-empty")  # Deleting Camera declaration never admits the actual/default minimum.
+            includes("nativecmpkit-fixture", "nativecmpkit-empty")  # Deleting Camera declaration never admits the actual/default minimum.
             with patch.object(library, "source_files") as sources:
                 with self.assertRaises(ValueError): library.plan(root, "android-device")
                 sources.assert_not_called()
             for settings in ('include(\n    libraryProjects.map { it.name }\n)\n',
-                             'include(\n    ":calf-fixture",\n    ":calf-fixture",\n)\n'):
+                             'include(\n    ":nativecmpkit-fixture",\n    ":nativecmpkit-fixture",\n)\n'):
                 write("settings.gradle.kts", settings)
                 with patch.object(library, "source_files") as sources:
                     with self.assertRaises(ValueError):
-                        library.plan(root, "android-device", minimum_modules=("calf-fixture",), only_modules=("calf-fixture",))
+                        library.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",), only_modules=("nativecmpkit-fixture",))
                     sources.assert_not_called()
             for api in (23, 35):
                 with self.assertRaises(ValueError): device.validate_api_selection(api, None, None)

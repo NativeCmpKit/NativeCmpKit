@@ -24,9 +24,9 @@ import uuid
 import xml.etree.ElementTree as ET
 
 FOCUS = "android-camera-real-restoration-dont-keep"
-MODULE = "calf-camera-picker"
+MODULE = "nativecmpkit-camera-picker"
 SERIAL = "emulator-5588"
-REPORTER = "com.mohamedrejeb.calf.calfcamerapicker.test"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitcamerapicker.test"
 RECEIVER = "io.github.apdelrahman1911.nativecmpkit.verification.camerareceiver"
 MASTER = "development_settings_enabled"
 SCALAR = "always_finish_activities"

@@ -23,9 +23,9 @@ from android_permission_selected_context import (camera_callback_admission_conte
 TREE = Path(os.environ.get("PERMISSION_RECOVERY_REVIEW_TREE", Path(__file__).resolve().parents[2])).resolve()
 REFERENCE = Path(os.environ.get("PERMISSION_RECOVERY_REVIEW_REFERENCE", TREE)).resolve()
 PROFILE = "android-permission-demo-call-denial-recovery"
-CORE = "calf-permissions/core"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidPermissionDemoDeviceTest"
-SOURCE = CORE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionDemoDeviceTest.kt"
+CORE = "nativecmpkit-permissions/core"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidPermissionDemoDeviceTest"
+SOURCE = CORE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionDemoDeviceTest.kt"
 METHODS = ("callOnFreshApprovedVariantUsesPublicRequestAndActualSystemGrant",
            "denialThenPermanentDenialKeepsActualRationaleAndOneResultPerRequest")
 PICKER = "pickersReadRealDocumentsAndImagesWithoutAllFilesOrSmsPermissions"
@@ -157,8 +157,8 @@ def plan_model(env):
             "source_fixture": "tests/consumer/android-permission-demo", "source_contract": {
                 "source_policy_verified": True, "native_or_compile_success_inferred": False,
                 "source_inputs": inputs, "source_inputs_sha256": env["input_digest"](inputs)}},
-        "expected": [{"module": CORE, "project": ":calf-permissions:calf-permissions-core",
-            "task": ":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest",
+        "expected": [{"module": CORE, "project": ":nativecmpkit-permissions:nativecmpkit-permissions-core",
+            "task": ":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest",
             "report_directory": CORE + "/build/outputs/androidTest-results/connected/androidMain",
             "test_filter": env["android_permission_device_filter"](PROFILE), "test_filter_argument": "annotation",
             "required_testcases": env["android_permission_device_identities"](PROFILE), "test_source_files": [SOURCE]}]}
@@ -248,7 +248,7 @@ class AndroidPermissionDemoCallDenialRecoveryTests(unittest.TestCase):
             ("@Test fun " + PICKER, "fun " + PICKER),
             ("@Test fun " + METHODS[0], "@Test fun unreviewedCallReplacement"),
             ("class AndroidPermissionDemoDeviceTest", "class UnknownNativeTest"),
-            ("package com.mohamedrejeb.calf.permissions", "package foreign.synthetic"),
+            ("package io.github.apdelrahman1911.nativecmpkit.permissions", "package foreign.synthetic"),
         ):
             with self.subTest(declaration_mutation=old), self.assertRaises(ValueError): select(native.replace(old, new, 1))
         for extra in ("\n@Test fun extraUnreviewedMethod() {}\n", "\n@Ignore\n"):
@@ -261,11 +261,11 @@ class AndroidPermissionDemoCallDenialRecoveryTests(unittest.TestCase):
         self.assertTrue(env["validate_permission_focus"](original))
         mutations = (
             lambda p: p.update(suite="android-host"),
-            lambda p: p.update(explicit_module_subset=[CORE, "calf-io"]),
+            lambda p: p.update(explicit_module_subset=[CORE, "nativecmpkit-io"]),
             lambda p: p.update(complete_suite_requested=True),
-            lambda p: p["expected"][0].update(module="calf-io"),
-            lambda p: p["expected"][0].update(project=":calf-permissions:core"),
-            lambda p: p["expected"][0].update(task=":calf-permissions:calf-permissions-core:androidHostTest"),
+            lambda p: p["expected"][0].update(module="nativecmpkit-io"),
+            lambda p: p["expected"][0].update(project=":nativecmpkit-permissions:core"),
+            lambda p: p["expected"][0].update(task=":nativecmpkit-permissions:nativecmpkit-permissions-core:androidHostTest"),
             lambda p: p["expected"][0].update(report_directory=CORE + "/build/test-results/androidHostTest"),
             lambda p: p["expected"][0].update(test_filter=CLASS),
             lambda p: p["expected"][0]["required_testcases"].append({"classname": CLASS, "name": PICKER}),
@@ -327,8 +327,8 @@ class AndroidPermissionDemoCallDenialRecoveryTests(unittest.TestCase):
     def test_recovery_uses_existing_complete_helper_sources_cli_and_exact_api_admission(self):
         env = owning_environment()
         self.assertTrue(env["allowed_test_focus"]("android-device", (CORE,), PROFILE))
-        for suite, modules in (("android-host", (CORE,)), ("android-device", None), ("android-device", ("calf-io",)),
-            ("android-device", (CORE, "calf-io"))):
+        for suite, modules in (("android-host", (CORE,)), ("android-device", None), ("android-device", ("nativecmpkit-io",)),
+            ("android-device", (CORE, "nativecmpkit-io"))):
             self.assertFalse(env["allowed_test_focus"](suite, modules, PROFILE))
         device_source = source_at("scripts/ci/android_device_tests.py", reference=True)
         self.assertIn("*lt.ANDROID_PERMISSION_DEVICE_SPECS", device_source)
@@ -367,7 +367,7 @@ class AndroidPermissionDemoCallDenialRecoveryTests(unittest.TestCase):
             helper_env, "unchanged-complete-permission-source-file-contract-only")
         sources = helper_env["SOURCE_FILES"]
         self.assertIn(SOURCE, sources)
-        self.assertIn(CORE + "/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/PermissionDemoSystemUi.kt", sources)
+        self.assertIn(CORE + "/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/PermissionDemoSystemUi.kt", sources)
         self.assertTrue(any(path.endswith("AndroidMediaSelectionDeviceTest.kt") for path in sources))
         self.assertTrue(any(path.endswith("PermissionDemoActivity.kt") for path in sources))
         self.assertTrue(any(path.endswith("PermissionDemoService.kt") for path in sources))

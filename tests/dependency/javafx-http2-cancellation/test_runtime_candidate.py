@@ -157,7 +157,7 @@ class LibraryCandidateTests(unittest.TestCase):
     def test_exact_actual_replacement_marker_is_required(self):
         with tempfile.TemporaryDirectory() as d:
             log=Path(d)/"gradle.log"
-            row=("NATIVECMPKIT_JAVAFX_CANDIDATE task=:calf-webview:desktopTest originalRemoved=1 candidateCount=1 "
+            row=("NATIVECMPKIT_JAVAFX_CANDIDATE task=:nativecmpkit-webview:desktopTest originalRemoved=1 candidateCount=1 "
                  "originalSha256="+"a"*64+" candidateSha256="+"b"*64+" runtimeModulePatch=false privateRouteOverride=false\n")
             log.write_text(row)
             self.assertEqual(library_candidate.marker(log,{"original_web_sha256":"a"*64,"jar_sha256":"b"*64})["original_removed"],1)
@@ -209,7 +209,7 @@ class CandidateCacheAndWorkflowTests(unittest.TestCase):
 
     def test_task_arguments_include_exact_task_specific_selector_without_full_suite_fallback(self):
         text=(library_candidate.ROOT/library_candidate.INIT).read_text()
-        self.assertIn('startParameter.taskNames == listOf(":calf-webview:desktopTest", "--tests", selected)',text)
+        self.assertIn('startParameter.taskNames == listOf(":nativecmpkit-webview:desktopTest", "--tests", selected)',text)
         self.assertIn("setIncludePatterns(selected)",text)
         self.assertNotIn("startParameter.taskNames.contains",text)
 

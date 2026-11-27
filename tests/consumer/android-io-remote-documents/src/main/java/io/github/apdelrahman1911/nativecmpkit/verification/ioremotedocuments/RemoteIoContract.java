@@ -21,7 +21,7 @@ import java.util.UUID;
 /** Finite test-only identities and protocol. Never a payload or local-file fallback. */
 final class RemoteIoContract {
     static final String PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments";
-    static final String REPORTER = "com.mohamedrejeb.calf.calfio.test";
+    static final String REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitio.test";
     static final String AUTHORITY = PACKAGE + ".documents";
     static final String PERMISSION = PACKAGE + ".CONTROL_REMOTE_IO";
     static final String PROVIDER_PROCESS = PACKAGE + ":nativecmpkit_io_remote_provider";

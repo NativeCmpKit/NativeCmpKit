@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.camerareceiver.BIND_RECEIVER"
         android:protectionLevel="signature" />
-    <queries><package android:name="com.mohamedrejeb.calf.calfcamerapicker.test" /></queries>
+    <queries><package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitcamerapicker.test" /></queries>
     <application android:allowBackup="false" android:label="NativeCmpKit owned camera URI receiver">
         <activity android:name=".CameraReceiverActivity" android:exported="true"
             android:permission="io.github.apdelrahman1911.nativecmpkit.verification.camerareceiver.BIND_RECEIVER"

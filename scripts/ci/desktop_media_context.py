@@ -15,7 +15,7 @@ import signal
 import subprocess
 import time
 
-MEDIA_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewLifetimeTest.kt"
+MEDIA_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewLifetimeTest.kt"
 SINK = "nativecmpkit_verification"
 ALSA = b"# Owned verification process only; real PulseAudio-clocked software output.\npcm.!default { type pulse }\nctl.!default { type pulse }\n"
 
@@ -25,7 +25,7 @@ class OwnedAudio:
         self.root = root.resolve()
         self.output = output
         self.requested = (platform.system() == "Linux" and plan["suite"] == "desktop" and any(
-            item["module"] == "calf-webview" and MEDIA_SOURCE in item["test_source_files"] for item in plan["expected"]))
+            item["module"] == "nativecmpkit-webview" and MEDIA_SOURCE in item["test_source_files"] for item in plan["expected"]))
         self.environment = None
         self.receipt = None
         self.process = None

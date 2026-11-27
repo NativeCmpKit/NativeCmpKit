@@ -23,20 +23,20 @@ implementation/history below retain their original scope.
 
 ## Scope and reading guide
 
-Reviewed baseline: **`af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`**. This document describes the implementation, not an aspirational API. All **47 tracked files** in `calf-camera-picker`, `calf-share`, `calf-webview`, `calf-maps`, `calf-media`, and `calf-notifications` were read, including build/native/cinterop files and unsupported actuals. Exact baseline file/symbol coverage is at the end. Findings are in [the area audit](../audit/native-features.md) and [`NATIVE.json`](../audit/findings/NATIVE.json); [test procedures and executed probes](../testing/native-features.md) distinguish source evidence from device verification.
+Reviewed baseline: **`af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`**. This document describes the implementation, not an aspirational API. All **47 tracked files** in `nativecmpkit-camera-picker`, `nativecmpkit-share`, `nativecmpkit-webview`, `nativecmpkit-maps`, `nativecmpkit-media`, and `nativecmpkit-notifications` were read, including build/native/cinterop files and unsupported actuals. Exact baseline file/symbol coverage is at the end. Findings are in [the area audit](../audit/native-features.md) and [`NATIVE.json`](../audit/findings/NATIVE.json); [test procedures and executed probes](../testing/native-features.md) distinguish source evidence from device verification.
 
-Project identity is nativeCmpkit; retained `calf-*` project paths and `com.mohamedrejeb.calf.*` public packages are compatibility decisions. JNI exported symbol names also embed that package; **never rename the Kotlin bridge independently of the Rust exports**. Neither runtime implementation downloads source from upstream GitHub. Dependency repositories, native resource packaging, OS frameworks and host setup remain external requirements.
+Project identity is nativeCmpkit; retained `nativecmpkit-*` project paths and `io.github.apdelrahman1911.nativecmpkit.*` public packages are compatibility decisions. JNI exported symbol names also embed that package; **never rename the Kotlin bridge independently of the Rust exports**. Neither runtime implementation downloads source from upstream GitHub. Dependency repositories, native resource packaging, OS frameworks and host setup remain external requirements.
 
 ### Dependency/availability map
 
 | Module | Direct implementation dependencies | API/status |
 |---|---|---|
-| `calf-camera-picker` | Compose foundation; Android Activity Compose; `api(calf-io)` | Published module, mobile capture; Desktop/Web actuals silently do nothing |
-| `calf-share` | Compose foundation; Android Activity Compose; Web kotlinx-browser; `api(calf-io)`; Desktop JNI/Rust | Experimental public launcher; real native share only Android/iOS/macOS; other desktop actions are fallbacks |
-| `calf-webview` | Compose foundation/material3, coroutines; Android Activity/coroutines-android; Desktop JavaFX **19** base/graphics/controls/media/web/swing + coroutines-swing; Web kotlinx-browser | Native Android/WK/JavaFX views, browser iframe, common state/navigation/cookies; incomplete parity |
-| `calf-maps` | Compose foundation/UI, Kotlin test | Included Gradle module, **zero source/API**, no module-publication plugin |
-| `calf-media` | Stale independent Gradle script only | **Excluded** from settings; no implementation |
-| `calf-notifications` | Stale independent Gradle script and incomplete iOS experiment | **Excluded** from settings; not notification delivery support; distinct from `calf-permissions:notifications` |
+| `nativecmpkit-camera-picker` | Compose foundation; Android Activity Compose; `api(nativecmpkit-io)` | Published module, mobile capture; Desktop/Web actuals silently do nothing |
+| `nativecmpkit-share` | Compose foundation; Android Activity Compose; Web kotlinx-browser; `api(nativecmpkit-io)`; Desktop JNI/Rust | Experimental public launcher; real native share only Android/iOS/macOS; other desktop actions are fallbacks |
+| `nativecmpkit-webview` | Compose foundation/material3, coroutines; Android Activity/coroutines-android; Desktop JavaFX **19** base/graphics/controls/media/web/swing + coroutines-swing; Web kotlinx-browser | Native Android/WK/JavaFX views, browser iframe, common state/navigation/cookies; incomplete parity |
+| `nativecmpkit-maps` | Compose foundation/UI, Kotlin test | Included Gradle module, **zero source/API**, no module-publication plugin |
+| `nativecmpkit-media` | Stale independent Gradle script only | **Excluded** from settings; no implementation |
+| `nativecmpkit-notifications` | Stale independent Gradle script and incomplete iOS experiment | **Excluded** from settings; not notification delivery support; distinct from `nativecmpkit-permissions:notifications` |
 
 The first four use shared `compose.multiplatform` conventions: Android KMP library, JVM target named `desktop`, browser JS, browser WasmJS, **iOS arm64 device and arm64 simulator**. iOS x64 is **not** a target of those active modules. The old excluded scripts still declare it; that does not add supported binaries. There is no native Linux/macOS/Windows Kotlin target: desktop integration runs on JVM, with a Rust cdylib only for sharing. See [architecture](../architecture/README.md) and [platform matrix](../platforms/README.md).
 
@@ -80,7 +80,7 @@ Both actual remembered launchers instantiate an otherwise empty implementation; 
 
 ### Common types
 
-`@ExperimentalCalfApi rememberShareLauncher(onResult)` returns the expect `@Stable ShareLauncher(onLaunch)` class. Every actual's `launch(content)` simply invokes the supplied function; platform work is supplied by the remembered factory. The constructor itself is public, so a custom launcher can be application-defined.
+`@ExperimentalNativeCmpKitApi rememberShareLauncher(onResult)` returns the expect `@Stable ShareLauncher(onLaunch)` class. Every actual's `launch(content)` simply invokes the supplied function; platform work is supplied by the remembered factory. The constructor itself is public, so a custom launcher can be application-defined.
 
 `@Immutable sealed interface ShareContent` has:
 
@@ -136,11 +136,11 @@ Compose click
 
 `handleFallbackShare` has separate text, URL, file and list functions. Text uses AWT `Toolkit.systemClipboard` and `StringSelection`. URL tries Desktop.BROWSE, otherwise/exception copies URL. Files call Desktop.OPEN; MIME/subject are ignored. The file-list loop can partially open files and then return Unavailable when a later entry fails. Empty lists can report Success. All fallback errors handled here are Exception, not arbitrary VM errors. These side effects run on the IO worker; result is resumed in the Compose coroutine context.
 
-**Native library loader.** First attempts `System.loadLibrary("calf_share_native")` for packagers that extract natives. On UnsatisfiedLinkError it identifies macOS/Windows/Linux and arm64/x64 aliases, opens a resource under `native/<os>-<arch>/<mapped-name>`, reads all bytes, makes `~/.cache/calf-share`, writes a private temporary file, moves atomically if possible (falls back to replace move), then calls `System.load` on **one fixed filename**. The stream is closed and extraction failure deletes the temporary file. Cache directory creation/ownership are unchecked; full resource buffering is unnecessary overhead; filename/version collision remains (NATIVE-031). File-picker's newer content-addressed cache is an existing remedy, not another defect to copy.
+**Native library loader.** First attempts `System.loadLibrary("nativecmpkit_share_native")` for packagers that extract natives. On UnsatisfiedLinkError it identifies macOS/Windows/Linux and arm64/x64 aliases, opens a resource under `native/<os>-<arch>/<mapped-name>`, reads all bytes, makes `~/.cache/nativecmpkit-share`, writes a private temporary file, moves atomically if possible (falls back to replace move), then calls `System.load` on **one fixed filename**. The stream is closed and extraction failure deletes the temporary file. Cache directory creation/ownership are unchecked; full resource buffering is unnecessary overhead; filename/version collision remains (NATIVE-031). File-picker's newer content-addressed cache is an existing remedy, not another defect to copy.
 
-**Bridge ABI.** `NativeShareBridge` defines constants and static external `init`, `isNativeShareSupported`, `showShareSheet(text?,url?,Array<String>?,parentWindow:Long)`. Initialization calls `loadNativeLibrary`; the exported native `init` is otherwise a no-op. Rust exports exact `Java_com_mohamedrejeb_calf_share_platform_NativeShareBridge_*` names. `jstring_to_string` maps null or JNI conversion failure to None; `jstring_array_to_vec` uses array length or zero, skips unreadable entries, and **deletes JNI local references** per entry. No shell/process command interpolation occurs in Rust. JNI errors/pending Java exceptions are not surfaced as structured diagnostics.
+**Bridge ABI.** `NativeShareBridge` defines constants and static external `init`, `isNativeShareSupported`, `showShareSheet(text?,url?,Array<String>?,parentWindow:Long)`. Initialization calls `loadNativeLibrary`; the exported native `init` is otherwise a no-op. Rust exports exact `Java_io_github_apdelrahman1911_nativecmpkit_share_platform_NativeShareBridge_*` names. `jstring_to_string` maps null or JNI conversion failure to None; `jstring_array_to_vec` uses array length or zero, skips unreadable entries, and **deletes JNI local references** per entry. No shell/process command interpolation occurs in Rust. JNI errors/pending Java exceptions are not surfaced as structured diagnostics.
 
-**macOS Rust details.** It builds retained NSString/NSURL items; an invalid URL may be omitted, and no items returns Unavailable. It uses an `Arc<(Mutex<Option<jint>>,Condvar)>`, `Once` and a global dynamically registered `CalfShareDelegate` ObjC class with `_pairPtr` ivar. The `sharingServicePicker:didChooseSharingService:` method reconstructs the raw Arc, writes the result and notifies, then forgets the Arc. `ShareContext` contains retained NSArray, parent-window integer and Arc and has a manually asserted `unsafe impl Send`; current item types are immutable NSString/NSURL, so this needs deliberate review if item types expand.
+**macOS Rust details.** It builds retained NSString/NSURL items; an invalid URL may be omitted, and no items returns Unavailable. It uses an `Arc<(Mutex<Option<jint>>,Condvar)>`, `Once` and a global dynamically registered `NativeCmpKitShareDelegate` ObjC class with `_pairPtr` ivar. The `sharingServicePicker:didChooseSharingService:` method reconstructs the raw Arc, writes the result and notifies, then forgets the Arc. `ShareContext` contains retained NSArray, parent-window integer and Arc and has a manually asserted `unsafe impl Send`; current item types are immutable NSString/NSURL, so this needs deliberate review if item types expand.
 
 `dispatch_async_f` owns a boxed context. On the main queue it obtains supplied NSWindow pointer or, in current Kotlin usage, `NSApp.keyWindow`. Missing window/contentView signals Unavailable before picker/delegate allocation. It creates NSSharingServicePicker via `msg_send_id!`, assigns a retained delegate holding another raw Arc owner, converts current mouse coordinates from screen→window→view, chooses mouse or center anchor, and shows a 1×1 popup near that position. Main-thread marking is unchecked but justified by this dispatch path. A `std::mem::forget(delegate)` prevents weak-delegate loss by permanently leaking it; no later cleanup exists. The local picker is dropped at function exit; **whether AppKit retains it adequately is a device/runtime verification item**, not a demonstrated UAF.
 
@@ -237,7 +237,7 @@ Settings are now correctly marshalled to FX, addressing historical issue344 at s
 
 ### Browser implementation
 
-Both JS and Wasm use a tiny actual adapter over Compose `WebElementView`. A generic expected CalfWebElementView exposes only factory/modifier/update. Common WebView creates an iframe, border none, width/height attributes 100%, registers load/error lambdas, stores it, then calls onCreated. Update applies the sandbox setting; it is not a per-content reset hook.
+Both JS and Wasm use a tiny actual adapter over Compose `WebElementView`. A generic expected NativeCmpKitWebElementView exposes only factory/modifier/update. Common WebView creates an iframe, border none, width/height attributes 100%, registers load/error lambdas, stores it, then calls onCreated. Update applies the sandbox setting; it is not a per-content reset hook.
 
 URL content sets src; HTML content sets srcdoc. Native-looking headers/base URL/MIME do nothing. Load always sets Finished, attempts title/location read (same-origin only), then forces both history capabilities false. Cross-origin access exceptions are swallowed. Browser iframe load fires even for many error pages; error events cannot establish native-equivalent network status. No started/progress event is implemented.
 
@@ -272,18 +272,18 @@ Do not include/publish these modules simply to make an artifact matrix appear co
 
 Paths below are relative to each module root, with Kotlin package-path spelling preserved (some directories literally contain dots). Ranges are baseline lines, not promises about later migration edits. Declaration-only DTOs/default getters and native external prototypes were reviewed as well as executable functions.
 
-### `calf-camera-picker` — 6 files
+### `nativecmpkit-camera-picker` — 6 files
 
 | File | Lines / reviewed symbols and behavior |
 |---|---|
 | `build.gradle.kts` | 1–21: conventions/publication, IO API, foundation, Kotlin test, Activity Compose; no actual tests |
-| `src/commonMain/kotlin/com.mohamedrejeb.calf/camerapicker/CameraPickerLauncher.kt` | 7–14: launcher interface/launch and remember expect; success-only callback |
-| `src/androidMain/kotlin/com/mohamedrejeb/calf/camerapicker/CameraPickerLauncher.android.kt` | 21–74: Android implementation constructor/state, launch, handleResult, remembered activity result glue |
-| `src/iosMain/kotlin/com.mohamedrejeb.calf/camerapicker/CameraPickerLauncher.ios.kt` | 24–106: launcher/delegate field, launch/source choice, finish/cancel delegate, saveTempImageFile, remembered factory |
-| `src/desktopMain/kotlin/com.mohamedrejeb.calf/camerapicker/CameraPickerLauncher.desktop.kt` | 8–20: Desktop implementation/launch stub/remember actual |
-| `src/webMain/kotlin/com/mohamedrejeb/calf/camerapicker/CameraPickerLauncher.web.kt` | 8–20: Web implementation/launch stub/remember actual |
+| `src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.kt` | 7–14: launcher interface/launch and remember expect; success-only callback |
+| `src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/CameraPickerLauncher.android.kt` | 21–74: Android implementation constructor/state, launch, handleResult, remembered activity result glue |
+| `src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.ios.kt` | 24–106: launcher/delegate field, launch/source choice, finish/cancel delegate, saveTempImageFile, remembered factory |
+| `src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.desktop.kt` | 8–20: Desktop implementation/launch stub/remember actual |
+| `src/webMain/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/CameraPickerLauncher.web.kt` | 8–20: Web implementation/launch stub/remember actual |
 
-### `calf-share` — 17 files
+### `nativecmpkit-share` — 17 files
 
 | File | Lines / reviewed symbols and behavior |
 |---|---|
@@ -291,52 +291,52 @@ Paths below are relative to each module root, with Kotlin package-path spelling 
 | `native/.gitignore` | 1–2: target and Cargo.lock ignored |
 | `native/Cargo.toml` | 1–22: crate identity, cdylib, JNI/macOS features, release profile |
 | `native/src/lib.rs` | 1–337: result constants; three JNI exports; nullable/array conversion helpers; macOS/non-macOS show_share_sheet; did_choose; ClassBuilder/ivar/Once; ShareContext; execute_on_main; Condvar wait; all unsafe ownership/dispatch blocks |
-| `src/commonMain/kotlin/com/mohamedrejeb/calf/share/ShareContent.kt` | 9–59: sealed content, Text/Url/File/Files, MIME/subject contracts and list ownership |
-| `src/commonMain/kotlin/com/mohamedrejeb/calf/share/ShareResult.kt` | 8–26: Success/Dismissed/Unavailable and documented semantics |
-| `src/commonMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.kt` | 7–41: remember expect, experimental constructor/launch contract, platform comments |
-| `src/androidMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.android.kt` | 12–86: remember factory, actual launcher, toShareIntent, text/single/multiple intent builders, grants/errors/results |
-| `src/iosMain/kotlin/com/mohamedrejeb/calf/share/ShareContentExt.ios.kt` | 9–24: all four toActivityItems branches, URL parse fallback |
-| `src/iosMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.ios.kt` | 17–100: remember factory/actual launcher, presentShareSheet, subject/completion/iPad anchor |
-| `src/desktopMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.desktop.kt` | 19–162: remember/actual launcher; handleShare, showNativeShare, handleFallbackShare, four fallback helpers, copyToClipboard |
-| `src/desktopMain/kotlin/com/mohamedrejeb/calf/share/platform/NativeLibLoader.kt` | 8–85: LIB_NAME, whole loadNativeLibrary path/OS/arch/cache extraction/load/fallback |
-| `src/desktopMain/kotlin/com/mohamedrejeb/calf/share/platform/NativeShareBridge.kt` | 10–49: static init, constants, init/isNativeShareSupported/showShareSheet native signatures |
-| `src/webMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.web.kt` | 10–114: remember/actual launcher, handleShare, tri-state map, text/URL/file/list paths |
-| `src/webMain/kotlin/com/mohamedrejeb/calf/share/WebShareApi.kt` | 3–49: all six expect functions and result/clipboard contract |
-| `src/jsMain/kotlin/com/mohamedrejeb/calf/share/WebShareApi.js.kt` | 5–56: support detection, four payload helpers, clipboard, handleSharePromise |
-| `src/wasmJsMain/kotlin/com/mohamedrejeb/calf/share/WebShareApi.wasmJs.kt` | 7–131: jsIsShareSupported; four jsShare* externals; jsCopyToClipboard; all actual wrappers; jsArrayPush |
+| `src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareContent.kt` | 9–59: sealed content, Text/Url/File/Files, MIME/subject contracts and list ownership |
+| `src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareResult.kt` | 8–26: Success/Dismissed/Unavailable and documented semantics |
+| `src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.kt` | 7–41: remember expect, experimental constructor/launch contract, platform comments |
+| `src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.android.kt` | 12–86: remember factory, actual launcher, toShareIntent, text/single/multiple intent builders, grants/errors/results |
+| `src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareContentExt.ios.kt` | 9–24: all four toActivityItems branches, URL parse fallback |
+| `src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.ios.kt` | 17–100: remember factory/actual launcher, presentShareSheet, subject/completion/iPad anchor |
+| `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.desktop.kt` | 19–162: remember/actual launcher; handleShare, showNativeShare, handleFallbackShare, four fallback helpers, copyToClipboard |
+| `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeLibLoader.kt` | 8–85: LIB_NAME, whole loadNativeLibrary path/OS/arch/cache extraction/load/fallback |
+| `src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridge.kt` | 10–49: static init, constants, init/isNativeShareSupported/showShareSheet native signatures |
+| `src/webMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.web.kt` | 10–114: remember/actual launcher, handleShare, tri-state map, text/URL/file/list paths |
+| `src/webMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebShareApi.kt` | 3–49: all six expect functions and result/clipboard contract |
+| `src/jsMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebShareApi.js.kt` | 5–56: support detection, four payload helpers, clipboard, handleSharePromise |
+| `src/wasmJsMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebShareApi.wasmJs.kt` | 7–131: jsIsShareSupported; four jsShare* externals; jsCopyToClipboard; all actual wrappers; jsArrayPush |
 
-### `calf-webview` — 20 files
+### `nativecmpkit-webview` — 20 files
 
 | File | Lines / reviewed symbols and behavior |
 |---|---|
 | `build.gradle.kts` | 1–54: OS/arch classifier, Apple cinterop configuration, common/native/browser dependencies |
-| `src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/Cookie.kt` | 3–23: all Cookie fields/defaults and millis/HttpOnly documentation |
-| `src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.kt` | 3–33: default constructor and three suspend expect operations, outdated web-no-op comment |
-| `src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebSettings.kt` | 3–171: every common/Android/iOS/Desktop setter/default and notification callback |
-| `src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt` | 18–331: WebView expect; content variants/withUrl; loading variants; state expect; error DTO; navigator/events/all public commands; remember helpers; saveable helper/saver expect |
-| `src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt` | 32–459: both composables/layout/factory/back; applySettings; both Accompanist client classes and all callbacks; state/all fields/applySettings/evaluateJavascript; navigation collector; Bundle saver |
-| `src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/CookieManager.android.kt` | 12–98: manager getter/set/get/remove; buildCookieString/parseCookies; dispatch/callback/flush |
-| `src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.ios.kt` | 36–406: composable/effects/interop/release; state/delegate callbacks; applySetting/evaluateJavascript; native applySettings; collector; KVO observer keys/start/stop/observe; metadata saver |
-| `src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.ios.kt` | 24–125: default store getter, all three operations, property conversion/domain filter and sequential deletion |
+| `src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/Cookie.kt` | 3–23: all Cookie fields/defaults and millis/HttpOnly documentation |
+| `src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.kt` | 3–33: default constructor and three suspend expect operations, outdated web-no-op comment |
+| `src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebSettings.kt` | 3–171: every common/Android/iOS/Desktop setter/default and notification callback |
+| `src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt` | 18–331: WebView expect; content variants/withUrl; loading variants; state expect; error DTO; navigator/events/all public commands; remember helpers; saveable helper/saver expect |
+| `src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt` | 32–459: both composables/layout/factory/back; applySettings; both Accompanist client classes and all callbacks; state/all fields/applySettings/evaluateJavascript; navigation collector; Bundle saver |
+| `src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieManager.android.kt` | 12–98: manager getter/set/get/remove; buildCookieString/parseCookies; dispatch/callback/flush |
+| `src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt` | 36–406: composable/effects/interop/release; state/delegate callbacks; applySetting/evaluateJavascript; native applySettings; collector; KVO observer keys/start/stop/observe; metadata saver |
+| `src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.ios.kt` | 24–125: default store getter, all three operations, property conversion/domain filter and sequential deletion |
 | `src/iosMain/cinterop/nskeyvalueobserving.def` | 1–14: generated helper package, Objective-C Foundation protocol selector and pointer types |
-| `src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt` | 25–269: composable/JFXPanel/lifecycle/listeners/content; state/applySetting/evaluateJavascript; native applySettings; command collector; metadata saver |
-| `src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt` | 11–64: global getter/replacement, HttpCookie setter, metadata getter, removal |
-| `src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.web.kt` | 19–250: composable/iframe content+listeners; state/settings/evaluation; sandbox; all commands; metadata saver |
-| `src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.web.kt` | 11–47: document setter/getter/deletion and unsupported field behavior |
-| `src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/PlatformUtils.web.kt` | 5–9: expected Window.evaluateScript |
-| `src/webMain/kotlin/com.mohamedrejeb.calf/ui/web/WebElementView.web.kt` | 7–12: generic expected interop adapter/signature |
-| `src/jsMain/kotlin/com.mohamedrejeb.calf/ui/web/PlatformUtils.js.kt` | 5–6: dynamic Window eval actual |
-| `src/jsMain/kotlin/com.mohamedrejeb.calf/ui/web/WebElementView.js.kt` | 9–21: Compose generic WebElementView adapter |
-| `src/wasmJsMain/kotlin/com.mohamedrejeb.calf/ui/web/PlatformUtils.wasmJs.kt` | 6–12: windowEval JS intrinsic and expected extension actual |
-| `src/wasmJsMain/kotlin/com.mohamedrejeb.calf/ui/web/WebElementView.wasmJs.kt` | 9–21: Compose generic WebElementView adapter |
+| `src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt` | 25–269: composable/JFXPanel/lifecycle/listeners/content; state/applySetting/evaluateJavascript; native applySettings; command collector; metadata saver |
+| `src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt` | 11–64: global getter/replacement, HttpCookie setter, metadata getter, removal |
+| `src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.web.kt` | 19–250: composable/iframe content+listeners; state/settings/evaluation; sandbox; all commands; metadata saver |
+| `src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.web.kt` | 11–47: document setter/getter/deletion and unsupported field behavior |
+| `src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/PlatformUtils.web.kt` | 5–9: expected Window.evaluateScript |
+| `src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebElementView.web.kt` | 7–12: generic expected interop adapter/signature |
+| `src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/PlatformUtils.js.kt` | 5–6: dynamic Window eval actual |
+| `src/jsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebElementView.js.kt` | 9–21: Compose generic WebElementView adapter |
+| `src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/PlatformUtils.wasmJs.kt` | 6–12: windowEval JS intrinsic and expected extension actual |
+| `src/wasmJsMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebElementView.wasmJs.kt` | 9–21: Compose generic WebElementView adapter |
 
 ### Scaffolds — 4 files
 
 | File | Lines / reviewed symbols and behavior |
 |---|---|
-| `calf-maps/build.gradle.kts` | 1–13: only declarations; empty implementation |
-| `calf-media/build.gradle.kts` | 1–47: excluded legacy plugin/targets/dependencies/namespace/JVM11 |
-| `calf-notifications/build.gradle.kts` | 1–47: same excluded legacy scaffold |
-| `calf-notifications/src/iosMain/kotlin/com.mohamedrejeb.calf/notifications/Main.kt` | 1–26: unbuildable main, request authorization callback, undefined coroutine scope, sample notification request |
+| `nativecmpkit-maps/build.gradle.kts` | 1–13: only declarations; empty implementation |
+| `nativecmpkit-media/build.gradle.kts` | 1–47: excluded legacy plugin/targets/dependencies/namespace/JVM11 |
+| `nativecmpkit-notifications/build.gradle.kts` | 1–47: same excluded legacy scaffold |
+| `nativecmpkit-notifications/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/notifications/Main.kt` | 1–26: unbuildable main, request authorization callback, undefined coroutine scope, sample notification request |
 
 Also inspected as dependency/context, not claimed as complete ownership: `settings.gradle.kts`, shared target/convention helpers, version catalog, imported Gradle/deploy/native workflows, sample camera/share screens, Android manifest/provider paths, iOS privacy plist, IO KmpFile wrappers, improved file-picker cache, upstream `docs/webview.md`/`docs/share.md`, relevant archived issues/PRs/comments and original history. Full-repository coverage resides in [source inventory](../architecture/source-inventory.md).

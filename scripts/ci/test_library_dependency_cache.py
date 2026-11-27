@@ -18,12 +18,12 @@ class LibraryDependencyCacheTests(unittest.TestCase):
         self.root.mkdir()
         self.home = Path(temporary.name) / "home"
         self.home.mkdir()
-        self.write("settings.gradle.kts", 'include(\n ":calf-core", ":calf-io",\n)\n')
-        for name in ("build.gradle.kts", "gradle.properties", "calf-core/build.gradle.kts",
-                     "calf-io/build.gradle.kts", *d.RECIPE_FILES):
+        self.write("settings.gradle.kts", 'include(\n ":nativecmpkit-core", ":nativecmpkit-io",\n)\n')
+        for name in ("build.gradle.kts", "gradle.properties", "nativecmpkit-core/build.gradle.kts",
+                     "nativecmpkit-io/build.gradle.kts", *d.RECIPE_FILES):
             self.write(name, "synthetic-config-not-executed-" + name)
         inputs = d.selected_inputs(self.root, "libraries")
-        selection = d.selection_contract(self.root, "calf-io")
+        selection = d.selection_contract(self.root, "nativecmpkit-io")
         self.receipt = {"schema_version": 1, "scope": "libraries", "source_revision": "a" * 40,
                         "dependency_input_count": len(inputs), "inputs": inputs,
                         "dependency_inputs_sha256": d.fingerprint("libraries", inputs),
@@ -37,18 +37,18 @@ class LibraryDependencyCacheTests(unittest.TestCase):
         path.write_text(body)
         return path
 
-    def validate(self, record=None, selection="calf-io"):
+    def validate(self, record=None, selection="nativecmpkit-io"):
         with patch.object(c.lt, "git_revision", return_value="a" * 40):
             return c.validate_dependency_observation(self.root, record or self.receipt, selection)
 
     def test_exact_unchanged_key_and_selection_are_eligible_independent_of_library_failure(self):
         self.assertEqual(self.receipt["dependency_inputs_sha256"], self.validate())
         self.assertNotIn("tests_passed", self.receipt)
-        self.write("calf-io/build/test-results/TEST-failed.xml", "not-cached-failed-library-report")
+        self.write("nativecmpkit-io/build/test-results/TEST-failed.xml", "not-cached-failed-library-report")
         self.assertEqual(self.receipt["dependency_inputs_sha256"], self.validate())
 
     def test_changed_recipe_config_or_selection_refuses_save_without_deleting_data(self):
-        path = self.root / "calf-io/build.gradle.kts"
+        path = self.root / "nativecmpkit-io/build.gradle.kts"
         before = path.read_bytes()
         path.write_text("changed-config")
         with self.assertRaises(ValueError):
@@ -56,7 +56,7 @@ class LibraryDependencyCacheTests(unittest.TestCase):
         self.assertEqual(b"changed-config", path.read_bytes())
         path.write_bytes(before)
         with self.assertRaises(ValueError):
-            self.validate(selection="calf-core")
+            self.validate(selection="nativecmpkit-core")
         path = self.root / "scripts/ci/library_dependency_cache.py"
         path.write_text("changed-owning-validator")
         with self.assertRaises(ValueError):
@@ -66,7 +66,7 @@ class LibraryDependencyCacheTests(unittest.TestCase):
         for update in ({"source_revision": "b" * 40}, {"scope": "core-io"}, {"schema_version": 2},
                        {"dependency_inputs_sha256": "0" * 64}, {"dependency_input_count": 0},
                        {"compiled_or_test_results_reused": True}, {"ordinary_dependency_trust_certified": True},
-                       {"release_readiness_certified": True}, {"selected_modules": ["calf-core"]},
+                       {"release_readiness_certified": True}, {"selected_modules": ["nativecmpkit-core"]},
                        {"selection_cache_key": "unreviewed"}):
             with self.subTest(update=update), self.assertRaises(ValueError):
                 self.validate(self.receipt | update)
@@ -128,7 +128,7 @@ class LibraryDependencyCacheTests(unittest.TestCase):
     def invoke(self, phase, env=None):
         with patch.object(c, "ROOT", self.root), patch.object(c.lt, "git_revision", return_value="a" * 40), \
                 patch.object(c.Path, "home", return_value=self.home), patch.dict(c.os.environ, env or {}, clear=True), \
-                patch("sys.argv", ["library_dependency_cache.py", "--phase", phase, "--selection", "calf-io"]), \
+                patch("sys.argv", ["library_dependency_cache.py", "--phase", phase, "--selection", "nativecmpkit-io"]), \
                 patch("sys.stdout", new_callable=io.StringIO) as console:
             code = c.main()
         output = self.root / f"build/ci-runtime/library-cache-{phase}.json"

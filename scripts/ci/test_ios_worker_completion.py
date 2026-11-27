@@ -25,7 +25,7 @@ import workflow_matrix as workflow
 from test_ios_ui_application import ACTIVE, COMPLETE, frame
 
 ROOT = Path(__file__).resolve().parents[2]
-HOST = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
+HOST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
 COMPILER = "scripts/ci/ios_modal_completion_compile.init.gradle.kts"
 DEVICE = "11111111-2222-3333-4444-555555555555"
 FIXTURE = "scripts/ci/test_android_external337_fixture_recovery.py"
@@ -163,7 +163,7 @@ class WorkerCompletionControls(unittest.TestCase):
 
     def test_one_five_case_plan_and_five_source_compiler_exclude_accepted_and_xctest_methods(self):
         focus = library.IOS_MODAL_COMPLETION_FOCUS
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
         required = library.ui_application_focus_identities(focus)
         self.assertEqual(5, len(required))
         self.assertEqual(required, plan["expected"][0]["required_testcases"])
@@ -171,11 +171,11 @@ class WorkerCompletionControls(unittest.TestCase):
                          library.ui_application_focus_identities(library.IOS_SHEET_REPEAT_FOCUS), required)
         command = library.gradle_command("ios", plan, DEVICE)
         self.assertEqual(1, command.count(COMPILER))
-        self.assertEqual([":calf-ui:iosSimulatorArm64ApplicationTest"] + [arg
+        self.assertEqual([":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"] + [arg
             for identity in library.ui_application_focus_filter(focus).split(",") for arg in ("--tests", identity)],
-            command[command.index(":calf-ui:iosSimulatorArm64ApplicationTest"):])
+            command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         compiler = (ROOT / COMPILER).read_text()
-        paths = re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', compiler)
+        paths = re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', compiler)
         self.assertEqual([library.IOS_MODAL_LIFECYCLE_SOURCE, library.IOS_WORKER_OWNERSHIP_SOURCE,
                           HOST, HOST.replace("NativeUiApplicationHost", "NativeObjectIdentity"),
                           library.IOS_SHEET_REPEAT_SOURCE], paths)
@@ -190,7 +190,7 @@ class WorkerCompletionControls(unittest.TestCase):
     def test_compiler_accepts_only_compile_or_the_exact_ordered_five_case_request(self):
         source = (ROOT / COMPILER).read_text()
         permitted = source.split("    val permittedTasks = setOf(\n", 1)[1].split("    check(gradle.startParameter", 1)[0]
-        self.assertEqual([':calf-ui:compileTestKotlinIosSimulatorArm64'], re.findall(r'listOf\("([^"]+)"\)', permitted))
+        self.assertEqual([':nativecmpkit-ui:compileTestKotlinIosSimulatorArm64'], re.findall(r'listOf\("([^"]+)"\)', permitted))
         self.assertEqual(1, permitted.count("applicationRequest,"))
         request = source.split("    val applicationRequest = ", 1)[1].split("    val permittedTasks", 1)[0]
         identities = re.findall(r'"(com\.mohamedrejeb\.[^"\n]+)"', request)
@@ -203,7 +203,7 @@ class WorkerCompletionControls(unittest.TestCase):
         profile = "ios-modal-completion-cancellation"
         original = copy.deepcopy(workflow.matrix("ios-sheet-cancellation-repeat"))
         expected = {"include": [{"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                    "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui",
+                    "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui",
                     "test-focus": library.IOS_MODAL_COMPLETION_FOCUS}]}
         self.assertEqual(expected, workflow.matrix(profile))
         changed = workflow.matrix(profile); changed["include"][0]["test-focus"] = "foreign"
@@ -212,13 +212,13 @@ class WorkerCompletionControls(unittest.TestCase):
         for slots in (("ios-ipad",), ("desktop-macos-arm64",), ("ios-iphone", "ios-ipad")):
             with patch.dict(workflow.PROFILES, {profile: slots}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-        with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError):
+        with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError):
             workflow.matrix(profile)
         source = (ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn(profile, source)
         self.assertIn("permissions:\n  contents: read\n", source)
         self.assertIn("persist-credentials: false", source)
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, library.IOS_MODAL_COMPLETION_FOCUS))
 
     def test_exact_additive_history_preserves_all_old_pins_without_recursive_readmission(self):

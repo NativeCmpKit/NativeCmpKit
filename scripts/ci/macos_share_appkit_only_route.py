@@ -25,12 +25,12 @@ import macos_share_appkit_only_source_projection as source
 PROFILE = "macos-share-missing-lifecycle"
 ENTRY_FOCUS = "macos-share-timeout-retention-recovery"  # Existing workflow entry; JNI execution retired.
 EFFECTIVE_FOCUS = "macos-share-appkit6-only-recovery"
-MODULE = "calf-share"
+MODULE = "nativecmpkit-share"
 SLOT = "desktop-macos-arm64"
 OUTPUT = "build/ci-verification/" + SLOT
 PARENT = OUTPUT + "-appkit"
 REPORT_PARENT = "build/ci-verification/share-appkit-native"
-CLASS = "com.mohamedrejeb.calf.share.native.AppKitLifecycle"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.share.native.AppKitLifecycle"
 SUITE = "NativeCmpKitAppKitLifecycle"
 CASES = ("missing_content_view", "real_picker_cancel", "controlled_picker_dismissal",
          "controlled_success_duplicate_late", "controlled_service_failure", "bounded_concurrent_requests")
@@ -88,7 +88,7 @@ def plan(root: Path):
     return {"schema_version": 1, "suite": "desktop", "profile": PROFILE,
             "explicit_test_focus": ENTRY_FOCUS, "effective_test_focus": EFFECTIVE_FOCUS,
             "complete_suite_requested": False, "explicit_module_subset": [MODULE],
-            "expected": [{"module": MODULE, "project": ":calf-share", "task": "native-AppKit-standalone",
+            "expected": [{"module": MODULE, "project": ":nativecmpkit-share", "task": "native-AppKit-standalone",
                           "test_kind": "Rust-AppKit-not-JVM", "report_directory": PARENT + "/cases", "required_testcases":
                           [{"classname": CLASS, "name": name} for name in CASES]}],
             "native_command_owned_by_prior_workflow_step": ["python3", "scripts/ci/macos_share_appkit_lifecycle.py",
@@ -340,11 +340,11 @@ def reference_parent(root: Path, context: dict, now_ns: int):
         need(source.sha(read(name)[0]) == digest, "AppKit-parent-source-changed-before-reference")
     for name, digest in native_before.items():
         need(source.sha(read(name)[0]) == digest, "AppKit-parent-native-source-changed-before-reference")
-    required = {name: digest for name, digest in expected.items() if name.startswith(("scripts/", "calf-share/"))}
+    required = {name: digest for name, digest in expected.items() if name.startswith(("scripts/", "nativecmpkit-share/"))}
     need(all(before.get(name) == digest for name, digest in required.items()), "complete-AppKit-owning-reader-source-map-required")
     native_required = {name: digest for name, digest in expected.items()
-                       if name.startswith(("calf-share/native/", "calf-share/src/desktopMain/")) or name in {
-                           "calf-share/build.gradle.kts", "rust-toolchain.toml", "scripts/native/artifacts.py",
+                       if name.startswith(("nativecmpkit-share/native/", "nativecmpkit-share/src/desktopMain/")) or name in {
+                           "nativecmpkit-share/build.gradle.kts", "rust-toolchain.toml", "scripts/native/artifacts.py",
                            "convention-plugins/src/main/kotlin/NativeLibraries.kt"}}
     need(all(before.get(name) == digest == native_before.get(name) for name, digest in native_required.items()),
          "complete-AppKit-native-build-source-map-required")
@@ -361,9 +361,9 @@ def reference_parent(root: Path, context: dict, now_ns: int):
     artifact = parent.get("artifact_before")
     need(type(artifact) is dict and artifact.get("macho_file_type") == "MH_EXECUTE" and
          artifact.get("rust_target") == "aarch64-apple-darwin" and artifact.get("fresh_cargo_artifact") is True and
-         artifact.get("source_path") == "calf-share/native/tests/appkit_lifecycle_main.rs" and
+         artifact.get("source_path") == "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs" and
          artifact.get("source_sha256") == before.get(artifact["source_path"]) and
-         artifact.get("package") == "calf-share-native@0.1.0" and artifact.get("test_target") == "appkit_lifecycle" and
+         artifact.get("package") == "nativecmpkit-share-native@0.1.0" and artifact.get("test_target") == "appkit_lifecycle" and
          type(artifact.get("diagnostics")) is dict and type(artifact["diagnostics"].get("errors")) is int and artifact["diagnostics"]["errors"] == 0 and
          type(artifact["diagnostics"].get("warnings")) is int and artifact["diagnostics"]["warnings"] >= 0 and
          type(artifact.get("relative_path")) is str and
@@ -377,7 +377,7 @@ def reference_parent(root: Path, context: dict, now_ns: int):
          compile_execution["started_at_ns"] - FRESHNESS_SLOP <= binary_identity["mtime_ns"] <= compile_execution["ended_at_ns"] + FRESHNESS_SLOP,
          "held-actual-AppKit-executable-reference-required")
     witness = parent.get("control_failure_witness")
-    cases_source = "calf-share/native/tests/appkit_lifecycle/cases.rs"
+    cases_source = "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"
     need(type(witness) is dict and witness.get("source_path") == cases_source and
          witness.get("source_sha256") == before.get(cases_source) and witness.get("compiled_with_admitted_executable") is True and
          witness.get("source_bound_failed_control_gate_verified") is True and

@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 import verify_native_test_results as gate
 
 
-CLASS = "nativecmpkit.consumer.PublishedNativeConsumerTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedNativeConsumerTest"
 METHODS = (
     "pickerNativeLibraryLoadsAndInitializes", "packagedPickerCreatesAndReleasesValidHandles",
     "shareNativeLibraryLoadsAndReportsActualHostCapability",

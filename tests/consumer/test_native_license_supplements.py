@@ -66,12 +66,12 @@ class VcsLicenseSupplementTest(unittest.TestCase):
         self.add_file("license_files", "LICENSE-MIT", "LICENSE-MIT", self.license)
         self.save_catalog()
         (self.source / "docs/migration").mkdir(parents=True)
-        (self.source / "docs/migration/identity.json").write_text(json.dumps({"modules": [{"new_artifact": "nativecmpkit-file-picker"}]}))
+        (self.source / "docs/migration/current-identity.json").write_text(json.dumps({"modules": [{"new_artifact": "nativecmpkit-file-picker"}]}))
         for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
             (self.source / name).write_text("Project notice synthetic fixture " + name)
-        native = self.source / "calf-file-picker/native"
+        native = self.source / "nativecmpkit-file-picker/native"
         native.mkdir(parents=True)
-        (native / "Cargo.toml").write_text('[package]\nname="calf-filepicker-native"\nversion="0.1.0"\n')
+        (native / "Cargo.toml").write_text('[package]\nname="nativecmpkit-filepicker-native"\nversion="0.1.0"\n')
         self.metadata_path = self.root / "metadata.json"
         self.save_metadata()
 
@@ -104,10 +104,10 @@ class VcsLicenseSupplementTest(unittest.TestCase):
         (self.entry / "manifest.json").write_text(json.dumps(self.data, indent=2, sort_keys=True) + "\n")
 
     def save_metadata(self):
-        native = self.source / "calf-file-picker/native"
+        native = self.source / "nativecmpkit-file-picker/native"
         lock = native / "Cargo.lock"
         checksum = gate.sha256(self.archive)
-        lock.write_text('version = 4\n[[package]]\nname="calf-filepicker-native"\nversion="0.1.0"\n'
+        lock.write_text('version = 4\n[[package]]\nname="nativecmpkit-filepicker-native"\nversion="0.1.0"\n'
                         '[[package]]\nname="example"\nversion="1.0.0"\n'
                         'source="registry+https://github.com/rust-lang/crates.io-index"\nchecksum="' + checksum + '"\n')
         self.metadata = metadata_fixture(checksum=checksum, manifest_hash=gate.sha256(native / "Cargo.toml"), lock_hash=gate.sha256(lock))
@@ -151,11 +151,11 @@ class VcsLicenseSupplementTest(unittest.TestCase):
         verifier = gate.ArtifactVerifier(self.source, repository, "0.1.0-preview.1", targets=["desktop"], native_platforms=["linux-x64"],
                                          expected_native_revision=self.NATIVE_FIXTURE_REVISION)
         with zipfile.ZipFile(io.BytesIO(memory.getvalue())) as archive:
-            verifier.native_notices(archive, gate.archive_names(archive), "calf-file-picker", "fixture")
+            verifier.native_notices(archive, gate.archive_names(archive), "nativecmpkit-file-picker", "fixture")
         return verifier.checks
 
     def report_entry(self, entries):
-        name = "META-INF/nativecmpkit/native-dependencies/calf-file-picker/licenses-report.json"
+        name = "META-INF/nativecmpkit/native-dependencies/nativecmpkit-file-picker/licenses-report.json"
         return name, json.loads(entries[name])
 
     def assert_gate_fails(self, entries, part):
@@ -507,7 +507,7 @@ class VcsLicenseSupplementTest(unittest.TestCase):
 
     def test_notice_gate_rejects_unrecorded_stale_provenance_material(self):
         entries = self.actual_entries()
-        entries["META-INF/nativecmpkit/native-dependencies/calf-file-picker/example-1.0.0/provenance/stale.json"] = b"{}"
+        entries["META-INF/nativecmpkit/native-dependencies/nativecmpkit-file-picker/example-1.0.0/provenance/stale.json"] = b"{}"
         self.assert_gate_fails(entries, "native-license-no-stale-material")
 
     def test_notice_gate_retains_fail_closed_missing_text_requirement(self):

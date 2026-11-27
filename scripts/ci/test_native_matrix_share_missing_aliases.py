@@ -12,7 +12,7 @@ HELPER = "scripts/ci/macos_share_missing_ci.py"
 UPSTREAM = "scripts/ci/macos_share_missing_only.py"
 PATHS = tuple("scripts/ci/" + module + ".py" for module, _ in reader._DECLARATIONS.values()) + (HELPER, UPSTREAM)
 SOURCES = {path: (ROOT / path).read_text(encoding="utf-8") for path in PATHS}
-EXPECTED = {"PROFILE": "macos-share-missing-lifecycle", "MODULE": "calf-share",
+EXPECTED = {"PROFILE": "macos-share-missing-lifecycle", "MODULE": "nativecmpkit-share",
             "FOCUS": "macos-share-timeout-retention-recovery"}
 
 
@@ -86,7 +86,7 @@ class NativeMatrixShareMissingAliasTests(unittest.TestCase):
         actual = aliases()
         for expression in ("share_missing.UNKNOWN", "share_missing.PROFILE.upper", "share_missing.PROFILE.upper()",
                            "unknown_missing.PROFILE", "share_missing.PROFILE + ''", "share_missing.__dict__",
-                           '{share_missing.PROFILE: "calf-share", "macos-share-missing-lifecycle": "calf-ui"}'):
+                           '{share_missing.PROFILE: "nativecmpkit-share", "macos-share-missing-lifecycle": "nativecmpkit-ui"}'):
             with self.subTest(expression=expression), self.assertRaises(AssertionError):
                 reader.literal_metadata(ast.parse(expression, mode="eval").body, actual)
 

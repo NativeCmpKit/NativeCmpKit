@@ -30,13 +30,13 @@ ROUTES = {
     "desktop-macos-x64": ("Darwin", "x64", "mac", "tls-rendering-cookies-policy"),
 }
 PROJECTS = (
-    ":calf-camera-picker", ":calf-core", ":calf-cupertino-icons", ":calf-file-picker",
-    ":calf-file-picker-coil", ":calf-geo", ":calf-io", ":calf-maps", ":calf-navigation",
-    ":calf-permissions",
-    *(":calf-permissions:calf-permissions-" + name for name in (
+    ":nativecmpkit-camera-picker", ":nativecmpkit-core", ":nativecmpkit-cupertino-icons", ":nativecmpkit-file-picker",
+    ":nativecmpkit-file-picker-coil", ":nativecmpkit-geo", ":nativecmpkit-io", ":nativecmpkit-maps", ":nativecmpkit-navigation",
+    ":nativecmpkit-permissions",
+    *(":nativecmpkit-permissions:nativecmpkit-permissions-" + name for name in (
         "background-location", "bluetooth", "calendar", "camera", "contacts", "core",
         "gallery", "location", "microphone", "notifications", "wifi")),
-    ":calf-share", ":calf-ui", ":calf-webview",
+    ":nativecmpkit-share", ":nativecmpkit-ui", ":nativecmpkit-webview",
 )
 COLLECTORS = (
     {
@@ -176,7 +176,7 @@ def route(profile: str, slot: str, environment: dict) -> tuple:
     need(profile == PROFILE and slot in ROUTES, "Only four missing-host security graph routes are admitted")
     selected = ROUTES[slot]
     need((environment.get("SLOT"), environment.get("SUITE"), environment.get("TEST_MODULES"),
-          environment.get("TEST_FOCUS")) == (slot, "desktop", "calf-webview", selected[3]),
+          environment.get("TEST_FOCUS")) == (slot, "desktop", "nativecmpkit-webview", selected[3]),
          "Foreign slot/suite/module/focus; no native or accepted-host fallback")
     arch = platform.machine().lower()
     arch = {"amd64": "x64", "x86_64": "x64", "aarch64": "arm64"}.get(arch, arch)

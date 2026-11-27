@@ -19,10 +19,10 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-io",\n)\n')
-        self.write("calf-io/build.gradle.kts", "// synthetic build, never executed\n")
-        self.write("calf-io/src/commonTest/kotlin/Unrelated.kt", "// retained, not requested\n")
-        self.source = "package com.mohamedrejeb.calf.io\nclass KmpFileDeviceTest {\n" + \
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-io",\n)\n')
+        self.write("nativecmpkit-io/build.gradle.kts", "// synthetic build, never executed\n")
+        self.write("nativecmpkit-io/src/commonTest/kotlin/Unrelated.kt", "// retained, not requested\n")
+        self.source = "package io.github.apdelrahman1911.nativecmpkit.io\nclass KmpFileDeviceTest {\n" + \
             "\n".join("@Test fun " + method + "() {}" for method in r.ANDROID_IO_DEVICE_METHODS) + "\n}\n"
         self.write(r.ANDROID_IO_DEVICE_SOURCE, self.source)
 
@@ -32,7 +32,7 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         path.write_text(payload)
 
     def plan(self):
-        return r.plan(self.root, "android-device", only_modules=("calf-io",),
+        return r.plan(self.root, "android-device", only_modules=("nativecmpkit-io",),
                       focus=r.ANDROID_IO_OVERSIZE_FOCUS)
 
     def collect(self, cases=None, marker=1, age=0):
@@ -56,20 +56,20 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         item, = plan["expected"]
         self.assertEqual(r.ANDROID_IO_DEVICE_CLASS + "#" + r.ANDROID_IO_OVERSIZE_METHOD, item["test_filter"])
         self.assertEqual(r.android_io_oversize_identities(), item["required_testcases"])
-        self.assertIn("calf-io/src/commonTest/kotlin/Unrelated.kt", item["test_source_files"])
+        self.assertIn("nativecmpkit-io/src/commonTest/kotlin/Unrelated.kt", item["test_source_files"])
         self.assertIn(r.ANDROID_IO_DEVICE_SOURCE, item["test_source_files"])
-        self.assertEqual("calf-io/build/outputs/androidTest-results/connected/androidMain", item["report_directory"])
+        self.assertEqual("nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain", item["report_directory"])
 
     def test_real_profile_and_cli_select_one_method_not_the_twelve_method_class_or_other_modules(self):
         row, = matrix.matrix("android-io-oversize")["include"]
-        self.assertEqual(("android-device-api35", "calf-io", r.ANDROID_IO_OVERSIZE_FOCUS),
+        self.assertEqual(("android-device-api35", "nativecmpkit-io", r.ANDROID_IO_OVERSIZE_FOCUS),
                          (row["slot"], row["test-modules"], row["test-focus"]))
         result = subprocess.run([sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "android-device", "--module", "calf-io", "--focus", r.ANDROID_IO_OVERSIZE_FOCUS],
+                                 "--suite", "android-device", "--module", "nativecmpkit-io", "--focus", r.ANDROID_IO_OVERSIZE_FOCUS],
                                 cwd=r.ROOT, capture_output=True)
         self.assertEqual(0, result.returncode, result.stderr.decode())
         self.assertIn(r.ANDROID_IO_DEVICE_CLASS + "#" + r.ANDROID_IO_OVERSIZE_METHOD, result.stdout.decode())
-        self.assertEqual(1, len(r.plan(r.ROOT, "android-device", only_modules=("calf-io",),
+        self.assertEqual(1, len(r.plan(r.ROOT, "android-device", only_modules=("nativecmpkit-io",),
                                      focus=r.ANDROID_IO_OVERSIZE_FOCUS)["expected"][0]["required_testcases"]))
 
     def test_supported_instrumentation_class_method_argument_has_no_KGP_filter(self):
@@ -78,15 +78,15 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         self.assertEqual(["-Pandroid.testInstrumentationRunnerArguments.class=" + r.ANDROID_IO_DEVICE_CLASS + "#" +
                           r.ANDROID_IO_OVERSIZE_METHOD], arguments)
         self.assertNotIn("--tests", command)
-        self.assertEqual(":calf-io:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-io:connectedAndroidDeviceTest", command[-1])
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.timeout_msec=120000", command)
 
     def test_unreviewed_module_suite_wildcard_and_duplicate_selection_are_rejected(self):
-        for suite, modules, focus in (("desktop", ("calf-io",), r.ANDROID_IO_OVERSIZE_FOCUS),
-                                     ("android-device", ("calf-ui",), r.ANDROID_IO_OVERSIZE_FOCUS),
-                                     ("android-device", ("calf-io", "calf-ui"), r.ANDROID_IO_OVERSIZE_FOCUS),
-                                     ("android-device", ("calf-io", "calf-io"), r.ANDROID_IO_OVERSIZE_FOCUS),
-                                     ("android-device", ("calf-io",), "io-device-*")):
+        for suite, modules, focus in (("desktop", ("nativecmpkit-io",), r.ANDROID_IO_OVERSIZE_FOCUS),
+                                     ("android-device", ("nativecmpkit-ui",), r.ANDROID_IO_OVERSIZE_FOCUS),
+                                     ("android-device", ("nativecmpkit-io", "nativecmpkit-ui"), r.ANDROID_IO_OVERSIZE_FOCUS),
+                                     ("android-device", ("nativecmpkit-io", "nativecmpkit-io"), r.ANDROID_IO_OVERSIZE_FOCUS),
+                                     ("android-device", ("nativecmpkit-io",), "io-device-*")):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
         with self.assertRaises(ValueError):
@@ -103,7 +103,7 @@ class AndroidIoOversizeFocus(unittest.TestCase):
     def test_tampered_plan_cannot_execute_an_unrelated_or_full_device_suite(self):
         plan = self.plan()
         for key, value in (("test_filter", r.ANDROID_IO_DEVICE_CLASS), ("required_testcases", []),
-                           ("test_source_files", []), ("module", "calf-ui"), ("task", ":calf-io:testAndroidHostTest")):
+                           ("test_source_files", []), ("module", "nativecmpkit-ui"), ("task", ":nativecmpkit-io:testAndroidHostTest")):
             changed = deepcopy(plan)
             changed["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -135,16 +135,16 @@ class AndroidIoOversizeFocus(unittest.TestCase):
     def test_controller_requires_the_reviewed_module_before_touching_an_emulator(self):
         with patch.object(device, "require_host", side_effect=RuntimeError("synthetic stop before runtime")) as guard:
             with self.assertRaises(ValueError):
-                device.run(self.root, "build/ci-verification/synthetic", only_modules=("calf-ui",),
+                device.run(self.root, "build/ci-verification/synthetic", only_modules=("nativecmpkit-ui",),
                            focus=r.ANDROID_IO_OVERSIZE_FOCUS)
             guard.assert_not_called()
             with self.assertRaisesRegex(RuntimeError, "synthetic stop"):
-                device.run(self.root, "build/ci-verification/synthetic", only_modules=("calf-io",),
+                device.run(self.root, "build/ci-verification/synthetic", only_modules=("nativecmpkit-io",),
                            focus=r.ANDROID_IO_OVERSIZE_FOCUS)
             guard.assert_called_once()
         result = subprocess.run([sys.executable, str(r.ROOT / "scripts/ci/android_device_tests.py"),
                                  "--output", "build/ci-verification/synthetic", "--api-level", "35",
-                                 "--module", "calf-ui", "--focus", r.ANDROID_IO_OVERSIZE_FOCUS], capture_output=True)
+                                 "--module", "nativecmpkit-ui", "--focus", r.ANDROID_IO_OVERSIZE_FOCUS], capture_output=True)
         self.assertEqual(2, result.returncode)
         self.assertIn(b"--focus requires its exact reviewed single --module", result.stderr)
 
@@ -156,7 +156,7 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         with patch.object(r, "projects") as projects, patch.object(r, "source_files") as sources, \
                 patch.object(r, "gradle_command") as command, patch.object(device, "require_host") as host:
             with self.assertRaisesRegex(ValueError, "^Unfiltered Android discovery requires a qualified remote IO fixture route; full aggregate is blocked$"):
-                r.plan(self.root, "android-device", only_modules=("calf-io",))
+                r.plan(self.root, "android-device", only_modules=("nativecmpkit-io",))
             projects.assert_not_called(); sources.assert_not_called()
             command.assert_not_called(); host.assert_not_called()
         self.assertFalse((self.root / "build").exists())
@@ -170,11 +170,11 @@ class AndroidIoOversizeFocus(unittest.TestCase):
         before = {path.relative_to(self.root).as_posix(): path.read_bytes()
                   for path in self.root.rglob("*") if path.is_file()}
         requests = (
-            (None, ("calf-io",)),
-            (("calf-io",), None),
-            (("calf-fixture",), None),
-            (("calf-fixture",), ()),
-            (("calf-fixture",), ("calf-io",)),
+            (None, ("nativecmpkit-io",)),
+            (("nativecmpkit-io",), None),
+            (("nativecmpkit-fixture",), None),
+            (("nativecmpkit-fixture",), ()),
+            (("nativecmpkit-fixture",), ("nativecmpkit-io",)),
         )
         for minimum, modules in requests:
             with self.subTest(minimum=minimum, modules=modules), \

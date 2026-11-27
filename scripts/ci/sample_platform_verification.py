@@ -39,7 +39,7 @@ BUILD_TASKS = {
 SUITES = {"linux": ("android-host", "js", "wasm"), "apple": ("ios",)}
 KNOWN_TEST_SETS = frozenset(lt.KNOWN_TEST_SETS)
 SAMPLE_TREES = ("sample/common/src", "sample/android/src", "sample/desktop/src",
-                "sample/web-js/src", "sample/web-js/webpack.config.d", "sample/web-wasm/src", "sample/ios/Calf")
+                "sample/web-js/src", "sample/web-js/webpack.config.d", "sample/web-wasm/src", "sample/ios/NativeCmpKit")
 GRAPH_TASK = ":nativecmpkitSampleCompileDependencies"
 
 
@@ -122,7 +122,7 @@ def gradle_command(root: Path, selected: dict, simulator: str | None = None) -> 
 def xcode_command(root: Path, simulator: str) -> list[str]:
     if not runtime_context.UUID.fullmatch(simulator):
         raise ValueError("Xcode must use the explicitly selected sample simulator")
-    return ["xcodebuild", "-project", "sample/ios/Calf.xcodeproj", "-scheme", "Calf",
+    return ["xcodebuild", "-project", "sample/ios/NativeCmpKit.xcodeproj", "-scheme", "NativeCmpKit",
             "-configuration", "Debug", "-sdk", "iphonesimulator", "-destination", "id=" + simulator,
             "-derivedDataPath", "build/ci-sample-xcode", "-jobs", "1", "CODE_SIGNING_ALLOWED=NO", "build"]
 
@@ -161,9 +161,9 @@ def inputs(root: Path) -> dict:
     for tree in SAMPLE_TREES:
         for path in lt.source_files(root, tree):
             result[path.relative_to(root).as_posix()] = lt.sha256(path)
-    for relative in (".github/workflows/gradle.yml", "sample/ios/Calf.xcodeproj/project.pbxproj",
-                     "sample/ios/Calf.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
-                     "sample/ios/Calf.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist"):
+    for relative in (".github/workflows/gradle.yml", "sample/ios/NativeCmpKit.xcodeproj/project.pbxproj",
+                     "sample/ios/NativeCmpKit.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+                     "sample/ios/NativeCmpKit.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist"):
         path = lt.safe_path(root, relative)
         if not path.is_file():
             raise ValueError("Missing actual sample/workflow input")
@@ -209,8 +209,8 @@ def build_outputs(root: Path, selected: dict, *, started_ns: int, ended_ns: int)
                  "js": ("sample/web-js/build/dist/js/productionExecutable", "web.js"),
                  "wasm": ("sample/web-wasm/build/dist/wasmJs/productionExecutable", "web.js")}
                 if selected["mode"] == "linux" else
-                {"ios-device": ("sample/common/build/bin/iosArm64/debugFramework/Common.framework", "Common"),
-                 "ios-simulator": ("sample/common/build/bin/iosSimulatorArm64/debugFramework/Common.framework", "Common")})
+                {"ios-device": ("sample/common/build/bin/iosArm64/debugFramework/NativeCmpKit.framework", "NativeCmpKit"),
+                 "ios-simulator": ("sample/common/build/bin/iosSimulatorArm64/debugFramework/NativeCmpKit.framework", "NativeCmpKit")})
     tasks = ({"android": BUILD_TASKS["linux"][:1], "jvm": BUILD_TASKS["linux"][1:2],
               "js": BUILD_TASKS["linux"][2:4], "wasm": BUILD_TASKS["linux"][4:6]}
              if selected["mode"] == "linux" else
@@ -398,19 +398,19 @@ def run(root: Path, mode: str, simulator: str | None, timeout: int, *, build_onl
             except (OSError, ValueError, KeyError) as error:
                 errors.append({"error": "Actual sample evidence rejected", "observer": key, "reason": type(error).__name__})
         if mode == "apple":
-            listing = subprocess.run(["xcodebuild", "-list", "-json", "-project", "sample/ios/Calf.xcodeproj"],
+            listing = subprocess.run(["xcodebuild", "-list", "-json", "-project", "sample/ios/NativeCmpKit.xcodeproj"],
                                      cwd=root, capture_output=True, timeout=180)
             receipt["xcode_list_exit_code"] = listing.returncode
             project = json.loads(listing.stdout).get("project", {}) if listing.returncode == 0 else {}
-            if "Calf" not in project.get("schemes", []) or "Calf" not in project.get("targets", []):
-                errors.append({"error": "Actual Xcode Calf target/scheme is missing; never guess a project or skip its build"})
+            if "NativeCmpKit" not in project.get("schemes", []) or "NativeCmpKit" not in project.get("targets", []):
+                errors.append({"error": "Actual Xcode NativeCmpKit target/scheme is missing; never guess a project or skip its build"})
             else:
                 xcommand = xcode_command(root, simulator)
                 xexecution = lt.execute(root, xcommand, output / "xcode.log", timeout, 8192)
                 receipt["xcode"] = {"command": xcommand, "execution": xexecution, "signing_allowed": False,
                                     "real_framework_shell_phase_required": True}
                 shell = (output / "xcode.log").read_text(errors="replace")
-                app_binary = lt.safe_path(root, "build/ci-sample-xcode/Build/Products/Debug-iphonesimulator/Calf.app/Calf")
+                app_binary = lt.safe_path(root, "build/ci-sample-xcode/Build/Products/Debug-iphonesimulator/NativeCmpKit.app/NativeCmpKit")
                 if (xexecution["exit_code"] != 0 or "Skipping Gradle build task invocation" in shell or
                         ":sample:common:embedAndSignAppleFrameworkForXcode" not in shell or
                         not app_binary.is_file() or not app_binary.stat().st_size):

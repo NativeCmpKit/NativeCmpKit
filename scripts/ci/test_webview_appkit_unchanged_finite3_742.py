@@ -14,7 +14,7 @@ from ios_popover_anchor_plan import _ordinary_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
 PATHS = (
-    "calf-share/native/tests/appkit_lifecycle/cases.rs",
+    "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs",
     "scripts/ci/macos_share_appkit_lifecycle.py",
     "scripts/ci/test_macos_share_missing_only.py",
 )

@@ -21,7 +21,7 @@ from urllib.parse import urlsplit
 
 FOCUS = "webview-ios-native-request-state"
 SOURCE = "scripts/ci/ios_webview_request_fixture.py"
-NATIVE_SOURCE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewRequestAcceptanceTest.kt"
+NATIVE_SOURCE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt"
 METHOD_KEYS = ("tls", "matrix")
 STAGE_SPECS = {
     "tls-prior": ("page", 1), "tls-one": ("tls", 1), "tls-two": ("tls", 1), "tls-recover": ("page", 2),

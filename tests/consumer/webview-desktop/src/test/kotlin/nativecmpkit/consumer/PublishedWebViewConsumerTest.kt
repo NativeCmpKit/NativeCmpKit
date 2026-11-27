@@ -1,14 +1,14 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.awt.ComposePanel
-import com.mohamedrejeb.calf.ui.web.JavascriptResult
-import com.mohamedrejeb.calf.ui.web.LoadingState
-import com.mohamedrejeb.calf.ui.web.WebContent
-import com.mohamedrejeb.calf.ui.web.WebView
-import com.mohamedrejeb.calf.ui.web.WebViewState
-import com.mohamedrejeb.calf.ui.web.evaluateJavascriptResult
-import com.mohamedrejeb.calf.ui.web.isDesktopWebViewAvailable
+import io.github.apdelrahman1911.nativecmpkit.ui.web.JavascriptResult
+import io.github.apdelrahman1911.nativecmpkit.ui.web.LoadingState
+import io.github.apdelrahman1911.nativecmpkit.ui.web.WebContent
+import io.github.apdelrahman1911.nativecmpkit.ui.web.WebView
+import io.github.apdelrahman1911.nativecmpkit.ui.web.WebViewState
+import io.github.apdelrahman1911.nativecmpkit.ui.web.evaluateJavascriptResult
+import io.github.apdelrahman1911.nativecmpkit.ui.web.isDesktopWebViewAvailable
 import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
 import java.awt.Component

@@ -1,10 +1,10 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
-import com.mohamedrejeb.calf.cupertino.icons.CupertinoIcons
-import com.mohamedrejeb.calf.permissions.*
-import com.mohamedrejeb.calf.picker.*
-import com.mohamedrejeb.calf.share.*
-import com.mohamedrejeb.calf.ui.web.*
+import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcons
+import io.github.apdelrahman1911.nativecmpkit.permissions.*
+import io.github.apdelrahman1911.nativecmpkit.picker.*
+import io.github.apdelrahman1911.nativecmpkit.share.*
+import io.github.apdelrahman1911.nativecmpkit.ui.web.*
 import kotlin.test.*
 
 /** Small actual artifact-level contract tests. These do not invoke native dialogs or UI. */

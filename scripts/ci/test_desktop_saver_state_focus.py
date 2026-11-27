@@ -18,7 +18,7 @@ import workflow_matrix as matrix
 
 class DesktopSaverStateFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "desktop", only_modules=("calf-file-picker",), focus=r.DESKTOP_SAVER_STATE_FOCUS)
+        return r.plan(root, "desktop", only_modules=("nativecmpkit-file-picker",), focus=r.DESKTOP_SAVER_STATE_FOCUS)
 
     def collect(self, cases=None, status="passed", stale=False, marker=1, host="Linux"):
         plan = self.plan()
@@ -35,18 +35,18 @@ class DesktopSaverStateFocusTests(unittest.TestCase):
             now = time.time_ns()
             if stale: os.utime(report, ns=(now - 10_000_000_000,) * 2)
             return r.collect_reports(root, plan, now - 1_000_000_000, now + 1_000_000_000,
-                                     Counter({":calf-file-picker:desktopTest": marker}), host_system=host)
+                                     Counter({":nativecmpkit-file-picker:desktopTest": marker}), host_system=host)
 
     def test_exact_one_method_runs_on_three_desktop_hosts_without_accepted_picker_replay(self):
         rows = matrix.matrix("picker-saver-state")["include"]
         self.assertEqual(["desktop-linux-x64", "desktop-macos-arm64", "desktop-windows-x64"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "calf-file-picker" and
+        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "nativecmpkit-file-picker" and
                             row["test-focus"] == r.DESKTOP_SAVER_STATE_FOCUS for row in rows))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
         self.assertTrue(r.validate_test_focus(plan))
         self.assertEqual(r.desktop_saver_state_identities(), plan["expected"][0]["required_testcases"])
-        self.assertEqual([":calf-file-picker:desktopTest", "--tests", r.DESKTOP_SAVER_STATE_CLASS], r.gradle_command("desktop", plan)[-3:])
+        self.assertEqual([":nativecmpkit-file-picker:desktopTest", "--tests", r.DESKTOP_SAVER_STATE_CLASS], r.gradle_command("desktop", plan)[-3:])
         self.assertTrue(all(case["classname"] != r.PICKER_LIFETIME_CLASS for case in plan["expected"][0]["required_testcases"]))
         rows[0]["test-focus"] = "arbitrary"
         self.assertEqual(r.DESKTOP_SAVER_STATE_FOCUS, matrix.matrix("picker-saver-state")["include"][0]["test-focus"])
@@ -71,11 +71,11 @@ class DesktopSaverStateFocusTests(unittest.TestCase):
         self.assertTrue(self.collect(marker=0)["errors"])
 
     def test_wrong_scope_filter_source_count_or_complete_claim_is_rejected(self):
-        for suite, modules in (("js", ("calf-file-picker",)), ("ios", ("calf-file-picker",)),
-                               ("desktop", ("calf-io",)), ("desktop", None),
-                               ("desktop", ("calf-file-picker", "calf-io"))):
+        for suite, modules in (("js", ("nativecmpkit-file-picker",)), ("ios", ("nativecmpkit-file-picker",)),
+                               ("desktop", ("nativecmpkit-io",)), ("desktop", None),
+                               ("desktop", ("nativecmpkit-file-picker", "nativecmpkit-io"))):
             with self.assertRaises(ValueError): r.plan(r.ROOT, suite, only_modules=modules, focus=r.DESKTOP_SAVER_STATE_FOCUS)
-        for key, value in (("task", ":calf-file-picker:publish"), ("test_filter", "*"),
+        for key, value in (("task", ":nativecmpkit-file-picker:publish"), ("test_filter", "*"),
                            ("required_testcases", []), ("test_source_files", [])):
             plan = copy.deepcopy(self.plan()); plan["expected"][0][key] = value
             with self.assertRaises(ValueError): r.validate_test_focus(plan)
@@ -88,8 +88,8 @@ class DesktopSaverStateFocusTests(unittest.TestCase):
         source = (r.ROOT / r.DESKTOP_SAVER_STATE_SOURCE).read_text()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-file-picker",\n)\n')
-            module = root / "calf-file-picker"; module.mkdir()
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-file-picker",\n)\n')
+            module = root / "nativecmpkit-file-picker"; module.mkdir()
             (module / "build.gradle.kts").write_text("// synthetic fixture, never compiled\n")
             path = root / r.DESKTOP_SAVER_STATE_SOURCE; path.parent.mkdir(parents=True); path.write_text(source)
             # The owning module still requires its original six-method native
@@ -122,7 +122,7 @@ class DesktopSaverStateFocusTests(unittest.TestCase):
                 self.assertTrue(portal.OwnedPickerPortal(r.ROOT, Path("unused"), changed).requested)
 
     def test_public_factory_keeps_actual_operation_current_state_and_per_launch_snapshot(self):
-        source = (r.ROOT / "calf-file-picker/src/desktopMain/kotlin/com/mohamedrejeb/calf/picker/FileSaverLauncher.desktop.kt").read_text()
+        source = (r.ROOT / "nativecmpkit-file-picker/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/FileSaverLauncher.desktop.kt").read_text()
         self.assertIn("rememberDesktopFileSaverLauncher(settings, onError, onResult, PlatformFilePicker::save)", source)
         self.assertEqual(2, source.count("actual fun rememberFileSaverLauncher("))
         for phrase in ("internal fun rememberDesktopFileSaverLauncher", "val currentSaveFile by rememberUpdatedState(saveFile)",
@@ -171,7 +171,7 @@ class DesktopSaverStateFocusTests(unittest.TestCase):
 
     def test_cli_selects_exact_finite_focus(self):
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan", "--suite", "desktop",
-                                 "--module", "calf-file-picker", "--focus", r.DESKTOP_SAVER_STATE_FOCUS],
+                                 "--module", "nativecmpkit-file-picker", "--focus", r.DESKTOP_SAVER_STATE_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
 

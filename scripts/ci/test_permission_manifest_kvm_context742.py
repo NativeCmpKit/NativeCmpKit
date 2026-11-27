@@ -70,13 +70,13 @@ class PermissionManifestKvmContextControls(unittest.TestCase):
     def test_KVM_context_uses_actual_lifecycle_and_callback_admission_not_synthetic_noops(self):
         lifecycle, callback = timeline.selected_admission_dependencies()
         self.assertEqual(35, lifecycle.API)
-        self.assertEqual("calf-permissions/core", lifecycle.MODULE)
+        self.assertEqual("nativecmpkit-permissions/core", lifecycle.MODULE)
         self.assertEqual(3, len(lifecycle.FOCUSES))
-        self.assertEqual("calf-camera-picker", callback.MODULE)
+        self.assertEqual("nativecmpkit-camera-picker", callback.MODULE)
         self.assertEqual("android-camera-callback-substitution", callback.FOCUS)
         self.assertIsNone(lifecycle.validate_request(35, (lifecycle.MODULE,), sorted(lifecycle.FOCUSES)[0]))
         with self.assertRaises(ValueError): lifecycle.validate_request(True, (lifecycle.MODULE,), sorted(lifecycle.FOCUSES)[0])
-        with self.assertRaises(ValueError): lifecycle.validate_request(35, ("calf-io",), sorted(lifecycle.FOCUSES)[0])
+        with self.assertRaises(ValueError): lifecycle.validate_request(35, ("nativecmpkit-io",), sorted(lifecycle.FOCUSES)[0])
         self.assertIsNone(callback.validate_discovery("android-device", (lifecycle.MODULE,), "android-permission-demo-contracts", (callback.FOCUS,)))
         for modules in (None, (), (callback.MODULE,)):
             with self.subTest(unfiltered=modules), self.assertRaises(ValueError):
@@ -93,7 +93,7 @@ class PermissionManifestKvmContextControls(unittest.TestCase):
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True); target.write_text(text, encoding="utf-8")
             with patch.object(timeline, "ROOT", root):
                 lifecycle, callback = timeline.selected_admission_dependencies()
-                self.assertEqual(3, len(lifecycle.FOCUSES)); self.assertEqual("calf-camera-picker", callback.MODULE)
+                self.assertEqual(3, len(lifecycle.FOCUSES)); self.assertEqual("nativecmpkit-camera-picker", callback.MODULE)
                 for relative, mutations in (
                     (relatives[0], (originals[relatives[0]] + "\nMODULE = 'foreign'\n", originals[relatives[0]].replace("def validate_plan(", "def missing_validate_plan(", 1))),
                     (relatives[1], (originals[relatives[1]] + "\nFOCUS = 'foreign'\n", originals[relatives[1]].replace("def validate_api(", "def missing_validate_api(", 1))),

@@ -14,7 +14,7 @@ This toolbar is intended for contextual action buttons (not navigation), similar
 ## Usage
 
 ```kotlin
-@OptIn(ExperimentalCalfUiApi::class)
+@OptIn(ExperimentalNativeCmpKitUiApi::class)
 @Composable
 fun MyToolbar() {
     var expanded by remember { mutableStateOf(true) }

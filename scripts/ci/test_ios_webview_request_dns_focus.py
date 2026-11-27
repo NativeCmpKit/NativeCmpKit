@@ -33,9 +33,9 @@ from test_ios_webview_request_focus import synthetic_request_receipt
 PROFILE = "ios-webview-request-dns"
 FOCUS = "webview-ios-native-request-dns"
 NATIVE_PINS = {
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewRequestAcceptanceTest.kt":
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt":
         "594eb2139ad98961b06edcf0d6d9dc36efaa3dcad394e3b3ea458db75476aacf",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt":
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt":
         "25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594",
     "scripts/ci/ios_webview_request_fixture.py":
         "a5b4780ab39822a4ee261c07d434bacb9ce9fe72943c1924eeaddcbbeb1e17a7",
@@ -44,7 +44,7 @@ NATIVE_PINS = {
 
 class IosWebViewRequestDnsFocusTests(unittest.TestCase):
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "ios", only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, "ios", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def groups(self):
         return (lt.IOS_WEBVIEW_REQUEST_GROUP, lt.IOS_WEBVIEW_DNS_GROUP)
@@ -60,7 +60,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
         self.assertEqual(set(matrix.PROFILES), set(options))
         self.assertEqual(1, options.count(PROFILE))
         row, = matrix.matrix(PROFILE)["include"]
-        self.assertEqual(("ios-iphone", "ios", "macos-26", "arm64", "iphone", "calf-webview", FOCUS),
+        self.assertEqual(("ios-iphone", "ios", "macos-26", "arm64", "iphone", "nativecmpkit-webview", FOCUS),
                          tuple(row[k] for k in ("slot", "suite", "runner", "arch", "simulator-kind", "test-modules", "test-focus")))
         self.assertNotIn("serial-test-focus", row)
         self.assertNotIn("android-batch", row)
@@ -78,7 +78,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
         self.assertFalse(selected_ids & accepted_ids)
         self.assertEqual(full, selected_ids | accepted_ids)
         plan = self.plan(); selected, = plan["expected"]
-        self.assertEqual(":calf-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
+        self.assertEqual(":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
         self.assertEqual("genuine-uikit-application", selected["native_test_host"])
         self.assertEqual(3, len(selected["required_testcases"]))
         self.assertEqual(3, lt.gradle_command("ios", plan, simulator=runtime_fixture.DEVICE).count("--tests"))
@@ -94,7 +94,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
     def test_generic_plan_and_router_accept_only_exact_three_identity_union_for_this_owner(self):
         plan = self.plan(); selected, = plan["expected"]
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
         self.assertTrue(lt.validate_test_focus(plan))
         patterns = selected["test_filter"].split(",")
         self.assertEqual(3, len(patterns))
@@ -116,24 +116,24 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
                 app.application_test_focus(arguments + ["--ktest_gradle_filter=" + text])
         with self.assertRaises(ValueError):
             app.application_test_focus(arguments + ["--ktest_gradle_filter=" + ",".join(patterns), "--ktest_gradle_filter=*"])
-        binary = app.APPLICATION_HOSTS["calf-webview"]["binary_directory"] + "/test.kexe"
-        self.assertEqual("calf-webview", app.application_host(binary, FOCUS)["module"])
-        for changed in (binary.replace("calf-webview", "calf-ui"), binary.replace("applicationDebugTest", "debugTest")):
+        binary = app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"] + "/test.kexe"
+        self.assertEqual("nativecmpkit-webview", app.application_host(binary, FOCUS)["module"])
+        for changed in (binary.replace("nativecmpkit-webview", "nativecmpkit-ui"), binary.replace("applicationDebugTest", "debugTest")):
             with self.assertRaises(ValueError): app.application_host(changed, FOCUS)
-        for suite, modules in (("desktop", ("calf-webview",)), ("js", ("calf-webview",)),
-                               ("wasm", ("calf-webview",)), ("android-device", ("calf-webview",)),
-                               ("ios", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-webview",)), ("js", ("nativecmpkit-webview",)),
+                               ("wasm", ("nativecmpkit-webview",)), ("android-device", ("nativecmpkit-webview",)),
+                               ("ios", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
         for key, value in (("test_filter", "*"), ("required_testcases", selected["required_testcases"][:2]),
-                           ("native_test_host", "command-line"), ("task", ":calf-webview:publish"),
+                           ("native_test_host", "command-line"), ("task", ":nativecmpkit-webview:publish"),
                            ("test_source_files", [])):
             changed = copy.deepcopy(plan); changed["expected"][0][key] = value
             with self.assertRaises(ValueError): lt.validate_test_focus(changed)
         changed = copy.deepcopy(plan); changed["complete_suite_requested"] = True
         with self.assertRaises(ValueError): lt.validate_test_focus(changed)
         stream = io.StringIO()
-        with patch("sys.argv", ["library_tests.py", "plan", "--suite", "ios", "--module", "calf-webview", "--focus", FOCUS]), \
+        with patch("sys.argv", ["library_tests.py", "plan", "--suite", "ios", "--module", "nativecmpkit-webview", "--focus", FOCUS]), \
              patch("sys.stdout", stream):
             self.assertEqual(0, lt.main())  # In-process source parser only; no subprocess/preflight/SDK.
         self.assertEqual(plan, json.loads(stream.getvalue()))
@@ -163,7 +163,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
                            ("test_source_files", [p for p in selected["test_source_files"] if p != requests.SOURCE])):
             changed = copy.deepcopy(plan); changed["expected"][0][key] = value
             with self.assertRaises(ValueError): lt.validate_test_focus(changed)
-        dns = lt.plan(lt.ROOT, "ios", only_modules=("calf-webview",), focus=lt.IOS_WEBVIEW_DNS_FOCUS)
+        dns = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-webview",), focus=lt.IOS_WEBVIEW_DNS_FOCUS)
         self.assertNotIn("ios_webview_request_fixture", dns["expected"][0])
         self.assertNotIn(requests.SOURCE, dns["expected"][0]["test_source_files"])
         fixture = self.fixture(); path = fixture.root / requests.SOURCE; original = path.read_bytes()
@@ -267,7 +267,7 @@ class IosWebViewRequestDnsFocusTests(unittest.TestCase):
             "test_owned_only_install_launch_readback_uninstall_and_local_cleanup")
         helper.setUp()
         try:
-            binary = helper.root / app.APPLICATION_HOSTS["calf-webview"]["binary_directory"] / "test.kexe"
+            binary = helper.root / app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"] / "test.kexe"
             binary.parent.mkdir(parents=True); binary.write_bytes(helper.binary.read_bytes()); binary.chmod(0o700)
             helper.binary = binary
             for source in NATIVE_PINS:

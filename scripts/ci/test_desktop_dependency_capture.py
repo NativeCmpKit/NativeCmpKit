@@ -23,7 +23,7 @@ import library_tests as lt
 class DesktopDependencyCaptureModels(unittest.TestCase):
     DEFAULT = "desktop-macos-arm64"
     REVISION = "1" * 40
-    INPUTS = ("build.gradle.kts", "calf-io/src/commonTest/explicitly-synthetic.kt")
+    INPUTS = ("build.gradle.kts", "nativecmpkit-io/src/commonTest/explicitly-synthetic.kt")
     MACHINES = {"desktop-macos-arm64": "arm64", "desktop-windows-x64": "AMD64",
                 "desktop-linux-arm64": "aarch64", "desktop-macos-x64": "x86_64"}
 
@@ -51,7 +51,7 @@ class DesktopDependencyCaptureModels(unittest.TestCase):
         context = {"schema_version": 1, "source_revision": self.REVISION, "source_tree_dirty": False,
                    "host": {"system": selected[0], "architecture": selected[1], "python": "explicitly-synthetic"}}
         (root / capture.RUNTIME).write_text(json.dumps(context) + "\n")
-        environment = {"SLOT": slot, "SUITE": "desktop", "TEST_MODULES": "calf-webview", "TEST_FOCUS": selected[3]}
+        environment = {"SLOT": slot, "SUITE": "desktop", "TEST_MODULES": "nativecmpkit-webview", "TEST_FOCUS": selected[3]}
         return root, environment
 
     def synthetic_graph(self, item):
@@ -163,8 +163,8 @@ class DesktopDependencyCaptureModels(unittest.TestCase):
         self.assertEqual([], self.calls)
 
     def test_foreign_suite_modules_focus_or_slot_environment_refuse_before_execution(self):
-        for key, value in (("SUITE", "android-device"), ("TEST_MODULES", "calf-io"),
-                           ("TEST_MODULES", "calf-webview,calf-io"), ("TEST_MODULES", ""),
+        for key, value in (("SUITE", "android-device"), ("TEST_MODULES", "nativecmpkit-io"),
+                           ("TEST_MODULES", "nativecmpkit-webview,nativecmpkit-io"), ("TEST_MODULES", ""),
                            ("TEST_FOCUS", "tls-rendering"), ("TEST_FOCUS", "tls-rendering-cookies-policy-media"),
                            ("SLOT", "desktop-macos-x64")):
             with self.subTest(key=key, value=value):

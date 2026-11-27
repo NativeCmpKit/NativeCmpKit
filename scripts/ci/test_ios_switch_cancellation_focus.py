@@ -15,7 +15,7 @@ import workflow_matrix as m
 
 class IOSSwitchCancellationFocusTests(unittest.TestCase):
     def plan(self):
-        return r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
+        return r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
 
     def collect(self, identities=None, outcome="", markers=1, duplicate=False):
         expected = self.plan()["expected"][0]
@@ -37,18 +37,18 @@ class IOSSwitchCancellationFocusTests(unittest.TestCase):
         rows = m.matrix("ios-switch-cancellation")["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual("ios-iphone", rows[0]["slot"])
-        self.assertEqual("calf-ui", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-ui", rows[0]["test-modules"])
         self.assertEqual(r.IOS_SWITCH_CANCELLATION_FOCUS, rows[0]["test-focus"])
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(":calf-ui:" + r.IOS_APPLICATION_TASK, plan["expected"][0]["task"])
+        self.assertEqual(":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK, plan["expected"][0]["task"])
         self.assertEqual("genuine-uikit-application", plan["expected"][0]["native_test_host"])
         selectors = [item for method in r.IOS_SWITCH_CANCELLATION_METHODS
                      for item in ("--tests", r.IOS_SWITCH_CANCELLATION_CLASS + "." + method)]
         self.assertEqual(selectors, r.gradle_command(
             "ios", plan, simulator="00000000-0000-4000-8000-000000000001")[-4:])
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_SWITCH_CANCELLATION_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_SWITCH_CANCELLATION_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         report = self.collect()
@@ -57,10 +57,10 @@ class IOSSwitchCancellationFocusTests(unittest.TestCase):
         self.assertEqual(r.IOS_SWITCH_CANCELLATION_SOURCE, report["modules"][0]["native_scenarios"][0]["source"])
 
     def test_wrong_scope_or_weakened_filter_cannot_run(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
-        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":calf-ui:publish")):
+        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":nativecmpkit-ui:publish")):
             plan = copy.deepcopy(self.plan())
             plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -70,9 +70,9 @@ class IOSSwitchCancellationFocusTests(unittest.TestCase):
         source = (r.ROOT / r.IOS_SWITCH_CANCELLATION_SOURCE).read_text()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-ui",\n)\n')
-            (root / "calf-ui").mkdir()
-            (root / "calf-ui/build.gradle.kts").write_text("// synthetic build, not a runtime fixture\n")
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-ui",\n)\n')
+            (root / "nativecmpkit-ui").mkdir()
+            (root / "nativecmpkit-ui/build.gradle.kts").write_text("// synthetic build, not a runtime fixture\n")
             for relative in r.IOS_APPLICATION_SOURCES:
                 host_source = root / relative
                 host_source.parent.mkdir(parents=True, exist_ok=True)
@@ -80,14 +80,14 @@ class IOSSwitchCancellationFocusTests(unittest.TestCase):
             path = root / r.IOS_SWITCH_CANCELLATION_SOURCE
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(source)
-            unchanged = r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
+            unchanged = r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
             self.assertTrue(r.validate_test_focus(unchanged))
             self.assertEqual(r.ios_switch_cancellation_identities(), unchanged["expected"][0]["required_testcases"])
             for changed in (source.replace(r.IOS_SWITCH_CANCELLATION_METHODS[0], "wrongMethod"),
                             source.replace("@Test", "@IgnoredTest", 1), source + "\n@Test fun unrelated() {}\n"):
                 path.write_text(changed)
                 with self.subTest(change=changed[-70:]), self.assertRaises(ValueError):
-                    r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
+                    r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
 
     def test_real_application_accepts_only_the_exact_two_method_filter_in_either_kgp_order(self):
         full = sorted(app.TEST_ARGUMENTS)
@@ -134,7 +134,7 @@ class IOSSwitchApplicationReceiptTests(unittest.TestCase):
         self.fixture.setUp()
         f = self.fixture
         f.write(r.IOS_SWITCH_CANCELLATION_SOURCE, (r.ROOT / r.IOS_SWITCH_CANCELLATION_SOURCE).read_bytes())
-        f.plan = r.plan(f.root, "ios", only_modules=("calf-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
+        f.plan = r.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SWITCH_CANCELLATION_FOCUS)
         f.cases = [{"classname": r.IOS_SWITCH_CANCELLATION_CLASS, "name": method, "status": "passed"}
                    for method in r.IOS_SWITCH_CANCELLATION_METHODS]
         f.document["explicit_test_focus"] = r.IOS_SWITCH_CANCELLATION_FOCUS

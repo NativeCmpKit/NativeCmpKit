@@ -15,7 +15,7 @@ import workflow_matrix as m
 
 class IOSSliderNumericFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_SLIDER_NUMERIC_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_SLIDER_NUMERIC_FOCUS)
 
     def collect(self, identities=None, outcome="", markers=1):
         plan = self.plan()
@@ -36,7 +36,7 @@ class IOSSliderNumericFocusTests(unittest.TestCase):
         rows = m.matrix("ios-slider-numeric")["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual("ios-iphone", rows[0]["slot"])
-        self.assertEqual("calf-ui", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-ui", rows[0]["test-modules"])
         self.assertEqual(r.IOS_SLIDER_NUMERIC_FOCUS, rows[0]["test-focus"])
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
@@ -46,12 +46,12 @@ class IOSSliderNumericFocusTests(unittest.TestCase):
         self.assertEqual(selectors, r.gradle_command(
             "ios", plan, simulator="00000000-0000-4000-8000-000000000001")[-4:])
         process = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                  "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_SLIDER_NUMERIC_FOCUS],
+                                  "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_SLIDER_NUMERIC_FOCUS],
                                  stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, process.returncode, process.stderr)
         self.assertEqual(2, self.collect()["totals"]["passed"])
         self.assertEqual([], self.collect()["errors"])
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_SLIDER_NUMERIC_FOCUS)
 
@@ -59,9 +59,9 @@ class IOSSliderNumericFocusTests(unittest.TestCase):
         source = (r.ROOT / r.IOS_SLIDER_NUMERIC_SOURCE).read_text()
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-ui",\n)\n')
-            (root / "calf-ui").mkdir()
-            (root / "calf-ui/build.gradle.kts").write_text("// synthetic build, never executed\n")
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-ui",\n)\n')
+            (root / "nativecmpkit-ui").mkdir()
+            (root / "nativecmpkit-ui/build.gradle.kts").write_text("// synthetic build, never executed\n")
             for relative in r.IOS_APPLICATION_SOURCES:
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)

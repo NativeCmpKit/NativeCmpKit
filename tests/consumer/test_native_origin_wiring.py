@@ -84,8 +84,8 @@ class NativeOriginWiringTest(unittest.TestCase):
         ):
             with self.subTest(required=required):
                 self.assertIn(required, self.native)
-        self.assertIn('"calf_filepicker_native", "file-picker")', self.native)
-        self.assertIn('"calf_share_native", "share")', self.native)
+        self.assertIn('"nativecmpkit_filepicker_native", "file-picker")', self.native)
+        self.assertIn('"nativecmpkit_share_native", "share")', self.native)
 
     def test_jni_checks_empty_system_library_path_and_serial_forks_are_retained(self):
         for required in (

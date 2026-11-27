@@ -17,12 +17,12 @@ import library_tests as tests
 
 FOCUSES = (tests.IOS_VECTOR_RENDERING_FOCUS, tests.IOS_SYSTEM_APPEARANCE_FOCUS,
            tests.IOS_SLIDER_PAIR_STRUCTURE_FOCUS, tests.IOS_SLIDER_TAP_FOCUS)
-TASK = ":calf-ui:iosSimulatorArm64ApplicationTest"
-REPORTS = "calf-ui/build/test-results/iosSimulatorArm64ApplicationTest"
+TASK = ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"
+REPORTS = "nativecmpkit-ui/build/test-results/iosSimulatorArm64ApplicationTest"
 COMPILE_TASKS = (
-    ":calf-ui:compileKotlinIosSimulatorArm64",
-    ":calf-ui:compileTestKotlinIosSimulatorArm64",
-    ":calf-ui:linkApplicationDebugTestIosSimulatorArm64",
+    ":nativecmpkit-ui:compileKotlinIosSimulatorArm64",
+    ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64",
+    ":nativecmpkit-ui:linkApplicationDebugTestIosSimulatorArm64",
 )
 
 
@@ -85,7 +85,7 @@ def archive(root: Path, relative: str) -> dict:
             receipt.get("suite") == "ios" and len(receipt.get("modules", [])) == 1,
             "Missing exact fresh application task execution")
     module = receipt["modules"][0]
-    require(module.get("module") == "calf-ui" and module.get("task") == TASK and
+    require(module.get("module") == "nativecmpkit-ui" and module.get("task") == TASK and
             len(module.get("reports", [])) == 1, "Wrong or empty native XML scope")
     row, = module["reports"]
     source = tests.safe_path(root, row["path"])

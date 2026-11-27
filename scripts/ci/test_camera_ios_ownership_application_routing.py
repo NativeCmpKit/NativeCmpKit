@@ -93,7 +93,7 @@ class CameraIosOwnershipApplicationRoutingControls(unittest.TestCase):
 
     def test_distinct_camera_application_task_binary_and_receipt_require_exact_new5_and_reject_other_hosts_full_or_sdk(self):
         host = application.APPLICATION_HOSTS[camera.MODULE]
-        self.assertEqual((camera.TASK, "calf-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest", "native-camera-application"),
+        self.assertEqual((camera.TASK, "nativecmpkit-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest", "native-camera-application"),
                          (host["task"], host["binary_directory"], host["receipt_subdirectory"]))
         binary = host["binary_directory"] + "/application.kexe"
         self.assertEqual(camera.MODULE, application.application_host(binary, camera.FOCUS)["module"])
@@ -138,7 +138,7 @@ class CameraIosOwnershipApplicationRoutingControls(unittest.TestCase):
 
     def test_only_camera_plist_gets_both_exact_keys_and_no_ats_scene_debug_or_foreign_fixture(self):
         node = camera_block("privacy_information")
-        for module in (camera.MODULE, "calf-ui", "calf-share", "calf-webview", "calf-file-picker"):
+        for module in (camera.MODULE, "nativecmpkit-ui", "nativecmpkit-share", "nativecmpkit-webview", "nativecmpkit-file-picker"):
             original = application.app_information(BUNDLE, "17.0.0")
             namespace = {"host": {"module": module}, "lt": SimpleNamespace(camera_ios=camera),
                          "information": original.copy(), "camera_photo": photos}

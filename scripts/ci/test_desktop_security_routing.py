@@ -34,7 +34,7 @@ def temporary():
 class DesktopSecurityRoutingModels(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.plans = {focus: lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=focus)
+        cls.plans = {focus: lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
                      for focus in security.FOCUSES}
 
     def plan(self, focus="tls-rendering"):
@@ -42,7 +42,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
 
     def source_root(self, folder):
         root = Path(folder)
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
         for relative in (*security.SOURCE_SHA256, security.BUILD_SOURCE, security.INIT_SCRIPT):
             destination = root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
@@ -86,7 +86,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
     def events(self, focus):
         route = security.focus_selection(focus)
         prefix = "NATIVECMPKIT_DESKTOP_SECURITY_"
-        lines = [prefix + "SETUP task=:calf-webview:desktopTest focus=" + focus +
+        lines = [prefix + "SETUP task=:nativecmpkit-webview:desktopTest focus=" + focus +
                  " forks=1 forkEvery=1 classes=" + str(len(route["selected"]))]
         for index, name in enumerate(route["selected"], 7):
             classname = security.SPECS[name][0]
@@ -109,7 +109,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
         rows = matrix.matrix(security.PROFILE)["include"]
         self.assertEqual([row[0] for row in ROWS], [row["slot"] for row in rows])
         self.assertEqual([row[3] for row in ROWS], [row["test-focus"] for row in rows])
-        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "calf-webview" for row in rows))
+        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "nativecmpkit-webview" for row in rows))
         preflight = matrix.preflight_plans(security.PROFILE, root=lt.ROOT)
         self.assertTrue(preflight["source_only"])
         self.assertEqual(0, preflight["Gradle_builds_executed"])
@@ -132,7 +132,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                 self.assertEqual(count, len(selected))
                 self.assertEqual(1, command.count("-PnativecmpkitDesktopSecurityFocus=" + focus))
                 self.assertEqual(1, command.count(security.INIT_SCRIPT))
-                self.assertEqual(1, command.count(":calf-webview:desktopTest"))
+                self.assertEqual(1, command.count(":nativecmpkit-webview:desktopTest"))
                 self.assertIn("--no-daemon", command)
                 self.assertIn("scripts/ci/fresh-tests.init.gradle.kts", command)
                 self.assertIn("scripts/ci/daemon-jvm.init.gradle.kts", command)
@@ -152,8 +152,8 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                     patch("library_tests.platform.machine", return_value=arch):
                 with self.assertRaises(ValueError):
                     lt.gradle_command("desktop", self.plan(focus), root=lt.ROOT)
-        for suite, modules in (("desktop", None), ("desktop", ("calf-io",)),
-                               ("desktop", ("calf-webview", "calf-io")), ("android-device", ("calf-webview",))):
+        for suite, modules in (("desktop", None), ("desktop", ("nativecmpkit-io",)),
+                               ("desktop", ("nativecmpkit-webview", "nativecmpkit-io")), ("android-device", ("nativecmpkit-webview",))):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus="tls-rendering")
 
@@ -168,7 +168,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                     patch("library_tests.platform.system", return_value="Linux"), \
                     patch("library_tests.platform.machine", return_value="x86_64"):
                 root = self.source_root(folder)
-                plan = lt.plan(root, "desktop", only_modules=("calf-webview",), focus="tls-rendering")
+                plan = lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus="tls-rendering")
                 file = root / relative; text = file.read_text(); self.assertIn(old, text)
                 file.write_text(text.replace(old, new, 1))
                 with self.assertRaises(ValueError):
@@ -177,12 +177,12 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
             root = self.source_root(folder)
             file = root / security.INIT_SCRIPT; file.unlink()
             with self.assertRaises((OSError, ValueError)):
-                lt.plan(root, "desktop", only_modules=("calf-webview",), focus="tls-rendering")
+                lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus="tls-rendering")
 
     def test_owning_plan_mutations_cannot_broaden_case_source_task_or_worker_contract(self):
         focus = "tls-rendering-cookies-policy-media"
-        variants = (("module", "calf-io"), ("project", ":calf-io"), ("task", ":calf-webview:publish"),
-                    ("report_directory", "calf-io/build/test-results/desktopTest"), ("test_filter", "*"),
+        variants = (("module", "nativecmpkit-io"), ("project", ":nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"),
+                    ("report_directory", "nativecmpkit-io/build/test-results/desktopTest"), ("test_filter", "*"),
                     ("required_testcases", []), ("required_original_xml", 1), ("required_original_xml", True),
                     ("test_source_files", []), ("test_source_sha256", {}), ("test_source_sets", ["commonTest"]))
         for key, value in variants:
@@ -202,8 +202,8 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                 lt.validate_test_focus(plan)
 
     def test_security_fixture_is_absent_from_ordinary_and_existing_request_commands(self):
-        default = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",))
-        request = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=lt.WEBVIEW_DESKTOP_REQUEST_FOCUS)
+        default = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",))
+        request = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=lt.WEBVIEW_DESKTOP_REQUEST_FOCUS)
         for plan in (default, request):
             self.assertNotIn("desktop_security_fixture", plan)
             with patch("library_tests.platform.system", return_value="Linux"), \
@@ -310,7 +310,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                 root = self.source_root(folder)
                 def execute(model_root, command, log, timeout, reserve_mib, **kwargs):
                     self.assertEqual(4200, timeout); self.assertEqual(8192, reserve_mib)
-                    lines = ["NATIVECMPKIT_TEST_RUNTIME task=:calf-webview:desktopTest gradle=9.7.1"]
+                    lines = ["NATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-webview:desktopTest gradle=9.7.1"]
                     if present:
                         lines.extend(self.events("tls-rendering"))
                     log.write_text("\n".join(lines) + "\n")
@@ -326,7 +326,7 @@ class DesktopSecurityRoutingModels(unittest.TestCase):
                         patch("library_tests.platform.system", return_value="Linux"), \
                         patch("library_tests.platform.machine", return_value="x86_64"):
                     result = lt.run(root, "desktop", "build/ci-verification/explicitly-synthetic-security", None,
-                                    4200, 8192, only_modules=("calf-webview",), focus="tls-rendering")
+                                    4200, 8192, only_modules=("nativecmpkit-webview",), focus="tls-rendering")
                 self.assertIs(expected, result["passed"])
                 self.assertEqual(present, "desktop_security_workers" in result)
                 if not present:

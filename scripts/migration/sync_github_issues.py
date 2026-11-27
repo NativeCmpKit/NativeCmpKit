@@ -91,7 +91,7 @@ def source_links(locations):
 def bullets(items): return '\n'.join('- '+str(x) for x in items) or '- None identified.'
 
 
-def calf_upstream_numbers(references):
+def original_upstream_numbers(references):
     """Only Calf issue/PR numbers belong in the migration's original-number map."""
     pattern=re.compile(r'^https://github\.com/MohamedRejeb/Calf/(?:issues|pull)/(\d+)(?:[/?#]|$)',re.IGNORECASE)
     return sorted({int(match[1]) for url in references if (match:=pattern.match(url))})
@@ -207,7 +207,7 @@ def main():
     items=[]
     for f in findings:
         resolution=resolutions.get(f['id'])
-        items.append({'key':'audit:'+f['id'],'finding_ids':[f['id']],'upstream_numbers':calf_upstream_numbers(f['upstream_refs']),'title':f'[{f["priority"]}][{f["id"]}] {f["title"]}','body':body_for(f,resolution),'labels':['audit','priority:'+f['priority'].lower(),'area:'+f['id'].split('-')[0].lower(),'evidence:'+f['status']],'state':'closed' if resolution and resolution['state']=='closed' else 'open'})
+        items.append({'key':'audit:'+f['id'],'finding_ids':[f['id']],'upstream_numbers':original_upstream_numbers(f['upstream_refs']),'title':f'[{f["priority"]}][{f["id"]}] {f["title"]}','body':body_for(f,resolution),'labels':['audit','priority:'+f['priority'].lower(),'area:'+f['id'].split('-')[0].lower(),'evidence:'+f['status']],'state':'closed' if resolution and resolution['state']=='closed' else 'open'})
     items.extend(inherited_items(decisions))
     if len({item['key'] for item in items})!=len(items): raise ValueError('Duplicate final issue keys')
     rendered=ROOT/'docs/audit/issue-drafts';rendered.mkdir(exist_ok=True)

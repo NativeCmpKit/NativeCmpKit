@@ -13,13 +13,13 @@ from pathlib import Path
 import re
 import stat
 
-SECURITY_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"
+SECURITY_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"
 SECURITY_METHOD = "trustedHttpsPaintsTwoAuthoredDocumentsAndUntrustedCertificateFailsBeforeHttpOnTheSameOwner"
-COOKIE_CLASS = "com.mohamedrejeb.calf.ui.web.JavaFxCookieIntegrationTest"
+COOKIE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxCookieIntegrationTest"
 COOKIE_METHOD = "realNativeLoginSurvivesLibraryCookieReadsAndHttpOnlyNeverLeaksIntoDocumentCookie"
-POLICY_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewIdentityAcceptanceTest"
+POLICY_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewIdentityAcceptanceTest"
 POLICY_METHOD = "actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"
-MEDIA_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest"
+MEDIA_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest"
 MEDIA_METHOD = "disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument"
 SPECS = {
     "tls-rendering": (SECURITY_CLASS, SECURITY_METHOD),
@@ -74,8 +74,8 @@ def selection(system: str, architecture: str) -> dict:
         raise ValueError("Unsupported actual Desktop host; no other-host or full-suite fallback")
     return {
         **row,
-        "test_modules": ("calf-webview",),
-        "task": ":calf-webview:desktopTest",
+        "test_modules": ("nativecmpkit-webview",),
+        "task": ":nativecmpkit-webview:desktopTest",
         "isolation_property": "-PnativecmpkitDesktopSecurityFocus=" + row["focus"],
         "selectors": tuple(SPECS[key][0] + "." + SPECS[key][1] for key in row["selected"]),
         "required_testcases": tuple({"classname": SPECS[key][0], "name": SPECS[key][1] + "[desktop]"} for key in row["selected"]),
@@ -90,13 +90,13 @@ def matrix() -> dict:
 
 
 FOCUSES = tuple(dict.fromkeys(row["focus"] for row in ROWS)) + (POLICY_RECOVERY_FOCUS, WINDOWS_TLS_RECOVERY_FOCUS)
-SOURCE_PATHS = {'tls-rendering': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt', 'cookie': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/JavaFxCookieIntegrationTest.kt', 'policy': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewIdentityAcceptanceTest.kt', 'media': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewLifetimeTest.kt'}
-SOURCE_SHA256 = {'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt': '00698c638a729549c890240b000e64cbd88be9f6ac32d4ca067b304b1443187c', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt': '6855ecb7610ba617efd04ab404e183dd05128c829765caecc66c4ba04fcff6ee', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/JavaFxCookieIntegrationTest.kt': 'd5b1da0a1b2c18c65cf4fff35b63d07138f0f631e6cd8b64464c9ebeeaa02183', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewIdentityAcceptanceTest.kt': 'cb8366e5283b8d1fb4a2e06970fdad85c7bf2e4ba30b86fbbaaab968aeb400ad', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewLifetimeTest.kt': 'aa57d7b6475b3b2b5931af90e22a77440e71a5fae3fe5edf2d31874facac8456'}
-TLS_HELPER = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedDesktopTlsFixture.kt"
-BUILD_SOURCE = "calf-webview/build.gradle.kts"
+SOURCE_PATHS = {'tls-rendering': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt', 'cookie': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxCookieIntegrationTest.kt', 'policy': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewIdentityAcceptanceTest.kt', 'media': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewLifetimeTest.kt'}
+SOURCE_SHA256 = {'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewTlsRenderingAcceptanceTest.kt': '00698c638a729549c890240b000e64cbd88be9f6ac32d4ca067b304b1443187c', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt': '6855ecb7610ba617efd04ab404e183dd05128c829765caecc66c4ba04fcff6ee', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxCookieIntegrationTest.kt': 'd5b1da0a1b2c18c65cf4fff35b63d07138f0f631e6cd8b64464c9ebeeaa02183', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewIdentityAcceptanceTest.kt': 'cb8366e5283b8d1fb4a2e06970fdad85c7bf2e4ba30b86fbbaaab968aeb400ad', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewLifetimeTest.kt': 'aa57d7b6475b3b2b5931af90e22a77440e71a5fae3fe5edf2d31874facac8456'}
+TLS_HELPER = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedDesktopTlsFixture.kt"
+BUILD_SOURCE = "nativecmpkit-webview/build.gradle.kts"
 INIT_SCRIPT = "scripts/ci/desktop-security.init.gradle.kts"
 INIT_SCRIPT_SHA256 = '0bb21f3b22d69b6e65202f79f82ab5a8c31e165673f512c3ca9adfe24483b233'
-ISOLATION_BLOCK = 'val desktopSecurityClass = "com.mohamedrejeb.calf.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"\nval desktopSecurityMethod = "trustedHttpsPaintsTwoAuthoredDocumentsAndUntrustedCertificateFailsBeforeHttpOnTheSameOwner"\nval desktopCookieSelector = "com.mohamedrejeb.calf.ui.web.JavaFxCookieIntegrationTest.realNativeLoginSurvivesLibraryCookieReadsAndHttpOnlyNeverLeaksIntoDocumentCookie"\nval desktopPolicySelector = "com.mohamedrejeb.calf.ui.web.DesktopWebViewIdentityAcceptanceTest.actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"\nval desktopMediaSelector = "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument"\nval desktopSecurityFocus = providers.gradleProperty("nativecmpkitDesktopSecurityFocus").orNull\nval desktopSecuritySelectors = when (desktopSecurityFocus) {\n    null -> emptyList()\n    "tls-rendering" -> listOf("$desktopSecurityClass.$desktopSecurityMethod")\n    "tls-rendering-cookies-policy" -> listOf("$desktopSecurityClass.$desktopSecurityMethod", desktopCookieSelector, desktopPolicySelector)\n    "tls-rendering-cookies-policy-media" -> listOf("$desktopSecurityClass.$desktopSecurityMethod", desktopCookieSelector, desktopPolicySelector, desktopMediaSelector)\n    "policy-macos-recovery" -> listOf(desktopPolicySelector)\n    "tls-windows-recovery" -> listOf("$desktopSecurityClass.$desktopSecurityMethod")\n    else -> error("Unknown finite Desktop security focus; no arbitrary class or whole-suite fallback")\n}\n\ntasks.withType<Test>().matching { it.name == "desktopTest" }.configureEach {\n    if (desktopSecurityFocus == null) {\n        // Never auto-enable a process-global test trust lease in an ordinary worker.\n        filter { excludeTestsMatching(desktopSecurityClass) }\n    } else {\n        // Each selected class has exactly one selected method; no second class can\n        // reuse HTTP2Loader\'s static fixture-trusted HttpClient or a cookie handler.\n        maxParallelForks = 1\n        forkEvery = 1L\n        systemProperty("nativecmpkit.desktop.security.worker", "one-selected-class")\n        filter {\n            setIncludePatterns(*desktopSecuritySelectors.toTypedArray())\n            isFailOnNoMatchingTests = true\n        }\n    }\n}\n'
+ISOLATION_BLOCK = 'val desktopSecurityClass = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"\nval desktopSecurityMethod = "trustedHttpsPaintsTwoAuthoredDocumentsAndUntrustedCertificateFailsBeforeHttpOnTheSameOwner"\nval desktopCookieSelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxCookieIntegrationTest.realNativeLoginSurvivesLibraryCookieReadsAndHttpOnlyNeverLeaksIntoDocumentCookie"\nval desktopPolicySelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewIdentityAcceptanceTest.actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"\nval desktopMediaSelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument"\nval desktopSecurityFocus = providers.gradleProperty("nativecmpkitDesktopSecurityFocus").orNull\nval desktopSecuritySelectors = when (desktopSecurityFocus) {\n    null -> emptyList()\n    "tls-rendering" -> listOf("$desktopSecurityClass.$desktopSecurityMethod")\n    "tls-rendering-cookies-policy" -> listOf("$desktopSecurityClass.$desktopSecurityMethod", desktopCookieSelector, desktopPolicySelector)\n    "tls-rendering-cookies-policy-media" -> listOf("$desktopSecurityClass.$desktopSecurityMethod", desktopCookieSelector, desktopPolicySelector, desktopMediaSelector)\n    "policy-macos-recovery" -> listOf(desktopPolicySelector)\n    "tls-windows-recovery" -> listOf("$desktopSecurityClass.$desktopSecurityMethod")\n    else -> error("Unknown finite Desktop security focus; no arbitrary class or whole-suite fallback")\n}\n\ntasks.withType<Test>().matching { it.name == "desktopTest" }.configureEach {\n    if (desktopSecurityFocus == null) {\n        // Never auto-enable a process-global test trust lease in an ordinary worker.\n        filter { excludeTestsMatching(desktopSecurityClass) }\n    } else {\n        // Each selected class has exactly one selected method; no second class can\n        // reuse HTTP2Loader\'s static fixture-trusted HttpClient or a cookie handler.\n        maxParallelForks = 1\n        forkEvery = 1L\n        systemProperty("nativecmpkit.desktop.security.worker", "one-selected-class")\n        filter {\n            setIncludePatterns(*desktopSecuritySelectors.toTypedArray())\n            isFailOnNoMatchingTests = true\n        }\n    }\n}\n'
 ISOLATION_BLOCK_SHA256 = '131bcb833441e07589e73356a46dfc5f2a9bab54fecd9dd075932ef3fa4b9c8f'
 
 
@@ -225,7 +225,7 @@ def worker_observation(log: Path, focus: str) -> dict:
     after = log.stat()
     if (before.st_ino, before.st_size, before.st_mtime_ns) != (after.st_ino, after.st_size, after.st_mtime_ns):
         raise ValueError("Worker observation changed during bounded readback")
-    setup = prefix + "SETUP task=:calf-webview:desktopTest focus=" + focus + " forks=1 forkEvery=1 classes=" + str(len(classes))
+    setup = prefix + "SETUP task=:nativecmpkit-webview:desktopTest focus=" + focus + " forks=1 forkEvery=1 classes=" + str(len(classes))
     if len(lines) != 1 + 4 * len(classes) or lines[0] != setup:
         raise ValueError("Missing exact effective setup and one complete fresh boundary per selected class")
     event = re.compile(re.escape(prefix) + r"(WORKER|CASE) phase=(start|finish) worker=([1-9][0-9]{0,8})"

@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.iodocuments.CONTROL_IO"
         android:protectionLevel="signature" />
-    <queries><package android:name="com.mohamedrejeb.calf.calfio.test" /></queries>
+    <queries><package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitio.test" /></queries>
     <application android:allowBackup="false" android:label="NativeCmpKit owned IO document source">
         <activity android:name=".IoDocumentGrantActivity" android:exported="true"
             android:permission="io.github.apdelrahman1911.nativecmpkit.verification.iodocuments.CONTROL_IO"

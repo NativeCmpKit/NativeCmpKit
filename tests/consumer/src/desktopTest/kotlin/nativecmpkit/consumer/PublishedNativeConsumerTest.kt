@@ -1,4 +1,4 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
 import java.net.JarURLConnection
 import java.nio.file.Files
@@ -62,12 +62,12 @@ class PublishedNativeConsumerTest {
     }
 
     @Test fun pickerNativeLibraryLoadsAndInitializes() {
-        val type = bridge("com.mohamedrejeb.calf.picker.platform.NativeFilePickerBridge", "calf_filepicker_native", "file-picker")
+        val type = bridge("io.github.apdelrahman1911.nativecmpkit.picker.platform.NativeFilePickerBridge", "nativecmpkit_filepicker_native", "file-picker")
         type.getMethod("init").invoke(null)
     }
 
     @Test fun packagedPickerCreatesAndReleasesValidHandles() {
-        val type = bridge("com.mohamedrejeb.calf.picker.platform.NativeFilePickerBridge", "calf_filepicker_native", "file-picker")
+        val type = bridge("io.github.apdelrahman1911.nativecmpkit.picker.platform.NativeFilePickerBridge", "nativecmpkit_filepicker_native", "file-picker")
         val create = type.getMethod("createDirectoryDialog", String::class.java, String::class.java, Long::class.javaPrimitiveType)
         val destroy = type.getMethod("destroyDialog", Long::class.javaPrimitiveType)
         repeat(100) {
@@ -78,7 +78,7 @@ class PublishedNativeConsumerTest {
     }
 
     @Test fun shareNativeLibraryLoadsAndReportsActualHostCapability() {
-        val type = bridge("com.mohamedrejeb.calf.share.platform.NativeShareBridge", "calf_share_native", "share")
+        val type = bridge("io.github.apdelrahman1911.nativecmpkit.share.platform.NativeShareBridge", "nativecmpkit_share_native", "share")
         type.getMethod("init").invoke(null)
         val supported = type.getMethod("isNativeShareSupported").invoke(null) as Boolean
         val os = System.getProperty("os.name").lowercase()

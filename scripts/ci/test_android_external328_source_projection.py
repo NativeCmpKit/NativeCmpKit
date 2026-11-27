@@ -38,11 +38,11 @@ READERS = {
     "scripts/ci/test_terminal_awt240_source_projection.py",
 }
 NATIVE_INPUTS = {
-    "calf-io/src/androidDeviceTest/AndroidManifest.xml": "397d45d9201637e6a696b3c4148376bb02fe5c4bb1070c541616bdcdaefeeb19",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoNamedSystemProviderTest.kt": "ec15772e36b8d5676d9d98a5742f38c3b97b85c51123f27637f50a7238ca4909",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoSystemTreeGrantActivity.kt": "760634c61aa94ffb04b16f94fc20ceb67f4c58aa06477ee6dde14c3dda24fdde",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/DeviceDescriptorProbe.kt": "941c43e90bd8d32f113b3dc0b863b4885459a4f17716825eb26ffbf8b320a78a",
-    "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/NamedSystemDocumentsUi.kt": "e0251e1f3cc8bb4c93791b978d84de5bc4eb18469873c4879c190dbdd93956a0",
+    "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml": "397d45d9201637e6a696b3c4148376bb02fe5c4bb1070c541616bdcdaefeeb19",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoNamedSystemProviderTest.kt": "ec15772e36b8d5676d9d98a5742f38c3b97b85c51123f27637f50a7238ca4909",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoSystemTreeGrantActivity.kt": "760634c61aa94ffb04b16f94fc20ceb67f4c58aa06477ee6dde14c3dda24fdde",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/DeviceDescriptorProbe.kt": "941c43e90bd8d32f113b3dc0b863b4885459a4f17716825eb26ffbf8b320a78a",
+    "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/NamedSystemDocumentsUi.kt": "e0251e1f3cc8bb4c93791b978d84de5bc4eb18469873c4879c190dbdd93956a0",
 }
 
 
@@ -95,7 +95,7 @@ class External328SourceHistoryControls(unittest.TestCase):
         self.assertEqual("cfbc16a80b9d93d734130e1151a93551456d7bfe", contract["before_fixture_revision"])
         self.assertEqual(49, sum(len(binding["fragments"]) for binding in self.bindings.values()))
         self.assertEqual(bridge.SPEC_SHA256, digest(self.raw_spec))
-        self.assertTrue(all(not path.startswith("calf-") for path in self.bindings))
+        self.assertTrue(all(not path.startswith("nativecmpkit-") for path in self.bindings))
 
     def test_all_sixteen_actual_postimages_restore_exact_whole_sources_and_roundtrip(self):
         for relative, binding in self.bindings.items():
@@ -213,7 +213,7 @@ class External328SourceHistoryControls(unittest.TestCase):
         # native operands retain their original raw-byte pins; no unregistered
         # source is enrolled. tearDownClass still holds actual native_before.
         native_ancestor = dict(self.native_before)
-        manifest = "calf-io/src/androidDeviceTest/AndroidManifest.xml"
+        manifest = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
         native_ancestor[manifest] = bridge.current_source_for_history(manifest, self.native_before[manifest])
         self.assertEqual(NATIVE_INPUTS, {relative: digest(payload) for relative, payload in native_ancestor.items()})
         self.assertEqual(self.native_before, {relative: (ROOT / relative).read_bytes() for relative in NATIVE_INPUTS})

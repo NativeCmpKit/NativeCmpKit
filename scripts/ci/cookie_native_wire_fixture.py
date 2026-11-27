@@ -30,29 +30,29 @@ TOKEN = re.compile(r"[0-9a-f]{32}\Z")
 PID = re.compile(r"[1-9][0-9]{0,9}\Z")
 UUID = re.compile(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\Z")
 SELECTORS = {
-    "desktop": "com.mohamedrejeb.calf.ui.web.DesktopCookieWireAcceptanceTest.realJavaFxScopedCookieHeadersKeepNativeMultiplicityAcrossHttpAndTrustedHttps",
-    "ios": "com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.realWkScopedCookieHeadersKeepNativeMultiplicityAcrossHttpAndTrustedHttps",
+    "desktop": "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieWireAcceptanceTest.realJavaFxScopedCookieHeadersKeepNativeMultiplicityAcrossHttpAndTrustedHttps",
+    "ios": "io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.realWkScopedCookieHeadersKeepNativeMultiplicityAcrossHttpAndTrustedHttps",
 }
 COMMON_SOURCES = (
     "scripts/ci/cookie_native_wire_fixture.py",
     "scripts/ci/cookie_wire_material.py",
     "scripts/ci/fixtures/cookie-wire-v1.json",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/CookieWireContract.kt",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/NativeCookieWireScenario.kt",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieRules.kt",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/Cookie.kt",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieWireContract.kt",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/NativeCookieWireScenario.kt",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieRules.kt",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/Cookie.kt",
     "gradle/libs.versions.toml",
 )
 PLATFORM_SOURCES = {
     "desktop": (
-        "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt",
-        "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireAcceptanceTest.kt",
-        "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireFixture.kt",
+        "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt",
+        "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireAcceptanceTest.kt",
+        "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireFixture.kt",
     ),
     "ios": (
-        "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.ios.kt",
-        "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireAcceptanceTest.kt",
-        "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireFixture.kt",
+        "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.ios.kt",
+        "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireAcceptanceTest.kt",
+        "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireFixture.kt",
     ),
 }
 

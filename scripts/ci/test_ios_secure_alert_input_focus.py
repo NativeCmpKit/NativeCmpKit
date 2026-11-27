@@ -109,7 +109,7 @@ class IosSecureAlertInputFocusTests(unittest.TestCase):
         workflow = (r.ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn(s.PROFILE, _secure_alert_profile_options(workflow))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
-        for suite, modules in (("desktop", (s.MODULE,)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", (s.MODULE,)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): r.plan(self.root, suite, only_modules=modules, focus=s.FOCUS)
 
     def test_actual_source_only_cli_preflight_has_exact_focus_and_does_not_run_gradle(self):

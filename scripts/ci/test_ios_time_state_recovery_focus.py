@@ -11,7 +11,7 @@ import workflow_matrix as m
 
 class IosTimeStateRecoveryTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_TIME_STATE_RECOVERY_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_TIME_STATE_RECOVERY_FOCUS)
 
     def helper(self):
         helper = batch.IOSUiStateFocusTests("test_eight_exact_methods_single_real_application_and_cli_do_not_replay_dates")
@@ -20,7 +20,7 @@ class IosTimeStateRecoveryTests(unittest.TestCase):
 
     def test_only_failed_method_is_selected_without_replaying_seven_accepted_methods(self):
         row, = m.matrix("ios-time-state-recovery")["include"]
-        self.assertEqual(("ios-iphone", "calf-ui", r.IOS_TIME_STATE_RECOVERY_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-ui", r.IOS_TIME_STATE_RECOVERY_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
@@ -36,7 +36,7 @@ class IosTimeStateRecoveryTests(unittest.TestCase):
         self.assertEqual(r.IOS_TIME_STATE_RECOVERY_FOCUS, app.application_test_focus(
             sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + selector]))
         result = subprocess.run([r.sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_TIME_STATE_RECOVERY_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_TIME_STATE_RECOVERY_FOCUS],
                                 stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(11, len(m.matrix("all")["include"]))
@@ -79,7 +79,7 @@ class IosTimeStateRecoveryTests(unittest.TestCase):
         self.assertTrue(f.collect()["errors"])
 
     def test_recovery_does_not_hide_declared_method_drift_or_remove_required_host(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_TIME_STATE_RECOVERY_FOCUS)
         f = self.helper().fixture()
         source = f.root / r.IOS_TIME_STATE_SOURCE

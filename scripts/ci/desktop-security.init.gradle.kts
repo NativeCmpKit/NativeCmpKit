@@ -8,11 +8,11 @@ import org.gradle.api.tasks.testing.TestResult
 
 gradle.settingsEvaluated {
     if (rootProject.name == "NativeCmpKit") {
-        val securityClass = "com.mohamedrejeb.calf.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"
+        val securityClass = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewTlsRenderingAcceptanceTest"
         val securitySelector = "$securityClass.trustedHttpsPaintsTwoAuthoredDocumentsAndUntrustedCertificateFailsBeforeHttpOnTheSameOwner"
-        val cookieSelector = "com.mohamedrejeb.calf.ui.web.JavaFxCookieIntegrationTest.realNativeLoginSurvivesLibraryCookieReadsAndHttpOnlyNeverLeaksIntoDocumentCookie"
-        val policySelector = "com.mohamedrejeb.calf.ui.web.DesktopWebViewIdentityAcceptanceTest.actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"
-        val mediaSelector = "com.mohamedrejeb.calf.ui.web.DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument"
+        val cookieSelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxCookieIntegrationTest.realNativeLoginSurvivesLibraryCookieReadsAndHttpOnlyNeverLeaksIntoDocumentCookie"
+        val policySelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewIdentityAcceptanceTest.actualFxTypedValuesOffMainAndThrowingOrDetachedCallbacksAreExactlyOnce"
+        val mediaSelector = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewLifetimeTest.disposingARealWindowClosesItsSlowConnectionAndStopsTheLiveMediaDocument"
         val securityFocus = gradle.startParameter.projectProperties["nativecmpkitDesktopSecurityFocus"]
             ?: error("Security observation requires the exact explicit finite focus")
         val securitySelectors = when (securityFocus) {
@@ -27,7 +27,7 @@ gradle.settingsEvaluated {
         val workerName = Regex("Gradle Test Executor ([1-9][0-9]{0,8})")
 
         allprojects {
-            tasks.withType<Test>().matching { it.path == ":calf-webview:desktopTest" }.configureEach {
+            tasks.withType<Test>().matching { it.path == ":nativecmpkit-webview:desktopTest" }.configureEach {
                 val selectedTask = this
                 doFirst {
                     check(maxParallelForks == 1 && forkEvery == 1L)

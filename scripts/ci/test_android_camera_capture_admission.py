@@ -107,8 +107,8 @@ class Model:
         self.home = self.root / "nonexistent-sdk"
         self.old_umask = os.umask(0o077)
         self.stack.enter_context(patch.dict(os.environ, {"ANDROID_HOME": str(self.home)}, clear=True))
-        plan = {"expected": [{"project": ":calf-camera-picker"}], "complete_suite_requested": False,
-                "explicit_module_subset": ["calf-camera-picker"], "test_bearing_modules_not_requested": []}
+        plan = {"expected": [{"project": ":nativecmpkit-camera-picker"}], "complete_suite_requested": False,
+                "explicit_module_subset": ["nativecmpkit-camera-picker"], "test_bearing_modules_not_requested": []}
         inert = {
             "safe_path": lambda root, relative: root / relative,
             "plan": lambda *a, **k: copy.deepcopy(plan),
@@ -118,7 +118,7 @@ class Model:
             "android_camera_receiver_required": lambda p: self.camera_route,
             "android_geo_probe_required": lambda p: False,
             "android_share_recipient_required": lambda p: False,
-            "gradle_command": lambda *a, **k: ["model-gradle", ":calf-camera-picker:connectedAndroidDeviceTest"],
+            "gradle_command": lambda *a, **k: ["model-gradle", ":nativecmpkit-camera-picker:connectedAndroidDeviceTest"],
             "execute": self.execute,
             "write_json": lambda path, value: self.writes.__setitem__(path.name, copy.deepcopy(value)),
             "snapshot_inputs": lambda root: {"held-controller": hashlib.sha256(CONTROLLER.read_bytes()).hexdigest()},
@@ -250,7 +250,7 @@ class Model:
 
     def run(self):
         result = device._run(self.root, "build/ci-verification/owning-capture-model",
-                             only_modules=("calf-camera-picker",), focus=self.focus, api_level=self.api)
+                             only_modules=("nativecmpkit-camera-picker",), focus=self.focus, api_level=self.api)
         assert result["passed"] is False and result["test_suite_passed"] is False
         assert "test_totals" not in result and "boot.json" not in self.writes
         assert MARKER not in json.dumps(result) and str(self.root) not in json.dumps(result)

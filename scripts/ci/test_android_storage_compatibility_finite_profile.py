@@ -18,8 +18,8 @@ import workflow_matrix as workflow
 
 ROOT = lt.ROOT
 PROFILE = "android-storage-compatibility"
-MODULE = "calf-permissions/core"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidStorageCompatibilityTest"
+MODULE = "nativecmpkit-permissions/core"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidStorageCompatibilityTest"
 EXPECTED = (
     ("android-storage-api28", 28, "legacy28", 28, "api28LegacyPermissionControlsSharedStorage"),
     ("android-storage-api29-target28", 29, "legacyTarget28", 28,
@@ -74,7 +74,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
                 self.assertEqual([MODULE], source["explicit_module_subset"])
                 item, = source["expected"]
                 self.assertEqual(MODULE, item["module"])
-                self.assertEqual(":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest", item["task"])
+                self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest", item["task"])
                 self.assertEqual(MODULE + "/build/outputs/androidTest-results/connected/androidMain", item["report_directory"])
                 self.assertEqual(CLASS + "#" + method, item["test_filter"])
                 self.assertEqual([{"classname": CLASS, "name": method}], item["required_testcases"])
@@ -107,7 +107,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
         for name, routes in ORIGINAL_BATCHES.items():
             self.assertEqual(routes, fixed.BATCHES[name])
             self.assertIn(name, workflow.PROFILES)
-        self.assertEqual("calf-io,calf-permissions/core", fixed.MODULES["android-io-permission-storage-api35"])
+        self.assertEqual("nativecmpkit-io,nativecmpkit-permissions/core", fixed.MODULES["android-io-permission-storage-api35"])
         self.assertEqual(MODULE, fixed.MODULES["android-permission-storage-compatibility"])
         self.assertEqual(MODULE, fixed.MODULES[PROFILE])
         row, = workflow.matrix(PROFILE)["include"]
@@ -162,7 +162,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
 
     def test_new_batch_route_api_module_focus_or_host_overrides_refuse_before_source_planning(self):
         first = EXPECTED[0][0]
-        for index, value in ((0, 35), (1, "calf-io"), (2, "android-media-selection")):
+        for index, value in ((0, 35), (1, "nativecmpkit-io"), (2, "android-media-selection")):
             altered = list(fixed.SELECTIONS[first])
             altered[index] = value
             with self.subTest(selection_index=index), patch.dict(fixed.SELECTIONS, {first: tuple(altered)}), \
@@ -171,7 +171,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
                 batch.plan(ROOT, PROFILE)
         matrix_function = workflow.matrix
         for key, value in (("suite", "android-host"), ("runner", "self-hosted"), ("arch", "arm64"),
-                           ("python", "python"), ("emulator-api", "35"), ("test-modules", "calf-io"),
+                           ("python", "python"), ("emulator-api", "35"), ("test-modules", "nativecmpkit-io"),
                            ("test-focus", "android-media-selection"), ("arbitrary-task", "all")):
             def altered_matrix(name, key=key, value=value):
                 result = matrix_function(name)
@@ -182,7 +182,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
                     patch.object(lt, "plan", side_effect=AssertionError("No planning after route refusal")), \
                     self.assertRaises(ValueError):
                 batch.plan(ROOT, PROFILE)
-        for name in (PROFILE + ";all", PROFILE + "-api35", PROFILE + " --module calf-io"):
+        for name in (PROFILE + ";all", PROFILE + "-api35", PROFILE + " --module nativecmpkit-io"):
             with self.subTest(invalid_batch=name), patch.object(lt, "plan") as source, self.assertRaises(ValueError):
                 batch.plan(ROOT, name)
             source.assert_not_called()
@@ -196,7 +196,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
                     key = {"api": "verification_api_level", "target": "target_sdk", "flavor": "flavor"}[kind]
                     source["android_storage_probe"][key] = "wrong" if kind == "flavor" else source["android_storage_probe"][key] + 1
                 elif kind == "task":
-                    item["task"] = ":calf-permissions:calf-permissions-core:test"
+                    item["task"] = ":nativecmpkit-permissions:nativecmpkit-permissions-core:test"
                 elif kind == "xml":
                     item["report_directory"] = MODULE + "/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest"
                 elif kind == "filter":
@@ -206,7 +206,7 @@ class AndroidStorageCompatibilityFiniteProfileTests(unittest.TestCase):
                 elif kind == "missing-case":
                     item["required_testcases"] = []
                 elif kind == "module":
-                    item["module"] = "calf-io"
+                    item["module"] = "nativecmpkit-io"
                 else:
                     source["suite"] = "android-host"
                 with self.subTest(profile=route["profile"], mutation=kind), self.assertRaises(ValueError):

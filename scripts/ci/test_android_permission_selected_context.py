@@ -56,7 +56,7 @@ class PermissionSelectedContextControls(unittest.TestCase):
         for name, mutate in (
             ("unrelated-focus", lambda p: p.update(explicit_test_focus=recovery.PROFILE)),
             ("default-focus", lambda p: p.update(explicit_test_focus=None)),
-            ("foreign-module", lambda p: p.update(explicit_module_subset=["calf-io"])),
+            ("foreign-module", lambda p: p.update(explicit_module_subset=["nativecmpkit-io"])),
             ("complete-claim", lambda p: p.update(complete_suite_requested=True)),
             ("native-inference", lambda p: p["android_permission_lifecycle"]["source_contract"].update(native_or_compile_success_inferred=True)),
             ("missing-source", lambda p: p["android_permission_lifecycle"]["source_contract"]["source_inputs"].pop(lifecycle.SOURCE_FILES[0])),

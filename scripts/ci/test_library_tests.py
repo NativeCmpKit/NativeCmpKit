@@ -18,10 +18,10 @@ class LibraryTestReceipts(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-fixture",\n    ":calf-empty",\n    ":calf-permissions:core",\n    ":sample:common",\n)\nproject(":calf-permissions:core").name = "calf-permissions-core"\n')
-        for module in ("calf-fixture", "calf-empty", "calf-permissions/core", "sample/common"):
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-fixture",\n    ":nativecmpkit-empty",\n    ":nativecmpkit-permissions:core",\n    ":sample:common",\n)\nproject(":nativecmpkit-permissions:core").name = "nativecmpkit-permissions-core"\n')
+        for module in ("nativecmpkit-fixture", "nativecmpkit-empty", "nativecmpkit-permissions/core", "sample/common"):
             self.write(module + "/build.gradle.kts", "// build fixture\n")
-        self.write("calf-fixture/src/commonTest/kotlin/Fixture.kt", "// synthetic test input\n")
+        self.write("nativecmpkit-fixture/src/commonTest/kotlin/Fixture.kt", "// synthetic test input\n")
 
     def write(self, name, value):
         path = self.root / name
@@ -30,7 +30,7 @@ class LibraryTestReceipts(unittest.TestCase):
         return path
 
     def plan(self, suite="desktop"):
-        return r.plan(self.root, suite, minimum_modules=("calf-fixture",))
+        return r.plan(self.root, suite, minimum_modules=("nativecmpkit-fixture",))
 
     def report(self, name="a", status="", **attributes):
         extra = " ".join(f'{key}="{value}"' for key, value in attributes.items())
@@ -44,12 +44,12 @@ class LibraryTestReceipts(unittest.TestCase):
 
     def test_literal_project_renames_and_sample_exclusion(self):
         projects = r.projects(self.root)
-        self.assertEqual(":calf-permissions:calf-permissions-core", projects["calf-permissions/core"])
+        self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core", projects["nativecmpkit-permissions/core"])
         self.assertNotIn("sample/common", projects)
 
     def test_source_set_inheritance_is_target_specific(self):
         for source_set in ("materialTest", "nonAndroidTest", "iosTest", "androidHostTest", "webTest"):
-            self.write(f"calf-fixture/src/{source_set}/kotlin/{source_set}.kt", "// fixture")
+            self.write(f"nativecmpkit-fixture/src/{source_set}/kotlin/{source_set}.kt", "// fixture")
         desktop = self.plan()["expected"][0]["test_source_sets"]
         android = self.plan("android-host")["expected"][0]["test_source_sets"]
         ios = self.plan("ios")["expected"][0]["test_source_sets"]
@@ -61,23 +61,23 @@ class LibraryTestReceipts(unittest.TestCase):
         self.assertEqual(2, len(self.plan()["uncovered"]))
 
     def test_removing_last_required_source_is_failure(self):
-        (self.root / "calf-fixture/src/commonTest/kotlin/Fixture.kt").unlink()
+        (self.root / "nativecmpkit-fixture/src/commonTest/kotlin/Fixture.kt").unlink()
         with self.assertRaises(ValueError):
             self.plan()
 
     def test_explicit_diagnostic_subset_is_not_full_ci_coverage(self):
-        self.write("calf-empty/src/commonTest/kotlin/A.kt", "// extra module tests")
-        plan = r.plan(self.root, "desktop", only_modules=("calf-fixture",))
+        self.write("nativecmpkit-empty/src/commonTest/kotlin/A.kt", "// extra module tests")
+        plan = r.plan(self.root, "desktop", only_modules=("nativecmpkit-fixture",))
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-fixture"], plan["explicit_module_subset"])
-        self.assertEqual(["calf-empty"], plan["test_bearing_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-fixture"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-empty"], plan["test_bearing_modules_not_requested"])
         self.assertEqual(1, len(plan["expected"]))
-        for modules in (("calf-fixture", "calf-fixture"), ("../../outside",), ("calf-permissions/core",)):
+        for modules in (("nativecmpkit-fixture", "nativecmpkit-fixture"), ("../../outside",), ("nativecmpkit-permissions/core",)):
             with self.assertRaises(ValueError):
                 r.plan(self.root, "desktop", only_modules=modules)
 
     def test_unknown_hierarchy_cannot_silently_drop_sources(self):
-        self.write("calf-fixture/src/mysteryTest/kotlin/A.kt", "// fixture")
+        self.write("nativecmpkit-fixture/src/mysteryTest/kotlin/A.kt", "// fixture")
         with self.assertRaises(ValueError):
             self.plan()
 
@@ -88,13 +88,13 @@ class LibraryTestReceipts(unittest.TestCase):
 
     def test_snapshot_covers_new_changed_sources_and_build_configuration(self):
         before = r.snapshot_inputs(self.root)
-        self.write("calf-fixture/src/commonTest/kotlin/Added.kt", "// new input")
-        self.write("calf-fixture/build/ignored.kt", "// generated, not source")
+        self.write("nativecmpkit-fixture/src/commonTest/kotlin/Added.kt", "// new input")
+        self.write("nativecmpkit-fixture/build/ignored.kt", "// generated, not source")
         self.write("sample/common/src/commonTest/kotlin/Sample.kt", "// never substitute sample tests")
         self.write("sample/common/build.gradle.kts", "// evaluated configuration changed")
         after = r.snapshot_inputs(self.root)
-        self.assertIn("calf-fixture/src/commonTest/kotlin/Added.kt", after)
-        self.assertNotIn("calf-fixture/build/ignored.kt", after)
+        self.assertIn("nativecmpkit-fixture/src/commonTest/kotlin/Added.kt", after)
+        self.assertNotIn("nativecmpkit-fixture/build/ignored.kt", after)
         self.assertNotIn("sample/common/src/commonTest/kotlin/Sample.kt", after)
         self.assertNotEqual(before["sample/common/build.gradle.kts"], after["sample/common/build.gradle.kts"])
         self.assertNotEqual(r.input_digest(before), r.input_digest(after))
@@ -102,7 +102,7 @@ class LibraryTestReceipts(unittest.TestCase):
     def test_traversal_and_symlink_sources_refused(self):
         with self.assertRaises(ValueError):
             r.safe_path(self.root, "../external")
-        (self.root / "calf-fixture/src/commonTest/link.kt").symlink_to(self.root / "settings.gradle.kts")
+        (self.root / "nativecmpkit-fixture/src/commonTest/link.kt").symlink_to(self.root / "settings.gradle.kts")
         with self.assertRaises(ValueError):
             self.plan()
 
@@ -164,13 +164,13 @@ class LibraryTestReceipts(unittest.TestCase):
             self.assertTrue(self.collect()["errors"])
 
     def test_one_missing_module_is_failure_despite_other_passing_module(self):
-        self.write("calf-empty/src/commonTest/kotlin/A.kt", "// added tests")
+        self.write("nativecmpkit-empty/src/commonTest/kotlin/A.kt", "// added tests")
         plan = self.plan()
-        populated = next(item for item in plan["expected"] if item["module"] == "calf-fixture")
+        populated = next(item for item in plan["expected"] if item["module"] == "nativecmpkit-fixture")
         self.write(populated["report_directory"] + "/TEST-a.xml", self.report())
         result = self.collect(plan)
         self.assertEqual(1, result["totals"]["passed"])
-        self.assertTrue(any(error["module"] == "calf-empty" for error in result["errors"]))
+        self.assertTrue(any(error["module"] == "nativecmpkit-empty" for error in result["errors"]))
 
     def test_duplicate_case_across_report_files_is_failure(self):
         directory = self.plan()["expected"][0]["report_directory"]
@@ -193,7 +193,7 @@ class LibraryTestReceipts(unittest.TestCase):
     def test_quarantine_moves_only_selected_task_reports(self):
         directory = self.plan()["expected"][0]["report_directory"]
         selected = self.write(directory + "/TEST-old.xml", self.report())
-        unrelated = self.write("calf-fixture/build/test-results/allTests/TEST-old.xml", self.report())
+        unrelated = self.write("nativecmpkit-fixture/build/test-results/allTests/TEST-old.xml", self.report())
         output = self.root / "build/ci-verification/run"
         output.mkdir(parents=True)
         moved = r.quarantine_reports(self.root, output, self.plan())
@@ -215,7 +215,7 @@ class LibraryTestReceipts(unittest.TestCase):
     def test_command_is_narrow_and_ios_device_is_explicit(self):
         command = r.gradle_command("desktop", self.plan())
         self.assertIn("--init-script", command)
-        self.assertIn(":calf-fixture:desktopTest", command)
+        self.assertIn(":nativecmpkit-fixture:desktopTest", command)
         self.assertNotIn("--rerun-tasks", command)
         for simulator in (None, "$(untrusted)"):
             with self.assertRaises(ValueError):
@@ -224,8 +224,8 @@ class LibraryTestReceipts(unittest.TestCase):
             r.gradle_command("desktop", self.plan(), "11111111-1111-1111-1111-111111111111")
 
     def test_runtime_markers_ignore_cached_task_lines(self):
-        log = self.write("build/run.log", "> Task :calf-fixture:desktopTest FROM-CACHE\nNATIVECMPKIT_TEST_RUNTIME task=:calf-fixture:desktopTest gradle=9.7.1 java=17\n")
-        self.assertEqual(Counter({":calf-fixture:desktopTest": 1}), r.execution_markers(log))
+        log = self.write("build/run.log", "> Task :nativecmpkit-fixture:desktopTest FROM-CACHE\nNATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-fixture:desktopTest gradle=9.7.1 java=17\n")
+        self.assertEqual(Counter({":nativecmpkit-fixture:desktopTest": 1}), r.execution_markers(log))
 
     def test_bounded_execution_does_not_start_without_disk_reserve(self):
         with patch.object(r.shutil, "disk_usage") as usage, patch.object(r.subprocess, "Popen") as process:
@@ -236,13 +236,13 @@ class LibraryTestReceipts(unittest.TestCase):
 
     def fake_run(self, *, exit_code=0, mutate_source=False, revision_after=None):
         def execute(root, command, log_path, timeout, reserve_mib):
-            self.write("calf-fixture/build/test-results/desktopTest/TEST-a.xml", self.report())
-            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:calf-fixture:desktopTest gradle=9.7.1 java=17\n" +
+            self.write("nativecmpkit-fixture/build/test-results/desktopTest/TEST-a.xml", self.report())
+            log_path.write_text("NATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-fixture:desktopTest gradle=9.7.1 java=17\n" +
                                 r.daemon_jvm.PREFIX + json.dumps(SYNTHETIC_DAEMON) + "\n")
             if mutate_source:
-                self.write("calf-fixture/src/commonTest/kotlin/Fixture.kt", "// changed during simulated execution")
+                self.write("nativecmpkit-fixture/src/commonTest/kotlin/Fixture.kt", "// changed during simulated execution")
             return {"exit_code": exit_code}
-        with patch.dict(r.MINIMUM_MODULES, {"desktop": ("calf-fixture",)}), \
+        with patch.dict(r.MINIMUM_MODULES, {"desktop": ("nativecmpkit-fixture",)}), \
                 patch.object(r.runtime_context, "capture", return_value={"source_revision": "a" * 40, "source_tree_dirty": True, "host": {"system": "Linux"}, "java": {"major": 17}}), \
                 patch.object(r, "git_revision", side_effect=["a" * 40, revision_after or "a" * 40]), \
                 patch.object(r, "execute", side_effect=execute):
@@ -264,7 +264,7 @@ class LibraryTestReceipts(unittest.TestCase):
     def test_source_change_invalidates_otherwise_passing_simulated_run(self):
         receipt = self.fake_run(mutate_source=True)
         self.assertFalse(receipt["passed"])
-        self.assertEqual(["calf-fixture/src/commonTest/kotlin/Fixture.kt"], receipt["changed_inputs"])
+        self.assertEqual(["nativecmpkit-fixture/src/commonTest/kotlin/Fixture.kt"], receipt["changed_inputs"])
 
     def test_git_revision_change_invalidates_same_bytes(self):
         receipt = self.fake_run(revision_after="b" * 40)
@@ -325,7 +325,7 @@ class KotlinUserHomeOptionTests(unittest.TestCase):
     def test_home_requires_a_strict_build_descendant_directory(self):
         self.fixture.write("build/file", "not a directory")
         for home in ("", ".", "build", "../outside", str(self.root / "build/absolute"),
-                     "calf-fixture/build/home", "build/../calf-fixture", "build/../../outside",
+                     "nativecmpkit-fixture/build/home", "build/../nativecmpkit-fixture", "build/../../outside",
                      "build/file", "build/file/child"):
             with self.subTest(home=home), self.assertRaises(ValueError):
                 self.command("wasm", home)
@@ -353,10 +353,10 @@ class KotlinUserHomeOptionTests(unittest.TestCase):
 
     def test_invalid_run_home_fails_before_outputs_or_execution(self):
         with patch.object(r, "execute") as execute, patch.object(r, "quarantine_reports") as quarantine:
-            for home in ("build", "../outside", "calf-fixture/build/home"):
+            for home in ("build", "../outside", "nativecmpkit-fixture/build/home"):
                 with self.subTest(home=home), self.assertRaises(ValueError):
                     r.run(self.root, "js", "build/ci-verification/invalid", None, 60, 1024,
-                          ("calf-fixture",), kotlin_user_home=home)
+                          ("nativecmpkit-fixture",), kotlin_user_home=home)
             execute.assert_not_called()
             quarantine.assert_not_called()
         self.assertFalse((self.root / "build/ci-verification").exists())
@@ -364,16 +364,16 @@ class KotlinUserHomeOptionTests(unittest.TestCase):
     def test_cli_threads_browser_option_without_other_arguments(self):
         for suite in ("js", "wasm"):
             result = {"suite": suite, "source_revision": "a" * 40, "passed": True,
-                      "complete_suite_requested": False, "explicit_module_subset": ["calf-fixture"],
+                      "complete_suite_requested": False, "explicit_module_subset": ["nativecmpkit-fixture"],
                       "execution": {"exit_code": 0}, "totals": {}, "errors": []}
-            argv = ["library_tests.py", "run", "--suite", suite, "--module", "calf-fixture",
+            argv = ["library_tests.py", "run", "--suite", suite, "--module", "nativecmpkit-fixture",
                     "--output", "build/ci-verification/cli", "--timeout", "60", "--reserve-mib", "1024",
                     "--kotlin-user-home", "build/prepared home"]
             with self.subTest(suite=suite), patch.object(sys, "argv", argv), patch.object(r, "ROOT", self.root), \
                     patch.object(r, "run", return_value=result) as run, patch.object(sys, "stdout", io.StringIO()):
                 self.assertEqual(0, r.main())
                 run.assert_called_once_with(self.root, suite, "build/ci-verification/cli", None, 60, 1024,
-                                            ("calf-fixture",), kotlin_user_home="build/prepared home")
+                                            ("nativecmpkit-fixture",), kotlin_user_home="build/prepared home")
 
     def test_cli_refuses_plan_and_non_browser_option_without_work(self):
         cases = [("plan", "js", "build/home"), ("plan", "wasm", ""),
@@ -409,13 +409,13 @@ class KotlinUserHomeOptionTests(unittest.TestCase):
         def execute(root, command, log_path, timeout, reserve_mib):
             observed.extend(command)
             if failure != "missing-report":
-                self.fixture.write(f"calf-fixture/build/test-results/{task}/TEST-a.xml",
+                self.fixture.write(f"nativecmpkit-fixture/build/test-results/{task}/TEST-a.xml",
                                    self.fixture.report(status="<failure/>" if failure == "failed-case" else ""))
             log_path.write_text("" if failure == "missing-marker" else
-                                f"NATIVECMPKIT_TEST_RUNTIME task=:calf-fixture:{task} gradle=9.7.1 java=17\n" +
+                                f"NATIVECMPKIT_TEST_RUNTIME task=:nativecmpkit-fixture:{task} gradle=9.7.1 java=17\n" +
                                 r.daemon_jvm.PREFIX + json.dumps(SYNTHETIC_DAEMON) + "\n")
             if failure == "source-change":
-                self.fixture.write("calf-fixture/src/commonTest/kotlin/Fixture.kt", "// changed during synthetic run")
+                self.fixture.write("nativecmpkit-fixture/src/commonTest/kotlin/Fixture.kt", "// changed during synthetic run")
             return {"exit_code": 1 if failure == "gradle" else 0,
                     **({"stop_reason": "synthetic stop"} if failure == "stop-reason" else {})}
 
@@ -423,7 +423,7 @@ class KotlinUserHomeOptionTests(unittest.TestCase):
         with patch.object(r.runtime_context, "capture", return_value={"source_revision": "a" * 40,
                          "source_tree_dirty": True, "host": {"system": "Linux"}, "java": {"major": 17}}), \
                 patch.object(r, "git_revision", return_value="a" * 40), patch.object(r, "execute", side_effect=execute):
-            receipt = r.run(self.root, suite, output, None, 60, 1024, ("calf-fixture",), kotlin_user_home=home)
+            receipt = r.run(self.root, suite, output, None, 60, 1024, ("nativecmpkit-fixture",), kotlin_user_home=home)
         self.assertEqual(observed, receipt["command"])
         self.assertEqual(receipt, json.loads((self.root / output / "receipt.json").read_text()))
         self.assertEqual([f"-Pkotlin.user.home={self.root / home}"],
@@ -454,10 +454,10 @@ class NativeShareBoundaryFocusTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-share",\n)\n')
-        self.write("calf-share/build.gradle.kts", "// synthetic build\n")
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-share",\n)\n')
+        self.write("nativecmpkit-share/build.gradle.kts", "// synthetic build\n")
         self.write(r.native_test_policy.SOURCE, "// required bridge source is still retained\n")
-        self.source = "package com.mohamedrejeb.calf.share.platform\nclass NativeLoaderBoundaryIntegrationTest {\n" + \
+        self.source = "package io.github.apdelrahman1911.nativecmpkit.share.platform\nclass NativeLoaderBoundaryIntegrationTest {\n" + \
             "\n".join("@Test fun " + method + "() {}" for method in r.NATIVE_SHARE_BOUNDARY_METHODS) + "\n}\n"
         self.write(r.NATIVE_SHARE_BOUNDARY_SOURCE, self.source)
 
@@ -468,18 +468,18 @@ class NativeShareBoundaryFocusTests(unittest.TestCase):
         return path
 
     def plan(self):
-        return r.plan(self.root, "desktop", only_modules=("calf-share",), focus=r.NATIVE_SHARE_BOUNDARY_FOCUS)
+        return r.plan(self.root, "desktop", only_modules=("nativecmpkit-share",), focus=r.NATIVE_SHARE_BOUNDARY_FOCUS)
 
     def collect(self, methods=None, skip=False, focused=True):
-        plan = self.plan() if focused else r.plan(self.root, "desktop", only_modules=("calf-share",))
+        plan = self.plan() if focused else r.plan(self.root, "desktop", only_modules=("nativecmpkit-share",))
         methods = r.NATIVE_SHARE_BOUNDARY_METHODS if methods is None else methods
         body = "".join('<testcase classname="' + r.NATIVE_SHARE_BOUNDARY_CLASS + '" name="' + method +
                        '[desktop]">' + ('<skipped/>' if skip and index == 0 else '') + '</testcase>'
                        for index, method in enumerate(methods))
-        self.write("calf-share/build/test-results/desktopTest/TEST-boundary.xml", "<testsuite>" + body + "</testsuite>")
+        self.write("nativecmpkit-share/build/test-results/desktopTest/TEST-boundary.xml", "<testsuite>" + body + "</testsuite>")
         now = time.time_ns()
         return r.collect_reports(self.root, plan, now - 1_000_000_000, now + 1_000_000_000,
-                                 Counter({":calf-share:desktopTest": 1}), host_system="Windows")
+                                 Counter({":nativecmpkit-share:desktopTest": 1}), host_system="Windows")
 
     def test_exact_plan_keeps_all_source_inputs_but_requests_only_five_cases(self):
         plan = self.plan()
@@ -488,16 +488,16 @@ class NativeShareBoundaryFocusTests(unittest.TestCase):
         self.assertIn(r.native_test_policy.SOURCE, plan["expected"][0]["test_source_files"])
         self.assertEqual(5, len(plan["expected"][0]["required_testcases"]))
         command = r.gradle_command("desktop", plan, root=self.root)
-        self.assertEqual([":calf-share:desktopTest", "--tests", r.NATIVE_SHARE_BOUNDARY_CLASS], command[-3:])
+        self.assertEqual([":nativecmpkit-share:desktopTest", "--tests", r.NATIVE_SHARE_BOUNDARY_CLASS], command[-3:])
         self.assertEqual(1, command.count("--tests"))
         with self.assertRaises(ValueError):
             r.gradle_command("js", plan, root=self.root)
 
     def test_only_reviewed_desktop_module_focus_is_allowed(self):
-        for suite, modules, focus in (("js", ("calf-share",), r.NATIVE_SHARE_BOUNDARY_FOCUS),
+        for suite, modules, focus in (("js", ("nativecmpkit-share",), r.NATIVE_SHARE_BOUNDARY_FOCUS),
                                       ("desktop", None, r.NATIVE_SHARE_BOUNDARY_FOCUS),
-                                      ("desktop", ("calf-share", "calf-io"), r.NATIVE_SHARE_BOUNDARY_FOCUS),
-                                      ("desktop", ("calf-share",), "arbitrary.*")):
+                                      ("desktop", ("nativecmpkit-share", "nativecmpkit-io"), r.NATIVE_SHARE_BOUNDARY_FOCUS),
+                                      ("desktop", ("nativecmpkit-share",), "arbitrary.*")):
             with self.subTest(suite=suite, modules=modules, focus=focus), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
 
@@ -510,7 +510,7 @@ class NativeShareBoundaryFocusTests(unittest.TestCase):
 
     def test_poisoned_plan_never_creates_an_arbitrary_argument_or_weaker_case_set(self):
         plan = self.plan()
-        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":calf-share:publish")):
+        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":nativecmpkit-share:publish")):
             changed = json.loads(json.dumps(plan))
             changed["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -539,8 +539,8 @@ class NativeShareBoundaryFocusTests(unittest.TestCase):
         self.assertTrue(any("must appear exactly once" in e["error"] for e in result["errors"]))
 
     def test_cli_refuses_wrong_scope_before_work(self):
-        for args in (("--suite", "desktop"), ("--suite", "js", "--module", "calf-share"),
-                     ("--suite", "desktop", "--module", "calf-share", "--module", "calf-io")):
+        for args in (("--suite", "desktop"), ("--suite", "js", "--module", "nativecmpkit-share"),
+                     ("--suite", "desktop", "--module", "nativecmpkit-share", "--module", "nativecmpkit-io")):
             argv = ["library_tests.py", "run", *args, "--focus", r.NATIVE_SHARE_BOUNDARY_FOCUS,
                     "--output", "build/ci-verification/refused"]
             with self.subTest(args=args), patch.object(sys, "argv", argv), patch.object(r, "run") as run, \

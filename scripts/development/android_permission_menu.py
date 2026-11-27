@@ -11,7 +11,7 @@ import tomllib
 import xml.etree.ElementTree as ET
 
 ANDROID = "{http://schemas.android.com/apk/res/android}"
-SCREEN = "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/screens/PermissionsScreen.kt"
+SCREEN = "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/screens/PermissionsScreen.kt"
 MANIFEST = "sample/android/src/main/AndroidManifest.xml"
 EXPECTED = (
     ("Camera", "camera", "CameraPermissions"),
@@ -44,7 +44,7 @@ FORBIDDEN = {"android.permission." + value for value in ("CALL_PHONE", "MANAGE_E
 
 
 def source_path(module: str, filename: str) -> str:
-    return f"calf-permissions/{module}/src/androidMain/kotlin/com/mohamedrejeb/calf/permissions/{filename}.android.kt"
+    return f"nativecmpkit-permissions/{module}/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/{filename}.android.kt"
 
 
 class NoDtd(ET.TreeBuilder):
@@ -116,7 +116,7 @@ def mapping(name: str, payload: bytes) -> dict:
 
 def inspect(root: Path, merged_manifest: str | None = None) -> dict:
     inputs = {path: read(root, path) for path in {SCREEN, MANIFEST, "gradle/libs.versions.toml",
-        "calf-permissions/core/src/androidMain/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionRegistry.kt",
+        "nativecmpkit-permissions/core/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionRegistry.kt",
         *(source_path(module, filename) for _, module, filename in EXPECTED)}}
     screen = inputs[SCREEN].decode("utf-8")
     menus = re.findall(r"val permissions = remember\s*\{\s*listOf\((.*?)\)\s*\}", screen, re.S)
@@ -125,7 +125,7 @@ def inspect(root: Path, merged_manifest: str | None = None) -> dict:
     rows = re.findall(r"Permission\.([A-Za-z]+)\s*,", menus[0])
     if rows != [name for name, _, _ in EXPECTED] or len(rows) != len(set(rows)):
         raise ValueError("Every current menu declaration must be reviewed; no unknown, duplicate or omitted row")
-    registry = inputs["calf-permissions/core/src/androidMain/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionRegistry.kt"].decode("utf-8")
+    registry = inputs["nativecmpkit-permissions/core/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionRegistry.kt"].decode("utf-8")
     if "val minSdkVersion: Int = 0" not in registry or "val maxSdkVersion: Int = Int.MAX_VALUE" not in registry:
         raise ValueError("Registry default SDK bounds changed")
     catalog = tomllib.loads(inputs["gradle/libs.versions.toml"].decode("utf-8"))["versions"]

@@ -9,14 +9,14 @@ rootProject.name = "nativecmpkit-owned-android-permission-lifecycle"
 includeBuild("../../..") {
     dependencySubstitution {
         substitute(module("verification.nativecmpkit:unpublished-permission-core"))
-            .using(project(":calf-permissions:calf-permissions-core"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-core"))
         substitute(module("verification.nativecmpkit:unpublished-permission-location"))
-            .using(project(":calf-permissions:calf-permissions-location"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-location"))
         substitute(module("verification.nativecmpkit:unpublished-permission-background-location"))
-            .using(project(":calf-permissions:calf-permissions-background-location"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-background-location"))
         substitute(module("verification.nativecmpkit:unpublished-permission-camera"))
-            .using(project(":calf-permissions:calf-permissions-camera"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-camera"))
         substitute(module("verification.nativecmpkit:unpublished-permission-notifications"))
-            .using(project(":calf-permissions:calf-permissions-notifications"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-notifications"))
     }
 }

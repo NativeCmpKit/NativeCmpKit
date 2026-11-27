@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests/consumer/android-permission-compatibility"
-KT = FIXTURE / "reporter/src/androidTest/kotlin/com/mohamedrejeb/calf/permissions"
+KT = FIXTURE / "reporter/src/androidTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions"
 APP = FIXTURE / "helper/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/permissioncompat"
 ANDROID = "{http://schemas.android.com/apk/res/android}"
 

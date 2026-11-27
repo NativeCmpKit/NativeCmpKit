@@ -3,7 +3,7 @@
 This standalone JVM fixture resolves **only** `nativecmpkit-core` and
 `nativecmpkit-io` from a supplied local Maven repository, through their actual
 published KMP root metadata/desktop variants. It has no producer project,
-composite, source, old-Calf, `mavenLocal` or candidate-group remote fallback.
+composite, source, old-NativeCmpKit, `mavenLocal` or candidate-group remote fallback.
 Every selected compile/runtime/test classpath must resolve both roots and match
 the exact staged artifact bytes. Missing coordinates fail.
 
@@ -64,7 +64,7 @@ before any consumer methods/XML. Java types are now explicitly imported.
 Actual standalone `help` configures the corrected script; **it is not a seven-
 method consumer pass**. Preserve the earlier included-root and TLS failures.
 
-Gradle may cache the canonical nativeCmpkit Maven URL under the retained Calf
+Gradle may cache the canonical nativeCmpkit Maven URL under the retained NativeCmpKit
 GMM `files.name`. Verification binds the **actual declared** primary label to
 its canonical `files.url`, metadata/root identity and exact staged/loaded bytes;
 it does not accept arbitrary aliases, old groups, source directories or paths.

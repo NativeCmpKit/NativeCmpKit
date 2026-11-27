@@ -9,19 +9,19 @@ import json
 import cookie_common_jdk_source_projection as history
 
 FOCUS = "common-jdk4"
-MODULE = "calf-webview"
-TASK = ":calf-webview:desktopTest"
-NATIVE_EXCLUSION = "--ktest_negative_gradle_filter=com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*"
+MODULE = "nativecmpkit-webview"
+TASK = ":nativecmpkit-webview:desktopTest"
+NATIVE_EXCLUSION = "--ktest_negative_gradle_filter=io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*"
 PARKED = (
-    "com.mohamedrejeb.calf.ui.web.DesktopCookieWireAcceptanceTest",
-    "com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest",
-    "com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest",
+    "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieWireAcceptanceTest",
+    "io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest",
+    "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest",
 )
 GROUPS = (
-    ("com.mohamedrejeb.calf.ui.web.CookieHeaderMultiplicityTest", (
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.CookieHeaderMultiplicityTest", (
         "requestCookieParsingRetainsDuplicateNamesAndEqualValues",
         "nestedPathAndDomainScopeStillApplyToDuplicateCookieIdentities")),
-    ("com.mohamedrejeb.calf.ui.web.DesktopCookieRequestParityTest", (
+    ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest", (
         "realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes",
         "anOwnedJdkHandlerSelectingOneEqualValueOccurrenceDoesNotInventTwoResults")),
 )
@@ -52,7 +52,7 @@ def validate_native_exclusion_owner(module: str, arguments: list[str]) -> None:
 
 def plan(root: Path, focus: str = FOCUS, module: str = MODULE) -> dict:
     if type(focus) is not str or focus != FOCUS or type(module) is not str or module != MODULE:
-        raise ValueError("Only exact common/JDK4 calf-webview source plan is allowed")
+        raise ValueError("Only exact common/JDK4 nativecmpkit-webview source plan is allowed")
     hashes = history.validate_current_sources(root)
     command = ["./gradlew", "--console=plain", "--no-parallel", "--max-workers=1",
                "--init-script", "scripts/ci/fresh-tests.init.gradle.kts",

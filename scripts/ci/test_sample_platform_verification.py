@@ -14,7 +14,7 @@ import library_tests as libraries
 import workflow_matrix as libraries_matrix
 
 ROOT = Path(__file__).resolve().parents[2]
-CODEC = "sample/common/src/nonAndroidTest/kotlin/com/mohamedrejeb/calf/sample/utils/SampleImageCodecTest.kt"
+CODEC = "sample/common/src/nonAndroidTest/kotlin/io/github/apdelrahman1911/nativecmpkit/sample/utils/SampleImageCodecTest.kt"
 
 
 class SamplePlatformVerificationTests(unittest.TestCase):
@@ -419,7 +419,7 @@ class SamplePlatformVerificationTests(unittest.TestCase):
             require_runtime_suffix=True))
 
     def test_new_native_graphics_host_is_explicit_and_does_not_claim_physical_encoding_verification(self):
-        source = (ROOT / "sample/common/src/androidHostTest/kotlin/com/mohamedrejeb/calf/sample/utils/SampleImageCodecAndroidHostTest.kt").read_text()
+        source = (ROOT / "sample/common/src/androidHostTest/kotlin/io/github/apdelrahman1911/nativecmpkit/sample/utils/SampleImageCodecAndroidHostTest.kt").read_text()
         self.assertIn("@GraphicsMode(GraphicsMode.Mode.NATIVE)", source)
         self.assertIn("@Config(sdk = [35], manifest = Config.NONE)", source)
         self.assertIn("assertFailsWith<IllegalStateException> { input.toByteArray() }", source)
@@ -436,7 +436,7 @@ class SamplePlatformVerificationTests(unittest.TestCase):
         self.assertNotIn("github.sha", job)
         self.assertIn("inputs.profile", text)
         upload = job.split("- name: Keep sample receipts", 1)[1]
-        for forbidden in (".apk", ".aar", ".jar", ".app", ".klib", "Common.framework", "*.log"):
+        for forbidden in (".apk", ".aar", ".jar", ".app", ".klib", "NativeCmpKit.framework", "*.log"):
             self.assertNotIn(forbidden, upload)
 
     def test_failed_shared_sample_build_captures_bounded_diagnostics_before_reports_upload(self):

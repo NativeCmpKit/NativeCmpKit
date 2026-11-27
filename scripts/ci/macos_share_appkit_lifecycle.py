@@ -41,7 +41,7 @@ import artifacts as native  # Side-effect-free source/toolchain/container helper
 PLATFORM = "macos-arm64"
 TARGET = "aarch64-apple-darwin"
 PINNED = "1.98.0"
-MODULE = "calf-share"
+MODULE = "nativecmpkit-share"
 MANIFEST = MODULE + "/native/Cargo.toml"
 MAIN = MODULE + "/native/tests/appkit_lifecycle_main.rs"
 CASES_SOURCE = MODULE + "/native/tests/appkit_lifecycle/cases.rs"
@@ -57,7 +57,7 @@ CASES = (
     "controlled_success_duplicate_late", "controlled_service_failure",
     "bounded_concurrent_requests",
 )
-CLASS = "com.mohamedrejeb.calf.share.native.AppKitLifecycle"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.share.native.AppKitLifecycle"
 SUITE = "NativeCmpKitAppKitLifecycle"
 REPORT_PARENT = "build/ci-verification/share-appkit-native"
 DEFAULT_OUTPUT = "build/ci-verification/share-appkit-lifecycle"
@@ -331,7 +331,7 @@ def source_contract(root: Path, sources: dict) -> dict:
                 hashlib.sha256(key_wait.current_source_before_key_wait(relative, payload)).hexdigest() == expected,
                 "unqualified-native-harness-bytes")
     manifest = tomllib.loads(ordinary_file(root, MANIFEST).read_text())
-    require(manifest["package"]["name"] == "calf-share-native" and manifest["package"]["version"] == "0.1.0"
+    require(manifest["package"]["name"] == "nativecmpkit-share-native" and manifest["package"]["version"] == "0.1.0"
             and manifest["package"]["publish"] is False and manifest.get("test") == [{
                 "name": "appkit_lifecycle", "path": "tests/appkit_lifecycle_main.rs", "harness": False,
                 "required-features": ["appkit-lifecycle-tests"]}], "native-target-contract-changed")
@@ -375,7 +375,7 @@ def admit_artifact(root: Path, target: Path, stdout: bytes, execution: dict) -> 
     require(finished == [True] and len(candidates) == 1 and diagnostics["errors"] == 0,
             "cargo-artifact-or-terminal-population-mismatch")
     entry = candidates[0]
-    expected_package = "path+" + (root / MODULE / "native").as_uri() + "#calf-share-native@0.1.0"
+    expected_package = "path+" + (root / MODULE / "native").as_uri() + "#nativecmpkit-share-native@0.1.0"
     spec = entry.get("target", {})
     profile = entry.get("profile", {})
     require(entry.get("package_id") == expected_package and spec.get("name") == "appkit_lifecycle" and
@@ -399,7 +399,7 @@ def admit_artifact(root: Path, target: Path, stdout: bytes, execution: dict) -> 
     identity = file_identity(path)
     require(execution["started_at_ns"] - FRESHNESS_SLOP_NS <= identity["mtime_ns"] <=
             execution["ended_at_ns"] + FRESHNESS_SLOP_NS, "native-artifact-not-fresh")
-    return path, {"relative_path": relative, "package": "calf-share-native@0.1.0", "test_target": "appkit_lifecycle",
+    return path, {"relative_path": relative, "package": "nativecmpkit-share-native@0.1.0", "test_target": "appkit_lifecycle",
                   "source_path": MAIN, "source_sha256": HARNESS_PINS[MAIN], "rust_target": TARGET,
                   "macho_file_type": "MH_EXECUTE", "fresh_cargo_artifact": True,
                   "diagnostics": diagnostics, **identity}

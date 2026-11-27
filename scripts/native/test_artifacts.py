@@ -17,7 +17,7 @@ class NativeArtifactsTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
-        self.module = "calf-file-picker"
+        self.module = "nativecmpkit-file-picker"
         self.resources = self.root / "build/input"
         self.platform = "linux-x64"
         self.revision = "a" * 40
@@ -100,7 +100,7 @@ class NativeArtifactsTest(unittest.TestCase):
 
     def test_foreign_module_binaries_are_rejected(self):
         self.bundle()
-        self.bundle(module="calf-share")
+        self.bundle(module="nativecmpkit-share")
         with self.assertRaisesRegex(ValueError, "unexpected"):
             self.validate()
 
@@ -145,7 +145,7 @@ class NativeArtifactsTest(unittest.TestCase):
             self.validate()
 
     def test_bad_identity_version_toolchain_and_abi_rejected(self):
-        replacements = {"abiVersion": 2, "module": "calf-share", "platform": "linux-arm64",
+        replacements = {"abiVersion": 2, "module": "nativecmpkit-share", "platform": "linux-arm64",
                         "schemaVersion": 2, "filename": "unrelated.so", "rustToolchain": "stable",
                         "crateVersion": "4.0.0", "libraryVersion": "2.0.0", "cargoProfile": "debug",
                         "rustTarget": "aarch64-unknown-linux-gnu", "rustFlags": ["-C"]}
@@ -236,7 +236,7 @@ class NativeArtifactsTest(unittest.TestCase):
 
     def test_duplicate_json_keys_rejected(self):
         path, _, _ = self.bundle()
-        path.write_text('{"module":"calf-share","module":"calf-file-picker"}')
+        path.write_text('{"module":"nativecmpkit-share","module":"nativecmpkit-file-picker"}')
         with self.assertRaisesRegex(ValueError, "Duplicate"):
             self.validate()
 
@@ -273,7 +273,7 @@ class NativeArtifactsTest(unittest.TestCase):
 
     def test_assembly_cannot_destroy_source_or_unrelated_directory(self):
         self.bundle()
-        for destination in (self.root, self.root / "calf-io", self.root / "build", self.root / self.module):
+        for destination in (self.root, self.root / "nativecmpkit-io", self.root / "build", self.root / self.module):
             with self.assertRaisesRegex(ValueError, "dedicated child"):
                 a.assemble(self.root, self.module, self.resources, destination, [self.platform])
 

@@ -163,7 +163,7 @@ class StorageOperationalGuards(unittest.TestCase):
             destination = self.root / relative
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes((lt.ROOT / relative).read_bytes())
-        (self.root / "settings.gradle.kts").write_text('include(\n    ":calf-permissions:core",\n)\nproject(":calf-permissions:core").name = "calf-permissions-core"\n')
+        (self.root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-permissions:core",\n)\nproject(":nativecmpkit-permissions:core").name = "nativecmpkit-permissions-core"\n')
         self.source = s.source_contract(self.root)
 
     def row(self, profile="android-storage-api35-all-files"):
@@ -255,13 +255,13 @@ class StorageOperationalGuards(unittest.TestCase):
             for api in {23, 28, 29, 30, 35} - {row.api}:
                 with self.subTest(profile=row.profile, api=api), self.assertRaises(ValueError):
                     device.validate_api_selection(api, (s.MODULE,), row.profile)
-            for modules in (None, ("calf-io",), (s.MODULE, "calf-io")):
+            for modules in (None, ("nativecmpkit-io",), (s.MODULE, "nativecmpkit-io")):
                 with self.assertRaises(ValueError):
                     device.validate_api_selection(row.api, modules, row.profile)
         for api in (28, 29, 30):
-            with self.assertRaises(ValueError): device.validate_api_selection(api, ("calf-io",), lt.ANDROID_IO_PROVIDER_FOCUS)
-        device.validate_api_selection(35, ("calf-io",), lt.ANDROID_IO_PROVIDER_FOCUS)
-        device.validate_api_selection(23, ("calf-camera-picker",), lt.ANDROID_CAMERA_PROVIDER_FOCUS)
+            with self.assertRaises(ValueError): device.validate_api_selection(api, ("nativecmpkit-io",), lt.ANDROID_IO_PROVIDER_FOCUS)
+        device.validate_api_selection(35, ("nativecmpkit-io",), lt.ANDROID_IO_PROVIDER_FOCUS)
+        device.validate_api_selection(23, ("nativecmpkit-camera-picker",), lt.ANDROID_CAMERA_PROVIDER_FOCUS)
 
     def test_all_existing_profiles_and_eleven_full_slots_are_unchanged(self):
         self.assertTrue(set(FROZEN_PROFILE_NAMES) <= matrix.PROFILES.keys())
@@ -276,9 +276,9 @@ class StorageOperationalGuards(unittest.TestCase):
 
     def test_default_eight_modules_exclude_only_explicit_finite_storage_metadata(self):
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), lt.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), lt.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             lt.plan(lt.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -286,13 +286,13 @@ class StorageOperationalGuards(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         plan = lt.plan(lt.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in plan["expected"]])
         self.assertEqual(list(unrelated), plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          plan["test_bearing_modules_not_requested"])
         self.assertEqual(9, len(lt.MINIMUM_MODULES["android-device"]))
         self.assertEqual([s.MODULE], plan["finite_only_device_modules_not_requested"])
@@ -303,18 +303,18 @@ class StorageOperationalGuards(unittest.TestCase):
         with self.assertRaises(ValueError): lt.validate_test_focus(forged)
 
     def test_unfocused_or_wrong_suite_core_device_requests_are_refused(self):
-        for modules in ((s.MODULE,), (s.MODULE, "calf-io")):
+        for modules in ((s.MODULE,), (s.MODULE, "nativecmpkit-io")):
             with self.assertRaises(ValueError): lt.plan(self.root, "android-device", only_modules=modules)
         for row in storage.ROWS:
             self.assertFalse(lt.allowed_test_focus("android-host", (s.MODULE,), row.profile))
-            self.assertFalse(lt.allowed_test_focus("android-device", ("calf-io",), row.profile))
+            self.assertFalse(lt.allowed_test_focus("android-device", ("nativecmpkit-io",), row.profile))
         with self.assertRaises(ValueError): lt.gradle_command("android-device", {"suite": "android-device",
             "expected": [{"module": s.MODULE}], "complete_suite_requested": True}, android_serial="emulator-5588")
 
     def test_focused_plan_tampering_never_widens_the_class_or_module(self):
         original = self.plan()
-        for key, value in (("test_filter", storage.CLASS), ("required_testcases", []), ("module", "calf-io"),
-                           ("project", ":calf-io"), ("task", ":calf-io:connectedAndroidDeviceTest")):
+        for key, value in (("test_filter", storage.CLASS), ("required_testcases", []), ("module", "nativecmpkit-io"),
+                           ("project", ":nativecmpkit-io"), ("task", ":nativecmpkit-io:connectedAndroidDeviceTest")):
             forged = copy.deepcopy(original); forged["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): lt.validate_test_focus(forged)
         for key, value in (("verification_api_level", 30), ("target_sdk", 28), ("flavor", "modern"),
@@ -451,7 +451,7 @@ class StorageOperationalGuards(unittest.TestCase):
         command = lt.gradle_command("android-device", plan, android_serial="emulator-5588", android_storage_probe_receipt=receipt)
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedStorageProbe=true", command)
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitStorageReporterApkSha256=" + "c" * 64, command)
-        unrelated = lt.plan(lt.ROOT, "android-device", only_modules=("calf-io",), focus=lt.ANDROID_IO_OVERSIZE_FOCUS)
+        unrelated = lt.plan(lt.ROOT, "android-device", only_modules=("nativecmpkit-io",), focus=lt.ANDROID_IO_OVERSIZE_FOCUS)
         with self.assertRaises(ValueError): lt.gradle_command("android-device", unrelated, android_serial="emulator-5588", android_storage_probe_receipt=receipt)
 
     def test_atomic_native_status_refuses_replay_foreign_grants_and_missing_release(self):

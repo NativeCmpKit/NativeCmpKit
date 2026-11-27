@@ -25,7 +25,7 @@ class WorkflowMatrixTests(unittest.TestCase):
             slot, = result["slots"]
             matrix_row, = m.matrix(profile)["include"]
             command = slot["command"]
-            self.assertEqual("calf-ui", command[command.index("--module") + 1])
+            self.assertEqual("nativecmpkit-ui", command[command.index("--module") + 1])
             self.assertEqual(matrix_row["test-focus"], command[command.index("--focus") + 1])
             self.assertEqual("ios", command[command.index("--suite") + 1])
 
@@ -73,7 +73,7 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual(1, len(rows))
         self.assertEqual("android-device-api35", rows[0]["slot"])
         self.assertEqual("android-device", rows[0]["suite"])
-        self.assertEqual("calf-webview", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-webview", rows[0]["test-modules"])
         self.assertNotIn("test-modules", m.matrix("android-device")["include"][0])
 
     def test_tooling_selects_no_library_execution(self):
@@ -85,26 +85,26 @@ class WorkflowMatrixTests(unittest.TestCase):
 
     def test_targeted_native_profiles_do_not_repeat_successful_other_hosts(self):
         self.assertEqual(["ios-iphone"], [row["slot"] for row in m.matrix("ios")["include"]])
-        self.assertEqual("calf-ui", m.matrix("ios-ui")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-ui", m.matrix("ios-ui")["include"][0]["test-modules"])
         cache = m.matrix("windows-cache")["include"]
         self.assertEqual(1, len(cache))
         self.assertEqual("desktop-windows-x64", cache[0]["slot"])
-        self.assertEqual("calf-file-picker,calf-share", cache[0]["test-modules"])
+        self.assertEqual("nativecmpkit-file-picker,nativecmpkit-share", cache[0]["test-modules"])
 
     def test_windows_share_loader_recovery_never_repeats_the_accepted_picker_or_other_hosts(self):
         rows = m.matrix("windows-share-loader")["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual("desktop-windows-x64", rows[0]["slot"])
-        self.assertEqual("calf-share", rows[0]["test-modules"])
-        rows[0]["test-modules"] = "calf-file-picker"
-        self.assertEqual("calf-share", m.matrix("windows-share-loader")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-share", rows[0]["test-modules"])
+        rows[0]["test-modules"] = "nativecmpkit-file-picker"
+        self.assertEqual("nativecmpkit-share", m.matrix("windows-share-loader")["include"][0]["test-modules"])
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
     def test_windows_share_boundaries_are_five_fixed_methods_not_unrelated_bridge_replay(self):
         rows = m.matrix("windows-share-boundaries")["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual("desktop-windows-x64", rows[0]["slot"])
-        self.assertEqual("calf-share", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-share", rows[0]["test-modules"])
         self.assertEqual("native-share-boundaries", rows[0]["test-focus"])
         for profile in ("all", "windows-cache", "windows-share-loader"):
             self.assertTrue(all("test-focus" not in r for r in m.matrix(profile)["include"]))
@@ -119,16 +119,16 @@ class WorkflowMatrixTests(unittest.TestCase):
                                ("ui-date-android", ["android-device-api35"])):
             rows = m.matrix(profile)["include"]
             self.assertEqual(slots, [r["slot"] for r in rows])
-            self.assertTrue(all(r["test-modules"] == "calf-ui" and
+            self.assertTrue(all(r["test-modules"] == "nativecmpkit-ui" and
                                 r["test-focus"] == "material-date-transaction" for r in rows))
         self.assertTrue(all("test-focus" not in r for r in m.matrix("all")["include"]))
 
     def test_browser_picker_acceptance_runs_only_both_changed_browser_targets(self):
         rows = m.matrix("browser-picker")["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-file-picker" for row in rows))
-        rows[0]["test-modules"] = "calf-io"
-        self.assertEqual("calf-file-picker", m.matrix("browser-picker")["include"][0]["test-modules"])
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-file-picker" for row in rows))
+        rows[0]["test-modules"] = "nativecmpkit-io"
+        self.assertEqual("nativecmpkit-file-picker", m.matrix("browser-picker")["include"][0]["test-modules"])
         for profile in ("browser", "all"):
             self.assertTrue(all("test-modules" not in row for row in m.matrix(profile)["include"]))
         self.assertEqual(11, len(m.matrix("all")["include"]))
@@ -137,10 +137,10 @@ class WorkflowMatrixTests(unittest.TestCase):
         rows = m.matrix("webview-browser")["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
         self.assertEqual(["js", "wasm"], [row["suite"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-webview" for row in rows))
-        rows[0]["test-modules"] = "calf-share"
-        self.assertEqual("calf-webview", m.matrix("webview-browser")["include"][0]["test-modules"])
-        self.assertEqual("calf-webview", m.matrix("webview-desktop")["include"][0]["test-modules"])
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-webview" for row in rows))
+        rows[0]["test-modules"] = "nativecmpkit-share"
+        self.assertEqual("nativecmpkit-webview", m.matrix("webview-browser")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-webview", m.matrix("webview-desktop")["include"][0]["test-modules"])
         for profile in ("browser", "all"):
             self.assertTrue(all("test-modules" not in row for row in m.matrix(profile)["include"]))
         self.assertEqual(11, len(m.matrix("all")["include"]))
@@ -150,9 +150,9 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual(1, len(rows))
         self.assertEqual("browser-wasm", rows[0]["slot"])
         self.assertEqual("wasm", rows[0]["suite"])
-        self.assertEqual("calf-webview", rows[0]["test-modules"])
-        rows[0]["test-modules"] = "calf-share"
-        self.assertEqual("calf-webview", m.matrix("webview-wasm")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-webview", rows[0]["test-modules"])
+        rows[0]["test-modules"] = "nativecmpkit-share"
+        self.assertEqual("nativecmpkit-webview", m.matrix("webview-wasm")["include"][0]["test-modules"])
         self.assertEqual(["browser-js", "browser-wasm"],
                          [row["slot"] for row in m.matrix("webview-browser")["include"]])
         for profile in ("core", "browser", "apple", "all"):
@@ -161,9 +161,9 @@ class WorkflowMatrixTests(unittest.TestCase):
     def test_browser_share_callback_scope_does_not_replay_unchanged_android_or_other_libraries(self):
         rows = m.matrix("share-browser")["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-share" for row in rows))
-        rows[0]["test-modules"] = "calf-webview"
-        self.assertEqual("calf-share", m.matrix("share-browser")["include"][0]["test-modules"])
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-share" for row in rows))
+        rows[0]["test-modules"] = "nativecmpkit-webview"
+        self.assertEqual("nativecmpkit-share", m.matrix("share-browser")["include"][0]["test-modules"])
         self.assertTrue(all("test-modules" not in row for row in m.matrix("browser")["include"]))
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
@@ -171,7 +171,7 @@ class WorkflowMatrixTests(unittest.TestCase):
         rows = m.matrix("navigation-geo")["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
         self.assertEqual(["js", "wasm"], [row["suite"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-navigation,calf-geo" for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-navigation,nativecmpkit-geo" for row in rows))
         self.assertTrue(all(row["runner"] == "ubuntu-24.04" for row in rows))
 
     def test_jvm_navigation_probe_does_not_repeat_unchanged_browser_native_or_geo_suites(self):
@@ -180,14 +180,14 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual("desktop-linux-x64", rows[0]["slot"])
         self.assertEqual("desktop", rows[0]["suite"])
         self.assertEqual("ubuntu-24.04", rows[0]["runner"])
-        self.assertEqual("calf-navigation", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-navigation", rows[0]["test-modules"])
 
     def test_desktop_data_safety_runs_only_the_changed_owners_on_three_os_families(self):
         rows = m.matrix("desktop-data-safety")["include"]
         self.assertEqual(["desktop-linux-x64", "desktop-macos-arm64", "desktop-windows-x64"], [r["slot"] for r in rows])
-        self.assertTrue(all(r["suite"] == "desktop" and r["test-modules"] == "calf-file-picker,calf-share" for r in rows))
-        rows[0]["test-modules"] = "calf-ui"
-        self.assertEqual("calf-file-picker,calf-share", m.matrix("desktop-data-safety")["include"][0]["test-modules"])
+        self.assertTrue(all(r["suite"] == "desktop" and r["test-modules"] == "nativecmpkit-file-picker,nativecmpkit-share" for r in rows))
+        rows[0]["test-modules"] = "nativecmpkit-ui"
+        self.assertEqual("nativecmpkit-file-picker,nativecmpkit-share", m.matrix("desktop-data-safety")["include"][0]["test-modules"])
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
     def test_android_resource_safety_is_a_single_host_owner_subset_not_a_device_claim(self):
@@ -195,15 +195,15 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual(1, len(rows))
         self.assertEqual("android-host", rows[0]["slot"])
         self.assertEqual("android-host", rows[0]["suite"])
-        self.assertEqual("calf-io,calf-file-picker-coil", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-io,nativecmpkit-file-picker-coil", rows[0]["test-modules"])
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
     def test_android_coil_fixture_repair_does_not_replay_the_unchanged_io_suite(self):
         rows = m.matrix("android-coil-resource")["include"]
         self.assertEqual(1, len(rows))
         self.assertEqual("android-host", rows[0]["slot"])
-        self.assertEqual("calf-file-picker-coil", rows[0]["test-modules"])
-        self.assertEqual("calf-io,calf-file-picker-coil", m.matrix("android-resource-safety")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-file-picker-coil", rows[0]["test-modules"])
+        self.assertEqual("nativecmpkit-io,nativecmpkit-file-picker-coil", m.matrix("android-resource-safety")["include"][0]["test-modules"])
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
     def test_android_permission_alias_acceptance_runs_only_the_changed_core_host(self):
@@ -211,24 +211,24 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual(1, len(rows))
         self.assertEqual("android-host", rows[0]["slot"])
         self.assertEqual("android-host", rows[0]["suite"])
-        self.assertEqual("calf-permissions/core", rows[0]["test-modules"])
-        rows[0]["test-modules"] = "calf-io"
-        self.assertEqual("calf-permissions/core", m.matrix("android-permission-alias")["include"][0]["test-modules"])
+        self.assertEqual("nativecmpkit-permissions/core", rows[0]["test-modules"])
+        rows[0]["test-modules"] = "nativecmpkit-io"
+        self.assertEqual("nativecmpkit-permissions/core", m.matrix("android-permission-alias")["include"][0]["test-modules"])
         self.assertEqual(11, len(m.matrix("all")["include"]))
         self.assertTrue(all("test-modules" not in row for row in m.matrix("all")["include"]))
 
     def test_jvm_navigation_subset_cannot_mutate_full_or_future_profiles(self):
         selected = m.matrix("navigation-desktop")
-        selected["include"][0]["test-modules"] = "calf-ui"
-        self.assertEqual("calf-navigation", m.matrix("navigation-desktop")["include"][0]["test-modules"])
+        selected["include"][0]["test-modules"] = "nativecmpkit-ui"
+        self.assertEqual("nativecmpkit-navigation", m.matrix("navigation-desktop")["include"][0]["test-modules"])
         for profile in ("core", "browser", "apple", "all"):
             self.assertTrue(all("test-modules" not in row for row in m.matrix(profile)["include"]))
         self.assertEqual(11, len(m.matrix("all")["include"]))
 
     def test_navigation_geo_subset_never_reduces_complete_browser_or_all_coverage(self):
         selected = m.matrix("navigation-geo")
-        selected["include"][0]["test-modules"] = "calf-io"
-        self.assertEqual("calf-navigation,calf-geo", m.matrix("navigation-geo")["include"][0]["test-modules"])
+        selected["include"][0]["test-modules"] = "nativecmpkit-io"
+        self.assertEqual("nativecmpkit-navigation,nativecmpkit-geo", m.matrix("navigation-geo")["include"][0]["test-modules"])
         for profile in ("browser", "all"):
             self.assertTrue(all("test-modules" not in row for row in m.matrix(profile)["include"]))
         self.assertEqual(11, len(m.matrix("all")["include"]))
@@ -238,7 +238,7 @@ class WorkflowMatrixTests(unittest.TestCase):
         self.assertEqual(["desktop-linux-x64", "browser-js", "browser-wasm", "ios-iphone"],
                          [row["slot"] for row in rows])
         self.assertEqual({"desktop", "js", "wasm", "ios"}, {row["suite"] for row in rows})
-        self.assertTrue(all(row["test-modules"] == "calf-navigation,calf-geo" for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-navigation,nativecmpkit-geo" for row in rows))
         self.assertNotIn("consumer-core-io", {row["slot"] for row in rows})
         self.assertTrue(all(row["suite"] != "android-device" for row in rows))
         for profile in ("core", "browser", "apple", "all"):
@@ -246,8 +246,8 @@ class WorkflowMatrixTests(unittest.TestCase):
 
     def test_new_matrix_does_not_mutate_the_browser_only_continuation(self):
         selected = m.matrix("navigation-geo-matrix")
-        selected["include"][0]["test-modules"] = "calf-ui"
-        self.assertEqual("calf-navigation,calf-geo", m.matrix("navigation-geo-matrix")["include"][0]["test-modules"])
+        selected["include"][0]["test-modules"] = "nativecmpkit-ui"
+        self.assertEqual("nativecmpkit-navigation,nativecmpkit-geo", m.matrix("navigation-geo-matrix")["include"][0]["test-modules"])
         self.assertEqual(["browser-js", "browser-wasm"],
                          [row["slot"] for row in m.matrix("navigation-geo")["include"]])
 

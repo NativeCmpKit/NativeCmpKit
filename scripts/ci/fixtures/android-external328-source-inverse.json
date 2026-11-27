@@ -36,9 +36,9 @@
           "before_fragment_sha256": "ce4d012ba463ad009de61505250e05846a12cedb36aaf89bb9d81132a9d3ab83"
         },
         {
-          "after": "def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focus: str | None) -> None:\n    if focus in (lt.ANDROID_IO_NAMED_SYSTEM_FOCUS, \"android-io-named-external-storage\"):\n        if type(api_level) is not int or api_level != 35 or modules != (\"calf-io\",):\n",
+          "after": "def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focus: str | None) -> None:\n    if focus in (lt.ANDROID_IO_NAMED_SYSTEM_FOCUS, \"android-io-named-external-storage\"):\n        if type(api_level) is not int or api_level != 35 or modules != (\"nativecmpkit-io\",):\n",
           "after_fragment_sha256": "7798b7ff5ad7126b393f2ecfdb9914b60eaacbb0e7e3100bc3623e9080b6e434",
-          "before": "def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focus: str | None) -> None:\n    if focus == lt.ANDROID_IO_NAMED_SYSTEM_FOCUS:\n        if type(api_level) is not int or api_level != 35 or modules != (\"calf-io\",):\n",
+          "before": "def validate_api_selection(api_level: int, modules: tuple[str, ...] | None, focus: str | None) -> None:\n    if focus == lt.ANDROID_IO_NAMED_SYSTEM_FOCUS:\n        if type(api_level) is not int or api_level != 35 or modules != (\"nativecmpkit-io\",):\n",
           "before_fragment_sha256": "bf4c5e8bcdcfbbeb66b70d5399530faf99465db1546157fcf8a1afd69990c86e"
         },
         {
@@ -93,9 +93,9 @@
           "before_fragment_sha256": "35614ddf1aa68a4c479d53a12f3cfedc277576350e0726aae354401aa6ac2e71"
         },
         {
-          "after": "            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == \"android-device\" and modules == (\"calf-io\",)) or\n            (focus in ANDROID_IO_NAMED_SYSTEM_FOCUSES and suite == \"android-device\" and modules == (\"calf-io\",)) or\n            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == \"android-device\" and modules == (\"calf-io\",)) or\n",
+          "after": "            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n            (focus in ANDROID_IO_NAMED_SYSTEM_FOCUSES and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n",
           "after_fragment_sha256": "07447d17aa3f229448bcc9d29ed4aa7062aa31d081e770240fb28f7437a58ca8",
-          "before": "            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == \"android-device\" and modules == (\"calf-io\",)) or\n            (focus == ANDROID_IO_NAMED_SYSTEM_FOCUS and suite == \"android-device\" and modules == (\"calf-io\",)) or\n            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == \"android-device\" and modules == (\"calf-io\",)) or\n",
+          "before": "            (focus == ANDROID_IO_DEFAULT_DECODE_FOCUS and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n            (focus == ANDROID_IO_NAMED_SYSTEM_FOCUS and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n            (focus == ANDROID_IO_REFERENCE_FOCUS and suite == \"android-device\" and modules == (\"nativecmpkit-io\",)) or\n",
           "before_fragment_sha256": "15c044fa3135853196420fdf9675863a09533f5fa837a2519f86b2d983191f25"
         },
         {
@@ -123,9 +123,9 @@
           "before_fragment_sha256": "e0f284a84755153fb618e70bbfd700e2ab8f78f0ea82b0f88a35e26af1fd251f"
         },
         {
-          "after": "                expected[0].get(\"agp_declared_xml_directory\") != \"calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest\" or\n                expected[0].get(\"test_filter\") != android_io_named_system_filter(focus) or\n                expected[0].get(\"test_filter_argument\") is not None or expected[0].get(\"test_exclusion_annotation\") is not None or\n                expected[0].get(\"required_testcases\") != android_io_named_system_identities(focus) or\n                any(relative not in expected[0][\"test_source_files\"] for relative in ANDROID_IO_NAMED_SYSTEM_SOURCE_DEPENDENCIES) or\n                test_plan.get(\"android_io_documents\") is not None):\n            raise ValueError(\"Invalid finite named local-system-provider plan\")\n        return True\n",
+          "after": "                expected[0].get(\"agp_declared_xml_directory\") != \"nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest\" or\n                expected[0].get(\"test_filter\") != android_io_named_system_filter(focus) or\n                expected[0].get(\"test_filter_argument\") is not None or expected[0].get(\"test_exclusion_annotation\") is not None or\n                expected[0].get(\"required_testcases\") != android_io_named_system_identities(focus) or\n                any(relative not in expected[0][\"test_source_files\"] for relative in ANDROID_IO_NAMED_SYSTEM_SOURCE_DEPENDENCIES) or\n                test_plan.get(\"android_io_documents\") is not None):\n            raise ValueError(\"Invalid finite named local-system-provider plan\")\n        return True\n",
           "after_fragment_sha256": "7bb24bcaef0d4d3062d69c5bd2e20bda02b16ae171e305dc7f7e0a70e403d76c",
-          "before": "                expected[0].get(\"agp_declared_xml_directory\") != \"calf-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest\" or\n                expected[0].get(\"test_filter\") != ANDROID_IO_NAMED_SYSTEM_CLASS or\n                expected[0].get(\"test_filter_argument\") is not None or expected[0].get(\"test_exclusion_annotation\") is not None or\n                expected[0].get(\"required_testcases\") != android_io_named_system_identities() or\n                any(relative not in expected[0][\"test_source_files\"] for relative in ANDROID_IO_NAMED_SYSTEM_SOURCE_DEPENDENCIES) or\n                test_plan.get(\"android_io_documents\") is not None):\n            raise ValueError(\"Invalid finite two-method named local-system-provider plan\")\n        return True\n",
+          "before": "                expected[0].get(\"agp_declared_xml_directory\") != \"nativecmpkit-io/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest\" or\n                expected[0].get(\"test_filter\") != ANDROID_IO_NAMED_SYSTEM_CLASS or\n                expected[0].get(\"test_filter_argument\") is not None or expected[0].get(\"test_exclusion_annotation\") is not None or\n                expected[0].get(\"required_testcases\") != android_io_named_system_identities() or\n                any(relative not in expected[0][\"test_source_files\"] for relative in ANDROID_IO_NAMED_SYSTEM_SOURCE_DEPENDENCIES) or\n                test_plan.get(\"android_io_documents\") is not None):\n            raise ValueError(\"Invalid finite two-method named local-system-provider plan\")\n        return True\n",
           "before_fragment_sha256": "0858f850a51d3a2599200d9b1759943fa834b7e7a4f2a019454a4c034126f86a"
         },
         {
@@ -387,9 +387,9 @@
           "before_fragment_sha256": "db3bb23eec986cc082584a607679952cb6dca03858524f94ee09f379c56692d1"
         },
         {
-          "after": "            for rel in (DESKTOP, OWNER, lt.WEBVIEW_DESKTOP_REQUEST_SOURCE):\n                path = root / rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(current_bytes(rel))\n            self.assertTrue(lt.validate_test_focus(lt.plan(root, \"desktop\", only_modules=(\"calf-webview\",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))\n",
+          "after": "            for rel in (DESKTOP, OWNER, lt.WEBVIEW_DESKTOP_REQUEST_SOURCE):\n                path = root / rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(current_bytes(rel))\n            self.assertTrue(lt.validate_test_focus(lt.plan(root, \"desktop\", only_modules=(\"nativecmpkit-webview\",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))\n",
           "after_fragment_sha256": "4c7a6bae1f7b2846f7447a2a54f8e9c6568d33dcc8cd009ee1e6f1d7248271a3",
-          "before": "            for rel in (DESKTOP, OWNER, lt.WEBVIEW_DESKTOP_REQUEST_SOURCE):\n                path = root / rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes((ROOT / rel).read_bytes())\n            self.assertTrue(lt.validate_test_focus(lt.plan(root, \"desktop\", only_modules=(\"calf-webview\",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))\n",
+          "before": "            for rel in (DESKTOP, OWNER, lt.WEBVIEW_DESKTOP_REQUEST_SOURCE):\n                path = root / rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes((ROOT / rel).read_bytes())\n            self.assertTrue(lt.validate_test_focus(lt.plan(root, \"desktop\", only_modules=(\"nativecmpkit-webview\",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))\n",
           "before_fragment_sha256": "aec460118f259ace725af85e8146e76ed0967c4a9b0bfb2d6b8b2c311b16a46e"
         },
         {
@@ -426,9 +426,9 @@
           "before_fragment_sha256": "b10b4a8c8eab774cb31ad7a0a255426cc02dc769ffe4b2bde861c91016079ad5"
         },
         {
-          "after": "    \"android-io-named-system-providers\": \"calf-io\",\n    \"android-io-named-external-storage\": \"calf-io\",\n    \"android-io-reference-regressions\": \"calf-io\",\n",
+          "after": "    \"android-io-named-system-providers\": \"nativecmpkit-io\",\n    \"android-io-named-external-storage\": \"nativecmpkit-io\",\n    \"android-io-reference-regressions\": \"nativecmpkit-io\",\n",
           "after_fragment_sha256": "0b73f5fc1f046143280d03112b7384d9213e10efc3466ed7f4d90db6cf33fcbb",
-          "before": "    \"android-io-named-system-providers\": \"calf-io\",\n    \"android-io-reference-regressions\": \"calf-io\",\n",
+          "before": "    \"android-io-named-system-providers\": \"nativecmpkit-io\",\n    \"android-io-reference-regressions\": \"nativecmpkit-io\",\n",
           "before_fragment_sha256": "08ad5104655928115aabc658e5eb08c8dc8d658e85e4f92dc466876a91a3dc3c"
         },
         {

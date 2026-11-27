@@ -45,7 +45,7 @@
         }
       ]
     },
-    "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt": {
+    "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt": {
       "before_sha256": "a1fb76c6092881a3681ec38002b4820f1d0d8282727a4d18fa89968f6b8c5b50",
       "after_sha256": "01771567b969a88094d88a2906dadc6bc4d1e8502e695abc9f145b7ca197e06e",
       "fragments": [
@@ -151,15 +151,15 @@
   "added_behavior_sources": {
     "scripts/ci/android_camera_home_baseline.py": "1a83b99e06c554f0bf4f0db0288fb08be49415265af34f502016b14e234187c5",
     "scripts/ci/test_android_camera_home_baseline.py": "7d730c800b9fbfb1d7a203632b5fe06161c00bed2382ecc65fa1d0762f9c24da",
-    "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaseline.kt": "d52e83f4c58f64c4f333ecc7d2b848a44f4044661caeea4da607f1dce4dc02bd",
-    "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaselineTest.kt": "4634afa0478faa5ec5e701a5373ab6deaa262df3480490bbdce4e765e0535f4a"
+    "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaseline.kt": "d52e83f4c58f64c4f333ecc7d2b848a44f4044661caeea4da607f1dce4dc02bd",
+    "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaselineTest.kt": "4634afa0478faa5ec5e701a5373ab6deaa262df3480490bbdce4e765e0535f4a"
   },
   "unchanged_native_inputs": {
-    "calf-camera-picker/build.gradle.kts": "f074767f7042ac6e07955b361400e672ae43209f99b17986acd27cf5078428c7",
-    "calf-camera-picker/src/androidDeviceTest/AndroidManifest.xml": "c24a6c2498dddb660cafd78d31bfc4f4730f8ae34f1c807eff3f17ff6034962b",
-    "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/AndroidCameraRestorationTest.kt": "357c8545e35d5fa529a6b38b064a86c1724ea2b0a2d2b7ec46d5ff4c3671a7d0",
-    "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedAlwaysFinish.kt": "2010803e066ce0de1a34051ed40a50c9bca08f238a6218dcaabb4e7d0a09bee7",
-    "calf-camera-picker/src/androidMain/kotlin/com/mohamedrejeb/calf/camerapicker/CameraPickerLauncher.android.kt": "b7094d795bfaa209b254bbf2c549de21a7fff07df636fbb68f4cb1a3baa917a7",
+    "nativecmpkit-camera-picker/build.gradle.kts": "f074767f7042ac6e07955b361400e672ae43209f99b17986acd27cf5078428c7",
+    "nativecmpkit-camera-picker/src/androidDeviceTest/AndroidManifest.xml": "c24a6c2498dddb660cafd78d31bfc4f4730f8ae34f1c807eff3f17ff6034962b",
+    "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/AndroidCameraRestorationTest.kt": "357c8545e35d5fa529a6b38b064a86c1724ea2b0a2d2b7ec46d5ff4c3671a7d0",
+    "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedAlwaysFinish.kt": "2010803e066ce0de1a34051ed40a50c9bca08f238a6218dcaabb4e7d0a09bee7",
+    "nativecmpkit-camera-picker/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/CameraPickerLauncher.android.kt": "b7094d795bfaa209b254bbf2c549de21a7fff07df636fbb68f4cb1a3baa917a7",
     "scripts/ci/android_device_tests.py": "f096609a3731628c02966b7f6edd40641d7c0ff8119d0922605f6c7e6e99d7d8",
     ".github/workflows/gradle.yml": "3d5d2ea0313055366bf6bc83550f7e2f40c50438c450508588db778fb6bb75f7"
   }

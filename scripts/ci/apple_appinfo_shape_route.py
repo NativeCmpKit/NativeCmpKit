@@ -27,15 +27,15 @@ import runtime_context as runtime
 
 PROFILE = "ios-appinfo-shape"
 OUTPUT = "build/ci-verification/apple-appinfo-shape"
-BINARY = "calf-ui/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
-LINK_TASK = ":calf-ui:linkApplicationDebugTestIosSimulatorArm64"
+BINARY = "nativecmpkit-ui/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe"
+LINK_TASK = ":nativecmpkit-ui:linkApplicationDebugTestIosSimulatorArm64"
 LINK_COMMAND = ["./gradlew", "--no-daemon", "--no-parallel", "--max-workers=1",
                 "--no-configuration-cache", "--no-build-cache", "--console=plain", LINK_TASK]
 LINK_SECONDS, RESERVE_MIB = 1200, 8192
 HELP_RECEIPT = "docs/development/evidence/apple-appinfo-exact-template-20261101/actual006/receipt.json"
 SOURCE_INPUTS = ("scripts/ci/apple_appinfo_shape_route.py", "scripts/ci/apple_appinfo_shape.py",
                  "scripts/ci/apple_appinfo_capability.py", "scripts/ci/ios_ui_application.py",
-                 "calf-ui/build.gradle.kts", application.HOST_SOURCE)
+                 "nativecmpkit-ui/build.gradle.kts", application.HOST_SOURCE)
 FALSE_FLAGS = ("appinfo_output_schema_observed", "subsequent_appinfo_ready", "registration_observed",
                "root_cause_proven", "native_functionality_verified", "profile_passed",
                "packages_published", "release_readiness_certified",

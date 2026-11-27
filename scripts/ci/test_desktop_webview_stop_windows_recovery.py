@@ -23,23 +23,23 @@ import workflow_matrix as matrix
 from terminal_awt240_source_projection import text_before_terminal_awt240
 
 FOCUS = "webview-desktop-stop-windows-recovery"
-CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 REDIRECT = "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct"
-SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
+SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
 SOURCE_SHA256 = "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3"
 BOUNDED_FIXTURE_PREIMAGE_SHA256 = "c828401cd5e0dbae8138e5fc61e4540568e0d076d66953b746124fb104dc8a90"
 PREIMAGE_SHA256 = "0a8301aa683b0b5e1f767e8d7928e21a9038b74e3a26c038e612f5a22958ce8b"
 CAPTURE_FIXTURE_PREIMAGE_SHA256 = "5a7db4734c215546d751b702b2b9c92766ec81e54f2eb33a788b0687cdebb4d7"
-CAPTURE_HELPER_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewStopFailureResources.kt"
+CAPTURE_HELPER_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopFailureResources.kt"
 CAPTURE_HELPER_SHA256 = "d643487bffff3ab744e7eb770faf60552e82e49d90982249dc26bcdccef088c5"
 CAPTURE_CALL = '                    runCatching { captureWindowsStopFailureResources(native.javaClass) }\n'
-ACCEPTED_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest"
+ACCEPTED_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 ACCEPTED_METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
-ACCEPTED_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
+ACCEPTED_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
 CASE = {"classname": CLASS, "name": METHOD + "[desktop]"}
 ROW = {"slot": "desktop-windows-x64", "suite": "desktop", "runner": "windows-2025",
-       "arch": "x64", "python": "python", "test-modules": "calf-webview", "test-focus": FOCUS}
+       "arch": "x64", "python": "python", "test-modules": "nativecmpkit-webview", "test-focus": FOCUS}
 PREDICATES = (
     "native.engine.loadWorker.state == Worker.State.CANCELLED &&",
     "!native.engine.loadWorker.isRunning && state.loadingState == LoadingState.Finished &&",
@@ -67,15 +67,15 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Source-only planning when the lead later executes controls. No Gradle/native invocation.
-        cls.original_plan = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=FOCUS)
+        cls.original_plan = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def plan(self):
         return copy.deepcopy(self.original_plan)
 
     def source_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root, never compiled.\n")
         for relative in (SOURCE, ACCEPTED_SOURCE, lt.WEBVIEW_DESKTOP_AWT_OWNER_SOURCE):
@@ -114,7 +114,7 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
         inherited, = matrix.matrix("webview-desktop-request-state-windows-single")["include"]
         self.assertEqual({**inherited, "test-focus": FOCUS}, ROW)
         self.assertEqual(("desktop-windows-x64",), matrix.PROFILES[FOCUS])
-        self.assertEqual("calf-webview", matrix.MODULE_SUBSETS[FOCUS])
+        self.assertEqual("nativecmpkit-webview", matrix.MODULE_SUBSETS[FOCUS])
         text = (lt.ROOT / "scripts/ci/workflow_matrix.py").read_text()
         tree = ast.parse(text)
         slots = next(node for node in tree.body if isinstance(node, ast.Assign) and
@@ -128,7 +128,7 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
                       ("desktop-windows-x64", "desktop-windows-x64")):
             with patch.dict(matrix.PROFILES, {FOCUS: slots}), self.assertRaises(ValueError):
                 matrix.matrix(FOCUS)
-        for modules in (None, "calf-io", "calf-webview,calf-ui", ""):
+        for modules in (None, "nativecmpkit-io", "nativecmpkit-webview,nativecmpkit-ui", ""):
             with patch.dict(matrix.MODULE_SUBSETS, {FOCUS: modules}), self.assertRaises(ValueError):
                 matrix.matrix(FOCUS)
         for key, value in (("runner", "ubuntu-24.04"), ("arch", "arm64"), ("suite", "ios"),
@@ -151,13 +151,13 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
         expected, = plan["expected"]
         self.assertTrue(lt.validate_test_focus(plan))
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
         self.assertEqual(list(lt.SUITES["desktop"][1]), plan["inherited_test_source_sets"])
         self.assertEqual(FOCUS, plan["explicit_test_focus"])
-        self.assertEqual("calf-webview", expected["module"])
-        self.assertEqual(":calf-webview", expected["project"])
-        self.assertEqual(":calf-webview:desktopTest", expected["task"])
-        self.assertEqual("calf-webview/build/test-results/desktopTest", expected["report_directory"])
+        self.assertEqual("nativecmpkit-webview", expected["module"])
+        self.assertEqual(":nativecmpkit-webview", expected["project"])
+        self.assertEqual(":nativecmpkit-webview:desktopTest", expected["task"])
+        self.assertEqual("nativecmpkit-webview/build/test-results/desktopTest", expected["report_directory"])
         self.assertEqual(["desktopTest"], expected["test_source_sets"])
         self.assertEqual([SOURCE, lt.WEBVIEW_DESKTOP_AWT_OWNER_SOURCE], expected["test_source_files"])
         self.assertEqual({SOURCE: SOURCE_SHA256, lt.WEBVIEW_DESKTOP_AWT_OWNER_SOURCE: lt.WEBVIEW_DESKTOP_AWT_OWNER_SHA256}, expected["test_source_sha256"])
@@ -176,14 +176,14 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
                            ("test_source_sets", ["commonTest"]), ("test_source_sha256", {}),
                            ("test_source_sha256", {SOURCE: PREIMAGE_SHA256}), ("required_original_xml", None),
                            ("required_original_xml", True), ("required_original_xml", 0), ("required_original_xml", 2),
-                           ("task", ":calf-webview:publish"), ("project", ":calf-io"), ("module", "calf-io"),
-                           ("report_directory", "calf-io/build/test-results/desktopTest")):
+                           ("task", ":nativecmpkit-webview:publish"), ("project", ":nativecmpkit-io"), ("module", "nativecmpkit-io"),
+                           ("report_directory", "nativecmpkit-io/build/test-results/desktopTest")):
             changed = self.plan()
             changed["expected"][0][key] = value
             with self.assertRaises(ValueError):
                 lt.validate_test_focus(changed)
         for key, value in (("suite", "ios"), ("complete_suite_requested", True),
-                           ("explicit_module_subset", ["calf-webview", "calf-io"]), ("inherited_test_source_sets", ["iosTest"])):
+                           ("explicit_module_subset", ["nativecmpkit-webview", "nativecmpkit-io"]), ("inherited_test_source_sets", ["iosTest"])):
             changed = self.plan()
             changed[key] = value
             with self.assertRaises(ValueError):
@@ -192,8 +192,8 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
     def test_wrong_suites_modules_unknown_profiles_and_unknown_focuses_have_no_full_suite_fallback(self):
         for suite in ("android-host", "android-device", "js", "wasm", "ios"):
             with self.assertRaises(ValueError):
-                lt.plan(lt.ROOT, suite, only_modules=("calf-webview",), focus=FOCUS)
-        for modules in (None, (), ("calf-io",), ("calf-webview", "calf-ui"), ("calf-webview", "calf-webview")):
+                lt.plan(lt.ROOT, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
+        for modules in (None, (), ("nativecmpkit-io",), ("nativecmpkit-webview", "nativecmpkit-ui"), ("nativecmpkit-webview", "nativecmpkit-webview")):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, "desktop", only_modules=modules, focus=FOCUS)
         for unknown in (FOCUS + "-linux", FOCUS + "*", "unknown-windows-stop"):
@@ -209,7 +209,7 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
                 command = lt.gradle_command("desktop", self.plan())
             self.assertEqual([CLASS + "." + METHOD], [command[index + 1] for index, token in enumerate(command) if token == "--tests"])
             self.assertEqual(1, command.count("--tests"))
-            self.assertIn(":calf-webview:desktopTest", command)
+            self.assertIn(":nativecmpkit-webview:desktopTest", command)
             self.assertIn("--max-workers=2", command)
             self.assertIn("-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8", command)
             self.assertIn("--no-daemon", command)
@@ -226,7 +226,7 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
                     lt.gradle_command("desktop", self.plan())
 
     def test_cli_plan_is_source_only_and_unknown_focus_is_refused(self):
-        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "calf-webview", "--focus", FOCUS]
+        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "nativecmpkit-webview", "--focus", FOCUS]
         output = io.StringIO()
         with patch("sys.argv", args), patch("sys.stdout", output):
             self.assertEqual(0, lt.main())
@@ -238,20 +238,20 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
     def test_selected_changed_missing_or_symlink_fixture_is_refused_before_any_native_command(self):
         with tempfile.TemporaryDirectory() as directory:
             root = self.source_root(directory)
-            self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("calf-webview",), focus=FOCUS)))
+            self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)))
             file = root / SOURCE
             original = file.read_bytes()
             for needle in (METHOD, "server.peerEofs(Endpoint.StopHeld) == 1", "withTimeout(10_000)", "stopSnapshot"):
                 file.write_bytes(original.replace(needle.encode(), b"unreviewed", 1))
                 with self.assertRaises(ValueError):
-                    lt.plan(root, "desktop", only_modules=("calf-webview",), focus=FOCUS)
+                    lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
                 file.write_bytes(original)
             file.unlink()
             with self.assertRaises(ValueError):
-                lt.plan(root, "desktop", only_modules=("calf-webview",), focus=FOCUS)
-            file.symlink_to(root / "calf-webview/build.gradle.kts")
+                lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
+            file.symlink_to(root / "nativecmpkit-webview/build.gradle.kts")
             with self.assertRaises(ValueError):
-                lt.plan(root, "desktop", only_modules=("calf-webview",), focus=FOCUS)
+                lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def test_one_fresh_exact_synthetic_pass_is_only_collector_calibration_not_windows_acceptance(self):
         result = self.collect()
@@ -328,9 +328,9 @@ class DesktopWebViewStopWindowsRecoveryTests(unittest.TestCase):
         self.assertEqual("1c152af0b6f9015fbd719c8c505fc918742a620e35aff6e8cf4a2b8e5ff914f4", digest(suffix))
         preserved = {
             ACCEPTED_SOURCE: "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13",
-            "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
-            "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
-            "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
+            "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
+            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
+            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
             "convention-plugins/src/main/kotlin/DesktopJavaFx.kt": "acf777bd8781de5e8aebb4a8be33b0e2649971696fa2168dc9d1e698fb87c2d5",
             "gradle/libs.versions.toml": "88b87d830087e6f63ebe6211f8f30b85d33e89322f837c27810b9091c1469449",
         }

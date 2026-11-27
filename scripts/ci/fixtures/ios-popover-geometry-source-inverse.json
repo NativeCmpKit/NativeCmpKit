@@ -1,7 +1,7 @@
 {
   "added_inputs": {
-    "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverGeometryTest.kt": "6f5803b7996bfecc2835c13ccc6c7bb4b7695a93934ac2d402ec9e8b91c7f441",
-    "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativePopoverGeometryScene.kt": "c9ec604a2006a5412f52dc9d1e8601aa61caace62dad88a4e89f4bbdddf9043b",
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "6f5803b7996bfecc2835c13ccc6c7bb4b7695a93934ac2d402ec9e8b91c7f441",
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt": "c9ec604a2006a5412f52dc9d1e8601aa61caace62dad88a4e89f4bbdddf9043b",
     "scripts/ci/ios_popover_geometry_compile.init.gradle.kts": "2779cc77d0fbbed7fd8428c1b20e6666851a157d3b811df863c571b436eb628e",
     "scripts/ci/ios_popover_geometry_plan.py": "9869cb094679ed3802e319ee0d4d5068b616659beef1c9b43f71ec636a990364",
     "scripts/ci/test_ios_popover_geometry.py": "1124dd508f4fa7efc7c104c489cdb36971280257ddbfa562727b67e239efa019"
@@ -19,7 +19,7 @@
         }
       ]
     },
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt": {
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt": {
       "after_sha256": "ea18a76b5270fee0c95e953e6a4d280cc00b4fc2b64538a6ca23f7097ca43a0f",
       "before_sha256": "95c3dea0a73ec2a5bd306e81f7fb001d10552cf302681b936165c3ebbf16b6eb",
       "fragments": [
@@ -96,15 +96,15 @@
       "before_sha256": "edc4e95464413288a15693fc4398c7502ff6de9db72d27731ca6dabd753c4b3a",
       "fragments": [
         {
-          "after": "        information = app_information(bundle_id, identity[\"minimum_os\"], local_webview_requests=request_fixture_requested)\n        if host[\"module\"] == \"calf-ui\" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:\n            import ios_popover_geometry_plan as geometry_plan\n            geometry_plan.validate_sources(root)\n            information.update(geometry_plan.scene_information())\n            receipt[\"popover_geometry\"] = geometry_plan.application_fixture(root, before[\"simulator\"], focus)\n        (app / \"Info.plist\").write_bytes(plistlib.dumps(information, sort_keys=True))",
+          "after": "        information = app_information(bundle_id, identity[\"minimum_os\"], local_webview_requests=request_fixture_requested)\n        if host[\"module\"] == \"nativecmpkit-ui\" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:\n            import ios_popover_geometry_plan as geometry_plan\n            geometry_plan.validate_sources(root)\n            information.update(geometry_plan.scene_information())\n            receipt[\"popover_geometry\"] = geometry_plan.application_fixture(root, before[\"simulator\"], focus)\n        (app / \"Info.plist\").write_bytes(plistlib.dumps(information, sort_keys=True))",
           "after_fragment_sha256": "3bd0a0036a81159414a362c24b404d1f56b39d26dfcbec7c21983d4ba4706cdf",
           "before": "        (app / \"Info.plist\").write_bytes(plistlib.dumps(app_information(bundle_id, identity[\"minimum_os\"],\n            local_webview_requests=request_fixture_requested), sort_keys=True))",
           "before_fragment_sha256": "113b70a79356e3ca3b2b60bafdabcdf3fea232c06b98423f53a2f876a446629d"
         },
         {
-          "after": "        if host[\"module\"] == \"calf-ui\" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:\n            import ios_popover_geometry_plan as geometry_plan\n            native_environment = geometry_plan.process_launch_environment(before[\"simulator\"], focus)\n        if host[\"module\"] == \"calf-ui\" and focus == lt.IOS_MODAL_XCUI_FOCUS:\n",
+          "after": "        if host[\"module\"] == \"nativecmpkit-ui\" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:\n            import ios_popover_geometry_plan as geometry_plan\n            native_environment = geometry_plan.process_launch_environment(before[\"simulator\"], focus)\n        if host[\"module\"] == \"nativecmpkit-ui\" and focus == lt.IOS_MODAL_XCUI_FOCUS:\n",
           "after_fragment_sha256": "ec6e3044a4c4738860f8383e16dfdf078464038d56076786affb0129fe91420f",
-          "before": "        if host[\"module\"] == \"calf-ui\" and focus == lt.IOS_MODAL_XCUI_FOCUS:\n",
+          "before": "        if host[\"module\"] == \"nativecmpkit-ui\" and focus == lt.IOS_MODAL_XCUI_FOCUS:\n",
           "before_fragment_sha256": "3848f0f549390df1af58abd8bc7432448c89a4cd5daa3014b0387639ad183d63"
         }
       ]
@@ -114,13 +114,13 @@
       "before_sha256": "0e59884abde1d112ed5bcffff3c78667fbdc1934bed02bce88f8bcc2d6924663",
       "fragments": [
         {
-          "after": "                       if path.name.endswith(\"Test\") and path.name not in KNOWN_TEST_SETS\n                       # This owner-only opt-in input tree is excluded from ordinary\n                       # source-set inheritance. Its exact four-file init script and\n                       # geometry focus must admit it explicitly before compilation.\n                       and not (module == \"calf-ui\" and path.name == \"iosGeometryTest\")\n                       and source_files(root, path.relative_to(root).as_posix())}",
+          "after": "                       if path.name.endswith(\"Test\") and path.name not in KNOWN_TEST_SETS\n                       # This owner-only opt-in input tree is excluded from ordinary\n                       # source-set inheritance. Its exact four-file init script and\n                       # geometry focus must admit it explicitly before compilation.\n                       and not (module == \"nativecmpkit-ui\" and path.name == \"iosGeometryTest\")\n                       and source_files(root, path.relative_to(root).as_posix())}",
           "after_fragment_sha256": "249e0af9139ac33a9c9d95ab3e396c976ce5bbcf10578a826f607e567f323271",
           "before": "                       if path.name.endswith(\"Test\") and path.name not in KNOWN_TEST_SETS\n                       and source_files(root, path.relative_to(root).as_posix())}",
           "before_fragment_sha256": "4ef6f253327818be4808eb57ceadd692ad17b131a5d2efd46aa5f2101b86029b"
         },
         {
-          "after": "IOS_POPOVER_GEOMETRY_CLASS = \"com.mohamedrejeb.calf.ui.dialog.NativePopoverGeometryTest\"\nIOS_POPOVER_GEOMETRY_SOURCE = \"calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverGeometryTest.kt\"\nIOS_POPOVER_GEOMETRY_SCENE_SOURCE = \"calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativePopoverGeometryScene.kt\"\nIOS_POPOVER_GEOMETRY_METHODS = (\n    \"nativePortraitTraitsAndViewLocalAnchorUseTheOwnedScene\",\n    \"nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation\",\n)\nIOS_POPOVER_PORTRAIT_FOCUS = \"ui-native-popover-portrait-traits\"\nIOS_POPOVER_ROTATION_FOCUS = \"ui-native-popover-os-rotation\"\nIOS_POPOVER_GEOMETRY_FOCUSES = (IOS_POPOVER_PORTRAIT_FOCUS, IOS_POPOVER_ROTATION_FOCUS)\nfor _focus, _method in zip(IOS_POPOVER_GEOMETRY_FOCUSES, IOS_POPOVER_GEOMETRY_METHODS):\n    UI_APPLICATION_FOCUS_SPECS[_focus] = {\n        \"groups\": ({\"classname\": IOS_POPOVER_GEOMETRY_CLASS, \"source\": IOS_POPOVER_GEOMETRY_SOURCE,\n                    \"methods\": (_method,), \"declared_methods\": IOS_POPOVER_GEOMETRY_METHODS},),\n        \"scope\": \"One NEW genuine library UIKit OS-geometry method only: observed native iPhone compact portrait or iPad regular portrait/landscape with public UIWindowScene geometry input, automatic view-local/fallback anchor updates while the SAME controller is presented, and admitted original interface-orientation restoration. The dedicated test-only input tree is compiled only by its exact focused init script; ordinary source sets and prior accepted native methods are unchanged/excluded. Exact four-source compiler receipt, current scene manifest/launch mode, actual native XML/Worker/runtime/owned cleanup mandatory. This is NOT real split view, physical/minimum-platform, full UI-013, consumer/API-ABI/security/release certification.\",\n    }\n\nIOS_MODAL_OWNERSHIP_FOCUS = \"ui-native-modal-ownership-batch\"",
+          "after": "IOS_POPOVER_GEOMETRY_CLASS = \"io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverGeometryTest\"\nIOS_POPOVER_GEOMETRY_SOURCE = \"nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt\"\nIOS_POPOVER_GEOMETRY_SCENE_SOURCE = \"nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt\"\nIOS_POPOVER_GEOMETRY_METHODS = (\n    \"nativePortraitTraitsAndViewLocalAnchorUseTheOwnedScene\",\n    \"nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation\",\n)\nIOS_POPOVER_PORTRAIT_FOCUS = \"ui-native-popover-portrait-traits\"\nIOS_POPOVER_ROTATION_FOCUS = \"ui-native-popover-os-rotation\"\nIOS_POPOVER_GEOMETRY_FOCUSES = (IOS_POPOVER_PORTRAIT_FOCUS, IOS_POPOVER_ROTATION_FOCUS)\nfor _focus, _method in zip(IOS_POPOVER_GEOMETRY_FOCUSES, IOS_POPOVER_GEOMETRY_METHODS):\n    UI_APPLICATION_FOCUS_SPECS[_focus] = {\n        \"groups\": ({\"classname\": IOS_POPOVER_GEOMETRY_CLASS, \"source\": IOS_POPOVER_GEOMETRY_SOURCE,\n                    \"methods\": (_method,), \"declared_methods\": IOS_POPOVER_GEOMETRY_METHODS},),\n        \"scope\": \"One NEW genuine library UIKit OS-geometry method only: observed native iPhone compact portrait or iPad regular portrait/landscape with public UIWindowScene geometry input, automatic view-local/fallback anchor updates while the SAME controller is presented, and admitted original interface-orientation restoration. The dedicated test-only input tree is compiled only by its exact focused init script; ordinary source sets and prior accepted native methods are unchanged/excluded. Exact four-source compiler receipt, current scene manifest/launch mode, actual native XML/Worker/runtime/owned cleanup mandatory. This is NOT real split view, physical/minimum-platform, full UI-013, consumer/API-ABI/security/release certification.\",\n    }\n\nIOS_MODAL_OWNERSHIP_FOCUS = \"ui-native-modal-ownership-batch\"",
           "after_fragment_sha256": "02a66a8ed10087da892a6189dcb6368c4e97b540c6791722305d30b539bfd2f2",
           "before": "IOS_MODAL_OWNERSHIP_FOCUS = \"ui-native-modal-ownership-batch\"",
           "before_fragment_sha256": "e95fe1bd41e54b0b63b5d544f2d6f90c6e4ea3d8798e0b429f0e63adbc38e7ef"
@@ -138,9 +138,9 @@
           "before_fragment_sha256": "28bd9bb795807a49e79da0c86e3bceeee9e81b670252ba3e4f348aed67085cf9"
         },
         {
-          "after": "        if focus in IOS_POPOVER_GEOMETRY_FOCUSES and (len(expected) != 1 or\n                any(name not in expected[0].get(\"test_source_files\", []) for name in\n                    (IOS_POPOVER_GEOMETRY_SOURCE, IOS_POPOVER_GEOMETRY_SCENE_SOURCE))):\n            raise ValueError(\"OS geometry plan requires both exact opt-in library test inputs\")\n        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get(\"module\", \"calf-ui\")\n        if (not allowed_test_focus",
+          "after": "        if focus in IOS_POPOVER_GEOMETRY_FOCUSES and (len(expected) != 1 or\n                any(name not in expected[0].get(\"test_source_files\", []) for name in\n                    (IOS_POPOVER_GEOMETRY_SOURCE, IOS_POPOVER_GEOMETRY_SCENE_SOURCE))):\n            raise ValueError(\"OS geometry plan requires both exact opt-in library test inputs\")\n        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get(\"module\", \"nativecmpkit-ui\")\n        if (not allowed_test_focus",
           "after_fragment_sha256": "edb974d2ecb1cb732a820c729606351dafca958e32493a485c5009a83f8cdb0f",
-          "before": "        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get(\"module\", \"calf-ui\")\n        if (not allowed_test_focus",
+          "before": "        application_module = UI_APPLICATION_FOCUS_SPECS[focus].get(\"module\", \"nativecmpkit-ui\")\n        if (not allowed_test_focus",
           "before_fragment_sha256": "f74b5923b87f08b3bf7698e1a1567770b084b176e2cd6a1d09eb1b139ff649bd"
         },
         {
@@ -180,13 +180,13 @@
           "before_fragment_sha256": "2b46bd35da78e47669d78cabcc7400b5bb26e93b8b92adcb66540ae2d7ca1518"
         },
         {
-          "after": "    \"ios-popover-bar-ipad-recovery\": \"calf-ui\",\n    \"ios-popover-geometry-iphone\": \"calf-ui\",\n    \"ios-popover-geometry-ipad\": \"calf-ui\",",
+          "after": "    \"ios-popover-bar-ipad-recovery\": \"nativecmpkit-ui\",\n    \"ios-popover-geometry-iphone\": \"nativecmpkit-ui\",\n    \"ios-popover-geometry-ipad\": \"nativecmpkit-ui\",",
           "after_fragment_sha256": "bce66a84f674917cf8e386c14c8ff23de29e2adaf4d8973ad293acbca5d4eb64",
-          "before": "    \"ios-popover-bar-ipad-recovery\": \"calf-ui\",",
+          "before": "    \"ios-popover-bar-ipad-recovery\": \"nativecmpkit-ui\",",
           "before_fragment_sha256": "cb608fef15bcad62c24f9c27dcfa03a4ad23b1077b56578f241decc4569a3620"
         },
         {
-          "after": "    if profile in (\"ios-popover-geometry-iphone\", \"ios-popover-geometry-ipad\"):\n        kind = \"iphone\" if profile == \"ios-popover-geometry-iphone\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"calf-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"calf-ui\" or rows != [canonical]:\n            raise ValueError(\"OS geometry requires one fixed genuine Arm64 UIKit host and calf-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-portrait-traits\" if kind == \"iphone\" else \"ui-native-popover-os-rotation\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n",
+          "after": "    if profile in (\"ios-popover-geometry-iphone\", \"ios-popover-geometry-ipad\"):\n        kind = \"iphone\" if profile == \"ios-popover-geometry-iphone\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"nativecmpkit-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"nativecmpkit-ui\" or rows != [canonical]:\n            raise ValueError(\"OS geometry requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-portrait-traits\" if kind == \"iphone\" else \"ui-native-popover-os-rotation\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n",
           "after_fragment_sha256": "cb1962cc80446b9a58be2b8e21e7027d6cbfa65901d3b5bcf22618facc87a4ad",
           "before": "    if profile == \"ios-modal-worker-memory-recovery\":\n",
           "before_fragment_sha256": "71f7f372b1bae352c6e8a8944418f98167bb0ea675041d2eaf8853895703bc5e"

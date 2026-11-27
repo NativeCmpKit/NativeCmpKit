@@ -12,6 +12,6 @@ dependencyResolutionManagement {
 rootProject.name = "nativecmpkit-owned-android-geo-probe"
 includeBuild("../../..") {
     dependencySubstitution {
-        substitute(module("verification.nativecmpkit:unpublished-geo")).using(project(":calf-geo"))
+        substitute(module("verification.nativecmpkit:unpublished-geo")).using(project(":nativecmpkit-geo"))
     }
 }

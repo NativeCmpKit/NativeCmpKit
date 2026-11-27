@@ -28,7 +28,7 @@ class ArchiveFocusedJunitTests(unittest.TestCase):
         if self.focus in (tests.IOS_SLIDER_PAIR_STRUCTURE_FOCUS, tests.IOS_SLIDER_TAP_FOCUS):
             self.fixture.write(tests.IOS_SLIDER_LIFECYCLE_SOURCE,
                                (tests.ROOT / tests.IOS_SLIDER_LIFECYCLE_SOURCE).read_bytes())
-        plan = tests.plan(self.root, "ios", only_modules=("calf-ui",), focus=self.focus)
+        plan = tests.plan(self.root, "ios", only_modules=("nativecmpkit-ui",), focus=self.focus)
         selected = tests.ui_application_focus_identities(self.focus)
         if selected_limit is not None:
             selected = selected[:selected_limit]
@@ -44,7 +44,7 @@ class ArchiveFocusedJunitTests(unittest.TestCase):
                         "source_revision": "a" * 40, "source_revision_after": "a" * 40,
                         "changed_inputs": [], "explicit_test_focus": self.focus,
                         "task_execution_markers": {archive.TASK: 1}, "totals": tests.case_counts(cases),
-                        "modules": [{"module": "calf-ui", "task": archive.TASK, "reports": [row], "testcases": cases}],
+                        "modules": [{"module": "nativecmpkit-ui", "task": archive.TASK, "reports": [row], "testcases": cases}],
                         "passed": status == "passed", "execution": {"exit_code": 0 if status == "passed" else 1}}
         inputs = tests.snapshot_inputs(self.root)
         self.receipt.update(inputs_before_sha256=tests.input_digest(inputs), inputs_after_sha256=tests.input_digest(inputs))
@@ -54,7 +54,7 @@ class ArchiveFocusedJunitTests(unittest.TestCase):
         self.write(self.output + "/receipt.json", self.receipt)
         self.fixture.document["explicit_test_focus"] = self.focus
         self.fixture.save()
-        self.write(self.output + "/gradle.log", "> Task :calf-ui:linkApplicationDebugTestIosSimulatorArm64 UP-TO-DATE\n")
+        self.write(self.output + "/gradle.log", "> Task :nativecmpkit-ui:linkApplicationDebugTestIosSimulatorArm64 UP-TO-DATE\n")
 
     def run_archive(self):
         return archive.archive(self.root, self.output)

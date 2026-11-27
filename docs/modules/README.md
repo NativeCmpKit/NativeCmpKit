@@ -1,30 +1,30 @@
 # Module knowledge base
 
-Source names below intentionally remain `calf-*`; published coordinates, if
+Source names below intentionally remain `nativecmpkit-*`; published coordinates, if
 separately authorized later, use `io.github.apdelrahman1911.nativecmpkit` and
 `nativecmpkit-*`. See the [complete mapping](../migration/identity.json).
-Public `com.mohamedrejeb.calf.*` packages, JNI exports and generated resource
+Public `io.github.apdelrahman1911.nativecmpkit.*` packages, JNI exports and generated resource
 names remain compatibility boundaries. **No new packages are published.**
 
 ## Read by subsystem
 
 | Included module(s) | Main responsibilities and interfaces | Detailed implementation guide |
 |---|---|---|
-| `calf-core` | PlatformContext, composition locals, API opt-in markers | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
-| `calf-io` | KmpFile constructors, metadata, bytes and RawSource; URI/NSURL/File ownership | [IO/picker/Coil](io-and-file-picker.md) |
-| `calf-file-picker` | Launcher/settings/type models; gallery/documents/folders; saver; JNI/rfd; MIME/cache | [IO/picker/Coil](io-and-file-picker.md) |
-| `calf-file-picker-coil` | Coil Fetcher, context conversion and eager file reads | [IO/picker/Coil](io-and-file-picker.md) |
-| `calf-ui` | Adaptive controls, Material actuals, native alerts/sheets/bars, date/time models, Cupertino/glass gestures | [UI, every control and native manager](ui.md) |
-| `calf-camera-picker` | Android ActivityResult/FileProvider and iOS UIImagePickerController capture | [Native features](native-features.md) |
-| `calf-share` | ShareContent/Result, Android intents, UIActivityViewController, AppKit JNI, browser promises/fallbacks | [Native features](native-features.md) |
-| `calf-webview` | WebContent/State/Navigator/Settings, Android/WK/JavaFX/iframe engines, every cookie store | [Native features](native-features.md) |
-| `calf-permissions` aggregate | Compatibility exports of all feature modules | [Permissions/geo](permissions-and-geo.md) |
-| `calf-permissions/core` | Permission registry, statuses, single/multiple state, platform dispatch and built-ins | [Permissions/geo](permissions-and-geo.md) |
+| `nativecmpkit-core` | PlatformContext, composition locals, API opt-in markers | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
+| `nativecmpkit-io` | KmpFile constructors, metadata, bytes and RawSource; URI/NSURL/File ownership | [IO/picker/Coil](io-and-file-picker.md) |
+| `nativecmpkit-file-picker` | Launcher/settings/type models; gallery/documents/folders; saver; JNI/rfd; MIME/cache | [IO/picker/Coil](io-and-file-picker.md) |
+| `nativecmpkit-file-picker-coil` | Coil Fetcher, context conversion and eager file reads | [IO/picker/Coil](io-and-file-picker.md) |
+| `nativecmpkit-ui` | Adaptive controls, Material actuals, native alerts/sheets/bars, date/time models, Cupertino/glass gestures | [UI, every control and native manager](ui.md) |
+| `nativecmpkit-camera-picker` | Android ActivityResult/FileProvider and iOS UIImagePickerController capture | [Native features](native-features.md) |
+| `nativecmpkit-share` | ShareContent/Result, Android intents, UIActivityViewController, AppKit JNI, browser promises/fallbacks | [Native features](native-features.md) |
+| `nativecmpkit-webview` | WebContent/State/Navigator/Settings, Android/WK/JavaFX/iframe engines, every cookie store | [Native features](native-features.md) |
+| `nativecmpkit-permissions` aggregate | Compatibility exports of all feature modules | [Permissions/geo](permissions-and-geo.md) |
+| `nativecmpkit-permissions/core` | Permission registry, statuses, single/multiple state, platform dispatch and built-ins | [Permissions/geo](permissions-and-geo.md) |
 | Permission features: `background-location`, `bluetooth`, `calendar`, `camera`, `contacts`, `gallery`, `location`, `microphone`, `notifications`, `wifi` | Each platform mapping, registration, usage key, OS-level prerequisite and helper | [Permissions/geo](permissions-and-geo.md) |
-| `calf-cupertino-icons` | MIT font codepoints, icon text rendering, content semantics | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
-| `calf-navigation` | Experimental route/back-stack controller, argument/saved-state types, expect/actual controller | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
-| `calf-geo` | Coordinates, radius/distance, incomplete location tracker | [Permissions/geo](permissions-and-geo.md) |
-| `calf-maps` | Included build-only scaffold, no map API | [Native features](native-features.md) |
+| `nativecmpkit-cupertino-icons` | MIT font codepoints, icon text rendering, content semantics | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
+| `nativecmpkit-navigation` | Experimental route/back-stack controller, argument/saved-state types, expect/actual controller | [Core/navigation/icons/sample](navigation-core-icons-sample.md) |
+| `nativecmpkit-geo` | Coordinates, radius/distance, incomplete location tracker | [Permissions/geo](permissions-and-geo.md) |
+| `nativecmpkit-maps` | Included build-only scaffold, no map API | [Native features](native-features.md) |
 
 This is **24 included library projects**; navigation, geo and maps do not apply
 the publication plugin. The other **21** prospective artifacts include the
@@ -37,11 +37,11 @@ permission aggregate, core and all ten permission features.
   [sample guide](navigation-core-icons-sample.md). Samples illustrate integration;
   they are not proof of production-ready export, permission, back-stack or lifecycle
   behavior. Their platform manifests/configuration have their own constraints.
-- `calf-media` is excluded stale build configuration. `calf-notifications` is an
+- `nativecmpkit-media` is excluded stale build configuration. `nativecmpkit-notifications` is an
   excluded iOS scheduling experiment, not the included notification-permission
   module. Neither is a working supported product surface.
-- Generated `SFSymbol` names in `calf-ui` are distinct from the bundled Cupertino
-  font in `calf-cupertino-icons`. Name uniqueness/glyph mapping and license
+- Generated `SFSymbol` names in `nativecmpkit-ui` are distinct from the bundled Cupertino
+  font in `nativecmpkit-cupertino-icons`. Name uniqueness/glyph mapping and license
   provenance were checked; this does not establish per-iOS-version SF availability.
 - Convention plugins, build scripts and dependency APIs are explained in
   [build/security](../audit/build-security.md) and the

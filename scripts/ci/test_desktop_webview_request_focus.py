@@ -17,9 +17,9 @@ import workflow_matrix as matrix
 
 
 FOCUS = "webview-desktop-request-state"
-CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
-SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
+SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
 SOURCE_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
 SLOTS = ("desktop-linux-x64", "desktop-macos-arm64", "desktop-windows-x64", "desktop-linux-arm64", "desktop-macos-x64")
 HOSTS = (("Linux", "x86_64"), ("Darwin", "arm64"), ("Windows", "AMD64"), ("Linux", "aarch64"), ("Darwin", "x86_64"))
@@ -27,12 +27,12 @@ HOSTS = (("Linux", "x86_64"), ("Darwin", "arm64"), ("Windows", "AMD64"), ("Linux
 
 class DesktopWebViewRequestFocusTests(unittest.TestCase):
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "desktop", only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def source_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root; never compiled\n")
         source = root / SOURCE
@@ -72,7 +72,7 @@ class DesktopWebViewRequestFocusTests(unittest.TestCase):
         self.assertEqual(list(SLOTS), [row["slot"] for row in rows])
         focuses = (FOCUS, FOCUS + "-stop", FOCUS + "-stop", FOCUS + "-stop-redirect", FOCUS + "-stop")
         self.assertEqual(list(focuses), [row["test-focus"] for row in rows])
-        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "calf-webview" for row in rows))
+        self.assertTrue(all(row["suite"] == "desktop" and row["test-modules"] == "nativecmpkit-webview" for row in rows))
         self.assertEqual([1, 2, 2, 3, 2], [len(lt.webview_desktop_request_identities(focus)) for focus in focuses])
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in matrix.matrix("webview-request-state")["include"]])
@@ -95,27 +95,27 @@ class DesktopWebViewRequestFocusTests(unittest.TestCase):
                 command = lt.gradle_command("desktop", plan)
             self.assertEqual(1, command.count("--tests"))
             self.assertEqual(CLASS + "." + METHOD, command[command.index("--tests") + 1])
-            self.assertIn(":calf-webview:desktopTest", command)
+            self.assertIn(":nativecmpkit-webview:desktopTest", command)
             self.assertNotIn("publish", " ".join(command))
             self.assertNotIn("stopCancelsRealSlowLoad", " ".join(command))
 
     def test_real_cli_plans_exact_focus_and_refuses_wrong_suite_module_or_unknown_focus(self):
-        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "calf-webview", "--focus", FOCUS]
+        args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "nativecmpkit-webview", "--focus", FOCUS]
         stream = io.StringIO()
         with patch("sys.argv", args), patch("sys.stdout", stream):
             self.assertEqual(0, lt.main())
         self.assertEqual(self.plan(), json.loads(stream.getvalue()))
         for suite in ("android-host", "android-device", "ios", "js", "wasm"):
             with self.assertRaises(ValueError):
-                lt.plan(lt.ROOT, suite, only_modules=("calf-webview",), focus=FOCUS)
+                lt.plan(lt.ROOT, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
             wrong = args.copy(); wrong[3] = suite
             with patch("sys.argv", wrong), patch("sys.stderr", io.StringIO()), self.assertRaises(SystemExit) as error:
                 lt.main()
             self.assertEqual(2, error.exception.code)
-        for modules in (None, (), ("calf-ui",), ("calf-webview", "calf-ui"), ("calf-webview", "calf-webview")):
+        for modules in (None, (), ("nativecmpkit-ui",), ("nativecmpkit-webview", "nativecmpkit-ui"), ("nativecmpkit-webview", "nativecmpkit-webview")):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, "desktop", only_modules=modules, focus=FOCUS)
-        wrong = args.copy(); wrong[5] = "calf-ui"
+        wrong = args.copy(); wrong[5] = "nativecmpkit-ui"
         with patch("sys.argv", wrong), patch("sys.stderr", io.StringIO()), self.assertRaises(SystemExit) as error:
             lt.main()
         self.assertEqual(2, error.exception.code)
@@ -143,7 +143,7 @@ class DesktopWebViewRequestFocusTests(unittest.TestCase):
             source = root / SOURCE
             original = source.read_text()
             variants = (original.replace(METHOD, "wrongMethod", 1), original.replace("class DesktopWebViewRequestStateAcceptanceTest", "class ForeignTest", 1),
-                        original.replace("package com.mohamedrejeb.calf.ui.web", "package foreign", 1),
+                        original.replace("package io.github.apdelrahman1911.nativecmpkit.ui.web", "package foreign", 1),
                         original.replace("@Test", "@Ignore @Test", 1), original.replace("@Test", "@IgnoredTest", 1),
                         original + "\n@Test fun extra() {}\n", original.replace("owned.release.await(15, TimeUnit.SECONDS)", "owned.release.await(16, TimeUnit.SECONDS)", 1))
             for changed in variants:
@@ -157,14 +157,14 @@ class DesktopWebViewRequestFocusTests(unittest.TestCase):
             source.unlink()
             with self.assertRaises(ValueError):
                 self.plan(root)
-            source.symlink_to(root / "calf-webview/build.gradle.kts")
+            source.symlink_to(root / "nativecmpkit-webview/build.gradle.kts")
             with self.assertRaises(ValueError):
                 self.plan(root)
 
     def test_filter_source_case_task_report_or_complete_suite_mutations_cannot_fall_back(self):
-        variants = (("project", ":calf-io"), ("module", "calf-io"), ("task", ":calf-webview:publish"),
-                    ("report_directory", "calf-io/build/test-results/desktopTest"), ("test_filter", "*"),
-                    ("test_filter", "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest.stopCancelsRealSlowLoadWithoutFeedbackLoop"),
+        variants = (("project", ":nativecmpkit-io"), ("module", "nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"),
+                    ("report_directory", "nativecmpkit-io/build/test-results/desktopTest"), ("test_filter", "*"),
+                    ("test_filter", "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest.stopCancelsRealSlowLoadWithoutFeedbackLoop"),
                     ("test_source_files", []), ("test_source_files", [SOURCE, lt.WEBVIEW_IDENTITY_SPECS["desktop"]["source"]]),
                     ("test_source_files", [lt.WEBVIEW_IDENTITY_SPECS["desktop"]["source"]]), ("test_source_sets", ["commonTest"]),
                     ("test_source_sha256", {}), ("test_source_sha256", {SOURCE: "0" * 64}),
@@ -205,7 +205,7 @@ class DesktopWebViewRequestFocusTests(unittest.TestCase):
 
     def test_nonmedia_selection_does_not_start_source_inferred_audio_or_change_full_source_inventory(self):
         focused = self.plan()
-        full = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",))
+        full = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",))
         self.assertIn(SOURCE, full["expected"][0]["test_source_files"])
         self.assertIn(desktop_media_context.MEDIA_SOURCE, full["expected"][0]["test_source_files"])
         with tempfile.TemporaryDirectory() as directory, patch("desktop_media_context.platform.system", return_value="Linux"):

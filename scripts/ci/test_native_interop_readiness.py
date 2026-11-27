@@ -4,8 +4,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DROPDOWN = ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dropdown/NativeDropDownLifecycleTest.kt"
-TIME = ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/timepicker/NativeTimePickerTest.kt"
+DROPDOWN = ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dropdown/NativeDropDownLifecycleTest.kt"
+TIME = ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/timepicker/NativeTimePickerTest.kt"
 
 
 class NativeInteropReadinessTest(unittest.TestCase):
@@ -44,7 +44,7 @@ class NativeInteropReadinessTest(unittest.TestCase):
             self.assertIn("= runApplicationUiTest {", source)
             for forbidden in ("Thread.sleep(", "delay(", "@Ignore", "Assume.", "mockk(", "return@runApplicationUiTest"):
                 self.assertNotIn(forbidden, source)
-        helper = (ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt").read_text()
+        helper = (ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt").read_text()
         self.assertIn('awaitMain("native predicate") { predicate() }', helper)
         self.assertIn('error("Timed out awaiting $phase;', helper)
 

@@ -8,7 +8,7 @@ import unittest
 from test_android_permission_demo_denial_absence import permission_absence_preimage
 
 TREE = Path(os.environ.get("PERMISSION_TIMEOUT_REVIEW_TREE", Path(__file__).resolve().parents[2])).resolve()
-KOTLIN = "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/"
+KOTLIN = "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/"
 UI_BEFORE_SHA256 = "4fbabce53f8a07f80c59d60bb4ed0be84beb75cd12584b55ea8d8a99f48c412e"
 NATIVE_BEFORE_SHA256 = "e55b84ffd061767e66ae128b57ea9262c4f6e0c2af2446ebd6a53231e9d569cf"
 
@@ -324,10 +324,10 @@ class AndroidPermissionDemoTimeoutReviewTests(unittest.TestCase):
             ("marker-moved-to-class", source.replace(marker, "", 1).replace("@RunWith(AndroidJUnit4::class)", "@" + name + "\n@RunWith(AndroidJUnit4::class)", 1)),
             ("nested-declaration", source.replace(declaration, "", 1).replace("class AndroidPermissionDemoDeviceTest {", "class AndroidPermissionDemoDeviceTest {\n" + declaration, 1)),
             ("declaration-before-imports", source.replace(declaration, "", 1).replace("import android.Manifest\n", declaration + "import android.Manifest\n", 1)),
-            ("fully-qualified-marker", source.replace(marker, "    @com.mohamedrejeb.calf.permissions." + name + "\n", 1)),
+            ("fully-qualified-marker", source.replace(marker, "    @io.github.apdelrahman1911.nativecmpkit.permissions." + name + "\n", 1)),
             ("foreign-helper-marker", source + "\n@" + name + "\nfun foreignSelectorHelper() {}\n"),
             ("foreign-annotation-name", source.replace(name, name + "Foreign")),
-            ("foreign-alias", source.replace("import org.junit.Test\n", "import com.mohamedrejeb.calf.permissions." + name + " as Foreign\nimport org.junit.Test\n", 1)),
+            ("foreign-alias", source.replace("import org.junit.Test\n", "import io.github.apdelrahman1911.nativecmpkit.permissions." + name + " as Foreign\nimport org.junit.Test\n", 1)),
             ("changed-third-request-deadline", source.replace("SystemClock.elapsedRealtime() + 5000", "SystemClock.elapsedRealtime() + 5001", 1)),
             ("changed-third-callback-count", source.replace('?.getInt("callbacks") == 3', '?.getInt("callbacks") == 4', 1)),
         )

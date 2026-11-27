@@ -35,7 +35,7 @@ MODES = ("module", "pom")
 FIXTURE = "tests/consumer/webview-desktop"
 FILES = ("README.md", "settings.gradle.kts", "build.gradle.kts", "gradle.properties",
          "src/test/kotlin/nativecmpkit/consumer/PublishedWebViewConsumerTest.kt")
-CLASS = "nativecmpkit.consumer.PublishedWebViewConsumerTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedWebViewConsumerTest"
 METHODS = {"loadedPublicClassesComeFromTheExactStagedJar", "publicComposableLoadsEvaluatesAndReleasesTheRealNativeView"}
 CLASSPATHS = {"compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"}
 FX_MODULES = {"base", "graphics", "controls", "media", "web", "swing"}
@@ -111,7 +111,7 @@ def inputs(root: Path):
     for path in paths:
         need(path.stat().st_nlink == 1 and path.stat().st_size < 2 * 1024**2, "Unbounded or shared fixture input")
         result[path.relative_to(root).as_posix()] = lt.sha256(path)
-    for name in ("tests/consumer/verify_artifacts.py", "docs/migration/identity.json", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
+    for name in ("tests/consumer/verify_artifacts.py", "docs/migration/current-identity.json", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
         result[name] = lt.sha256(lt.safe_path(root, name))
     for path in lt.source_files(root, "licenses"):
         result[path.relative_to(root).as_posix()] = lt.sha256(path)
@@ -261,14 +261,14 @@ def resolution_contract(document, staged, host, mode):
         need(isinstance(row, dict) and row.get('configuration') in CLASSPATHS and all(isinstance(row.get(k), str) and row[k]
              for k in ('group', 'module', 'version', 'file', 'sha256')), "Invalid resolved Maven row")
         need(type(row.get('bytes')) is int and row['bytes'] > 0 and re.fullmatch(r'[0-9a-f]{64}', row['sha256']), "Invalid resolved artifact size/hash")
-        need(row['group'] != 'com.mohamedrejeb.calf' and row['file'] == PurePosixPath(row['file']).name and '\\' not in row['file'], "Original/source/path substitute in consumer")
+        need(row['group'] != 'io.github.apdelrahman1911.nativecmpkit' and row['file'] == PurePosixPath(row['file']).name and '\\' not in row['file'], "Original/source/path substitute in consumer")
         identity = tuple(row[k] for k in ('configuration', 'group', 'module', 'version', 'file'))
         need(identity not in identities, "Duplicate consumer artifact row")
         identities.add(identity)
         if row['group'] == GROUP:
             target = MODULE + '-desktop'
             canonical = target + '-' + VERSION + '.jar'
-            allowed_labels = {canonical, 'calf-webview-desktop-' + VERSION + '.jar'}
+            allowed_labels = {canonical, 'nativecmpkit-webview-desktop-' + VERSION + '.jar'}
             need(row['module'] == target and row['version'] == VERSION and row.get('declared_file_name') in allowed_labels and
                  row.get('declared_file_url') == canonical and row.get('resolved_file_name') == row['file'] and
                  row['file'] == (row['declared_file_name'] if mode == 'module' else canonical), "Wrong candidate metadata/Maven-name binding")
@@ -368,7 +368,7 @@ def run(root: Path, relative: str, host: str, timeout=4200):
         need(result['exit_code'] == 0 and not result.get('stop_reason'), "Actual two-publication staging failed")
         record['producer_daemon'] = daemon_jvm.observation(producer_log)
         markers = re.findall(r'(?m)^NATIVECMPKIT_WEBVIEW_STAGE task=(\S+) group=' + re.escape(GROUP) + r' version=' + re.escape(VERSION) + '$', producer_log.read_text(errors='replace'))
-        expected = {':calf-webview:publish' + name + 'PublicationToNativecmpkitVerificationRepository' for name in ('KotlinMultiplatform', 'Desktop')}
+        expected = {':nativecmpkit-webview:publish' + name + 'PublicationToNativecmpkitVerificationRepository' for name in ('KotlinMultiplatform', 'Desktop')}
         need(len(markers) == 2 and set(markers) == expected, "Exactly two actual WebView staging task markers required")
         record['actual_publication_tasks'] = sorted(markers)
         staged = staged_inputs(repository)

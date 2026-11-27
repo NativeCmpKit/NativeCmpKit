@@ -7,10 +7,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-MODULE = "calf-permissions/core"
+MODULE = "nativecmpkit-permissions/core"
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.storageprobe"
-REPORTER = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test"
-CLASS = "com.mohamedrejeb.calf.permissions.AndroidStorageCompatibilityTest"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.AndroidStorageCompatibilityTest"
 
 
 @dataclass(frozen=True)

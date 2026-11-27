@@ -62,7 +62,7 @@ class CameraRecentsFixtureRecoveryControls(unittest.TestCase):
                         if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and
                            "SHA256" in target.id for target in node.targets)}
             self.assertEqual(pins(before), pins(current), relative)
-        self.assertFalse(any(path.startswith("calf-") for path in self.bindings))
+        self.assertFalse(any(path.startswith("nativecmpkit-") for path in self.bindings))
 
     def test_exact_current_inverse_and_forward_composition_keep_older_stage_separate(self):
         from camera_tooling562_source_projection import current_source_before_tooling

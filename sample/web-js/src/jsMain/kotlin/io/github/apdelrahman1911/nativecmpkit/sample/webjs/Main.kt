@@ -1,0 +1,22 @@
+package io.github.apdelrahman1911.nativecmpkit.sample.webjs
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.window.ComposeViewport
+import io.github.apdelrahman1911.nativecmpkit.sample.App
+import org.jetbrains.skiko.wasm.onWasmReady
+
+@OptIn(ExperimentalComposeUiApi::class)
+fun main() {
+    onWasmReady {
+        ComposeViewport("composeApp") {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                App()
+            }
+        }
+    }
+}

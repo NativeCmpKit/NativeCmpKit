@@ -130,8 +130,8 @@ class AndroidPermissionDemoSourceReviewTest(unittest.TestCase):
     def test_new_fixture_build_settings_manifest_and_recipe_are_dependency_keyed_not_its_sources_or_outputs(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-permissions:core",\n)\n')
-            for relative in ("calf-permissions/core/build.gradle.kts", "scripts/ci/android_permission_demo.py",
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-permissions:core",\n)\n')
+            for relative in ("nativecmpkit-permissions/core/build.gradle.kts", "scripts/ci/android_permission_demo.py",
                 demo.FIXTURE + "/build.gradle.kts", demo.FIXTURE + "/settings.gradle.kts",
                 demo.FIXTURE + "/gradle.properties", demo.FIXTURE + "/src/main/AndroidManifest.xml"):
                 dest = root / relative

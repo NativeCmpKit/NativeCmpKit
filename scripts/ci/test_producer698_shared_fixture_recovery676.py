@@ -40,7 +40,7 @@ FIXTURE_BINDINGS = {'scripts/ci/test_ios_geometry_simulator_source_projection.py
                                                                                          'name).read_bytes()\n'
                                                                                          '            '
                                                                                          'if name == '
-                                                                                         '"calf-ui/build.gradle.kts":\n'
+                                                                                         '"nativecmpkit-ui/build.gradle.kts":\n'
                                                                                          '                '
                                                                                          'current = '
                                                                                          'current_source_before_ui_split664(name, '
@@ -175,7 +175,7 @@ SEALED_SPECS = {'scripts/ci/fixtures/android-io-controlled-remote-routing-source
  'scripts/ci/fixtures/tooling-recovery671-source-inverse.json': '9def6c416e199237600bdcdc2a16a3fd22dc2158796e1116f999b8681c96a110',
  'scripts/ci/fixtures/webview-content-policy-routing-source-inverse.json': 'c44400087570740d3248704c2165c3222229f2c05ff1a2a3840dbda9aa04b916'}
 
-UI_BUILD = "calf-ui/build.gradle.kts"
+UI_BUILD = "nativecmpkit-ui/build.gradle.kts"
 UI_CONTROL = "scripts/ci/test_ios_ui_related_source_projection.py"
 UI_SPLIT_GUARD = "scripts/ci/ios_ui_split664_source_projection.py"
 RECENTS_GUARD = "scripts/ci/camera_recents_source_projection.py"
@@ -297,7 +297,7 @@ class Producer698SharedFixtureRecoveryControls(unittest.TestCase):
         relative = "scripts/ci/test_ios_geometry_simulator_source_projection.py"
         method = _function(ast.parse((EXECUTABLE_ROOT / relative).read_bytes()), FIXTURE_BINDINGS[relative]["changed_method"])
         qualifiers = [node for node in ast.walk(method) if isinstance(node, ast.If) and
-                      ast.unparse(node.test) == "name == 'calf-ui/build.gradle.kts'"]
+                      ast.unparse(node.test) == "name == 'nativecmpkit-ui/build.gradle.kts'"]
         self.assertEqual(1, len(qualifiers))
         self.assertEqual("current = current_source_before_ui_split664(name, current)", ast.unparse(qualifiers[0].body[0]))
         self.assertEqual(1, len([node for node in ast.walk(method) if isinstance(node, ast.Call) and

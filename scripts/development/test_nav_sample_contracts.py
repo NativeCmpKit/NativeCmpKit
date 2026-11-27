@@ -5,16 +5,16 @@ import unittest
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
-SCREENS = ROOT / "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/screens"
+SCREENS = ROOT / "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/screens"
 ANDROID = "{http://schemas.android.com/apk/res/android}"
 
 
 class NavSampleContractTest(unittest.TestCase):
     def test_secure_dialog_demo_has_no_input_logging(self):
         text = (SCREENS / "AlertDialogScreen.kt").read_text()
-        helper = (ROOT / "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/alertinput/SampleAlertDialogInputFields.kt").read_text()
+        helper = (ROOT / "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/alertinput/SampleAlertDialogInputFields.kt").read_text()
         self.assertIn("textFields = sampleAlertDialogInputFields()", text)
-        self.assertIn("import com.mohamedrejeb.calf.sample.alertinput.sampleAlertDialogInputFields", text)
+        self.assertIn("import io.github.apdelrahman1911.nativecmpkit.sample.alertinput.sampleAlertDialogInputFields", text)
         self.assertIn("isSecure = true", helper)
         self.assertNotRegex(text + "\n" + helper, r"\b(?:println|print)\s*\(|\bLog\.[diewv]\s*\(|\blogger\.")
         self.assertIn("Secure input must never", helper)
@@ -34,7 +34,7 @@ class NavSampleContractTest(unittest.TestCase):
         self.assertNotIn("Permission.Call,", (SCREENS / "PermissionsScreen.kt").read_text())
 
     def test_apple_demo_declares_current_calendar_and_local_network_prerequisites(self):
-        plist = plistlib.loads((ROOT / "sample/ios/Calf/Info.plist").read_bytes())
+        plist = plistlib.loads((ROOT / "sample/ios/NativeCmpKit/Info.plist").read_bytes())
         for key in ("NSCalendarsFullAccessUsageDescription", "NSCalendarsWriteOnlyAccessUsageDescription",
                     "NSLocalNetworkUsageDescription"):
             self.assertTrue(plist.get(key, "").strip())
@@ -54,7 +54,7 @@ class NavSampleContractTest(unittest.TestCase):
     def test_unused_jetbrains_navigation_dependency_is_not_declared_by_sample(self):
         text = (ROOT / "sample/common/build.gradle.kts").read_text()
         self.assertNotIn("implementation(libs.jetbrains.navigation.compose)", text)
-        self.assertIn("implementation(projects.calfNavigation)", text)
+        self.assertIn("implementation(projects.nativecmpkitNavigation)", text)
 
     def test_streaming_screen_uses_the_same_cancellable_owner_as_its_regressions(self):
         text = (SCREENS / "FilePickerScreen.kt").read_text()
@@ -62,7 +62,7 @@ class NavSampleContractTest(unittest.TestCase):
         self.assertIn("streaming.replace(selection,", text)
         self.assertIn("streaming.cancel()", text)
         self.assertNotIn("streamingJob", text)
-        owner = (ROOT / "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/utils/SampleStreamingOwner.kt").read_text()
+        owner = (ROOT / "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/utils/SampleStreamingOwner.kt").read_text()
         self.assertIn("selection.toList()", owner)
         self.assertIn("currentCoroutineContext().ensureActive()", owner)
         self.assertIn("if (request === token) publish(results)", owner)

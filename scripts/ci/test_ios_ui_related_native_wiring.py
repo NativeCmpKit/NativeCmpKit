@@ -80,13 +80,13 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
         definitions = {target.id: node.value for node in tree.body if isinstance(node, ast.Assign)
                        for target in node.targets if isinstance(target, ast.Name) and target.id in {"PROFILES", "MODULE_SUBSETS"}}
         for profile, focus in zip(PROFILES, related.FOCUSES):
-            for name, wanted in (("PROFILES", ("ios-iphone",)), ("MODULE_SUBSETS", "calf-ui")):
+            for name, wanted in (("PROFILES", ("ios-iphone",)), ("MODULE_SUBSETS", "nativecmpkit-ui")):
                 node = definitions[name]; value = next(value for key, value in zip(node.keys, node.values)
                                                       if isinstance(key, ast.Constant) and key.value == profile)
                 self.assertEqual(wanted, ast.literal_eval(value))
                 self.assertFalse(any(isinstance(child, (ast.Name, ast.Attribute)) for child in ast.walk(value)))
             row = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64", "python": "python3",
-                   "simulator-kind": "iphone", "test-modules": "calf-ui", "test-focus": focus}
+                   "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui", "test-focus": focus}
             self.assertEqual({"include": [row]}, workflow.matrix(profile))
             for field, bad in (("runner", "macos-15"), ("arch", "x64"), ("python", "python"),
                                ("suite", "desktop"), ("simulator-kind", "ipad"), ("extra", "unknown")):
@@ -100,7 +100,7 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
     def test_native_registry_and_gradle_requests_select_only_exact_ten_or_four(self):
         for focus in related.FOCUSES:
             self.assertEqual(related.focus_spec(focus), library.UI_APPLICATION_FOCUS_SPECS[focus])
-            plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertTrue(related.validate_plan(plan)); self.assertTrue(library.validate_test_focus(plan))
             command = library.gradle_command("ios", plan, NEW_UUID, root=ROOT)
             self.assertIn(related.init_script(focus), command)
@@ -113,7 +113,7 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
 
     def test_native_plan_rejects_source_task_module_focus_and_hash_contract_broadening(self):
         focus = related.FOCUSES[1]; original = model_plan(focus)
-        for key, value in (("task", ":calf-ui:allTests"), ("project", ":other"), ("module", "calf-core"),
+        for key, value in (("task", ":nativecmpkit-ui:allTests"), ("project", ":other"), ("module", "nativecmpkit-core"),
                            ("test_source_sets", ["commonTest", "iosTest"]), ("test_source_files", []),
                            ("test_filter", "*"), ("required_testcases", []),
                            ("report_directory", "foreign"), ("ui_related_source_contract", {})):
@@ -124,7 +124,7 @@ class RelatedUiNativeWiringControls(unittest.TestCase):
                            ("schema_version", True)):
             changed = copy.deepcopy(original); changed["expected"][0]["ui_related_source_contract"][key] = value
             with self.assertRaises(ValueError): related.validate_plan(changed)
-        for key, value in (("suite", "desktop"), ("explicit_module_subset", ["calf-ui", "calf-core"]),
+        for key, value in (("suite", "desktop"), ("explicit_module_subset", ["nativecmpkit-ui", "nativecmpkit-core"]),
                            ("complete_suite_requested", True), ("explicit_test_focus", "ui-native-adaptive-ios26plus")):
             changed = copy.deepcopy(original); changed[key] = value
             with self.assertRaises(ValueError): library.validate_test_focus(changed)

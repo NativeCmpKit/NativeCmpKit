@@ -14,7 +14,7 @@ import workflow_matrix as wm
 
 class NavigationGeoPublicContractsTests(unittest.TestCase):
     def plan(self):
-        return lt.plan(lt.ROOT, 'android-device', only_modules=('calf-navigation',),
+        return lt.plan(lt.ROOT, 'android-device', only_modules=('nativecmpkit-navigation',),
                        focus=lt.ANDROID_NAV_BACK_FOCUS)
 
     def collect(self, cases=None, markers=1, stale=False):
@@ -35,8 +35,8 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
                                       Counter({plan['expected'][0]['task']: markers}))
 
     def test_existing_public_android_types_are_exported_without_consumer_workarounds(self):
-        nav = (lt.ROOT / 'calf-navigation/build.gradle.kts').read_text()
-        geo = (lt.ROOT / 'calf-geo/build.gradle.kts').read_text()
+        nav = (lt.ROOT / 'nativecmpkit-navigation/build.gradle.kts').read_text()
+        geo = (lt.ROOT / 'nativecmpkit-geo/build.gradle.kts').read_text()
         self.assertIn('api(libs.android.navigation.compose)', nav)
         for dependency in ('appcompat', 'lifecycle.extensions', 'play.services.location'):
             self.assertIn('api(libs.'+dependency+')', geo)
@@ -50,8 +50,8 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
         fixture = lt.ROOT / 'tests/consumer/navigation-geo-source'
         settings = (fixture / 'settings.gradle.kts').read_text()
         self.assertEqual(2, settings.count('substitute(module('))
-        self.assertIn('project(":calf-navigation")', settings)
-        self.assertIn('project(":calf-geo")', settings)
+        self.assertIn('project(":nativecmpkit-navigation")', settings)
+        self.assertIn('project(":nativecmpkit-geo")', settings)
         for forbidden in ('mavenLocal()', 'upstream', 'publishToMavenLocal'):
             self.assertNotIn(forbidden, settings.split('// Fixed explicit substitutions:', 1)[0])
         build = (fixture / 'build.gradle.kts').read_text()
@@ -72,7 +72,7 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
 
     def test_exact_one_native_method_no_accepted_navigation_geo_replay_or_slot_removal(self):
         row, = wm.matrix('android-navigation-back')['include']
-        self.assertEqual(('android-device-api35', 'android-device', 'calf-navigation', lt.ANDROID_NAV_BACK_FOCUS),
+        self.assertEqual(('android-device-api35', 'android-device', 'nativecmpkit-navigation', lt.ANDROID_NAV_BACK_FOCUS),
                          (row['slot'], row['suite'], row['test-modules'], row['test-focus']))
         plan = self.plan()
         self.assertTrue(lt.validate_test_focus(plan))
@@ -80,23 +80,23 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
         self.assertEqual(lt.android_nav_back_identities(), plan['expected'][0]['required_testcases'])
         self.assertEqual(lt.ANDROID_NAV_BACK_CLASS, plan['expected'][0]['test_filter'])
         self.assertEqual(11, len(wm.matrix('all')['include']))
-        self.assertIn('calf-navigation', lt.MINIMUM_MODULES['android-device'])
+        self.assertIn('nativecmpkit-navigation', lt.MINIMUM_MODULES['android-device'])
 
     def test_cli_choices_have_the_same_guarded_exact_focus(self):
         import android_device_tests as device
         for module, args in ((lt, ['library_tests.py', 'plan', '--suite', 'android-device', '--module',
-                                  'calf-navigation', '--focus', lt.ANDROID_NAV_BACK_FOCUS]),
+                                  'nativecmpkit-navigation', '--focus', lt.ANDROID_NAV_BACK_FOCUS]),
                              (device, ['android_device_tests.py', 'plan', '--api-level', '35', '--module',
-                                      'calf-navigation', '--focus', lt.ANDROID_NAV_BACK_FOCUS,
+                                      'nativecmpkit-navigation', '--focus', lt.ANDROID_NAV_BACK_FOCUS,
                                       '--output', 'build/ci-verification/navback-fixture'])):
             with patch('sys.argv', args), patch('sys.stdout', new=io.StringIO()) as output:
                 self.assertEqual(0, module.main())
             self.assertIn(lt.ANDROID_NAV_BACK_FOCUS, output.getvalue())
 
     def test_invalid_suite_module_arbitrary_filter_and_broad_success_claim_are_rejected(self):
-        for suite, modules in (('desktop', ('calf-navigation',)), ('android-host', ('calf-navigation',)),
-                               ('android-device', None), ('android-device', ('calf-navigation', 'calf-geo')),
-                               ('android-device', ('calf-webview',))):
+        for suite, modules in (('desktop', ('nativecmpkit-navigation',)), ('android-host', ('nativecmpkit-navigation',)),
+                               ('android-device', None), ('android-device', ('nativecmpkit-navigation', 'nativecmpkit-geo')),
+                               ('android-device', ('nativecmpkit-webview',))):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.ANDROID_NAV_BACK_FOCUS)
         for field, value in (('test_filter', '*'), ('required_testcases', [])):
@@ -125,7 +125,7 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
         for forbidden in ('onBackPressed()', 'onBackPressedDispatcher.onBackPressed()', 'AndroidBackHandler(',
                           '@Ignore', '@Disabled', 'sample.'):
             self.assertNotIn(forbidden, source)
-        docs = (lt.ROOT / 'calf-navigation/README.md').read_text()
+        docs = (lt.ROOT / 'nativecmpkit-navigation/README.md').read_text()
         for token in ('predictive', 'gesture progress/animation is not implemented', 'not implemented', 'popBackStack'):
             self.assertIn(token, docs)
 
@@ -133,7 +133,7 @@ class NavigationGeoPublicContractsTests(unittest.TestCase):
         command = lt.gradle_command('android-device', self.plan(), android_serial='emulator-5588', root=lt.ROOT)
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.class='+lt.ANDROID_NAV_BACK_CLASS, command)
         self.assertNotIn('--tests', command)
-        self.assertEqual(':calf-navigation:connectedAndroidDeviceTest', command[-1])
+        self.assertEqual(':nativecmpkit-navigation:connectedAndroidDeviceTest', command[-1])
         workflow = (lt.ROOT / '.github/workflows/gradle.yml').read_text()
         self.assertIn('android-navigation-back', workflow)
         self.assertIn('permissions:\n  contents: read', workflow)

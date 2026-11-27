@@ -16,11 +16,11 @@ import workflow_matrix as w
 
 class AndroidGeoPrerequisitesTests(unittest.TestCase):
     def plan(self):
-        return l.plan(l.ROOT, "android-device", only_modules=("calf-geo",), focus=l.ANDROID_GEO_PREREQUISITES_FOCUS)
+        return l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-geo",), focus=l.ANDROID_GEO_PREREQUISITES_FOCUS)
 
     def test_only_failed_default_provider_and_two_new_prerequisites_recover_without_two_accepted_replays(self):
         row, = w.matrix("android-geo-prerequisites")["include"]
-        self.assertEqual(("android-device-api35", "calf-geo", l.ANDROID_GEO_PREREQUISITES_FOCUS),
+        self.assertEqual(("android-device-api35", "nativecmpkit-geo", l.ANDROID_GEO_PREREQUISITES_FOCUS),
                          (row["slot"], row["test-modules"], row["test-focus"]))
         plan = self.plan(); self.assertTrue(l.validate_test_focus(plan)); self.assertTrue(l.android_geo_probe_required(plan))
         cases = l.android_geo_provider_identities(l.ANDROID_GEO_PREREQUISITES_FOCUS)
@@ -29,13 +29,13 @@ class AndroidGeoPrerequisitesTests(unittest.TestCase):
         self.assertEqual(l.ANDROID_GEO_PREREQUISITES_ANNOTATION, plan["expected"][0]["test_filter"])
         command = l.gradle_command("android-device", plan, android_serial="emulator-5588")
         self.assertEqual(1, command.count("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedGeoProbe=true"))
-        owner = l.plan(l.ROOT, "android-device", only_modules=("calf-geo",), focus=l.ANDROID_GEO_OWNERSHIP_FOCUS)
+        owner = l.plan(l.ROOT, "android-device", only_modules=("nativecmpkit-geo",), focus=l.ANDROID_GEO_OWNERSHIP_FOCUS)
         self.assertFalse(l.android_geo_probe_required(owner))
         self.assertEqual(11, len(w.matrix("all")["include"]))
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), l.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), l.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             l.plan(l.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -43,13 +43,13 @@ class AndroidGeoPrerequisitesTests(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         unrelated_plan = l.plan(l.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in unrelated_plan["expected"]])
         self.assertEqual(list(unrelated), unrelated_plan["explicit_module_subset"])
         self.assertFalse(unrelated_plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], unrelated_plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], unrelated_plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          unrelated_plan["test_bearing_modules_not_requested"])
         self.assertEqual(9, len(l.MINIMUM_MODULES["android-device"]))
 
@@ -59,7 +59,7 @@ class AndroidGeoPrerequisitesTests(unittest.TestCase):
         selectors = [a for a in command if a.startswith("-Pandroid.testInstrumentationRunnerArguments.") and
                      a.split("=", 1)[0].rsplit(".", 1)[-1] in {"class", "annotation", "notAnnotation"}]
         self.assertEqual(["-Pandroid.testInstrumentationRunnerArguments.annotation=" +
-                          "com.mohamedrejeb.calf.geo.AndroidGeoPrerequisiteVerification"], selectors)
+                          "io.github.apdelrahman1911.nativecmpkit.geo.AndroidGeoPrerequisiteVerification"], selectors)
         self.assertTrue(all("," not in selector for selector in selectors), "ATE1.0.1 loses comma-containing selectors")
         source = (l.ROOT / l.ANDROID_GEO_PROVIDER_SOURCE).read_text()
         annotated = re.findall(r"@AndroidGeoPrerequisiteVerification\s+@Test fun ([A-Za-z0-9_]+)", source)
@@ -68,8 +68,8 @@ class AndroidGeoPrerequisitesTests(unittest.TestCase):
 
     def test_both_real_clis_have_the_same_exact_finite_source_only_plan(self):
         import android_device_tests as device
-        for module, args in [(l, ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-geo", "--focus", l.ANDROID_GEO_PREREQUISITES_FOCUS]),
-                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "calf-geo", "--focus", l.ANDROID_GEO_PREREQUISITES_FOCUS,
+        for module, args in [(l, ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-geo", "--focus", l.ANDROID_GEO_PREREQUISITES_FOCUS]),
+                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "nativecmpkit-geo", "--focus", l.ANDROID_GEO_PREREQUISITES_FOCUS,
                                        "--output", "build/ci-verification/synthetic-geo"] )]:
             with patch("sys.argv", args), patch("sys.stdout", io.StringIO()): self.assertEqual(0, module.main())
         self.assertEqual(0, w.preflight_plans("android-geo-prerequisites")["slots"][0]["exit_code"])
@@ -90,7 +90,7 @@ class AndroidGeoPrerequisitesTests(unittest.TestCase):
         with self.assertRaises(ValueError): l.validate_test_focus(invalid)
 
     def test_default_client_checks_actual_gms_and_location_settings_before_registration_without_enabling_them(self):
-        source = (l.ROOT / "calf-geo/src/androidMain/kotlin/com/mohamedrejeb/calf/geo/AndroidLocationTrackingBackend.kt").read_text()
+        source = (l.ROOT / "nativecmpkit-geo/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/geo/AndroidLocationTrackingBackend.kt").read_text()
         for token in ["DefaultAndroidLocationClient(context)", "GoogleApiAvailabilityLight", "isGooglePlayServicesAvailable(this)",
                       "LocationManagerCompat.isLocationEnabled(manager)", "platformCode = status", "AndroidLocationPrerequisiteException",
                       "requestIssued = false", "delegate?.remove(callback) ?: Tasks.forResult<Void>(null)"]:

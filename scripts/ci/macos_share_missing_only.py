@@ -19,8 +19,8 @@ APPKIT_CASES = (
 )
 ACCEPTED_APPKIT = APPKIT_CASES[:2]
 MISSING_APPKIT = APPKIT_CASES[2:]
-JNI_CLASS = "com.mohamedrejeb.calf.share.MacOsShareCoroutineLifecycleTest"
-JNI_SOURCE = "calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/MacOsShareCoroutineLifecycleTest.kt"
+JNI_CLASS = "io.github.apdelrahman1911.nativecmpkit.share.MacOsShareCoroutineLifecycleTest"
+JNI_SOURCE = "nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/MacOsShareCoroutineLifecycleTest.kt"
 JNI_METHOD = "realNativeTimeoutReportsOnceWithoutFallbackAndAllowsFreshRequestAfterMainCleanup"
 JNI_FOCUS = "macos-share-timeout-retention-recovery"
 JNI_PROFILE = "macos-share-missing-lifecycle"
@@ -28,9 +28,9 @@ ACCEPTED_JNI = (
     "independentRealNativeOwnersRejectOverlapWithoutReplacingTheRetainedRequest",
     "cancellingRetainedAppKitRequestFreesOwnersAndDoesNotOccupySingleCoroutineWorker",
 )
-CASES_SOURCE = "calf-share/native/tests/appkit_lifecycle/cases.rs"
+CASES_SOURCE = "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"
 CASES_SHA = "9e038b83b4e2e4d3d4718869ec05c9eaa198ce1f3c886a38b97b7c13ff83842b"
-OPERATION_SOURCE = "calf-share/native/src/operation.rs"
+OPERATION_SOURCE = "nativecmpkit-share/native/src/operation.rs"
 OPERATION_SHA = "926b8c1fd41c2039e6bb8a81e9d05333165ed459aa10b9381ab28d140ed62942"
 MAX_STDERR = 4096
 MAX_JNI_OUTPUT = 32768
@@ -69,7 +69,7 @@ def jni_validate_source(source: str, test_sources: list[str]) -> None:
     methods = re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source)
     expected = [ACCEPTED_JNI[1], JNI_METHOD, ACCEPTED_JNI[0]]
     if (JNI_SOURCE not in test_sources or methods != expected or
-            "package com.mohamedrejeb.calf.share" not in source or
+            "package io.github.apdelrahman1911.nativecmpkit.share" not in source or
             "class MacOsShareCoroutineLifecycleTest" not in source or
             re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) or
             "DesktopShareOwner(scope," not in source or

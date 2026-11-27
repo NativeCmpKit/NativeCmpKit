@@ -11,7 +11,7 @@ import workflow_matrix as matrix
 
 class LinuxPickerPortalSaveFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "desktop", only_modules=("calf-file-picker",), focus=r.LINUX_PICKER_PORTAL_SAVE_FOCUS)
+        return r.plan(root, "desktop", only_modules=("nativecmpkit-file-picker",), focus=r.LINUX_PICKER_PORTAL_SAVE_FOCUS)
 
     def collect(self, cases=None, **kwargs):
         helper = fixtures.LinuxPickerPortalFocusTests()
@@ -21,19 +21,19 @@ class LinuxPickerPortalSaveFocusTests(unittest.TestCase):
 
     def test_one_failed_method_one_linux_job_never_replays_completed_open_or_cancellation(self):
         row, = matrix.matrix("picker-linux-portal-save")["include"]
-        self.assertEqual(("desktop-linux-x64", "calf-file-picker", r.LINUX_PICKER_PORTAL_SAVE_FOCUS),
+        self.assertEqual(("desktop-linux-x64", "nativecmpkit-file-picker", r.LINUX_PICKER_PORTAL_SAVE_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan(); expected = plan["expected"][0]
         self.assertFalse(plan["complete_suite_requested"])
         self.assertTrue(r.validate_test_focus(plan))
         self.assertEqual(1, len(expected["required_testcases"]))
         self.assertEqual(r.LINUX_PICKER_PORTAL_METHODS[1] + "[desktop]", expected["required_testcases"][0]["name"])
-        self.assertEqual([":calf-file-picker:desktopTest", "--tests", r.LINUX_PICKER_PORTAL_CLASS + "." + r.LINUX_PICKER_PORTAL_METHODS[1]], r.gradle_command("desktop", plan)[-3:])
+        self.assertEqual([":nativecmpkit-file-picker:desktopTest", "--tests", r.LINUX_PICKER_PORTAL_CLASS + "." + r.LINUX_PICKER_PORTAL_METHODS[1]], r.gradle_command("desktop", plan)[-3:])
         self.assertTrue(portal.OwnedPickerPortal(r.ROOT, Path("unused"), plan).requested)
         self.assertEqual(3, len(r.linux_picker_portal_identities()))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         result = subprocess.run([r.sys.executable, "scripts/ci/library_tests.py", "plan", "--suite", "desktop",
-                                 "--module", "calf-file-picker", "--focus", r.LINUX_PICKER_PORTAL_SAVE_FOCUS],
+                                 "--module", "nativecmpkit-file-picker", "--focus", r.LINUX_PICKER_PORTAL_SAVE_FOCUS],
                                 cwd=r.ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
 
@@ -53,7 +53,7 @@ class LinuxPickerPortalSaveFocusTests(unittest.TestCase):
         self.assertTrue(self.collect(stale=True)["errors"])
 
     def test_filter_whole_suite_and_source_minimum_cannot_be_changed_to_reduce_coverage(self):
-        for key, value in (("task", ":calf-file-picker:publish"), ("test_filter", r.LINUX_PICKER_PORTAL_CLASS),
+        for key, value in (("task", ":nativecmpkit-file-picker:publish"), ("test_filter", r.LINUX_PICKER_PORTAL_CLASS),
                            ("required_testcases", r.linux_picker_portal_identities()), ("test_source_files", [])):
             plan = self.plan(); plan["expected"][0][key] = value
             with self.assertRaises(ValueError): r.validate_test_focus(plan)

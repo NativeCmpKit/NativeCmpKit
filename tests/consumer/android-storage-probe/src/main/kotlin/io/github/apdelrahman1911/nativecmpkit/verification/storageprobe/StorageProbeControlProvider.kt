@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-@file:OptIn(com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi::class)
+@file:OptIn(io.github.apdelrahman1911.nativecmpkit.permissions.ExperimentalPermissionsApi::class)
 
 package io.github.apdelrahman1911.nativecmpkit.verification.storageprobe
 
@@ -29,7 +29,7 @@ import org.json.JSONObject
 
 /** Only a fixed reporter-authority nonce URI; persisted before any grant can exist. */
 internal object StorageControlRecord {
-    private const val AUTHORITY = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test.storage-documents"
+    private const val AUTHORITY = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test.storage-documents"
     private const val PREFERENCES = "owned-storage-record"
     private fun preferences(context: Context) = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
     fun ownedUri(nonce: String): Uri {

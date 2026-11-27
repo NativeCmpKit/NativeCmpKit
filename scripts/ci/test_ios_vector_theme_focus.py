@@ -18,7 +18,7 @@ import workflow_matrix as matrix
 
 class IosVectorThemeFocusTests(unittest.TestCase):
     def plan(self, root=r.ROOT):
-        return r.plan(root, "ios", only_modules=("calf-ui",), focus=r.IOS_VECTOR_THEME_FOCUS)
+        return r.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=r.IOS_VECTOR_THEME_FOCUS)
 
     def fixture(self):
         f = receipts.IosApplicationReceipts("test_exact_app_protocol_xml_runtime_binary_and_cleanup_are_required")
@@ -50,7 +50,7 @@ class IosVectorThemeFocusTests(unittest.TestCase):
 
     def test_five_exact_new_methods_share_one_ipad_job_real_cli_and_no_accepted_test_replay(self):
         row, = matrix.matrix("ios-vector-theme")["include"]
-        self.assertEqual(("ios-ipad", "calf-ui", r.IOS_VECTOR_THEME_FOCUS, "ipad"),
+        self.assertEqual(("ios-ipad", "nativecmpkit-ui", r.IOS_VECTOR_THEME_FOCUS, "ipad"),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus", "simulator-kind")))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
@@ -62,7 +62,7 @@ class IosVectorThemeFocusTests(unittest.TestCase):
         self.assertNotIn("UIImageConversionTest", ",".join(selectors))
         self.assertNotIn("ThemeOwnershipTest", ",".join(selectors))
         result = subprocess.run([r.sys.executable, "-B", str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "ios", "--module", "calf-ui", "--focus", r.IOS_VECTOR_THEME_FOCUS],
+                                 "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.IOS_VECTOR_THEME_FOCUS],
                                 capture_output=True, text=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(plan, json.loads(result.stdout))
@@ -73,7 +73,7 @@ class IosVectorThemeFocusTests(unittest.TestCase):
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         self.assertIn(r.IOS_VECTOR_THEME_SOURCE, r.IOS_APPLICATION_SOURCES)
         self.assertIn(("utils.NativeVectorThemeAcceptanceTest", r.IOS_VECTOR_THEME_METHODS[-1]), r.IOS_APPLICATION_CASES)
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_VECTOR_THEME_FOCUS)
 

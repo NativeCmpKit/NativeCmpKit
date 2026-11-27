@@ -19,7 +19,7 @@ from test_ios_io_profile import profile_options
 import workflow_matrix as matrix
 
 
-ANNOTATION = "com.mohamedrejeb.calf.ui.web.AndroidWebViewRequestVerification"
+ANNOTATION = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewRequestVerification"
 ANNOTATION_NAME = ANNOTATION.rsplit(".", 1)[1]
 ORIGINAL_TWO_METHOD_SOURCE_SHA256 = "84018856aee7c6e223d32465d2eef76a9b705ebbaf6f232513fd34c8b152b326"
 HELD_START_DIAGNOSTIC_TWO_METHOD_SOURCE_SHA256 = "0afe3cdee0d353bb8a531606c892ac2b317f1ebf848bb84bef8bc212e6790a3f"
@@ -81,12 +81,12 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name).resolve()
-        (self.root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        module = self.root / "calf-webview"
+        (self.root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        module = self.root / "nativecmpkit-webview"
         module.mkdir()
         (module / "build.gradle.kts").write_text("// Synthetic discovery only; never built\n")
         for source_set in r.SUITES["android-device"][1]:
-            for original in r.source_files(r.ROOT, "calf-webview/src/" + source_set):
+            for original in r.source_files(r.ROOT, "nativecmpkit-webview/src/" + source_set):
                 relative = original.relative_to(r.ROOT)
                 target = self.root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
@@ -95,7 +95,7 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
         self.source = self.source_path.read_text()
 
     def plan(self):
-        return r.plan(self.root, "android-device", only_modules=("calf-webview",),
+        return r.plan(self.root, "android-device", only_modules=("nativecmpkit-webview",),
                       focus=r.ANDROID_WEBVIEW_REQUEST_FOCUS)
 
     def command(self, plan=None):
@@ -126,7 +126,7 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
         self.assertFalse(plan["complete_suite_requested"])
         self.assertEqual(2, len(item["required_testcases"]))
         self.assertNotIn("--tests", self.command(plan))
-        self.assertEqual(":calf-webview:connectedAndroidDeviceTest", self.command(plan)[-1])
+        self.assertEqual(":nativecmpkit-webview:connectedAndroidDeviceTest", self.command(plan)[-1])
 
     def test_exact_agp_ate_map_model_drops_old_second_class_method_but_retains_annotation(self):
         legacy = ",".join(r.ANDROID_WEBVIEW_REQUEST_CLASS + "#" + method
@@ -234,7 +234,7 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
 
     def test_foreign_common_or_device_annotation_uses_imports_or_declarations_refuse(self):
         for source_set in ("commonTest", "androidDeviceTest"):
-            relative = "calf-webview/src/" + source_set + "/kotlin/ForeignSelection.kt"
+            relative = "nativecmpkit-webview/src/" + source_set + "/kotlin/ForeignSelection.kt"
             path = self.root / relative
             path.parent.mkdir(parents=True, exist_ok=True)
             for label, text in (
@@ -283,7 +283,7 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
 
     def test_annotation_plan_cli_is_pure_and_keeps_exact_two_source_bound_cases(self):
         stream = io.StringIO()
-        argv = ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-webview",
+        argv = ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-webview",
                 "--focus", r.ANDROID_WEBVIEW_REQUEST_FOCUS]
         with patch.object(r, "ROOT", self.root), patch("sys.argv", argv), patch("sys.stdout", stream), \
                 patch.object(r.subprocess, "Popen", side_effect=AssertionError("No external command is allowed")):
@@ -341,7 +341,7 @@ class AndroidWebViewRequestSelectorModels(unittest.TestCase):
 
     def test_annotation_profile_stays_existing_api35_slot_and_does_not_change_all_full_slots(self):
         row, = matrix.matrix(r.ANDROID_WEBVIEW_REQUEST_FOCUS)["include"]
-        self.assertEqual(("android-device-api35", "android-device", "35", "calf-webview"),
+        self.assertEqual(("android-device-api35", "android-device", "35", "nativecmpkit-webview"),
                          (row["slot"], row["suite"], row["emulator-api"], row["test-modules"]))
         self.assertEqual(r.ANDROID_WEBVIEW_REQUEST_FOCUS, row["test-focus"])
         self.assertFalse(any(key.startswith("serial-") for key in row))

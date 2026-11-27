@@ -1,6 +1,6 @@
 # Technical audit
 
-**Reviewed baseline:** `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6` (Calf main,
+**Reviewed baseline:** `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6` (NativeCmpKit main,
 2026-10-24). Findings cite that immutable commit, preserved in this repository.
 Migration changes are additive commits, not rewritten evidence. This is an
 implementation-level review and verification record, **not a production or

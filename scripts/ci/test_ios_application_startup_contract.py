@@ -8,7 +8,7 @@ from pathlib import Path
 import unittest
 
 HOST = Path(__file__).resolve().parents[2] / (
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt")
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt")
 IDENTITY = HOST.with_name("NativeObjectIdentity.kt")
 
 

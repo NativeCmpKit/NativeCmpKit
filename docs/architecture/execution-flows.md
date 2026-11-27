@@ -8,7 +8,7 @@ lifecycle transitions are independent events.
 ## 1. File selection → file handle → read/Coil
 
 Common entrypoint:
-`calf-file-picker/src/commonMain/kotlin/com.mohamedrejeb.calf/picker/FilePickerLauncher.kt`.
+`nativecmpkit-file-picker/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FilePickerLauncher.kt`.
 The caller provides type, single/multiple selection (with optional maximum),
 settings and callback. A remembered launcher starts UI from a non-composable
 event. Results are `List<KmpFile>`; an empty list can represent cancellation, but
@@ -44,7 +44,7 @@ native symbol names, resource basenames and host directories consistent. `rfd`
 filter semantics differ from Android MIME types and iOS UTTypes; common file
 type names must be traced to all three rather than assumed equivalent.
 
-`calf-io` has two read paths:
+`nativecmpkit-io` has two read paths:
 
 - `readByteArray(context)` produces the full content in memory on every target.
   Its unsafe native copy implementations must enforce size/EOF bounds. Do not
@@ -104,7 +104,7 @@ operation. The native-features report traces each implementation separately.
 
 ## 3. Permission identities → registry → request → observable status
 
-Entry functions live in `calf-permissions/core/.../PermissionState.kt` and
+Entry functions live in `nativecmpkit-permissions/core/.../PermissionState.kt` and
 `MultiplePermissionsState.kt`. They first return inert granted preview objects
 in Compose inspection mode; otherwise they call platform `rememberMutable*`
 actuals. A public `Permission.Companion.Camera`-style extension initializes a
@@ -216,7 +216,7 @@ and state restoration must be tested across teardown/recreation.
 | Android | Native WebView in Compose Android interop; settings, WebViewClient/WebChromeClient; back handling; page callbacks update state |
 | iOS | WKWebView plus navigation delegate and handwritten KVO protocol bridge for estimated progress/title/URL; swipe gesture configured from `captureBackPresses` |
 | Desktop | Remember `JFXPanel` on Swing/Compose side; create JavaFX `WebView`/Scene on FX queue; observe `loadWorker`, history and content; `SwingPanel` hosts it |
-| JS/Wasm | DOM iframe via `CalfWebElementView` actual; same-origin access constrains document title, script evaluation, cookies and navigation |
+| JS/Wasm | DOM iframe via `NativeCmpKitWebElementView` actual; same-origin access constrains document title, script evaluation, cookies and navigation |
 
 Cookie APIs are not one shared jar. Android uses android.webkit's global store,
 iOS a WKHTTPCookieStore, desktop a Java CookieManager/handler, web the current

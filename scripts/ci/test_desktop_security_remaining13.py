@@ -39,11 +39,11 @@ class DesktopSecurityRemaining13Models(unittest.TestCase):
         selected = []
         for row, (slot, system, arch, focus, keys) in zip(rows, EXPECTED):
             with self.subTest(slot=slot):
-                self.assertEqual(("desktop", "calf-webview", focus), tuple(row[key] for key in ("suite", "test-modules", "test-focus")))
+                self.assertEqual(("desktop", "nativecmpkit-webview", focus), tuple(row[key] for key in ("suite", "test-modules", "test-focus")))
                 self.assertFalse(any(key.startswith("serial-") or key == "android-batch" for key in row))
                 owned = security.selection(system, arch)
                 self.assertEqual(keys, owned["selected"])
-                plan = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=focus)
+                plan = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
                 item, = plan["expected"]
                 cases = [{"classname": security.SPECS[key][0], "name": security.SPECS[key][1] + "[desktop]"} for key in keys]
                 self.assertEqual(cases, item["required_testcases"])
@@ -56,7 +56,7 @@ class DesktopSecurityRemaining13Models(unittest.TestCase):
                     command = lt.gradle_command("desktop", plan, root=lt.ROOT)
                 selectors = [command[i + 1] for i, value in enumerate(command) if value == "--tests"]
                 self.assertEqual(list(owned["selectors"]), selectors)
-                self.assertEqual(1, command.count(":calf-webview:desktopTest"))
+                self.assertEqual(1, command.count(":nativecmpkit-webview:desktopTest"))
                 self.assertEqual(1, command.count("-PnativecmpkitDesktopSecurityFocus=" + focus))
                 selected.extend((slot, value) for value in selectors)
         self.assertEqual(13, len(selected))
@@ -114,12 +114,12 @@ class DesktopSecurityRemaining13Models(unittest.TestCase):
         focus = EXPECTED[0][3]
         with patch("library_tests.platform.system", return_value="Linux"), patch("library_tests.platform.machine", return_value="x86_64"):
             with self.assertRaises(ValueError):
-                lt.gradle_command("desktop", lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=focus), root=lt.ROOT)
-        for suite, modules in (("desktop", None), ("desktop", ("calf-io",)), ("desktop", ("calf-webview", "calf-io")), ("android-device", ("calf-webview",))):
+                lt.gradle_command("desktop", lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus), root=lt.ROOT)
+        for suite, modules in (("desktop", None), ("desktop", ("nativecmpkit-io",)), ("desktop", ("nativecmpkit-webview", "nativecmpkit-io")), ("android-device", ("nativecmpkit-webview",))):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=focus)
-        plan = lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=focus)
-        for key, value in (("required_testcases", plan["expected"][0]["required_testcases"][:1]), ("required_original_xml", 1), ("test_filter", "*"), ("task", ":calf-webview:publish")):
+        plan = lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
+        for key, value in (("required_testcases", plan["expected"][0]["required_testcases"][:1]), ("required_original_xml", 1), ("test_filter", "*"), ("task", ":nativecmpkit-webview:publish")):
             changed = copy.deepcopy(plan); changed["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
                 lt.validate_test_focus(changed)

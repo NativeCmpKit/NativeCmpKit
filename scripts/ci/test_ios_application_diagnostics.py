@@ -12,7 +12,7 @@ import ios_ui_application as a
 import test_ios_ui_application as f
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
-CLASS = "com.mohamedrejeb.calf.ui.utils.UIImageConversionTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.utils.UIImageConversionTest"
 METHOD = "returnedImageOwnsItsPixelsAfterTemporaryArraysAndContextsAreCollected"
 
 
@@ -198,7 +198,7 @@ class ActualPythonPipeObservationTests(unittest.TestCase):
 class ImageLifetimeSourceGuardTests(unittest.TestCase):
     def test_instrumentation_preserves_real_conversion_bytes_native_releases_and_twenty_gc_calls(self):
         root = Path(__file__).resolve().parents[2]
-        source = (root / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/utils/UIImageConversionTest.kt").read_text()
+        source = (root / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/UIImageConversionTest.kt").read_text()
         body = source.split("@Test fun " + METHOD + "() = runNativeUiTest {", 1)[1].split("private fun compareVectorWithCompose", 1)[0]
         for statement in ["val bridge = CountingBridge()", "bridge.assertBalanced()", "val expected = image.drawRgba()",
                           "repeat(20)", "GC.collect()", "assertEquals(257uL, CGImageGetWidth(other.CGImage))",

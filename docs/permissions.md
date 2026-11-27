@@ -4,13 +4,13 @@ render_macros: true
 <!-- Modified for nativeCmpkit migration (2026-10-24): independent coordinates / project references; inherited APIs retained. -->
 # Permissions
 
-> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical Calf version claims are preserved, not certified as nativeCmpkit releases.
+> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical NativeCmpKit version claims are preserved, not certified as nativeCmpkit releases.
 
 nativeCmpkit Permissions provides a Compose Multiplatform API for requesting and observing runtime permissions on Android and iOS.
 
 ## Why Modular Permissions?
 
-Calf Permissions is split into **individual modules per permission type** instead of shipping as a single monolithic library. This architecture offers several important benefits:
+NativeCmpKit Permissions is split into **individual modules per permission type** instead of shipping as a single monolithic library. This architecture offers several important benefits:
 
 ### iOS App Store Compliance
 
@@ -71,22 +71,22 @@ implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-permissions:
 The permissions library is organized as follows:
 
 ```
-calf-permissions/
+nativecmpkit-permissions/
 ├── build.gradle.kts          ← umbrella module (includes all)
-├── core/                     ← calf-permissions-core (base API + permissions that don't require adding keys to `Info.plist`)
-├── camera/                   ← calf-permissions-camera
-├── microphone/               ← calf-permissions-microphone
-├── gallery/                  ← calf-permissions-gallery
-├── location/                 ← calf-permissions-location
-├── background-location/      ← calf-permissions-background-location
-├── bluetooth/                ← calf-permissions-bluetooth
-├── contacts/                 ← calf-permissions-contacts
-├── calendar/                 ← calf-permissions-calendar
-├── notifications/            ← calf-permissions-notifications
-└── wifi/                     ← calf-permissions-wifi
+├── core/                     ← nativecmpkit-permissions-core (base API + permissions that don't require adding keys to `Info.plist`)
+├── camera/                   ← nativecmpkit-permissions-camera
+├── microphone/               ← nativecmpkit-permissions-microphone
+├── gallery/                  ← nativecmpkit-permissions-gallery
+├── location/                 ← nativecmpkit-permissions-location
+├── background-location/      ← nativecmpkit-permissions-background-location
+├── bluetooth/                ← nativecmpkit-permissions-bluetooth
+├── contacts/                 ← nativecmpkit-permissions-contacts
+├── calendar/                 ← nativecmpkit-permissions-calendar
+├── notifications/            ← nativecmpkit-permissions-notifications
+└── wifi/                     ← nativecmpkit-permissions-wifi
 ```
 
-Each module depends on `calf-permissions-core`, which provides the shared API (`Permission`, `PermissionState`, `rememberPermissionState`, etc.). The platform-specific permission handling is implemented in each individual module.
+Each module depends on `nativecmpkit-permissions-core`, which provides the shared API (`Permission`, `PermissionState`, `rememberPermissionState`, etc.). The platform-specific permission handling is implemented in each individual module.
 
 Permissions that don't require adding a reason in the iOS `Info.plist` (because they are always granted on iOS) are included directly in the **core** module. This includes storage permissions (`ReadStorage`, `WriteStorage`), `ReadAudio`, and `Call`.
 
@@ -143,7 +143,7 @@ if (multiplePermissionsState.allPermissionsGranted) {
 ## Request results, scope and unsupported targets
 
 `PermissionStatus` intentionally still has only `Granted` and `Denied`, preserving
-existing exhaustive `when` expressions. Import `com.mohamedrejeb.calf.permissions.details`
+existing exhaustive `when` expressions. Import `io.github.apdelrahman1911.nativecmpkit.permissions.details`
 and inspect `state.details` when you need `availability`, `access`, `requestability`,
 `lastRequest`, or the narrower native `capability`.
 
@@ -193,7 +193,7 @@ test limitations. New tests do not imply physical-device permission flows passed
 
 ### Core Permissions
 
-The following permissions are included in the **core** module (`calf-permissions-core`) because they are always granted on iOS and don't require an `Info.plist` entry.
+The following permissions are included in the **core** module (`nativecmpkit-permissions-core`) because they are always granted on iOS and don't require an `Info.plist` entry.
 
 #### Storage Permissions
 
@@ -275,7 +275,7 @@ There is no corresponding runtime gate in this helper (`NotRequired`). iOS sandb
 
 ### Gallery Permissions
 
-**Module:** `calf-permissions-gallery`
+**Module:** `nativecmpkit-permissions-gallery`
 
 To request gallery permissions, use `Permission.Gallery`, `Permission.ReadImage`, or `Permission.ReadVideo`.
 
@@ -350,7 +350,7 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Location Permissions
 
-**Module:** `calf-permissions-location`
+**Module:** `nativecmpkit-permissions-location`
 
 To request the location permission, use `Permission.FineLocation` or `Permission.CoarseLocation`.
 
@@ -388,12 +388,12 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Background Location Permission
 
-**Module:** `calf-permissions-background-location`
+**Module:** `nativecmpkit-permissions-background-location`
 
 To request the background location permission, use `Permission.BackgroundLocation`.
 
 !!! note
-    This is a separate module from `calf-permissions-location` to avoid requiring `NSLocationAlwaysAndWhenInUseUsageDescription` in your iOS `Info.plist` when you only need foreground location.
+    This is a separate module from `nativecmpkit-permissions-location` to avoid requiring `NSLocationAlwaysAndWhenInUseUsageDescription` in your iOS `Info.plist` when you only need foreground location.
 
 #### Android
 
@@ -441,7 +441,7 @@ You also need to enable the **Location updates** background mode in your Xcode p
 
 ### Notification Permissions
 
-**Module:** `calf-permissions-notifications`
+**Module:** `nativecmpkit-permissions-notifications`
 
 #### Post Notifications Permission
 
@@ -449,7 +449,7 @@ To request the post notifications permission, use `Permission.Notification`.
 
 ##### Android
 
-The `android.permission.POST_NOTIFICATIONS` permission is automatically included via manifest merger when you add the `calf-permissions-notifications` dependency. No manual manifest entry is needed.
+The `android.permission.POST_NOTIFICATIONS` permission is automatically included via manifest merger when you add the `nativecmpkit-permissions-notifications` dependency. No manual manifest entry is needed.
 
 This runtime permission applies to Android API 33 and up. On older versions the helper is `NotRequired`; app/channel settings can still disable notifications.
 
@@ -469,7 +469,7 @@ No `Info.plist` entry is required.
 
 ### Camera Permission
 
-**Module:** `calf-permissions-camera`
+**Module:** `nativecmpkit-permissions-camera`
 
 To request the camera permission, use `Permission.Camera`.
 
@@ -494,7 +494,7 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Record Audio Permission
 
-**Module:** `calf-permissions-microphone`
+**Module:** `nativecmpkit-permissions-microphone`
 
 To request the record audio permission, use `Permission.RecordAudio`.
 
@@ -519,7 +519,7 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Bluetooth Permissions
 
-**Module:** `calf-permissions-bluetooth`
+**Module:** `nativecmpkit-permissions-bluetooth`
 
 To request bluetooth permissions, use `Permission.BluetoothLe`, `Permission.BluetoothScan`, `Permission.BluetoothConnect`, or `Permission.BluetoothAdvertise`.
 
@@ -551,7 +551,7 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Contacts Permissions
 
-**Module:** `calf-permissions-contacts`
+**Module:** `nativecmpkit-permissions-contacts`
 
 To request contacts permissions, use `Permission.ReadContacts` or `Permission.WriteContacts`.
 
@@ -579,7 +579,7 @@ The string value is the message that will be displayed to the user when the perm
 
 ### Calendar Permissions
 
-**Module:** `calf-permissions-calendar`
+**Module:** `nativecmpkit-permissions-calendar`
 
 To request calendar permissions, use `Permission.ReadCalendar` or `Permission.WriteCalendar`.
 
@@ -630,7 +630,7 @@ See [library-level EventKit verification and remaining native coverage](testing/
 
 ### Wi-Fi Permissions
 
-**Module:** `calf-permissions-wifi`
+**Module:** `nativecmpkit-permissions-wifi`
 
 To request Wi-Fi permissions, use `Permission.WifiAccessState`, `Permission.WifiChangeState`, or `Permission.WifiNearbyDevices`.
 

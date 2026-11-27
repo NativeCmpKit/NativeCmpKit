@@ -75,7 +75,7 @@ allprojects {
                 "Effective AGP instrumentation selectors differ from the requested exact selection"
             }
             val callbackFocus = providers.gradleProperty("nativecmpkitCameraCallbackSubstitution").orNull
-            val callbackSelector = "com.mohamedrejeb.calf.camerapicker.AndroidCameraCallbackSubstitutionTest#nativeActiveCaptureDeliversOnceToLatestCallbackWithoutReplacingOwner"
+            val callbackSelector = "io.github.apdelrahman1911.nativecmpkit.camerapicker.AndroidCameraCallbackSubstitutionTest#nativeActiveCaptureDeliversOnceToLatestCallbackWithoutReplacingOwner"
             check(callbackFocus == null || callbackFocus == "android-camera-callback-substitution") {
                 "Only the exact opt-in callback/delayed-recipient focus is permitted"
             }
@@ -84,7 +84,7 @@ allprojects {
                 "Callback selection requires its exact explicit callback/delayed-recipient opt-in"
             }
             if (callbackSelected) {
-                check(path == ":calf-camera-picker:connectedAndroidDeviceTest" &&
+                check(path == ":nativecmpkit-camera-picker:connectedAndroidDeviceTest" &&
                     requestedSelectors == mapOf("class" to callbackSelector)) {
                     "Callback is one Camera class#method, never an annotation, exclusion or provider replay"
                 }

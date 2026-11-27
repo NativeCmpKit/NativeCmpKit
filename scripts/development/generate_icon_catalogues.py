@@ -16,9 +16,9 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = Path("tools/icon-catalogues")
-CUPERTINO = Path("calf-cupertino-icons/src/commonMain/kotlin/com/mohamedrejeb/calf/cupertino/icons/CupertinoIcons.kt")
-SAMPLE = Path("sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/screens/CupertinoIconsCatalogData.kt")
-SF = Path("calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/sf/symbols/SFSymbol.kt")
+CUPERTINO = Path("nativecmpkit-cupertino-icons/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/cupertino/icons/CupertinoIcons.kt")
+SAMPLE = Path("sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/screens/CupertinoIconsCatalogData.kt")
+SF = Path("nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/sf/symbols/SFSymbol.kt")
 IDENTIFIER = re.compile(r"(?:[A-Za-z_]\w*|`[A-Za-z_]\w*`)", re.ASCII)
 # Preserve the reviewed historical notice; regeneration must not replace its date.
 MODIFICATION_NOTICE = (
@@ -118,7 +118,7 @@ def load_inputs(root: Path = ROOT) -> tuple[dict, list[dict], list[dict]]:
 def render(cupertino: list[dict], symbols: list[dict]) -> dict[Path, str]:
     icons = '''@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
-package com.mohamedrejeb.calf.cupertino.icons
+package io.github.apdelrahman1911.nativecmpkit.cupertino.icons
 
 /**
  * Codepoints for the bundled MIT-licensed Flutter CupertinoIcons font (not Apple SF Symbols).
@@ -132,9 +132,9 @@ object CupertinoIcons {
     icons += "}\n"
     sample = '''@file:Suppress("unused")
 
-package com.mohamedrejeb.calf.sample.screens
+package io.github.apdelrahman1911.nativecmpkit.sample.screens
 
-import com.mohamedrejeb.calf.cupertino.icons.CupertinoIcons
+import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcons
 
 internal data class IconEntry(
     val name: String,
@@ -156,7 +156,7 @@ internal val AllCupertinoIcons: List<IconEntry> = listOf(
     sample += ")\n"
     sf = '''@file:Suppress("unused", "MemberVisibilityCanBePrivate")
 
-package com.mohamedrejeb.calf.sf.symbols
+package io.github.apdelrahman1911.nativecmpkit.sf.symbols
 
 /**
  * Type-safe names accepted by UIImage.systemImageNamed on supporting iOS versions.

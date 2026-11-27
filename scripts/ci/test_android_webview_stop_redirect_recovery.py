@@ -35,8 +35,8 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
 
     def temporary_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        module = root / "calf-webview"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        module = root / "nativecmpkit-webview"
         module.mkdir()
         (module / "build.gradle.kts").write_text("// Synthetic source discovery only; never compiled or executed\n")
         for relative in [r.ANDROID_WEBVIEW_REQUEST_SOURCE, *r.android_webview_request_fixtures()]:
@@ -46,7 +46,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
         return root
 
     def plan(self, root):
-        return r.plan(root, "android-device", only_modules=("calf-webview",), focus=FOCUS)
+        return r.plan(root, "android-device", only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def command(self, root, plan=None):
         return r.gradle_command("android-device", self.plan(root) if plan is None else plan,
@@ -125,10 +125,10 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
                 selector_guard.request_source_before_stop_content(changed)
 
     def test_public_source_keeps_requested_navigation_independent_of_declarative_content(self):
-        shared = (r.ROOT / "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt").read_text()
-        android = (r.ROOT / "calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt").read_text()
+        shared = (r.ROOT / "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt").read_text()
+        android = (r.ROOT / "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt").read_text()
         from platform_recovery659_source_projection import current_source_before_platform_recovery659
-        relative = "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt"
+        relative = "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt"
         contracts = current_source_before_platform_recovery659(relative, (r.ROOT / relative).read_bytes()).decode()
         load_url = source_guard.body_after(shared, "public fun loadUrl(")
         self.assertIn("enqueue(NavigationEvent.LoadUrl(url, additionalHttpHeaders.toMap()))", load_url)
@@ -157,7 +157,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
             item, = plan["expected"]
             self.assertEqual(FOCUS, plan["explicit_test_focus"])
             self.assertFalse(plan["complete_suite_requested"])
-            self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+            self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
             self.assertEqual([{"classname": r.ANDROID_WEBVIEW_REQUEST_CLASS, "name": STOP}], item["required_testcases"])
             self.assertEqual("class", item["test_filter_argument"])
             self.assertEqual(35, item["verification_api_level"])
@@ -181,7 +181,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
             self.assertNotIn(",", selectors["class"])
             self.assertNotIn(ACCEPTED, selectors["class"])
             self.assertNotIn("--tests", command)
-            self.assertEqual(":calf-webview:connectedAndroidDeviceTest", command[-1])
+            self.assertEqual(":nativecmpkit-webview:connectedAndroidDeviceTest", command[-1])
             self.assertNotIn("nativecmpkitWebViewHeapDiagnostic", " ".join(command))
 
     def test_wrong_suite_module_and_api_refuse_before_outputs(self):
@@ -189,16 +189,16 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
             root = self.temporary_root(directory)
             for suite in ("android-host", "desktop", "ios", "js", "wasm"):
                 with self.subTest(suite=suite), self.assertRaises(ValueError):
-                    r.plan(root, suite, only_modules=("calf-webview",), focus=FOCUS)
-            for modules in (None, (), ("calf-io",), ("calf-webview", "calf-io"), ("calf-webview", "calf-webview")):
+                    r.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
+            for modules in (None, (), ("nativecmpkit-io",), ("nativecmpkit-webview", "nativecmpkit-io"), ("nativecmpkit-webview", "nativecmpkit-webview")):
                 with self.subTest(modules=modules), self.assertRaises(ValueError):
                     r.plan(root, "android-device", only_modules=modules, focus=FOCUS)
                 with self.subTest(api_modules=modules), self.assertRaises(ValueError):
                     controller.validate_api_selection(35, modules, FOCUS)
-            controller.validate_api_selection(35, ("calf-webview",), FOCUS)
+            controller.validate_api_selection(35, ("nativecmpkit-webview",), FOCUS)
             for api in (True, 35.0, "35", 23, 28, 29, 30, 33, 34, 36):
                 with self.subTest(api=api), self.assertRaises(ValueError):
-                    controller.validate_api_selection(api, ("calf-webview",), FOCUS)
+                    controller.validate_api_selection(api, ("nativecmpkit-webview",), FOCUS)
             self.assertFalse((root / "build").exists())
 
     def test_original_annotations_missing_extra_skip_or_wrong_runtime_refuse(self):
@@ -217,7 +217,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
                 with self.subTest(variant=index), self.assertRaises(ValueError):
                     self.plan(root)
             path.write_text(original)
-            foreign = root / "calf-webview/src/commonTest/kotlin/ForeignAnnotation.kt"
+            foreign = root / "nativecmpkit-webview/src/commonTest/kotlin/ForeignAnnotation.kt"
             foreign.parent.mkdir(parents=True)
             foreign.write_text("@AndroidWebViewRequestVerification @Test fun foreign() {}\n")
             with self.assertRaises(ValueError):
@@ -236,7 +236,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
                          ("test_filter_argument", "notAnnotation"), ("test_exclusion_annotation", "Foreign"),
                          ("required_testcases", []), ("required_testcases", r.android_webview_request_identities()),
                          ("required_testcases", [{"classname": r.ANDROID_WEBVIEW_REQUEST_CLASS, "name": ACCEPTED}]),
-                         ("module", "calf-io"), ("project", ":calf-io"), ("task", ":calf-webview:publish"),
+                         ("module", "nativecmpkit-io"), ("project", ":nativecmpkit-io"), ("task", ":nativecmpkit-webview:publish"),
                          ("report_directory", "foreign/build/test-results/desktopTest"),
                          ("utp_results_directory", "foreign/build/outputs"),
                          ("agp_declared_xml_directory", "foreign/build/intermediates"),
@@ -262,8 +262,8 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
     def test_plan_cli_is_source_only_and_requires_exact_single_identity(self):
         with tempfile.TemporaryDirectory() as directory:
             root = self.temporary_root(directory)
-            entries = ((r.main, ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-webview", "--focus", FOCUS]),
-                       (controller.main, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "calf-webview", "--focus", FOCUS,
+            entries = ((r.main, ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-webview", "--focus", FOCUS]),
+                       (controller.main, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "nativecmpkit-webview", "--focus", FOCUS,
                                           "--output", "build/ci-verification/synthetic-never-created"]))
             for entry, argv in entries:
                 stream = io.StringIO()
@@ -311,7 +311,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
     def test_original_two_method_route_and_complete11_slots_stay_authored_unchanged(self):
         with tempfile.TemporaryDirectory() as directory:
             root = self.temporary_root(directory)
-            original = r.plan(root, "android-device", only_modules=("calf-webview",), focus=r.ANDROID_WEBVIEW_REQUEST_FOCUS)
+            original = r.plan(root, "android-device", only_modules=("nativecmpkit-webview",), focus=r.ANDROID_WEBVIEW_REQUEST_FOCUS)
             item, = original["expected"]
             self.assertEqual(r.ANDROID_WEBVIEW_REQUEST_ANNOTATION, item["test_filter"])
             self.assertEqual("annotation", item["test_filter_argument"])
@@ -331,7 +331,7 @@ class AndroidWebViewStopRedirectRecoveryControls(unittest.TestCase):
 
     def test_workflow_choice_is_fixed_read_only_without_hidden_serial_or_batch_route(self):
         row, = matrix.matrix(FOCUS)["include"]
-        self.assertEqual(("android-device-api35", "android-device", "35", "calf-webview", FOCUS),
+        self.assertEqual(("android-device-api35", "android-device", "35", "nativecmpkit-webview", FOCUS),
                          (row["slot"], row["suite"], row["emulator-api"], row["test-modules"], row["test-focus"]))
         self.assertFalse(any(key.startswith("serial-") or "batch" in key for key in row))
         workflow = (r.ROOT / ".github/workflows/gradle.yml").read_text()

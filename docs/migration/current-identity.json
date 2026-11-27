@@ -1,0 +1,159 @@
+{
+  "project": "NativeCmpKit",
+  "github_repository": "Apdelrahman1911/nativeCmpkit",
+  "source_repository": "MohamedRejeb/Calf",
+  "source_baseline": "af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6",
+  "maven_group": "io.github.apdelrahman1911.nativecmpkit",
+  "development_version": "0.1.0-SNAPSHOT",
+  "public_kotlin_namespace": "io.github.apdelrahman1911.nativecmpkit",
+  "binary_compatibility_verified": false,
+  "modules": [
+    {
+      "source_directory": "nativecmpkit-camera-picker",
+      "gradle_project": ":nativecmpkit-camera-picker",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-camera-picker",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-core",
+      "gradle_project": ":nativecmpkit-core",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-core",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-cupertino-icons",
+      "gradle_project": ":nativecmpkit-cupertino-icons",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-cupertino-icons",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-file-picker",
+      "gradle_project": ":nativecmpkit-file-picker",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-file-picker",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-file-picker-coil",
+      "gradle_project": ":nativecmpkit-file-picker-coil",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-file-picker-coil",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-io",
+      "gradle_project": ":nativecmpkit-io",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-io",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/background-location",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-background-location",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-background-location",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/bluetooth",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-bluetooth",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-bluetooth",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions",
+      "gradle_project": ":nativecmpkit-permissions",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/calendar",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-calendar",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-calendar",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/camera",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-camera",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-camera",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/contacts",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-contacts",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-contacts",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/core",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-core",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-core",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/gallery",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-gallery",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-gallery",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/location",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-location",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-location",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/microphone",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-microphone",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-microphone",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/notifications",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-notifications",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-notifications",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-permissions/wifi",
+      "gradle_project": ":nativecmpkit-permissions:nativecmpkit-permissions-wifi",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-permissions-wifi",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-share",
+      "gradle_project": ":nativecmpkit-share",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-share",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-ui",
+      "gradle_project": ":nativecmpkit-ui",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-ui",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-webview",
+      "gradle_project": ":nativecmpkit-webview",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-webview",
+      "publication_status": "unpublished"
+    }
+  ]
+}

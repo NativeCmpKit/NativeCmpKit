@@ -17,15 +17,15 @@ import workflow_matrix as matrix
 
 class DateReplacementFocus(unittest.TestCase):
     def plan(self):
-        return r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
+        return r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
 
     def test_exact_three_methods_keep_real_application_and_partial_scope(self):
         plan = self.plan()
         self.assertTrue(r.validate_test_focus(plan))
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-ui"], plan["explicit_module_subset"])
+        self.assertEqual(["nativecmpkit-ui"], plan["explicit_module_subset"])
         item, = plan["expected"]
-        self.assertEqual(":calf-ui:" + r.IOS_APPLICATION_TASK, item["task"])
+        self.assertEqual(":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK, item["task"])
         self.assertEqual("genuine-uikit-application", item["native_test_host"])
         self.assertEqual(3, len(item["required_testcases"]))
         self.assertEqual(r.UI_DATE_REPLACEMENT_CLASS, item["test_filter"])
@@ -34,7 +34,7 @@ class DateReplacementFocus(unittest.TestCase):
     def test_one_fixed_iphone_job_does_not_change_complete_profiles(self):
         row, = matrix.matrix("ios-date-replacement")["include"]
         self.assertEqual("ios-iphone", row["slot"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(r.UI_DATE_REPLACEMENT_FOCUS, row["test-focus"])
         for profile in ("all", "ios", "ios-ui", "extended"):
             self.assertTrue(all("test-focus" not in row for row in matrix.matrix(profile)["include"]))
@@ -44,7 +44,7 @@ class DateReplacementFocus(unittest.TestCase):
         index = command.index("--tests")
         self.assertEqual(["--tests", r.UI_DATE_REPLACEMENT_CLASS], command[index:index + 2])
         self.assertEqual(1, command.count("--tests"))
-        self.assertEqual([":calf-ui:" + r.IOS_APPLICATION_TASK], [v for v in command if v.startswith(":")])
+        self.assertEqual([":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK], [v for v in command if v.startswith(":")])
 
     def test_native_arguments_only_accept_full_protocol_or_exact_kgp_filter(self):
         full = sorted(app.TEST_ARGUMENTS)
@@ -61,15 +61,15 @@ class DateReplacementFocus(unittest.TestCase):
                 app.application_test_focus(arguments)
 
     def test_foreign_suite_module_or_declared_complete_scope_is_rejected(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-io",)),
-                               ("ios", ("calf-ui", "calf-io")), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-io",)),
+                               ("ios", ("nativecmpkit-ui", "nativecmpkit-io")), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.UI_DATE_REPLACEMENT_FOCUS)
         for section, key, value in (("plan", "complete_suite_requested", True),
                                     ("item", "native_test_host", "skiko-only"),
                                     ("item", "test_filter", "*"),
                                     ("item", "required_testcases", []),
-                                    ("item", "task", ":calf-ui:iosSimulatorArm64Test")):
+                                    ("item", "task", ":nativecmpkit-ui:iosSimulatorArm64Test")):
             plan = self.plan()
             (plan if section == "plan" else plan["expected"][0])[key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -131,7 +131,7 @@ class DateReplacementApplicationEvidence(unittest.TestCase):
         self.fixture.setUp()
         f = self.fixture
         f.write(r.UI_DATE_REPLACEMENT_SOURCE, (r.ROOT / r.UI_DATE_REPLACEMENT_SOURCE).read_bytes())
-        f.plan = r.plan(f.root, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
+        f.plan = r.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
         f.cases = [{"classname": r.UI_DATE_REPLACEMENT_CLASS, "name": method, "status": "passed"}
                    for method in r.UI_DATE_REPLACEMENT_METHODS]
         f.document["explicit_test_focus"] = r.UI_DATE_REPLACEMENT_FOCUS
@@ -177,8 +177,8 @@ class DistinctReviewedDateFilters(unittest.TestCase):
         full = sorted(app.TEST_ARGUMENTS)
         with self.assertRaises(ValueError):
             app.application_test_focus(full + [app.DATE_BOUNDS_ARGUMENT, app.DATE_REPLACEMENT_ARGUMENT])
-        bounds = r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_BOUNDS_FOCUS)
-        replacement = r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
+        bounds = r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_BOUNDS_FOCUS)
+        replacement = r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_REPLACEMENT_FOCUS)
         for plan, other in ((bounds, replacement), (replacement, bounds)):
             for key in ("test_filter", "required_testcases", "test_source_files"):
                 changed = copy.deepcopy(plan)

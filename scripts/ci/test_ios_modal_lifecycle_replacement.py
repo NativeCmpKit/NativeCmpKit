@@ -24,26 +24,26 @@ class IosModalLifecycleReplacementTests(unittest.TestCase):
         script = "scripts/ci/ios_modal_focused_compile.init.gradle.kts"
         for focus, present in ((library.IOS_MODAL_LIFECYCLE_FOCUS, True),
                                (library.IOS_MODAL_OWNERSHIP_FOCUS, False)):
-            plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             command = library.gradle_command("ios", plan, simulator)
             self.assertEqual(present, script in command)
             self.assertEqual(1 if present else 0, command.count(script))
-            self.assertEqual(1, command.count(":calf-ui:iosSimulatorArm64ApplicationTest"))
+            self.assertEqual(1, command.count(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"))
             self.assertIn("scripts/ci/fresh-tests.init.gradle.kts", command)
 
     def test_focused_compiler_holds_the_exact_three_sources_and_ignores_unrelated_included_builds(self):
         source = (ROOT / "scripts/ci/ios_modal_focused_compile.init.gradle.kts").read_text()
-        paths = re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', source)
+        paths = re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', source)
         self.assertEqual([library.IOS_MODAL_LIFECYCLE_SOURCE,
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt"], paths)
-        self.assertLess(source.index('rootProject.findProject(":calf-ui") ?: return@projectsEvaluated'),
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt"], paths)
+        self.assertLess(source.index('rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated'),
                         source.index("check(gradle.startParameter.taskNames in permittedTasks)"))
         for required in ('getMethod("setSource", Array<Any>::class.java)',
                          'getMethod("getSources")', 'common.setFrom(emptyList<Any>())',
                          'files.toSet() && common.files.isEmpty()',
-                         'listOf(":calf-ui:compileTestKotlinIosSimulatorArm64")',
-                         'listOf(":calf-ui:iosSimulatorArm64ApplicationTest")'):
+                         'listOf(":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64")',
+                         'listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest")'):
             self.assertIn(required, source)
         self.assertNotIn("ignoreFailures", source)
         self.assertNotIn("sourceSets", source)
@@ -57,7 +57,7 @@ class IosModalLifecycleReplacementTests(unittest.TestCase):
         for profile, kind in PROFILES:
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios",
                 "runner": "macos-26", "arch": "arm64", "python": "python3",
-                "simulator-kind": kind, "test-modules": "calf-ui",
+                "simulator-kind": kind, "test-modules": "nativecmpkit-ui",
                 "test-focus": library.IOS_MODAL_LIFECYCLE_FOCUS}]}, workflow.matrix(profile))
         identities = library.ui_application_focus_identities(library.IOS_MODAL_LIFECYCLE_FOCUS)
         self.assertEqual(3, len(identities))
@@ -73,14 +73,14 @@ class IosModalLifecycleReplacementTests(unittest.TestCase):
                 with patch.dict(workflow.PROFILES, mutation):
                     with self.assertRaises(ValueError):
                         workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}):
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}):
                 with self.assertRaises(ValueError):
                     workflow.matrix(profile)
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, library.IOS_MODAL_LIFECYCLE_FOCUS))
 
     def test_live_plan_requires_three_enabled_native_declarations(self):
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
         self.assertEqual(library.ui_application_focus_identities(library.IOS_MODAL_LIFECYCLE_FOCUS),
                          plan["expected"][0]["required_testcases"])
         source = (ROOT / library.IOS_MODAL_LIFECYCLE_SOURCE).read_text()
@@ -92,7 +92,7 @@ class IosModalLifecycleReplacementTests(unittest.TestCase):
                 return ignored if relative == library.IOS_MODAL_LIFECYCLE_SOURCE else actual_safe_path(root, relative)
             with patch.object(library, "safe_path", selected_source):
                 with self.assertRaisesRegex(ValueError, "enabled native declarations"):
-                    library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
+                    library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_LIFECYCLE_FOCUS)
 
     def test_history_restores_every_routing_byte_without_refreshing_original_modal_pins(self):
         bindings = json.loads(lifecycle.SPEC_PATH.read_text())["bindings"]

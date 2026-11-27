@@ -29,7 +29,7 @@ class NativeVectorScreenTests(unittest.TestCase):
         self.assertEqual("ios-ipad", row["slot"])
         self.assertEqual("ipad", row["simulator-kind"])
         self.assertEqual("iphone", row["serial-simulator-kind"])
-        self.assertEqual("calf-ui", row["test-modules"])
+        self.assertEqual("nativecmpkit-ui", row["test-modules"])
         self.assertEqual(tests.IOS_VECTOR_RENDERING_FOCUS, row["test-focus"])
         self.assertEqual(row["test-focus"], row["serial-test-focus"])
         self.assertEqual(2, len(matrix.preflight_plans("ios-vector-native-screen-pair")["slots"]))

@@ -14,7 +14,7 @@ import workflow_matrix as m
 
 class BrowserCoilReadFocusTests(unittest.TestCase):
     def test_coil_bundle_uses_the_actual_compose_resource_plugin_without_production_transformations(self):
-        source = (r.ROOT / "calf-file-picker-coil/build.gradle.kts").read_text()
+        source = (r.ROOT / "nativecmpkit-file-picker-coil/build.gradle.kts").read_text()
         self.assertIn('id("compose.multiplatform")', source)
         self.assertIn("targetKotlinPlatforms.set(emptySet())", source)
         self.assertNotIn("libs.kotlinx.browser", source)
@@ -72,17 +72,17 @@ class BrowserCoilReadFocusTests(unittest.TestCase):
             self.assertEqual(r.browser_coil_read_identities(), plan["expected"][0]["required_testcases"])
             self.assertTrue(r.validate_test_focus(plan))
             self.assertIn(r.BROWSER_COIL_READ_MODULE, r.MINIMUM_MODULES[suite])
-            self.assertEqual([":calf-file-picker-coil:" + r.SUITES[suite][0], "--tests", r.BROWSER_COIL_READ_CLASS],
+            self.assertEqual([":nativecmpkit-file-picker-coil:" + r.SUITES[suite][0], "--tests", r.BROWSER_COIL_READ_CLASS],
                              r.gradle_command(suite, plan)[-3:])
             self.assertEqual([], self.collect(suite=suite)["errors"])
             self.assertEqual(4, self.collect(suite=suite)["totals"]["passed"])
 
     def test_wrong_scope_task_filter_inputs_and_full_suite_claims_are_rejected(self):
         for suite, modules in (("ios", (r.BROWSER_COIL_READ_MODULE,)), ("desktop", (r.BROWSER_COIL_READ_MODULE,)),
-                               ("js", ("calf-io",)), ("wasm", None)):
+                               ("js", ("nativecmpkit-io",)), ("wasm", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.BROWSER_COIL_READ_FOCUS)
-        for key, value in (("task", ":calf-file-picker-coil:publish"), ("test_filter", "*"),
+        for key, value in (("task", ":nativecmpkit-file-picker-coil:publish"), ("test_filter", "*"),
                            ("required_testcases", []), ("test_source_files", [])):
             plan = copy.deepcopy(self.plan())
             plan["expected"][0][key] = value
@@ -100,7 +100,7 @@ class BrowserCoilReadFocusTests(unittest.TestCase):
         self.assertTrue(r.validate_test_focus(self.plan()))
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-file-picker-coil",\n)\n')
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-file-picker-coil",\n)\n')
             module = root / r.BROWSER_COIL_READ_MODULE
             module.mkdir()
             (module / "build.gradle.kts").write_text("// synthetic build, never executed\n")
@@ -162,9 +162,9 @@ class BrowserCoilReadFocusTests(unittest.TestCase):
             self.assertIn(required, source)
 
     def test_dependency_repair_belongs_to_the_public_api_owner_not_a_test_classpath_workaround(self):
-        for module in ("calf-io", "calf-file-picker"):
+        for module in ("nativecmpkit-io", "nativecmpkit-file-picker"):
             source = (r.ROOT / module / "build.gradle.kts").read_text()
             web = source.split("sourceSets.webMain.dependencies {", 1)[1].split("}", 1)[0]
             self.assertIn("api(libs.kotlinx.browser)", web)
             self.assertNotIn("implementation(libs.kotlinx.browser)", web)
-        self.assertNotIn("libs.kotlinx.browser", (r.ROOT / "calf-file-picker-coil/build.gradle.kts").read_text())
+        self.assertNotIn("libs.kotlinx.browser", (r.ROOT / "nativecmpkit-file-picker-coil/build.gradle.kts").read_text())

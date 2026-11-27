@@ -23,9 +23,9 @@ DEVICE = "11111111-1111-1111-1111-111111111111"
 
 def copy_model_checkout(root):
     """Only the Camera compiler companions and authored discovery sources."""
-    (root / "settings.gradle.kts").write_text('include(\n    ":calf-camera-picker",\n)\n')
+    (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-camera-picker",\n)\n')
     names = set(camera.SOURCE_SHA256) | set(camera.OTHER_SOURCE_SHA256)
-    names.update(path.relative_to(ROOT).as_posix() for path in library.source_files(ROOT, "calf-camera-picker/src/commonTest"))
+    names.update(path.relative_to(ROOT).as_posix() for path in library.source_files(ROOT, "nativecmpkit-camera-picker/src/commonTest"))
     for name in names:
         target = root / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -68,7 +68,7 @@ class CameraIosOwnershipNativeFocusControls(unittest.TestCase):
         for slots in (("ios-ipad",), ("ios-iphone", "ios-ipad"), ("ios-iphone", "ios-iphone")):
             with patch.dict(matrix.PROFILES, {camera.PROFILE: slots}), self.assertRaises(ValueError):
                 matrix.matrix(camera.PROFILE)
-        with patch.dict(matrix.MODULE_SUBSETS, {camera.PROFILE: "calf-file-picker"}), self.assertRaises(ValueError):
+        with patch.dict(matrix.MODULE_SUBSETS, {camera.PROFILE: "nativecmpkit-file-picker"}), self.assertRaises(ValueError):
             matrix.matrix(camera.PROFILE)
         for field, value in (("runner", "macos-26-intel"), ("arch", "x64"), ("suite", "desktop"),
                              ("python", "python"), ("simulator-kind", "ipad"), ("extra", "foreign")):
@@ -80,14 +80,14 @@ class CameraIosOwnershipNativeFocusControls(unittest.TestCase):
     def test_no_focus_camera_keeps_original_task_and_global_application_host_inheritance(self):
         ordinary = library.plan(self.root, "ios", only_modules=(camera.MODULE,))
         item = ordinary["expected"][0]
-        self.assertEqual(":calf-camera-picker:iosSimulatorArm64Test", item["task"])
+        self.assertEqual(":nativecmpkit-camera-picker:iosSimulatorArm64Test", item["task"])
         self.assertNotIn("native_test_host", item)
         self.assertNotIn(camera.MODULE, library.IOS_APPLICATION_HOST_SOURCES)
         self.assertFalse(library.validate_test_focus(ordinary))
         self.assertEqual(camera.focus_spec(), library.UI_APPLICATION_FOCUS_SPECS[camera.FOCUS])
         for suite, modules, focus in (("desktop", (camera.MODULE,), camera.FOCUS),
-                                     ("ios", ("calf-ui",), camera.FOCUS),
-                                     ("ios", (camera.MODULE, "calf-ui"), camera.FOCUS),
+                                     ("ios", ("nativecmpkit-ui",), camera.FOCUS),
+                                     ("ios", (camera.MODULE, "nativecmpkit-ui"), camera.FOCUS),
                                      ("ios", (camera.MODULE,), camera.FOCUS + "-all")):
             with self.assertRaises(ValueError):
                 library.plan(self.root, suite, only_modules=modules, focus=focus)
@@ -101,9 +101,9 @@ class CameraIosOwnershipNativeFocusControls(unittest.TestCase):
         self.assertEqual(camera.identities(), item["required_testcases"])
         mutations = (
             lambda p: p.update(complete_suite_requested=0),
-            lambda p: p.update(explicit_module_subset=[camera.MODULE, "calf-ui"]),
-            lambda p: p["expected"][0].update(task=":calf-camera-picker:iosSimulatorArm64Test"),
-            lambda p: p["expected"][0].update(project=":calf-ui"),
+            lambda p: p.update(explicit_module_subset=[camera.MODULE, "nativecmpkit-ui"]),
+            lambda p: p["expected"][0].update(task=":nativecmpkit-camera-picker:iosSimulatorArm64Test"),
+            lambda p: p["expected"][0].update(project=":nativecmpkit-ui"),
             lambda p: p["expected"][0].update(required_original_xml=True),
             lambda p: p["expected"][0].update(test_source_sets=["commonTest", "iosTest"]),
             lambda p: p["expected"][0].update(test_filter_argument="foreign"),

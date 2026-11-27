@@ -23,8 +23,8 @@ import library_tests as r
 import workflow_matrix as matrix
 
 FOCUS = 'android-io-provider-lifecycle'
-CLASS = 'com.mohamedrejeb.calf.io.AndroidIoProviderLifecycleTest'
-SOURCE = 'calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoProviderLifecycleTest.kt'
+CLASS = 'io.github.apdelrahman1911.nativecmpkit.io.AndroidIoProviderLifecycleTest'
+SOURCE = 'nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoProviderLifecycleTest.kt'
 FIXTURE = 'tests/consumer/android-io-documents'
 ANDROID = '{http://schemas.android.com/apk/res/android}'
 METHODS = (
@@ -40,15 +40,15 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix='nativecmpkit-io-provider-hooks-')
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.write('settings.gradle.kts', 'include(\n    ":calf-io",\n)\n')
-        self.write('calf-io/src/commonTest/kotlin/Unrelated.kt', '// retained, never requested\n')
-        for relative in ('calf-io/build.gradle.kts', 'calf-io/src/androidDeviceTest/AndroidManifest.xml',
+        self.write('settings.gradle.kts', 'include(\n    ":nativecmpkit-io",\n)\n')
+        self.write('nativecmpkit-io/src/commonTest/kotlin/Unrelated.kt', '// retained, never requested\n')
+        for relative in ('nativecmpkit-io/build.gradle.kts', 'nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml',
                          'gradle/libs.versions.toml', 'scripts/ci/android_io_documents.py'):
             self.copy(relative)
         for path in (r.ROOT / FIXTURE).rglob('*'):
             if path.is_file() and 'build' not in path.relative_to(r.ROOT / FIXTURE).parts:
                 self.copy(path.relative_to(r.ROOT).as_posix())
-        for path in (r.ROOT / 'calf-io/src/androidDeviceTest').rglob('*'):
+        for path in (r.ROOT / 'nativecmpkit-io/src/androidDeviceTest').rglob('*'):
             if path.is_file(): self.copy(path.relative_to(r.ROOT).as_posix())
 
     def copy(self, relative):
@@ -61,10 +61,10 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         return path
 
     def plan(self):
-        return r.plan(self.root, 'android-device', only_modules=('calf-io',), focus=FOCUS)
+        return r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',), focus=FOCUS)
 
     def test_exact_five_case_focus_is_authored_api35_only_and_excludes_the_accepted_precheck(self):
-        self.assertTrue(r.allowed_test_focus('android-device', ('calf-io',), FOCUS))
+        self.assertTrue(r.allowed_test_focus('android-device', ('nativecmpkit-io',), FOCUS))
         plan = self.plan(); item, = plan['expected']
         self.assertFalse(plan['complete_suite_requested']); self.assertTrue(r.validate_test_focus(plan))
         self.assertEqual(CLASS, item['test_filter'])
@@ -72,11 +72,11 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         self.assertIn(SOURCE, item['test_source_files'])
         self.assertIn(r.ANDROID_IO_DEVICE_SOURCE, item['test_source_files'])
         self.assertNotIn(r.android_io_oversize_identities()[0], item['required_testcases'])
-        self.assertEqual('calf-io/build/outputs/androidTest-results/connected/androidMain', item['report_directory'])
+        self.assertEqual('nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain', item['report_directory'])
 
     def test_real_profile_preserves_all_eleven_slots_nine_modules_and_additive_iframe_focus(self):
         row, = matrix.matrix(FOCUS)['include']
-        self.assertEqual(('android-device-api35', 'calf-io', FOCUS),
+        self.assertEqual(('android-device-api35', 'nativecmpkit-io', FOCUS),
                          (row['slot'], row['test-modules'], row['test-focus']))
         self.assertEqual(11, len(matrix.matrix('all')['include']))
         self.assertEqual(9, len(r.MINIMUM_MODULES['android-device']))
@@ -177,9 +177,9 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
     def test_real_read_only_controller_and_library_clis_select_api35_without_outputs_or_builds(self):
         commands = [
             [sys.executable, '-B', str(r.ROOT / 'scripts/ci/library_tests.py'), 'plan',
-             '--suite', 'android-device', '--module', 'calf-io', '--focus', FOCUS],
+             '--suite', 'android-device', '--module', 'nativecmpkit-io', '--focus', FOCUS],
             [sys.executable, '-B', str(r.ROOT / 'scripts/ci/android_device_tests.py'), 'plan',
-             '--output', 'build/ci-plan', '--api-level', '35', '--module', 'calf-io', '--focus', FOCUS],
+             '--output', 'build/ci-plan', '--api-level', '35', '--module', 'nativecmpkit-io', '--focus', FOCUS],
         ]
         for command in commands:
             with self.subTest(controller='android_device_tests.py' in command[2]):
@@ -193,19 +193,19 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         self.assertEqual(0, witness['library_tests_executed']); self.assertEqual(1, len(witness['slots']))
 
     def test_wrong_module_suite_duplicate_wildcard_and_api23_refuse_before_runtime_mutation(self):
-        for suite, modules, focus in (('desktop', ('calf-io',), FOCUS), ('android-host', ('calf-io',), FOCUS),
-                ('android-device', ('calf-ui',), FOCUS), ('android-device', ('calf-io', 'calf-io'), FOCUS),
-                ('android-device', ('calf-io', 'calf-ui'), FOCUS), ('android-device', ('calf-io',), 'android-io-*')):
+        for suite, modules, focus in (('desktop', ('nativecmpkit-io',), FOCUS), ('android-host', ('nativecmpkit-io',), FOCUS),
+                ('android-device', ('nativecmpkit-ui',), FOCUS), ('android-device', ('nativecmpkit-io', 'nativecmpkit-io'), FOCUS),
+                ('android-device', ('nativecmpkit-io', 'nativecmpkit-ui'), FOCUS), ('android-device', ('nativecmpkit-io',), 'android-io-*')):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
         with patch.object(device, 'require_host') as host:
-            for modules, api in ((('calf-ui',), 35), (('calf-io',), 23)):
+            for modules, api in ((('nativecmpkit-ui',), 35), (('nativecmpkit-io',), 23)):
                 with self.assertRaises(ValueError):
                     device.run(self.root, 'build/ci-verification/refused', only_modules=modules, focus=FOCUS, api_level=api)
             host.assert_not_called()
         self.assertFalse((self.root / 'build').exists())
         result = subprocess.run([sys.executable, '-B', str(r.ROOT / 'scripts/ci/android_device_tests.py'), 'plan',
-            '--output', 'build/ci-plan', '--api-level', '23', '--module', 'calf-io', '--focus', FOCUS],
+            '--output', 'build/ci-plan', '--api-level', '23', '--module', 'nativecmpkit-io', '--focus', FOCUS],
             cwd=r.ROOT, capture_output=True, timeout=30)
         self.assertEqual(2, result.returncode)
 
@@ -213,7 +213,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         path = self.root / SOURCE; original = path.read_text()
         for changed in (original.replace(METHODS[0], 'unreviewed'), original.replace('@Test', '@Ignore @Test', 1),
                         original.replace('class AndroidIoProviderLifecycleTest', 'class ChangedTest'),
-                        original.replace('package com.mohamedrejeb.calf.io', 'package foreign.io'),
+                        original.replace('package io.github.apdelrahman1911.nativecmpkit.io', 'package foreign.io'),
                         original + '\n@Test fun unreviewedExtra() {}\n'):
             with self.subTest(change=hashlib.sha256(changed.encode()).hexdigest()):
                 path.write_text(changed)
@@ -223,8 +223,8 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
 
     def test_tampered_filter_task_module_report_inventory_and_source_binding_cannot_run(self):
         original = self.plan()
-        for key, value in (('test_filter', CLASS + '*'), ('module', 'calf-file-picker-coil'), ('project', ':calf-ui'),
-                ('task', ':calf-io:testAndroidHostTest'), ('report_directory', 'calf-ui/build/test-results/forged'),
+        for key, value in (('test_filter', CLASS + '*'), ('module', 'nativecmpkit-file-picker-coil'), ('project', ':nativecmpkit-ui'),
+                ('task', ':nativecmpkit-io:testAndroidHostTest'), ('report_directory', 'nativecmpkit-ui/build/test-results/forged'),
                 ('required_testcases', self.identities()[:-1]), ('test_source_files', [])):
             changed = deepcopy(original); changed['expected'][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): r.validate_test_focus(changed)
@@ -260,12 +260,12 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         plan = self.plan()
         with self.assertRaises(ValueError): r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL)
         assembly = r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL, for_assembly=True)
-        self.assertEqual(':calf-io:assembleAndroidDeviceTest', assembly[-1])
-        self.assertNotIn(':calf-io:connectedAndroidDeviceTest', assembly)
+        self.assertEqual(':nativecmpkit-io:assembleAndroidDeviceTest', assembly[-1])
+        self.assertNotIn(':nativecmpkit-io:connectedAndroidDeviceTest', assembly)
         self.assertFalse(any('nativecmpkitOwnedIoDocuments=' in value for value in assembly))
         native = r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL,
                                   android_io_documents_receipt=self.prepared())
-        self.assertEqual(':calf-io:connectedAndroidDeviceTest', native[-1])
+        self.assertEqual(':nativecmpkit-io:connectedAndroidDeviceTest', native[-1])
         self.assertEqual(1, native.count('-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedIoDocuments=true'))
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.class=' + CLASS, native)
         self.assertNotIn('--tests', native)
@@ -275,7 +275,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         with patch.object(r, 'execute') as execute, patch.object(r.runtime_context, 'capture') as capture:
             with self.assertRaises(ValueError):
                 r.run(self.root, 'android-device', 'build/ci-verification/refused', None, 10, 8192,
-                    only_modules=('calf-io',), focus=FOCUS, android_serial=device.SERIAL)
+                    only_modules=('nativecmpkit-io',), focus=FOCUS, android_serial=device.SERIAL)
             execute.assert_not_called(); capture.assert_not_called()
         self.assertFalse((self.root / 'build').exists())
 
@@ -285,7 +285,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         with patch.object(r, 'projects') as projects, patch.object(r, 'source_files') as sources, \
                 patch.object(r, 'gradle_command') as command, patch.object(device, 'require_host') as host:
             with self.assertRaisesRegex(ValueError, '^Unfiltered Android discovery requires a qualified remote IO fixture route; full aggregate is blocked$'):
-                r.plan(self.root, 'android-device', only_modules=('calf-io',))
+                r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',))
             projects.assert_not_called(); sources.assert_not_called()
             command.assert_not_called(); host.assert_not_called()
         self.assertFalse((self.root / 'build').exists())
@@ -297,7 +297,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
                                    android_io_documents_receipt=self.prepared())
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.class=' + CLASS, command)
         self.assertEqual(1, command.count('-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedIoDocuments=true'))
-        accepted = r.plan(self.root, 'android-device', only_modules=('calf-io',), focus=r.ANDROID_IO_OVERSIZE_FOCUS)
+        accepted = r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',), focus=r.ANDROID_IO_OVERSIZE_FOCUS)
         self.assertFalse(r.android_io_documents_required(accepted)); self.assertNotIn('android_io_documents', accepted)
         command = r.gradle_command('android-device', accepted, root=self.root, android_serial=device.SERIAL)
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.class=' + r.ANDROID_IO_DEVICE_CLASS + '#' + r.ANDROID_IO_OVERSIZE_METHOD, command)
@@ -347,7 +347,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         with self.assertRaises(ValueError): helper.source_contract(self.root)
 
     def test_reporter_cannot_obtain_manage_documents_or_extra_grant_permissions(self):
-        path = self.root / 'calf-io/src/androidDeviceTest/AndroidManifest.xml'; original = path.read_bytes()
+        path = self.root / 'nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml'; original = path.read_bytes()
         for permission in ('android.permission.MANAGE_DOCUMENTS', 'android.permission.READ_MEDIA_IMAGES'):
             root = ET.fromstring(original); ET.SubElement(root, 'uses-permission', {ANDROID + 'name': permission})
             path.write_bytes(ET.tostring(root))
@@ -488,7 +488,7 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
 
     def invoke_controller(self):
         relative = 'build/ci-verification/controller-synthetic'
-        result = device.run(self.root, relative, only_modules=('calf-io',), focus=FOCUS)
+        result = device.run(self.root, relative, only_modules=('nativecmpkit-io',), focus=FOCUS)
         self.assertEqual(result, json.loads((self.root / relative / 'controller.json').read_text()))
         self.assertFalse((self.root / 'build/ci-verification/.android-device-controller.lock').exists())
         self.assertNotIn('private synthetic', json.dumps(result))
@@ -500,8 +500,8 @@ class AndroidIoProviderLifecycleHooks(unittest.TestCase):
         self.assertEqual(['owned-avd-create', 'boot', 'helper-prepare', 'apk-assembly', 'tests', 'helper-close', 'shutdown', 'transport-removal'], order)
         self.assertEqual(self.prepared(), tests.call_args.kwargs['android_io_documents_receipt'])
         assembly = execute.call_args_list[-1].args[1]
-        self.assertIn(':calf-io:assembleAndroidDeviceTest', assembly)
-        self.assertNotIn(':calf-io:connectedAndroidDeviceTest', assembly)
+        self.assertIn(':nativecmpkit-io:assembleAndroidDeviceTest', assembly)
+        self.assertNotIn(':nativecmpkit-io:connectedAndroidDeviceTest', assembly)
         self.assertFalse(any('nativecmpkitOwnedIoDocuments=' in argument for argument in assembly))
         self.assertTrue(result['emulator_shutdown']['owned_adb_transport_removed'])
 

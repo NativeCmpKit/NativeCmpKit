@@ -20,12 +20,12 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         self.assertIn("ios-webview-lifecycle", matrix.PROFILES,
                       "The current native WebView has no actual UIKit test-app verification profile")
         row, = matrix.matrix("ios-webview-lifecycle")["include"]
-        self.assertEqual(("ios-iphone", "calf-webview", lt.IOS_WEBVIEW_LIFECYCLE_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-webview", lt.IOS_WEBVIEW_LIFECYCLE_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         plan = self.plan()
         self.assertFalse(plan["complete_suite_requested"])
         expected, = plan["expected"]
-        self.assertEqual(":calf-webview:" + lt.IOS_APPLICATION_TASK, expected["task"])
+        self.assertEqual(":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK, expected["task"])
         self.assertEqual("genuine-uikit-application", expected["native_test_host"])
         self.assertEqual(10, len(expected["required_testcases"]))
         command = lt.gradle_command("ios", plan, simulator=fixtures.DEVICE)
@@ -35,7 +35,7 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
 
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "ios", only_modules=("calf-webview",), focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)
+        return lt.plan(root, "ios", only_modules=("nativecmpkit-webview",), focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)
 
     def collect(self, identities=None, outcome="", markers=1, stale=False, duplicate=False):
         plan = self.plan()
@@ -62,13 +62,13 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         f = fixtures.IosApplicationReceipts("test_exact_app_protocol_xml_runtime_binary_and_cleanup_are_required")
         self.addCleanup(f.doCleanups)
         f.setUp()
-        f.write("settings.gradle.kts", 'include(\n    ":calf-ui",\n    ":calf-webview",\n)\n')
-        f.write("calf-webview/build.gradle.kts", "// synthetic model; never executed")
+        f.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-ui",\n    ":nativecmpkit-webview",\n)\n')
+        f.write("nativecmpkit-webview/build.gradle.kts", "// synthetic model; never executed")
         for source in {*lt.IOS_WEBVIEW_APPLICATION_SOURCES,
                        *(g["source"] for g in lt.IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS),
                        lt.IOS_WEBVIEW_REQUEST_FIXTURE}:
             f.write(source, (lt.ROOT / source).read_bytes())
-        directory = app.APPLICATION_HOSTS["calf-webview"]["binary_directory"]
+        directory = app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"]
         binary = f.write(directory + "/test.kexe", f.binary.read_bytes())
         binary.chmod(0o700)
         f.plan = self.plan(f.root)
@@ -76,20 +76,20 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         f.receipt_path = f.app_root / fixtures.TOKEN / "receipt.json"
         cases = [{"classname": g["classname"], "name": name, "status": "passed"}
                  for g in lt.IOS_WEBVIEW_LIFECYCLE_GROUPS for name in g["methods"]]
-        f.document.update(task=":calf-webview:" + lt.IOS_APPLICATION_TASK,
+        f.document.update(task=":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK,
                           explicit_test_focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS,
                           binary_path=binary.relative_to(f.root).as_posix(), binary_sha256=lt.sha256(binary),
                           binary_sha256_after=lt.sha256(binary), macho=app.macho_simulator_identity(binary))
         f.document["application_protocol"].update(testcases=cases, counts=lt.case_counts(cases))
         f.document["application_protocol"].pop("image_lifetime_observation", None)
-        f.modules = [{"module": "calf-webview", "task": ":calf-webview:" + lt.IOS_APPLICATION_TASK,
+        f.modules = [{"module": "nativecmpkit-webview", "task": ":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK,
                       "testcases": f.xml_cases(cases)}]
         f.save()
         return f
 
     def test_real_cli_transports_exact_native_identities_without_a_publish_task(self):
         command = [lt.sys.executable, "-B", str(lt.ROOT / "scripts/ci/library_tests.py"), "plan", "--suite", "ios",
-                   "--module", "calf-webview", "--focus", lt.IOS_WEBVIEW_LIFECYCLE_FOCUS]
+                   "--module", "nativecmpkit-webview", "--focus", lt.IOS_WEBVIEW_LIFECYCLE_FOCUS]
         result = subprocess.run(command, capture_output=True, timeout=15)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(self.plan(), json.loads(result.stdout))
@@ -103,23 +103,23 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         self.assertNotIn("publish", " ".join(lt.gradle_command("ios", self.plan(), simulator=fixtures.DEVICE)))
 
     def test_other_suites_owner_modules_and_unknown_binary_paths_are_rejected(self):
-        for suite, modules in (("desktop", ("calf-webview",)), ("ios", ("calf-ui",)),
-                               ("ios", ("calf-file-picker",)), ("ios", None), ("android-device", ("calf-webview",))):
+        for suite, modules in (("desktop", ("nativecmpkit-webview",)), ("ios", ("nativecmpkit-ui",)),
+                               ("ios", ("nativecmpkit-file-picker",)), ("ios", None), ("android-device", ("nativecmpkit-webview",))):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)
-        path = app.APPLICATION_HOSTS["calf-webview"]["binary_directory"] + "/test.kexe"
-        self.assertEqual("calf-webview", app.application_host(path, lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)["module"])
-        for changed, focus in ((path.replace("calf-webview", "calf-ui"), lt.IOS_WEBVIEW_LIFECYCLE_FOCUS),
+        path = app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"] + "/test.kexe"
+        self.assertEqual("nativecmpkit-webview", app.application_host(path, lt.IOS_WEBVIEW_LIFECYCLE_FOCUS)["module"])
+        for changed, focus in ((path.replace("nativecmpkit-webview", "nativecmpkit-ui"), lt.IOS_WEBVIEW_LIFECYCLE_FOCUS),
                                (path, lt.IOS_IMAGE_MEMORY_FOCUS), (path.replace("applicationDebugTest", "debugTest"), None)):
             with self.assertRaises(ValueError): app.application_host(changed, focus)
 
     def test_every_native_host_is_retained_and_full_webview_uses_its_own_application(self):
-        for module in ("calf-ui", "calf-file-picker", "calf-webview"):
+        for module in ("nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-webview"):
             plan = lt.plan(lt.ROOT, "ios", only_modules=(module,))
             self.assertFalse(plan["complete_suite_requested"], "One selected module is not the complete all-module suite")
             self.assertNotIn("test_filter", plan["expected"][0])
             self.assertEqual(":" + module + ":" + lt.IOS_APPLICATION_TASK, plan["expected"][0]["task"])
-        image = lt.plan(lt.ROOT, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        image = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         self.assertEqual(3, len(image["expected"][0]["required_testcases"]))
         self.assertEqual(360, app.application_timeout_seconds(lt.IOS_IMAGE_MEMORY_FOCUS))
         self.assertEqual(app.APP_TIMEOUT_SECONDS, app.application_timeout_seconds(lt.IOS_WEBVIEW_LIFECYCLE_FOCUS))
@@ -169,7 +169,7 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
 
     def test_unfiltered_webview_still_requires_every_owning_host_and_native_method(self):
         f = self.fixture()
-        f.plan = lt.plan(f.root, "ios", only_modules=("calf-webview",))
+        f.plan = lt.plan(f.root, "ios", only_modules=("nativecmpkit-webview",))
         f.document["explicit_test_focus"] = None
         cases = [{"classname": group["classname"], "name": name, "status": "passed"}
                  for group in lt.IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS for name in group["methods"]]
@@ -187,7 +187,7 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         f.save()
         self.assertTrue(f.collect()["errors"], "An unfiltered module run must not lose a required native-host test")
     def test_wrong_task_full_suite_claim_filter_or_required_case_inventory_is_rejected(self):
-        for key, value in (("task", ":calf-webview:publish"), ("test_filter", "*"), ("required_testcases", []),
+        for key, value in (("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"), ("required_testcases", []),
                            ("native_test_host", "command-line"), ("test_source_files", [])):
             plan = self.plan(); plan["expected"][0][key] = value
             with self.assertRaises(ValueError): lt.validate_test_focus(plan)
@@ -195,14 +195,14 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         with self.assertRaises(ValueError): lt.validate_test_focus(plan)
 
     def test_host_preserves_the_accepted_worker_native_identity_and_every_cleanup_statement(self):
-        replacements = (("package com.mohamedrejeb.calf.ui.internal", "package com.mohamedrejeb.calf.ui.web.internal"),
+        replacements = (("package io.github.apdelrahman1911.nativecmpkit.ui.internal", "package io.github.apdelrahman1911.nativecmpkit.ui.web.internal"),
                         ("NativeUiApplicationDelegate", "NativeWebViewApplicationDelegate"),
                         ("NativeUiApplicationHostTest", "NativeWebViewApplicationHostTest"),
                         ("NativecmpkitUIKitLibraryTestDelegate", "NativecmpkitWebViewLibraryTestDelegate"))
         for original, target in (("NativeUiApplicationHost.kt", lt.IOS_WEBVIEW_APPLICATION_SOURCES[0]),
                                  ("NativeUiApplicationHostTest.kt", lt.IOS_WEBVIEW_APPLICATION_SOURCES[1]),
                                  ("NativeObjectIdentity.kt", lt.IOS_WEBVIEW_APPLICATION_SOURCES[2])):
-            path = lt.ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal" / original
+            path = lt.ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal" / original
             from ios_modal_worker_source_projection import current_source_before_modal_worker
             source = current_source_before_modal_worker(path.relative_to(lt.ROOT).as_posix(), path.read_bytes()).decode()
             for old, new in replacements: source = source.replace(old, new)
@@ -230,8 +230,8 @@ class IosWebViewLifecycleFocusTests(unittest.TestCase):
         self.assertIn("build/ci-verification/${{ matrix.slot }}/native-webview-application/*/receipt.json", workflow)
         self.assertNotIn("native-webview-application/**", workflow)
         self.assertIn("permissions:\n  contents: read", workflow)
-        build = (lt.ROOT / "calf-webview/build.gradle.kts").read_text()
-        for required in ("binaries.test(\"application\"", "com.mohamedrejeb.calf.ui.web.internal.nativeApplicationMain",
+        build = (lt.ROOT / "nativecmpkit-webview/build.gradle.kts").read_text()
+        for required in ("binaries.test(\"application\"", "io.github.apdelrahman1911.nativecmpkit.ui.web.internal.nativeApplicationMain",
                          "ignoreFailures = false", "ignoreRunFailures = false", "outputs.upToDateWhen { false }",
                          "outputs.doNotCacheIf", "reports.junitXml.required.set(true)"):
             self.assertIn(required, build)

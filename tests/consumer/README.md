@@ -40,7 +40,7 @@ metadata+desktop and reuses all six IO methods **byte-identically**, plus one ne
 actual loaded-class JAR-origin/hash method. Finite `consumer-core-io` verification
 stages four actual publications and copies that fixture independently; all seven
 named methods/two fresh XML, four exact resolved classpaths and source/staging/
-runtime bindings are mandatory. No project/composite/source/old-Calf/Maven-local
+runtime bindings are mandatory. No project/composite/source/old-NativeCmpKit/Maven-local
 or remote candidate-group fallback is allowed. The full21-root build/settings
 and17-method inventory above remain unchanged and unexecuted.
 
@@ -277,14 +277,14 @@ was not weakened or replaced with alternative source scaffolding.
 ## Rust dependency notice collection
 
 After the native owner settles and fetches the exact lockfiles, export metadata
-with `scripts/native/artifacts.py metadata --module calf-file-picker` (repeat for
+with `scripts/native/artifacts.py metadata --module nativecmpkit-file-picker` (repeat for
 share). This is locked/offline metadata, not a build. Then:
 
 ```sh
 python3 tests/consumer/collect_native_licenses.py \
-  --metadata build/native-metadata/calf-file-picker.json \
+  --metadata build/native-metadata/nativecmpkit-file-picker.json \
   --registry-cache /absolute/public-cargo-cache/registry/cache/<crates-io-index> \
-  --output build/native-notices/calf-file-picker
+  --output build/native-notices/nativecmpkit-file-picker
 ```
 
 Repeat for share. The output must be empty/new; no unrelated files are deleted.

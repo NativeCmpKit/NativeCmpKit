@@ -25,11 +25,11 @@ kotlin {
         iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "Common"
+            baseName = "NativeCmpKit"
             isStatic = true
 
-            // IMPORTANT: Exporting calf-ui is required for some functionalities to work
-            export(projects.calfUi)
+            // IMPORTANT: Exporting nativecmpkit-ui is required for some functionalities to work
+            export(projects.nativecmpkitUi)
         }
     }
 
@@ -40,16 +40,16 @@ kotlin {
 
         implementation(libs.kotlinx.datetime)
 
-        // Calf
-        api(projects.calfUi)
-        implementation(projects.calfFilePicker)
-        implementation(projects.calfFilePickerCoil)
-        implementation(projects.calfPermissions)
-        implementation(projects.calfWebview)
-        implementation(projects.calfNavigation)
-        implementation(projects.calfCameraPicker)
-        implementation(projects.calfShare)
-        implementation(projects.calfCupertinoIcons)
+        // NativeCmpKit
+        api(projects.nativecmpkitUi)
+        implementation(projects.nativecmpkitFilePicker)
+        implementation(projects.nativecmpkitFilePickerCoil)
+        implementation(projects.nativecmpkitPermissions)
+        implementation(projects.nativecmpkitWebview)
+        implementation(projects.nativecmpkitNavigation)
+        implementation(projects.nativecmpkitCameraPicker)
+        implementation(projects.nativecmpkitShare)
+        implementation(projects.nativecmpkitCupertinoIcons)
 
         // Coil
         implementation(libs.coil.compose)

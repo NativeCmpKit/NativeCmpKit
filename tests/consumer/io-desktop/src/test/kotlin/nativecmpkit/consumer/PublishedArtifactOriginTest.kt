@@ -1,7 +1,7 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
-import com.mohamedrejeb.calf.core.PlatformContext
-import com.mohamedrejeb.calf.io.KmpFile
+import io.github.apdelrahman1911.nativecmpkit.core.PlatformContext
+import io.github.apdelrahman1911.nativecmpkit.io.KmpFile
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.MessageDigest

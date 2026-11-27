@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-@file:OptIn(com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi::class)
+@file:OptIn(io.github.apdelrahman1911.nativecmpkit.permissions.ExperimentalPermissionsApi::class)
 package io.github.apdelrahman1911.nativecmpkit.verification.permissiondemo
 
 import android.Manifest
@@ -18,24 +18,24 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.SideEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.mohamedrejeb.calf.io.KmpFile
-import com.mohamedrejeb.calf.io.readByteArray
-import com.mohamedrejeb.calf.permissions.Call
-import com.mohamedrejeb.calf.permissions.MultiplePermissionsState
-import com.mohamedrejeb.calf.permissions.Permission
-import com.mohamedrejeb.calf.permissions.PermissionState
-import com.mohamedrejeb.calf.permissions.ReadImage
-import com.mohamedrejeb.calf.permissions.ReadVideo
-import com.mohamedrejeb.calf.permissions.RecordAudio
-import com.mohamedrejeb.calf.permissions.details
-import com.mohamedrejeb.calf.permissions.isGranted
-import com.mohamedrejeb.calf.permissions.rememberMultiplePermissionsState
-import com.mohamedrejeb.calf.permissions.rememberPermissionState
-import com.mohamedrejeb.calf.permissions.shouldShowRationale
-import com.mohamedrejeb.calf.picker.FilePickerFileType
-import com.mohamedrejeb.calf.picker.FilePickerLauncher
-import com.mohamedrejeb.calf.picker.FilePickerSelectionMode
-import com.mohamedrejeb.calf.picker.rememberFilePickerLauncher
+import io.github.apdelrahman1911.nativecmpkit.io.KmpFile
+import io.github.apdelrahman1911.nativecmpkit.io.readByteArray
+import io.github.apdelrahman1911.nativecmpkit.permissions.Call
+import io.github.apdelrahman1911.nativecmpkit.permissions.MultiplePermissionsState
+import io.github.apdelrahman1911.nativecmpkit.permissions.Permission
+import io.github.apdelrahman1911.nativecmpkit.permissions.PermissionState
+import io.github.apdelrahman1911.nativecmpkit.permissions.ReadImage
+import io.github.apdelrahman1911.nativecmpkit.permissions.ReadVideo
+import io.github.apdelrahman1911.nativecmpkit.permissions.RecordAudio
+import io.github.apdelrahman1911.nativecmpkit.permissions.details
+import io.github.apdelrahman1911.nativecmpkit.permissions.isGranted
+import io.github.apdelrahman1911.nativecmpkit.permissions.rememberMultiplePermissionsState
+import io.github.apdelrahman1911.nativecmpkit.permissions.rememberPermissionState
+import io.github.apdelrahman1911.nativecmpkit.permissions.shouldShowRationale
+import io.github.apdelrahman1911.nativecmpkit.picker.FilePickerFileType
+import io.github.apdelrahman1911.nativecmpkit.picker.FilePickerLauncher
+import io.github.apdelrahman1911.nativecmpkit.picker.FilePickerSelectionMode
+import io.github.apdelrahman1911.nativecmpkit.picker.rememberFilePickerLauncher
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
 import java.util.UUID

@@ -17,8 +17,8 @@ import workflow_matrix as workflow
 ROOT = Path(__file__).resolve().parents[2]
 FOCUS = "ui-native-popover-bar-recovery"
 METHOD = "nativeBarButtonAndDetachedOrMissingViewUseTheDocumentedFallback"
-CLASS = "com.mohamedrejeb.calf.ui.dialog.NativePopoverAnchorTest"
-NATIVE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverAnchorTest.kt"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverAnchorTest"
+NATIVE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverAnchorTest.kt"
 INIT = "scripts/ci/ios_popover_bar_compile.init.gradle.kts"
 SIMULATOR = "726D52AF-426A-408A-974D-CA8B9BE8A479"
 
@@ -28,8 +28,8 @@ class PopoverBarRecoveryControls(unittest.TestCase):
         for profile, kind in (("ios-popover-bar-recovery", "iphone"), ("ios-popover-bar-ipad-recovery", "ipad")):
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
                                            "python": "python3", "simulator-kind": kind,
-                                           "test-modules": "calf-ui", "test-focus": FOCUS}]}, workflow.matrix(profile))
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=FOCUS)
+                                           "test-modules": "nativecmpkit-ui", "test-focus": FOCUS}]}, workflow.matrix(profile))
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=FOCUS)
         self.assertEqual([{"classname": "iosSimulatorArm64ApplicationTest." + CLASS,
                            "name": METHOD + "[iosSimulatorArm64]"}], plan["expected"][0]["required_testcases"])
         self.assertFalse(plan["complete_suite_requested"])
@@ -40,14 +40,14 @@ class PopoverBarRecoveryControls(unittest.TestCase):
         import ios_popover_bar_recovery_plan as compiler
         self.assertEqual(old.SOURCES, compiler.SOURCES)
         source = (ROOT / INIT).read_text()
-        self.assertEqual(list(old.SOURCES), re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', source))
+        self.assertEqual(list(old.SOURCES), re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', source))
         self.assertIn('common.setFrom(emptyList<Any>())', source)
         self.assertIn('"native_tests_executed" to 0', source)
         self.assertEqual(1, source.count('"' + METHOD + '"'))
         for name in library.IOS_POPOVER_ANCHOR_METHODS:
             if name != METHOD:
                 self.assertNotIn('"' + name + '"', source)
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=FOCUS)
         command = library.gradle_command("ios", plan, SIMULATOR)
         self.assertEqual(1, command.count(INIT))
         self.assertEqual([CLASS + "." + METHOD], [command[i + 1] for i, value in enumerate(command) if value == "--tests"])
@@ -59,12 +59,12 @@ class PopoverBarRecoveryControls(unittest.TestCase):
         self.assertEqual(5, len(library.ui_application_focus_identities(old.FOCUS)))
 
     def test_disabled_foreign_suite_modules_host_and_extra_case_refuse(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, FOCUS))
         for profile in ("ios-popover-bar-recovery", "ios-popover-bar-ipad-recovery"):
             with patch.dict(workflow.PROFILES, {profile: ("desktop-macos-arm64",)}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError):
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary) / "native.kt"
@@ -74,7 +74,7 @@ class PopoverBarRecoveryControls(unittest.TestCase):
             for mutation in ("@Ignore\nclass NativePopoverAnchorTest", "@Disabled\nclass NativePopoverAnchorTest"):
                 target.write_text((ROOT / NATIVE).read_text().replace("class NativePopoverAnchorTest", mutation, 1))
                 with patch.object(library, "safe_path", controlled), self.assertRaisesRegex(ValueError, "enabled native declarations"):
-                    library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=FOCUS)
+                    library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=FOCUS)
 
     def test_bar_identity_and_window_ownership_replace_only_unsupported_nil_postcondition(self):
         source = (ROOT / NATIVE).read_text()
@@ -100,7 +100,7 @@ class PopoverBarRecoveryControls(unittest.TestCase):
             for name in compiler.SOURCES:
                 target = root / name; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes((ROOT / name).read_bytes())
             target = root / compiler.RECEIPT; target.parent.mkdir(parents=True, exist_ok=True)
-            document = {"task": ":calf-ui:compileTestKotlinIosSimulatorArm64", "focus": FOCUS,
+            document = {"task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64", "focus": FOCUS,
                         "source_sha256": {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in compiler.SOURCES},
                         "effective_sources": list(compiler.SOURCES), "excluded_unrelated_test_sources": True,
                         "production_source_sets_changed": False, "native_tests_executed": 0,

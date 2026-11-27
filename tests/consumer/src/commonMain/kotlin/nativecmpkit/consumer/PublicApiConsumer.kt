@@ -1,28 +1,28 @@
-package nativecmpkit.consumer
+package io.github.apdelrahman1911.nativecmpkit.consumer
 
 import androidx.compose.runtime.Composable
 import coil3.fetch.Fetcher
-import com.mohamedrejeb.calf.camerapicker.rememberCameraPickerLauncher
-import com.mohamedrejeb.calf.core.ExperimentalCalfApi
-import com.mohamedrejeb.calf.core.PlatformContext
-import com.mohamedrejeb.calf.cupertino.icons.CupertinoIcon
-import com.mohamedrejeb.calf.cupertino.icons.CupertinoIcons
-import com.mohamedrejeb.calf.io.KmpFile
-import com.mohamedrejeb.calf.io.source
-import com.mohamedrejeb.calf.permissions.*
-import com.mohamedrejeb.calf.picker.*
-import com.mohamedrejeb.calf.picker.coil.KmpFileFetcher
-import com.mohamedrejeb.calf.share.*
-import com.mohamedrejeb.calf.ui.progress.AdaptiveCircularProgressIndicator
-import com.mohamedrejeb.calf.ui.toggle.AdaptiveSwitch
-import com.mohamedrejeb.calf.ui.web.*
+import io.github.apdelrahman1911.nativecmpkit.camerapicker.rememberCameraPickerLauncher
+import io.github.apdelrahman1911.nativecmpkit.core.ExperimentalNativeCmpKitApi
+import io.github.apdelrahman1911.nativecmpkit.core.PlatformContext
+import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcon
+import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcons
+import io.github.apdelrahman1911.nativecmpkit.io.KmpFile
+import io.github.apdelrahman1911.nativecmpkit.io.source
+import io.github.apdelrahman1911.nativecmpkit.permissions.*
+import io.github.apdelrahman1911.nativecmpkit.picker.*
+import io.github.apdelrahman1911.nativecmpkit.picker.coil.KmpFileFetcher
+import io.github.apdelrahman1911.nativecmpkit.share.*
+import io.github.apdelrahman1911.nativecmpkit.ui.progress.AdaptiveCircularProgressIndicator
+import io.github.apdelrahman1911.nativecmpkit.ui.toggle.AdaptiveSwitch
+import io.github.apdelrahman1911.nativecmpkit.ui.web.*
 import kotlinx.io.RawSource
 
 /**
  * Compiled against Maven/KLIB artifacts, never the producer source tree. This is a SOURCE
  * compatibility probe, not a claim that calling it rendered/presented every native control.
  */
-@OptIn(ExperimentalCalfApi::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalNativeCmpKitApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun PublicApiConsumer(onFile: (KmpFile) -> Unit) {
     AdaptiveSwitch(checked = false, onCheckedChange = null)

@@ -31,7 +31,7 @@ SYSTEM_IMAGES = {
     "libsystem_c.dylib", "libsystem_platform.dylib", "libc++abi.dylib", "libc++.1.dylib",
 }
 RUNTIME_SYMBOL_PREFIXES = (
-    "kfun:kotlin.", "kfun:kotlinx.", "kfun:com.mohamedrejeb.calf.", "Kotlin_", "kotlin::",
+    "kfun:kotlin.", "kfun:kotlinx.", "kfun:io.github.apdelrahman1911.nativecmpkit.", "Kotlin_", "kotlin::",
 )
 OBJC_CLASSES = (
     "UIApplication", "UIWindow", "UIView", "UIViewController", "UIImage", "UIAlertController",

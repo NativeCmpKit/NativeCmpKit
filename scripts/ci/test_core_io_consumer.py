@@ -259,9 +259,9 @@ class ResolutionTests(TemporaryTest):
         next(iter(wrong.values()))['sha256'] = 'b' * 64
         with self.assertRaises(c.ConsumerEvidenceError): c.resolution_contract(document, wrong, bindings)
 
-    def test_foreign_old_calf_coordinate_or_wrong_version_fail(self):
+    def test_foreign_old_nativecmpkit_coordinate_or_wrong_version_fail(self):
         document, staged, bindings = self.resolution()
-        for key, value in [('group', 'com.mohamedrejeb.calf'), ('module', 'nativecmpkit-share-desktop'),
+        for key, value in [('group', 'io.github.apdelrahman1911.nativecmpkit'), ('module', 'nativecmpkit-share-desktop'),
                            ('module', 'nativecmpkit-core'), ('version', '0.1.0-preview.2')]:
             with self.subTest(key=key, value=value):
                 changed = deepcopy(document)
@@ -382,7 +382,7 @@ class FreshXmlTests(TemporaryTest):
 
     def test_missing_new_or_duplicate_method_does_not_replace_the_required_origin_assertion(self):
         args = self.reports()
-        path = args[0] / 'build/test-results/test/TEST-nativecmpkit.consumer.PublishedArtifactOriginTest.xml'
+        path = args[0] / 'build/test-results/test/TEST-io.github.apdelrahman1911.nativecmpkit.consumer.PublishedArtifactOriginTest.xml'
         original = path.read_bytes()
         for change in ('rename', 'delete', 'duplicate'):
             document = ET.fromstring(original)
@@ -428,7 +428,7 @@ class ControllerPreflightTests(TemporaryTest):
             calls.append((cwd, command, env))
             if command[-1] == 'stageCoreIoVerificationPublications':
                 self.staging(metadata=True)
-                tasks = [f':calf-{module}:publish{publication}PublicationToNativecmpkitVerificationRepository'
+                tasks = [f':nativecmpkit-{module}:publish{publication}PublicationToNativecmpkitVerificationRepository'
                          for module in ('core', 'io') for publication in ('KotlinMultiplatform', 'Desktop')]
                 log.write_text(''.join('NATIVECMPKIT_PARTIAL_STAGE task=' + task + ' group=' + c.GROUP + ' version=' + c.VERSION + '\n' for task in tasks))
                 return {'exit_code': 0, 'elapsed_seconds': 0.0}

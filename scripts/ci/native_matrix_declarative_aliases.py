@@ -17,20 +17,20 @@ _DECLARATIONS = {
     "calendar_native": (
         "ios_calendar_native_focus",
         {"PROFILE": "permissions-ios-calendar-configuration",
-         "MODULE": "calf-permissions/calendar",
+         "MODULE": "nativecmpkit-permissions/calendar",
          "FOCUS": "permission-ios-calendar-configuration"},
     ),
     "macos_share_native": (
         "macos_share_native_focus",
         {"PROFILE": "macos-share-lifecycle",
-         "MODULE": "calf-share",
+         "MODULE": "nativecmpkit-share",
          "FOCUS": "macos-share-coroutine-lifecycle"},
     ),
 }
 _FORWARDED_DECLARATIONS = {
     "share_missing": (
         "macos_share_missing_ci",
-        {"PROFILE": "macos-share-missing-lifecycle", "MODULE": "calf-share",
+        {"PROFILE": "macos-share-missing-lifecycle", "MODULE": "nativecmpkit-share",
          "FOCUS": "macos-share-timeout-retention-recovery"},
         "recovery", "macos_share_missing_only",
         {"PROFILE": "JNI_PROFILE", "FOCUS": "JNI_FOCUS"},

@@ -31,10 +31,10 @@ def model_cases(focus):
 
 
 def model_plan(focus):
-    return {"schema_version": 1, "suite": "ios", "explicit_module_subset": ["calf-ui"],
+    return {"schema_version": 1, "suite": "ios", "explicit_module_subset": ["nativecmpkit-ui"],
             "explicit_test_focus": focus, "complete_suite_requested": False,
-            "expected": [{"module": "calf-ui", "project": ":calf-ui", "task": related.TASK,
-                          "report_directory": "calf-ui/build/test-results/" + related.TASK_NAME,
+            "expected": [{"module": "nativecmpkit-ui", "project": ":nativecmpkit-ui", "task": related.TASK,
+                          "report_directory": "nativecmpkit-ui/build/test-results/" + related.TASK_NAME,
                           "native_test_host": "genuine-uikit-application", "test_source_sets": ["iosTest"],
                           "test_source_files": sorted(related.sources(focus)),
                           "test_filter": ",".join(related.selectors(focus)),
@@ -70,9 +70,9 @@ class RelatedUiNativeSpecificationControls(unittest.TestCase):
         for focus in related.FOCUSES:
             request = related.native_request(focus)
             self.assertEqual(related.TASK, request[0]); self.assertTrue(related.validate_request(request, focus))
-            for bad in (request[:-2], request + request[-2:], request + [":calf-ui:compileTestKotlinIosSimulatorArm64"],
+            for bad in (request[:-2], request + request[-2:], request + [":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"],
                         request + ["publish"], [request[0], "--tests", "*"], tuple(request),
-                        [":calf-ui:allTests", *request[1:]], [request[0], "--tests", "foreign", *request[3:]]):
+                        [":nativecmpkit-ui:allTests", *request[1:]], [request[0], "--tests", "foreign", *request[3:]]):
                 with self.assertRaises(ValueError): related.validate_request(bad, focus)
 
     def test_source_contract_retains_exact_focus_runtime_init_and_ordinary_source_hashes(self):
@@ -154,7 +154,7 @@ class RelatedUiNativeSpecificationControls(unittest.TestCase):
                 doc = json.loads(path.read_bytes())
                 self.assertEqual(related.TASK, doc["task"])
                 self.assertEqual(0, doc["native_tests_executed"])
-                doc["task"] = ":calf-ui:compileTestKotlinIosSimulatorArm64"; path.write_text(json.dumps(doc))
+                doc["task"] = ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"; path.write_text(json.dumps(doc))
                 self.assertFalse(related.validate_admission(root, now, time.time_ns(), focus))
 
     def test_stale_future_corrupt_or_aliased_source_admission_refuses(self):

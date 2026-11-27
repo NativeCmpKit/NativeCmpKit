@@ -5,7 +5,7 @@
         android:name="io.github.apdelrahman1911.nativecmpkit.verification.sharerecipient.BIND_RECIPIENT"
         android:protectionLevel="signature" />
     <queries>
-        <package android:name="com.mohamedrejeb.calf.calfshare.test" />
+        <package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitshare.test" />
         <package android:name="io.github.apdelrahman1911.nativecmpkit.verification.sharedocuments" />
     </queries>
     <application android:allowBackup="false" android:label="NativeCmpKit owned URI recipient">

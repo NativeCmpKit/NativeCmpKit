@@ -31,7 +31,7 @@ def observations():
 
 class CompactDateFocus(unittest.TestCase):
     def plan(self):
-        return r.plan(r.ROOT, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_COMPACT_FOCUS)
+        return r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_COMPACT_FOCUS)
 
     def collect(self, cases=None, **kwargs):
         fixture = bounds.DateBoundsFocus()
@@ -41,13 +41,13 @@ class CompactDateFocus(unittest.TestCase):
 
     def test_one_failed_method_only_retains_the_real_application_and_full_declared_inventory(self):
         row, = matrix.matrix("ios-date-compact")["include"]
-        self.assertEqual(("ios-iphone", "calf-ui", r.UI_DATE_COMPACT_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-ui", r.UI_DATE_COMPACT_FOCUS),
                          (row["slot"], row["test-modules"], row["test-focus"]))
         plan = self.plan()
         self.assertTrue(r.validate_test_focus(plan))
         self.assertFalse(plan["complete_suite_requested"])
         item, = plan["expected"]
-        self.assertEqual(":calf-ui:" + r.IOS_APPLICATION_TASK, item["task"])
+        self.assertEqual(":nativecmpkit-ui:" + r.IOS_APPLICATION_TASK, item["task"])
         self.assertEqual("genuine-uikit-application", item["native_test_host"])
         self.assertEqual(1, len(item["required_testcases"]))
         self.assertEqual(r.UI_DATE_REPLACEMENT_CLASS + "." + r.UI_DATE_REPLACEMENT_METHODS[1], item["test_filter"])
@@ -57,7 +57,7 @@ class CompactDateFocus(unittest.TestCase):
 
     def test_real_cli_gradle_and_transport_only_accept_the_exact_single_method(self):
         result = subprocess.run([sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"),
-                                 "plan", "--suite", "ios", "--module", "calf-ui", "--focus", r.UI_DATE_COMPACT_FOCUS],
+                                 "plan", "--suite", "ios", "--module", "nativecmpkit-ui", "--focus", r.UI_DATE_COMPACT_FOCUS],
                                 cwd=r.ROOT, capture_output=True)
         self.assertEqual(0, result.returncode, result.stderr.decode())
         command = r.gradle_command("ios", self.plan(), simulator=transport.DEVICE)
@@ -73,7 +73,7 @@ class CompactDateFocus(unittest.TestCase):
     def test_accepted_profiles_and_methods_are_not_silently_replayed_or_narrowed(self):
         for focus, count in ((r.UI_DATE_BOUNDS_FOCUS, 6), (r.UI_DATE_REPLACEMENT_FOCUS, 3),
                              (r.UI_DATE_IMPORTANT_FOCUS, 7)):
-            self.assertEqual(count, len(r.plan(r.ROOT, "ios", only_modules=("calf-ui",),
+            self.assertEqual(count, len(r.plan(r.ROOT, "ios", only_modules=("nativecmpkit-ui",),
                                               focus=focus)["expected"][0]["required_testcases"]))
         for profile in ("all", "ios", "ios-ui", "extended"):
             self.assertTrue(all("test-focus" not in row for row in matrix.matrix(profile)["include"]))
@@ -95,7 +95,7 @@ class CompactDateFocus(unittest.TestCase):
         self.assertIn("traceCompactNativeAppearance()\n        replacement(\"compact\")", source)
         self.assertIn("assertEquals(colors.containerColor.toUIColor(), view.backgroundColor)", source)
         self.assertIn("assertInitialized(first, colors, enabled = kind != \"compact\")", source)
-        helper = (r.ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/datepicker/CompactNativeAppearanceDiagnostic.kt").read_text()
+        helper = (r.ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/CompactNativeAppearanceDiagnostic.kt").read_text()
         self.assertIn("val picker = UIDatePicker().apply", helper)
         self.assertNotIn("UIDatePickerBackend(", helper)
         self.assertNotIn("CompactDatePickerContainer(", helper)
@@ -163,7 +163,7 @@ class CompactDateApplicationEvidence(unittest.TestCase):
         self.fixture.setUp()
         f = self.fixture
         f.write(r.UI_DATE_REPLACEMENT_SOURCE, (r.ROOT / r.UI_DATE_REPLACEMENT_SOURCE).read_bytes())
-        f.plan = r.plan(f.root, "ios", only_modules=("calf-ui",), focus=r.UI_DATE_COMPACT_FOCUS)
+        f.plan = r.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=r.UI_DATE_COMPACT_FOCUS)
         f.cases = [{"classname": app.COMPACT_APPEARANCE_CASE[0], "name": app.COMPACT_APPEARANCE_CASE[1], "status": "passed"}]
         f.document["explicit_test_focus"] = r.UI_DATE_COMPACT_FOCUS
         f.document["application_protocol"]["testcases"] = copy.deepcopy(f.cases)

@@ -13,7 +13,7 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-NATIVE = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewRequestAcceptanceTest.kt"
+NATIVE = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt"
 DNS_GUARD = "scripts/ci/test_ios_webview_request_dns_focus.py"
 BOUNDARY_GUARD = "scripts/ci/test_ios_webview_request_callback_boundary.py"
 BASE_NATIVE_SHA256 = "569716cf0524d25b1b3c2712dbe040c0ec82cfe3db24f6dac3775e5ec15bd857"

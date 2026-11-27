@@ -17,7 +17,7 @@ import subprocess
 import threading
 import urllib.request
 
-PACKAGE = "com.mohamedrejeb.calf.calfwebview.test"
+PACKAGE = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitwebview.test"
 MARKER = "cache/nativecmpkit-owned-webview-heap/unmounted-media.complete.json"
 DUMP = "cache/nativecmpkit-owned-webview-heap/unmounted-media.hprof"
 PARSER_URL = "https://repo.maven.apache.org/maven2/org/graalvm/visualvm/modules/org-graalvm-visualvm-lib-jfluid-heap/2.2/org-graalvm-visualvm-lib-jfluid-heap-2.2.jar"
@@ -62,7 +62,7 @@ def reviewed_analysis(raw: bytes) -> dict:
     identity = re.compile(r"[A-Za-z0-9_$/.;<>\[\]-]{1,512}\Z")
     for target in value["targets"]:
         if (not isinstance(target, dict) or set(target) != {"target_class", "nearest_path", "root_reached", "weak_reference_edge", "root_kinds"} or
-                target["target_class"] not in {"android.webkit.WebView", "com.mohamedrejeb.calf.ui.web.WebViewLifetimeActivity"} or
+                target["target_class"] not in {"android.webkit.WebView", "io.github.apdelrahman1911.nativecmpkit.ui.web.WebViewLifetimeActivity"} or
                 type(target["root_reached"]) is not bool or type(target["weak_reference_edge"]) is not bool or
                 not isinstance(target["root_kinds"], list) or len(target["root_kinds"]) > 32 or
                 not all(isinstance(kind, str) and re.fullmatch(r"[A-Za-z _-]{1,64}", kind) for kind in target["root_kinds"]) or

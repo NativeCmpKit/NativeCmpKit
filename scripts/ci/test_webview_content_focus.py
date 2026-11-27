@@ -18,9 +18,9 @@ import workflow_matrix as matrix
 
 FOCUS = "webview-browser-content-transitions"
 PROFILE = "webview-content-transitions"
-CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewContentAcceptanceTest"
-SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewContentAcceptanceTest.kt"
-FIXTURE = "calf-webview/karma.config.d/nativecmpkit-iframe-fixture.js"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewContentAcceptanceTest"
+SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentAcceptanceTest.kt"
+FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-iframe-fixture.js"
 METHODS = (
     "directAndRememberedContentTransitionsMatchNavigatorAttributesAndDocuments",
     "realCrossOriginCspAndFrameOptionsRefusalsCannotRetainOrReportTheOldDocument",
@@ -29,7 +29,7 @@ METHODS = (
 
 class WebViewContentFocusTests(unittest.TestCase):
     def plan(self, suite="js", root=lt.ROOT):
-        return lt.plan(root, suite, only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def identities(self, suite):
         target = "js" if suite == "js" else "wasmJs"
@@ -39,8 +39,8 @@ class WebViewContentFocusTests(unittest.TestCase):
 
     def source_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Synthetic discovery model, never built\n")
         for relative in (SOURCE, FIXTURE):
@@ -75,14 +75,14 @@ class WebViewContentFocusTests(unittest.TestCase):
         self.assertIn(PROFILE, matrix.PROFILES)
         rows = matrix.matrix(PROFILE)["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-webview" and row["test-focus"] == FOCUS for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-webview" and row["test-focus"] == FOCUS for row in rows))
         self.assertEqual(4, sum(len(self.plan(row["suite"])["expected"][0]["required_testcases"]) for row in rows))
         self.assertEqual({"desktop-linux-x64", "android-host", "browser-js", "browser-wasm",
                           "desktop-macos-arm64", "ios-iphone", "desktop-windows-x64", "desktop-linux-arm64",
                           "desktop-macos-x64", "ios-ipad", "android-device-api35"},
                          {row["slot"] for row in matrix.matrix("all")["include"]})
-        self.assertEqual(("calf-io", "calf-file-picker", "calf-geo", "calf-webview", "calf-ui",
-                          "calf-navigation", "calf-share", "calf-camera-picker", "calf-permissions/core"), lt.MINIMUM_MODULES["android-device"])
+        self.assertEqual(("nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-geo", "nativecmpkit-webview", "nativecmpkit-ui",
+                          "nativecmpkit-navigation", "nativecmpkit-share", "nativecmpkit-camera-picker", "nativecmpkit-permissions/core"), lt.MINIMUM_MODULES["android-device"])
         for profile in ("all", "browser", "webview-browser", "webview-wasm", "core", "android-device"):
             self.assertTrue(all("test-focus" not in row for row in matrix.matrix(profile)["include"]))
 
@@ -92,7 +92,7 @@ class WebViewContentFocusTests(unittest.TestCase):
             selected, = plan["expected"]
             self.assertTrue(lt.validate_test_focus(plan))
             self.assertFalse(plan["complete_suite_requested"])
-            self.assertEqual(":calf-webview:" + lt.SUITES[suite][0], selected["task"])
+            self.assertEqual(":nativecmpkit-webview:" + lt.SUITES[suite][0], selected["task"])
             self.assertEqual(CLASS, selected["test_filter"])
             self.assertEqual([{"classname": CLASS, "name": method} for method in METHODS], selected["required_testcases"])
             self.assertEqual(FIXTURE, selected["browser_http_fixture"])
@@ -105,7 +105,7 @@ class WebViewContentFocusTests(unittest.TestCase):
     def test_real_readonly_cli_accepts_only_exact_browser_suite_module_and_focus(self):
         for suite in ("js", "wasm"):
             command = [sys.executable, "-B", str(lt.ROOT / "scripts/ci/library_tests.py"), "plan",
-                       "--suite", suite, "--module", "calf-webview", "--focus", FOCUS]
+                       "--suite", suite, "--module", "nativecmpkit-webview", "--focus", FOCUS]
             result = subprocess.run(command, cwd=lt.ROOT, capture_output=True, text=True, timeout=30)
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertEqual(self.plan(suite), json.loads(result.stdout))
@@ -114,13 +114,13 @@ class WebViewContentFocusTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
 
     def test_wrong_suite_module_filter_task_inventory_source_fixture_and_full_claim_are_rejected(self):
-        for suite, modules in (("ios", ("calf-webview",)), ("desktop", ("calf-webview",)),
-                               ("android-host", ("calf-webview",)), ("android-device", ("calf-webview",)),
-                               ("js", None), ("wasm", ("calf-io",)), ("js", ("calf-webview", "calf-ui"))):
+        for suite, modules in (("ios", ("nativecmpkit-webview",)), ("desktop", ("nativecmpkit-webview",)),
+                               ("android-host", ("nativecmpkit-webview",)), ("android-device", ("nativecmpkit-webview",)),
+                               ("js", None), ("wasm", ("nativecmpkit-io",)), ("js", ("nativecmpkit-webview", "nativecmpkit-ui"))):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
         for suite in ("js", "wasm"):
-            for key, value in (("module", "calf-ui"), ("task", ":calf-webview:publish"), ("test_filter", "*"),
+            for key, value in (("module", "nativecmpkit-ui"), ("task", ":nativecmpkit-webview:publish"), ("test_filter", "*"),
                                ("required_testcases", []), ("test_source_files", []), ("browser_http_fixture", "foreign.js")):
                 plan = self.plan(suite)
                 plan["expected"][0][key] = value

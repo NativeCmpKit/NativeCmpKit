@@ -14,18 +14,18 @@ import stat
 
 PROFILE = "ios-secure-alert-input"
 FOCUS = "ios-native-secure-alert-input"
-MODULE = "calf-ui"
+MODULE = "nativecmpkit-ui"
 SOURCE_SET = "iosTest"
-EXTERNAL_DIRECTORY = "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/alertinput"
+EXTERNAL_DIRECTORY = "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/alertinput"
 HELPER = EXTERNAL_DIRECTORY + "/SampleAlertDialogInputFields.kt"
-SCREEN = "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/screens/AlertDialogScreen.kt"
-BUILD = "calf-ui/build.gradle.kts"
-NATIVE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativeSecureAlertInputTest.kt"
-CAPTURE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/OwnedNativeConsoleCapture.kt"
-CONTROLS = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/OwnedNativeConsoleCaptureTest.kt"
+SCREEN = "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/screens/AlertDialogScreen.kt"
+BUILD = "nativecmpkit-ui/build.gradle.kts"
+NATIVE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeSecureAlertInputTest.kt"
+CAPTURE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCapture.kt"
+CONTROLS = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCaptureTest.kt"
 BUILD_SEAM = 'sourceSets.getByName("iosTest").kotlin.srcDir(rootProject.file("' + EXTERNAL_DIRECTORY + '"))'
-NATIVE_CLASS = "com.mohamedrejeb.calf.ui.dialog.NativeSecureAlertInputTest"
-CAPTURE_CLASS = "com.mohamedrejeb.calf.ui.dialog.OwnedNativeConsoleCaptureTest"
+NATIVE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativeSecureAlertInputTest"
+CAPTURE_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.OwnedNativeConsoleCaptureTest"
 NATIVE_METHODS = ("syntheticNativeInputKeepsRequestedKeyboardMaskedPixelsAndNoCapturedConsoleValues",)
 CAPTURE_METHODS = (
     "bothRealSinksCapturePublicControlsAndRestoreOriginalDescriptorIdentity",
@@ -38,10 +38,10 @@ CAPTURE_METHODS = (
     "controlledRestoreFlagAndCloseRefusalsStillAttemptAllOtherOwnedCleanup",
     "bodyAndControlledCleanupFailurePreserveExactThrowableAndSuppressedRefusal",
 )
-QUALIFIED_SOURCE_SHA256 = {'sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/alertinput/SampleAlertDialogInputFields.kt': 'eda2a28358c19d6d76fe27c404e2e53c6ec6b89bfbb540baf2702a026a7e6c70',
- 'calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativeSecureAlertInputTest.kt': 'a3c2d326851717510c1b158e90a7322a524595b1af499860a1818f18e26d326b',
- 'calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/OwnedNativeConsoleCapture.kt': '99a33e856d9cbedbe72be3474e301f15edfe4c1241f3ff2b093caa5b6c5e59fd',
- 'calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/OwnedNativeConsoleCaptureTest.kt': '38e5e6c9b42657dcc494bd2f6e649976251e24686dcc202422e117eb4a842b84'}
+QUALIFIED_SOURCE_SHA256 = {'sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/alertinput/SampleAlertDialogInputFields.kt': 'eda2a28358c19d6d76fe27c404e2e53c6ec6b89bfbb540baf2702a026a7e6c70',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativeSecureAlertInputTest.kt': 'a3c2d326851717510c1b158e90a7322a524595b1af499860a1818f18e26d326b',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCapture.kt': '99a33e856d9cbedbe72be3474e301f15edfe4c1241f3ff2b093caa5b6c5e59fd',
+ 'nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/OwnedNativeConsoleCaptureTest.kt': '38e5e6c9b42657dcc494bd2f6e649976251e24686dcc202422e117eb4a842b84'}
 ORIGINAL_DESCRIPTOR_EXPRESSION_SHA256 = "1adae899b3dd5da975e687a52f60b6f2af26dbadaa62b53af93aa8bbf094528e"
 MAX_SOURCE_BYTES = 2 * 1024 * 1024
 _NO_INPUT_LOG = re.compile(
@@ -142,7 +142,7 @@ def source_contract(root: Path) -> dict:
     screen = screen_bytes.decode("utf-8")
     helper = _read(root, HELPER).decode("utf-8")
     if (screen.count("textFields = sampleAlertDialogInputFields()") != 1 or
-            screen.count("import com.mohamedrejeb.calf.sample.alertinput.sampleAlertDialogInputFields") != 1 or
+            screen.count("import io.github.apdelrahman1911.nativecmpkit.sample.alertinput.sampleAlertDialogInputFields") != 1 or
             _NO_INPUT_LOG.search(screen + "\n" + helper)):
         raise ValueError("The genuine sample must use the exact no-input-log callback seam")
     return {

@@ -20,8 +20,8 @@ import library_tests as lt
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.iodocuments"
 FIXTURE = "tests/consumer/android-io-documents"
 PERMISSION = PACKAGE + ".CONTROL_IO"
-REPORTER = "com.mohamedrejeb.calf.calfio.test"
-KOTLIN = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitio.test"
+KOTLIN = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/"
 JAVA = FIXTURE + "/src/main/java/" + PACKAGE.replace(".", "/") + "/"
 JAVA_NAMES = ("IoControlService", "IoDocumentGrantActivity", "IoFixture",
               "IoProviderWitnessService", "IoSingleDocumentGrantActivity", "OwnedIoDocumentsProvider")
@@ -30,9 +30,9 @@ KOTLIN_NAMES = ("AndroidIoGrantActivity", "AndroidIoProviderContract", "AndroidI
                "AndroidIoReferenceRegressionTest", "AndroidIoSingleDocumentGrantActivity",
                "DeviceDescriptorProbe", "IoBookmarkClientService", "KmpFileDeviceTest", "OwnedIoEndpoint")
 REFERENCE_PROVIDER = KOTLIN + "instrumentation/DeviceIoFileProvider.kt"
-REFERENCE_PATHS = "calf-io/src/androidDeviceTest/res/xml/nativecmpkit_io_device_paths.xml"
-SOURCE_FILES = tuple(sorted(("gradle/libs.versions.toml", "calf-io/build.gradle.kts",
-    "calf-io/src/androidDeviceTest/AndroidManifest.xml", FIXTURE + "/build.gradle.kts",
+REFERENCE_PATHS = "nativecmpkit-io/src/androidDeviceTest/res/xml/nativecmpkit_io_device_paths.xml"
+SOURCE_FILES = tuple(sorted(("gradle/libs.versions.toml", "nativecmpkit-io/build.gradle.kts",
+    "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml", FIXTURE + "/build.gradle.kts",
     FIXTURE + "/settings.gradle.kts", FIXTURE + "/gradle.properties", FIXTURE + "/src/main/AndroidManifest.xml",
     REFERENCE_PROVIDER, REFERENCE_PATHS,
     *(JAVA + name + ".java" for name in JAVA_NAMES), *(KOTLIN + name + ".kt" for name in KOTLIN_NAMES))))
@@ -47,7 +47,7 @@ REMOTE_REPORTER_FRAGMENTS = (
     b'    <uses-permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.CONTROL_REMOTE_IO" />\n',
     b'        <package android:name="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments" />\n',
     b'        <provider android:authorities="io.github.apdelrahman1911.nativecmpkit.verification.ioremotedocuments.documents" />\n',
-    b'        <activity android:name="com.mohamedrejeb.calf.io.AndroidIoRemoteTreeGrantActivity" android:exported="false"\n'
+    b'        <activity android:name="io.github.apdelrahman1911.nativecmpkit.io.AndroidIoRemoteTreeGrantActivity" android:exported="false"\n'
     b'            android:theme="@android:style/Theme.Material.Light.NoActionBar" />\n',
 )
 
@@ -161,7 +161,7 @@ def validate_reference_sources(texts: dict[str, str]) -> None:
     owner = texts[JAVA + "IoSingleDocumentGrantActivity.java"]
     require(re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", reference) == list(lt.ANDROID_IO_REFERENCE_METHODS) and
             re.search(r"\bclass\s+AndroidIoReferenceRegressionTest\b", reference) is not None and
-            re.search(r"(?m)^package\s+com\.mohamedrejeb\.calf\.io\s*$", reference) is not None and
+            re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", reference) is not None and
             not re.search(r"@(Ignore|Disabled|IgnoredTest)\b", reference) and
             reference.count("= runBlocking(Dispatchers.IO)") == len(lt.ANDROID_IO_REFERENCE_METHODS),
             "Every exact native reference method must remain enabled and off the main Looper")
@@ -206,7 +206,7 @@ def validate_unavailable_sources(texts: dict[str, str]) -> None:
     endpoint = texts[KOTLIN + "OwnedIoEndpoint.kt"]
     require(re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", source) == [lt.ANDROID_IO_UNAVAILABLE_METHOD] and
             re.search(r"\bclass\s+AndroidIoUnavailableProviderTest\b", source) is not None and
-            re.search(r"(?m)^package\s+com\.mohamedrejeb\.calf\.io\s*$", source) is not None and
+            re.search(r"(?m)^package\s+com\.mohamedrejeb\.nativecmpkit\.io\s*$", source) is not None and
             not re.search(r"@(Ignore|Disabled|IgnoredTest)\b", source) and
             source.count("= runBlocking(Dispatchers.IO)") == 1,
             "The exact missing unavailable-provider method must remain enabled and off the main Looper")
@@ -337,9 +337,9 @@ def source_contract(root: Path) -> dict:
     require(actual == {FIXTURE + "/src/main/AndroidManifest.xml", *(JAVA + name + ".java" for name in JAVA_NAMES)},
             "Unexpected helper source inventory")
     validate_manifest(texts[FIXTURE + "/src/main/AndroidManifest.xml"].encode(), compiled=False)
-    texts["calf-io/src/androidDeviceTest/AndroidManifest.xml"] = normalize_remote_reporter_source(
-        texts["calf-io/src/androidDeviceTest/AndroidManifest.xml"].encode("utf-8")).decode("utf-8")
-    reporter = ET.fromstring(texts["calf-io/src/androidDeviceTest/AndroidManifest.xml"],
+    texts["nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"] = normalize_remote_reporter_source(
+        texts["nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"].encode("utf-8")).decode("utf-8")
+    reporter = ET.fromstring(texts["nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"],
                              parser=ET.XMLParser(target=lt.NoDtdBuilder()))
     permissions = [node.get(ANDROID + "name") for node in reporter.findall("uses-permission")]
     applications, queries = reporter.findall("application"), reporter.findall("queries")
@@ -369,24 +369,24 @@ def source_contract(root: Path) -> dict:
             all(node.tag in {"activity", "service", "provider"} for node in app) and
             all(node.get(ANDROID + "enabled") in {None, "true"} for node in app) and
             {activity.get(ANDROID + "name") for activity in grant} ==
-                ({"com.mohamedrejeb.calf.io.AndroidIoGrantActivity", "com.mohamedrejeb.calf.io.AndroidIoSingleDocumentGrantActivity"} |
-                 ({"com.mohamedrejeb.calf.io.AndroidIoSystemTreeGrantActivity"} if named_system_union else set())) and
+                ({"io.github.apdelrahman1911.nativecmpkit.io.AndroidIoGrantActivity", "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoSingleDocumentGrantActivity"} |
+                 ({"io.github.apdelrahman1911.nativecmpkit.io.AndroidIoSystemTreeGrantActivity"} if named_system_union else set())) and
             all(activity.get(ANDROID + "exported") == "false" and activity.get(ANDROID + "permission") is None and
                 activity.get(ANDROID + "process") is None and len(activity) == 0 for activity in grant) and
-            client[0].get(ANDROID + "name") == "com.mohamedrejeb.calf.io.IoBookmarkClientService" and
+            client[0].get(ANDROID + "name") == "io.github.apdelrahman1911.nativecmpkit.io.IoBookmarkClientService" and
             client[0].get(ANDROID + "exported") == "false" and client[0].get(ANDROID + "process") == ":nativecmpkit_io_client" and
             client[0].get(ANDROID + "permission") is None and len(client[0]) == 0,
             "The exact reporter client and both grant/revoke Activities must remain private")
     if named_system_union:
         named_caller = next(activity for activity in grant if
-                            activity.get(ANDROID + "name") == "com.mohamedrejeb.calf.io.AndroidIoSystemTreeGrantActivity")
+                            activity.get(ANDROID + "name") == "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoSystemTreeGrantActivity")
         require(named_caller.attrib == {
-                    ANDROID + "name": "com.mohamedrejeb.calf.io.AndroidIoSystemTreeGrantActivity",
+                    ANDROID + "name": "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoSystemTreeGrantActivity",
                     ANDROID + "exported": "false", ANDROID + "theme": "@android:style/Theme.Material.Light.NoActionBar"} and
                 len(named_caller) == 0,
                 "Only the exact nonexported source-bound named-system caller is permitted")
     provider = providers[0]
-    require(provider.get(ANDROID + "name") == "com.mohamedrejeb.calf.io.instrumentation.DeviceIoFileProvider" and
+    require(provider.get(ANDROID + "name") == "io.github.apdelrahman1911.nativecmpkit.io.instrumentation.DeviceIoFileProvider" and
             provider.get(ANDROID + "authorities") == "${applicationId}.io-device-files" and
             provider.get(ANDROID + "exported") == "false" and provider.get(ANDROID + "grantUriPermissions") == "true" and
             provider.get(ANDROID + "process") == ":nativecmpkit_io_device_provider" and
@@ -407,8 +407,8 @@ def source_contract(root: Path) -> dict:
                 'targetSdk = libs.versions.android.compileSdk.get().toInt()',
                 'sourceCompatibility = JavaVersion.VERSION_17', 'targetCompatibility = JavaVersion.VERSION_17')) and
             'from(files("../../../gradle/libs.versions.toml"))' in texts[FIXTURE + "/settings.gradle.kts"] and
-            'implementation(projects.calfFilePickerCoil)' in texts['calf-io/build.gradle.kts'] and
-            'implementation(libs.coil)' in texts['calf-io/build.gradle.kts'], "Unexpected helper/reporter build inputs")
+            'implementation(projects.nativecmpkitFilePickerCoil)' in texts['nativecmpkit-io/build.gradle.kts'] and
+            'implementation(libs.coil)' in texts['nativecmpkit-io/build.gradle.kts'], "Unexpected helper/reporter build inputs")
     catalog = texts['gradle/libs.versions.toml']
     require('android-minSdk = "23"' in catalog and 'android-compileSdk = "37"' in catalog and 'coil = "3.6.2"' in catalog,
             "The exact source SDK/Coil declaration changed")

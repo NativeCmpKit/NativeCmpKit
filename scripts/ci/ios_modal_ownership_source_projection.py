@@ -54,7 +54,7 @@ def source_before_modal_ownership(relative, payload):
     if observed == binding["before_sha256"]:
         return payload
     payload = lifecycle_history.source_before_modal_lifecycle(relative, payload)
-    if relative == "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/sheet/BottomSheetManager.kt":
+    if relative == "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/BottomSheetManager.kt":
         payload = input_history.source_before_modal_xcui(relative, payload)
     observed = hashlib.sha256(payload).hexdigest()
     if observed != binding["after_sha256"]:
@@ -91,7 +91,7 @@ def current_source_before_modal_ownership(relative, payload):
         return input_history.current_source_before_modal_xcui(relative, payload)
     if binding is not None:
         payload = lifecycle_history.current_source_before_modal_lifecycle(relative, payload)
-        if relative == "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/sheet/BottomSheetManager.kt":
+        if relative == "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/BottomSheetManager.kt":
             payload = input_history.current_source_before_modal_xcui(relative, payload)
     if binding is not None and hashlib.sha256(payload).hexdigest() != binding["after_sha256"]:
         raise ValueError("A historical image cannot replace the exact current iOS modal ownership source")

@@ -25,7 +25,7 @@ MAX_SOURCE_BYTES = 4 * 1024 * 1024
 MAX_SPEC_BYTES = 512 * 1024
 MAX_STDERR = 4096
 MAX_MARKER_BYTES = 512
-CASES_SOURCE = "calf-share/native/tests/appkit_lifecycle/cases.rs"
+CASES_SOURCE = "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs"
 BOUND_PATHS = {
     CASES_SOURCE, "scripts/ci/macos_share_appkit_lifecycle.py",
     "scripts/ci/test_macos_share_appkit_lifecycle_runner.py", "scripts/ci/test_macos_share_missing_only.py",
@@ -34,11 +34,11 @@ ADDED_PATHS = {
     "scripts/ci/test_macos_share_key_wait_observation.py", "docs/testing/macos-share-key-wait-observation.md",
 }
 UNCHANGED_PATHS = {
-    "calf-share/native/Cargo.toml", "calf-share/native/Cargo.lock", "calf-share/native/src/lib.rs",
-    "calf-share/native/src/macos.rs", "calf-share/native/src/operation.rs",
-    "calf-share/native/tests/appkit_lifecycle_main.rs", "scripts/ci/macos_share_missing_only.py",
+    "nativecmpkit-share/native/Cargo.toml", "nativecmpkit-share/native/Cargo.lock", "nativecmpkit-share/native/src/lib.rs",
+    "nativecmpkit-share/native/src/macos.rs", "nativecmpkit-share/native/src/operation.rs",
+    "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs", "scripts/ci/macos_share_missing_only.py",
     "scripts/ci/macos_share_missing_ci.py",
-    "calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/MacOsShareCoroutineLifecycleTest.kt",
+    "nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/MacOsShareCoroutineLifecycleTest.kt",
 }
 _DIGEST = re.compile(r"[0-9a-f]{64}\Z")
 

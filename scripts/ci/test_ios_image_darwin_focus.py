@@ -20,14 +20,14 @@ class IosImageDarwinFocusTests(unittest.TestCase):
         self.assertIn("ios-image-memory-darwin", matrix.PROFILES,
                       "Instruments cannot start when the unrelated strict ObjC startup assertion aborts")
         row, = matrix.matrix("ios-image-memory-darwin")["include"]
-        self.assertEqual(("ios-iphone", "calf-ui", lt.IOS_IMAGE_DARWIN_FOCUS),
+        self.assertEqual(("ios-iphone", "nativecmpkit-ui", lt.IOS_IMAGE_DARWIN_FOCUS),
                          tuple(row[k] for k in ("slot", "test-modules", "test-focus")))
         strict, = matrix.matrix("ios-image-memory")["include"]
         self.assertEqual(lt.IOS_IMAGE_MEMORY_FOCUS, strict["test-focus"])
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
 
     def plan(self, root=lt.ROOT):
-        return lt.plan(root, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_DARWIN_FOCUS)
+        return lt.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_DARWIN_FOCUS)
 
     def arguments(self):
         return sorted(app.TEST_ARGUMENTS) + ["--ktest_gradle_filter=" + lt.ui_application_focus_filter(lt.IOS_IMAGE_DARWIN_FOCUS)]
@@ -44,7 +44,7 @@ class IosImageDarwinFocusTests(unittest.TestCase):
         self.assertNotIn("-PnativecmpkitImageMemoryDiagnostics=true", command)
         self.assertEqual(3, command.count("--tests"))
         self.assertNotIn("UIImageConversionTest", " ".join(command))
-        strict = lt.plan(lt.ROOT, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        strict = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         self.assertIn("-PnativecmpkitImageMemoryDiagnostics=true", lt.gradle_command("ios", strict, frames.DEVICE))
         self.assertNotEqual(plan["scope"], strict["scope"])
 
@@ -70,7 +70,7 @@ class IosImageDarwinFocusTests(unittest.TestCase):
                 app.application_test_focus(arguments, "darwin-tools")
 
     def test_real_cli_strips_only_the_finite_transport_flag_before_generated_native_arguments(self):
-        binary = lt.ROOT / "calf-ui/build/bin/iosSimulatorArm64/applicationDebugTest/test.kexe"
+        binary = lt.ROOT / "nativecmpkit-ui/build/bin/iosSimulatorArm64/applicationDebugTest/test.kexe"
         arguments = self.arguments()
         argv = [str(lt.ROOT / "scripts/ci/ios_ui_application.py"), "--binary", str(binary),
                 "--image-diagnostics", "darwin-tools", *arguments]
@@ -113,14 +113,14 @@ class IosImageDarwinFocusTests(unittest.TestCase):
         f = self.fixture()
         f.document["explicit_test_focus"] = lt.IOS_IMAGE_MEMORY_FOCUS; f.save()
         self.assertTrue(f.collect()["errors"])
-        f.plan = lt.plan(f.root, "ios", only_modules=("calf-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
+        f.plan = lt.plan(f.root, "ios", only_modules=("nativecmpkit-ui",), focus=lt.IOS_IMAGE_MEMORY_FOCUS)
         self.assertTrue(f.collect()["errors"], "Strict evidence must not contain a Darwin-only mode claim")
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-webview",)),
-                               ("ios", ("calf-file-picker",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-webview",)),
+                               ("ios", ("nativecmpkit-file-picker",)), ("ios", None)):
             with self.assertRaises(ValueError): lt.plan(lt.ROOT, suite, only_modules=modules, focus=lt.IOS_IMAGE_DARWIN_FOCUS)
 
     def test_linked_test_only_mode_retains_both_strict_options_and_does_not_override_defaults(self):
-        build = (lt.ROOT / "calf-ui/build.gradle.kts").read_text()
+        build = (lt.ROOT / "nativecmpkit-ui/build.gradle.kts").read_text()
         self.assertIn('if (imageMemoryMode == "true") {\n                binaryOption("runtimeAssertionsMode", "panic")', build)
         self.assertIn('binaryOption("checkStateAtExternalCalls", "true")', build)
         self.assertIn('if (imageMemoryMode == "darwin-tools") listOf("--image-diagnostics", "darwin-tools")', build)

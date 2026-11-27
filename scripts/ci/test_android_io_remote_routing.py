@@ -60,7 +60,7 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
         for module in (controller, remote, old_io, projection, lt, workflow_matrix):
             if Path(module.__file__).resolve().parents[2] != TREE:
                 raise AssertionError("Controls must read this exact selected source tree, not another worktree")
-        cls.plans = {focus: lt.plan(TREE, "android-device", only_modules=("calf-io",), focus=focus)
+        cls.plans = {focus: lt.plan(TREE, "android-device", only_modules=("nativecmpkit-io",), focus=focus)
                      for focus in lt.ANDROID_IO_REMOTE_FOCUSES}
         cls.native = (TREE / lt.ANDROID_IO_REMOTE_SOURCE).read_text(encoding="utf-8")
         cls.source = cls.plans["android-io-controlled-remote"]["android_io_remote_documents"]["source_contract"]
@@ -193,7 +193,7 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
                 stack.enter_context(patch.object(module, name, replacement))
             stack.enter_context(patch.dict(os.environ, {"ANDROID_HOME": str(root / "synthetic-sdk")}))
             result = controller._run(root, "build/ci-verification/synthetic-remote-orchestration",
-                                     only_modules=("calf-io",), focus="android-io-controlled-remote", api_level=35)
+                                     only_modules=("nativecmpkit-io",), focus="android-io-controlled-remote", api_level=35)
             return deepcopy(result), list(events)
 
     def test_combined_class_and_exact_single_missing_only_routes_share_two_direct_enabled_methods(self):
@@ -215,7 +215,7 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
                     android_io_remote_documents_receipt=self.prepared())
                 self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + expected_filter, command)
                 self.assertNotIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedIoDocuments=true", command)
-                self.assertEqual(1, command.count(":calf-io:connectedAndroidDeviceTest"))
+                self.assertEqual(1, command.count(":nativecmpkit-io:connectedAndroidDeviceTest"))
                 self.assertNotIn(",", expected_filter)
         self.assertEqual(2, len(remote.METHODS))
 
@@ -237,7 +237,7 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
             "typealias": self.native.replace("@RunWith(AndroidJUnit4::class)",
                             "typealias OtherTest = org.junit.Test\n@RunWith(AndroidJUnit4::class)", 1),
             "foreign-runner": self.native.replace("androidx.test.ext.junit.runners.AndroidJUnit4", "foreign.AndroidJUnit4", 1),
-            "foreign-package": self.native.replace("package com.mohamedrejeb.calf.io", "package foreign.io", 1),
+            "foreign-package": self.native.replace("package io.github.apdelrahman1911.nativecmpkit.io", "package foreign.io", 1),
             "ambiguous-braces": self.native.rstrip()[:-1],
             "unterminated-comment": self.native + "\n/* @Test",
         }
@@ -252,41 +252,41 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
             with self.subTest(kind=type(bad).__name__), self.assertRaises(ValueError):
                 remote.validate_direct_native_population(bad)
 
-    def test_exact_api35_calf_io_only_native_and_cli_routes_refuse_wrong_type_or_expansion(self):
+    def test_exact_api35_nativecmpkit_io_only_native_and_cli_routes_refuse_wrong_type_or_expansion(self):
         for focus in lt.ANDROID_IO_REMOTE_FOCUSES:
-            controller.validate_api_selection(35, ("calf-io",), focus)
+            controller.validate_api_selection(35, ("nativecmpkit-io",), focus)
             for api in (True, "35", 35.0, None, 23, 33, 34, 36):
                 with self.subTest(focus=focus, api_type=type(api).__name__), self.assertRaises(ValueError):
-                    controller.validate_api_selection(api, ("calf-io",), focus)
-            for modules in (None, ["calf-io"], ("calf-share",), ("calf-io", "calf-share"), ("calf-io", "calf-io")):
+                    controller.validate_api_selection(api, ("nativecmpkit-io",), focus)
+            for modules in (None, ["nativecmpkit-io"], ("nativecmpkit-share",), ("nativecmpkit-io", "nativecmpkit-share"), ("nativecmpkit-io", "nativecmpkit-io")):
                 self.assertFalse(lt.allowed_test_focus("android-device", modules, focus))
                 with self.assertRaises(ValueError):
                     controller.validate_api_selection(35, modules, focus)
             for suite in ("desktop", "android-host", "ios", "js", "wasm"):
-                self.assertFalse(lt.allowed_test_focus(suite, ("calf-io",), focus))
-        for module_request in (("calf-io",), None):
+                self.assertFalse(lt.allowed_test_focus(suite, ("nativecmpkit-io",), focus))
+        for module_request in (("nativecmpkit-io",), None):
             with self.subTest(unfiltered_modules=module_request), self.assertRaisesRegex(ValueError, "Unfiltered Android discovery"):
                 lt.plan(TREE, "android-device", only_modules=module_request)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             # Neither deleting the enabled class nor declaring a synthetic minimum
-            # can transform a full/default or calf-io-unfiltered request into admission.
+            # can transform a full/default or nativecmpkit-io-unfiltered request into admission.
             with patch.object(lt, "projects", side_effect=AssertionError("Domain refusal must precede source discovery")), \
                  patch.object(controller, "require_host", side_effect=AssertionError("Full refusal must precede host")):
-                for modules in (None, (), ("calf-io",), ("calf-io", "calf-share")):
+                for modules in (None, (), ("nativecmpkit-io",), ("nativecmpkit-io", "nativecmpkit-share")):
                     with self.subTest(no_tree_modules=modules), self.assertRaisesRegex(ValueError, "Unfiltered Android discovery"):
-                        lt.plan(root, "android-device", minimum_modules=("calf-fixture",), only_modules=modules)
+                        lt.plan(root, "android-device", minimum_modules=("nativecmpkit-fixture",), only_modules=modules)
                     for owning_run in (controller.run, controller._run):
                         with self.subTest(controller=owning_run.__name__, modules=modules), self.assertRaisesRegex(ValueError, "Unfiltered Android discovery"):
                             owning_run(root, "build/ci-verification/unfiltered-refused", only_modules=modules, api_level=35)
             self.assertFalse((root / "build").exists(), "Full refusal must precede outputs and locks")
             for api in (True, "35", 34):
                 with self.subTest(direct_remote_api_type=type(api).__name__), self.assertRaisesRegex(ValueError, "exact integer API35"):
-                    controller._run(root, "build/ci-verification/direct-remote-refused", only_modules=("calf-io",),
+                    controller._run(root, "build/ci-verification/direct-remote-refused", only_modules=("nativecmpkit-io",),
                                      focus="android-io-controlled-remote", api_level=api)
             self.assertFalse((root / "build").exists(), "Direct remote API refusal must also precede output")
         for name, value in (("verification_api_level", True), ("test_filter", remote.CLASS + "#" + remote.METHODS[0] + "," + remote.CLASS + "#" + remote.METHODS[1]),
-                            ("test_filter_argument", "annotation"), ("required_original_xml", True), ("task", ":calf-io:connectedCheck"),
+                            ("test_filter_argument", "annotation"), ("required_original_xml", True), ("task", ":nativecmpkit-io:connectedCheck"),
                             ("required_testcases", list(remote.identities("android-io-controlled-remote")) + [{"classname": remote.CLASS, "name": "foreign"}])):
             bad = deepcopy(self.plans["android-io-controlled-remote"])
             bad["expected"][0][name] = value
@@ -357,8 +357,8 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
         self.assertFalse(result["remote_io_documents"]["native_or_consumer_success_inferred"])
         assembly = lt.gradle_command("android-device", self.plans["android-io-controlled-remote"],
                                     root=TREE, android_serial=controller.SERIAL, for_assembly=True)
-        self.assertIn(":calf-io:assembleAndroidDeviceTest", assembly)
-        self.assertNotIn(":calf-io:connectedAndroidDeviceTest", assembly)
+        self.assertIn(":nativecmpkit-io:assembleAndroidDeviceTest", assembly)
+        self.assertNotIn(":nativecmpkit-io:connectedAndroidDeviceTest", assembly)
         self.assertNotIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedRemoteIoDocuments=true", assembly)
         with self.assertRaises(ValueError):
             lt.gradle_command("android-device", self.plans["android-io-controlled-remote"], root=TREE,
@@ -406,7 +406,7 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             lt.gradle_command("android-device", plan, root=TREE, android_serial=controller.SERIAL,
                               android_io_documents_receipt=self.prepared())
-        unrelated = lt.plan(TREE, "android-device", only_modules=("calf-io",), focus=lt.ANDROID_IO_OVERSIZE_FOCUS)
+        unrelated = lt.plan(TREE, "android-device", only_modules=("nativecmpkit-io",), focus=lt.ANDROID_IO_OVERSIZE_FOCUS)
         self.assertFalse(lt.android_io_remote_documents_required(unrelated))
         with self.assertRaises(ValueError):
             lt.gradle_command("android-device", unrelated, root=TREE, android_serial=controller.SERIAL,
@@ -465,9 +465,9 @@ class AndroidIoRemoteRoutingControls(unittest.TestCase):
     def test_finite_workflow_one_api35_row_permissions_and_sdk_recipe_do_not_mutate_old_profiles(self):
         profiles = set(lt.ANDROID_IO_REMOTE_FOCUSES)
         for focus in profiles:
-            expected = dict(workflow_matrix.SLOTS[-1], **{"test-modules": "calf-io", "test-focus": focus})
+            expected = dict(workflow_matrix.SLOTS[-1], **{"test-modules": "nativecmpkit-io", "test-focus": focus})
             self.assertEqual(("android-device-api35",), workflow_matrix.PROFILES[focus])
-            self.assertEqual("calf-io", workflow_matrix.MODULE_SUBSETS[focus])
+            self.assertEqual("nativecmpkit-io", workflow_matrix.MODULE_SUBSETS[focus])
             self.assertEqual({"include": [expected]}, workflow_matrix.matrix(focus))
         self.assertEqual(11, len(workflow_matrix.matrix("all")["include"]))
         workflow = (TREE / ".github/workflows/gradle.yml").read_bytes()

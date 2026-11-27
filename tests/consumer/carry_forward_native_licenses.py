@@ -26,10 +26,10 @@ MAX_ALL_BYTES = 32 * 1024 * 1024
 ORIGINAL_SCOPE = ("Exact license texts from checksum-verified crates.io archives in conservative locked target union; not legal clearance; "
                   "explicit pinned-VCS missing-text supplements retain full origin/proofs")
 ORIGINALS = _freeze({
-    "calf-file-picker": {"report": "306d12e24a5ecaa3a29065ba6aed78dbfc9bd50e55f4222bc84ac6016e1c7ef4",
+    "nativecmpkit-file-picker": {"report": "306d12e24a5ecaa3a29065ba6aed78dbfc9bd50e55f4222bc84ac6016e1c7ef4",
         "metadata": "e53bd784aae97aab724d887e7256bac6cf7c0497ef7a0ac9387e11c4060d8524", "packages": 93,
         "gaps": 17},
-    "calf-share": {"report": "fdb2d36377ad2c2b044087f4d533db949e2922b42381bf49b6865f22d12f473e",
+    "nativecmpkit-share": {"report": "fdb2d36377ad2c2b044087f4d533db949e2922b42381bf49b6865f22d12f473e",
         "metadata": "63e8c694ed7cc4a33e6419b7cd9307ca999b118ccd3d2ed980b202f20cda880a", "packages": 48,
         "gaps": 15},
 })
@@ -133,7 +133,7 @@ def validate_original(module: str, report_bytes: bytes, metadata_bytes: bytes, r
             require(files == [], "Project root notices are separately packaged")
             continue
         if not files:
-            require(package["name"] in SELECTED_NAMES or module == "calf-file-picker"
+            require(package["name"] in SELECTED_NAMES or module == "nativecmpkit-file-picker"
                     and package["name"] in {"winapi-i686-pc-windows-gnu", "winapi-x86_64-pc-windows-gnu"},
                     "An unknown original gap cannot use this finite carry-forward path")
             expected_gaps.add(package["name"] + "-" + package["version"])

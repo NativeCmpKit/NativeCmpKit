@@ -34,26 +34,26 @@ import library_tests as lt
 import runtime_context as runtime
 import simulator_appearance
 
-TASK = ":calf-ui:iosSimulatorArm64ApplicationTest"
-HOST_SOURCE = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
-HOST_TEST = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHostTest.kt"
-EXPECTED_BINARY_DIRECTORY = "calf-ui/build/bin/iosSimulatorArm64/applicationDebugTest"
+TASK = ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"
+HOST_SOURCE = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
+HOST_TEST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHostTest.kt"
+EXPECTED_BINARY_DIRECTORY = "nativecmpkit-ui/build/bin/iosSimulatorArm64/applicationDebugTest"
 APPLICATION_HOSTS = {
-    "calf-ui": {"task": TASK, "binary_directory": EXPECTED_BINARY_DIRECTORY,
+    "nativecmpkit-ui": {"task": TASK, "binary_directory": EXPECTED_BINARY_DIRECTORY,
                 "receipt_subdirectory": "native-ui-application"},
-    "calf-file-picker": {"task": ":calf-file-picker:" + lt.IOS_APPLICATION_TASK,
-                         "binary_directory": "calf-file-picker/build/bin/iosSimulatorArm64/applicationDebugTest",
+    "nativecmpkit-file-picker": {"task": ":nativecmpkit-file-picker:" + lt.IOS_APPLICATION_TASK,
+                         "binary_directory": "nativecmpkit-file-picker/build/bin/iosSimulatorArm64/applicationDebugTest",
                          "receipt_subdirectory": "native-picker-application"},
-    "calf-webview": {"task": ":calf-webview:" + lt.IOS_APPLICATION_TASK,
-                     "binary_directory": "calf-webview/build/bin/iosSimulatorArm64/applicationDebugTest",
+    "nativecmpkit-webview": {"task": ":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK,
+                     "binary_directory": "nativecmpkit-webview/build/bin/iosSimulatorArm64/applicationDebugTest",
                      "receipt_subdirectory": "native-webview-application"},
-    "calf-share": {"task": ":calf-share:" + lt.IOS_APPLICATION_TASK,
-                   "binary_directory": "calf-share/build/bin/iosSimulatorArm64/applicationDebugTest",
+    "nativecmpkit-share": {"task": ":nativecmpkit-share:" + lt.IOS_APPLICATION_TASK,
+                   "binary_directory": "nativecmpkit-share/build/bin/iosSimulatorArm64/applicationDebugTest",
                    "receipt_subdirectory": "native-share-application"},
 }
-APPLICATION_HOSTS["calf-camera-picker"] = {
-    "task": ":calf-camera-picker:" + lt.IOS_APPLICATION_TASK,
-    "binary_directory": "calf-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest",
+APPLICATION_HOSTS["nativecmpkit-camera-picker"] = {
+    "task": ":nativecmpkit-camera-picker:" + lt.IOS_APPLICATION_TASK,
+    "binary_directory": "nativecmpkit-camera-picker/build/bin/iosSimulatorArm64/applicationDebugTest",
     "receipt_subdirectory": "native-camera-application",
 }
 APP_EXECUTABLE = "NativeCmpkitLibraryTests"
@@ -117,7 +117,7 @@ APPLICATION_FOCUS_ARGUMENTS = {
 PICKER_PROVIDER_C3_CASE = (lt.IOS_PICKER_PROVIDER_CANCELLATION_CLASS,
                            lt.IOS_PICKER_PROVIDER_CANCELLATION_METHODS[0])
 PICKER_PROVIDER_C3_MAIN_RETURNED = "NATIVECMPKIT_UIKIT_MAIN_RETURNED"
-IMAGE_LIFETIME_CASE = ("com.mohamedrejeb.calf.ui.utils.UIImageConversionTest",
+IMAGE_LIFETIME_CASE = ("io.github.apdelrahman1911.nativecmpkit.ui.utils.UIImageConversionTest",
                        "returnedImageOwnsItsPixelsAfterTemporaryArraysAndContextsAreCollected")
 COMPACT_APPEARANCE_CASE = (lt.UI_DATE_REPLACEMENT_CLASS, lt.UI_DATE_REPLACEMENT_METHODS[1])
 COMPACT_APPEARANCE_PHASES = (
@@ -131,7 +131,7 @@ IMAGE_LIFETIME_STEPS = (
     (("before-verify", None), ("verified", None))
 )
 IMAGE_PROFILE_CASE = (lt.IOS_IMAGE_MEMORY_CLASS, lt.IOS_IMAGE_MEMORY_METHODS[-1])
-PICKER_HOST_CASE = ("com.mohamedrejeb.calf.picker.internal.NativePickerApplicationHostTest",
+PICKER_HOST_CASE = ("io.github.apdelrahman1911.nativecmpkit.picker.internal.NativePickerApplicationHostTest",
                     "repeatedRealComposeRootsRecomposeDisposeAndRestoreTheirOwner")
 PICKER_HOST_STEPS = tuple((phase, iteration, main_thread) for iteration in (1, 2) for phase, main_thread in (
     ("before-host", False), ("content-installed", False), ("initial-composed", True),
@@ -479,7 +479,7 @@ class NativeProtocol:
             r"backlink=(true|false) presenting=(true|false) dismissing=(true|false) "
             r"forward=(true|false) noPresentation=(true|false)", line)
         if admission:
-            owner = "com.mohamedrejeb.calf.picker.IosPickerRuntimeOwnershipTest"
+            owner = "io.github.apdelrahman1911.nativecmpkit.picker.IosPickerRuntimeOwnershipTest"
             expected = {"export-initial": "cancellationDuringRealExportPresentationWaitsForNativeCompletionBeforeRemovingStaging",
                         "photo-initial": "retainedPublicPhotoLauncherUsesFourNativeConfigurationSnapshotsAndCurrentCallback"}
             phase, iteration = admission[1], int(admission[2])
@@ -1023,7 +1023,7 @@ def application_host(binary_relative: str, focus: str | None) -> dict:
     module, host = matching[0]
     if module == lt.camera_ios.MODULE and focus != lt.camera_ios.FOCUS:
         raise ValueError("Camera application is exact NEW5-only, never a generic/full or SDK fixture")
-    if focus is not None and lt.UI_APPLICATION_FOCUS_SPECS[focus].get("module", "calf-ui") != module:
+    if focus is not None and lt.UI_APPLICATION_FOCUS_SPECS[focus].get("module", "nativecmpkit-ui") != module:
         raise ValueError("Application test selection belongs to a different owning module")
     if focus in lt.ui_related.SPLIT_FOCUSES:
         host = {**host, "task": lt.ui_related.task(focus),
@@ -1033,7 +1033,7 @@ def application_host(binary_relative: str, focus: str | None) -> dict:
 
 def provider_c3_observation_route(host: dict, focus: str | None, arguments: list[str]) -> bool:
     """Observation opt-in is exact module/task/sole method, never a focus label alone."""
-    expected_host = {"module": "calf-file-picker", **APPLICATION_HOSTS["calf-file-picker"]}
+    expected_host = {"module": "nativecmpkit-file-picker", **APPLICATION_HOSTS["nativecmpkit-file-picker"]}
     return (type(host) is dict and host == expected_host and
             focus == lt.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS and type(arguments) is list and
             len(arguments) == 3 and all(type(argument) is str for argument in arguments) and
@@ -1111,7 +1111,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
     if appinfo_shape_only:
         if (binary_relative != EXPECTED_BINARY_DIRECTORY + "/application.kexe" or
                 type(arguments) is not list or arguments or image_diagnostics is not None):
-            raise ValueError("The SDK prerequisite owns only one ordinary calf-ui app and no native selection")
+            raise ValueError("The SDK prerequisite owns only one ordinary nativecmpkit-ui app and no native selection")
         focus = None
     else:
         focus = application_test_focus(arguments, image_diagnostics)
@@ -1130,7 +1130,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
     result_root = lt.safe_path(root, result_relative)
     if focus in lt.ui_related.SPLIT_FOCUSES and result_root.name != host["receipt_subdirectory"]:
         raise ValueError("Split UI receipts require their exact independent owned application output")
-    if host["module"] in {"calf-file-picker", "calf-webview", "calf-share", lt.camera_ios.MODULE}:
+    if host["module"] in {"nativecmpkit-file-picker", "nativecmpkit-webview", "nativecmpkit-share", lt.camera_ios.MODULE}:
         if result_root.name not in {"native-ui-application", host["receipt_subdirectory"]}:
             raise ValueError("Library receipts require their finite owning application output")
         result_root = lt.safe_path(root, (result_root.parent / host["receipt_subdirectory"]).relative_to(root).as_posix())
@@ -1166,8 +1166,8 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
     content_fixture = None
     content_nonce_hash = None
     native_input_driver = None
-    request_fixture_requested = host["module"] == "calf-webview" and focus in (None, lt.IOS_WEBVIEW_REQUEST_FOCUS, lt.IOS_WEBVIEW_REQUEST_DNS_FOCUS)
-    content_fixture_requested = host["module"] == "calf-webview" and focus == lt.content_policy.IOS_FOCUS
+    request_fixture_requested = host["module"] == "nativecmpkit-webview" and focus in (None, lt.IOS_WEBVIEW_REQUEST_FOCUS, lt.IOS_WEBVIEW_REQUEST_DNS_FOCUS)
+    content_fixture_requested = host["module"] == "nativecmpkit-webview" and focus == lt.content_policy.IOS_FOCUS
     native_environment = None
     camera_photos = None
     try:
@@ -1199,7 +1199,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
         app.mkdir()
         shutil.copy2(binary, app / APP_EXECUTABLE)
         information = app_information(bundle_id, identity["minimum_os"], local_webview_requests=request_fixture_requested or content_fixture_requested)
-        if host["module"] == "calf-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
+        if host["module"] == "nativecmpkit-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
             import ios_popover_geometry_plan as geometry_plan
             geometry_plan.validate_sources(root)
             information.update(geometry_plan.scene_information())
@@ -1253,7 +1253,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             # Return through the original finally. Never fall through to launch,
             # Worker, WK/profile preparation, transport pass or native test output.
             return receipt
-        if host["module"] == "calf-ui" and focus == lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS:
+        if host["module"] == "nativecmpkit-ui" and focus == lt.IOS_IMAGE_PROFILE_RECOVERY_FOCUS:
             import apple_appinfo_shape as appinfo_shape
             import apple_image_launch_readiness as launch_readiness
             phase = "observe-owned-image-prelaunch-readiness"
@@ -1283,15 +1283,15 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             content_nonce_hash = content_fixture.nonce_sha256
             receipt["webview_content_policy_nonce_sha256"] = content_nonce_hash
             native_environment = content_fixture.launch_environment(os.environ.copy())
-        if host["module"] == "calf-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
+        if host["module"] == "nativecmpkit-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
             import ios_popover_geometry_plan as geometry_plan
             native_environment = geometry_plan.process_launch_environment(before["simulator"], focus)
-        if host["module"] == "calf-ui" and focus == lt.IOS_MODAL_XCUI_FOCUS:
+        if host["module"] == "nativecmpkit-ui" and focus == lt.IOS_MODAL_XCUI_FOCUS:
             import native_ui_input
             phase = "prepare-independent-owned-xctest-input"
             native_input_driver = native_ui_input.InputDriver(root, device, bundle_id, token, execute_control, signed_hash, plist_hash)
             native_environment = native_input_driver.prepare()
-        if host["module"] == "calf-ui" and focus in (None, lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES):
+        if host["module"] == "nativecmpkit-ui" and focus in (None, lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES):
             import apple_image_profile
             phase = "prepare-owned-image-memory-profile"
             image_profile_driver = apple_image_profile.ImageProfileDriver(
@@ -1299,7 +1299,7 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             native_environment = image_profile_driver.prepare()
             protocol.image_profile_request = image_profile_driver.observe_native_request
             protocol.image_profile_poll = image_profile_driver.poll
-        if host["module"] == "calf-ui" and focus in (
+        if host["module"] == "nativecmpkit-ui" and focus in (
                 None, lt.IOS_VECTOR_THEME_FOCUS, lt.IOS_SYSTEM_APPEARANCE_FOCUS):
             phase = "prepare-owned-simulator-system-appearance"
             appearance_driver = simulator_appearance.AppearanceDriver(device, execute_control)

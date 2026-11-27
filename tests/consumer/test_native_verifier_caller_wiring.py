@@ -99,7 +99,7 @@ class NativeVerifierCallerWiringTest(unittest.TestCase):
         sample = supplements_fixture.VcsLicenseSupplementTest()
         sample.setUp()
         self.addCleanup(sample.tearDown)
-        identity = json.loads((sample.source / "docs/migration/identity.json").read_text())
+        identity = json.loads((sample.source / "docs/migration/current-identity.json").read_text())
         self.assertEqual({"nativecmpkit-file-picker"}, {row["new_artifact"] for row in identity["modules"]})
         entries = sample.actual_entries()
         original = gate.ArtifactVerifier

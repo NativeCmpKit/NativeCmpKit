@@ -13,7 +13,7 @@ from ios_popover_anchor_plan import _ordinary_bytes
 
 SOURCE = "scripts/ci/webview_content_policy_native_focus.py"
 SPEC_RELATIVE = "scripts/ci/fixtures/webview-content-policy-routing-source-inverse.json"
-MODULE = "calf-webview"
+MODULE = "nativecmpkit-webview"
 DESKTOP_FOCUS = "webview-content-policy-linux"
 ANDROID_FOCUS = "webview-content-policy-android"
 JS_FOCUS = "webview-content-policy-js"
@@ -21,19 +21,19 @@ WASM_FOCUS = "webview-content-policy-wasm"
 IOS_FOCUS = "ios-webview-content-policy"
 FOCUSES = (DESKTOP_FOCUS, ANDROID_FOCUS, JS_FOCUS, WASM_FOCUS, IOS_FOCUS)
 CONTRACT_FIELD = "webview_content_policy_source_contract"
-ANDROID_FILTER_CLASS = "com.mohamedrejeb.calf.ui.web.AndroidContentPolicyVerificationFilter"
-ANDROID_FILTER_SOURCE = "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidContentPolicyVerificationFilter.kt"
-ANDROID_AFFECTED_CLASS = "com.mohamedrejeb.calf.ui.web.AndroidWebViewLifetimeDeviceTest"
+ANDROID_FILTER_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidContentPolicyVerificationFilter"
+ANDROID_FILTER_SOURCE = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt"
+ANDROID_AFFECTED_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewLifetimeDeviceTest"
 ANDROID_AFFECTED_METHOD = "retainedStateReleasesRepeatedRealActivitiesAndViewsAndRestoresSerializedNativeState"
-ANDROID_AFFECTED_SOURCE = "calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt"
+ANDROID_AFFECTED_SOURCE = "nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt"
 ANDROID_NETWORK_SOURCES = (
-    "calf-webview/src/androidDeviceTest/AndroidManifest.xml",
-    "calf-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml",
+    "nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml",
+    "nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml",
 )
-ANDROID_SAVER_SOURCE = "calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt"
-IOS_HOST_CONTROL = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHostTest.kt"
+ANDROID_SAVER_SOURCE = "nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt"
+IOS_HOST_CONTROL = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt"
 IOS_FIXTURE = "scripts/ci/webview_content_policy_fixture.py"
-IOS_HELPER = "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosContentPolicyFixture.kt"
+IOS_HELPER = "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt"
 _METHOD = re.compile(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)")
 _DISABLED = re.compile(r"@(Ignore|Disabled|IgnoredTest)\b")
 
@@ -41,90 +41,90 @@ SPECS = {'webview-content-policy-linux': {'profile': 'webview-content-policy-lin
                                   'focus': 'webview-content-policy-linux',
                                   'slot': 'desktop-linux-x64',
                                   'suite': 'desktop',
-                                  'task': ':calf-webview:desktopTest',
-                                  'classname': 'com.mohamedrejeb.calf.ui.web.DesktopWebViewContentPolicyAcceptanceTest',
-                                  'source': 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt',
+                                  'task': ':nativecmpkit-webview:desktopTest',
+                                  'classname': 'io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewContentPolicyAcceptanceTest',
+                                  'source': 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt',
                                   'methods': ('savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory',
                                               'documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved',
                                               'unsupportedHeadersAndBaseUrlRefuseBeforeNetworkForBothEntryPoints'),
-                                  'helpers': ('calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopContentPolicyWindow.kt',
-                                              'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedWebViewContentPolicyHttpFixture.kt'),
-                                  'report_directory': 'calf-webview/build/test-results/desktopTest'},
+                                  'helpers': ('nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopContentPolicyWindow.kt',
+                                              'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt'),
+                                  'report_directory': 'nativecmpkit-webview/build/test-results/desktopTest'},
  'webview-content-policy-android': {'profile': 'webview-content-policy-android',
                                     'focus': 'webview-content-policy-android',
                                     'slot': 'android-device-api35',
                                     'suite': 'android-device',
-                                    'task': ':calf-webview:connectedAndroidDeviceTest',
-                                    'classname': 'com.mohamedrejeb.calf.ui.web.AndroidWebViewContentPolicyAcceptanceTest',
-                                    'source': 'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt',
+                                    'task': ':nativecmpkit-webview:connectedAndroidDeviceTest',
+                                    'classname': 'io.github.apdelrahman1911.nativecmpkit.ui.web.AndroidWebViewContentPolicyAcceptanceTest',
+                                    'source': 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt',
                                     'methods': ('savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory',
                                                 'documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved',
                                                 'initialHeadersRedirectsAndSubresourcesMatchStateAndNavigatorPolicy',
                                                 'relativeResourcesPreserveSupportedUnicodeEncoding'),
-                                    'helpers': ('calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedWebViewContentPolicyHttpFixture.kt',
-                                                'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt'),
-                                    'report_directory': 'calf-webview/build/outputs/androidTest-results/connected/androidMain'},
+                                    'helpers': ('nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt',
+                                                'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt'),
+                                    'report_directory': 'nativecmpkit-webview/build/outputs/androidTest-results/connected/androidMain'},
  'webview-content-policy-js': {'profile': 'webview-content-policy-js',
                                'focus': 'webview-content-policy-js',
                                'slot': 'browser-js',
                                'suite': 'js',
-                               'task': ':calf-webview:jsBrowserTest',
-                               'classname': 'com.mohamedrejeb.calf.ui.web.BrowserWebViewContentPolicyAcceptanceTest',
-                               'source': 'calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt',
+                               'task': ':nativecmpkit-webview:jsBrowserTest',
+                               'classname': 'io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewContentPolicyAcceptanceTest',
+                               'source': 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt',
                                'methods': ('savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory',
                                            'documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved',
                                            'unsupportedHeadersAndBaseUrlRefuseBeforeNetworkForBothEntryPoints'),
-                               'helpers': ('calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserContentPolicyFixture.kt',
-                                           'calf-webview/karma.config.d/nativecmpkit-content-policy-fixture.js'),
-                               'report_directory': 'calf-webview/build/test-results/jsBrowserTest'},
+                               'helpers': ('nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserContentPolicyFixture.kt',
+                                           'nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js'),
+                               'report_directory': 'nativecmpkit-webview/build/test-results/jsBrowserTest'},
  'webview-content-policy-wasm': {'profile': 'webview-content-policy-wasm',
                                  'focus': 'webview-content-policy-wasm',
                                  'slot': 'browser-wasm',
                                  'suite': 'wasm',
-                                 'task': ':calf-webview:wasmJsBrowserTest',
-                                 'classname': 'com.mohamedrejeb.calf.ui.web.BrowserWebViewContentPolicyAcceptanceTest',
-                                 'source': 'calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt',
+                                 'task': ':nativecmpkit-webview:wasmJsBrowserTest',
+                                 'classname': 'io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewContentPolicyAcceptanceTest',
+                                 'source': 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt',
                                  'methods': ('savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory',
                                              'documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved',
                                              'unsupportedHeadersAndBaseUrlRefuseBeforeNetworkForBothEntryPoints'),
-                                 'helpers': ('calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserContentPolicyFixture.kt',
-                                             'calf-webview/karma.config.d/nativecmpkit-content-policy-fixture.js'),
-                                 'report_directory': 'calf-webview/build/test-results/wasmJsBrowserTest'},
+                                 'helpers': ('nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserContentPolicyFixture.kt',
+                                             'nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js'),
+                                 'report_directory': 'nativecmpkit-webview/build/test-results/wasmJsBrowserTest'},
  'ios-webview-content-policy': {'profile': 'ios-webview-content-policy',
                                 'focus': 'ios-webview-content-policy',
                                 'slot': 'ios-iphone',
                                 'suite': 'ios',
-                                'task': ':calf-webview:iosSimulatorArm64ApplicationTest',
-                                'classname': 'com.mohamedrejeb.calf.ui.web.IosWebViewContentPolicyAcceptanceTest',
-                                'source': 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewContentPolicyAcceptanceTest.kt',
+                                'task': ':nativecmpkit-webview:iosSimulatorArm64ApplicationTest',
+                                'classname': 'io.github.apdelrahman1911.nativecmpkit.ui.web.IosWebViewContentPolicyAcceptanceTest',
+                                'source': 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt',
                                 'methods': ('savedRemainingStatesRemountWithoutBlankTitleOrFalseHistory',
                                             'documentedGetReplayAndNonSaveablePostOneTimeOptOutAreObserved',
                                             'initialHeadersRedirectsAndSubresourcesMatchStateAndNavigatorPolicy',
                                             'relativeResourcesPreserveSupportedUnicodeEncoding'),
-                                'helpers': ('calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosContentPolicyFixture.kt',
+                                'helpers': ('nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt',
                                             'scripts/ci/webview_content_policy_fixture.py',
-                                            'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHost.kt',
-                                            'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeObjectIdentity.kt'),
-                                'report_directory': 'calf-webview/build/test-results/iosSimulatorArm64ApplicationTest'}}
+                                            'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt',
+                                            'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt'),
+                                'report_directory': 'nativecmpkit-webview/build/test-results/iosSimulatorArm64ApplicationTest'}}
 
-SOURCE_SHA256 = {'calf-webview/karma.config.d/nativecmpkit-content-policy-fixture.js': 'c78874d7622fa8a507d68735305a989a5fc21b0a072098532473e6c586212d81',
- 'calf-webview/src/androidDeviceTest/AndroidManifest.xml': '4bb4a2e939562f0ca2f2973ba2438c52ccdd54be1eb500e8afa78d5a5e1b1966',
- 'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidContentPolicyVerificationFilter.kt': '592151fdea1302aece7c93f8f84d5287af9c68649698df76e6e8bc62d55ca47d',
- 'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': 'd292df9838fd7a208d97db9adf69d1b61466b0a5848955bf5e989f2467ab3564',
- 'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/AndroidWebViewLifetimeDeviceTest.kt': 'eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23',
- 'calf-webview/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
- 'calf-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml': 'd41572dbbaf67ec740c28ed69a8c5fce4223329c4c96d726f1df9a08f95de71d',
- 'calf-webview/src/androidMain/kotlin/com/mohamedrejeb/calf/ui/web/WebView.android.kt': 'e7f3e127d3f3293d21f1bc2d84d9dd6761d26f65b1b77102237521197bb045a2',
- 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopContentPolicyWindow.kt': 'e90b00f604cc16db8f26a0b8210d0fb815c0faa1af9d1d5edc11aca8ef9eb007',
- 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '79601573fea41ab8d1a78258b2de74153383a2582d9eac031deb6cfbe7e2c683',
- 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
- 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosContentPolicyFixture.kt': 'fcb6ab01848cd2b4caaa4ac2274aab6062e16cc3b29103e6da4f748aabcac7c4',
- 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '36713f1ccec7c2b19ed9abba86dd502f4108485889f7e8bb0719a735f05aead9',
- 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeObjectIdentity.kt': 'f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42',
- 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHost.kt': '0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f',
- 'calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHostTest.kt': '7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7',
- 'calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserContentPolicyFixture.kt': '94e13cf71742536efa828c737861c94063b3a35b8df0ceb9d37bad7f7e80f749',
- 'calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt': 'e31efb65ee40ba0f22c6e5c3f7dd39ce88356d35cfa7e469824f28a325e49d2d',
+SOURCE_SHA256 = {'nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js': 'c78874d7622fa8a507d68735305a989a5fc21b0a072098532473e6c586212d81',
+ 'nativecmpkit-webview/src/androidDeviceTest/AndroidManifest.xml': '4bb4a2e939562f0ca2f2973ba2438c52ccdd54be1eb500e8afa78d5a5e1b1966',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidContentPolicyVerificationFilter.kt': '592151fdea1302aece7c93f8f84d5287af9c68649698df76e6e8bc62d55ca47d',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewContentPolicyAcceptanceTest.kt': 'd292df9838fd7a208d97db9adf69d1b61466b0a5848955bf5e989f2467ab3564',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/AndroidWebViewLifetimeDeviceTest.kt': 'eae30dcbcb7b5df1fc3fb38384b9238e23acdd75d90b8f40c27eef31c8a6db23',
+ 'nativecmpkit-webview/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
+ 'nativecmpkit-webview/src/androidDeviceTest/res/xml/nativecmpkit_webview_test_network_security.xml': 'd41572dbbaf67ec740c28ed69a8c5fce4223329c4c96d726f1df9a08f95de71d',
+ 'nativecmpkit-webview/src/androidMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/WebView.android.kt': 'e7f3e127d3f3293d21f1bc2d84d9dd6761d26f65b1b77102237521197bb045a2',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopContentPolicyWindow.kt': 'e90b00f604cc16db8f26a0b8210d0fb815c0faa1af9d1d5edc11aca8ef9eb007',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt': '79601573fea41ab8d1a78258b2de74153383a2582d9eac031deb6cfbe7e2c683',
+ 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/OwnedWebViewContentPolicyHttpFixture.kt': '6b3b15646abec07088135e0de306c10c7fd577eb20a73fc1b3c2ba21df8b8499',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosContentPolicyFixture.kt': 'fcb6ab01848cd2b4caaa4ac2274aab6062e16cc3b29103e6da4f748aabcac7c4',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewContentPolicyAcceptanceTest.kt': '36713f1ccec7c2b19ed9abba86dd502f4108485889f7e8bb0719a735f05aead9',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt': 'f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt': '0a98d085f6ce1b97392c0387e6dbbc77a3a41d0e9e3bc707ef1ced462c1bdb7f',
+ 'nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHostTest.kt': '7fe27bd89424c033d4f2f319fe209d90af8156f2bef7ff3c4cf5da0e328c45c7',
+ 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserContentPolicyFixture.kt': '94e13cf71742536efa828c737861c94063b3a35b8df0ceb9d37bad7f7e80f749',
+ 'nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewContentPolicyAcceptanceTest.kt': 'e31efb65ee40ba0f22c6e5c3f7dd39ce88356d35cfa7e469824f28a325e49d2d',
  'scripts/ci/webview_content_policy_fixture.py': '7ef8dfd4e8eee68a8d584e91d3ea231daa46b15a68f36cf762ee4409c8b4d571'}
 
 
@@ -237,10 +237,10 @@ def validate_plan(test_plan: dict) -> bool:
     expected = test_plan.get("expected")
     if (type(expected) is not list or len(expected) != 1 or test_plan.get("suite") != row["suite"] or
             test_plan.get("explicit_module_subset") != [MODULE] or test_plan.get("complete_suite_requested") is not False):
-        raise ValueError("Content policy requires one exact finite suite and calf-webview module")
+        raise ValueError("Content policy requires one exact finite suite and nativecmpkit-webview module")
     item = expected[0]; contract = item.get(CONTRACT_FIELD)
     wanted = _contract(focus)
-    if (item.get("module") != MODULE or item.get("project") != ":calf-webview" or
+    if (item.get("module") != MODULE or item.get("project") != ":nativecmpkit-webview" or
             item.get("task") != row["task"] or item.get("report_directory") != row["report_directory"] or
             item.get("test_filter") != selector(focus) or item.get("required_testcases") != identities(focus) or
             type(item.get("required_original_xml")) is not int or item["required_original_xml"] != 1 or
@@ -252,7 +252,7 @@ def validate_plan(test_plan: dict) -> bool:
     if focus == ANDROID_FOCUS:
         if (item.get("test_filter_argument") != "filter" or item.get("test_exclusion_annotation") is not None or
                 type(item.get("verification_api_level")) is not int or item["verification_api_level"] != 35 or
-                item.get("agp_declared_xml_directory") != "calf-webview/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
+                item.get("agp_declared_xml_directory") != "nativecmpkit-webview/build/intermediates/android_test_results/androidMain/connectedAndroidDeviceTest" or
                 item.get("utp_results_directory") != row["report_directory"] or
                 item.get("native_fixture_paths") != [*ANDROID_NETWORK_SOURCES, row["helpers"][0],
                                                     ANDROID_AFFECTED_SOURCE, ANDROID_FILTER_SOURCE]):

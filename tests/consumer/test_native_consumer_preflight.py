@@ -60,7 +60,7 @@ class NativeConsumerPreflightSourceTest(unittest.TestCase):
         methods = self.focus.split('val methods = listOf(', 1)[1].split(')', 1)[0]
         self.assertEqual(EXPECTED_METHODS, originals)
         self.assertEqual(EXPECTED_METHODS, set(re.findall(r'"(\w+)"', methods)))
-        self.assertIn('includeTestsMatching("nativecmpkit.consumer.PublishedNativeConsumerTest.$it")', self.focus)
+        self.assertIn('includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedNativeConsumerTest.$it")', self.focus)
         self.assertIn('gradleProperty("nativecmpkitConsumerTestFocus").orElse("all")', self.build)
         self.assertIn('consumerTargets == setOf("desktop")', self.build)
         self.assertIn('consumerTestFocus in setOf("all", "native")', self.build)

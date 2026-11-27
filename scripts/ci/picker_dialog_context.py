@@ -15,7 +15,7 @@ import subprocess
 import tempfile
 import time
 
-SOURCE = "calf-file-picker/src/desktopTest/kotlin/com/mohamedrejeb/calf/picker/NativePickerComposeLifetimeTest.kt"
+SOURCE = "nativecmpkit-file-picker/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/NativePickerComposeLifetimeTest.kt"
 # This exact finite focus allocates native configs but never invokes a chooser.
 # Original/full/unknown-focus plans retain their actual portal prerequisites.
 SAVER_STATE_FOCUS = "picker-desktop-saver-state"
@@ -28,7 +28,7 @@ class OwnedPickerPortal:
         self.root, self.output = root.resolve(), output
         self.requested = (platform.system() == "Linux" and plan["suite"] == "desktop" and
             plan.get("explicit_test_focus") != SAVER_STATE_FOCUS and any(
-            item["module"] == "calf-file-picker" and SOURCE in item["test_source_files"] for item in plan["expected"]))
+            item["module"] == "nativecmpkit-file-picker" and SOURCE in item["test_source_files"] for item in plan["expected"]))
         self.environment = None
         self.receipt = None
         self.folder = None

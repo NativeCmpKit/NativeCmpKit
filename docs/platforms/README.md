@@ -59,16 +59,16 @@ mobile picker may exist but have confirmed correctness defects.
 
 ### Source evidence for unsupported/limited cells
 
-- Camera: `calf-camera-picker/src/{desktopMain,webMain}/.../CameraPickerLauncher.*.kt`.
-- Permissions: `calf-permissions/core/src/{desktopMain,jsMain,wasmJsMain}/.../
+- Camera: `nativecmpkit-camera-picker/src/{desktopMain,webMain}/.../CameraPickerLauncher.*.kt`.
+- Permissions: `nativecmpkit-permissions/core/src/{desktopMain,jsMain,wasmJsMain}/.../
   MutablePermissionState.*.kt`, corresponding multiple-state implementations,
   and no-op feature registration actuals.
-- Geo: five platform `LocationTracker` actuals under `calf-geo/src`; only Android
+- Geo: five platform `LocationTracker` actuals under `nativecmpkit-geo/src`; only Android
   creates real native updates, and those updates are not wired into public state.
 - Maps/media/notifications: absence from relevant source trees and/or
   `settings.gradle.kts`; discussed in native-features report.
-- Web IO/saving: `calf-io/src/webMain/.../KmpFileSource.web.kt` and
-  `calf-file-picker/src/webMain/.../FileSaverLauncher.web.kt`, with separate
+- Web IO/saving: `nativecmpkit-io/src/webMain/.../KmpFileSource.web.kt` and
+  `nativecmpkit-file-picker/src/webMain/.../FileSaverLauncher.web.kt`, with separate
   JS/Wasm Blob interop helpers.
 - Navigation: common `AdaptiveNavHostController`, platform `AndroidBackHandler`
   actuals, and absence of a native navigation-controller/browser-history adapter.
@@ -81,16 +81,16 @@ Picker/share Gradle host mapping names these resource directories/triples:
 
 | Directory | Rust target | Picker binary name |
 |---|---|---|
-| `macos-arm64` | `aarch64-apple-darwin` | `libcalf_filepicker_native.dylib` |
+| `macos-arm64` | `aarch64-apple-darwin` | `libnativecmpkit_filepicker_native.dylib` |
 | `macos-x64` | `x86_64-apple-darwin` | same basename |
-| `windows-x64` | `x86_64-pc-windows-msvc` | `calf_filepicker_native.dll` |
-| `linux-x64` | `x86_64-unknown-linux-gnu` | `libcalf_filepicker_native.so` |
+| `windows-x64` | `x86_64-pc-windows-msvc` | `nativecmpkit_filepicker_native.dll` |
+| `linux-x64` | `x86_64-unknown-linux-gnu` | `libnativecmpkit_filepicker_native.so` |
 | `linux-arm64` | `aarch64-unknown-linux-gnu` | same basename |
 
-Share uses the corresponding `calf_share_native` basename; availability of a
+Share uses the corresponding `nativecmpkit_share_native` basename; availability of a
 build task is not availability of a native share UI. Windows ARM64, 32-bit JVMs,
 musl Linux and unusual `os.arch` aliases require explicit investigation. JavaFX
-classifiers are constructed separately in `calf-webview/build.gradle.kts`; the
+classifiers are constructed separately in `nativecmpkit-webview/build.gradle.kts`; the
 picker's host support does not establish the WebView's support.
 
 The audited Git tree contains **no tracked `.so`, `.dll` or `.dylib` payloads**.

@@ -23,9 +23,9 @@ import verify_artifacts as gate
 
 
 BASELINE = "af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6"
-NAV_ROOT = "calf-navigation/src/commonMain/kotlin/com.mohamedrejeb.calf/navigation/"
-UI_ROOT = "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/"
-COMMON_SLIDER = "calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt"
+NAV_ROOT = "nativecmpkit-navigation/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/navigation/"
+UI_ROOT = "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/"
+COMMON_SLIDER = "nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt"
 COMMON_SLIDER_ADDITION = "6eb7c66eb01b390353100c63882cd102846c7b8d"
 COMMON_SLIDER_PARENT = "94d2492e99d5cbc060409d94d9f88febd06222d5"
 INTRODUCTIONS = {
@@ -35,10 +35,10 @@ INTRODUCTIONS = {
     UI_ROOT + "button/LiquidGlassButton.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210", UI_ROOT + "button/LiquidGlassButton.kt"),
     UI_ROOT + "slider/LiquidGlassSlider.kt": ("fce1638c011f1d5528cbf0c833bee44b64a97e90", UI_ROOT + "slider/LiquidGlassSlider.kt"),
     UI_ROOT + "utils/DragGestureInspector.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
-        "calf-ui/src/iosArm64Main/kotlin/com/mohamedrejeb/calf/ui/button/DragGestureInspector.kt"),
+        "nativecmpkit-ui/src/iosArm64Main/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/DragGestureInspector.kt"),
     UI_ROOT + "utils/DampedDragAnimation.kt": ("01a070e9866fd7cb97424f1d09249378cdec0c28", UI_ROOT + "utils/DampedDragAnimation.kt"),
     UI_ROOT + "utils/InteractiveHighlight.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
-        "calf-ui/src/iosArm64Main/kotlin/com/mohamedrejeb/calf/ui/button/InteractiveHighlight.kt"),
+        "nativecmpkit-ui/src/iosArm64Main/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/InteractiveHighlight.kt"),
 }
 APACHE_BODY = ''' * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ def archive_bytes(entries: dict[str, bytes]) -> bytes:
 
 
 class DerivedApacheSourceTest(unittest.TestCase):
-    def test_known_ui_copyright_headers_and_calf_change_notices_are_explicit(self):
+    def test_known_ui_copyright_headers_and_nativecmpkit_change_notices_are_explicit(self):
         paths = {COMMON_SLIDER: "Copyright (c) 2023-2024. Compose Cupertino project and open source contributors.",
                  **{UI_ROOT + "utils/" + name + ".kt": "Copyright 2025 Kyant"
                     for name in ("DragGestureInspector", "DampedDragAnimation", "InteractiveHighlight")}}
@@ -89,7 +89,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
             with self.subTest(source=name):
                 self.assertTrue(text.startswith("/*\n * " + copyright_text + "\n"))
                 self.assertIn(APACHE_BODY, text)
-                self.assertIn("Adapted for Calf and nativeCmpkit. Modified 2026-10-24:", text)
+                self.assertIn("Adapted for NativeCmpKit and nativeCmpkit. Modified 2026-10-24:", text)
         for path, digest in {
             "LICENSE": "188187b988999fc9f6ecdae6ba6e49e4f53f0488ec5af68acbfff3b2cf0c8722",
             "licenses/compose-cupertino-Apache-2.0.txt": "f9a85c61ba4fe8bacc300053b3384b5fc7d9f585a08dc7b9a465b7c0716c4f50",
@@ -102,7 +102,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
 
     def test_introduction_trace_matches_retained_added_paths_blobs_and_authors(self):
         history = json.loads((gate.ROOT / "licenses/derived-apache-introduction-history.json").read_text())
-        self.assertEqual(BASELINE, history["reviewed_calf_baseline"])
+        self.assertEqual(BASELINE, history["reviewed_nativecmpkit_baseline"])
         self.assertFalse(history["source_history_rewritten"])
         self.assertFalse(history["exact_original_copy_revisions_established"])
         records = {record["baseline_source_path"]: record for record in history["records"]}
@@ -320,7 +320,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
         # NAV is an unpublished experiment, not one of the 21 publication roots.
         # Model its future archive policy without changing the real allowlist or
         # mocking archive/metadata parsing and checks after construction.
-        identity_bytes = (gate.ROOT / "docs/migration/identity.json").read_bytes()
+        identity_bytes = (gate.ROOT / "docs/migration/current-identity.json").read_bytes()
         identity = gate.load_json_bytes(identity_bytes)
         self.assertNotIn(module, {item["new_artifact"] for item in identity["modules"]})
         fixture_identity = {**identity, "modules": [*identity["modules"],
@@ -333,7 +333,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
 
     def test_navigation_model_identity_is_scoped_and_default_rejection_remains(self):
         parser = gate.load_json_bytes
-        identity_path = gate.ROOT / "docs/migration/identity.json"
+        identity_path = gate.ROOT / "docs/migration/current-identity.json"
         original = identity_path.read_bytes()
         declared = self.verifier("nativecmpkit-ui").all_modules
         self.assertEqual(21, len(declared))
@@ -357,7 +357,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
 
     @staticmethod
     def notices(verifier, module=None):
-        prefix = gate.NOTICE_PREFIX if module is None else gate.NOTICE_PREFIX + "calf-" + module.removeprefix("nativecmpkit-") + "/"
+        prefix = gate.NOTICE_PREFIX if module is None else gate.NOTICE_PREFIX + "nativecmpkit-" + module.removeprefix("nativecmpkit-") + "/"
         return {prefix + name: data for name, data in verifier.expected_notices.items()}
 
     def inspect(self, module, target, kind, entries):
@@ -392,7 +392,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
         module = "nativecmpkit-ui"
         verifier = self.verifier(module)
         expected = self.applicable_sources(verifier, module, "metadata")
-        entry = "commonMain/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt"
+        entry = "commonMain/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt"
         original = expected[entry]
         for mutated in (None, original.replace(b"Copyright (c) 2023-2024. Compose Cupertino project and open source contributors.", b"", 1), original + b"\n// altered source\n"):
             entries = {**self.notices(verifier, module), **expected}
@@ -423,7 +423,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
         original = {**self.notices(verifier, module), **expected}
         for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md", "licenses/compose-cupertino-Apache-2.0.txt",
                      "licenses/android-liquid-glass-Apache-2.0.txt", "licenses/derived-apache-introduction-history.json"):
-            entry = gate.NOTICE_PREFIX + "calf-ui/" + name
+            entry = gate.NOTICE_PREFIX + "nativecmpkit-ui/" + name
             for mutation in ("missing", "truncated"):
                 entries = original.copy()
                 if mutation == "missing":
@@ -434,7 +434,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
                     result = self.inspect(module, "metadata", "sources", entries)
                     self.assertTrue(any(not check["passed"] and check["name"].endswith(":notice:" + name)
                         for check in result.checks))
-        foreign = {**{name.replace("/calf-ui/", "/calf-core/", 1): data
+        foreign = {**{name.replace("/nativecmpkit-ui/", "/nativecmpkit-core/", 1): data
             for name, data in self.notices(verifier, module).items()}, **expected}
         result = self.inspect(module, "metadata", "sources", foreign)
         self.assertTrue(any(not check["passed"] and ":notice:" in check["name"] for check in result.checks))
@@ -446,7 +446,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
                 entries = self.notices(verifier, module)
                 with self.subTest(module=module, target=target):
                     self.assert_passes(self.inspect(module, target, kind, entries))
-                    entry = gate.NOTICE_PREFIX + "calf-" + module.removeprefix("nativecmpkit-") + "/licenses/androidx-aosp-NOTICE.txt"
+                    entry = gate.NOTICE_PREFIX + "nativecmpkit-" + module.removeprefix("nativecmpkit-") + "/licenses/androidx-aosp-NOTICE.txt"
                     del entries[entry]
                     result = self.inspect(module, target, kind, entries)
                     self.assertTrue(any(not row["passed"] and row["name"].endswith(":notice:licenses/androidx-aosp-NOTICE.txt")

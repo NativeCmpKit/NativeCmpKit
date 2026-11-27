@@ -8,10 +8,10 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-SAMPLE = "sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/screens/FileSaverScreen.kt"
-COMMON_TEST = "sample/common/src/commonTest/kotlin/com/mohamedrejeb/calf/sample/screens/SampleFileSaverFeedbackTest.kt"
-DESKTOP_TEST = "sample/common/src/desktopTest/kotlin/com/mohamedrejeb/calf/sample/screens/SampleFileSaverSavedFeedbackTest.kt"
-LEGACY_WEB_SAVER = "calf-file-picker/src/webMain/kotlin/com.mohamedrejeb.calf/picker/FileSaverLauncher.web.kt"
+SAMPLE = "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/screens/FileSaverScreen.kt"
+COMMON_TEST = "sample/common/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/sample/screens/SampleFileSaverFeedbackTest.kt"
+DESKTOP_TEST = "sample/common/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/sample/screens/SampleFileSaverSavedFeedbackTest.kt"
+LEGACY_WEB_SAVER = "nativecmpkit-file-picker/src/webMain/kotlin/io.github.apdelrahman1911.nativecmpkit/picker/FileSaverLauncher.web.kt"
 
 
 class SampleFileSaverFeedbackSourceTests(unittest.TestCase):

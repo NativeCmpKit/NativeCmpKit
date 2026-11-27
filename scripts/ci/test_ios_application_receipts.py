@@ -26,7 +26,7 @@ from test_daemon_jvm import FIXTURE as SYNTHETIC_DAEMON
 DEVICE = "11111111-1111-1111-1111-111111111111"
 OUTPUT = "build/ci-verification/synthetic-ui"
 TOKEN = "b" * 32
-TASK = ":calf-ui:iosSimulatorArm64ApplicationTest"
+TASK = ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"
 PREFIX = "iosSimulatorArm64ApplicationTest."
 SUFFIX = "[iosSimulatorArm64]"
 REQUIRED = (
@@ -99,13 +99,13 @@ class IosApplicationReceipts(unittest.TestCase):
         self.output = self.root / OUTPUT
         self.app_root = self.output / "native-ui-application"
         self.receipt_path = self.app_root / TOKEN / "receipt.json"
-        self.write("settings.gradle.kts", 'include(\n    ":calf-ui",\n    ":calf-io",\n)\n')
-        for module in ["calf-ui", "calf-io"]:
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-ui",\n    ":nativecmpkit-io",\n)\n')
+        for module in ["nativecmpkit-ui", "nativecmpkit-io"]:
             self.write(module + "/build.gradle.kts", "// synthetic build")
             self.write(module + "/src/commonTest/kotlin/Common.kt", "// synthetic test")
         for name in r.IOS_APPLICATION_SOURCES:
             self.write(name, "// synthetic native host input")
-        self.plan = r.plan(self.root, "ios", only_modules=("calf-ui",))
+        self.plan = r.plan(self.root, "ios", only_modules=("nativecmpkit-ui",))
         command = struct.pack("<6I", 0x32, 24, 7, 15 << 16, 26 << 16, 0)
         self.binary = self.write(a.EXPECTED_BINARY_DIRECTORY + "/test.kexe",
             struct.pack("<8I", 0xFEEDFACF, 0x0100000C, 0, 2, 1, len(command), 0, 0) + command)
@@ -115,7 +115,7 @@ class IosApplicationReceipts(unittest.TestCase):
             "java": {"major": 17}, "rust": {"release": "1.98.0"}, "xcode": {"version": "26.0"},
             "apple_sdks": {"macosx": "26.0", "iphoneos": "26.0", "iphonesimulator": "26.0"},
             "simulator": {"udid": DEVICE, "state": "Booted", "runtime_version": "26.0"}}
-        self.cases = [{"classname": "com.mohamedrejeb.calf.ui." + c, "name": n, "status": "passed"}
+        self.cases = [{"classname": "io.github.apdelrahman1911.nativecmpkit.ui." + c, "name": n, "status": "passed"}
                       for c, n in REQUIRED]
         now = dt.datetime.now(dt.timezone.utc)
         self.document = {"schema_version": 1, "task": TASK, "transport_passed": True,
@@ -149,7 +149,7 @@ class IosApplicationReceipts(unittest.TestCase):
                 "image_profile_observations": [{"phase": "ready", "process_id": 12345}, {"phase": "complete", "rounds": 23}],
                 "system_appearance_observations": [{"phase": phase, "step": step, "style": style}
                     for phase, step, style in a.SYSTEM_APPEARANCE_STEPS]}}
-        self.modules = [{"module": "calf-ui", "task": TASK, "testcases": self.xml_cases(self.cases)}]
+        self.modules = [{"module": "nativecmpkit-ui", "task": TASK, "testcases": self.xml_cases(self.cases)}]
         self.save()
 
     def write(self, relative, data):
@@ -210,7 +210,7 @@ class IosApplicationReceipts(unittest.TestCase):
         self.assertTrue(self.collect()["errors"])
 
     def test_original_failed_image_gc_case_cannot_disappear_from_matching_green_protocol_and_xml(self):
-        cases = [c for c in self.cases if c["classname"] != "com.mohamedrejeb.calf.ui.utils.UIImageConversionTest"]
+        cases = [c for c in self.cases if c["classname"] != "io.github.apdelrahman1911.nativecmpkit.ui.utils.UIImageConversionTest"]
         self.document["application_protocol"]["testcases"] = cases
         self.document["application_protocol"]["counts"] = r.case_counts(cases)
         self.modules[0]["testcases"] = self.xml_cases(cases)
@@ -277,7 +277,7 @@ class IosApplicationReceipts(unittest.TestCase):
 
     def test_revision_dirty_bundle_and_task_identity_cannot_be_substituted(self):
         for key, value in [("source_revision", "e" * 40), ("source_tree_dirty", True),
-                           ("bundle_id", "foreign.application"), ("task", ":calf-ui:iosSimulatorArm64Test")]:
+                           ("bundle_id", "foreign.application"), ("task", ":nativecmpkit-ui:iosSimulatorArm64Test")]:
             with self.subTest(key=key):
                 original = self.document[key]; self.document[key] = value; self.save()
                 self.assertTrue(self.collect()["errors"])
@@ -377,8 +377,8 @@ class IosApplicationReceipts(unittest.TestCase):
         self.assertTrue(self.collect()["errors"])
 
     def test_non_application_ios_subset_and_other_platforms_need_no_app_receipt(self):
-        for plan in [r.plan(self.root, "ios", only_modules=("calf-io",)),
-                     r.plan(self.root, "desktop", only_modules=("calf-ui",))]:
+        for plan in [r.plan(self.root, "ios", only_modules=("nativecmpkit-io",)),
+                     r.plan(self.root, "desktop", only_modules=("nativecmpkit-ui",))]:
             result = r.collect_ios_application_receipts(self.root, plan, self.output, 0, 1, {}, [])
             self.assertEqual([], result["ios_applications"])
             self.assertEqual([], result["errors"])
@@ -396,7 +396,7 @@ class IosApplicationReceipts(unittest.TestCase):
         with patch.dict(os.environ, {"NATIVECMPKIT_UIKIT_RESULT_ROOT": "build/ci-verification/foreign"}), \
                 patch.object(r, "execute") as execute, patch.object(r, "quarantine_reports") as quarantine:
             with self.assertRaises(ValueError):
-                r.run(self.root, "ios", "build/ci-verification/not-created", DEVICE, 60, 8192, ("calf-ui",))
+                r.run(self.root, "ios", "build/ci-verification/not-created", DEVICE, 60, 8192, ("nativecmpkit-ui",))
             execute.assert_not_called(); quarantine.assert_not_called()
         self.assertFalse((self.root / "build/ci-verification/not-created").exists())
 
@@ -424,7 +424,7 @@ class IosApplicationReceipts(unittest.TestCase):
                 patch.object(r, "git_revision", return_value="a" * 40), \
                 patch.object(r, "execute", side_effect=execute), \
                 patch.dict(os.environ, {"NATIVECMPKIT_NATIVE_UI_TESTS": "true"}):
-            return r.run(self.root, "ios", OUTPUT, DEVICE, 60, 8192, ("calf-ui",))
+            return r.run(self.root, "ios", OUTPUT, DEVICE, 60, 8192, ("nativecmpkit-ui",))
 
     def test_simulated_run_threads_actual_child_environment_and_collects_agreement(self):
         result = self.simulated_run()

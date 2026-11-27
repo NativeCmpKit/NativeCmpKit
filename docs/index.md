@@ -1,6 +1,6 @@
 # NativeCmpKit
 
-Independent Kotlin Multiplatform native components, derived from Apache-2.0 Calf.
+Independent Kotlin Multiplatform native components, derived from Apache-2.0 NativeCmpKit.
 
 **Migration/audit state, not a production certification. No NativeCmpKit packages
 or releases have been published.** Original Git history and GitHub metadata are
@@ -20,7 +20,7 @@ no redeployment is authorized.
 - [Development roadmap](roadmap/README.md) and [decisions](decisions/README.md)
 - [Migration and preserved metadata](migration/README.md)
 
-Existing Kotlin imports use `com.mohamedrejeb.calf.*` deliberately; prospective
+Existing Kotlin imports use `io.github.apdelrahman1911.nativecmpkit.*` deliberately; prospective
 Maven coordinates use `io.github.apdelrahman1911.nativecmpkit:nativecmpkit-*`.
 
 The current owner-requested display/root-project name is **NativeCmpKit**.

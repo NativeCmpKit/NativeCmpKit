@@ -90,7 +90,7 @@ class AndroidDeviceBatchTests(unittest.TestCase):
             execute.assert_not_called()
         name = next(iter(fixed.BATCHES))
         original = workflow.matrix
-        for change in ({"test-modules": "calf-io,calf-webview"}, {"emulator-api": "23"},
+        for change in ({"test-modules": "nativecmpkit-io,nativecmpkit-webview"}, {"emulator-api": "23"},
                        {"runner": "self-hosted"}, {"serial-emulator-api": "23"},
                        {"test-focus": "android-io-default-decode"}):
             def changed(profile):
@@ -286,7 +286,7 @@ class AndroidDeviceBatchTests(unittest.TestCase):
             foreign = root / "unrelated/android-user"
             foreign.mkdir(parents=True)
             (foreign / "retained.txt").write_text("synthetic foreign data")
-            cached = root / "calf-permissions/core/build/compiled.txt"
+            cached = root / "nativecmpkit-permissions/core/build/compiled.txt"
             cached.parent.mkdir(parents=True)
             cached.write_text("synthetic unchanged compilation")
             result = batch.reclaim_owned_state(root, relative, route, REVISION)

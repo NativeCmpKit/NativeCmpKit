@@ -99,7 +99,7 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
         run = functions(APP_SOURCE)["run"]
         assign = next(node for node in ast.walk(run) if isinstance(node, ast.Assign) and
                       any(isinstance(target, ast.Name) and target.id == "content_fixture_requested" for target in node.targets))
-        for module in ("calf-webview", "calf-ui", "calf-share", "calf-file-picker"):
+        for module in ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-share", "nativecmpkit-file-picker"):
             for focus in (policy.IOS_FOCUS, None, r.IOS_WEBVIEW_REQUEST_FOCUS, r.IOS_WEBVIEW_REQUEST_DNS_FOCUS, r.IOS_WEBVIEW_LIFECYCLE_FOCUS):
                 namespace = {"host": {"module": module}, "focus": focus, "lt": SimpleNamespace(content_policy=policy)}
                 expression = ast.fix_missing_locations(ast.Expression(copy.deepcopy(assign.value)))
@@ -214,7 +214,7 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
             self.assertEqual(policy.IOS_FOCUS, application.application_test_focus(base + ["--ktest_gradle_filter=" + ",".join(methods)]))
         for methods in (selected[:-1], selected + [selected[0]], [policy.spec(policy.IOS_FOCUS)["classname"]], ["*"], [selected[0] + "*", *selected[1:]]):
             with self.assertRaises(ValueError): application.application_test_focus(base + ["--ktest_gradle_filter=" + ",".join(methods)])
-        host = application.application_host("calf-webview/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe", policy.IOS_FOCUS)
+        host = application.application_host("nativecmpkit-webview/build/bin/iosSimulatorArm64/applicationDebugTest/application.kexe", policy.IOS_FOCUS)
         self.assertEqual(policy.MODULE, host["module"])
 
     def test_native_case_receipt_block_requires_exact_focus_current_source_original_nonce_and_actual_protocol_witnesses(self):
@@ -247,7 +247,7 @@ class WebViewContentPolicyApplicationRoutingControls(unittest.TestCase):
             plan = r.plan(root, "ios", only_modules=(policy.MODULE,)); item = plan["expected"][0]
             self.assertIn(policy.spec(policy.IOS_FOCUS)["source"], item["test_source_files"])
             self.assertNotIn("test_filter", item); self.assertNotIn(policy.CONTRACT_FIELD, item)
-        host = (ROOT / "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeWebViewApplicationHost.kt").read_text()
+        host = (ROOT / "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeWebViewApplicationHost.kt").read_text()
         self.assertIn("testLauncherEntryPoint(it)", host)
         helper = (ROOT / policy.IOS_HELPER).read_text()
         for name in ("NATIVECMPKIT_WEBVIEW_CONTENT_TOKEN", "NATIVECMPKIT_WEBVIEW_CONTENT_ORIGIN_PORT", "NATIVECMPKIT_WEBVIEW_CONTENT_SECOND_PORT"):

@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const test = require('node:test');
 const crypto = require('node:crypto');
 
-const sourcePath = path.resolve(__dirname, '../../calf-webview/karma.config.d/nativecmpkit-content-policy-fixture.js');
+const sourcePath = path.resolve(__dirname, '../../nativecmpkit-webview/karma.config.d/nativecmpkit-content-policy-fixture.js');
 async function withFixture(method, body) {
   const config = { plugins: [], middleware: [] };
   vm.runInNewContext(fs.readFileSync(sourcePath, 'utf8'), { config, URL, Buffer, setTimeout, clearTimeout, Map, Set, Promise });

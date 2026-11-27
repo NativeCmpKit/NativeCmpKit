@@ -38,7 +38,7 @@ class IOSPermissionSafetyFocusTests(unittest.TestCase):
         self.assertEqual(r.IOS_PERMISSION_MODULE, rows[0]["test-modules"])
         self.assertEqual(r.IOS_PERMISSION_SAFETY_FOCUS, rows[0]["test-focus"])
         plan = self.plan()
-        expected = [{"classname": "iosSimulatorArm64Test.com.mohamedrejeb.calf.permissions.IOSPermissionSafetyAcceptanceTest",
+        expected = [{"classname": "iosSimulatorArm64Test.io.github.apdelrahman1911.nativecmpkit.permissions.IOSPermissionSafetyAcceptanceTest",
                      "name": name + "[iosSimulatorArm64]"} for name in r.IOS_PERMISSION_SAFETY_METHODS]
         self.assertEqual(expected, plan["expected"][0]["required_testcases"])
         self.assertFalse(plan["complete_suite_requested"])
@@ -50,12 +50,12 @@ class IOSPermissionSafetyFocusTests(unittest.TestCase):
         self.assertEqual(0, result["totals"]["not_applicable"])
 
     def test_wrong_scope_and_weaker_or_arbitrary_filters_are_rejected(self):
-        for suite, modules in (("desktop", (r.IOS_PERMISSION_MODULE,)), ("ios", ("calf-ui",)),
+        for suite, modules in (("desktop", (r.IOS_PERMISSION_MODULE,)), ("ios", ("nativecmpkit-ui",)),
                                ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PERMISSION_SAFETY_FOCUS)
         for key, value in (("test_filter", "*"), ("required_testcases", []),
-                           ("task", ":calf-permissions:calf-permissions-core:publish")):
+                           ("task", ":nativecmpkit-permissions:nativecmpkit-permissions-core:publish")):
             plan = copy.deepcopy(self.plan())
             plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -66,7 +66,7 @@ class IOSPermissionSafetyFocusTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "settings.gradle.kts").write_text(
-                'include(":calf-permissions:core")\nproject(":calf-permissions:core").name = "calf-permissions-core"\n')
+                'include(":nativecmpkit-permissions:core")\nproject(":nativecmpkit-permissions:core").name = "nativecmpkit-permissions-core"\n')
             module = root / r.IOS_PERMISSION_MODULE
             module.mkdir(parents=True)
             (module / "build.gradle.kts").write_text("// Synthetic discovery fixture\n")
@@ -108,7 +108,7 @@ class IOSPermissionSafetyFocusTests(unittest.TestCase):
             self.assertIn(required, source)
         self.assertNotIn("Dispatchers.setMain", source)
         self.assertNotIn("PermissionBackend", source)
-        controller = (r.ROOT / "calf-permissions/core/src/commonMain/kotlin/com.mohamedrejeb.calf/permissions/CallbackPermissionState.kt").read_text()
+        controller = (r.ROOT / "nativecmpkit-permissions/core/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/CallbackPermissionState.kt").read_text()
         self.assertIn("SupervisorJob(scope.coroutineContext[Job])", controller)
         self.assertIn("try { owned?.dispose() } finally { operationJob.cancel() }", controller)
 

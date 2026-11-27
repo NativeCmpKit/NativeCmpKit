@@ -22,34 +22,34 @@ import library_tests as r
 import workflow_matrix as matrix
 
 FOCUS = 'android-io-reference-regressions'
-CLASS = 'com.mohamedrejeb.calf.io.AndroidIoReferenceRegressionTest'
+CLASS = 'io.github.apdelrahman1911.nativecmpkit.io.AndroidIoReferenceRegressionTest'
 SOURCE = helper.KOTLIN + 'AndroidIoReferenceRegressionTest.kt'
 CALLER = helper.KOTLIN + 'AndroidIoSingleDocumentGrantActivity.kt'
 OWNER = helper.JAVA + 'IoSingleDocumentGrantActivity.java'
 PROVIDER = helper.KOTLIN + 'instrumentation/DeviceIoFileProvider.kt'
-PATHS = 'calf-io/src/androidDeviceTest/res/xml/nativecmpkit_io_device_paths.xml'
-REPORTER_MANIFEST = 'calf-io/src/androidDeviceTest/AndroidManifest.xml'
+PATHS = 'nativecmpkit-io/src/androidDeviceTest/res/xml/nativecmpkit_io_device_paths.xml'
+REPORTER_MANIFEST = 'nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml'
 ANDROID = '{http://schemas.android.com/apk/res/android}'
 METHODS = (
     'nativeFileProviderSingleFileMetadataAndNonPersistableAccessStayDistinctFromTrees',
     'nativeSandboxFileUriSupportsDecodedPathsBookmarksDirectoriesAndMissingReadFailures',
     'nativeOrdinaryDocumentGrantBookmarkAndOwnerRevokeNeverBecomeTreeAccess',
 )
-BASE_ANDROID_MODULES = {'calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview',
-                        'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker'}
+BASE_ANDROID_MODULES = {'nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview',
+                        'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker'}
 
 
 class AndroidIoReferenceRegressionGuards(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix='nativecmpkit-io-reference-model-')
         self.addCleanup(temporary.cleanup); self.root = Path(temporary.name)
-        self.write('settings.gradle.kts', 'include(\n    ":calf-io",\n)\n')
-        self.write('calf-io/src/commonTest/kotlin/Unrelated.kt', '// retained, never selected for execution\n')
+        self.write('settings.gradle.kts', 'include(\n    ":nativecmpkit-io",\n)\n')
+        self.write('nativecmpkit-io/src/commonTest/kotlin/Unrelated.kt', '// retained, never selected for execution\n')
         for relative in (*helper.SOURCE_FILES, 'scripts/ci/android_io_documents.py',
                 'scripts/ci/library_tests.py', 'scripts/ci/dependency_cache_inputs.py',
                 'scripts/ci/library_dependency_cache.py', 'scripts/ci/runtime_context.py'):
             self.copy(relative)
-        for relative in (helper.FIXTURE, 'calf-io/src/androidDeviceTest'):
+        for relative in (helper.FIXTURE, 'nativecmpkit-io/src/androidDeviceTest'):
             for path in (r.ROOT / relative).rglob('*'):
                 if path.is_file() and 'build' not in path.relative_to(r.ROOT).parts:
                     self.copy(path.relative_to(r.ROOT).as_posix())
@@ -63,7 +63,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
         target.write_text(value); return target
 
     def plan(self):
-        return r.plan(self.root, 'android-device', only_modules=('calf-io',), focus=FOCUS)
+        return r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',), focus=FOCUS)
 
     def identities(self):
         return [{'classname': CLASS, 'name': method} for method in METHODS]
@@ -105,12 +105,12 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
                                  Counter({plan['expected'][0]['task']: marker}))
 
     def test_exact_three_authored_methods_class_dependencies_and_one_real_task_only(self):
-        self.assertTrue(r.allowed_test_focus('android-device', ('calf-io',), FOCUS))
+        self.assertTrue(r.allowed_test_focus('android-device', ('nativecmpkit-io',), FOCUS))
         plan = self.plan(); item, = plan['expected']
         self.assertTrue(r.validate_test_focus(plan)); self.assertFalse(plan['complete_suite_requested'])
         self.assertEqual(CLASS, item['test_filter']); self.assertEqual(self.identities(), item['required_testcases'])
-        self.assertEqual(':calf-io:connectedAndroidDeviceTest', item['task'])
-        self.assertEqual('calf-io/build/outputs/androidTest-results/connected/androidMain', item['report_directory'])
+        self.assertEqual(':nativecmpkit-io:connectedAndroidDeviceTest', item['task'])
+        self.assertEqual('nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain', item['report_directory'])
         for relative in (SOURCE, CALLER, PROVIDER, helper.KOTLIN + 'DeviceDescriptorProbe.kt',
                          helper.KOTLIN + 'OwnedIoEndpoint.kt', helper.KOTLIN + 'AndroidIoProviderContract.kt'):
             self.assertIn(relative, item['test_source_files'])
@@ -121,7 +121,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
 
     def test_new_profile_options_are_exact_additions_without_a_future_module_maximum(self):
         row, = matrix.matrix(FOCUS)['include']
-        self.assertEqual(('android-device-api35', 'android-device', '35', 'calf-io', FOCUS),
+        self.assertEqual(('android-device-api35', 'android-device', '35', 'nativecmpkit-io', FOCUS),
                          (row['slot'], row['suite'], row['emulator-api'], row['test-modules'], row['test-focus']))
         self.assertEqual(11, len(matrix.matrix('all')['include']))
         self.assertTrue(BASE_ANDROID_MODULES <= set(r.MINIMUM_MODULES['android-device']))
@@ -133,23 +133,23 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
         self.assertIn('build-tools;36.0.0', workflow)
 
     def test_wrong_suite_module_duplicate_wildcard_and_api23_fail_before_host_or_outputs(self):
-        for suite, modules, focus in (('desktop', ('calf-io',), FOCUS), ('android-host', ('calf-io',), FOCUS),
-                ('android-device', ('calf-ui',), FOCUS), ('android-device', ('calf-io', 'calf-io'), FOCUS),
-                ('android-device', ('calf-io', 'calf-ui'), FOCUS), ('android-device', ('calf-io',), 'android-io-reference-*')):
+        for suite, modules, focus in (('desktop', ('nativecmpkit-io',), FOCUS), ('android-host', ('nativecmpkit-io',), FOCUS),
+                ('android-device', ('nativecmpkit-ui',), FOCUS), ('android-device', ('nativecmpkit-io', 'nativecmpkit-io'), FOCUS),
+                ('android-device', ('nativecmpkit-io', 'nativecmpkit-ui'), FOCUS), ('android-device', ('nativecmpkit-io',), 'android-io-reference-*')):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
         with patch.object(device, 'require_host') as host:
             with self.assertRaises(ValueError):
-                device.run(self.root, 'build/ci-verification/refused', only_modules=('calf-io',), focus=FOCUS, api_level=23)
+                device.run(self.root, 'build/ci-verification/refused', only_modules=('nativecmpkit-io',), focus=FOCUS, api_level=23)
             host.assert_not_called()
         self.assertFalse((self.root / 'build').exists())
 
     def test_two_real_read_only_clis_select_only_the_three_cases_without_outputs_or_builds(self):
         commands = [
             [sys.executable, '-B', str(r.ROOT / 'scripts/ci/library_tests.py'), 'plan',
-             '--suite', 'android-device', '--module', 'calf-io', '--focus', FOCUS],
+             '--suite', 'android-device', '--module', 'nativecmpkit-io', '--focus', FOCUS],
             [sys.executable, '-B', str(r.ROOT / 'scripts/ci/android_device_tests.py'), 'plan',
-             '--output', 'build/ci-plan', '--api-level', '35', '--module', 'calf-io', '--focus', FOCUS],
+             '--output', 'build/ci-plan', '--api-level', '35', '--module', 'nativecmpkit-io', '--focus', FOCUS],
         ]
         for command in commands:
             result = subprocess.run(command, cwd=r.ROOT, capture_output=True, text=True, timeout=30, check=False)
@@ -168,13 +168,13 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
         self.assertEqual(0, result['library_tests_executed']); self.assertEqual(1, row['expected_modules'])
         self.assertEqual(str(self.root / 'scripts/ci/android_device_tests.py'), command[2])
         self.assertEqual('plan', command[3]); self.assertEqual('35', command[command.index('--api-level') + 1])
-        self.assertEqual(FOCUS, command[command.index('--focus') + 1]); self.assertEqual('calf-io', command[command.index('--module') + 1])
+        self.assertEqual(FOCUS, command[command.index('--focus') + 1]); self.assertEqual('nativecmpkit-io', command[command.index('--module') + 1])
         self.assertNotIn('run', command); self.assertFalse((self.root / 'build').exists())
 
     def test_changed_filter_route_identity_source_list_and_expected_order_cannot_be_laundered(self):
         original = self.plan()
-        for key, value in (('module', 'calf-ui'), ('project', ':calf-ui'), ('task', ':calf-io:testAndroidHostTest'),
-                ('report_directory', 'calf-io/build/test-results/desktopTest'), ('test_filter', CLASS + '#*'),
+        for key, value in (('module', 'nativecmpkit-ui'), ('project', ':nativecmpkit-ui'), ('task', ':nativecmpkit-io:testAndroidHostTest'),
+                ('report_directory', 'nativecmpkit-io/build/test-results/desktopTest'), ('test_filter', CLASS + '#*'),
                 ('required_testcases', self.identities()[:-1]), ('required_testcases', self.identities()[::-1]),
                 ('required_testcases', self.identities() + self.identities()[:1]), ('test_filter_argument', 'annotation'),
                 ('test_exclusion_annotation', 'org.junit.Test')):
@@ -184,7 +184,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
                          helper.KOTLIN + 'OwnedIoEndpoint.kt', helper.KOTLIN + 'AndroidIoProviderContract.kt'):
             altered = deepcopy(original); altered['expected'][0]['test_source_files'].remove(relative)
             with self.subTest(relative=relative), self.assertRaises(ValueError): r.validate_test_focus(altered)
-        for key, value in (('complete_suite_requested', True), ('explicit_module_subset', ['calf-ui']), ('suite', 'desktop')):
+        for key, value in (('complete_suite_requested', True), ('explicit_module_subset', ['nativecmpkit-ui']), ('suite', 'desktop')):
             altered = deepcopy(original); altered[key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): r.validate_test_focus(altered)
         altered = deepcopy(original); altered.pop('android_io_documents')
@@ -300,7 +300,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
         for name in helper.JAVA_NAMES: self.assertIn(helper.JAVA + name + '.java', values)
         self.write(helper.FIXTURE + '/build/outputs/apk/debug/fake.apk', 'not compiler or native proof')
         self.write(helper.FIXTURE + '/build/android-user/debug.keystore', 'not a source input')
-        self.write('calf-io/build/outputs/androidTest-results/connected/androidMain/TEST-fake.xml', '<testsuite/>')
+        self.write('nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain/TEST-fake.xml', '<testsuite/>')
         self.assertEqual(values, r.snapshot_inputs(self.root))
 
     def test_exact_io_adapter_manifest_configs_key_dependencies_but_java_library_sources_signing_xml_and_outputs_do_not(self):
@@ -318,7 +318,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
             self.assertEqual(before, cache.fingerprint('libraries', cache.selected_inputs(self.root, 'libraries')))
             path.write_bytes(original)
         for relative in (helper.FIXTURE + '/build/outputs/apk/debug/fake.apk', helper.FIXTURE + '/build/android-user/debug.keystore',
-                         'calf-io/build/outputs/androidTest-results/connected/androidMain/TEST-fake.xml'):
+                         'nativecmpkit-io/build/outputs/androidTest-results/connected/androidMain/TEST-fake.xml'):
             self.write(relative, 'not a dependency-policy input')
         self.assertEqual(before, cache.fingerprint('libraries', cache.selected_inputs(self.root, 'libraries')))
         for scope in ('core-io', 'webview'):
@@ -330,12 +330,12 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
         with self.assertRaises(ValueError):
             r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL)
         command = r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL, android_io_documents_receipt=prepared)
-        self.assertEqual(1, command.count(':calf-io:connectedAndroidDeviceTest'))
+        self.assertEqual(1, command.count(':nativecmpkit-io:connectedAndroidDeviceTest'))
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.class=' + CLASS, command)
         self.assertIn('-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedIoDocuments=true', command)
         self.assertFalse(any('#' in value or 'Arguments.annotation=' in value for value in command))
         assembly = r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL, for_assembly=True)
-        self.assertIn(':calf-io:assembleAndroidDeviceTest', assembly); self.assertNotIn(':calf-io:connectedAndroidDeviceTest', assembly)
+        self.assertIn(':nativecmpkit-io:assembleAndroidDeviceTest', assembly); self.assertNotIn(':nativecmpkit-io:connectedAndroidDeviceTest', assembly)
         self.assertFalse(any('nativecmpkitOwnedIoDocuments=' in value for value in assembly))
         altered = deepcopy(prepared); altered['apk_policy']['signature_verification_min_sdk_version'] = True
         with self.assertRaises(ValueError):
@@ -347,7 +347,7 @@ class AndroidIoReferenceRegressionGuards(unittest.TestCase):
               patch.object(device, 'sdk_assets', side_effect=ValueError('private-sentinel-error-body')),
               patch.object(device.lt, 'execute') as execute):
             with self.assertRaises(ValueError):
-                device._run(self.root, 'build/ci-verification/reference-sdk-refused', ('calf-io',), focus=FOCUS)
+                device._run(self.root, 'build/ci-verification/reference-sdk-refused', ('nativecmpkit-io',), focus=FOCUS)
             execute.assert_not_called()
         receipt = self.root / 'build/ci-verification/reference-sdk-refused/preflight.json'
         self.assertTrue(receipt.is_file()); value = json.loads(receipt.read_text())

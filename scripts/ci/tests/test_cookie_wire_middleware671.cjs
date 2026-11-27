@@ -7,7 +7,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { EventEmitter } = require('node:events');
 const root = path.resolve(__dirname, '../../..');
-const source = fs.readFileSync(path.join(root, 'calf-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js'), 'utf8');
+const source = fs.readFileSync(path.join(root, 'nativecmpkit-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js'), 'utf8');
 const specPath = path.join(root, 'scripts/ci/fixtures/cookie-wire-v1.json');
 const token = '0'.repeat(32), owner = '1'.repeat(32), foreignToken = '2'.repeat(32), foreignOwner = '3'.repeat(32);
 const host = 'r' + token + '.nativecmpkit.test';

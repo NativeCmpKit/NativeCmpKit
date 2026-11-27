@@ -58,7 +58,7 @@ class DaemonJvmTests(unittest.TestCase):
 
     def test_all_real_suite_commands_include_one_actual_root_daemon_init(self):
         for suite in r.SUITES:
-            plan = {"suite": suite, "expected": [{"task": ":calf-fixture:" + r.SUITES[suite][0]}]}
+            plan = {"suite": suite, "expected": [{"task": ":nativecmpkit-fixture:" + r.SUITES[suite][0]}]}
             kwargs = {"simulator": "11111111-1111-1111-1111-111111111111"} if suite == "ios" else {}
             if suite == "android-device": kwargs["android_serial"] = "emulator-5588"
             command = r.gradle_command(suite, plan, **kwargs)

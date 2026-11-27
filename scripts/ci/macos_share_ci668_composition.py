@@ -92,11 +92,11 @@ ANDROID_TRANSITION_ENDPOINT = {'sha256': 'ebb781e0e1c62f34f774d6dae737b822509810
 ANDROID_AUTHOR_RECIPE_SHA256 = 'e2260f56286ee946bed458e76e2d29126d80c6f6ce3fb1b04ab19b2da02562e6'
 ANDROID_AUTHOR_FINAL_MAP_SHA256 = '39c02ea6930a7024a1dd83bda1a6dc6236894937ea75f7a11c2702157a8b81c8'
 ANDROID_ORIGINAL_BINDINGS_SHA256 = '3798f3f00f7304b25ba30d71b49ea1d07155e1db5c77a4a127f1df05ed551f1a'
-ANDROID_PATCH_FRAGMENT_COUNTS = {'scripts/ci/library_tests.py': 10, 'scripts/ci/android_device_tests.py': 15, 'scripts/ci/workflow_matrix.py': 4, 'scripts/ci/android_storage_probe.py': 3, 'calf-permissions/core/src/androidDeviceTest/AndroidManifest.xml': 1, '.github/workflows/gradle.yml': 3}
+ANDROID_PATCH_FRAGMENT_COUNTS = {'scripts/ci/library_tests.py': 10, 'scripts/ci/android_device_tests.py': 15, 'scripts/ci/workflow_matrix.py': 4, 'scripts/ci/android_storage_probe.py': 3, 'nativecmpkit-permissions/core/src/androidDeviceTest/AndroidManifest.xml': 1, '.github/workflows/gradle.yml': 3}
 ANDROID_CONTEXT_FRAGMENT_COUNTS = {'scripts/ci/test_ci668_outer_source_projection.py': 1, 'scripts/ci/test_producer698_batch_source_fixture_recovery.py': 1, 'scripts/ci/tests/test_cookie_ci668_outer_scope609.py': 1, 'scripts/ci/cookie_ci668_outer_source_projection.py': 4, 'scripts/ci/fixtures/cookie-ci668-outer-source-inverse.json': 2}
 ANDROID_PATCH_PATHS = frozenset(ANDROID_PATCH_FRAGMENT_COUNTS)
 ANDROID_BOUND_PATHS = ANDROID_PATCH_PATHS | frozenset(ANDROID_CONTEXT_FRAGMENT_COUNTS)
-ANDROID_SOURCE_INPUTS = frozenset(['calf-permissions/core/src/androidDeviceTest/AndroidManifest.xml', 'calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/AndroidPermissionLifecycleDeviceTest.kt', 'calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/OwnedPermissionLifecycle.kt', 'calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/PermissionLifecycleSystemUi.kt', 'scripts/ci/android_permission_lifecycle.py', 'scripts/ci/android_permission_lifecycle_contract.py', 'scripts/ci/test_android_permission_lifecycle_source.py', 'tests/consumer/android-permission-lifecycle/build.gradle.kts', 'tests/consumer/android-permission-lifecycle/gradle.properties', 'tests/consumer/android-permission-lifecycle/settings.gradle.kts', 'tests/consumer/android-permission-lifecycle/src/main/AndroidManifest.xml', 'tests/consumer/android-permission-lifecycle/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/permissionlifecycle/PermissionLifecycleActivity.kt', 'tests/consumer/android-permission-lifecycle/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/permissionlifecycle/PermissionLifecycleService.kt'])
+ANDROID_SOURCE_INPUTS = frozenset(['nativecmpkit-permissions/core/src/androidDeviceTest/AndroidManifest.xml', 'nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/AndroidPermissionLifecycleDeviceTest.kt', 'nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/OwnedPermissionLifecycle.kt', 'nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/PermissionLifecycleSystemUi.kt', 'scripts/ci/android_permission_lifecycle.py', 'scripts/ci/android_permission_lifecycle_contract.py', 'scripts/ci/test_android_permission_lifecycle_source.py', 'tests/consumer/android-permission-lifecycle/build.gradle.kts', 'tests/consumer/android-permission-lifecycle/gradle.properties', 'tests/consumer/android-permission-lifecycle/settings.gradle.kts', 'tests/consumer/android-permission-lifecycle/src/main/AndroidManifest.xml', 'tests/consumer/android-permission-lifecycle/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/permissionlifecycle/PermissionLifecycleActivity.kt', 'tests/consumer/android-permission-lifecycle/src/main/kotlin/io/github/apdelrahman1911/nativecmpkit/verification/permissionlifecycle/PermissionLifecycleService.kt'])
 ANDROID_ADDED_INPUTS = ANDROID_SOURCE_INPUTS | {ANDROID_SPEC, ANDROID_CONTROL, ANDROID_MEMO, ANDROID_BRIDGE}
 ANDROID_GENERIC_EXCLUSIONS = ANDROID_ADDED_INPUTS | {NEW_COOKIE_CONTROL}
 ADDED_INPUTS = frozenset({NEW_CONTROL, NEW_DOC, BUDGET707_CONTROL,
@@ -689,7 +689,7 @@ def _shape(document, root=ROOT):
             need(row["sha256"] == ancestors[view][relative], "sealed-share-CI-ancestor-identity-required")
     # Resolve the five real ancestor conflicts by owning identity, not union order.
     owning = {WORKFLOW: CI_VIEW, LIBRARY: SHARE_VIEW, CI_OWNER: CI_VIEW,
-              "calf-webview/build.gradle.kts": COOKIE_VIEW,
+              "nativecmpkit-webview/build.gradle.kts": COOKIE_VIEW,
               "scripts/ci/ios_ui_application.py": COOKIE_VIEW}
     base = {}
     conflicts = set()
@@ -706,13 +706,13 @@ def _shape(document, root=ROOT):
     need(len(base) == 260, "exact-historical-three-view-import260-required")
     producer = ancestors[PRODUCER_VIEW]
     producer_conflicts = {name for name in set(base) & set(producer) if base[name] != producer[name]}
-    need(producer_conflicts == {CI_OWNER, LIBRARY, "calf-webview/build.gradle.kts",
+    need(producer_conflicts == {CI_OWNER, LIBRARY, "nativecmpkit-webview/build.gradle.kts",
          "scripts/ci/ios_ui_application.py", OFFLINE, UI_SPLIT_CONTROL, CI_CONTROL},
          "exact-seven-producer-Cookie-Share-source-conflicts-required")
     base.update(producer)
     # Explicit owning decisions, never a union-order overlay or blanket repin.
     for relative, view in {CI_OWNER: CI_VIEW, LIBRARY: SHARE_VIEW,
-            "calf-webview/build.gradle.kts": COOKIE_VIEW,
+            "nativecmpkit-webview/build.gradle.kts": COOKIE_VIEW,
             "scripts/ci/ios_ui_application.py": COOKIE_VIEW,
             OFFLINE: PRODUCER_VIEW, UI_SPLIT_CONTROL: PRODUCER_VIEW,
             CI_CONTROL: PRODUCER_VIEW}.items():

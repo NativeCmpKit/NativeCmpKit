@@ -46,7 +46,7 @@ class IOSPermissionBatchFocusTests(unittest.TestCase):
         self.assertTrue(r.validate_test_focus(plan))
         self.assertFalse(plan["complete_suite_requested"])
         item, = plan["expected"]
-        self.assertEqual(":calf-permissions:calf-permissions-core:iosSimulatorArm64Test", item["task"])
+        self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core:iosSimulatorArm64Test", item["task"])
         self.assertEqual(r.IOS_PERMISSION_BATCH_CLASS, item["test_filter"])
         self.assertEqual([{"classname": "iosSimulatorArm64Test." + r.IOS_PERMISSION_BATCH_CLASS,
                            "name": r.IOS_PERMISSION_BATCH_METHODS[0] + "[iosSimulatorArm64]"}],
@@ -69,14 +69,14 @@ class IOSPermissionBatchFocusTests(unittest.TestCase):
 
     def test_cross_scope_arbitrary_filters_and_false_complete_claims_are_rejected(self):
         for suite, modules in (("desktop", (r.IOS_PERMISSION_MODULE,)), ("js", (r.IOS_PERMISSION_MODULE,)),
-                               ("ios", ("calf-ui",)), ("ios", None)):
+                               ("ios", ("nativecmpkit-ui",)), ("ios", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(r.ROOT, suite, only_modules=modules, focus=r.IOS_PERMISSION_BATCH_FOCUS)
         for section, key, value in (("item", "test_filter", "*"),
                                     ("item", "test_filter", r.IOS_PERMISSION_SAFETY_CLASS),
                                     ("item", "required_testcases", []),
                                     ("item", "required_testcases", r.ios_permission_safety_identities()),
-                                    ("item", "task", ":calf-permissions:calf-permissions-core:publish"),
+                                    ("item", "task", ":nativecmpkit-permissions:nativecmpkit-permissions-core:publish"),
                                     ("plan", "complete_suite_requested", True)):
             plan = copy.deepcopy(self.plan())
             (plan if section == "plan" else plan["expected"][0])[key] = value
@@ -122,7 +122,7 @@ class IOSPermissionBatchFocusTests(unittest.TestCase):
             self.assertIn(required, source)
         self.assertNotIn("Dispatchers.setMain", source)
         self.assertNotIn("PermissionDelegateRegistry.register", source)
-        owning = (r.ROOT / "calf-permissions/core/src/iosMain/kotlin/com.mohamedrejeb.calf/permissions/MutableMultiplePermissionsState.ios.kt").read_text()
+        owning = (r.ROOT / "nativecmpkit-permissions/core/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/MutableMultiplePermissionsState.ios.kt").read_text()
         self.assertIn("SupervisorJob(scope.coroutineContext[Job])", owning)
         self.assertIn("try { batch.dispose() } finally { operationJob.cancel() }", owning)
 

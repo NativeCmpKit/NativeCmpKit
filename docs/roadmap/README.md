@@ -193,7 +193,7 @@ of the generated 170-item audit/history backlog. The original migration snapshot
 had 168 open/three closed issues; Pages closure makes 167 open/four closed before
 any development fixes. Future counts require current readback, not this snapshot.
 
-**Upstream-first prerequisite completed:** all 16 currently open Calf issues were
+**Upstream-first prerequisite completed:** all 16 currently open NativeCmpKit issues were
 reconciled, their original descriptions/discussion and labels preserved on existing
 tickets, and 16 context comments independently read back. No duplicate issues
 were created. See the [completion receipt](../development/upstream-sync-20261024T183300Z/completion.json).

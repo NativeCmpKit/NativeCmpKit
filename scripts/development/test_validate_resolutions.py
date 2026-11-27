@@ -435,7 +435,7 @@ class ResolutionFixtures(unittest.TestCase):
                 self.assertEqual(f"[{path}]({relative})", validator.doc_link(path))
 
     def test_repository_links_keep_the_repository_root_relative_path(self) -> None:
-        for path in ("AGENTS.md", "scripts/development/validate_resolutions.py", "calf-io/src/File.kt"):
+        for path in ("AGENTS.md", "scripts/development/validate_resolutions.py", "nativecmpkit-io/src/File.kt"):
             with self.subTest(path=path):
                 self.assertTrue(validator.doc_link(path).endswith(f"(../../{path})"))
 

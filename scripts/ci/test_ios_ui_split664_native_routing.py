@@ -35,8 +35,8 @@ from test_ios_ui_related_native_wiring import NEW_UUID, PRE_UUID, synthetic_cont
 
 ROOT = Path(__file__).resolve().parents[2]
 PROFILES = ("ios-ui-related-nine-ios26plus", "ios-ui-adaptive-customization-ios26plus")
-TASKS = (":calf-ui:iosSimulatorArm64UiNineApplicationTest",
-         ":calf-ui:iosSimulatorArm64AdaptiveCustomizationApplicationTest")
+TASKS = (":nativecmpkit-ui:iosSimulatorArm64UiNineApplicationTest",
+         ":nativecmpkit-ui:iosSimulatorArm64AdaptiveCustomizationApplicationTest")
 CHILDREN = ("native-ui-nine-application", "native-adaptive-customization-application")
 CUSTOM = adaptive.CUSTOM_SOURCE
 CURRENT_CUSTOM = "b58eafaa3f097de27d0e8babe1059ce818fca903d954a77cdbd2a4c1a73252b9"
@@ -62,10 +62,10 @@ def copy_inputs(root, *, complete=True):
 
 
 def model_plan(focus):
-    return {"schema_version": 1, "suite": "ios", "explicit_module_subset": ["calf-ui"],
+    return {"schema_version": 1, "suite": "ios", "explicit_module_subset": ["nativecmpkit-ui"],
             "explicit_test_focus": focus, "complete_suite_requested": False,
-            "expected": [{"module": "calf-ui", "project": ":calf-ui", "task": related.task(focus),
-                          "report_directory": "calf-ui/build/test-results/" + related.task_name(focus),
+            "expected": [{"module": "nativecmpkit-ui", "project": ":nativecmpkit-ui", "task": related.task(focus),
+                          "report_directory": "nativecmpkit-ui/build/test-results/" + related.task_name(focus),
                           "native_test_host": "genuine-uikit-application", "test_source_sets": ["iosTest"],
                           "test_source_files": sorted(related.sources(focus)),
                           "test_filter": ",".join(related.selectors(focus)),
@@ -117,7 +117,7 @@ class UiSplit664SourceControls(unittest.TestCase):
         helper = library.secure_alert.HELPER
         target = fixture.root / helper; target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes((ROOT / helper).read_bytes())
-        fixture.plan = library.plan(fixture.root, "ios", only_modules=("calf-ui",), focus=focus)
+        fixture.plan = library.plan(fixture.root, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
         context = synthetic_context(focus, NEW_UUID)
         context.update({key: fixture.context[key] for key in ("java", "rust", "xcode", "apple_sdks")})
         fixture.context = context
@@ -134,7 +134,7 @@ class UiSplit664SourceControls(unittest.TestCase):
         for key in ("image_lifetime_observation", "image_profile_observations", "system_appearance_observations"):
             protocol.pop(key, None)
         xml, _ = model_cases(focus)
-        fixture.modules = [{"module": "calf-ui", "task": related.task(focus), "testcases": xml}]
+        fixture.modules = [{"module": "nativecmpkit-ui", "task": related.task(focus), "testcases": xml}]
         fixture.app_root = fixture.output / related.receipt_subdirectory(focus)
         fixture.receipt_path = fixture.app_root / ("b" * 32) / "receipt.json"
         fixture.save(); write_admission(fixture.root, focus)
@@ -146,7 +146,7 @@ class UiSplit664SourceControls(unittest.TestCase):
         ten = related.selectors(related.FOCUSES[1]); pre = related.selectors(related.FOCUSES[0])
         self.assertEqual((9, 1, 10, 4), tuple(map(len, (nine, one, ten, pre))))
         self.assertEqual({CUSTOM}, {group["source"] for group in related.focus_spec(related.SPLIT_FOCUSES[1])["groups"]})
-        self.assertEqual("com.mohamedrejeb.calf.ui.controls.AdaptiveControlCustomizationMatrixTest.ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText", one[0])
+        self.assertEqual("io.github.apdelrahman1911.nativecmpkit.ui.controls.AdaptiveControlCustomizationMatrixTest.ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText", one[0])
         self.assertFalse(set(nine) & set(one)); self.assertEqual(set(ten), set(nine) | set(one))
         self.assertFalse(set(pre) & (set(nine) | set(one)))
         before = functions(split.source_before_ui_split664("scripts/ci/ios_ui_related_native_focus.py",
@@ -168,13 +168,13 @@ class UiSplit664SourceControls(unittest.TestCase):
         definitions = {target.id: node.value for node in tree.body if isinstance(node, ast.Assign)
                        for target in node.targets if isinstance(target, ast.Name) and target.id in {"PROFILES", "MODULE_SUBSETS"}}
         for profile, focus in zip(PROFILES, related.SPLIT_FOCUSES):
-            for name, wanted in (("PROFILES", ("ios-iphone",)), ("MODULE_SUBSETS", "calf-ui")):
+            for name, wanted in (("PROFILES", ("ios-iphone",)), ("MODULE_SUBSETS", "nativecmpkit-ui")):
                 node = definitions[name]
                 value = next(value for key, value in zip(node.keys, node.values)
                              if isinstance(key, ast.Constant) and key.value == profile)
                 self.assertEqual(wanted, ast.literal_eval(value))
             row = {"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64", "python": "python3",
-                   "simulator-kind": "iphone", "test-modules": "calf-ui", "test-focus": focus}
+                   "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui", "test-focus": focus}
             self.assertEqual({"include": [row]}, workflow.matrix(profile))
             for field, bad in (("runner", "macos-15"), ("arch", "x64"), ("python", "python"),
                                ("suite", "desktop"), ("simulator-kind", "ipad"), ("unknown", "extra")):
@@ -184,14 +184,14 @@ class UiSplit664SourceControls(unittest.TestCase):
                 with patch.object(workflow, "SLOTS", slots), self.assertRaises(ValueError): workflow.matrix(profile)
             with patch.dict(workflow.PROFILES, {profile: ("ios-iphone", "ios-ipad")}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError): workflow.matrix(profile)
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError): workflow.matrix(profile)
 
     def test_split_native_plans_requests_tasks_reports_and_hashes_are_exact(self):
         for focus, task, child, count in zip(related.SPLIT_FOCUSES, TASKS, CHILDREN, (9, 1)):
-            plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=focus)
+            plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=focus)
             self.assertTrue(library.validate_test_focus(plan)); self.assertTrue(related.validate_plan(plan))
             item = plan["expected"][0]; self.assertEqual(task, item["task"])
-            self.assertEqual("calf-ui/build/test-results/" + task.rsplit(":", 1)[1], item["report_directory"])
+            self.assertEqual("nativecmpkit-ui/build/test-results/" + task.rsplit(":", 1)[1], item["report_directory"])
             self.assertEqual(related.identities(focus), item["required_testcases"])
             self.assertEqual(count, len(item["required_testcases"]))
             source = item["ui_related_source_contract"]
@@ -212,10 +212,10 @@ class UiSplit664SourceControls(unittest.TestCase):
             plan = model_plan(focus); request = related.native_request(focus)
             other = related.SPLIT_FOCUSES[1 if focus == related.SPLIT_FOCUSES[0] else 0]
             for bad in (request[:-2], request + request[-2:], tuple(request), [related.TASK, *request[1:]],
-                        [related.task(other), *request[1:]], request + ["publish"], request + [":calf-ui:compileTestKotlinIosSimulatorArm64"],
+                        [related.task(other), *request[1:]], request + ["publish"], request + [":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"],
                         [request[0], "--tests", "*"]):
                 with self.assertRaises(ValueError): related.validate_request(bad, focus)
-            for key, value in (("task", related.TASK), ("report_directory", "calf-ui/build/test-results/" + related.TASK_NAME),
+            for key, value in (("task", related.TASK), ("report_directory", "nativecmpkit-ui/build/test-results/" + related.TASK_NAME),
                                ("required_testcases", related.identities(other)), ("test_filter", "*"),
                                ("test_source_files", sorted(set(related.sources(focus)) | {CUSTOM})),
                                ("native_test_host", "skiko")):
@@ -409,8 +409,8 @@ class UiSplit664SourceControls(unittest.TestCase):
 
     def test_split_init_and_build_tasks_match_exact_compilations_and_independent_results_without_cross_dependencies(self):
         init = (ROOT / related.init_script(related.SPLIT_FOCUSES[0])).read_text()
-        build = (ROOT / "calf-ui/build.gradle.kts").read_bytes()
-        old = split.source_before_ui_split664("calf-ui/build.gradle.kts", build)
+        build = (ROOT / "nativecmpkit-ui/build.gradle.kts").read_bytes()
+        old = split.source_before_ui_split664("nativecmpkit-ui/build.gradle.kts", build)
         original_start = old.index(b'        tasks.register<KotlinNativeHostTest>("iosSimulatorArm64ApplicationTest")')
         original_task = old[original_start:old.rfind(b"    }\n}")]
         self.assertIn(original_task, build)

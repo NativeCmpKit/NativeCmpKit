@@ -9,6 +9,6 @@ rootProject.name = "nativecmpkit-owned-android-storage-probe"
 includeBuild("../../..") {
     dependencySubstitution {
         substitute(module("verification.nativecmpkit:unpublished-permissions-core"))
-            .using(project(":calf-permissions:calf-permissions-core"))
+            .using(project(":nativecmpkit-permissions:nativecmpkit-permissions-core"))
     }
 }

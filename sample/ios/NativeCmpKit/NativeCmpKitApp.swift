@@ -1,0 +1,29 @@
+//
+//  NativeCmpKitApp.swift
+//  NativeCmpKit
+//
+//  Created by Mohamed Ben Rejeb on 2/8/2023.
+//
+
+import SwiftUI
+import NativeCmpKit
+
+@main
+struct NativeCmpKitApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ComposeView()
+                .ignoresSafeArea()
+        }
+    }
+}
+
+struct ComposeView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        return Main_iosKt.MainViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // Updates the state of the specified view controller with new information from SwiftUI.
+    }
+}

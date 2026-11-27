@@ -13,13 +13,13 @@ class DependencyCacheInputTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix='nativecmpkit-dependency-key-')
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.write('settings.gradle.kts', 'include(\n ":calf-core", ":calf-io", ":sample:desktop",\n)\n')
-        for name in ('calf-core/build.gradle.kts', 'calf-io/build.gradle.kts', 'sample/desktop/build.gradle.kts',
+        self.write('settings.gradle.kts', 'include(\n ":nativecmpkit-core", ":nativecmpkit-io", ":sample:desktop",\n)\n')
+        for name in ('nativecmpkit-core/build.gradle.kts', 'nativecmpkit-io/build.gradle.kts', 'sample/desktop/build.gradle.kts',
                      'build.gradle.kts', 'gradle.properties', 'gradle/libs.versions.toml',
                      'gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.jar',
                      'convention-plugins/build.gradle.kts', 'convention-plugins/settings.gradle.kts',
-                     'convention-plugins/src/main/kotlin/dependencies.kt', 'calf-io/native/Cargo.toml',
-                     'calf-io/native/Cargo.lock', 'kotlin-js-store/yarn.lock', 'rust-toolchain.toml',
+                     'convention-plugins/src/main/kotlin/dependencies.kt', 'nativecmpkit-io/native/Cargo.toml',
+                     'nativecmpkit-io/native/Cargo.lock', 'kotlin-js-store/yarn.lock', 'rust-toolchain.toml',
                      'tests/consumer/build.gradle.kts', 'tests/consumer/io-desktop/build.gradle.kts', *d.RECIPE_FILES):
             self.write(name, 'synthetic-config-not-executed-' + name)
 
@@ -79,8 +79,8 @@ class DependencyCacheInputTests(unittest.TestCase):
 
     def test_repeat_keys_are_exact_content_bound_and_include_all_configured_builds(self):
         values = d.selected_inputs(self.root, 'libraries')
-        self.assertIn('calf-core/build.gradle.kts', values)
-        self.assertIn('calf-io/build.gradle.kts', values)
+        self.assertIn('nativecmpkit-core/build.gradle.kts', values)
+        self.assertIn('nativecmpkit-io/build.gradle.kts', values)
         self.assertIn('sample/desktop/build.gradle.kts', values)
         self.assertEqual(self.key(), self.key())
         self.assertEqual(64, len(self.key()))
@@ -97,16 +97,16 @@ class DependencyCacheInputTests(unittest.TestCase):
 
     def test_source_test_docs_archives_and_build_outputs_do_not_make_cache_misses(self):
         before = self.key()
-        for name in ('calf-core/src/commonMain/source.kt', 'calf-io/src/desktopTest/test.kt', 'AGENTS.md',
+        for name in ('nativecmpkit-core/src/commonMain/source.kt', 'nativecmpkit-io/src/desktopTest/test.kt', 'AGENTS.md',
                      'docs/development/evidence/old/build.gradle.kts', 'docs/migration/upstream-metadata/archive.json',
-                     'convention-plugins/build/old.kt', 'calf-io/build/gradle.properties',
-                     'build/verification-repo/candidate.jar', 'calf-media/build.gradle.kts'):
+                     'convention-plugins/build/old.kt', 'nativecmpkit-io/build/gradle.properties',
+                     'build/verification-repo/candidate.jar', 'nativecmpkit-media/build.gradle.kts'):
             self.write(name, 'synthetic-irrelevant-to-dependency-declarations')
         self.assertEqual(before, self.key())
 
     def test_new_or_modified_active_lock_or_native_config_invalidates_the_key(self):
-        for name in ('calf-core/gradle.lockfile', 'gradle/verification-metadata.xml', 'calf-io/native/.cargo/config.toml',
-                     '.cargo/config.toml', 'calf-io/native/build.rs', 'sample/desktop/gradle.properties'):
+        for name in ('nativecmpkit-core/gradle.lockfile', 'gradle/verification-metadata.xml', 'nativecmpkit-io/native/.cargo/config.toml',
+                     '.cargo/config.toml', 'nativecmpkit-io/native/build.rs', 'sample/desktop/gradle.properties'):
             with self.subTest(path=name):
                 before = self.key()
                 self.write(name, 'synthetic-new-config')
@@ -126,11 +126,11 @@ class DependencyCacheInputTests(unittest.TestCase):
 
     def test_added_configured_project_is_bound_and_missing_project_fails(self):
         before = self.key()
-        self.write('settings.gradle.kts', 'include(\n ":calf-core", ":calf-io", ":calf-ui", ":sample:desktop",\n)\n')
+        self.write('settings.gradle.kts', 'include(\n ":nativecmpkit-core", ":nativecmpkit-io", ":nativecmpkit-ui", ":sample:desktop",\n)\n')
         with self.assertRaises(ValueError): self.key()
-        self.write('calf-ui/build.gradle.kts', 'synthetic-new-project')
+        self.write('nativecmpkit-ui/build.gradle.kts', 'synthetic-new-project')
         self.assertNotEqual(before, self.key())
-        self.assertIn('calf-ui/build.gradle.kts', d.selected_inputs(self.root, 'libraries'))
+        self.assertIn('nativecmpkit-ui/build.gradle.kts', d.selected_inputs(self.root, 'libraries'))
 
     def test_unknown_scope_or_changed_include_syntax_does_not_guess_a_key(self):
         with self.assertRaises(ValueError): self.key('unreviewed')

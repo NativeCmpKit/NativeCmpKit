@@ -4,11 +4,11 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-CALENDAR = ROOT / "calf-permissions/calendar"
-HELPER = CALENDAR / "src/iosMain/kotlin/com.mohamedrejeb.calf/permissions/helper/CalendarPermissionHelper.kt"
-POLICY = CALENDAR / "src/commonMain/kotlin/com.mohamedrejeb.calf/permissions/helper/CalendarPermissionPolicy.kt"
-NATIVE = CALENDAR / "src/iosTest/kotlin/com/mohamedrejeb/calf/permissions/helper/NativeCalendarConfigurationTest.kt"
-COMMON = CALENDAR / "src/commonTest/kotlin/com/mohamedrejeb/calf/permissions/helper/CalendarConfigurationTest.kt"
+CALENDAR = ROOT / "nativecmpkit-permissions/calendar"
+HELPER = CALENDAR / "src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/helper/CalendarPermissionHelper.kt"
+POLICY = CALENDAR / "src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/helper/CalendarPermissionPolicy.kt"
+NATIVE = CALENDAR / "src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/helper/NativeCalendarConfigurationTest.kt"
+COMMON = CALENDAR / "src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/helper/CalendarConfigurationTest.kt"
 
 NATIVE_METHODS = (
     "nativeSelectorsMatchTheRunningIOSVersionAndSelectedRequestKind",
@@ -88,7 +88,7 @@ class IOSCalendarConfigurationControls(unittest.TestCase):
         self.assertNotIn("PermissionStatus.Denied(true)", observe)
 
     def test_public_read_write_modes_remain_separate(self):
-        source = (CALENDAR / "src/iosMain/kotlin/com.mohamedrejeb.calf/permissions/CalendarPermissions.ios.kt").read_text()
+        source = (CALENDAR / "src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/permissions/CalendarPermissions.ios.kt").read_text()
         self.assertIn("CalendarPermissionHelper(CalendarAccessMode.Read)", body(source, "registerReadCalendarPermission("))
         self.assertIn("CalendarPermissionHelper(CalendarAccessMode.Write)", body(source, "registerWriteCalendarPermission("))
 

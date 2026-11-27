@@ -336,15 +336,15 @@ def require_stop_redirect_witnesses(source):
 class AndroidWebViewRequestStateGuards(unittest.TestCase):
     def temporary_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        module = root / "calf-webview"; module.mkdir()
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        module = root / "nativecmpkit-webview"; module.mkdir()
         (module / "build.gradle.kts").write_text("// Synthetic discovery only; never executed\n")
         for relative in [r.ANDROID_WEBVIEW_REQUEST_SOURCE, *r.android_webview_request_fixtures()]:
             path = root / relative; path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes((r.ROOT / relative).read_bytes())
         return root
 
-    def plan(self, root, suite="android-device", modules=("calf-webview",)):
+    def plan(self, root, suite="android-device", modules=("nativecmpkit-webview",)):
         return r.plan(root, suite, only_modules=modules, focus=r.ANDROID_WEBVIEW_REQUEST_FOCUS)
 
     def collect(self, cases=None, outcome=None, markers=1, duplicate=False, stale=False, host="Linux", extra_empty=False):
@@ -368,7 +368,7 @@ class AndroidWebViewRequestStateGuards(unittest.TestCase):
         self.assertEqual("android-device-api35", row["slot"])
         self.assertEqual("android-device", row["suite"])
         self.assertEqual("35", row["emulator-api"])
-        self.assertEqual("calf-webview", row["test-modules"])
+        self.assertEqual("nativecmpkit-webview", row["test-modules"])
         self.assertEqual(r.ANDROID_WEBVIEW_REQUEST_FOCUS, row["test-focus"])
         self.assertFalse(row.get("serial-test-focus"))
         self.assertEqual(11, len(matrix.SLOTS))
@@ -394,7 +394,7 @@ class AndroidWebViewRequestStateGuards(unittest.TestCase):
             self.assertEqual("annotation", item["test_filter_argument"])
             self.assertFalse(any(arg.startswith("-Pandroid.testInstrumentationRunnerArguments.class=") for arg in command))
             self.assertNotIn("--tests", command)
-            self.assertEqual(":calf-webview:connectedAndroidDeviceTest", command[-1])
+            self.assertEqual(":nativecmpkit-webview:connectedAndroidDeviceTest", command[-1])
             self.assertFalse(r.android_io_documents_required(plan))
             self.assertNotIn("nativecmpkitWebViewHeapDiagnostic", " ".join(command))
 
@@ -403,18 +403,18 @@ class AndroidWebViewRequestStateGuards(unittest.TestCase):
             root = self.temporary_root(directory)
             for suite in ("desktop", "android-host", "ios", "js", "wasm"):
                 with self.subTest(suite=suite), self.assertRaises(ValueError): self.plan(root, suite)
-            for modules in (None, (), ("calf-io",), ("calf-webview", "calf-io"), ("calf-webview", "calf-webview")):
+            for modules in (None, (), ("nativecmpkit-io",), ("nativecmpkit-webview", "nativecmpkit-io"), ("nativecmpkit-webview", "nativecmpkit-webview")):
                 with self.subTest(modules=modules), self.assertRaises(ValueError): self.plan(root, modules=modules)
-        controller.validate_api_selection(35, ("calf-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
+        controller.validate_api_selection(35, ("nativecmpkit-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
         for api in (True, 35.0, "35", 23, 28, 29, 30, 33, 34):
             with self.subTest(api=api), self.assertRaises(ValueError):
-                controller.validate_api_selection(api, ("calf-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
+                controller.validate_api_selection(api, ("nativecmpkit-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
 
     def test_real_plan_cli_transports_the_exact_focus_without_sdk_or_external_commands(self):
         with tempfile.TemporaryDirectory() as directory:
             root = self.temporary_root(directory)
-            for entry, arguments in ((r.main, ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-webview", "--focus", r.ANDROID_WEBVIEW_REQUEST_FOCUS]),
-                                     (controller.main, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "calf-webview", "--focus", r.ANDROID_WEBVIEW_REQUEST_FOCUS, "--output", "build/ci-verification/synthetic-unused"])):
+            for entry, arguments in ((r.main, ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-webview", "--focus", r.ANDROID_WEBVIEW_REQUEST_FOCUS]),
+                                     (controller.main, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "nativecmpkit-webview", "--focus", r.ANDROID_WEBVIEW_REQUEST_FOCUS, "--output", "build/ci-verification/synthetic-unused"])):
                 stream = io.StringIO()
                 with patch.object(r, "ROOT", root), patch("sys.argv", arguments), patch("sys.stdout", stream):
                     self.assertEqual(0, entry())
@@ -425,7 +425,7 @@ class AndroidWebViewRequestStateGuards(unittest.TestCase):
     def test_plan_tampering_cannot_switch_task_inventory_reports_helper_api_or_whole_suite(self):
         with tempfile.TemporaryDirectory() as directory:
             root = self.temporary_root(directory); valid = self.plan(root)
-            for key, value in (("task", ":calf-webview:publish"), ("module", "calf-io"), ("test_filter", "*"),
+            for key, value in (("task", ":nativecmpkit-webview:publish"), ("module", "nativecmpkit-io"), ("test_filter", "*"),
                                ("required_testcases", []), ("test_source_files", [r.ANDROID_WEBVIEW_REQUEST_SOURCE]),
                                ("native_fixture_paths", []), ("verification_api_level", 35.0),
                                ("report_directory", "foreign/build/test-results/desktopTest")):
@@ -566,14 +566,14 @@ class AndroidWebViewRequestStateGuards(unittest.TestCase):
         self.assertEqual((r.ANDROID_WEBVIEW_REQUEST_METHOD, STOP_REDIRECT_METHOD), r.ANDROID_WEBVIEW_REQUEST_METHODS)
         self.assertEqual(r.ANDROID_WEBVIEW_REQUEST_ANNOTATION, r.android_webview_request_filter())
         self.assertNotIn(",", r.android_webview_request_filter())
-        controller.validate_api_selection(35, ("calf-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
+        controller.validate_api_selection(35, ("nativecmpkit-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
         for api in (True, 35.0, "35", 23, 28, 29, 30, 33, 34):
             with self.subTest(api=api), self.assertRaises(ValueError):
-                controller.validate_api_selection(api, ("calf-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
-        for modules in (None, (), ("calf-io",), ("calf-webview", "calf-io"), ("calf-webview", "calf-webview")):
+                controller.validate_api_selection(api, ("nativecmpkit-webview",), r.ANDROID_WEBVIEW_REQUEST_FOCUS)
+        for modules in (None, (), ("nativecmpkit-io",), ("nativecmpkit-webview", "nativecmpkit-io"), ("nativecmpkit-webview", "nativecmpkit-webview")):
             with self.subTest(modules=modules), self.assertRaises(ValueError):
                 controller.validate_api_selection(35, modules, r.ANDROID_WEBVIEW_REQUEST_FOCUS)
-        self.assertIn("The exact two-method Android WebView request selection requires API35 and calf-webview only",
+        self.assertIn("The exact two-method Android WebView request selection requires API35 and nativecmpkit-webview only",
                       Path(controller.__file__).read_text())
         for case in r.android_webview_request_identities():
             with self.subTest(missing_other_case=case), self.assertRaises(ValueError):

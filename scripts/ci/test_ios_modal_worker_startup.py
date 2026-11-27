@@ -18,7 +18,7 @@ import ios_worker_completion_source_projection as completion_history
 from test_native_ui_input import driver_fixture, TOKEN, AUTH, DEVICE, BUNDLE, HASH, no_native
 
 ROOT = Path(__file__).resolve().parents[2]
-HOST = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
+HOST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
 COMPILER = "scripts/ci/ios_modal_worker_compile.init.gradle.kts"
 
 
@@ -50,7 +50,7 @@ class ModalWorkerStartupControls(unittest.TestCase):
             self.assertIn(marker, source)
 
     def test_finite_three_method_selection_excludes_both_accepted_lifecycle_methods_and_all_prior_modal_cases(self):
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_WORKER_MEMORY_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_WORKER_MEMORY_FOCUS)
         identities = library.ui_application_focus_identities(library.IOS_MODAL_WORKER_MEMORY_FOCUS)
         self.assertEqual(3, len(identities))
         self.assertEqual(identities, plan["expected"][0]["required_testcases"])
@@ -61,17 +61,17 @@ class ModalWorkerStartupControls(unittest.TestCase):
         source = (ROOT / COMPILER).read_text()
         request = source.split("val applicationRequest", 1)[1].split("val permittedTasks", 1)[0]
         authored = re.findall(r'"(com\.mohamedrejeb\.[^"\n]+)"', request)
-        expected = [":calf-ui:iosSimulatorArm64ApplicationTest"] + [arg for item in authored for arg in ("--tests", item)]
-        self.assertEqual(expected, command[command.index(":calf-ui:iosSimulatorArm64ApplicationTest"):])
+        expected = [":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"] + [arg for item in authored for arg in ("--tests", item)]
+        self.assertEqual(expected, command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         self.assertEqual([library.IOS_MODAL_LIFECYCLE_SOURCE, library.IOS_WORKER_OWNERSHIP_SOURCE,
                           HOST, HOST.replace("NativeUiApplicationHost", "NativeObjectIdentity")],
-                         re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', source))
+                         re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', source))
         row = workflow.matrix("ios-modal-worker-memory-recovery")["include"]
         self.assertEqual(1, len(row)); self.assertEqual(library.IOS_MODAL_WORKER_MEMORY_FOCUS, row[0]["test-focus"])
         for mutation in ({"ios-modal-worker-memory-recovery": ("ios-iphone", "ios-ipad")},
                          {"ios-modal-worker-memory-recovery": ("desktop-macos-arm64",)}):
             with patch.dict(workflow.PROFILES, mutation), self.assertRaises(ValueError): workflow.matrix("ios-modal-worker-memory-recovery")
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, library.IOS_MODAL_WORKER_MEMORY_FOCUS))
 
     def test_scheme_environment_preserves_xcode_testing_paths_and_refuses_existing_credentials_without_mutation(self):

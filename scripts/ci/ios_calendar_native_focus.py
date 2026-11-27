@@ -6,10 +6,10 @@ import re
 
 FOCUS = "permission-ios-calendar-configuration"
 PROFILE = "permissions-ios-calendar-configuration"
-MODULE = "calf-permissions/calendar"
-TASK = ":calf-permissions:calf-permissions-calendar:iosSimulatorArm64Test"
-CLASS = "com.mohamedrejeb.calf.permissions.helper.NativeCalendarConfigurationTest"
-SOURCE = MODULE + "/src/iosTest/kotlin/com/mohamedrejeb/calf/permissions/helper/NativeCalendarConfigurationTest.kt"
+MODULE = "nativecmpkit-permissions/calendar"
+TASK = ":nativecmpkit-permissions:nativecmpkit-permissions-calendar:iosSimulatorArm64Test"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.permissions.helper.NativeCalendarConfigurationTest"
+SOURCE = MODULE + "/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/helper/NativeCalendarConfigurationTest.kt"
 METHODS = (
     "nativeSelectorsMatchTheRunningIOSVersionAndSelectedRequestKind",
     "passivePublicHelpersMatchActualEventKitWithoutPromptingOrChangingAuthorization",

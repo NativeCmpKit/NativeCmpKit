@@ -19,11 +19,11 @@ import workflow_matrix as matrix
 
 PROFILE = "share-clipboard-native-wasm"
 FOCUS = "web-share-clipboard-native-contexts"
-FIXTURE = "calf-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
-SOURCE = "calf-share/src/webTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardEnvironmentAcceptanceTest.kt"
-JS_HELPER = "calf-share/src/jsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.js.kt"
-WASM_HELPER = "calf-share/src/wasmJsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.wasmJs.kt"
-CLASS = "com.mohamedrejeb.calf.share.WebClipboardEnvironmentAcceptanceTest"
+FIXTURE = "nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
+SOURCE = "nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt"
+JS_HELPER = "nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt"
+WASM_HELPER = "nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.share.WebClipboardEnvironmentAcceptanceTest"
 METHODS = (
     "secureContextWithAbsentClipboardApiReportsUnavailableWithoutPlatformCalls",
     "genuinelyInsecureHttpContextHasNoClipboardApiAndReportsUnavailable",
@@ -46,7 +46,7 @@ const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const source = fs.readFileSync(process.argv[1], 'utf8');
 const mode = process.argv[2];
-const klass = 'com.mohamedrejeb.calf.share.WebClipboardEnvironmentAcceptanceTest';
+const klass = 'io.github.apdelrahman1911.nativecmpkit.share.WebClipboardEnvironmentAcceptanceTest';
 const method = 'genuinelyInsecureHttpContextHasNoClipboardApiAndReportsUnavailable';
 const token = 'a'.repeat(30), origin = 'http://localhost:9876';
 const cut = (start, end) => source.slice(source.indexOf(start), source.indexOf(end, source.indexOf(start)));
@@ -58,9 +58,9 @@ const oldSelect = vm.runInNewContext(String.raw`  const scriptUrls = async (file
     const files = await filesPromise;
     const chosen = files.included.filter(file => {
       const original = path.basename(file.originalPath || file.path);
-      return ['runtime.js', 'commons.js'].includes(original) || /^(NativeCmpKit|nativeCmpkit)-calf-share-test\.m?js$/.test(original);
+      return ['runtime.js', 'commons.js'].includes(original) || /^(NativeCmpKit|nativeCmpkit)-nativecmpkit-share-test\.m?js$/.test(original);
     });
-    if (chosen.length !== 3 || chosen.filter(file => /-calf-share-test\.m?js$/.test(path.basename(file.originalPath || file.path))).length !== 1 ||
+    if (chosen.length !== 3 || chosen.filter(file => /-nativecmpkit-share-test\.m?js$/.test(path.basename(file.originalPath || file.path))).length !== 1 ||
         !chosen.some(file => path.basename(file.originalPath || file.path) === 'runtime.js') ||
         !chosen.some(file => path.basename(file.originalPath || file.path) === 'commons.js') ||
         chosen.some(file => file.isUrl || typeof file.path !== 'string' || file.path.includes('\0'))) throw new Error('Exact emitted Karma bundle inputs are missing');
@@ -71,12 +71,12 @@ const oldSelect = vm.runInNewContext(String.raw`  const scriptUrls = async (file
   };
 ` + '\nscriptUrls', {path});
 const canonical = value => JSON.parse(JSON.stringify(value));
-const packagePath = kind => '/explicitly-synthetic/NativeCmpKit/build/' + kind + '/packages/NativeCmpKit-calf-share-test';
+const packagePath = kind => '/explicitly-synthetic/NativeCmpKit/build/' + kind + '/packages/NativeCmpKit-nativecmpkit-share-test';
 function files(kind = 'wasm') {
   const base = packagePath(kind), output = '/explicitly-synthetic/_karma_webpack_owned';
   const make = (originalPath, filePath = originalPath) => ({originalPath, path: filePath, isUrl: false, sha: 'a'.repeat(40)});
   const entry = kind === 'wasm' ? make(base + '/static/load.mjs', 'load.' + hash(base + '/static/load.mjs') + '.js') :
-    make(base + '/kotlin/NativeCmpKit-calf-share-test.js', 'NativeCmpKit-calf-share-test.' + hash(base + '/kotlin/NativeCmpKit-calf-share-test.js') + '.js');
+    make(base + '/kotlin/NativeCmpKit-nativecmpkit-share-test.js', 'NativeCmpKit-nativecmpkit-share-test.' + hash(base + '/kotlin/NativeCmpKit-nativecmpkit-share-test.js') + '.js');
   const included = [make(output + '/runtime.js'), make(output + '/commons.js'), entry,
     make('/explicitly-synthetic/tooling/kotlin-test-karma-runner.js', 'kotlin-test-karma-runner.1.js')];
   return {base, included, served: included.slice()};
@@ -87,7 +87,7 @@ const wasmSource = cut('  function wasmChildBootstrap(', '  const reply =').trim
 const loadSource = cut('  function childLoad(', '  function wasmChildBootstrap(').trim();
 // Pinned KGP2.4.20 createLoadWasm template: only its static import is represented
 // by injected synthetic exports. No compiled test/Wasm module is loaded/executed.
-const loaderTemplate = `import * as exports from "../kotlin/NativeCmpKit-calf-share-test.mjs"
+const loaderTemplate = `import * as exports from "../kotlin/NativeCmpKit-nativecmpkit-share-test.mjs"
 try {
     const startUnitTests = "startUnitTests"
     exports[startUnitTests]?.()
@@ -160,7 +160,7 @@ function refused(c) {
       const variants = [
         f => { f.included.splice(2, 1); },
         f => { f.included.push(f.included[2]); },
-        f => { f.included[2].originalPath = f.base + '/kotlin/NativeCmpKit-calf-share-test.mjs'; },
+        f => { f.included[2].originalPath = f.base + '/kotlin/NativeCmpKit-nativecmpkit-share-test.mjs'; },
         f => { f.included[2].originalPath = '/foreign/static/load.mjs'; },
         f => { f.included[2].path = 'load.' + ((hash(f.base + '/static/load.mjs') + 1) >>> 0) + '.js'; },
         f => { f.included[2].path = f.base + '/static/load.mjs'; },
@@ -171,7 +171,7 @@ function refused(c) {
         f => { f.served = f.served.filter(file => file !== f.included[2]); },
         f => { f.included.reverse(); },
         f => { f.included[0].originalPath = f.included[0].path = 'runtime.js'; },
-        f => { f.base = '/foreign/build/wasm/packages/foreign-calf-share-test'; },
+        f => { f.base = '/foreign/build/wasm/packages/foreign-nativecmpkit-share-test'; },
         f => { f.base += '/.'; },
         f => { f.included[2].originalPath = 7; },
       ];
@@ -238,12 +238,12 @@ class ShareClipboardWasmRecoveryTests(unittest.TestCase):
         rows = matrix.matrix(PROFILE)["include"]
         self.assertEqual(["browser-wasm"], [row["slot"] for row in rows])
         self.assertEqual(["wasm"], [row["suite"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-share" and row["test-focus"] == FOCUS for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-share" and row["test-focus"] == FOCUS for row in rows))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         for profile in ("share-browser", "share-clipboard-native"):
             accepted = matrix.matrix(profile)["include"]
             self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in accepted])
-            self.assertTrue(all(row["test-modules"] == "calf-share" for row in accepted))
+            self.assertTrue(all(row["test-modules"] == "nativecmpkit-share" for row in accepted))
             self.assertTrue(all(("test-focus" in row) == (profile == "share-clipboard-native") for row in accepted))
 
     def test_dispatch_alias_reserves_one_row_without_serial_permission_or_upload_expansion(self):
@@ -260,22 +260,22 @@ class ShareClipboardWasmRecoveryTests(unittest.TestCase):
     def test_changed_fixture_pin_keeps_four_wasm_identities_one_xml_and_no_js_command(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-share",\n)\n')
-            build = root / "calf-share/build.gradle.kts"; build.parent.mkdir()
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-share",\n)\n')
+            build = root / "nativecmpkit-share/build.gradle.kts"; build.parent.mkdir()
             build.write_text("// Explicitly synthetic discovery only; never built\n")
             for relative in (FIXTURE, SOURCE, JS_HELPER, WASM_HELPER):
                 target = root / relative; target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes((lt.ROOT / relative).read_bytes())
-            plan = lt.plan(root, "wasm", only_modules=("calf-share",), focus=FOCUS)
+            plan = lt.plan(root, "wasm", only_modules=("nativecmpkit-share",), focus=FOCUS)
             case, = plan["expected"]
             self.assertTrue(lt.validate_test_focus(plan))
             self.assertEqual([{"classname": CLASS, "name": name} for name in METHODS], case["required_testcases"])
             self.assertEqual(1, case["required_original_xml"])
             self.assertEqual(lt.share_clipboard_native_sources("wasm"), case["test_source_sha256"])
-            self.assertEqual(":calf-share:wasmJsBrowserTest", case["task"])
+            self.assertEqual(":nativecmpkit-share:wasmJsBrowserTest", case["task"])
             command = lt.gradle_command("wasm", plan)
             self.assertEqual(CLASS, command[command.index("--tests") + 1])
-            self.assertNotIn(":calf-share:jsBrowserTest", command)
+            self.assertNotIn(":nativecmpkit-share:jsBrowserTest", command)
             self.assertFalse(any("WebSharePromiseTest" in item for item in command))
 
     def test_accepted_js_recipe_functions_and_modeled_output_are_byte_preserved(self):

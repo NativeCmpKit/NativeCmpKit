@@ -72,7 +72,7 @@ def review(root: Path) -> dict:
         require(receipt.get("inputs_before_sha256") == receipt.get("inputs_after_sha256") == tests.input_digest(before) and
                 receipt.get("runtime_receipt_sha256") == tests.sha256(tests.safe_path(root, relative + "/runtime.json")),
                 "Native pair input/runtime digests disagree")
-        require(plan == tests.plan(root, "ios", only_modules=("calf-ui",), focus=tests.IOS_VECTOR_RENDERING_FOCUS) and
+        require(plan == tests.plan(root, "ios", only_modules=("nativecmpkit-ui",), focus=tests.IOS_VECTOR_RENDERING_FOCUS) and
                 receipt.get("passed") is True and receipt.get("execution", {}).get("exit_code") == 0 and
                 receipt.get("errors") == receipt.get("uncovered") == [] and
                 receipt.get("task_execution_markers") == {archive.TASK: 1}, "Wrong or unsuccessful fresh native selection")

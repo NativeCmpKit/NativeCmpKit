@@ -57,8 +57,8 @@ PRESERVED_CONSUMER_INPUTS = MappingProxyType({
 
 # Exact663 catalog/f510 metadata originals, not a mutable producer-report waiver.
 MATERIAL_INPUTS = {
-    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/calf-file-picker.json': 'e53bd784aae97aab724d887e7256bac6cf7c0497ef7a0ac9387e11c4060d8524',
-    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/calf-share.json': '63e8c694ed7cc4a33e6419b7cd9307ca999b118ccd3d2ed980b202f20cda880a',
+    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/nativecmpkit-file-picker.json': 'e53bd784aae97aab724d887e7256bac6cf7c0497ef7a0ac9387e11c4060d8524',
+    'docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104/metadata-current606/nativecmpkit-share.json': '63e8c694ed7cc4a33e6419b7cd9307ca999b118ccd3d2ed980b202f20cda880a',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/LICENSE-APACHE': 'b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/LICENSE-MIT': '5b19674a1db628a475850a131956ed49521b744e3dda8f5a94141f9aba681219',
     'licenses/native-dependency-supplements/winapi-i686-pc-windows-gnu-0.4.0/crate/Cargo.toml': '9652222664ffc7e2a26fdcdebdce0917a455b39d8fbcbf451bf0b011a3067bf7',

@@ -32,29 +32,29 @@ TARGET_SUFFIXES = {
     "wasmJs": "-wasm-js", "iosArm64": "-iosarm64", "iosSimulatorArm64": "-iossimulatorarm64",
 }
 NATIVE_PLATFORMS = ("linux-x64", "linux-arm64", "macos-x64", "macos-arm64", "windows-x64")
-NATIVE_MODULES = {"nativecmpkit-file-picker": "calf-file-picker", "nativecmpkit-share": "calf-share"}
-NATIVE_NAMES = {"calf-file-picker": "calf_filepicker_native", "calf-share": "calf_share_native"}
+NATIVE_MODULES = {"nativecmpkit-file-picker": "nativecmpkit-file-picker", "nativecmpkit-share": "nativecmpkit-share"}
+NATIVE_NAMES = {"nativecmpkit-file-picker": "nativecmpkit_filepicker_native", "nativecmpkit-share": "nativecmpkit_share_native"}
 NOTICE_PREFIX = "META-INF/nativecmpkit/"
 # The inherited source adaptations covered by NAV-018. Paths are explicit source-set
 # entries, not a basename scan or producer-controlled list. Metadata source archives
 # include all inherited source sets; non-Apple target archives do not include iosMain.
 DERIVED_APACHE_SOURCE_PATHS = {
     "nativecmpkit-navigation": {
-        "commonMain/com.mohamedrejeb.calf/navigation/" + name + ".kt":
-            "calf-navigation/src/commonMain/kotlin/com.mohamedrejeb.calf/navigation/" + name + ".kt"
+        "commonMain/io.github.apdelrahman1911.nativecmpkit/navigation/" + name + ".kt":
+            "nativecmpkit-navigation/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/navigation/" + name + ".kt"
         for name in ("NavArgument", "AdaptiveNavType", "AdaptiveBaseBundle", "AdaptiveBundle")
     },
     "nativecmpkit-ui": {
-        "commonMain/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt":
-            "calf-ui/src/commonMain/kotlin/com/mohamedrejeb/calf/ui/slider/CupertinoSlider.kt",
-        **{"iosMain/com/mohamedrejeb/calf/ui/" + relative:
-            "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/" + relative
+        "commonMain/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt":
+            "nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt",
+        **{"iosMain/io/github/apdelrahman1911/nativecmpkit/ui/" + relative:
+            "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/" + relative
             for relative in ("button/LiquidGlassButton.kt", "slider/LiquidGlassSlider.kt",
                 "utils/DragGestureInspector.kt", "utils/DampedDragAnimation.kt", "utils/InteractiveHighlight.kt")},
     },
 }
 DERIVED_APACHE_ALL_SOURCE_TARGETS = {"metadata", "iosArm64", "iosSimulatorArm64"}
-CUPERTINO_RESOURCE_PREFIX = "composeResources/com.mohamedrejeb.calf.calf_cupertino_icons.generated.resources/"
+CUPERTINO_RESOURCE_PREFIX = "composeResources/io.github.apdelrahman1911.nativecmpkit.nativecmpkit_cupertino_icons.generated.resources/"
 CUPERTINO_FONT_SHA256 = "67c44fe9183b002e79dde7f6977e2988661c9a3e4a3c5fce968787efdbed823c"
 CUPERTINO_MIT_SHA256 = "310d6ab6483280280c9db122bded0a63c09558bc5743720f61dbcbb494db370a"
 MAX_METADATA = 8 * 1024 * 1024
@@ -66,7 +66,7 @@ CRATE_NAME = re.compile(r"[A-Za-z0-9_-]+\Z")
 CRATE_VERSION = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?(?:\+[A-Za-z0-9.-]+)?\Z")
 CHECKSUM = re.compile(r"[0-9a-f]{64}\Z")
 GIT_REVISION = re.compile(r"[0-9a-f]{40}\Z")
-NATIVE_CRATE_NAMES = {"calf-file-picker": "calf-filepicker-native", "calf-share": "calf-share-native"}
+NATIVE_CRATE_NAMES = {"nativecmpkit-file-picker": "nativecmpkit-filepicker-native", "nativecmpkit-share": "nativecmpkit-share-native"}
 NATIVE_METADATA_SCOPE = "Conservative unfiltered locked Cargo union; no compile or license certification"
 NATIVE_LICENSE_NAME = re.compile(r"(?:LICEN[CS]E|COPYING|NOTICE|COPYRIGHT|UNLICENSE)(?:[._ -].*)?\Z", re.I)
 SOURCE_EXTENSIONS = {".rs", ".kt", ".kts", ".java", ".c", ".cc", ".cpp", ".h", ".hh", ".hpp",
@@ -335,7 +335,7 @@ class ArtifactVerifier:
         if not SAFE_VERSION.fullmatch(version) or version.endswith("-SNAPSHOT"):
             raise InvalidArtifact("Use an exact non-SNAPSHOT local candidate version; timestamped snapshot repos are not this release gate")
         self.version = version
-        identity = load_json_bytes((self.root / "docs/migration/identity.json").read_bytes())
+        identity = load_json_bytes((self.root / "docs/migration/current-identity.json").read_bytes())
         self.all_modules = sorted(item["new_artifact"] for item in identity["modules"])
         if len(set(self.all_modules)) != len(self.all_modules):
             raise InvalidArtifact("Duplicate identity artifact")
@@ -666,7 +666,7 @@ class ArtifactVerifier:
                     if module in NATIVE_MODULES:
                         self.native_notices(archive, names, NATIVE_MODULES[module], label)
                 elif primary or derived_sources:
-                    retained_module = "calf-" + module.removeprefix("nativecmpkit-")
+                    retained_module = "nativecmpkit-" + module.removeprefix("nativecmpkit-")
                     self.notices(archive, names, label, NOTICE_PREFIX + retained_module + "/")
                 if derived_sources:
                     self.derived_apache_sources(archive, names, module, target, label)

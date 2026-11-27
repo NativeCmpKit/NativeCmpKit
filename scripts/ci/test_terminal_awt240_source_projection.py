@@ -14,14 +14,14 @@ import terminal_awt240_source_projection as projection
 import workflow_matrix as wm
 
 ROOT = Path(__file__).resolve().parents[2]
-SHARE = "calf-share/src/iosMain/kotlin/com/mohamedrejeb/calf/share/ShareLauncher.ios.kt"
-NATIVE = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/IosSharePresentationOwnershipTest.kt"
-SCENARIOS = "calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/ShareTerminalBarrierScenarios.kt"
-DESKTOP = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
-OWNER = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/BoundedDesktopAwtWindow.kt"
-OWNER_TEST = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/BoundedDesktopAwtWindowTest.kt"
+SHARE = "nativecmpkit-share/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.ios.kt"
+NATIVE = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/IosSharePresentationOwnershipTest.kt"
+SCENARIOS = "nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareTerminalBarrierScenarios.kt"
+DESKTOP = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
+OWNER = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindow.kt"
+OWNER_TEST = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindowTest.kt"
 SPEC_SHA256 = "57aea63782e79cf6bce95c4d443c73bceaf2c7a4e1a4d74d963bbb82e7eb69b2"
-ADDITION_SHA256 = {'calf-share/src/iosTest/kotlin/com/mohamedrejeb/calf/share/ShareTerminalBarrierScenarios.kt': 'c60c9aa31dc3e23734184ced80b2911ac655ec105d7197c5defad56bf8e84679', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/BoundedDesktopAwtWindow.kt': 'c7bccc89f020490ea6198b837c7a9e386b051a0926ec22e17b3557699420b082', 'calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/BoundedDesktopAwtWindowTest.kt': '0ab669d606bc6416e892f8509a694758c5a24447f904ed439de763886597bdc5', 'scripts/ci/terminal_awt240_source_projection.py': 'e839883e8c80a49de66ff334489dadd4189b40a862d924920ffa35fc35b2ae1d'} # Exact source-only additions.
+ADDITION_SHA256 = {'nativecmpkit-share/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareTerminalBarrierScenarios.kt': 'c60c9aa31dc3e23734184ced80b2911ac655ec105d7197c5defad56bf8e84679', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindow.kt': 'c7bccc89f020490ea6198b837c7a9e386b051a0926ec22e17b3557699420b082', 'nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BoundedDesktopAwtWindowTest.kt': '0ab669d606bc6416e892f8509a694758c5a24447f904ed439de763886597bdc5', 'scripts/ci/terminal_awt240_source_projection.py': 'e839883e8c80a49de66ff334489dadd4189b40a862d924920ffa35fc35b2ae1d'} # Exact source-only additions.
 
 
 def digest(data):
@@ -160,7 +160,7 @@ class TerminalAwt240SourceControls(unittest.TestCase):
         self.assertNotIn("owned.getAndSet", owner)
 
     def test_finite_windows_and_share_plans_keep_one_missing_method_and_pin_owning_support(self):
-        windows = lt.plan(ROOT, "desktop", only_modules=("calf-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)
+        windows = lt.plan(ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)
         selected, = windows["expected"]
         self.assertEqual([DESKTOP, OWNER], selected["test_source_files"])
         self.assertEqual({p: digest((ROOT / p).read_bytes()) for p in (DESKTOP, OWNER)}, selected["test_source_sha256"])
@@ -168,7 +168,7 @@ class TerminalAwt240SourceControls(unittest.TestCase):
         self.assertEqual(1, len(selected["required_testcases"]))
         self.assertNotIn("actual302Redirect", selected["test_filter"])
         self.assertNotIn("BoundedDesktopAwtWindowTest", selected["test_filter"])
-        share = lt.plan(ROOT, "ios", only_modules=("calf-share",), focus=lt.IOS_SHARE_REMEMBERED_FAILURE_FOCUS)
+        share = lt.plan(ROOT, "ios", only_modules=("nativecmpkit-share",), focus=lt.IOS_SHARE_REMEMBERED_FAILURE_FOCUS)
         app, = share["expected"]
         self.assertEqual(1, len(app["required_testcases"]))
         self.assertIn(SCENARIOS, app["test_source_files"])
@@ -178,15 +178,15 @@ class TerminalAwt240SourceControls(unittest.TestCase):
             self.assertEqual(1, len(wm.matrix(profile)["include"]))
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
-            (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-            (root / "calf-webview").mkdir()
-            (root / "calf-webview/build.gradle.kts").write_text("// synthetic source-only root\n")
+            (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+            (root / "nativecmpkit-webview").mkdir()
+            (root / "nativecmpkit-webview/build.gradle.kts").write_text("// synthetic source-only root\n")
             for rel in (DESKTOP, OWNER, lt.WEBVIEW_DESKTOP_REQUEST_SOURCE):
                 path = root / rel; path.parent.mkdir(parents=True, exist_ok=True); path.write_bytes(current_bytes(rel))
-            self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("calf-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))
+            self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)))
             owner = root / OWNER; owner.write_bytes(owner.read_bytes() + b"\n")
             with self.assertRaisesRegex(ValueError, "owning source changed"):
-                lt.plan(root, "desktop", only_modules=("calf-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)
+                lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=lt.WEBVIEW_DESKTOP_STOP_WINDOWS_RECOVERY_FOCUS)
 
     def test_current_camera_maps_are_exact_and_every_before47_and_existing_method_body_is_preserved(self):
         path = "scripts/ci/test_android_camera_owned_avd_console_name.py"

@@ -4,7 +4,7 @@ render_macros: true
 <!-- Modified for nativeCmpkit migration (2026-10-24): independent coordinates / project references; inherited APIs retained. -->
 # Web View
 
-> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical Calf version claims are preserved, not certified as nativeCmpkit releases.
+> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical NativeCmpKit version claims are preserved, not certified as nativeCmpkit releases.
 
 ## Installation
 

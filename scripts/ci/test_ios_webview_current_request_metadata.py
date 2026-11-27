@@ -9,15 +9,15 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-IOS = "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.ios.kt"
-IDENTITY = "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/NativeWebViewIdentity.ios.kt"
+IOS = "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.ios.kt"
+IDENTITY = "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/NativeWebViewIdentity.ios.kt"
 PINS = {
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewRequestAcceptanceTest.kt": "594eb2139ad98961b06edcf0d6d9dc36efaa3dcad394e3b3ea458db75476aacf",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt": "25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosWebViewLifecycleAcceptanceTest.kt": "49c98aa532e14a75e1b3c09b5404727b426e3c4b859ab16f4af5a4fe9979a381",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.kt": "36891159184df5bcd03b724b81070698c878022796a5b563994c58591c763791",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewRequestAcceptanceTest.kt": "594eb2139ad98961b06edcf0d6d9dc36efaa3dcad394e3b3ea458db75476aacf",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewProvisionalDnsAcceptanceTest.kt": "25efe05ca6ce4cc2f027dc74eaf22a3a74cd4213d315940be9b64bdf7f0fe594",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosWebViewLifecycleAcceptanceTest.kt": "49c98aa532e14a75e1b3c09b5404727b426e3c4b859ab16f4af5a4fe9979a381",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/internal/NativeObjectIdentity.kt": "f8a5b13a21a0b3adcea5e5c27def54a03ad486574a552e6439a71852f0ba4b42",
 }
 
 

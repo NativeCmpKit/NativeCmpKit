@@ -18,8 +18,8 @@ class AppleMemoryDiscoveryTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         (self.root / "build.gradle.kts").write_text("// synthetic source fixture\n")
-        (self.root / "settings.gradle.kts").write_text('include(\n    ":calf-io",\n)\n')
-        module = self.root / "calf-io"
+        (self.root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-io",\n)\n')
+        module = self.root / "nativecmpkit-io"
         module.mkdir()
         (module / "build.gradle.kts").write_text("// synthetic included module\n")
         self.runtime = {"source_revision": "a" * 40, "source_tree_dirty": False,

@@ -18,11 +18,11 @@ from unittest.mock import patch
 import ios_ui_application as a
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
-CASE = ("com.mohamedrejeb.calf.picker.NativePhotoProviderCancellationTest",
+CASE = ("io.github.apdelrahman1911.nativecmpkit.picker.NativePhotoProviderCancellationTest",
         "publicPhotoCancellationStopsAnInFlightNativeProviderCopyAndReleasesEarlierStaging")
 FILTER = "--ktest_gradle_filter=" + ".".join(CASE)
 ARGS = ["--ktest_logger=TEAMCITY", "--ktest_no_exit_code", FILTER]
-HOST = {"module": "calf-file-picker", **a.APPLICATION_HOSTS["calf-file-picker"]}
+HOST = {"module": "nativecmpkit-file-picker", **a.APPLICATION_HOSTS["nativecmpkit-file-picker"]}
 FOCUS = a.lt.IOS_PICKER_PROVIDER_CANCELLATION_FOCUS
 EXE = Path("/private/owned-nonce/NativeCmpkitLibraryTests.app") / a.APP_EXECUTABLE
 MISSING = "Missing native Worker/application completion"
@@ -50,8 +50,8 @@ class ProviderC3ObservationRouteControls(unittest.TestCase):
 
     def test_full_other_module_focus_duplicate_extra_wildcard_or_malformed_route_stays_out(self):
         cases = [(HOST, None, ARGS[:2]), (HOST, "picker-ios-batch", ARGS),
-                 ({**HOST, "module": "calf-ui"}, FOCUS, ARGS),
-                 ({**HOST, "task": ":calf-ui:iosSimulatorArm64ApplicationTest"}, FOCUS, ARGS),
+                 ({**HOST, "module": "nativecmpkit-ui"}, FOCUS, ARGS),
+                 ({**HOST, "task": ":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"}, FOCUS, ARGS),
                  ({**HOST, "binary_directory": "foreign"}, FOCUS, ARGS),
                  (HOST, FOCUS, ARGS + [FILTER]), (HOST, FOCUS, ARGS[:2] + [ARGS[0]]),
                  (HOST, FOCUS, ARGS[:2] + [FILTER + "," + FILTER]),
@@ -209,7 +209,7 @@ class ProviderC3FailureBoundaryControls(unittest.TestCase):
         self.assertNotIn("provider_c3_installed_executable=None", source)
         forward = next(node for node in ast.walk(run) if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == "forward_application")
         self.assertTrue(any(keyword.arg is None and isinstance(keyword.value, ast.Name) and keyword.value.id == "provider_c3_options" for keyword in forward.keywords))
-        host = (root / "calf-file-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/picker/internal/NativePickerApplicationHost.kt").read_text()
+        host = (root / "nativecmpkit-file-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/picker/internal/NativePickerApplicationHost.kt").read_text()
         body = host.split("fun nativeApplicationMain(arguments: Array<String>) {", 1)[1]
         self.assertLess(body.index("UIApplicationMain(0, null, null, NSStringFromClass(delegate))"), body.index("if (arguments.size == 3"))
         self.assertIn("arguments.toSet() == setOf(", body)

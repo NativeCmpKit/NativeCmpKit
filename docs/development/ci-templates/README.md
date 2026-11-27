@@ -84,7 +84,7 @@ tests still fail the nonzero-case gate. Modules without relevant sources are
 listed as uncovered, not counted as passing. New test-bearing modules are added
 automatically; update the minimum deliberately when their coverage is accepted.
 
-For a small helper smoke test, `--module calf-io` selects an explicitly labeled
+For a small helper smoke test, `--module nativecmpkit-io` selects an explicitly labeled
 diagnostic subset. Its receipt has `complete_suite_requested=false` and lists the
 other test-bearing modules not requested. The CI template does not use this
 option. Even a subset captures all known library/shared source inputs, so schedule
@@ -131,7 +131,7 @@ receipt is never repaired by copying reports from an older run.
 ### Exact native sharing scenario eligibility
 
 `scripts/ci/native_test_policy.py` binds the four scenarios in
-`calf-share/src/desktopTest/kotlin/com/mohamedrejeb/calf/share/platform/NativeShareBridgeTest.kt`.
+`nativecmpkit-share/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridgeTest.kt`.
 All four case identities must appear exactly once (KGP's `[desktop]` suffix is
 recognized); deleting the native test source or a case cannot silently reduce
 coverage. No arbitrary skip flag or substring/class-name exception exists.

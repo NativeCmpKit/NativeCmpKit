@@ -21,14 +21,14 @@ FOCUS = "webview-desktop-request-state"
 STOP_FOCUS = FOCUS + "-stop"
 ALL_FOCUS = STOP_FOCUS + "-redirect"
 FOCUSES = (FOCUS, STOP_FOCUS, ALL_FOCUS)
-OLD_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest"
+OLD_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest"
 OLD_METHOD = "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner"
-OLD_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
+OLD_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewRequestStateAcceptanceTest.kt"
 OLD_SHA256 = "c08bcdc062d18d24c5a370aaa818a8171c352d06acca35af1202fd4eb2c13f13"
-NEW_CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
+NEW_CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 STOP_METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 REDIRECT_METHOD = "actual302RedirectAndPublicReloadKeepNativeRequestAndTerminalMetadataDistinct"
-NEW_SOURCE = "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
+NEW_SOURCE = "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewStopRedirectAcceptanceTest.kt"
 NEW_SHA256 = "8eb3cbe9e91974c423998eb3007ed64ed9d98863dcc27d0b72da901caad411a3"
 ROWS = (
     ("desktop-linux-x64", FOCUS, "Linux", "x86_64", 1, 1),
@@ -61,15 +61,15 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Source-only plans over partial copied inputs; no compiler/task/SDK/native work.
-        cls.plans = {focus: lt.plan(lt.ROOT, "desktop", only_modules=("calf-webview",), focus=focus) for focus in FOCUSES}
+        cls.plans = {focus: lt.plan(lt.ROOT, "desktop", only_modules=("nativecmpkit-webview",), focus=focus) for focus in FOCUSES}
 
     def plan(self, focus):
         return copy.deepcopy(self.plans[focus])
 
     def source_root(self, directory):
         root = Path(directory).resolve()
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root; never compiled\n")
         for relative in (OLD_SOURCE, NEW_SOURCE, lt.WEBVIEW_DESKTOP_AWT_OWNER_SOURCE):
@@ -113,7 +113,7 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         report_total = 0
         for row, (_, focus, system, architecture, count, reports) in zip(rows, ROWS):
             self.assertEqual("desktop", row["suite"])
-            self.assertEqual("calf-webview", row["test-modules"])
+            self.assertEqual("nativecmpkit-webview", row["test-modules"])
             plan = self.plan(focus)
             expected, = plan["expected"]
             self.assertEqual(selected_cases(focus), expected["required_testcases"])
@@ -134,20 +134,20 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         for focus in FOCUSES:
             plan = self.plan(focus); expected, = plan["expected"]
             self.assertFalse(plan["complete_suite_requested"])
-            self.assertEqual(["calf-webview"], plan["explicit_module_subset"])
+            self.assertEqual(["nativecmpkit-webview"], plan["explicit_module_subset"])
             self.assertEqual(list(lt.SUITES["desktop"][1]), plan["inherited_test_source_sets"])
             self.assertEqual(list(source_hashes(focus)), expected["test_source_files"])
             self.assertEqual(source_hashes(focus), expected["test_source_sha256"])
             self.assertEqual(["desktopTest"], expected["test_source_sets"])
-            self.assertEqual(":calf-webview", expected["project"])
-            self.assertEqual(":calf-webview:desktopTest", expected["task"])
-            self.assertEqual("calf-webview/build/test-results/desktopTest", expected["report_directory"])
+            self.assertEqual(":nativecmpkit-webview", expected["project"])
+            self.assertEqual(":nativecmpkit-webview:desktopTest", expected["task"])
+            self.assertEqual("nativecmpkit-webview/build/test-results/desktopTest", expected["report_directory"])
             self.assertEqual(",".join(classname + "." + method for classname, method in selected_pairs(focus)), expected["test_filter"])
             self.assertTrue(lt.validate_test_focus(plan))
             for key, value in (("test_filter", "*"), ("test_filter", NEW_CLASS), ("required_testcases", selected_cases(focus) * 2),
                                ("test_source_files", []), ("test_source_sets", ["commonTest"]), ("test_source_sha256", {}),
-                               ("task", ":calf-webview:publish"), ("report_directory", "calf-io/build/test-results/desktopTest"),
-                               ("project", ":calf-io"), ("module", "calf-io")):
+                               ("task", ":nativecmpkit-webview:publish"), ("report_directory", "nativecmpkit-io/build/test-results/desktopTest"),
+                               ("project", ":nativecmpkit-io"), ("module", "nativecmpkit-io")):
                 changed = self.plan(focus); changed["expected"][0][key] = value
                 with self.assertRaises(ValueError):
                     lt.validate_test_focus(changed)
@@ -158,20 +158,20 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         for focus in (STOP_FOCUS, ALL_FOCUS):
             with tempfile.TemporaryDirectory() as directory:
                 root = self.source_root(directory)
-                self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("calf-webview",), focus=focus)))
+                self.assertTrue(lt.validate_test_focus(lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)))
                 for relative, needle in ((OLD_SOURCE, OLD_METHOD), (NEW_SOURCE, STOP_METHOD), (NEW_SOURCE, REDIRECT_METHOD)):
                     source = root / relative; original = source.read_bytes()
                     source.write_bytes(original.replace(needle.encode(), b"unreviewedMethod", 1))
                     with self.assertRaises(ValueError):
-                        lt.plan(root, "desktop", only_modules=("calf-webview",), focus=focus)
+                        lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
                     source.write_bytes(original)
                 source = root / NEW_SOURCE; original = source.read_bytes(); source.unlink()
                 with self.assertRaises(ValueError):
-                    lt.plan(root, "desktop", only_modules=("calf-webview",), focus=focus)
+                    lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
                 source.write_bytes(original)
-                source.unlink(); source.symlink_to(root / "calf-webview/build.gradle.kts")
+                source.unlink(); source.symlink_to(root / "nativecmpkit-webview/build.gradle.kts")
                 with self.assertRaises(ValueError):
-                    lt.plan(root, "desktop", only_modules=("calf-webview",), focus=focus)
+                    lt.plan(root, "desktop", only_modules=("nativecmpkit-webview",), focus=focus)
 
     def test_focus_specific_host_aliases_commands_cli_and_cross_host_suite_module_refusals(self):
         authorized = {
@@ -192,7 +192,7 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
                 wanted = [classname + "." + method for classname, method in selected_pairs(focus)]
                 self.assertEqual(wanted, [command[index + 1] for index, token in enumerate(command) if token == "--tests"])
                 self.assertEqual(len(wanted), command.count("--tests"))
-                self.assertIn(":calf-webview:desktopTest", command)
+                self.assertIn(":nativecmpkit-webview:desktopTest", command)
                 self.assertNotIn("publish", " ".join(command))
             for system, architecture in refused.get(focus, ()):
                 with self.assertRaises(ValueError):
@@ -200,15 +200,15 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
                 with patch("library_tests.platform.system", return_value=system), patch("library_tests.platform.machine", return_value=architecture):
                     with self.assertRaises(ValueError):
                         lt.gradle_command("desktop", self.plan(focus))
-            args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "calf-webview", "--focus", focus]
+            args = ["library_tests.py", "plan", "--suite", "desktop", "--module", "nativecmpkit-webview", "--focus", focus]
             stream = io.StringIO()
             with patch("sys.argv", args), patch("sys.stdout", stream):
                 self.assertEqual(0, lt.main())
             self.assertEqual(self.plan(focus), json.loads(stream.getvalue()))
             for suite in ("android-host", "android-device", "ios", "js", "wasm"):
                 with self.assertRaises(ValueError):
-                    lt.plan(lt.ROOT, suite, only_modules=("calf-webview",), focus=focus)
-            for modules in (None, (), ("calf-ui",), ("calf-webview", "calf-ui"), ("calf-webview", "calf-webview")):
+                    lt.plan(lt.ROOT, suite, only_modules=("nativecmpkit-webview",), focus=focus)
+            for modules in (None, (), ("nativecmpkit-ui",), ("nativecmpkit-webview", "nativecmpkit-ui"), ("nativecmpkit-webview", "nativecmpkit-webview")):
                 with self.assertRaises(ValueError):
                     lt.plan(lt.ROOT, "desktop", only_modules=modules, focus=focus)
         for focus, system, architecture in (("unknown-desktop-cells", "Linux", "x64"), (STOP_FOCUS, None, "x64"),
@@ -239,7 +239,7 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
                          [[cases[0]], [{"classname": "Foreign.Test", "name": STOP_METHOD + "[desktop]"}]],
                          [[cases[0]], [{"classname": NEW_CLASS, "name": STOP_METHOD}]],
                          [[cases[0]], [{"classname": NEW_CLASS, "name": STOP_METHOD + "[iosSimulatorArm64]"}]],
-                         normal + [[{"classname": "com.mohamedrejeb.calf.ui.web.JavaFxWebViewTest", "name": "stopCancelsRealSlowLoadWithoutFeedbackLoop[desktop]"}]])
+                         normal + [[{"classname": "io.github.apdelrahman1911.nativecmpkit.ui.web.JavaFxWebViewTest", "name": "stopCancelsRealSlowLoadWithoutFeedbackLoop[desktop]"}]])
             for reports in mutations:
                 self.assertTrue(self.collect(focus, reports=reports)["errors"])
             for changed in ({"outcome": "failure"}, {"outcome": "error"}, {"outcome": "skipped"}, {"stale": True}, {"markers": 0}, {"markers": 2}):
@@ -289,9 +289,9 @@ class DesktopWebViewLiteralMatrixTests(unittest.TestCase):
         self.assertEqual(OLD_SHA256, hashlib.sha256((lt.ROOT / OLD_SOURCE).read_bytes()).hexdigest())
         self.assertEqual([OLD_METHOD], re.findall(r"@Test\s+fun\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(\s*\)", (lt.ROOT / OLD_SOURCE).read_text()))
         preserved = {
-            "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/JavaFxWebViewTest.kt": "0c061f3ee9acc0d7d188d8604105349f0afe3fc1e61f743361eaf9cba38963ae",
-            "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
-            "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
+            "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/JavaFxWebViewTest.kt": "0c061f3ee9acc0d7d188d8604105349f0afe3fc1e61f743361eaf9cba38963ae",
+            "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt": "598bd8a18431882e68b96a28ff70f65c641bf2a1d36486aeff0aae12b999ae39",
+            "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt": "4a87aa4a7a17252f817f8bdc9b8de8fcda62fb6093bfed624db0bc5c6875647f",
         }
         from platform_recovery659_source_projection import current_source_before_platform_recovery659
         for relative, expected in preserved.items():

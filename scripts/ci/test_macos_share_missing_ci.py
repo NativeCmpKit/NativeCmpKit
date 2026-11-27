@@ -70,13 +70,13 @@ class MissingShare630CiControls(unittest.TestCase):
 
     def test_profile_mutations_and_other_suites_or_modules_refuse(self):
         for suite, modules in (("ios", (share.MODULE,)), ("desktop", None),
-                               ("desktop", ("calf-ui",)), ("desktop", (share.MODULE, "calf-ui"))):
+                               ("desktop", ("nativecmpkit-ui",)), ("desktop", (share.MODULE, "nativecmpkit-ui"))):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 library.plan(ROOT, suite, only_modules=modules, focus=share.FOCUS)
         for slots in (("desktop-macos-x64",), ("desktop-macos-arm64", "desktop-linux-x64")):
             with patch.dict(workflow.PROFILES, {share.PROFILE: slots}), self.assertRaises(ValueError):
                 workflow.matrix(share.PROFILE)
-        with patch.dict(workflow.MODULE_SUBSETS, {share.PROFILE: "calf-ui"}), self.assertRaises(ValueError):
+        with patch.dict(workflow.MODULE_SUBSETS, {share.PROFILE: "nativecmpkit-ui"}), self.assertRaises(ValueError):
             workflow.matrix(share.PROFILE)
         for key, value in (("arch", "x64"), ("native-ui", "false"), ("runner", "macos-26-intel")):
             slots = copy.deepcopy(workflow.SLOTS)
@@ -86,7 +86,7 @@ class MissingShare630CiControls(unittest.TestCase):
     def test_arbitrary_filters_tasks_populations_and_contract_mutations_refuse(self):
         for key, value in (("test_filter", "*"), ("test_filter", share.CLASS + ".*"),
                 ("test_filter_argument", "annotation"), ("test_exclusion_annotation", "Skip"),
-                ("task", ":calf-share:publish"), ("report_directory", "foreign/reports"),
+                ("task", ":nativecmpkit-share:publish"), ("report_directory", "foreign/reports"),
                 ("required_testcases", []), ("test_source_files", []), (share.CONTRACT_KEY, None)):
             plan = self.plan(); plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): library.validate_test_focus(plan)

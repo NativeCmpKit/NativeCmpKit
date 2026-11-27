@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-@file:OptIn(com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi::class)
+@file:OptIn(io.github.apdelrahman1911.nativecmpkit.permissions.ExperimentalPermissionsApi::class)
 
 package io.github.apdelrahman1911.nativecmpkit.verification.storageprobe
 
@@ -31,16 +31,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.SideEffect
 import androidx.lifecycle.Lifecycle
-import com.mohamedrejeb.calf.permissions.Permission
-import com.mohamedrejeb.calf.permissions.PermissionState
-import com.mohamedrejeb.calf.permissions.WriteStorage
-import com.mohamedrejeb.calf.permissions.details
-import com.mohamedrejeb.calf.permissions.isGranted
-import com.mohamedrejeb.calf.permissions.rememberPermissionState
+import io.github.apdelrahman1911.nativecmpkit.permissions.Permission
+import io.github.apdelrahman1911.nativecmpkit.permissions.PermissionState
+import io.github.apdelrahman1911.nativecmpkit.permissions.WriteStorage
+import io.github.apdelrahman1911.nativecmpkit.permissions.details
+import io.github.apdelrahman1911.nativecmpkit.permissions.isGranted
+import io.github.apdelrahman1911.nativecmpkit.permissions.rememberPermissionState
 import java.io.File
 import java.security.MessageDigest
 
-private const val REPORTER = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test"
+private const val REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test"
 private const val AUTHORITY = REPORTER + ".storage-documents"
 
 /** Real public library factory in the UID whose file operations are measured. */

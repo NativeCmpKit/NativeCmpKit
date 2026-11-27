@@ -27,7 +27,7 @@ class FakeOwnedProcess:
 
 class DesktopMediaContextTests(unittest.TestCase):
     def plan(self, suite="desktop", selected=True):
-        return {"suite": suite, "expected": [{"module": "calf-webview" if selected else "calf-io",
+        return {"suite": suite, "expected": [{"module": "nativecmpkit-webview" if selected else "nativecmpkit-io",
                 "test_source_files": [audio.MEDIA_SOURCE] if selected else []}]}
 
     def test_other_targets_modules_and_nonlinux_hosts_do_not_start_tools_or_mutate_environment(self):

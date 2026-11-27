@@ -14,14 +14,14 @@ import workflow_matrix as wm
 
 FOCUS = "geo-android-owner-lifetime"
 PROFILE = "android-geo-ownership"
-CLASS = "com.mohamedrejeb.calf.geo.AndroidLocationOwnershipTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.geo.AndroidLocationOwnershipTest"
 METHOD = "nativeRebindingRestartAndTerminalCleanupReleaseOwnersDespiteRetainedCallbacks"
-SOURCE = "calf-geo/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/geo/AndroidLocationOwnershipTest.kt"
+SOURCE = "nativecmpkit-geo/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/geo/AndroidLocationOwnershipTest.kt"
 
 
 class AndroidGeoOwnershipTests(unittest.TestCase):
     def plan(self):
-        return lt.plan(lt.ROOT, "android-device", only_modules=("calf-geo",), focus=FOCUS)
+        return lt.plan(lt.ROOT, "android-device", only_modules=("nativecmpkit-geo",), focus=FOCUS)
 
     def collect(self, cases=None, marker=1, stale=False):
         plan = self.plan()
@@ -42,7 +42,7 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
 
     def test_exact_one_new_native_method_not_replay_of_accepted_geo_or_navigation(self):
         row, = wm.matrix(PROFILE)["include"]
-        self.assertEqual(("android-device-api35", "android-device", "calf-geo", FOCUS),
+        self.assertEqual(("android-device-api35", "android-device", "nativecmpkit-geo", FOCUS),
                          (row["slot"], row["suite"], row["test-modules"], row["test-focus"]))
         plan = self.plan()
         self.assertTrue(lt.validate_test_focus(plan))
@@ -53,8 +53,8 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
 
     def test_both_real_source_clis_and_host_preflight_accept_the_same_finite_selection(self):
         import android_device_tests as device
-        for module, args in ((lt, ["library_tests.py", "plan", "--suite", "android-device", "--module", "calf-geo", "--focus", FOCUS]),
-                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "calf-geo", "--focus", FOCUS,
+        for module, args in ((lt, ["library_tests.py", "plan", "--suite", "android-device", "--module", "nativecmpkit-geo", "--focus", FOCUS]),
+                             (device, ["android_device_tests.py", "plan", "--api-level", "35", "--module", "nativecmpkit-geo", "--focus", FOCUS,
                                        "--output", "build/ci-verification/geo-synthetic-plan"])):
             with patch("sys.argv", args), patch("sys.stdout", io.StringIO()):
                 self.assertEqual(0, module.main())
@@ -63,12 +63,12 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
         self.assertEqual(0, preflight["slots"][0]["exit_code"])
 
     def test_foreign_targets_modules_arbitrary_filters_and_full_success_claim_are_rejected(self):
-        for suite, modules in (("desktop", ("calf-geo",)), ("android-host", ("calf-geo",)), ("ios", ("calf-geo",)),
-                               ("js", ("calf-geo",)), ("wasm", ("calf-geo",)), ("android-device", None),
-                               ("android-device", ("calf-navigation",)), ("android-device", ("calf-geo", "calf-io"))):
+        for suite, modules in (("desktop", ("nativecmpkit-geo",)), ("android-host", ("nativecmpkit-geo",)), ("ios", ("nativecmpkit-geo",)),
+                               ("js", ("nativecmpkit-geo",)), ("wasm", ("nativecmpkit-geo",)), ("android-device", None),
+                               ("android-device", ("nativecmpkit-navigation",)), ("android-device", ("nativecmpkit-geo", "nativecmpkit-io"))):
             with self.assertRaises(ValueError):
                 lt.plan(lt.ROOT, suite, only_modules=modules, focus=FOCUS)
-        for key, value in (("test_filter", "*"), ("required_testcases", []), ("test_source_files", []), ("task", ":calf-geo:publish")):
+        for key, value in (("test_filter", "*"), ("required_testcases", []), ("test_source_files", []), ("task", ":nativecmpkit-geo:publish")):
             plan = deepcopy(self.plan())
             plan["expected"][0][key] = value
             with self.assertRaises(ValueError):
@@ -103,9 +103,9 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
 
     def test_full_native_plan_retains_all_existing_modules_and_all_eleven_host_slots(self):
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), lt.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), lt.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             lt.plan(lt.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -113,13 +113,13 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         plan = lt.plan(lt.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in plan["expected"]])
         self.assertEqual(list(unrelated), plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          plan["test_bearing_modules_not_requested"])
         self.assertEqual(11, len(wm.matrix("all")["include"]))
 
@@ -127,7 +127,7 @@ class AndroidGeoOwnershipTests(unittest.TestCase):
         command = lt.gradle_command("android-device", self.plan(), android_serial="emulator-5588")
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + CLASS, command)
         self.assertNotIn("--tests", command)
-        self.assertEqual(":calf-geo:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-geo:connectedAndroidDeviceTest", command[-1])
         workflow = (lt.ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn(PROFILE, workflow)
         self.assertIn("permissions:\n  contents: read", workflow)

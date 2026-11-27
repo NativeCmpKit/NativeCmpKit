@@ -2,19 +2,19 @@
 
 ## Scope, baseline and confidence
 
-Reviewed against **`af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`** (imported Calf
+Reviewed against **`af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`** (imported NativeCmpKit
 main). All line numbers below refer to that immutable baseline, not subsequent
 nativeCmpkit identity edits. Read a cited file with `git show <baseline>:<path>`.
-Public `com.mohamedrejeb.calf` packages and `calf-*` Gradle paths remain intentional
+Public `io.github.apdelrahman1911.nativecmpkit` packages and `nativecmpkit-*` Gradle paths remain intentional
 compatibility boundaries. This review did not rewrite library implementations.
 
 | Reviewed tree | Baseline tracked files | Review method |
 |---|---:|---|
-| `calf-core/` | 9 | All source/configuration; every common/actual declaration |
-| `calf-navigation/` | 22 | All source/configuration, both existing tests, parser/bundle execution reproductions |
-| `calf-cupertino-icons/` | 4 | Renderer/configuration, every generated declaration mechanically checked, binary font tables/provenance |
+| `nativecmpkit-core/` | 9 | All source/configuration; every common/actual declaration |
+| `nativecmpkit-navigation/` | 22 | All source/configuration, both existing tests, parser/bundle execution reproductions |
+| `nativecmpkit-cupertino-icons/` | 4 | Renderer/configuration, every generated declaration mechanically checked, binary font tables/provenance |
 | `sample/` | 71 | All Kotlin/Swift, platform shells, Xcode/Gradle/manifests/HTML/resources, including commented prototypes |
-| `calf-ui/.../sf/symbols/SFSymbol.kt` | 1 additional file | All 6,984 generated declarations parsed/uniqueness checked; UIKit consumption traced with UI reviewer |
+| `nativecmpkit-ui/.../sf/symbols/SFSymbol.kt` | 1 additional file | All 6,984 generated declarations parsed/uniqueness checked; UIKit consumption traced with UI reviewer |
 
 The **106 files in the four assigned trees plus one additional catalogue** are
 covered here. Generated identifiers were exhaustively checked as data; that is
@@ -27,10 +27,10 @@ implementations have separate module reports. See [audit analysis](../audit/navi
 
 | Project | Direct responsibilities/dependencies | Publication/status at baseline |
 |---|---|---|
-| `:calf-core` | Compose convention; Compose foundation for composition locals | Applies `module.publication`; deliberately tiny common API |
-| `:calf-navigation` | Compose foundation/Material3; AndroidX navigation on Android; Kotlin test and desktop Compose test dependencies | **No publication plugin**; incomplete prototype, not a mature navigation framework |
-| `:calf-cupertino-icons` | Compose convention/publication; Material3 text + Compose resource font | Published-library configuration, but artifacts not verified by this review |
-| `:sample:common` | UI, file picker/Coil, permissions umbrella, WebView, adaptive navigation, camera, share, icons; Material icons, datetime, Coil/Ktor | Example library, not a release artifact; static iOS framework `Common` exports `calf-ui` |
+| `:nativecmpkit-core` | Compose convention; Compose foundation for composition locals | Applies `module.publication`; deliberately tiny common API |
+| `:nativecmpkit-navigation` | Compose foundation/Material3; AndroidX navigation on Android; Kotlin test and desktop Compose test dependencies | **No publication plugin**; incomplete prototype, not a mature navigation framework |
+| `:nativecmpkit-cupertino-icons` | Compose convention/publication; Material3 text + Compose resource font | Published-library configuration, but artifacts not verified by this review |
+| `:sample:common` | UI, file picker/Coil, permissions umbrella, WebView, adaptive navigation, camera, share, icons; Material icons, datetime, Coil/Ktor | Example library, not a release artifact; static iOS framework `NativeCmpKit` exports `nativecmpkit-ui` |
 | Sample Android/desktop/JS/Wasm shells | Platform launchers and distribution settings | Runnable examples, not proof of native functionality |
 | `sample/ios` | SwiftUI/Xcode host invokes Gradle framework integration | Requires macOS/Xcode/signing configuration; not executable on this Linux host |
 
@@ -42,9 +42,9 @@ navigation implementation. Toolchain and dependency compatibility belong to the
 [build audit](../audit/build-security.md); the central architecture
 map is authoritative for the complete Gradle graph.
 
-## `calf-core`: all declarations and ownership
+## `nativecmpkit-core`: all declarations and ownership
 
-All core Kotlin files use `src/<set>/kotlin/com.mohamedrejeb.calf/core/`.
+All core Kotlin files use `src/<set>/kotlin/io.github.apdelrahman1911.nativecmpkit/core/`.
 
 | File/symbol | Exact behavior and constraints |
 |---|---|
@@ -54,19 +54,19 @@ All core Kotlin files use `src/<set>/kotlin/com.mohamedrejeb.calf/core/`.
 | `androidMain/LocalPlatformContext.android.kt:5` | Actual getter delegates to Compose Android `LocalContext`; no globally cached Activity in this module |
 | `nonAndroidMain/PlatformContext.nonAndroid.kt:3-10` | Actual abstract class with private constructor and a companion singleton used as a sentinel; **not** a UIKit view controller or desktop Window |
 | `nonAndroidMain/LocalPlatformContext.nonAndroid.kt:5-8` | Static composition local defaulting to the sentinel; desktop/iOS/JS/Wasm share this behavior |
-| `ExperimentalCalfApi.kt:3-15` | `@RequiresOptIn` at ERROR level, BINARY retention; class/function/property/getter targets; existing name is part of the compatibility surface |
-| `InternalCalfApi.kt:3-15` | Same opt-in severity/retention; class/function/property/constructor targets (no property-getter target); source-level boundary, not a runtime access-control mechanism |
+| `ExperimentalNativeCmpKitApi.kt:3-15` | `@RequiresOptIn` at ERROR level, BINARY retention; class/function/property/getter targets; existing name is part of the compatibility surface |
+| `InternalNativeCmpKitApi.kt:3-15` | Same opt-in severity/retention; class/function/property/constructor targets (no property-getter target); source-level boundary, not a runtime access-control mechanism |
 
 Execution is simply `LocalPlatformContext.current -> platform actual`. This module
 creates no observers, native views, threads or closeable handles. No core-only
 tests are present. Positive source checks: non-Android code does not pretend to
 have an Activity; core introduces no mutable global context reference. Android
-context storage used by convenience file APIs lives in **calf-io**, reviewed there.
+context storage used by convenience file APIs lives in **nativecmpkit-io**, reviewed there.
 
-## `calf-navigation`: implementation map
+## `nativecmpkit-navigation`: implementation map
 
 Common paths below are relative to
-`calf-navigation/src/commonMain/kotlin/com.mohamedrejeb.calf/navigation/`.
+`nativecmpkit-navigation/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/navigation/`.
 
 ### Controller and save/restore
 
@@ -214,7 +214,7 @@ for a design decision before making the prototype a supported public product.
 
 ## Icon renderer, font and generated catalogues
 
-`calf-cupertino-icons/src/commonMain/kotlin/com/mohamedrejeb/calf/cupertino/icons/`:
+`nativecmpkit-cupertino-icons/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/cupertino/icons/`:
 
 - **`CupertinoIcons.kt:3-1335`:** 1,322 public Int constants, 1,234 distinct
   codepoints. Multiple names intentionally alias a codepoint. All fit one Kotlin
@@ -236,7 +236,7 @@ for a design decision before making the prototype a supported public product.
   1.08 font, Regular, FontForge metadata; misleading resource filename does not
   make it Apple's proprietary SF Symbols font. Byte-for-byte match and its MIT
   notice are archived locally in `licenses/` (`NAV-009`).
-- **`calf-ui/.../sf/symbols/SFSymbol.kt`:** 6,984 String name constants, unique names
+- **`nativecmpkit-ui/.../sf/symbols/SFSymbol.kt`:** 6,984 String name constants, unique names
   and values; passed to `UIKitImage.SystemName` / Apple's image API, not bundled
   Apple glyph outlines. Version1.0-7.0 catalogue claims have no per-symbol OS
   availability table or reconstructible generator (`NAV-011`). Missing UIKit
@@ -256,9 +256,9 @@ source-tree remediation is not packaged-artifact verification.
 ## Sample common application: entry and shared state
 
 All common sample paths are under
-`sample/common/src/commonMain/kotlin/com.mohamedrejeb.calf.sample/`.
+`sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit.sample/`.
 
-`App.kt:11-21 -> CalfTheme -> setSingletonImageLoaderFactory -> remembered Adaptive
+`App.kt:11-21 -> NativeCmpKitTheme -> setSingletonImageLoaderFactory -> remembered Adaptive
 controller -> Material Surface -> AppNavGraph` is the entry flow. Theme names stay
 compatible while the project identity changes. `navigation/Screen.kt` defines
 four categories and **24 live Screen entries including Home**. Map and expandable
@@ -282,7 +282,7 @@ fetching/native resource behavior is covered by the I/O/Coil reviewer; no networ
 load or cache-memory benchmark was completed here.
 
 `ui.theme/Color.kt` holds Blue/Teal/Purple and light/dark surface constants;
-`Theme.kt` defines DarkColorScheme, LightColorScheme, AppShapes and CalfTheme,
+`Theme.kt` defines DarkColorScheme, LightColorScheme, AppShapes and NativeCmpKitTheme,
 choosing the system dark-theme branch; `Typography.kt` supplies Material text
 styles. The switches that say dark mode in illustrative screens do not rewire
 the global theme. `Platform.kt` declares Android/iOS/Desktop/Web; five actuals
@@ -344,22 +344,22 @@ not a promised streaming image-transformation API.
 | `AndroidManifest.xml:1-68` | Camera hardware optional, network/media/location/Bluetooth/contacts/calendar/Wi-Fi/SMS declarations, backup disabled, exported launcher Activity, predictive-back setting, **nonexported** FileProvider with URI grants; permission matrix mismatch `NAV-015` |
 | `res/xml/filepaths.xml:1-6` | Grants a cache path root (`.`) through the FileProvider; not world-readable storage by itself. Correct least privilege depends on which individual URIs are granted by camera/share code |
 | `sample/desktop/build.gradle.kts` | Compose desktop JVM app, current-host runtime, DMG/MSI/DEB packaging; naming and OS icon/runtime expectations are configuration, not verified native installers |
-| `sample/desktop/src/jvmMain/kotlin/Main.kt:1-20` | Enables interop blending, starts Compose Window, provides it through `ProvideFilePickerParentWindow`, calls App; correct ownership hook for modal desktop picker parent |
+| `sample/desktop/src/jvmMain/kotlin/io/github/apdelrahman1911/nativecmpkit/sample/desktop/Main.kt:1-20` | Enables interop blending, starts Compose Window, provides it through `ProvideFilePickerParentWindow`, calls App; correct ownership hook for modal desktop picker parent |
 | `sample/web-js/build.gradle.kts`, `Main.kt:1-20` | JS browser executable; waits for Skia `onWasmReady` before ComposeViewport |
 | JS `index.html:1-67`, `webpack.config.d/fs.js` | Host container/styles and compiled script reference; fs.js is empty, not an implemented filesystem shim |
 | `sample/web-wasm/build.gradle.kts`, `Main.kt:1-17` | Wasm browser executable -> ComposeViewport directly |
 | Wasm `index.html:1-99` | Host container/script and fallback warning/error handlers for unsupported Wasm compilation; no browser navigation/history bridge |
 | `sample/common/src/iosMain/kotlin/Main.ios.kt:1-32` | `MainViewController` returns ComposeUIViewController{App}; UINavigationController experiment is commented out |
 | `Second.ios.kt:1-101` | Entire older example commented; no active second host behavior |
-| `sample/ios/Calf/CalfApp.swift:1-29` | SwiftUI App/WindowGroup -> UIViewControllerRepresentable -> shared MainViewController; no-op updateUIViewController; ignoresSafeArea at host |
-| `sample/ios/Calf/ContentView.swift:1-26` | Unused Hello-world SwiftUI view/preview, not the shared application's implementation |
-| `sample/ios/Calf.xcodeproj/project.pbxproj:1-404` | Gradle `:sample:common:embedAndSignAppleFrameworkForXcode` script, framework search/link/config settings and auto-signing references. Project settings name iOS26, **target settings override to18.5** at baseline314/361; do not report26 as the app minimum. Compile-SDK requirement differs from deployment target |
+| `sample/ios/NativeCmpKit/NativeCmpKitApp.swift:1-29` | SwiftUI App/WindowGroup -> UIViewControllerRepresentable -> shared MainViewController; no-op updateUIViewController; ignoresSafeArea at host |
+| `sample/ios/NativeCmpKit/ContentView.swift:1-26` | Unused Hello-world SwiftUI view/preview, not the shared application's implementation |
+| `sample/ios/NativeCmpKit.xcodeproj/project.pbxproj:1-404` | Gradle `:sample:common:embedAndSignAppleFrameworkForXcode` script, framework search/link/config settings and auto-signing references. Project settings name iOS26, **target settings override to18.5** at baseline314/361; do not report26 as the app minimum. Compile-SDK requirement differs from deployment target |
 | iOS `Info.plist:1-32` | App identity and test-purpose privacy descriptions; newer calendar/Bonjour mismatches audited by permission reviewer, not inferred correct from key presence |
 | `Assets.xcassets/**/Contents.json`, Preview assets | Asset catalogue metadata; app icon definition has no actual icon image filenames. Not a production-ready app icon set |
 | Xcode workspace/check plist | IDE workspace metadata only; no iOS unit/UI-test target or scripted device evidence included |
 
 Every Platform actual and both image actuals are covered above. The sample
-framework's explicit `export(projects.calfUi)` is annotated upstream as necessary
+framework's explicit `export(projects.nativecmpkitUi)` is annotated upstream as necessary
 for some iOS interop features; preserve it until an executable interop test proves
 otherwise. Upstream developer signing identifiers are migration configuration,
 not secrets to duplicate or evidence that the new owner can sign the app.

@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 CI = ROOT / "scripts/ci"
 FIXTURE = ROOT / "tests/consumer/android-permission-lifecycle"
-KT = ROOT / "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions"
+KT = ROOT / "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions"
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.permissionlifecycle"
 APP = FIXTURE / "src/main/kotlin" / PACKAGE.replace(".", "/")
 ANDROID = "{http://schemas.android.com/apk/res/android}"
@@ -251,7 +251,7 @@ class AndroidPermissionLifecycleSourceTests(unittest.TestCase):
         for focus in FOCUSES:
             c.validate_request(35, (c.MODULE,), focus)
         for api, modules, focus in ((True, (c.MODULE,), next(iter(FOCUSES))), (34, (c.MODULE,), next(iter(FOCUSES))),
-            (35, ("calf-io",), next(iter(FOCUSES))), (35, (c.MODULE, "calf-io"), next(iter(FOCUSES))),
+            (35, ("nativecmpkit-io",), next(iter(FOCUSES))), (35, (c.MODULE, "nativecmpkit-io"), next(iter(FOCUSES))),
             (35, (c.MODULE,), None), (35, (c.MODULE,), "android-permission-demo-contracts")):
             with self.assertRaises(ValueError): c.validate_request(api, modules, focus)
         bound = c.source_contract(ROOT)
@@ -260,7 +260,7 @@ class AndroidPermissionLifecycleSourceTests(unittest.TestCase):
                 "complete_suite_requested": False, "android_permission_lifecycle": {"package": c.PACKAGE,
                     "source_fixture": c.FIXTURE, "verification_api_level": 35, "source_contract": bound}}
             c.validate_plan(plan)
-            altered = copy.deepcopy(plan); altered["explicit_module_subset"] = ["calf-io", c.MODULE]
+            altered = copy.deepcopy(plan); altered["explicit_module_subset"] = ["nativecmpkit-io", c.MODULE]
             with self.assertRaises(ValueError): c.validate_plan(altered)
             altered = copy.deepcopy(plan); altered["explicit_test_focus"] = "android-permission-demo-contracts"
             with self.assertRaises(ValueError): c.validate_plan(altered)
@@ -354,10 +354,10 @@ class AndroidPermissionLifecycleSourceTests(unittest.TestCase):
         self.assertIn('versionName = "verification-only-api35-permission-lifecycle"', build)
         for module in ("core", "location", "background-location", "camera", "notifications"):
             self.assertIn('implementation("verification.nativecmpkit:unpublished-permission-' + module + '")', build)
-            self.assertIn('project(":calf-permissions:calf-permissions-' + module + '")', settings)
+            self.assertIn('project(":nativecmpkit-permissions:nativecmpkit-permissions-' + module + '")', settings)
         self.assertNotIn("module.publication", build)
         self.assertNotIn("maven-publish", build)
-        self.assertNotIn("calf-sample", settings)
+        self.assertNotIn("nativecmpkit-sample", settings)
         workflow = source(ROOT / ".github/workflows/gradle.yml")
         self.assertIn("build/ci-verification/${{ matrix.slot }}/permission-lifecycle/receipt.json", workflow)
 

@@ -98,7 +98,7 @@ class NativeLicensesTest(unittest.TestCase):
         self.assertFalse(report["license_obligations_reviewed"])
         self.assertEqual(1, len(report["packages"][0]["files"]))
         self.assertNotIn(str(self.cache), json.dumps(report))
-        copied = self.root / "output/META-INF/nativecmpkit/native-dependencies/calf-file-picker/metadata.json"
+        copied = self.root / "output/META-INF/nativecmpkit/native-dependencies/nativecmpkit-file-picker/metadata.json"
         self.assertEqual((self.root / "metadata.json").read_bytes(), copied.read_bytes())
         self.assertEqual(report["metadata_sha256"], sha256(copied))
 

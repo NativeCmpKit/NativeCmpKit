@@ -22,10 +22,10 @@ PREDECESSOR = "4697c3ec65427a12e53645ecffac5e2b52821dd5"
 MAX_SOURCE_BYTES = 4 * 1024 * 1024
 MAX_SPEC_BYTES = 512 * 1024
 BOUND_PATHS = {
-    "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/IosCameraOwnershipAcceptanceTest.kt",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/WebViewContracts.kt",
-    "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/WebView.desktop.kt",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt",
+    "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebViewContracts.kt",
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/WebView.desktop.kt",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopWebViewContentPolicyAcceptanceTest.kt",
     "scripts/ci/camera_ios_ownership_native_focus.py",
     "scripts/ci/camera_ios_ownership_source_projection.py",
     "scripts/ci/camera_recents_source_projection.py",

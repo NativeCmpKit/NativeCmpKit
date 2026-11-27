@@ -16,7 +16,7 @@ import org.gradle.kotlin.dsl.withType
 fun Project.configurePublicationNotices() {
     val moduleName = name
     val root = rootProject.layout.projectDirectory
-    val isNative = moduleName in setOf("calf-file-picker", "calf-share")
+    val isNative = moduleName in setOf("nativecmpkit-file-picker", "nativecmpkit-share")
     val nativeNotices = rootProject.layout.buildDirectory.dir("native-notices/$moduleName")
     val canonical = layout.buildDirectory.dir("publication-notices/canonical")
     val embedded = layout.buildDirectory.dir("publication-notices/embedded")
@@ -42,7 +42,7 @@ fun Project.configurePublicationNotices() {
     }
     val noticeZip = tasks.register<Zip>("publicationNoticesZip") {
         group = "verification"
-        archiveBaseName.set("nativecmpkit-" + moduleName.removePrefix("calf-"))
+        archiveBaseName.set(moduleName)
         archiveVersion.set(project.version.toString())
         archiveClassifier.set("notices")
         destinationDirectory.set(layout.buildDirectory.dir("publication-notices/archives"))

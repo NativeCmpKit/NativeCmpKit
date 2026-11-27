@@ -20,8 +20,8 @@ import workflow_matrix as workflow
 ROOT = Path(__file__).resolve().parents[2]
 SIMULATOR = "726D52AF-426A-408A-974D-CA8B9BE8A479"
 INIT = "scripts/ci/ios_popover_anchor_compile.init.gradle.kts"
-MANAGER = "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/dialog/AlertDialogManager.kt"
-ANCHOR = "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/dialog/uikit/AlertDialogIosPopoverAnchor.kt"
+MANAGER = "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/AlertDialogManager.kt"
+ANCHOR = "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/uikit/AlertDialogIosPopoverAnchor.kt"
 
 
 class PopoverAnchorSourceControls(unittest.TestCase):
@@ -33,8 +33,8 @@ class PopoverAnchorSourceControls(unittest.TestCase):
         for profile, kind in (("ios-popover-anchor", "iphone"), ("ios-popover-anchor-ipad", "ipad")):
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26",
                 "arch": "arm64", "python": "python3", "simulator-kind": kind,
-                "test-modules": "calf-ui", "test-focus": compiler.FOCUS}]}, workflow.matrix(profile))
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=compiler.FOCUS)
+                "test-modules": "nativecmpkit-ui", "test-focus": compiler.FOCUS}]}, workflow.matrix(profile))
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=compiler.FOCUS)
         self.assertEqual(library.ui_application_focus_identities(compiler.FOCUS), plan["expected"][0]["required_testcases"])
         self.assertEqual(5, len(plan["expected"][0]["required_testcases"]))
         self.assertFalse(plan["complete_suite_requested"])
@@ -42,29 +42,29 @@ class PopoverAnchorSourceControls(unittest.TestCase):
 
     def test_only_new_focus_uses_the_exact_four_source_compiler_and_five_filters(self):
         source = (ROOT / INIT).read_text()
-        self.assertEqual(list(compiler.SOURCES), re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', source))
+        self.assertEqual(list(compiler.SOURCES), re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', source))
         self.assertIn('common.setFrom(emptyList<Any>())', source)
         self.assertIn('actual.files.map { it.canonicalFile }.toSet() == files.toSet()', source)
         self.assertIn('compilation.doFirst {', source)
         self.assertIn('"native_tests_executed" to 0', source)
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=compiler.FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=compiler.FOCUS)
         command = library.gradle_command("ios", plan, SIMULATOR)
         self.assertEqual(1, command.count(INIT))
         selectors = [command[i + 1] for i, value in enumerate(command) if value == "--tests"]
         self.assertEqual([library.IOS_POPOVER_ANCHOR_CLASS + "." + name for name in library.IOS_POPOVER_ANCHOR_METHODS], selectors)
-        old = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
+        old = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         self.assertNotIn(INIT, library.gradle_command("ios", old, SIMULATOR))
         live = (ROOT / "scripts/ci/ios_ui_application.py").read_text()
         self.assertIn('focus == lt.IOS_MODAL_XCUI_FOCUS:', live)
         self.assertNotIn("lt.IOS_POPOVER_ANCHOR_FOCUS", live)  # No claimed independent OS input for controlled cases.
 
     def test_wrong_suite_modules_host_and_disabled_native_source_fail_closed(self):
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, compiler.FOCUS))
         for profile in ("ios-popover-anchor", "ios-popover-anchor-ipad"):
             with patch.dict(workflow.PROFILES, {profile: ("desktop-macos-arm64",)}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}), self.assertRaises(ValueError):
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}), self.assertRaises(ValueError):
                 workflow.matrix(profile)
         with tempfile.TemporaryDirectory() as temporary:
             target = Path(temporary) / "ignored.kt"
@@ -74,7 +74,7 @@ class PopoverAnchorSourceControls(unittest.TestCase):
             def controlled_path(root, relative):
                 return target if relative == library.IOS_POPOVER_ANCHOR_SOURCE else ordinary(root, relative)
             with patch.object(library, "safe_path", controlled_path), self.assertRaisesRegex(ValueError, "enabled native declarations"):
-                library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=compiler.FOCUS)
+                library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=compiler.FOCUS)
 
     def test_supported_view_local_api_finite_geometry_and_native_owner_cleanup_are_retained(self):
         anchor = (ROOT / ANCHOR).read_text()
@@ -97,7 +97,7 @@ class PopoverAnchorSourceControls(unittest.TestCase):
                       "delegate.objcPtr() == presentationDelegate.objcPtr()", "ownedAnchorView = null", "ownedAnchorBarButton = null"):
             self.assertIn(token, cleanup)
         self.assertNotIn("presentationController?.delegate =", source)
-        adapter = (ROOT / "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/dialog/AdaptiveAlertDialog.ios.kt").read_text()
+        adapter = (ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/AdaptiveAlertDialog.ios.kt").read_text()
         self.assertEqual(2, adapter.count("val popoverAnchor = LocalAlertDialogIosPopoverAnchor.current"))
         self.assertEqual(2, adapter.count("alertDialogManager.popoverAnchor = popoverAnchor"))
 
@@ -179,7 +179,7 @@ class PopoverAnchorSourceControls(unittest.TestCase):
         fixture.setUp()
         try:
             fixture.write(library.IOS_POPOVER_ANCHOR_SOURCE, (ROOT / library.IOS_POPOVER_ANCHOR_SOURCE).read_bytes())
-            fixture.plan = library.plan(fixture.root, "ios", only_modules=("calf-ui",), focus=compiler.FOCUS)
+            fixture.plan = library.plan(fixture.root, "ios", only_modules=("nativecmpkit-ui",), focus=compiler.FOCUS)
             fixture.document["explicit_test_focus"] = compiler.FOCUS
             fixture.cases = [{"classname": library.IOS_POPOVER_ANCHOR_CLASS, "name": method, "status": "passed"}
                              for method in library.IOS_POPOVER_ANCHOR_METHODS]
@@ -203,7 +203,7 @@ class PopoverCompilerReceiptControls(unittest.TestCase):
             target = self.root / relative; target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / relative).read_bytes())
         self.path = self.root / compiler.RECEIPT; self.path.parent.mkdir(parents=True)
-        self.document = {"task": ":calf-ui:compileTestKotlinIosSimulatorArm64", "focus": compiler.FOCUS,
+        self.document = {"task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64", "focus": compiler.FOCUS,
             "source_sha256": {name: hashlib.sha256((self.root / name).read_bytes()).hexdigest() for name in compiler.SOURCES},
             "effective_sources": list(compiler.SOURCES), "excluded_unrelated_test_sources": True,
             "production_source_sets_changed": False, "native_tests_executed": 0,
@@ -223,7 +223,7 @@ class PopoverCompilerReceiptControls(unittest.TestCase):
 
     def test_wrong_sources_hashes_target_scope_native_claims_and_extra_fields_refuse(self):
         original = copy.deepcopy(self.document)
-        mutations = (lambda d: d.update(task=":calf-ui:iosSimulatorArm64Test"), lambda d: d.update(focus="ui-native-modal-xcui-batch"),
+        mutations = (lambda d: d.update(task=":nativecmpkit-ui:iosSimulatorArm64Test"), lambda d: d.update(focus="ui-native-modal-xcui-batch"),
             lambda d: d.update(native_tests_executed=True), lambda d: d.update(native_tests_executed=0.0),
             lambda d: d.update(native_tests_executed=5), lambda d: d.update(excluded_unrelated_test_sources=1),
             lambda d: d.update(production_source_sets_changed=0), lambda d: d.update(production_source_sets_changed=True),

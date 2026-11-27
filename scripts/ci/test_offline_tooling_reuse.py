@@ -44,7 +44,7 @@ def model_signature():
     inputs = {path: {"mode": "100644", "sha256": reuse.digest(content.encode())} for path, content in {
         reuse.WORKFLOW: WORKFLOW_SOURCE, "scripts/ci/offline_tooling_reuse.py": "modeled committed owner",
         "scripts/ci/test_offline_tooling_reuse.py": "modeled new controls", "gradle/libs.versions.toml": "exact declarations",
-        "calf-share/native/Cargo.lock": "exact lock", "docs/testing/offline-tooling-reuse.md": "modeled docs",
+        "nativecmpkit-share/native/Cargo.lock": "exact lock", "docs/testing/offline-tooling-reuse.md": "modeled docs",
     }.items()}
     result = {"schema": reuse.SCHEMA, "source": {"revision": "a" * 40, "tree": "b" * 40, "inputs": inputs},
               "workflow": {"path": reuse.WORKFLOW, "tooling_actions": reuse.tooling_actions(WORKFLOW_SOURCE)},
@@ -147,7 +147,7 @@ class OfflineToolingReuseControls(unittest.TestCase):
                 if category == "source":
                     current["source"]["revision"] = "c" * 40
                 elif category == "dependency":
-                    current["source"]["inputs"]["calf-share/native/Cargo.lock"]["sha256"] = "1" * 64
+                    current["source"]["inputs"]["nativecmpkit-share/native/Cargo.lock"]["sha256"] = "1" * 64
                 elif category == "workflow":
                     current["source"]["inputs"][reuse.WORKFLOW]["sha256"] = "2" * 64
                 elif category == "action":
@@ -399,7 +399,7 @@ class OfflineToolingReuseControls(unittest.TestCase):
                         if (directory, pattern) == ("scripts/ci", "test_*.py")
                         else ["python3", "-B", "-m", "unittest", "discover", "-s", directory, "-p", pattern, "-v"])
             self.assertEqual(expected, reuse.scope_command(directory, pattern))
-        with self.assertRaises(ValueError): reuse.scope_command("calf-ui", "native*.py")
+        with self.assertRaises(ValueError): reuse.scope_command("nativecmpkit-ui", "native*.py")
 
     def test_runner_retains_first_failure_stops_and_never_seals_drift_as_success(self):
         red = reuse.scope_summary(reuse.SCOPES[1], 1, b"Ran 1 test in 0.1s\nFAILED (errors=1)\n")

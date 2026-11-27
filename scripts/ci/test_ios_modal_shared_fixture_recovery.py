@@ -10,7 +10,7 @@ import ios_modal_worker_source_projection as worker
 import terminal_awt240_source_projection as terminal
 
 ROOT = Path(__file__).resolve().parents[2]
-HOST = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
+HOST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
 
 
 class SharedModalFixtureRecoveryControls(unittest.TestCase):

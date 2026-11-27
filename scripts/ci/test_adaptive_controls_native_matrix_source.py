@@ -6,7 +6,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-BASE = ROOT / "calf-ui/src"
+BASE = ROOT / "nativecmpkit-ui/src"
 
 
 def source(relative):
@@ -49,7 +49,7 @@ def assert_owned_customization_screenshots(case, text):
 
 class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
     def test_common_thumb_uses_all_four_current_caller_colors_without_new_public_api(self):
-        text = source("commonMain/kotlin/com/mohamedrejeb/calf/ui/toggle/CupertinoSwitch.kt")
+        text = source("commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toggle/CupertinoSwitch.kt")
         self.assertIn("CompositionLocalProvider(LocalContentColor provides iconColor)", text)
         for field in ("checkedIconColor", "uncheckedIconColor", "disabledCheckedIconColor", "disabledUncheckedIconColor"):
             self.assertIn("colors." + field, text)
@@ -58,7 +58,7 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         self.assertNotIn("remember { iconColor", text)
 
     def test_real_os_host_requires_main_owned_application_and_fails_wrong_branch(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlNativeHost.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt")
         self.assertIn("val version = onApplicationMain", text)
         self.assertIn("requireOwnedApplicationWindow()", text)
         self.assertIn("UIDevice.currentDevice.systemVersion", text)
@@ -69,7 +69,7 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         self.assertNotIn("@Test", text)
 
     def test_slider_selects_only_public_real_inputs_for_all_twelve_rows_and_negative_contract(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/AdaptiveSliderNativeMatrixTest.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt")
         self.assertEqual([
             "pre26PublicStepsTapDragAndAccessibilityMatrix", "ios26PublicStepsTapDragAndAccessibilityMatrix",
             "pre26PublicNegativeStepsAreRejected", "ios26PublicNegativeStepsAreRejected",
@@ -88,7 +88,7 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         self.assertLess(negative.index("requireAdaptiveControlHost(branch)"), negative.index("assertFailsWith<IllegalArgumentException>"))
 
     def test_slider_requires_positive_paired_drag_and_finite_bounded_callbacks(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/AdaptiveSliderNativeMatrixTest.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt")
         for fragment in ("events.filterIsInstance<DragInteraction.Start>().size == 1",
                          "events.filterIsInstance<DragInteraction.Stop>().size == 1",
                          "requested.size > beforeDrag", "it.start === drag",
@@ -98,7 +98,7 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         self.assertNotIn("down(", text)  # Complete swipe, no held-pointer assertion teardown.
 
     def test_customization_uses_both_real_branches_and_actual_pixels_text_and_supplied_sources(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlCustomizationMatrixTest.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt")
         self.assertEqual([
             "pre26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
             "ios26CustomColorsContentAndInteractionsSurviveDarkAndLargeText",
@@ -113,7 +113,7 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         assert_owned_customization_screenshots(self, text)
 
     def test_toolbar_proves_only_its_authored_material_rows_and_owning_desktop_regression_is_new(self):
-        toolbar = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt")
+        toolbar = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt")
         self.assertEqual([
             "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
             "ios26EmptyItemsRenderMaterialSlotsAndCallerPlacement",
@@ -122,14 +122,14 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
                          "UIKitUIBarButtonItem.title", "expanded.value = false", "mainCompositions > beforeCollapsed",
                          "toolbarBounds.bottom <= bottomBounds.top", "assertWidthIsEqualTo(268.dp)"):
             self.assertIn(fragment, toolbar)
-        desktop = source("desktopTest/kotlin/com/mohamedrejeb/calf/ui/toggle/CupertinoSwitchThumbContentColorTest.kt")
+        desktop = source("desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toggle/CupertinoSwitchThumbContentColorTest.kt")
         self.assertEqual(2, len(methods(desktop)))
         for fragment in ("CupertinoSwitch(checked.value", "listOf(false, true)", "assertEquals(inherited, siblingColor",
                          "fontScale = 2f", "captureToImage().toPixelMap()"):
             self.assertIn(fragment, desktop)
 
     def test_accepted_first_eight_liquid_bodies_are_byte_identical_and_compile_script_is_opt_in(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/LiquidGlassControlTest.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/LiquidGlassControlTest.kt")
         prefix = text.split("    @Test fun cancellationAcceptanceSecondPointerHandoffCommitsOnlyAtTheFinalUp()", 1)[0]
         self.assertEqual("e6d841ab255b36ea60652d1df04ee49c49cd8ab86d0c291f63305637c0f40e91",
                          hashlib.sha256(prefix.encode()).hexdigest())
@@ -137,13 +137,13 @@ class AdaptiveControlsNativeMatrixSourceTests(unittest.TestCase):
         init = (ROOT / "scripts/ci/adaptive_controls_compile.init.gradle.kts").read_text()
         self.assertIn("getCommandLineIncludePatterns", init)
         self.assertIn("gradle.startParameter.taskNames == desktopRequest", init)
-        self.assertIn("listOf(\":calf-ui:compileTestKotlinIosSimulatorArm64\")", init)
+        self.assertIn("listOf(\":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64\")", init)
         self.assertIn("actual.files.map { it.canonicalFile }.toSet() == files.toSet()", init)
         self.assertNotIn("binaries.test", init)
         self.assertNotIn("dependsOn(", init)
 
     def test_owned_customization_screenshot_controls_refuse_missing_pixels_finally_close_and_foreign_owners(self):
-        text = source("iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlCustomizationMatrixTest.kt")
+        text = source("iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt")
         for name in ("assertOpaqueSurface", "assertSliderTracks", "assertThumbGlyph"):
             body = customization_screenshot_scope(text, name)
             for before, after in (

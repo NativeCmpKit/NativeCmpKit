@@ -54,6 +54,6 @@ class PermissionDemoService : Service() {
     })
     override fun onBind(intent: Intent): IBinder = endpoint.binder
     companion object {
-        private const val REPORTER = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test"
+        private const val REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test"
     }
 }

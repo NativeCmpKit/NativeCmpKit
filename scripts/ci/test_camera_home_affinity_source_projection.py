@@ -15,11 +15,11 @@ import ios_owned_geometry_fixture_recovery as older
 
 ROOT = Path(__file__).resolve().parents[2]
 HOME_TEST = "scripts/ci/test_camera_home_baseline_source_projection.py"
-KOTLIN_TEST = "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaselineTest.kt"
+KOTLIN_TEST = "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaselineTest.kt"
 EXPECTED = {
     "scripts/ci/android_camera_home_baseline.py",
     "scripts/ci/android_camera_home_refusal_observation.py",
-    "calf-camera-picker/src/commonTest/kotlin/com/mohamedrejeb/calf/camerapicker/SettingsHomeTaskBaseline.kt",
+    "nativecmpkit-camera-picker/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/SettingsHomeTaskBaseline.kt",
     KOTLIN_TEST, HOME_TEST,
     "scripts/ci/ios_owned_geometry_fixture_recovery.py",
     "scripts/ci/test_ios_owned_geometry_fixture_recovery.py",
@@ -90,7 +90,7 @@ class HomeAffinitySourceProjectionControls(unittest.TestCase):
             "scripts/ci/fixtures/camera-home571-fixture-recovery.json": "681d4eb39370cfff45de265f9baf0913e9e60f04a29f3a331e6fe1b61de9923b",
             "scripts/ci/fixtures/ios-owned-geometry581-fixture-recovery.json": "441995a9a586509700a8359c744c6a2d7420abed2df2924333c6f111598dcd58",
             "scripts/ci/android_camera_developer_prerequisite.py": "92f8d79d3a0871f1abb619a0a17b36c87568e11151fb3dbefa4f12773de78bdb",
-            "calf-camera-picker/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/camerapicker/OwnedDeveloperSettingsUi.kt": "01771567b969a88094d88a2906dadc6bc4d1e8502e695abc9f145b7ca197e06e",
+            "nativecmpkit-camera-picker/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/OwnedDeveloperSettingsUi.kt": "01771567b969a88094d88a2906dadc6bc4d1e8502e695abc9f145b7ca197e06e",
         }
         for name, digest in originals.items():
             raw_current = (ROOT / name).read_bytes()

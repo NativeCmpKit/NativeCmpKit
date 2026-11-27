@@ -21,13 +21,13 @@ do **not** designate NativeCmpKit builds; their history is [archived](migration/
 ## Work with the checked-in source
 
 Clone this independent repository and use its sample projects / Gradle project
-dependencies (`projects.calfUi`, `projects.calfFilePicker`, etc.). This avoids any
+dependencies (`projects.nativecmpkitUi`, `projects.nativecmpkitFilePicker`, etc.). This avoids any
 runtime or source-fetch dependency on the original repository.
 
 ```sh
 git clone https://github.com/Apdelrahman1911/nativeCmpkit.git
 cd nativeCmpkit
-./gradlew :calf-io:desktopTest :calf-file-picker:desktopTest
+./gradlew :nativecmpkit-io:desktopTest :nativecmpkit-file-picker:desktopTest
 # These require an appropriate local graphical / Android / browser environment:
 ./gradlew :sample:desktop:run
 ./gradlew :sample:android:assembleDebug
@@ -43,25 +43,14 @@ source remains `compileSdk = 37`. Apple builds require macOS/Xcode and the iOS S
 sample compile or an isolated JVM probe verifies a native device flow. Exact
 attempts, overrides, results and blocked checks are in [testing](testing/README.md).
 
-## Migration compatibility contract
+## Project names and imports
 
-- **NativeCmpKit** is the current display/root-project name. The repository URL,
-  lowercase Maven group/artifact IDs and existing `nativeCmpkit.version` /
-  `nativeCmpkit.allowPublishing` property names stay unchanged. Historical records
-  retain the original spelling; a display rename is not an API/ABI certification.
-- Replace Maven **group and artifact** when a verified release becomes available.
-- Keep imports under `com.mohamedrejeb.calf.*` for now. Public annotations, JNI
-  entry points, generated resource namespace and module paths remain stable.
-- Do not combine upstream and independent artifacts in one runtime: they define
-  the same classes. Existing users are not forced to migrate before a release.
-- The source project paths remain `:calf-*`; coordinate mappings are explicit in
-  [identity.json](migration/identity.json). Composite builds need explicit
-  substitution because Gradle project names differ from new Maven artifact IDs.
-- iOS consumers of native UI must export `projects.calfUi` from their shared
-  framework, as the sample does. Existing Swift framework names remain unchanged.
-- No binary/API compatibility certification is claimed. Preserve/add API dumps
-  and cross-target consumer tests before the first NativeCmpKit release.
+Use `io.github.apdelrahman1911.nativecmpkit.*` imports and `:nativecmpkit-*`
+Gradle paths. The [identity manifest](migration/current-identity.json) lists the
+projects with Maven publication configuration.
 
-See [ADR 0001](decisions/0001-independent-identity.md), [module guides](modules/README.md)
-and [platform caveats](platforms/README.md). Historical compatibility tables are
-records of upstream claims, not retested support guarantees.
+iOS consumers of native UI must export `projects.nativecmpkitUi` from their
+shared framework, as the sample does. The sample generates and imports the
+`NativeCmpKit` framework.
+
+The historical Calf API remains documented in the migration archive.

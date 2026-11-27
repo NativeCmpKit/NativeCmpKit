@@ -18,9 +18,9 @@ import workflow_matrix as matrix
 
 FOCUS = "webview-browser-offline-destination"
 PROFILE = "webview-offline-destination"
-SOURCE = "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserWebViewOfflineDestinationAcceptanceTest.kt"
-FIXTURE = "calf-webview/karma.config.d/nativecmpkit-offline-fixture.js"
-CLASS = "com.mohamedrejeb.calf.ui.web.BrowserWebViewOfflineDestinationAcceptanceTest"
+SOURCE = "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserWebViewOfflineDestinationAcceptanceTest.kt"
+FIXTURE = "nativecmpkit-webview/karma.config.d/nativecmpkit-offline-fixture.js"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserWebViewOfflineDestinationAcceptanceTest"
 METHOD = "previouslyReachableOwnedDestinationBecomesOfflineWithoutStoppingKarmaOrRetainingRequestState"
 
 # Pure in-memory Node VM model. require(node:http/net) is intercepted: NO listener, socket, network or browser is used.
@@ -174,8 +174,8 @@ main().catch(error => { process.stderr.write(error.message + '\n'); process.exit
 class BrowserOfflineDestinationFocusTests(unittest.TestCase):
     def source_root(self, directory):
         root = Path(directory)
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-webview",\n)\n')
-        build = root / "calf-webview/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-webview",\n)\n')
+        build = root / "nativecmpkit-webview/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root; never built\n")
         for relative in (SOURCE, FIXTURE):
@@ -185,7 +185,7 @@ class BrowserOfflineDestinationFocusTests(unittest.TestCase):
         return root
 
     def plan(self, root, suite="js"):
-        return lt.plan(root, suite, only_modules=("calf-webview",), focus=FOCUS)
+        return lt.plan(root, suite, only_modules=("nativecmpkit-webview",), focus=FOCUS)
 
     def cases(self, suite="js"):
         target = "js" if suite == "js" else "wasmJs"
@@ -213,7 +213,7 @@ class BrowserOfflineDestinationFocusTests(unittest.TestCase):
     def test_new_source_bound_single_method_selects_only_js_and_wasm_not_accepted_requests(self):
         rows = matrix.matrix(PROFILE)["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-webview" and row["test-focus"] == FOCUS for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-webview" and row["test-focus"] == FOCUS for row in rows))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         old = matrix.matrix("webview-request-state")["include"]
         self.assertTrue(all(row["test-focus"] == "webview-browser-request-state" for row in old))
@@ -238,10 +238,10 @@ class BrowserOfflineDestinationFocusTests(unittest.TestCase):
             for suite in ("ios", "desktop", "android-host", "android-device"):
                 with self.assertRaises(ValueError): self.plan(root, suite)
             for suite in ("js", "wasm"):
-                for modules in (None, ("calf-ui",), ("calf-webview", "calf-ui")):
+                for modules in (None, ("nativecmpkit-ui",), ("nativecmpkit-webview", "nativecmpkit-ui")):
                     with self.assertRaises(ValueError): lt.plan(root, suite, only_modules=modules, focus=FOCUS)
                 for key, value in (("test_filter", CLASS), ("required_testcases", []), ("test_source_files", []),
-                                   ("test_source_sha256", {}), ("browser_http_fixture", "foreign.js"), ("task", ":calf-webview:publish")):
+                                   ("test_source_sha256", {}), ("browser_http_fixture", "foreign.js"), ("task", ":nativecmpkit-webview:publish")):
                     plan = self.plan(root, suite); plan["expected"][0][key] = value
                     with self.assertRaises(ValueError): lt.validate_test_focus(plan)
                 plan = self.plan(root, suite); plan["complete_suite_requested"] = True

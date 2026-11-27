@@ -12,15 +12,15 @@ from ios_popover_anchor_plan import RECEIPT, _ordinary_bytes, _unique_object
 import ios_popover_geometry_source_projection as source_history
 
 FOCUSES = ("ui-native-popover-portrait-traits", "ui-native-popover-os-rotation")
-CLASS = "com.mohamedrejeb.calf.ui.dialog.NativePopoverGeometryTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.dialog.NativePopoverGeometryTest"
 METHODS = (
     "nativePortraitTraitsAndViewLocalAnchorUseTheOwnedScene",
     "nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation",
 )
-NATIVE = "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverGeometryTest.kt"
-SCENE = "calf-ui/src/iosGeometryTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativePopoverGeometryScene.kt"
-HOST = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
-IDENTITY = "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt"
+NATIVE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt"
+SCENE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt"
+HOST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
+IDENTITY = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt"
 INIT_SCRIPT = "scripts/ci/ios_popover_geometry_compile.init.gradle.kts"
 SOURCE = "scripts/ci/ios_popover_geometry_plan.py"
 SOURCES = (NATIVE, HOST, IDENTITY, SCENE)
@@ -150,7 +150,7 @@ def validate_compilation(root: Path, started_ns: int, ended_ns: int, focus: str)
         document = json.loads(raw, object_pairs_hook=_unique_object,
             parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite compiler receipt")))
         expected = {
-            "task": ":calf-ui:compileTestKotlinIosSimulatorArm64", "focus": focus,
+            "task": ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64", "focus": focus,
             "source_sha256": {name: hashlib.sha256(_ordinary_bytes(root, name)[0]).hexdigest() for name in SOURCES},
             "effective_sources": list(SOURCES), "excluded_unrelated_test_sources": True,
             "production_source_sets_changed": False, "native_tests_executed": 0,

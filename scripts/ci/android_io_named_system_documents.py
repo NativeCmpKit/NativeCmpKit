@@ -17,13 +17,13 @@ from android_io_named_system_documents_gate_observations import (
 from android_io_named_button_rendering import rendering_present
 
 FOCUS = "android-io-named-system-providers"
-CLASS = "com.mohamedrejeb.calf.io.AndroidIoNamedSystemProviderTest"
-KOTLIN = "calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.io.AndroidIoNamedSystemProviderTest"
+KOTLIN = "nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/"
 TEST = KOTLIN + "AndroidIoNamedSystemProviderTest.kt"
 CALLER = KOTLIN + "AndroidIoSystemTreeGrantActivity.kt"
 UI = KOTLIN + "NamedSystemDocumentsUi.kt"
 DESCRIPTOR = KOTLIN + "DeviceDescriptorProbe.kt"
-MANIFEST = "calf-io/src/androidDeviceTest/AndroidManifest.xml"
+MANIFEST = "nativecmpkit-io/src/androidDeviceTest/AndroidManifest.xml"
 SOURCE_FILES = (TEST, CALLER, UI, DESCRIPTOR, MANIFEST)
 METHODS = (
     "externalStorageProviderTreePreservesOwnedFolderMetadataAndBoundedReadOwnership",
@@ -249,7 +249,7 @@ def source_contract(root: Path) -> dict:
             test.count("= runBlocking(Dispatchers.IO)") == 2 and
             not re.search(r"@(?:(?:org\.junit\.)?Ignore|Disabled|IgnoredTest)\b", test),
             "Exactly the two enabled missing named-provider methods are required")
-    require(all("package com.mohamedrejeb.calf.io" in value for value in (test, caller, ui)),
+    require(all("package io.github.apdelrahman1911.nativecmpkit.io" in value for value in (test, caller, ui)),
             "Named-provider sources must retain the public library package")
     require(all(value in test for value in (
         'assertEquals(35, Build.VERSION.SDK_INT)', 'assertNotEquals(Looper.getMainLooper(), Looper.myLooper())',

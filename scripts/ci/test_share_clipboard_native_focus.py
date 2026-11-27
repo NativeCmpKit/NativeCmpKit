@@ -14,11 +14,11 @@ import workflow_matrix as matrix
 
 PROFILE = "share-clipboard-native"
 FOCUS = "web-share-clipboard-native-contexts"
-CLASS = "com.mohamedrejeb.calf.share.WebClipboardEnvironmentAcceptanceTest"
-SOURCE = "calf-share/src/webTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardEnvironmentAcceptanceTest.kt"
-JS_HELPER = "calf-share/src/jsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.js.kt"
-WASM_HELPER = "calf-share/src/wasmJsTest/kotlin/com/mohamedrejeb/calf/share/WebClipboardNativeHarness.wasmJs.kt"
-FIXTURE = "calf-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.share.WebClipboardEnvironmentAcceptanceTest"
+SOURCE = "nativecmpkit-share/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardEnvironmentAcceptanceTest.kt"
+JS_HELPER = "nativecmpkit-share/src/jsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.js.kt"
+WASM_HELPER = "nativecmpkit-share/src/wasmJsTest/kotlin/io/github/apdelrahman1911/nativecmpkit/share/WebClipboardNativeHarness.wasmJs.kt"
+FIXTURE = "nativecmpkit-share/karma.config.d/nativecmpkit-clipboard-fixture.js"
 METHODS = (
     "secureContextWithAbsentClipboardApiReportsUnavailableWithoutPlatformCalls",
     "genuinelyInsecureHttpContextHasNoClipboardApiAndReportsUnavailable",
@@ -30,8 +30,8 @@ METHODS = (
 class ShareClipboardNativeFocusTests(unittest.TestCase):
     def source_root(self, directory):
         root = Path(directory)
-        (root / "settings.gradle.kts").write_text('include(\n    ":calf-share",\n)\n')
-        build = root / "calf-share/build.gradle.kts"
+        (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-share",\n)\n')
+        build = root / "nativecmpkit-share/build.gradle.kts"
         build.parent.mkdir()
         build.write_text("// Explicitly synthetic discovery root; never built\n")
         for relative in (SOURCE, JS_HELPER, WASM_HELPER, FIXTURE):
@@ -41,7 +41,7 @@ class ShareClipboardNativeFocusTests(unittest.TestCase):
         return root
 
     def plan(self, root, suite="js"):
-        return lt.plan(root, suite, only_modules=("calf-share",), focus=FOCUS)
+        return lt.plan(root, suite, only_modules=("nativecmpkit-share",), focus=FOCUS)
 
     def cases(self, suite="js"):
         target = "js" if suite == "js" else "wasmJs"
@@ -73,11 +73,11 @@ class ShareClipboardNativeFocusTests(unittest.TestCase):
     def test_finite_profile_and_commands_select_only_four_new_cases(self):
         rows = matrix.matrix(PROFILE)["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in rows])
-        self.assertTrue(all(row["test-modules"] == "calf-share" and row["test-focus"] == FOCUS for row in rows))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-share" and row["test-focus"] == FOCUS for row in rows))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         accepted = matrix.matrix("share-browser")["include"]
         self.assertEqual(["browser-js", "browser-wasm"], [row["slot"] for row in accepted])
-        self.assertTrue(all(row["test-modules"] == "calf-share" and "test-focus" not in row for row in accepted))
+        self.assertTrue(all(row["test-modules"] == "nativecmpkit-share" and "test-focus" not in row for row in accepted))
         with tempfile.TemporaryDirectory() as directory:
             root = self.source_root(directory)
             for suite in ("js", "wasm"):
@@ -105,7 +105,7 @@ class ShareClipboardNativeFocusTests(unittest.TestCase):
                 with self.subTest(suite=suite), self.assertRaises(ValueError):
                     self.plan(root, suite)
             for suite in ("js", "wasm"):
-                for modules in (None, ("calf-ui",), ("calf-share", "calf-ui")):
+                for modules in (None, ("nativecmpkit-ui",), ("nativecmpkit-share", "nativecmpkit-ui")):
                     with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                         lt.plan(root, suite, only_modules=modules, focus=FOCUS)
                 for relative in lt.share_clipboard_native_sources(suite):
@@ -123,9 +123,9 @@ class ShareClipboardNativeFocusTests(unittest.TestCase):
             root = self.source_root(directory)
             for suite in ("js", "wasm"):
                 for key, value in (
-                    ("module", "calf-ui"), ("project", ":calf-ui"), ("task", ":calf-share:publish"),
-                    ("report_directory", "calf-share/build/test-results/foreign"),
-                    ("test_filter", "com.mohamedrejeb.calf.share.*"), ("required_testcases", []),
+                    ("module", "nativecmpkit-ui"), ("project", ":nativecmpkit-ui"), ("task", ":nativecmpkit-share:publish"),
+                    ("report_directory", "nativecmpkit-share/build/test-results/foreign"),
+                    ("test_filter", "io.github.apdelrahman1911.nativecmpkit.share.*"), ("required_testcases", []),
                     ("required_original_xml", True), ("required_original_xml", 2),
                     ("test_source_files", []), ("test_source_sets", ["commonTest"]),
                     ("test_source_sha256", {}), ("browser_http_fixture", "foreign.js"),
@@ -135,7 +135,7 @@ class ShareClipboardNativeFocusTests(unittest.TestCase):
                     with self.subTest(suite=suite, field=key, value=value), self.assertRaises(ValueError):
                         lt.validate_test_focus(plan)
                 for key, value in (("complete_suite_requested", True),
-                                   ("explicit_module_subset", ["calf-share", "calf-ui"]),
+                                   ("explicit_module_subset", ["nativecmpkit-share", "nativecmpkit-ui"]),
                                    ("inherited_test_source_sets", ["webTest"])):
                     plan = self.plan(root, suite)
                     plan[key] = value

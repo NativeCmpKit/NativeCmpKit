@@ -7,10 +7,10 @@ import java.security.MessageDigest
 // Only the separate compiler task OR NEW5 application request; no accepted/common
 // test compilation, implicit host, publication, unrelated task or generated XML.
 gradle.projectsEvaluated {
-    val project = rootProject.findProject(":calf-camera-picker") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-camera-picker") ?: return@projectsEvaluated
     val focus = rootProject.providers.gradleProperty("nativecmpkitCameraIosFocus").orNull
     check(focus == "ios-camera-ownership-memory-callback") { "Explicit exact Camera NEW5 focus is required" }
-    val prefix = "com.mohamedrejeb.calf.camerapicker.IosCameraOwnershipAcceptanceTest."
+    val prefix = "io.github.apdelrahman1911.nativecmpkit.camerapicker.IosCameraOwnershipAcceptanceTest."
     val methods = listOf(
         "publicOwnerSurvivesOrdinaryRecompositionAndNativeGcAndDeliversToLatestCallback",
         "doubleLaunchDuplicateTerminalInputAndReentrantReplacementKeepOneNativeOwner",
@@ -18,8 +18,8 @@ gradle.projectsEvaluated {
         "actualSimulatorUnavailableAndCompetingModalOutcomesPreserveForeignPresenter",
         "controlledOriginalNativeImageWritesRealPngAndJpegAndSuccessOutlivesOwner",
     ).map { prefix + it }
-    val compilerRequest = listOf(":calf-camera-picker:compileTestKotlinIosSimulatorArm64")
-    val applicationRequest = listOf(":calf-camera-picker:iosSimulatorArm64ApplicationTest") +
+    val compilerRequest = listOf(":nativecmpkit-camera-picker:compileTestKotlinIosSimulatorArm64")
+    val applicationRequest = listOf(":nativecmpkit-camera-picker:iosSimulatorArm64ApplicationTest") +
         methods.flatMap { listOf("--tests", it) }
     check(gradle.startParameter.taskNames in setOf(compilerRequest, applicationRequest)) {
         "Camera accepts only its exact three-input compiler or five native methods, never full/publish/other tasks"
@@ -35,14 +35,14 @@ gradle.projectsEvaluated {
         }
     }
     val paths = listOf(
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/IosCameraOwnershipAcceptanceTest.kt",
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/internal/NativeCameraApplicationHost.kt",
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/internal/NativeCameraObjectIdentity.kt",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt",
     )
     val expectedHashes = mapOf(
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "5e5a62825d8a47ad7a5880df2a75807aba01ffd79f4ffd601f04082a89797230",
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/internal/NativeCameraApplicationHost.kt" to "9a8a186ce3205a8b3ffb136d92e53c44139059e56775d84c9b21129ad8fa05fc",
-        "calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/internal/NativeCameraObjectIdentity.kt" to "62cb9f661dea845a7b103b497b3d788cbe3b738a6449e9860855b94575f80f1b",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "5e5a62825d8a47ad7a5880df2a75807aba01ffd79f4ffd601f04082a89797230",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt" to "9a8a186ce3205a8b3ffb136d92e53c44139059e56775d84c9b21129ad8fa05fc",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt" to "62cb9f661dea845a7b103b497b3d788cbe3b738a6449e9860855b94575f80f1b",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

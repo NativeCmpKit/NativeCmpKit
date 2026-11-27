@@ -22,7 +22,7 @@ WEBVIEW874_GUARD_SHA256 = "c8b75a6b06454135db4b6143987855e27588648d4eb3aefc0d726
 WEBVIEW874_SPEC_SHA256 = "c44400087570740d3248704c2165c3222229f2c05ff1a2a3840dbda9aa04b916"
 WEBVIEW648_FIXTURE_SHA256 = "75b52cd2abc6816bb23e02c01d89b7c5cade3219e737b18a9fe2ca17fd25c550"
 SEALED_HOST_SHA256 = "b4477359b87faf19df236e3511f1545cb1e411f5ba6d8743316fbb2c15c51b9c"
-PRODUCTION = "calf-camera-picker/src/iosMain/kotlin/com.mohamedrejeb.calf/camerapicker/CameraPickerLauncher.ios.kt"
+PRODUCTION = "nativecmpkit-camera-picker/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/camerapicker/CameraPickerLauncher.ios.kt"
 
 
 def sha(payload):

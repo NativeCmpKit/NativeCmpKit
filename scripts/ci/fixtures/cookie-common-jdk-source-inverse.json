@@ -1,15 +1,15 @@
 {
   "added_inputs": {
-    "calf-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js": "a0e557cfb2746551dcd5f5041b29071f72653dbb735442c680c511af357b69b8",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/CookieHeaderMultiplicityTest.kt": "cd16b8924d530932336b49d961540bac1ff363e2d4c7a15260102ad3a5b12b1e",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/CookieWireContract.kt": "9b80595101d1f4e799d2de4dbe6079b6695a03eb7bca705560c27b1b4806964a",
-    "calf-webview/src/commonTest/kotlin/com/mohamedrejeb/calf/ui/web/NativeCookieWireScenario.kt": "db142a088e025bf9a965ca6f601983f991b46c020fa7c36d1188423887091698",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieRequestParityTest.kt": "da6f840d3aadabbb49fbb472bbc2404f102aa67944ddf37dd015704702bd219d",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireAcceptanceTest.kt": "d2b1de74f01190e2a98cf00f0107c581bdf897660e31c1e6f767056c7fa46ca0",
-    "calf-webview/src/desktopTest/kotlin/com/mohamedrejeb/calf/ui/web/DesktopCookieWireFixture.kt": "d1ecff2a81ce985667f208ef8e1d5308237b8a746707f4c79a28343256a7f120",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireAcceptanceTest.kt": "b039975e045d198e3a2e6b72b5165119454f932c084328099806d9acee8dc83a",
-    "calf-webview/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/web/IosCookieWireFixture.kt": "c3505460cb9ee10a2afb238d0bd24f8f9cc1bbcd5e1f06ab226cc8ae1d5b1d10",
-    "calf-webview/src/webTest/kotlin/com/mohamedrejeb/calf/ui/web/BrowserCookieWireAcceptanceTest.kt": "a0714fd4188da4ec663aa41cfde356c1d15c1b67c725d286fa24d30c11952e5e",
+    "nativecmpkit-webview/karma.config.d/nativecmpkit-cookie-wire-fixture.js": "a0e557cfb2746551dcd5f5041b29071f72653dbb735442c680c511af357b69b8",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieHeaderMultiplicityTest.kt": "cd16b8924d530932336b49d961540bac1ff363e2d4c7a15260102ad3a5b12b1e",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/CookieWireContract.kt": "9b80595101d1f4e799d2de4dbe6079b6695a03eb7bca705560c27b1b4806964a",
+    "nativecmpkit-webview/src/commonTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/NativeCookieWireScenario.kt": "db142a088e025bf9a965ca6f601983f991b46c020fa7c36d1188423887091698",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieRequestParityTest.kt": "da6f840d3aadabbb49fbb472bbc2404f102aa67944ddf37dd015704702bd219d",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireAcceptanceTest.kt": "d2b1de74f01190e2a98cf00f0107c581bdf897660e31c1e6f767056c7fa46ca0",
+    "nativecmpkit-webview/src/desktopTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/DesktopCookieWireFixture.kt": "d1ecff2a81ce985667f208ef8e1d5308237b8a746707f4c79a28343256a7f120",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireAcceptanceTest.kt": "b039975e045d198e3a2e6b72b5165119454f932c084328099806d9acee8dc83a",
+    "nativecmpkit-webview/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/IosCookieWireFixture.kt": "c3505460cb9ee10a2afb238d0bd24f8f9cc1bbcd5e1f06ab226cc8ae1d5b1d10",
+    "nativecmpkit-webview/src/webTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/web/BrowserCookieWireAcceptanceTest.kt": "a0714fd4188da4ec663aa41cfde356c1d15c1b67c725d286fa24d30c11952e5e",
     "scripts/ci/cookie_common_jdk_plan.py": "bc8e9157e4fc26df183a5164f686716bf3a91a3a30e20a2c5ad295898cf99226",
     "scripts/ci/cookie_native_wire_fixture.py": "1f7cf6decd96a7aac543099672bbd509b9625aa62edb084be77cc8068d16c66c",
     "scripts/ci/cookie_wire_material.py": "49fd2d26fb4984f2d630134814425866958f257caaa26d007f9aa551bb30df58",
@@ -19,7 +19,7 @@
     "scripts/ci/tests/test_cookie_wire_middleware671.cjs": "f357f748ffa965387a3a68e5f98b04906ee45b3bebdc53b9afdecf17641346c3"
   },
   "bindings": {
-    "calf-webview/build.gradle.kts": {
+    "nativecmpkit-webview/build.gradle.kts": {
       "after_bytes": 9474,
       "after_sha256": "01801ef71db7b6b404a663eaf3a4585745b7e9fa8decad81dcb601f2b11d66c8",
       "before_bytes": 7383,
@@ -32,14 +32,14 @@
           "before_fragment_sha256": "542b64434bb365b900334807eb4767a04d1fedc14229a579e9c3cdb03bcfb197"
         },
         {
-          "after": "        }\n    }\n}\n\n// Missing-only cookie scope. Environment-dependent wire bodies stay parked in\n// every ordinary profile until genuine DNS/TLS/engine ownership is qualified.\nval cookieCommonJdkFocus = providers.gradleProperty(\"nativecmpkitCookieCommonJdkFocus\").orNull\ncheck(cookieCommonJdkFocus == null || cookieCommonJdkFocus == \"common-jdk4\") {\n    \"Unknown finite cookie focus; no native, engine or whole-suite fallback\"\n}\nval cookieCommonJdkSelectors = listOf(\n    \"com.mohamedrejeb.calf.ui.web.CookieHeaderMultiplicityTest.requestCookieParsingRetainsDuplicateNamesAndEqualValues\",\n    \"com.mohamedrejeb.calf.ui.web.CookieHeaderMultiplicityTest.nestedPathAndDomainScopeStillApplyToDuplicateCookieIdentities\",\n    \"com.mohamedrejeb.calf.ui.web.DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes\",\n    \"com.mohamedrejeb.calf.ui.web.DesktopCookieRequestParityTest.anOwnedJdkHandlerSelectingOneEqualValueOccurrenceDoesNotInventTwoResults\",\n)\ntasks.withType<Test>().matching { it.name == \"desktopTest\" }.configureEach {\n    filter { excludeTestsMatching(\"com.mohamedrejeb.calf.ui.web.DesktopCookieWireAcceptanceTest.*\") }\n    if (cookieCommonJdkFocus != null) {\n        check(desktopSecurityFocus == null) { \"Cookie common/JDK4 cannot borrow a native security worker\" }\n        maxParallelForks = 1\n        filter {\n            setIncludePatterns(*cookieCommonJdkSelectors.toTypedArray())\n            isFailOnNoMatchingTests = true\n        }\n    }\n}\n// Exact classes only: retain normal source-set inheritance and every other\n// native/browser test. No Ignore, forced skip or process/trust activation.\ntasks.withType<KotlinNativeTest>().configureEach {\n    filter { excludeTestsMatching(\"com.mohamedrejeb.calf.ui.web.IosCookieWireAcceptanceTest.*\") }\n}\ntasks.withType<KotlinJsTest>().configureEach {\n    filter { excludeTestsMatching(\"com.mohamedrejeb.calf.ui.web.BrowserCookieWireAcceptanceTest.*\") }\n}\n",
+          "after": "        }\n    }\n}\n\n// Missing-only cookie scope. Environment-dependent wire bodies stay parked in\n// every ordinary profile until genuine DNS/TLS/engine ownership is qualified.\nval cookieCommonJdkFocus = providers.gradleProperty(\"nativecmpkitCookieCommonJdkFocus\").orNull\ncheck(cookieCommonJdkFocus == null || cookieCommonJdkFocus == \"common-jdk4\") {\n    \"Unknown finite cookie focus; no native, engine or whole-suite fallback\"\n}\nval cookieCommonJdkSelectors = listOf(\n    \"io.github.apdelrahman1911.nativecmpkit.ui.web.CookieHeaderMultiplicityTest.requestCookieParsingRetainsDuplicateNamesAndEqualValues\",\n    \"io.github.apdelrahman1911.nativecmpkit.ui.web.CookieHeaderMultiplicityTest.nestedPathAndDomainScopeStillApplyToDuplicateCookieIdentities\",\n    \"io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest.realJdkRequestHeadersAndLibraryResultsKeepDuplicateNamesAcrossPathAndDomainScopes\",\n    \"io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieRequestParityTest.anOwnedJdkHandlerSelectingOneEqualValueOccurrenceDoesNotInventTwoResults\",\n)\ntasks.withType<Test>().matching { it.name == \"desktopTest\" }.configureEach {\n    filter { excludeTestsMatching(\"io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopCookieWireAcceptanceTest.*\") }\n    if (cookieCommonJdkFocus != null) {\n        check(desktopSecurityFocus == null) { \"Cookie common/JDK4 cannot borrow a native security worker\" }\n        maxParallelForks = 1\n        filter {\n            setIncludePatterns(*cookieCommonJdkSelectors.toTypedArray())\n            isFailOnNoMatchingTests = true\n        }\n    }\n}\n// Exact classes only: retain normal source-set inheritance and every other\n// native/browser test. No Ignore, forced skip or process/trust activation.\ntasks.withType<KotlinNativeTest>().configureEach {\n    filter { excludeTestsMatching(\"io.github.apdelrahman1911.nativecmpkit.ui.web.IosCookieWireAcceptanceTest.*\") }\n}\ntasks.withType<KotlinJsTest>().configureEach {\n    filter { excludeTestsMatching(\"io.github.apdelrahman1911.nativecmpkit.ui.web.BrowserCookieWireAcceptanceTest.*\") }\n}\n",
           "after_fragment_sha256": "080281e42d89886c0cceefd2863f3f66f129dcba088f5a7396c0cd9db4ecc0ce",
           "before": "        }\n    }\n}\n",
           "before_fragment_sha256": "b4a365a90ec11e90432752cf9376ec5ed36b80ba5e8e6854fcf98970d3044469"
         }
       ]
     },
-    "calf-webview/src/desktopMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.desktop.kt": {
+    "nativecmpkit-webview/src/desktopMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.desktop.kt": {
       "after_bytes": 6569,
       "after_sha256": "5d65a58d48666fa09d846477c27fca99673042a36cc61f2dc08eeb3c09bbcaf2",
       "before_bytes": 5117,
@@ -119,9 +119,9 @@
   "schema_version": 1,
   "scope": "Exact cookie common/JDK4 source custody and parked native/browser bodies; no compiler/native acceptance",
   "unchanged_inputs": {
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/Cookie.kt": "057241c17e64a4556f8dd568168aec53314caa6e72f29745077010c038869eda",
-    "calf-webview/src/commonMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieRules.kt": "5d539000c0c9f755d28fe031468bd9f0410cedb460302d18cf600a66d2102343",
-    "calf-webview/src/iosMain/kotlin/com.mohamedrejeb.calf/ui/web/CookieManager.ios.kt": "bb2d453725767f8f333398221f50d8919fd7eb756edba383f9d4c59d0c1df360",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/Cookie.kt": "057241c17e64a4556f8dd568168aec53314caa6e72f29745077010c038869eda",
+    "nativecmpkit-webview/src/commonMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieRules.kt": "5d539000c0c9f755d28fe031468bd9f0410cedb460302d18cf600a66d2102343",
+    "nativecmpkit-webview/src/iosMain/kotlin/io.github.apdelrahman1911.nativecmpkit/ui/web/CookieManager.ios.kt": "bb2d453725767f8f333398221f50d8919fd7eb756edba383f9d4c59d0c1df360",
     "gradle/libs.versions.toml": "88b87d830087e6f63ebe6211f8f30b85d33e89322f837c27810b9091c1469449",
     "gradle/wrapper/gradle-wrapper.jar": "7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d",
     "gradle/wrapper/gradle-wrapper.properties": "d0bebe8133babb74ab29a31ee6616c56ef8985fc801e1fd16c61b5ed2189e907",

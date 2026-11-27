@@ -1,4 +1,4 @@
-// Modified for nativeCmpkit migration (2026-10-24); legacy project paths preserve source compatibility.
+// NativeCmpKit module and sample projects.
 rootProject.name = "NativeCmpKit"
 
 pluginManagement {
@@ -27,30 +27,30 @@ dependencyResolutionManagement {
 
 include(
     // Artifact modules
-    ":calf-core",
-    ":calf-ui",
-    ":calf-webview",
-    ":calf-cupertino-icons",
-    ":calf-navigation",
-    ":calf-io",
-    ":calf-file-picker",
-    ":calf-file-picker-coil",
-    ":calf-permissions",
-    ":calf-permissions:core",
-    ":calf-permissions:camera",
-    ":calf-permissions:gallery",
-    ":calf-permissions:location",
-    ":calf-permissions:background-location",
-    ":calf-permissions:bluetooth",
-    ":calf-permissions:contacts",
-    ":calf-permissions:calendar",
-    ":calf-permissions:notifications",
-    ":calf-permissions:wifi",
-    ":calf-permissions:microphone",
-    ":calf-geo",
-    ":calf-maps",
-    ":calf-camera-picker",
-    ":calf-share",
+    ":nativecmpkit-core",
+    ":nativecmpkit-ui",
+    ":nativecmpkit-webview",
+    ":nativecmpkit-cupertino-icons",
+    ":nativecmpkit-navigation",
+    ":nativecmpkit-io",
+    ":nativecmpkit-file-picker",
+    ":nativecmpkit-file-picker-coil",
+    ":nativecmpkit-permissions",
+    ":nativecmpkit-permissions:core",
+    ":nativecmpkit-permissions:camera",
+    ":nativecmpkit-permissions:gallery",
+    ":nativecmpkit-permissions:location",
+    ":nativecmpkit-permissions:background-location",
+    ":nativecmpkit-permissions:bluetooth",
+    ":nativecmpkit-permissions:contacts",
+    ":nativecmpkit-permissions:calendar",
+    ":nativecmpkit-permissions:notifications",
+    ":nativecmpkit-permissions:wifi",
+    ":nativecmpkit-permissions:microphone",
+    ":nativecmpkit-geo",
+    ":nativecmpkit-maps",
+    ":nativecmpkit-camera-picker",
+    ":nativecmpkit-share",
     // Sample modules
     ":sample:android",
     ":sample:desktop",
@@ -60,17 +60,17 @@ include(
 )
 
 // Rename projects to keep published artifact names unchanged
-project(":calf-permissions:core").name = "calf-permissions-core"
-project(":calf-permissions:camera").name = "calf-permissions-camera"
-project(":calf-permissions:gallery").name = "calf-permissions-gallery"
-project(":calf-permissions:location").name = "calf-permissions-location"
-project(":calf-permissions:background-location").name = "calf-permissions-background-location"
-project(":calf-permissions:bluetooth").name = "calf-permissions-bluetooth"
-project(":calf-permissions:contacts").name = "calf-permissions-contacts"
-project(":calf-permissions:calendar").name = "calf-permissions-calendar"
-project(":calf-permissions:notifications").name = "calf-permissions-notifications"
-project(":calf-permissions:wifi").name = "calf-permissions-wifi"
-project(":calf-permissions:microphone").name = "calf-permissions-microphone"
+project(":nativecmpkit-permissions:core").name = "nativecmpkit-permissions-core"
+project(":nativecmpkit-permissions:camera").name = "nativecmpkit-permissions-camera"
+project(":nativecmpkit-permissions:gallery").name = "nativecmpkit-permissions-gallery"
+project(":nativecmpkit-permissions:location").name = "nativecmpkit-permissions-location"
+project(":nativecmpkit-permissions:background-location").name = "nativecmpkit-permissions-background-location"
+project(":nativecmpkit-permissions:bluetooth").name = "nativecmpkit-permissions-bluetooth"
+project(":nativecmpkit-permissions:contacts").name = "nativecmpkit-permissions-contacts"
+project(":nativecmpkit-permissions:calendar").name = "nativecmpkit-permissions-calendar"
+project(":nativecmpkit-permissions:notifications").name = "nativecmpkit-permissions-notifications"
+project(":nativecmpkit-permissions:wifi").name = "nativecmpkit-permissions-wifi"
+project(":nativecmpkit-permissions:microphone").name = "nativecmpkit-permissions-microphone"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")

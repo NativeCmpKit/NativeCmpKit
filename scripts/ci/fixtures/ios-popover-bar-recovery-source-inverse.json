@@ -3,7 +3,7 @@
   "base_git_revision": "4081f6aa0097ca7ac4dfb9be197d3ad1986837bd",
   "scope": "Exact failed bar-case assertion/finite CI source layer. Preserve prior five-case/Worker manifests and four accepted native method bodies; no production change or OS rotation/split-view acceptance.",
   "bindings": {
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/dialog/NativePopoverAnchorTest.kt": {
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverAnchorTest.kt": {
       "before_sha256": "672864a09fb3a9395596cfb1ca8e55eb74b18a217a6cd6628a6a711c153c8332",
       "after_sha256": "606714b18109cb9b45ab7854139acf119f5e3c97aaf7d19abbe8245023528ca5",
       "fragments": [
@@ -56,14 +56,14 @@
           "after_fragment_sha256": "b49b9cb2eef49fb1623fed21fd3b87f3594776a610f5d9db0751d283b5560711"
         },
         {
-          "before": "    \"ios-popover-anchor\": \"calf-ui\",\n    \"ios-popover-anchor-ipad\": \"calf-ui\",\n    \"ios-date-year-predicate-red\": \"calf-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n",
-          "after": "    \"ios-popover-anchor\": \"calf-ui\",\n    \"ios-popover-anchor-ipad\": \"calf-ui\",\n    \"ios-popover-bar-recovery\": \"calf-ui\",\n    \"ios-popover-bar-ipad-recovery\": \"calf-ui\",\n    \"ios-date-year-predicate-red\": \"calf-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n",
+          "before": "    \"ios-popover-anchor\": \"nativecmpkit-ui\",\n    \"ios-popover-anchor-ipad\": \"nativecmpkit-ui\",\n    \"ios-date-year-predicate-red\": \"nativecmpkit-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n",
+          "after": "    \"ios-popover-anchor\": \"nativecmpkit-ui\",\n    \"ios-popover-anchor-ipad\": \"nativecmpkit-ui\",\n    \"ios-popover-bar-recovery\": \"nativecmpkit-ui\",\n    \"ios-popover-bar-ipad-recovery\": \"nativecmpkit-ui\",\n    \"ios-date-year-predicate-red\": \"nativecmpkit-ui\",\n    # Foundation/guarded-copy/stream/Coil evidence without replaying unchanged\n",
           "before_fragment_sha256": "7a101942f6b0d6123ca8d2402aeb1f3a198340001b8e34d84ed3036680feefb8",
           "after_fragment_sha256": "0ea464d8ce3cb0af5272fd87884d27eef9ae905e0cce1fb7fa612cea498c40c5"
         },
         {
-          "before": "            raise ValueError(\"Popover anchor verification requires one fixed genuine Arm64 UIKit host and calf-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-anchor\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
-          "after": "            raise ValueError(\"Popover anchor verification requires one fixed genuine Arm64 UIKit host and calf-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-anchor\"\n    if profile in (\"ios-popover-bar-recovery\", \"ios-popover-bar-ipad-recovery\"):\n        kind = \"iphone\" if profile == \"ios-popover-bar-recovery\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"calf-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"calf-ui\" or rows != [canonical]:\n            raise ValueError(\"Failed bar-anchor recovery requires one fixed genuine Arm64 UIKit host and calf-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-bar-recovery\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
+          "before": "            raise ValueError(\"Popover anchor verification requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-anchor\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
+          "after": "            raise ValueError(\"Popover anchor verification requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-anchor\"\n    if profile in (\"ios-popover-bar-recovery\", \"ios-popover-bar-ipad-recovery\"):\n        kind = \"iphone\" if profile == \"ios-popover-bar-recovery\" else \"ipad\"\n        canonical = {\"slot\": \"ios-\" + kind, \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": kind, \"test-modules\": \"nativecmpkit-ui\"}\n        if PROFILES[profile] != (\"ios-\" + kind,) or MODULE_SUBSETS.get(profile) != \"nativecmpkit-ui\" or rows != [canonical]:\n            raise ValueError(\"Failed bar-anchor recovery requires one fixed genuine Arm64 UIKit host and nativecmpkit-ui only\")\n        rows[0][\"test-focus\"] = \"ui-native-popover-bar-recovery\"\n    if profile == \"ios-modal-worker-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
           "before_fragment_sha256": "118cdf6b7d956aa4ba2a46081dae00faa74c01c690b155a3334d457813b6f440",
           "after_fragment_sha256": "a4cf1209757af4882424b54d302262f65519aa2431039fcf3c4c19b134c49735"
         }

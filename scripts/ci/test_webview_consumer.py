@@ -14,7 +14,7 @@ import webview_consumer as c
 def resolution(host='linux-x64', mode='module'):
     target = c.MODULE + '-desktop'
     canonical = target + '-' + c.VERSION + '.jar'
-    label = 'calf-webview-desktop-' + c.VERSION + '.jar'
+    label = 'nativecmpkit-webview-desktop-' + c.VERSION + '.jar'
     directory = c.GROUP.replace('.', '/') + '/' + target + '/' + c.VERSION + '/'
     artifact, metadata = directory + canonical, directory + target + '-' + c.VERSION + '.module'
     staged = {artifact: {'bytes': 17, 'sha256': 'a' * 64}, metadata: {'bytes': 31, 'sha256': 'b' * 64}}
@@ -82,7 +82,7 @@ class WebViewConsumerControllerTests(unittest.TestCase):
         original, staged = resolution()
         cases = [deepcopy(original) for _ in range(3)]
         cases[0]['resolved_artifacts'].append(deepcopy(cases[0]['resolved_artifacts'][0]))
-        cases[1]['resolved_artifacts'][0]['group'] = 'com.mohamedrejeb.calf'
+        cases[1]['resolved_artifacts'][0]['group'] = 'io.github.apdelrahman1911.nativecmpkit'
         cases[2]['resolved_artifacts'][0]['module'] = 'nativecmpkit-io-desktop'
         for document in cases:
             with self.assertRaises(c.EvidenceError):

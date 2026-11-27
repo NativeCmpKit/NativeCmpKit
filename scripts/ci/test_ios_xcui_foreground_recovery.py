@@ -45,7 +45,7 @@ class XcuiForegroundRecoveryControls(unittest.TestCase):
         source = (ROOT / library.IOS_MODAL_XCUI_SOURCE).read_text()
         self.assertEqual(library.IOS_MODAL_XCUI_METHODS, tuple(re.findall(r"@Test fun (\w+)\(", source)))
         self.assertNotRegex(source, r"@(Ignore|Disabled|IgnoredTest)\b")
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         self.assertEqual(7, len(plan["expected"][0]["required_testcases"]))
         collector = (ROOT / "scripts/ci/library_tests.py").read_text()
         self.assertIn('native_ui_input.validate_receipt(document.get("native_xctest_input")', collector)

@@ -203,14 +203,14 @@ class CentralSourceRecovery740742Controls(unittest.TestCase):
                          {"sha256": sha(doc_payload), "bytes": len(doc_payload)})
         current_settings = (ROOT / recovery.SETTINGS).read_bytes()
         old_settings = recovery.current_source_before_recovery(recovery.SETTINGS, current_settings, ROOT)
-        # Explicit calf-core discovery fixture permits a tiny real snapshot.
+        # Explicit nativecmpkit-core discovery fixture permits a tiny real snapshot.
         # It is NOT admitted as current settings or a native/consumer checkout.
         # Mandatory core admission below receives the actual RAW settings operand.
-        discovery_settings = b'include(\n    ":calf-core",\n)\n'
+        discovery_settings = b'include(\n    ":nativecmpkit-core",\n)\n'
         with tempfile.TemporaryDirectory(prefix="nativecmpkit-jdk17-real-snapshot-") as folder:
             root = Path(folder)
             payloads = {recovery.SETTINGS: discovery_settings,
-                        "calf-core/build.gradle.kts": b"// Snapshot discovery only; never compiled or executed.\n",
+                        "nativecmpkit-core/build.gradle.kts": b"// Snapshot discovery only; never compiled or executed.\n",
                         recovery.INSTALLED_JDK17: doc_payload,
                         recovery.SPEC: (ROOT / recovery.SPEC).read_bytes()}
             for relative, payload in payloads.items():

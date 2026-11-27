@@ -1,9 +1,9 @@
 <!-- Modified for nativeCmpkit migration (2026-10-24): independent coordinates / project references; inherited APIs retained. -->
 # Content Sharing
 
-> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical Calf version claims are preserved, not certified as nativeCmpkit releases.
+> **nativeCmpkit migration:** new coordinates are **unpublished**. See [installation](installation.md) and the [source audit](audit/README.md). Historical NativeCmpKit version claims are preserved, not certified as nativeCmpkit releases.
 
-`calf-share` provides cross-platform content sharing using the platform's native share mechanism.
+`nativecmpkit-share` provides cross-platform content sharing using the platform's native share mechanism.
 
 ## Installation
 
@@ -18,7 +18,7 @@ commonMain.dependencies {
 ## Quick Start
 
 ```kotlin
-@OptIn(ExperimentalCalfApi::class)
+@OptIn(ExperimentalNativeCmpKitApi::class)
 @Composable
 fun ShareButton() {
     val shareLauncher = rememberShareLauncher { result ->
@@ -30,7 +30,7 @@ fun ShareButton() {
     }
 
     Button(onClick = {
-        shareLauncher.launch(ShareContent.Text(text = "Hello from Calf!"))
+        shareLauncher.launch(ShareContent.Text(text = "Hello from NativeCmpKit!"))
     }) {
         Text("Share")
     }
@@ -47,7 +47,7 @@ Share plain text with an optional email subject:
 shareLauncher.launch(
     ShareContent.Text(
         text = "Check out this library!",
-        subject = "Calf Library",
+        subject = "NativeCmpKit Library",
     )
 )
 ```

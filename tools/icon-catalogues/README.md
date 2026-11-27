@@ -1,7 +1,7 @@
 # Reproducible icon catalogue inputs
 
 `manifest.json` pins byte hashes and explains provenance. The JSON records were
-losslessly extracted from Calf commit `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`:
+losslessly extracted from NativeCmpKit commit `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`:
 
 - `cupertino.json`: all 1,322 public identifiers, 1,234 unique codepoints and every
   original sample name/category/order. The actual bundled Flutter CupertinoIcons

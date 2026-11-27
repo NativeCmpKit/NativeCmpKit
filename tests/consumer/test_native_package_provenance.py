@@ -27,7 +27,7 @@ PLATFORMS = {
     "macos-arm64": ("aarch64-apple-darwin", "macho", 0x0100000C),
     "windows-x64": ("x86_64-pc-windows-msvc", "pe", 0x8664),
 }
-MODULES = {"calf-file-picker": "calf_filepicker_native", "calf-share": "calf_share_native"}
+MODULES = {"nativecmpkit-file-picker": "nativecmpkit_filepicker_native", "nativecmpkit-share": "nativecmpkit_share_native"}
 REVISION = "a" * 40
 OTHER_REVISION = "b" * 40
 VERSION = "0.1.0-preview.1"
@@ -49,7 +49,7 @@ class NativePackageProvenanceTest(unittest.TestCase):
         self.repository = Path(temporary.name) / "repository"
         self.repository.mkdir()
         (self.root / "docs/migration").mkdir(parents=True)
-        (self.root / "docs/migration/identity.json").write_text(json.dumps({"modules": [
+        (self.root / "docs/migration/current-identity.json").write_text(json.dumps({"modules": [
             {"new_artifact": name} for name in
             ("nativecmpkit-core", "nativecmpkit-file-picker", "nativecmpkit-share")]}))
         for path in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
@@ -73,7 +73,7 @@ class NativePackageProvenanceTest(unittest.TestCase):
         return gate.ArtifactVerifier(self.root, self.repository, VERSION, list(modules), ["desktop"], list(platforms),
             expected_native_revision=revision, allow_dirty_native_diagnostic=dirty_diagnostic)
 
-    def entries(self, module="calf-file-picker", platforms=("linux-x64",), *, revision=REVISION, dirty=False):
+    def entries(self, module="nativecmpkit-file-picker", platforms=("linux-x64",), *, revision=REVISION, dirty=False):
         result = {}
         for platform in platforms:
             rust_target, container, machine = PLATFORMS[platform]
@@ -106,7 +106,7 @@ class NativePackageProvenanceTest(unittest.TestCase):
             result[f"META-INF/nativecmpkit/native/{module}/{platform}.json"] = json.dumps(manifest).encode()
         return result
 
-    def inspect(self, entries, *, module="calf-file-picker", platforms=("linux-x64",), verifier=None):
+    def inspect(self, entries, *, module="nativecmpkit-file-picker", platforms=("linux-x64",), verifier=None):
         verifier = verifier or self.verifier(platforms=platforms)
         with zipfile.ZipFile(io.BytesIO(zip_bytes(entries))) as archive:
             names = gate.archive_names(archive)
@@ -114,14 +114,14 @@ class NativePackageProvenanceTest(unittest.TestCase):
                 verifier.native(archive, names, module, platform, "synthetic-package")
         return verifier
 
-    def archive(self, entries, *, module="calf-file-picker", verifier=None):
-        coordinate = "nativecmpkit-" + module.removeprefix("calf-") + "-desktop"
+    def archive(self, entries, *, module="nativecmpkit-file-picker", verifier=None):
+        coordinate = "nativecmpkit-" + module.removeprefix("nativecmpkit-") + "-desktop"
         notices = {f"META-INF/nativecmpkit/{module}/{name}": (self.root / name).read_bytes()
                    for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md")}
         package = self.repository / f"{coordinate}-{VERSION}.jar"
         package.write_bytes(zip_bytes(notices | entries))
         verifier = verifier or self.verifier()
-        verifier.archive(package, coordinate, "nativecmpkit-" + module.removeprefix("calf-"), "desktop")
+        verifier.archive(package, coordinate, "nativecmpkit-" + module.removeprefix("nativecmpkit-"), "desktop")
         return verifier
 
     def assert_passes(self, verifier):
@@ -146,7 +146,7 @@ class NativePackageProvenanceTest(unittest.TestCase):
         self.assertEqual(MODULES, gate.NATIVE_NAMES)
         for module in MODULES:
             verifier = self.verifier(platforms=tuple(PLATFORMS),
-                modules=("nativecmpkit-" + module.removeprefix("calf-"),))
+                modules=("nativecmpkit-" + module.removeprefix("nativecmpkit-"),))
             self.assert_passes(self.inspect(self.entries(module, tuple(PLATFORMS)),
                 module=module, platforms=tuple(PLATFORMS), verifier=verifier))
             self.assertEqual(5, len(verifier.native_receipts))
@@ -158,7 +158,7 @@ class NativePackageProvenanceTest(unittest.TestCase):
 
     def test_one_mixed_revision_slot_refuses_even_when_other_four_match(self):
         entries = self.entries(platforms=tuple(PLATFORMS))
-        path = "META-INF/nativecmpkit/native/calf-file-picker/linux-arm64.json"
+        path = "META-INF/nativecmpkit/native/nativecmpkit-file-picker/linux-arm64.json"
         manifest = json.loads(entries[path])
         manifest["sourceRevision"] = OTHER_REVISION
         entries[path] = json.dumps(manifest).encode()
@@ -197,18 +197,18 @@ class NativePackageProvenanceTest(unittest.TestCase):
 
     def test_foreign_module_manifest_without_binary_is_rejected(self):
         entries = self.entries()
-        entries["META-INF/nativecmpkit/native/calf-share/linux-x64.json"] = b"{}"
+        entries["META-INF/nativecmpkit/native/nativecmpkit-share/linux-x64.json"] = b"{}"
         self.assert_refuses(self.archive(entries), ":native-manifest-module-isolation")
 
     def test_unclaimed_windows_arm64_manifest_is_not_silent_support(self):
         entries = self.entries()
-        entries["META-INF/nativecmpkit/native/calf-file-picker/windows-arm64.json"] = b"{}"
+        entries["META-INF/nativecmpkit/native/nativecmpkit-file-picker/windows-arm64.json"] = b"{}"
         self.assert_refuses(self.archive(entries), ":native-manifest-module-isolation")
 
     def test_native_manifest_cannot_hide_in_nonowning_desktop_jar(self):
         verifier = self.verifier(modules=("nativecmpkit-core",), revision=None)
-        entries = {"META-INF/nativecmpkit/native/calf-file-picker/linux-x64.json": b"{}"}
-        self.assert_refuses(self.archive(entries, module="calf-core", verifier=verifier), ":no-unrelated-native")
+        entries = {"META-INF/nativecmpkit/native/nativecmpkit-file-picker/linux-x64.json": b"{}"}
+        self.assert_refuses(self.archive(entries, module="nativecmpkit-core", verifier=verifier), ":no-unrelated-native")
 
     def test_boolean_dirty_provenance_is_not_an_integer_or_null(self):
         for dirty in (0, 1, "false", None):

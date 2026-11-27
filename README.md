@@ -1,7 +1,7 @@
 # NativeCmpKit
 
 An independent **Kotlin Multiplatform native component toolkit**, derived from
-[Calf](https://github.com/MohamedRejeb/Calf). Imported Git history, authorship,
+[NativeCmpKit](https://github.com/MohamedRejeb/Calf). Imported Git history, authorship,
 branches, tags and an extensive public GitHub metadata snapshot are preserved
 here; [unavailable records and archive boundaries](docs/migration/metadata-coverage.md)
 are documented explicitly.
@@ -34,37 +34,31 @@ desktop, Android-host, JS, Wasm and iOS simulator. Android/browser sample builds
 simulator framework linking also succeeded. These are not physical-device,
 native-UI or ABI certifications; see the [execution ledger](docs/testing/README.md).
 
-## Library identity and compatibility
+## Library identity
 
-- Library / root project: **NativeCmpKit** (owner spelling updated 2026-10-27).
-- Existing repository URL: `Apdelrahman1911/nativeCmpkit`; no new repository or history rewrite.
-- Prospective Maven group: `io.github.apdelrahman1911.nativecmpkit`
-- Prospective artifacts: `nativecmpkit-ui`, `nativecmpkit-io`,
-  `nativecmpkit-file-picker`, and corresponding module suffixes.
-- Development version: `0.1.0-SNAPSHOT` (**unpublished**).
-- Public Kotlin packages remain **`com.mohamedrejeb.calf.*`**, including opt-in
-  annotations and JNI names. Existing `calf-*` Gradle paths are intentionally
-  retained. This avoids gratuitous API/ABI breaks; binary compatibility has not
-  been certified. Do not put old and new artifacts with duplicate classes together.
+- Project and publication display name **NativeCmpKit**
+- Kotlin namespace `io.github.apdelrahman1911.nativecmpkit.*`
+- Gradle project paths `:nativecmpkit-*`
+- Maven group `io.github.apdelrahman1911.nativecmpkit` with artifact IDs such as
+  `nativecmpkit-ui` and `nativecmpkit-file-picker`
+- Development version `0.1.0-SNAPSHOT` (unpublished)
 
-Only current display/root/POM names change; lowercase coordinates, public packages,
-native/framework names and existing Gradle property keys remain compatible.
-See [installation](docs/installation.md), [coordinate mapping](docs/migration/identity.json),
-and the [compatibility decision](docs/decisions/0001-independent-identity.md).
+See [installation](docs/installation.md) and the
+[current artifact map](docs/migration/current-identity.json).
 
 ## Components
 
 | Source module(s) | Implementation / qualification |
 | --- | --- |
-| `calf-core`, `calf-io` | Platform context, files and streaming; target-specific URI / URL / browser Blob semantics |
-| `calf-ui` | Adaptive Compose / UIKit widgets, dates, dialogs, sheets, gestures, liquid glass |
-| `calf-file-picker`, `calf-file-picker-coil` | Native pick/save dialogs, Rust/JNI desktop bridge, Coil integration |
-| `calf-camera-picker`, `calf-share` | Mobile capture, platform-dependent sharing and desktop fallbacks |
-| `calf-webview` | Android WebView, iOS WKWebView, desktop JavaFX, browser iframe; not equivalent APIs |
-| `calf-permissions` and 11 subprojects | Per-feature Android/iOS permissions; desktop/web stubs are not permission checks |
-| `calf-cupertino-icons` | Bundled MIT-licensed Cupertino icon font; distinct from Apple's SF Symbols |
-| `calf-navigation`, `calf-geo` | Incomplete experimental implementations, not published by the build |
-| `calf-maps`, `calf-media`, `calf-notifications` | Empty / excluded prototypes, **not working features** |
+| `nativecmpkit-core`, `nativecmpkit-io` | Platform context, files and streaming; target-specific URI / URL / browser Blob semantics |
+| `nativecmpkit-ui` | Adaptive Compose / UIKit widgets, dates, dialogs, sheets, gestures, liquid glass |
+| `nativecmpkit-file-picker`, `nativecmpkit-file-picker-coil` | Native pick/save dialogs, Rust/JNI desktop bridge, Coil integration |
+| `nativecmpkit-camera-picker`, `nativecmpkit-share` | Mobile capture, platform-dependent sharing and desktop fallbacks |
+| `nativecmpkit-webview` | Android WebView, iOS WKWebView, desktop JavaFX, browser iframe; not equivalent APIs |
+| `nativecmpkit-permissions` and 11 subprojects | Per-feature Android/iOS permissions; desktop/web stubs are not permission checks |
+| `nativecmpkit-cupertino-icons` | Bundled MIT-licensed Cupertino icon font; distinct from Apple's SF Symbols |
+| `nativecmpkit-navigation`, `nativecmpkit-geo` | Incomplete experimental implementations, not published by the build |
+| `nativecmpkit-maps`, `nativecmpkit-media`, `nativecmpkit-notifications` | Empty / excluded prototypes, **not working features** |
 
 Android, iOS, desktop JVM, JavaScript and Wasm targets are not promises of full
 feature parity. Read the [source-evidenced platform matrix](docs/platforms/README.md).
@@ -76,7 +70,7 @@ git clone https://github.com/Apdelrahman1911/nativeCmpkit.git
 cd nativeCmpkit
 # JDK 17, SDK package platforms;android-37.0, Rust and host dependencies.
 # Linux picker: cargo on PATH, pkg-config and libwayland-dev.
-./gradlew :calf-io:desktopTest :calf-file-picker:desktopTest
+./gradlew :nativecmpkit-io:desktopTest :nativecmpkit-file-picker:desktopTest
 ```
 
 The imported toolchain uses Kotlin **2.4.20**, Compose **1.12.0**, AGP **9.4.0**

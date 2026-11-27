@@ -51,7 +51,7 @@ Only the notifications feature includes its own
 `android.permission.POST_NOTIFICATIONS` manifest declaration. Other required
 manifest entries remain the app's responsibility. `RemoteNotification` is an iOS
 APNs concept and is not Android push registration. Included notification
-permissions must not be confused with excluded `calf-notifications`, which is not
+permissions must not be confused with excluded `nativecmpkit-notifications`, which is not
 a notification scheduling API.
 
 Test both grant and revoke changes across `ON_RESUME`, permanently denied cases,

@@ -65,11 +65,11 @@ class MacOsShareNativeFocusTests(unittest.TestCase):
         self.assertEqual((3, 0), (result["totals"]["passed"], result["totals"]["not_applicable"]))
 
     def test_other_modules_suites_filters_and_publish_tasks_are_refused(self):
-        for suite, modules in (("ios", (share.MODULE,)), ("desktop", ("calf-file-picker",)),
-                               ("desktop", ("calf-ui",)), ("desktop", None)):
+        for suite, modules in (("ios", (share.MODULE,)), ("desktop", ("nativecmpkit-file-picker",)),
+                               ("desktop", ("nativecmpkit-ui",)), ("desktop", None)):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 runner.plan(runner.ROOT, suite, only_modules=modules, focus=share.FOCUS)
-        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":calf-share:publish")):
+        for key, value in (("test_filter", "*"), ("required_testcases", []), ("task", ":nativecmpkit-share:publish")):
             plan = copy.deepcopy(self.plan()); plan["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
                 runner.gradle_command("desktop", plan)
@@ -97,7 +97,7 @@ class MacOsShareNativeFocusTests(unittest.TestCase):
     def test_missing_duplicate_accepted_foreign_or_target_suffix_methods_never_pass(self):
         expected = share.identities()
         variants = [expected[:-1], [*expected, expected[0]], [*expected,
-            {"classname": "com.mohamedrejeb.calf.share.platform.NativeShareBridgeTest", "name": "accepted[desktop]"}]]
+            {"classname": "io.github.apdelrahman1911.nativecmpkit.share.platform.NativeShareBridgeTest", "name": "accepted[desktop]"}]]
         for key, value in (("classname", "Foreign"), ("name", share.METHODS[0] + "[iosSimulatorArm64]")):
             changed = copy.deepcopy(expected); changed[0][key] = value; variants.append(changed)
         for identities in variants:

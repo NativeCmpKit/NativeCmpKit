@@ -2,7 +2,7 @@
   "schema_version": 1,
   "scope": "Exact additive Worker lifecycle observation and one five-case native batch. Offline source-history readers only; original native cases, APIs, production, dependencies, Worker completion and all old pins remain. No native success inferred.",
   "bindings": {
-    "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt": {
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt": {
       "before_sha256": "ea658b8d85f58809e15bdd5bf3eed55871f80e7e77cf1bb333904c0faf6eaffd",
       "after_sha256": "95c3dea0a73ec2a5bd306e81f7fb001d10552cf302681b936165c3ebbf16b6eb",
       "fragments": [
@@ -109,14 +109,14 @@
           "after_fragment_sha256": "41613d8fbee5513b8e6098407ac310721e52ddabf628144de83fe39ae370865a"
         },
         {
-          "before": "    \"ios-modal-worker-memory-recovery\": \"calf-ui\",\n    \"ios-sheet-cancellation-repeat\": \"calf-ui\",\n    \"ios-modal-lifecycle-memory-recovery\": \"calf-ui\",\n    \"ios-modal-xcui-batch\": \"calf-ui\",\n",
-          "after": "    \"ios-modal-worker-memory-recovery\": \"calf-ui\",\n    \"ios-sheet-cancellation-repeat\": \"calf-ui\",\n    \"ios-modal-completion-cancellation\": \"calf-ui\",\n    \"ios-modal-lifecycle-memory-recovery\": \"calf-ui\",\n    \"ios-modal-xcui-batch\": \"calf-ui\",\n",
+          "before": "    \"ios-modal-worker-memory-recovery\": \"nativecmpkit-ui\",\n    \"ios-sheet-cancellation-repeat\": \"nativecmpkit-ui\",\n    \"ios-modal-lifecycle-memory-recovery\": \"nativecmpkit-ui\",\n    \"ios-modal-xcui-batch\": \"nativecmpkit-ui\",\n",
+          "after": "    \"ios-modal-worker-memory-recovery\": \"nativecmpkit-ui\",\n    \"ios-sheet-cancellation-repeat\": \"nativecmpkit-ui\",\n    \"ios-modal-completion-cancellation\": \"nativecmpkit-ui\",\n    \"ios-modal-lifecycle-memory-recovery\": \"nativecmpkit-ui\",\n    \"ios-modal-xcui-batch\": \"nativecmpkit-ui\",\n",
           "before_fragment_sha256": "b86a440b4c6326d67825c241626a871bb5090f641da60650a25d754923303fd7",
           "after_fragment_sha256": "a49760d4e096bddc829f7eafe13e37185acb58cb9956cf030a17152a1878508b"
         },
         {
-          "before": "            raise ValueError(\"Same-operation cancellation requires one genuine iPhone calf-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-sheet-cancellation-repeat\"\n    if profile == \"ios-modal-lifecycle-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
-          "after": "            raise ValueError(\"Same-operation cancellation requires one genuine iPhone calf-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-sheet-cancellation-repeat\"\n    if profile == \"ios-modal-completion-cancellation\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": \"iphone\", \"test-modules\": \"calf-ui\"}\n        if PROFILES[profile] != (\"ios-iphone\",) or MODULE_SUBSETS.get(profile) != \"calf-ui\" or rows != [canonical]:\n            raise ValueError(\"Combined completion/cancellation requires one genuine iPhone calf-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-modal-completion-cancellation\"\n    if profile == \"ios-modal-lifecycle-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
+          "before": "            raise ValueError(\"Same-operation cancellation requires one genuine iPhone nativecmpkit-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-sheet-cancellation-repeat\"\n    if profile == \"ios-modal-lifecycle-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
+          "after": "            raise ValueError(\"Same-operation cancellation requires one genuine iPhone nativecmpkit-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-sheet-cancellation-repeat\"\n    if profile == \"ios-modal-completion-cancellation\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n                     \"python\": \"python3\", \"simulator-kind\": \"iphone\", \"test-modules\": \"nativecmpkit-ui\"}\n        if PROFILES[profile] != (\"ios-iphone\",) or MODULE_SUBSETS.get(profile) != \"nativecmpkit-ui\" or rows != [canonical]:\n            raise ValueError(\"Combined completion/cancellation requires one genuine iPhone nativecmpkit-ui host\")\n        rows[0][\"test-focus\"] = \"ui-native-modal-completion-cancellation\"\n    if profile == \"ios-modal-lifecycle-memory-recovery\":\n        canonical = {\"slot\": \"ios-iphone\", \"suite\": \"ios\", \"runner\": \"macos-26\", \"arch\": \"arm64\",\n",
           "before_fragment_sha256": "c8c54893426ee06d0272eb8c1b6bb07996f92a3091fa90c1c6f7075ccf279e9f",
           "after_fragment_sha256": "d6c003cafa6b76afbb700d7d9806faf847a98b3b7908b4fe2759ffb7e05cd7d1"
         }

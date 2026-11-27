@@ -19,9 +19,9 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
-        self.write("settings.gradle.kts", 'include(\n    ":calf-file-picker",\n)\n')
-        self.write("calf-file-picker/build.gradle.kts", "// synthetic, never built\n")
-        self.write("calf-file-picker/src/commonTest/Unrelated.kt", "// retained, not selected\n")
+        self.write("settings.gradle.kts", 'include(\n    ":nativecmpkit-file-picker",\n)\n')
+        self.write("nativecmpkit-file-picker/build.gradle.kts", "// synthetic, never built\n")
+        self.write("nativecmpkit-file-picker/src/commonTest/Unrelated.kt", "// retained, not selected\n")
         self.write(r.ANDROID_SAVE_ANNOTATION_SOURCE, (r.ROOT / r.ANDROID_SAVE_ANNOTATION_SOURCE).read_text())
         for group in r.ANDROID_SAVE_IDENTITY_GROUPS:
             package, name = group["classname"].rsplit(".", 1)
@@ -36,7 +36,7 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
         path.write_text(text)
 
     def plan(self, focus=r.ANDROID_SAVE_IDENTITY_FOCUS):
-        return r.plan(self.root, "android-device", only_modules=("calf-file-picker",),
+        return r.plan(self.root, "android-device", only_modules=("nativecmpkit-file-picker",),
                       focus=focus)
 
     def collect(self, cases=None, marker=1, age=0, focus=r.ANDROID_SAVE_IDENTITY_FOCUS):
@@ -66,10 +66,10 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
 
     def test_profile_cli_and_runner_use_only_the_lossless_runtime_annotation(self):
         row, = matrix.matrix("android-saver-identity")["include"]
-        self.assertEqual(("android-device-api35", "calf-file-picker", r.ANDROID_SAVE_IDENTITY_FOCUS),
+        self.assertEqual(("android-device-api35", "nativecmpkit-file-picker", r.ANDROID_SAVE_IDENTITY_FOCUS),
                          (row["slot"], row["test-modules"], row["test-focus"]))
         result = subprocess.run([sys.executable, str(r.ROOT / "scripts/ci/library_tests.py"), "plan",
-                                 "--suite", "android-device", "--module", "calf-file-picker", "--focus", r.ANDROID_SAVE_IDENTITY_FOCUS],
+                                 "--suite", "android-device", "--module", "nativecmpkit-file-picker", "--focus", r.ANDROID_SAVE_IDENTITY_FOCUS],
                                 cwd=r.ROOT, capture_output=True)
         self.assertEqual(0, result.returncode, result.stderr.decode())
         command = r.gradle_command("android-device", self.plan(), root=self.root, android_serial="emulator-5554")
@@ -79,14 +79,14 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
         self.assertNotIn(",", r.android_save_identity_filter())
         self.assertNotIn("--tests", command)
         self.assertNotIn("*", r.android_save_identity_filter())
-        self.assertEqual(":calf-file-picker:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-file-picker:connectedAndroidDeviceTest", command[-1])
 
     def test_foreign_suite_module_wildcard_and_duplicate_module_are_rejected(self):
-        for suite, modules, focus in (("desktop", ("calf-file-picker",), r.ANDROID_SAVE_IDENTITY_FOCUS),
-                                     ("android-device", ("calf-io",), r.ANDROID_SAVE_IDENTITY_FOCUS),
-                                     ("android-device", ("calf-file-picker", "calf-io"), r.ANDROID_SAVE_IDENTITY_FOCUS),
-                                     ("android-device", ("calf-file-picker", "calf-file-picker"), r.ANDROID_SAVE_IDENTITY_FOCUS),
-                                     ("android-device", ("calf-file-picker",), "save-device-*")):
+        for suite, modules, focus in (("desktop", ("nativecmpkit-file-picker",), r.ANDROID_SAVE_IDENTITY_FOCUS),
+                                     ("android-device", ("nativecmpkit-io",), r.ANDROID_SAVE_IDENTITY_FOCUS),
+                                     ("android-device", ("nativecmpkit-file-picker", "nativecmpkit-io"), r.ANDROID_SAVE_IDENTITY_FOCUS),
+                                     ("android-device", ("nativecmpkit-file-picker", "nativecmpkit-file-picker"), r.ANDROID_SAVE_IDENTITY_FOCUS),
+                                     ("android-device", ("nativecmpkit-file-picker",), "save-device-*")):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
 
@@ -103,9 +103,9 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
 
     def test_tampered_plan_cannot_broaden_narrow_or_escape_the_native_module(self):
         plan = self.plan()
-        for key, value in (("required_testcases", []), ("test_filter", "com.mohamedrejeb.calf.picker.*"),
+        for key, value in (("required_testcases", []), ("test_filter", "io.github.apdelrahman1911.nativecmpkit.picker.*"),
                            ("test_filter_argument", "class"), ("test_exclusion_annotation", r.ANDROID_SAVE_CALIBRATION_ANNOTATION),
-                           ("test_source_files", []), ("module", "calf-io"), ("task", ":calf-file-picker:testAndroidHostTest")):
+                           ("test_source_files", []), ("module", "nativecmpkit-io"), ("task", ":nativecmpkit-file-picker:testAndroidHostTest")):
             changed = deepcopy(plan)
             changed["expected"][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -131,7 +131,7 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
         annotation.write_text(value.replace("AnnotationRetention.RUNTIME", "AnnotationRetention.SOURCE"))
         with self.assertRaises(ValueError): self.plan()
         annotation.write_text(value)
-        self.write("calf-file-picker/src/androidDeviceTest/Foreign.kt", "@SaveIdentityAcceptance @Test fun unrelated() {}")
+        self.write("nativecmpkit-file-picker/src/androidDeviceTest/Foreign.kt", "@SaveIdentityAcceptance @Test fun unrelated() {}")
         with self.assertRaises(ValueError): self.plan()
 
     def test_recovery_selects_only_nine_missing_methods_and_cannot_exclude_another_test(self):
@@ -183,14 +183,14 @@ class AndroidSaveIdentityFocus(unittest.TestCase):
     def test_controller_preflight_and_full_profiles_keep_enforcing_hardlink_gate(self):
         with patch.object(device, "require_host", side_effect=RuntimeError("synthetic stop")) as guard:
             with self.assertRaises(ValueError):
-                device.run(self.root, "build/ci-verification/synthetic", only_modules=("calf-io",), focus=r.ANDROID_SAVE_IDENTITY_FOCUS)
+                device.run(self.root, "build/ci-verification/synthetic", only_modules=("nativecmpkit-io",), focus=r.ANDROID_SAVE_IDENTITY_FOCUS)
             guard.assert_not_called()
             with self.assertRaisesRegex(RuntimeError, "synthetic stop"):
-                device.run(self.root, "build/ci-verification/synthetic", only_modules=("calf-file-picker",), focus=r.ANDROID_SAVE_IDENTITY_FOCUS)
+                device.run(self.root, "build/ci-verification/synthetic", only_modules=("nativecmpkit-file-picker",), focus=r.ANDROID_SAVE_IDENTITY_FOCUS)
             guard.assert_called_once()
         for profile in ("all", "android-device", "android-webview"):
             self.assertTrue(all("test-focus" not in row for row in matrix.matrix(profile)["include"]))
-        full = r.plan(self.root, "android-device", only_modules=("calf-file-picker",))
+        full = r.plan(self.root, "android-device", only_modules=("nativecmpkit-file-picker",))
         self.assertFalse(r.validate_test_focus(full))
         source = (r.ROOT / r.ANDROID_SAVE_IDENTITY_GROUPS[0]["source"]).read_text()
         self.assertIn("Os.link(source.path, alias.path)", source)

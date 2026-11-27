@@ -37,29 +37,29 @@ class IosModalXcuiBatchControls(unittest.TestCase):
         self.assertNotRegex(source, r"@(Ignore|Disabled|IgnoredTest)\b")
         compiler = (ROOT / COMPILER).read_text()
         self.assertEqual([library.IOS_MODAL_XCUI_SOURCE, input_driver.NATIVE,
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-            "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt"],
-            re.findall(r'"(calf-ui/src/iosTest/[^"\n]+\.kt)"', compiler))
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+            "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt"],
+            re.findall(r'"(nativecmpkit-ui/src/iosTest/[^"\n]+\.kt)"', compiler))
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         command = library.gradle_command("ios", plan, SIMULATOR)
-        self.assertEqual(native_request(compiler, "applicationRequest"), command[command.index(":calf-ui:iosSimulatorArm64ApplicationTest"):])
+        self.assertEqual(native_request(compiler, "applicationRequest"), command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         self.assertEqual(1, command.count(COMPILER))
         self.assertEqual(7, len(plan["expected"][0]["required_testcases"]))
         self.assertTrue(input_driver.validate_sources(ROOT))
         for profile, kind in (("ios-modal-xcui-batch", "iphone"), ("ios-modal-xcui-batch-ipad", "ipad")):
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26", "arch": "arm64",
-                "python": "python3", "simulator-kind": kind, "test-modules": "calf-ui", "test-focus": library.IOS_MODAL_XCUI_FOCUS}]},
+                "python": "python3", "simulator-kind": kind, "test-modules": "nativecmpkit-ui", "test-focus": library.IOS_MODAL_XCUI_FOCUS}]},
                 workflow.matrix(profile))
-            for module in ("calf-share", "calf-io"):
+            for module in ("nativecmpkit-share", "nativecmpkit-io"):
                 with patch.dict(workflow.MODULE_SUBSETS, {profile: module}), self.assertRaises(ValueError): workflow.matrix(profile)
             with patch.dict(workflow.PROFILES, {profile: ("ios-iphone", "ios-ipad")}), self.assertRaises(ValueError): workflow.matrix(profile)
 
     def test_failed_only_memory_request_keeps_original_three_bodies_and_excludes_every_accepted_method(self):
         self.assertEqual(LIFECYCLE_SHA256, hashlib.sha256((ROOT / library.IOS_MODAL_LIFECYCLE_SOURCE).read_bytes()).hexdigest())
-        host = ROOT / "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt"
+        host = ROOT / "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
         from ios_modal_worker_source_projection import current_source_before_modal_worker
         self.assertEqual(HOST_SHA256, hashlib.sha256(current_source_before_modal_worker(host.relative_to(ROOT).as_posix(), host.read_bytes())).hexdigest())
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_LIFECYCLE_MEMORY_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_LIFECYCLE_MEMORY_FOCUS)
         required = plan["expected"][0]["required_testcases"]
         self.assertEqual({method + "[iosSimulatorArm64]" for method in library.IOS_MODAL_LIFECYCLE_MEMORY_METHODS}, {c["name"] for c in required})
         self.assertNotIn(library.IOS_MODAL_LIFECYCLE_METHODS[1] + "[iosSimulatorArm64]", {c["name"] for c in required})
@@ -67,11 +67,11 @@ class IosModalXcuiBatchControls(unittest.TestCase):
         script = "scripts/ci/ios_modal_focused_compile.init.gradle.kts"
         source = (ROOT / script).read_text(); expected = native_request(source, "memoryRecoveryRequest")
         command = library.gradle_command("ios", plan, SIMULATOR)
-        self.assertEqual(expected, command[command.index(":calf-ui:iosSimulatorArm64ApplicationTest"):])
+        self.assertEqual(expected, command[command.index(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest"):])
         self.assertEqual(5, len(expected)); self.assertIn("        memoryRecoveryRequest,\n", source)
         self.assertIn("check(gradle.startParameter.taskNames in permittedTasks)", source)
         self.assertEqual({"include": [{"slot": "ios-iphone", "suite": "ios", "runner": "macos-26", "arch": "arm64",
-            "python": "python3", "simulator-kind": "iphone", "test-modules": "calf-ui", "test-focus": library.IOS_MODAL_LIFECYCLE_MEMORY_FOCUS}]},
+            "python": "python3", "simulator-kind": "iphone", "test-modules": "nativecmpkit-ui", "test-focus": library.IOS_MODAL_LIFECYCLE_MEMORY_FOCUS}]},
             workflow.matrix("ios-modal-lifecycle-memory-recovery"))
 
     def test_source_planning_refuses_disabled_declarations_and_a_missing_or_test_bearing_input_helper(self):
@@ -82,13 +82,13 @@ class IosModalXcuiBatchControls(unittest.TestCase):
             original = library.safe_path
             def selected(root, relative): return altered if relative == library.IOS_MODAL_XCUI_SOURCE else original(root, relative)
             with patch.object(library, "safe_path", selected), self.assertRaisesRegex(ValueError, "enabled native declarations"):
-                library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
+                library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         read = input_driver.read_ordinary
         def annotated(path, limit=input_driver.MAX_BYTES):
             raw = read(path, limit)
             return raw + b"\n@Ignore\n" if path == ROOT / input_driver.NATIVE else raw
         with patch.object(input_driver, "read_ordinary", side_effect=annotated), self.assertRaisesRegex(ValueError, "zero-test"):
-            library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
+            library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         with tempfile.TemporaryDirectory() as temporary, self.assertRaises(OSError): input_driver.validate_sources(Path(temporary))
 
     def test_public_input_has_no_launch_private_activation_callback_fallback_or_sample_substitution(self):
@@ -108,13 +108,13 @@ class IosModalXcuiBatchControls(unittest.TestCase):
         self.assertNotRegex(native, r"(activateAction|accessibilityActivate|sendActionsForControlEvents|dismissViewControllerAnimated)\s*\(")
         self.assertNotIn("sample/", native)
         app = (ROOT / "scripts/ci/ios_ui_application.py").read_text()
-        self.assertIn('if host["module"] == "calf-ui" and focus == lt.IOS_MODAL_XCUI_FOCUS:', app)
+        self.assertIn('if host["module"] == "nativecmpkit-ui" and focus == lt.IOS_MODAL_XCUI_FOCUS:', app)
         self.assertIn("except Exception as error:\n                receipt[\"native_xctest_input\"]", app)
         collector = (ROOT / "scripts/ci/library_tests.py").read_text()
         self.assertIn("native_ui_input.validate_receipt(document.get(\"native_xctest_input\")", collector)
 
     def test_terminal_sheet_release_invalidates_content_and_breaks_native_delegate_edges_without_changing_intent_or_animation_waiters(self):
-        relative = "calf-ui/src/iosMain/kotlin/com/mohamedrejeb/calf/ui/sheet/BottomSheetManager.kt"
+        relative = "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/sheet/BottomSheetManager.kt"
         source = (ROOT / relative).read_text(); old = history.current_source_before_modal_xcui(relative, source.encode()).decode()
         for start, end in (("    private suspend fun awaitVisibility", "    private fun publishState"),
                            ("    private fun finishWaiters", "    private fun pump")):

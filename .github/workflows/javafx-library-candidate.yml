@@ -94,7 +94,7 @@ jobs:
           PY
           python -B scripts/development/validate_resolutions.py --check \
             2>&1 | tee build/ci-runtime/javafx-candidate-index-check.log
-          python -B scripts/ci/library_tests.py plan --suite desktop --module calf-webview \
+          python -B scripts/ci/library_tests.py plan --suite desktop --module nativecmpkit-webview \
             --focus "$CANDIDATE_FOCUS" > build/javafx-library-candidate-plan.json
       - name: Exact configured dependency and runtime cache identity
         id: cache-inputs
@@ -102,7 +102,7 @@ jobs:
           mkdir -p build/ci-runtime
           python -B scripts/ci/runtime_context.py --expected-arch "$EXPECTED_ARCH" --require-clean \
             --android-platform android-37.0 --output build/ci-runtime/javafx-candidate-runtime.json
-          digest="$(python -B scripts/ci/dependency_cache_inputs.py --scope libraries --selection calf-webview \
+          digest="$(python -B scripts/ci/dependency_cache_inputs.py --scope libraries --selection nativecmpkit-webview \
             --output build/ci-runtime/library-dependencies.json)"
           python -B - "$digest" <<'PY'
           import json, os, re, sys
@@ -127,7 +127,7 @@ jobs:
             ~/.cargo/registry/index
             ~/.konan/dependencies
       - name: Validate restored cache without deleting or trusting changed bytes
-        run: python -B scripts/ci/library_dependency_cache.py --phase restore --selection calf-webview
+        run: python -B scripts/ci/library_dependency_cache.py --phase restore --selection nativecmpkit-webview
       - name: Full-JAR candidate and only the original failed public Stop method on the selected host
         run: |
           python -B tests/dependency/javafx-http2-cancellation/run_library_candidate.py \

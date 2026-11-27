@@ -58,7 +58,7 @@ def main():
     checked_locations = 0
     binary_locations = []
     try:
-        identity = json.loads((ROOT / "docs/migration/identity.json").read_text())
+        identity = json.loads((ROOT / "docs/migration/current-identity.json").read_text())
         baseline = identity["source_baseline"]
         if not re.fullmatch(r"[0-9a-f]{40}", baseline):
             raise ValueError("invalid baseline")

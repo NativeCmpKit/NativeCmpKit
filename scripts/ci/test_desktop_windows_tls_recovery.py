@@ -34,7 +34,7 @@ class DesktopWindowsTlsRecoveryControls(unittest.TestCase):
             raise AssertionError('Held source inputs changed during NEW controls')
 
     def plan(self):
-        return library.plan(ROOT, 'desktop', only_modules=('calf-webview',), focus=FOCUS)
+        return library.plan(ROOT, 'desktop', only_modules=('nativecmpkit-webview',), focus=FOCUS)
 
     def test_six_exact_inverses_and_eleven_fragments_restore_original_complete_sources(self):
         self.assertEqual(6, len(self.bindings))
@@ -90,11 +90,11 @@ class DesktopWindowsTlsRecoveryControls(unittest.TestCase):
     def test_only_the_original_failed_windows_tls_method_and_two_current_sources_are_selected(self):
         rows = matrix.matrix(PROFILE)['include']
         self.assertEqual([{'slot': 'desktop-windows-x64', 'suite': 'desktop', 'runner': 'windows-2025',
-                          'arch': 'x64', 'python': 'python', 'test-modules': 'calf-webview', 'test-focus': FOCUS}], rows)
+                          'arch': 'x64', 'python': 'python', 'test-modules': 'nativecmpkit-webview', 'test-focus': FOCUS}], rows)
         plan = self.plan()
         item, = plan['expected']
         self.assertFalse(plan['complete_suite_requested'])
-        self.assertEqual(['calf-webview'], plan['explicit_module_subset'])
+        self.assertEqual(['nativecmpkit-webview'], plan['explicit_module_subset'])
         self.assertEqual([{'classname': security.SECURITY_CLASS, 'name': security.SECURITY_METHOD + '[desktop]'}], item['required_testcases'])
         self.assertEqual(1, item['required_original_xml'])
         self.assertEqual({TLS, HELPER}, set(item['test_source_files']))
@@ -104,7 +104,7 @@ class DesktopWindowsTlsRecoveryControls(unittest.TestCase):
             command = library.gradle_command('desktop', plan, root=ROOT)
         self.assertEqual([security.SECURITY_CLASS + '.' + security.SECURITY_METHOD],
                          [command[i + 1] for i, arg in enumerate(command) if arg == '--tests'])
-        self.assertEqual(1, command.count(':calf-webview:desktopTest'))
+        self.assertEqual(1, command.count(':nativecmpkit-webview:desktopTest'))
         self.assertEqual(1, command.count(security.INIT_SCRIPT))
         self.assertEqual(1, command.count('-PnativecmpkitDesktopSecurityFocus=' + FOCUS))
 
@@ -115,14 +115,14 @@ class DesktopWindowsTlsRecoveryControls(unittest.TestCase):
         for slots in ((), ('desktop-linux-arm64',), ('desktop-windows-x64', 'desktop-linux-arm64'), ['desktop-windows-x64']):
             with self.subTest(slots=slots), patch.dict(matrix.PROFILES, {PROFILE: slots}), self.assertRaises(ValueError):
                 matrix.matrix(PROFILE)
-        with patch.dict(matrix.MODULE_SUBSETS, {PROFILE: 'calf-io'}), self.assertRaises(ValueError):
+        with patch.dict(matrix.MODULE_SUBSETS, {PROFILE: 'nativecmpkit-io'}), self.assertRaises(ValueError):
             matrix.matrix(PROFILE)
         for field, value in (('runner', 'ubuntu-24.04'), ('arch', 'arm64'), ('suite', 'android-device')):
             slots = tuple(dict(row) for row in matrix.SLOTS)
             next(row for row in slots if row['slot'] == 'desktop-windows-x64')[field] = value
             with self.subTest(field=field), patch.object(matrix, 'SLOTS', slots), self.assertRaises(ValueError):
                 matrix.matrix(PROFILE)
-        for key, value in (('required_original_xml', 3), ('required_testcases', []), ('task', ':calf-webview:publish'), ('test_filter', '*')):
+        for key, value in (('required_original_xml', 3), ('required_testcases', []), ('task', ':nativecmpkit-webview:publish'), ('test_filter', '*')):
             plan = copy.deepcopy(self.plan()); plan['expected'][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError):
                 library.validate_test_focus(plan)
@@ -137,7 +137,7 @@ class DesktopWindowsTlsRecoveryControls(unittest.TestCase):
 
     def test_strict_single_case_worker_parser_still_refuses_missing_replayed_or_failed_results(self):
         prefix = 'NATIVECMPKIT_DESKTOP_SECURITY_'; classname = security.SECURITY_CLASS
-        lines = [prefix + 'SETUP task=:calf-webview:desktopTest focus=' + FOCUS + ' forks=1 forkEvery=1 classes=1',
+        lines = [prefix + 'SETUP task=:nativecmpkit-webview:desktopTest focus=' + FOCUS + ' forks=1 forkEvery=1 classes=1',
                  prefix + 'WORKER phase=start worker=7',
                  prefix + 'CASE phase=start worker=7 classname=' + classname,
                  prefix + 'CASE phase=finish worker=7 classname=' + classname + ' tests=1 passed=1 failed=0 skipped=0 result=SUCCESS',

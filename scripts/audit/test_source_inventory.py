@@ -57,13 +57,13 @@ val visible = "fun notCode()" + """class NotCode""" + 'x'
         )
 
     def test_build_manifests_and_native_implementation_have_separate_owners(self):
-        self.assertEqual(inventory.owner_for("calf-file-picker/native/Cargo.toml"), "audit_build")
-        self.assertEqual(inventory.owner_for("calf-file-picker/native/src/lib.rs"), "audit_io_picker")
+        self.assertEqual(inventory.owner_for("nativecmpkit-file-picker/native/Cargo.toml"), "audit_build")
+        self.assertEqual(inventory.owner_for("nativecmpkit-file-picker/native/src/lib.rs"), "audit_io_picker")
 
     def test_baseline_rust_and_xcode_classification(self):
         data = json.loads((inventory.ROOT / "docs/audit/source-inventory.json").read_text())
         files = {item["path"]: item for item in data["files"]}
-        self.assertIsNone(files["calf-file-picker/native/src/lib.rs"]["source_set"])
+        self.assertIsNone(files["nativecmpkit-file-picker/native/src/lib.rs"]["source_set"])
         xcode = [item for item in files.values() if item["path"].startswith("sample/ios/")]
         self.assertTrue(xcode)
         self.assertTrue(all(item["module"] == "sample/ios" and not item["included_in_gradle"] for item in xcode))

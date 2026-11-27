@@ -20,7 +20,7 @@ import probe_runner as probe
 import run_library_candidate as runner
 
 FOCUS = "webview-desktop-stop-linux-arm64-recovery"
-CLASS = "com.mohamedrejeb.calf.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
+CLASS = "io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewStopRedirectAcceptanceTest"
 METHOD = "publicStopCancelsOneHeldNativeRequestBeforeAnyResponseAndRecoversOnTheSameOwner"
 
 
@@ -88,7 +88,7 @@ class Arm64CandidateTests(unittest.TestCase):
             if extra_empty:
                 (report_directory / "TEST-empty.xml").write_bytes(b"<testsuite/>")
             return runner.library.collect_reports(root, plan, now - 1_000_000_000, now + 1_000_000_000,
-                Counter({":calf-webview:desktopTest": 1}), host_system="Linux")
+                Counter({":nativecmpkit-webview:desktopTest": 1}), host_system="Linux")
 
     def test_exact_arm64_plan_excludes_both_accepted_methods_and_retains_one_original_xml(self):
         plan = self.plan()
@@ -146,7 +146,7 @@ class Arm64CandidateTests(unittest.TestCase):
 
     def test_missing_duplicate_mixed_empty_and_stale_xml_cannot_accept_native_stop(self):
         required = (CLASS, METHOD + "[desktop]")
-        foreign = ("com.mohamedrejeb.calf.ui.web.DesktopWebViewRequestStateAcceptanceTest",
+        foreign = ("io.github.apdelrahman1911.nativecmpkit.ui.web.DesktopWebViewRequestStateAcceptanceTest",
                    "twoHeldNativeTransportFailuresResetOldErrorsAndRecoverOnTheSameOwner[desktop]")
         for cases, options in (([], {}), ([required, required], {}), ([required, foreign], {}),
                                ([required], {"stale": True}), ([required], {"extra_empty": True})):

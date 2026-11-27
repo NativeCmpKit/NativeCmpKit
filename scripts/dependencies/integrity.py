@@ -55,7 +55,7 @@ def _selection_roots(root: Path, kind: str) -> list[Path]:
         return [path for path in root.iterdir() if path.name not in IGNORED_DIRECTORIES and
                 not path.name.startswith(".nativecmpkit-")]
     roots = [root / name for name in ROOT_FILES if (root / name).exists()]
-    roots.extend(path for path in root.iterdir() if path.name.startswith("calf-") and path.is_dir())
+    roots.extend(path for path in root.iterdir() if path.name.startswith("nativecmpkit-") and path.is_dir())
     roots.extend(root / name for name in ("convention-plugins", "sample", "gradle", "kotlin-js-store", "licenses", ".cargo",
                                         "scripts/native", "scripts/dependencies") if (root / name).exists())
     return sorted(set(roots))

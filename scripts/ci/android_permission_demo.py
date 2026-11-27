@@ -14,15 +14,15 @@ from android_share_recipient import OwnedShareRecipient
 import library_tests as lt
 
 PACKAGE = "io.github.apdelrahman1911.nativecmpkit.verification.permissiondemo"
-REPORTER = "com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test"
+REPORTER = "io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test"
 FIXTURE = "tests/consumer/android-permission-demo"
 PERMISSION = PACKAGE + ".BIND_DEMO"
 RUNTIME_PERMISSIONS = {"android.permission." + name for name in (
     "CALL_PHONE", "RECORD_AUDIO", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_VISUAL_USER_SELECTED")}
-KOTLIN = "calf-permissions/core/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/permissions/"
+KOTLIN = "nativecmpkit-permissions/core/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/permissions/"
 APPLICATION_KOTLIN = FIXTURE + "/src/main/kotlin/" + PACKAGE.replace(".", "/") + "/"
-SOURCE_FILES = tuple(sorted(("gradle/libs.versions.toml", "calf-permissions/core/build.gradle.kts",
-    "calf-permissions/core/src/androidDeviceTest/AndroidManifest.xml", FIXTURE + "/settings.gradle.kts",
+SOURCE_FILES = tuple(sorted(("gradle/libs.versions.toml", "nativecmpkit-permissions/core/build.gradle.kts",
+    "nativecmpkit-permissions/core/src/androidDeviceTest/AndroidManifest.xml", FIXTURE + "/settings.gradle.kts",
     FIXTURE + "/build.gradle.kts", FIXTURE + "/gradle.properties", FIXTURE + "/src/main/AndroidManifest.xml",
     *(KOTLIN + name + ".kt" for name in ("AndroidPermissionDemoDeviceTest", "AndroidMediaSelectionDeviceTest",
         "OwnedPermissionDemo", "PermissionDemoSystemUi")),

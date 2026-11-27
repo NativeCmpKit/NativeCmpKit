@@ -35,7 +35,7 @@ and fallback paths. No remote recipient acknowledgement is provided.
 
 ## WebView means iframe, not an unconstrained native web engine
 
-The shared web actual creates an iframe using `CalfWebElementView`; JS and Wasm
+The shared web actual creates an iframe using `NativeCmpKitWebElementView`; JS and Wasm
 provide their respective host-view bridges. Content loads through URL or HTML
 data, while same-origin restrictions constrain reading title/location, history,
 cookies and evaluating script inside foreign pages. An iframe request cannot

@@ -8,9 +8,9 @@ import java.security.MessageDigest
 // remains compile-only for iOS. Original application/Worker/XML/custody/cleanup
 // transport still rejects this selection until the lead registers its spec.
 gradle.projectsEvaluated {
-    val project = rootProject.findProject(":calf-ui") ?: return@projectsEvaluated
+    val project = rootProject.findProject(":nativecmpkit-ui") ?: return@projectsEvaluated
     val focus = rootProject.providers.gradleProperty("nativecmpkitAdaptiveControlsFocus").orNull
-    val prefix = "com.mohamedrejeb.calf.ui."
+    val prefix = "io.github.apdelrahman1911.nativecmpkit.ui."
     val branches = mapOf(
         "ui-native-adaptive-pre26" to listOf(
             prefix + "slider.AdaptiveSliderNativeMatrixTest.pre26PublicStepsTapDragAndAccessibilityMatrix",
@@ -27,7 +27,7 @@ gradle.projectsEvaluated {
     )
     check(focus in branches) { "Explicit adaptive OS-branch focus required; no default host or broad test selection" }
     val selectors = branches.getValue(focus!!)
-    val applicationRequest = listOf(":calf-ui:iosSimulatorArm64ApplicationTest") +
+    val applicationRequest = listOf(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest") +
         selectors.flatMap { listOf("--tests", it) }
     check(gradle.startParameter.taskNames == applicationRequest) {
         "Adaptive native init accepts only its exact four application methods; no standalone compiler/full/publish task"
@@ -40,12 +40,12 @@ gradle.projectsEvaluated {
         "Adaptive native execution requires the same explicit recorded simulator UDID as the original transport"
     }
     val paths = listOf(
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlNativeHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeUiApplicationHost.kt",
-        "calf-ui/src/iosTest/kotlin/com/mohamedrejeb/calf/ui/internal/NativeObjectIdentity.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlNativeHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/AdaptiveSliderNativeMatrixTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/controls/AdaptiveControlCustomizationMatrixTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/toolbar/AdaptiveToolbarFallbackNativeTest.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)

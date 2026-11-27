@@ -18,8 +18,8 @@ import workflow_matrix as matrix
 
 def populate_bound_source_root(root: Path) -> None:
     """Owned source-only fixture; no build or application is run."""
-    (root / "settings.gradle.kts").write_text('include(\n    ":calf-ui",\n    ":calf-io",\n)\n')
-    for module in ("calf-ui", "calf-io"):
+    (root / "settings.gradle.kts").write_text('include(\n    ":nativecmpkit-ui",\n    ":nativecmpkit-io",\n)\n')
+    for module in ("nativecmpkit-ui", "nativecmpkit-io"):
         folder = root / module / "src/commonTest/kotlin"
         folder.mkdir(parents=True, exist_ok=True)
         (folder / "Common.kt").write_text("// synthetic test source; never executed\n")
@@ -65,12 +65,12 @@ class SecureAlertInputSourceTests(unittest.TestCase):
         self.assert_bound()
         self.assertEqual(tuple(receipts.REQUIRED), tuple(r.IOS_APPLICATION_CASES))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
-        complete = r.plan(self.root, "ios", minimum_modules=("calf-ui", "calf-io"))
+        complete = r.plan(self.root, "ios", minimum_modules=("nativecmpkit-ui", "nativecmpkit-io"))
         self.assertTrue(complete["complete_suite_requested"])
         self.assertNotIn("explicit_test_focus", complete)
         for item in complete["expected"]:
             self.assertNotIn("secure_alert_input_contract", item)
-        self.assertEqual({"calf-ui", "calf-io"}, {item["module"] for item in complete["expected"]})
+        self.assertEqual({"nativecmpkit-ui", "nativecmpkit-io"}, {item["module"] for item in complete["expected"]})
 
     def test_missing_empty_oversized_or_changed_qualified_source_cannot_fallback_to_common_tests(self):
         self.assert_bound()
@@ -133,7 +133,7 @@ class SecureAlertInputSourceTests(unittest.TestCase):
         target = self.root / s.SCREEN
         original = target.read_text()
         for changed in (
-            original.replace("import com.mohamedrejeb.calf.sample.alertinput.sampleAlertDialogInputFields", "// removed factory import", 1),
+            original.replace("import io.github.apdelrahman1911.nativecmpkit.sample.alertinput.sampleAlertDialogInputFields", "// removed factory import", 1),
             original.replace("textFields = sampleAlertDialogInputFields()", "textFields = emptyList()", 1),
             original + '\nfun forbiddenPublicLogControl() { println("public-control") }\n',
         ):
@@ -219,14 +219,14 @@ class SecureAlertInputSourceTests(unittest.TestCase):
         def command():
             return r.gradle_command("ios", plan, root=self.root,
                 simulator="11111111-1111-1111-1111-111111111111")
-        self.assertIn(":calf-ui:iosSimulatorArm64ApplicationTest", command())
+        self.assertIn(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest", command())
         for relative in (s.HELPER, s.SCREEN, s.BUILD):
             target = self.root / relative
             original = target.read_bytes()
             target.write_bytes(original + b"\n// public postplan source drift\n")
             with self.subTest(source=relative), self.assertRaises(ValueError): command()
             target.write_bytes(original)
-            self.assertIn(":calf-ui:iosSimulatorArm64ApplicationTest", command())
+            self.assertIn(":nativecmpkit-ui:iosSimulatorArm64ApplicationTest", command())
 
     def test_unconfigured_or_empty_legacy_build_cannot_be_promoted_to_the_new_focused_verification(self):
         self.assert_bound()

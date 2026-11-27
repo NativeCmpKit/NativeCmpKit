@@ -5,8 +5,8 @@
 This is a source-based map of upstream baseline
 `af388bd3ad0325b2afdd8c0149cb7ff6f24c5da6`, imported into **nativeCmpkit**.
 Migration identity, attribution and build-safety changes are described separately in
-[migration](../migration/README.md). Existing `calf-*` Gradle paths and
-`com.mohamedrejeb.calf` public packages are compatibility boundaries, not a runtime
+[migration](../migration/README.md). Existing `nativecmpkit-*` Gradle paths and
+`io.github.apdelrahman1911.nativecmpkit` public packages are compatibility boundaries, not a runtime
 dependency on the old GitHub repository. Refer to an immutable source file with
 `git show af388bd:<path>`; line numbers in audit findings refer to that baseline.
 
@@ -40,23 +40,23 @@ policy, or UI thread dispatcher. Host applications supply those environments.
 
 ```mermaid
 flowchart TD
-    APP[Application / sample shells] --> UI[calf-ui]
-    APP --> PICK[calf-file-picker]
-    APP --> CAM[calf-camera-picker]
-    APP --> SHARE[calf-share]
-    APP --> WEB[calf-webview]
-    APP --> PERM[calf-permissions aggregate or feature modules]
-    APP --> NAV[calf-navigation prototype]
-    APP --> ICON[calf-cupertino-icons]
-    APP --> COIL[calf-file-picker-coil]
-    UI --> CORE[calf-core]
-    PICK --> IO[calf-io]
+    APP[Application / sample shells] --> UI[nativecmpkit-ui]
+    APP --> PICK[nativecmpkit-file-picker]
+    APP --> CAM[nativecmpkit-camera-picker]
+    APP --> SHARE[nativecmpkit-share]
+    APP --> WEB[nativecmpkit-webview]
+    APP --> PERM[nativecmpkit-permissions aggregate or feature modules]
+    APP --> NAV[nativecmpkit-navigation prototype]
+    APP --> ICON[nativecmpkit-cupertino-icons]
+    APP --> COIL[nativecmpkit-file-picker-coil]
+    UI --> CORE[nativecmpkit-core]
+    PICK --> IO[nativecmpkit-io]
     CAM --> IO
     SHARE --> IO
     COIL --> IO
     COIL --> CORE
     IO --> CORE
-    PERM --> PC[calf-permissions-core]
+    PERM --> PC[nativecmpkit-permissions-core]
     IO --> KIO[kotlinx-io RawSource]
     PICK --> JNI[Desktop JNI / Rust rfd]
     SHARE --> NATIVE[Desktop JNI / Rust AppKit]
@@ -65,37 +65,37 @@ flowchart TD
 
 Arrow direction means dependency, not callback direction. The complete
 Gradle-declared `api`/`implementation` graph is in the inventory and dependency map.
-Not every module depends on `calf-core`: WebView, permissions, navigation and geo
+Not every module depends on `nativecmpkit-core`: WebView, permissions, navigation and geo
 primarily consume Compose/OS APIs directly.
 
 ### Included libraries versus publishable libraries
 
 `settings.gradle.kts:28-60` includes 24 library Gradle projects and five Gradle
 sample projects. Permission projects are renamed at `settings.gradle.kts:63-74`
-to retain artifact names (`:calf-permissions:core` becomes
-`calf-permissions-core`, etc.). The directory paths remain nested.
+to retain artifact names (`:nativecmpkit-permissions:core` becomes
+`nativecmpkit-permissions-core`, etc.). The directory paths remain nested.
 
 | Module / family | Role and principal abstraction | Baseline publication plugin |
 |---|---|---|
-| `calf-core` | `PlatformContext`, composition local, experimental/internal opt-ins | Yes |
-| `calf-io` | `KmpFile`, metadata/read helpers, `RawSource`, context-free overloads | Yes |
-| `calf-file-picker` | File type/selection/settings models, remembered picker/saver, native bridge | Yes |
-| `calf-file-picker-coil` | `KmpFileFetcher.Factory` and Coil-to-Calf context adapter | Yes |
-| `calf-camera-picker` | Remembered capture launcher returning `KmpFile` | Yes |
-| `calf-share` | `ShareContent`, `ShareResult`, remembered launcher | Yes |
-| `calf-webview` | Content/state/navigation/settings/cookie API and embedded platform web engines | Yes |
-| `calf-ui` | Adaptive controls; common state/rules plus Material/UIKit/Compose renderers | Yes |
-| `calf-cupertino-icons` | Font codepoints and Compose icon rendering | Yes |
-| `calf-permissions` | Compatibility umbrella re-exporting all permission subprojects | Yes |
-| `calf-permissions/core` | Permission identity/status/state, registries, storage/SMS/call mappings | Yes |
+| `nativecmpkit-core` | `PlatformContext`, composition local, experimental/internal opt-ins | Yes |
+| `nativecmpkit-io` | `KmpFile`, metadata/read helpers, `RawSource`, context-free overloads | Yes |
+| `nativecmpkit-file-picker` | File type/selection/settings models, remembered picker/saver, native bridge | Yes |
+| `nativecmpkit-file-picker-coil` | `KmpFileFetcher.Factory` and Coil-to-NativeCmpKit context adapter | Yes |
+| `nativecmpkit-camera-picker` | Remembered capture launcher returning `KmpFile` | Yes |
+| `nativecmpkit-share` | `ShareContent`, `ShareResult`, remembered launcher | Yes |
+| `nativecmpkit-webview` | Content/state/navigation/settings/cookie API and embedded platform web engines | Yes |
+| `nativecmpkit-ui` | Adaptive controls; common state/rules plus Material/UIKit/Compose renderers | Yes |
+| `nativecmpkit-cupertino-icons` | Font codepoints and Compose icon rendering | Yes |
+| `nativecmpkit-permissions` | Compatibility umbrella re-exporting all permission subprojects | Yes |
+| `nativecmpkit-permissions/core` | Permission identity/status/state, registries, storage/SMS/call mappings | Yes |
 | Ten permission features | Camera, gallery, location, background-location, Bluetooth, contacts, calendar, notifications, Wi-Fi, microphone | Yes, each |
-| `calf-navigation` | In-memory adaptive route stack and a separate expect/actual controller API | **No** |
-| `calf-geo` | Location models plus incomplete tracker implementations | **No** |
-| `calf-maps` | Build file only; no implementation or public API | **No** |
+| `nativecmpkit-navigation` | In-memory adaptive route stack and a separate expect/actual controller API | **No** |
+| `nativecmpkit-geo` | Location models plus incomplete tracker implementations | **No** |
+| `nativecmpkit-maps` | Build file only; no implementation or public API | **No** |
 
 This makes 21 projects applying `module.publication`. That is not proof of
 successful publication or permission to publish. No nativeCmpkit release or
-package is authorized by this audit. `calf-media` and `calf-notifications` exist
+package is authorized by this audit. `nativecmpkit-media` and `nativecmpkit-notifications` exist
 on disk but are **not included** in settings; the former has only stale build
 configuration, the latter adds an unintegrated iOS experiment. They must not be
 presented as supported features. Notification *permissions* are a different,
@@ -160,7 +160,7 @@ host restrictions.
    `getPath()` may be a URI, and an iOS original URL may lose access. Opening
    `source()` is the intended stream boundary; browsers still buffer first.
 6. **Native bridges have two compatibility surfaces.** Kotlin package/class names
-   and Rust `Java_com_mohamedrejeb_...` exported symbols must agree. Packaged native
+   and Rust `Java_io_github_apdelrahman1911_nativecmpkit_...` exported symbols must agree. Packaged native
    resources, when present, are selected by library name and OS/architecture
    directory; no `.so`, `.dll` or `.dylib` is tracked in the audited source tree.
    Changing only Maven group is not the same as changing these ABI names.
@@ -178,13 +178,13 @@ host restrictions.
 
 | Boundary | Evidence / maintenance rule |
 |---|---|
-| `calf-ui/.../sf/symbols/SFSymbol.kt` | Generated-marker file: 6,984 SF Symbol **name strings**, 7,006 lines; actual images are requested from UIKit. No generator is tracked. Do not mistake strings for redistributed Apple icon artwork. |
-| `calf-cupertino-icons/.../CupertinoIcons.kt` | Generated-marker codepoint table: 1,322 constants, 1,335 lines; paired with the bundled font. |
+| `nativecmpkit-ui/.../sf/symbols/SFSymbol.kt` | Generated-marker file: 6,984 SF Symbol **name strings**, 7,006 lines; actual images are requested from UIKit. No generator is tracked. Do not mistake strings for redistributed Apple icon artwork. |
+| `nativecmpkit-cupertino-icons/.../CupertinoIcons.kt` | Generated-marker codepoint table: 1,322 constants, 1,335 lines; paired with the bundled font. |
 | `sample/common/.../CupertinoIconsCatalogData.kt` | Generated-marker sample catalogue: 1,352 lines; not production behavior. |
-| `calf-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf` | Binary font, misleading filename; provenance/license analysis is in the icons audit. It is separate from UIKit SF Symbol availability. |
-| `calf-file-picker/.../jodd/net/MimeTypes.kt` and resources | Vendored MIME database/parser; not generated native bindings. Preserve attribution and review the parser as executable code. |
-| `calf-file-picker/native/src/lib.rs`, `calf-share/native/src/lib.rs` | Handwritten unsafe JNI/native bridges, built by Cargo. No generated JNI wrapper validates the ABI for you. |
-| `calf-webview/src/iosMain/cinterop/nskeyvalueobserving.def` | Handwritten 15-line Objective-C protocol embedded in a Kotlin/Native cinterop definition; compiler-generated stubs are build outputs. |
+| `nativecmpkit-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf` | Binary font, misleading filename; provenance/license analysis is in the icons audit. It is separate from UIKit SF Symbol availability. |
+| `nativecmpkit-file-picker/.../jodd/net/MimeTypes.kt` and resources | Vendored MIME database/parser; not generated native bindings. Preserve attribution and review the parser as executable code. |
+| `nativecmpkit-file-picker/native/src/lib.rs`, `nativecmpkit-share/native/src/lib.rs` | Handwritten unsafe JNI/native bridges, built by Cargo. No generated JNI wrapper validates the ABI for you. |
+| `nativecmpkit-webview/src/iosMain/cinterop/nskeyvalueobserving.def` | Handwritten 15-line Objective-C protocol embedded in a Kotlin/Native cinterop definition; compiler-generated stubs are build outputs. |
 | `convention-plugins`, version catalog, Cargo manifests, workflows | Handwritten build logic/configuration. Gradle-generated resources/accessors, Kotlin native caches and downloaded binaries are not baseline source files. |
 
 The removed upstream `external/backdrop` and `external/shapes` trees remain in
@@ -195,10 +195,10 @@ third-party dependency ever used.
 ## Application shells and extension points
 
 `sample:common` composes the catalogue/application, uses local project
-dependencies and configures the `Common` static iOS framework. Its framework
-explicitly exports `calf-ui`; removing that export can affect Objective-C
+dependencies and configures the `NativeCmpKit` static iOS framework. Its framework
+explicitly exports `nativecmpkit-ui`; removing that export can affect Objective-C
 target/action visibility. Android's `MainActivity`, desktop's AWT application,
-browser `ComposeViewport` entrypoints, and `sample/ios/Calf.xcodeproj` host it.
+browser `ComposeViewport` entrypoints, and `sample/ios/NativeCmpKit.xcodeproj` host it.
 The Xcode project is not a Gradle subproject. Demo screens exercise features but
 are not automated regression tests or proof of native device compatibility.
 

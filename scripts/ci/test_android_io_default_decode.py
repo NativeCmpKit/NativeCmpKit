@@ -19,8 +19,8 @@ import library_tests as r
 import workflow_matrix as matrix
 
 FOCUS = 'android-io-default-decode'
-CLASS = 'com.mohamedrejeb.calf.io.AndroidIoDefaultDecodeTest'
-SOURCE = 'calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoDefaultDecodeTest.kt'
+CLASS = 'io.github.apdelrahman1911.nativecmpkit.io.AndroidIoDefaultDecodeTest'
+SOURCE = 'nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoDefaultDecodeTest.kt'
 METHODS = (
     'defaultPngDecodeStreamsUnknownSizeBinaryAndPreservesEveryPixel',
     'defaultJpegDecodeReplaysBoundsAndExifForRotationAndReflection',
@@ -31,11 +31,11 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix='nativecmpkit-default-decode-model-')
         self.addCleanup(temporary.cleanup); self.root = Path(temporary.name)
-        self.write('settings.gradle.kts', 'include(\n    ":calf-io",\n)\n')
-        self.write('calf-io/src/commonTest/kotlin/Unrelated.kt', '// retained and not requested\n')
+        self.write('settings.gradle.kts', 'include(\n    ":nativecmpkit-io",\n)\n')
+        self.write('nativecmpkit-io/src/commonTest/kotlin/Unrelated.kt', '// retained and not requested\n')
         for relative in helper.SOURCE_FILES:
             self.copy(relative)
-        for path in (r.ROOT / 'calf-io/src/androidDeviceTest').rglob('*'):
+        for path in (r.ROOT / 'nativecmpkit-io/src/androidDeviceTest').rglob('*'):
             if path.is_file(): self.copy(path.relative_to(r.ROOT).as_posix())
 
     def copy(self, relative):
@@ -47,7 +47,7 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
         return target
 
     def plan(self):
-        return r.plan(self.root, 'android-device', only_modules=('calf-io',), focus=FOCUS)
+        return r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',), focus=FOCUS)
 
     def identities(self):
         return [{'classname': CLASS, 'name': method} for method in METHODS]
@@ -81,12 +81,12 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
 
     def test_finite_profile_retains_eleven_full_slots_and_eight_android_modules(self):
         row, = matrix.matrix(FOCUS)['include']
-        self.assertEqual(('android-device-api35', 'calf-io', FOCUS), (row['slot'], row['test-modules'], row['test-focus']))
+        self.assertEqual(('android-device-api35', 'nativecmpkit-io', FOCUS), (row['slot'], row['test-modules'], row['test-focus']))
         self.assertEqual(11, len(matrix.matrix('all')['include'])); self.assertEqual(9, len(r.MINIMUM_MODULES['android-device']))
         # Eight ordinary hosts remain inventory metadata, not executable default coverage.
-        inventory = ('calf-io', 'calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share', 'calf-camera-picker')
+        inventory = ('nativecmpkit-io', 'nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share', 'nativecmpkit-camera-picker')
         self.assertEqual(8, len(inventory))
-        self.assertEqual((*inventory, "calf-permissions/core"), r.MINIMUM_MODULES["android-device"])
+        self.assertEqual((*inventory, "nativecmpkit-permissions/core"), r.MINIMUM_MODULES["android-device"])
         with self.assertRaises(ValueError) as refused:
             r.plan(r.ROOT, "android-device")
         self.assertIn(str(refused.exception), (
@@ -94,13 +94,13 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
             'Enabled API35-only callback requires exact finite Camera selection; unrestricted Camera/all discovery refuses before host work',
         ))
         # An unrelated explicit subset cannot admit the unfiltered Camera/IO domains.
-        unrelated = ('calf-file-picker', 'calf-geo', 'calf-webview', 'calf-ui', 'calf-navigation', 'calf-share')
+        unrelated = ('nativecmpkit-file-picker', 'nativecmpkit-geo', 'nativecmpkit-webview', 'nativecmpkit-ui', 'nativecmpkit-navigation', 'nativecmpkit-share')
         plan = r.plan(r.ROOT, "android-device", minimum_modules=unrelated, only_modules=unrelated)
         self.assertEqual(list(unrelated), [item["module"] for item in plan["expected"]])
         self.assertEqual(list(unrelated), plan["explicit_module_subset"])
         self.assertFalse(plan["complete_suite_requested"])
-        self.assertEqual(["calf-permissions/core"], plan["finite_only_device_modules_not_requested"])
-        self.assertEqual(["calf-camera-picker", "calf-io", "calf-permissions/core"],
+        self.assertEqual(["nativecmpkit-permissions/core"], plan["finite_only_device_modules_not_requested"])
+        self.assertEqual(["nativecmpkit-camera-picker", "nativecmpkit-io", "nativecmpkit-permissions/core"],
                          plan["test_bearing_modules_not_requested"])
         self.assertEqual(5, len(r.android_io_provider_identities()))
         choices = re.search(r'options: \[([^\n]+)\]', (r.ROOT / '.github/workflows/gradle.yml').read_text()).group(1)
@@ -109,20 +109,20 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
     def test_new_test_source_and_native_provider_are_selected_inputs_not_outputs(self):
         before = r.snapshot_inputs(self.root)
         self.assertEqual(hashlib.sha256((self.root / SOURCE).read_bytes()).hexdigest(), before[SOURCE])
-        provider = 'calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/instrumentation/DeviceIoFileProvider.kt'
+        provider = 'nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/instrumentation/DeviceIoFileProvider.kt'
         self.assertIn(provider, before)
-        self.write('calf-io/build/outputs/fake.xml', '<testsuite/>')
+        self.write('nativecmpkit-io/build/outputs/fake.xml', '<testsuite/>')
         self.assertEqual(before, r.snapshot_inputs(self.root))
 
     def test_wrong_suite_module_duplicate_wildcard_and_minimum_api_refuse_before_host_or_outputs(self):
-        for suite, modules, focus in (('desktop', ('calf-io',), FOCUS), ('android-host', ('calf-io',), FOCUS),
-                ('android-device', ('calf-ui',), FOCUS), ('android-device', ('calf-io', 'calf-io'), FOCUS),
-                ('android-device', ('calf-io', 'calf-ui'), FOCUS), ('android-device', ('calf-io',), 'android-io-default-*')):
+        for suite, modules, focus in (('desktop', ('nativecmpkit-io',), FOCUS), ('android-host', ('nativecmpkit-io',), FOCUS),
+                ('android-device', ('nativecmpkit-ui',), FOCUS), ('android-device', ('nativecmpkit-io', 'nativecmpkit-io'), FOCUS),
+                ('android-device', ('nativecmpkit-io', 'nativecmpkit-ui'), FOCUS), ('android-device', ('nativecmpkit-io',), 'android-io-default-*')):
             with self.subTest(suite=suite, modules=modules), self.assertRaises(ValueError):
                 r.plan(self.root, suite, only_modules=modules, focus=focus)
         with patch.object(device, 'require_host') as host:
             with self.assertRaises(ValueError):
-                device.run(self.root, 'build/ci-verification/refused', only_modules=('calf-io',), focus=FOCUS, api_level=23)
+                device.run(self.root, 'build/ci-verification/refused', only_modules=('nativecmpkit-io',), focus=FOCUS, api_level=23)
             host.assert_not_called()
         self.assertFalse((self.root / 'build').exists())
 
@@ -130,7 +130,7 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
         path = self.root / SOURCE; original = path.read_text()
         for changed in (original.replace(METHODS[0], 'unreviewed'), original.replace('@Test', '@Ignore @Test', 1),
                         original.replace('class AndroidIoDefaultDecodeTest', 'class ChangedTest'),
-                        original.replace('package com.mohamedrejeb.calf.io', 'package foreign.io'),
+                        original.replace('package io.github.apdelrahman1911.nativecmpkit.io', 'package foreign.io'),
                         original + '\n@Test fun unreviewedExtra() {}\n',
                         original.replace('.size(Size.ORIGINAL)', '.decoderFactory(unsafe).size(Size.ORIGINAL)'),
                         original.replace('ImageLoader.Builder(context)', 'ImageLoader.Builder(context).imageDecoderEnabled(false)')):
@@ -142,8 +142,8 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
 
     def test_tampered_filter_task_inventory_report_source_and_scope_cannot_run(self):
         original = self.plan()
-        for key, value in (('test_filter', CLASS + '*'), ('module', 'calf-file-picker-coil'), ('project', ':calf-ui'),
-                ('task', ':calf-io:testAndroidHostTest'), ('report_directory', 'calf-ui/build/test-results/forged'),
+        for key, value in (('test_filter', CLASS + '*'), ('module', 'nativecmpkit-file-picker-coil'), ('project', ':nativecmpkit-ui'),
+                ('task', ':nativecmpkit-io:testAndroidHostTest'), ('report_directory', 'nativecmpkit-ui/build/test-results/forged'),
                 ('required_testcases', self.identities()[:-1]), ('test_source_files', [])):
             changed = deepcopy(original); changed['expected'][0][key] = value
             with self.subTest(key=key), self.assertRaises(ValueError): r.validate_test_focus(changed)
@@ -163,7 +163,7 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
             with self.assertRaises(ValueError): r.validate_test_focus(changed)
 
     def test_accepted_preopen_oversize_has_no_helper_or_new_default_methods(self):
-        accepted = r.plan(self.root, 'android-device', only_modules=('calf-io',), focus=r.ANDROID_IO_OVERSIZE_FOCUS)
+        accepted = r.plan(self.root, 'android-device', only_modules=('nativecmpkit-io',), focus=r.ANDROID_IO_OVERSIZE_FOCUS)
         self.assertFalse(r.android_io_documents_required(accepted)); self.assertNotIn('android_io_documents', accepted)
         self.assertEqual(r.android_io_oversize_identities(), accepted['expected'][0]['required_testcases'])
 
@@ -187,9 +187,9 @@ class AndroidIoDefaultDecodeGuards(unittest.TestCase):
     def test_assembly_has_no_native_task_or_owned_helper_flag_and_native_requires_preparation(self):
         plan = self.plan()
         assembly = r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL, for_assembly=True)
-        self.assertEqual(':calf-io:assembleAndroidDeviceTest', assembly[-1])
+        self.assertEqual(':nativecmpkit-io:assembleAndroidDeviceTest', assembly[-1])
         self.assertFalse(any('nativecmpkitOwnedIoDocuments=' in value for value in assembly))
-        self.assertNotIn(':calf-io:connectedAndroidDeviceTest', assembly)
+        self.assertNotIn(':nativecmpkit-io:connectedAndroidDeviceTest', assembly)
         with self.assertRaises(ValueError): r.gradle_command('android-device', plan, root=self.root, android_serial=device.SERIAL)
 
     def test_png_uses_native_lossless_encoder_real_null_binary_metadata_and_partial_fetch(self):

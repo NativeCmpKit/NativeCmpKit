@@ -4,7 +4,7 @@
     <permission android:name="io.github.apdelrahman1911.nativecmpkit.verification.storageprobe.CONTROL_STORAGE"
         android:protectionLevel="signature" />
     <queries>
-        <package android:name="com.mohamedrejeb.calf.calfpermissions.calfpermissionscore.test" />
+        <package android:name="io.github.apdelrahman1911.nativecmpkit.nativecmpkitpermissions.nativecmpkitpermissionscore.test" />
         <intent>
             <action android:name="android.intent.action.OPEN_DOCUMENT" />
             <category android:name="android.intent.category.OPENABLE" />

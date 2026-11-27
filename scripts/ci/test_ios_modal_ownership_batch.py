@@ -22,21 +22,21 @@ class IosModalOwnershipBatchTests(unittest.TestCase):
         for profile, kind in (("ios-modal-ownership-batch", "iphone"), ("ios-modal-ownership-ipad", "ipad")):
             self.assertEqual({"include": [{"slot": "ios-" + kind, "suite": "ios", "runner": "macos-26",
                 "arch": "arm64", "python": "python3", "simulator-kind": kind,
-                "test-modules": "calf-ui", "test-focus": library.IOS_MODAL_OWNERSHIP_FOCUS}]}, workflow.matrix(profile))
+                "test-modules": "nativecmpkit-ui", "test-focus": library.IOS_MODAL_OWNERSHIP_FOCUS}]}, workflow.matrix(profile))
         identities = library.ui_application_focus_identities(library.IOS_MODAL_OWNERSHIP_FOCUS)
         self.assertEqual(9, len(identities))
         self.assertEqual({name + "[iosSimulatorArm64]" for name in names}, {item["name"] for item in identities})
-        self.assertTrue(library.allowed_test_focus("ios", ("calf-ui",), library.IOS_MODAL_OWNERSHIP_FOCUS))
+        self.assertTrue(library.allowed_test_focus("ios", ("nativecmpkit-ui",), library.IOS_MODAL_OWNERSHIP_FOCUS))
 
     def test_wrong_host_module_and_suite_are_refused_without_changing_old_alert_selection(self):
         old = library.ui_application_focus_filter(library.UI_ALERT_RECOVERY_FOCUS)
-        for suite, modules in (("desktop", ("calf-ui",)), ("ios", ("calf-share",)), ("ios", None)):
+        for suite, modules in (("desktop", ("nativecmpkit-ui",)), ("ios", ("nativecmpkit-share",)), ("ios", None)):
             self.assertFalse(library.allowed_test_focus(suite, modules, library.IOS_MODAL_OWNERSHIP_FOCUS))
         for profile in ("ios-modal-ownership-batch", "ios-modal-ownership-ipad"):
             with patch.dict(workflow.PROFILES, {profile: ("desktop-macos-arm64",)}):
                 with self.assertRaises(ValueError):
                     workflow.matrix(profile)
-            with patch.dict(workflow.MODULE_SUBSETS, {profile: "calf-share"}):
+            with patch.dict(workflow.MODULE_SUBSETS, {profile: "nativecmpkit-share"}):
                 with self.assertRaises(ValueError):
                     workflow.matrix(profile)
         self.assertEqual(old, library.ui_application_focus_filter(library.UI_ALERT_RECOVERY_FOCUS))
@@ -62,7 +62,7 @@ class IosModalOwnershipBatchTests(unittest.TestCase):
     def test_live_native_planning_does_not_use_offline_modal_history(self):
         for relative in ("scripts/ci/library_tests.py", "scripts/ci/workflow_matrix.py", "scripts/ci/ios_ui_application.py"):
             self.assertNotIn("ios_modal_ownership_source_projection", (ROOT / relative).read_text())
-        plan = library.plan(ROOT, "ios", only_modules=("calf-ui",), focus=library.IOS_MODAL_OWNERSHIP_FOCUS)
+        plan = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_OWNERSHIP_FOCUS)
         self.assertEqual(9, len(plan["expected"][0]["required_testcases"]))
 
 

@@ -36,7 +36,7 @@ class AndroidPermissionDemoGuardTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.contract = demo.source_contract(ROOT)
-        cls.plan = lt.plan(ROOT, "android-device", only_modules=("calf-permissions/core",), focus=lt.ANDROID_PERMISSION_DEMO_FOCUS)
+        cls.plan = lt.plan(ROOT, "android-device", only_modules=("nativecmpkit-permissions/core",), focus=lt.ANDROID_PERMISSION_DEMO_FOCUS)
 
     def test_finite_profiles_select_three_35_methods_and_one_media_method_per_api(self):
         for profile, api, focus, count in (("android-permission-demo", "35", lt.ANDROID_PERMISSION_DEMO_FOCUS, 3),
@@ -45,26 +45,26 @@ class AndroidPermissionDemoGuardTest(unittest.TestCase):
             with self.subTest(profile=profile):
                 row = workflow.matrix(profile)["include"].copy().pop()
                 self.assertEqual(api, row["emulator-api"])
-                self.assertEqual("calf-permissions/core", row["test-modules"])
+                self.assertEqual("nativecmpkit-permissions/core", row["test-modules"])
                 self.assertEqual(focus, row["test-focus"])
-                plan = lt.plan(ROOT, "android-device", only_modules=("calf-permissions/core",), focus=focus)
+                plan = lt.plan(ROOT, "android-device", only_modules=("nativecmpkit-permissions/core",), focus=focus)
                 self.assertEqual(count, len(plan["expected"][0]["required_testcases"]))
                 self.assertFalse(plan["complete_suite_requested"])
                 self.assertTrue(lt.validate_test_focus(plan))
         self.assertEqual(11, len(workflow.matrix("all")["include"]))
-        self.assertTrue(set(("calf-io", "calf-file-picker", "calf-geo", "calf-webview", "calf-ui", "calf-navigation", "calf-share",
-            "calf-camera-picker")) < set(lt.MINIMUM_MODULES["android-device"]))
+        self.assertTrue(set(("nativecmpkit-io", "nativecmpkit-file-picker", "nativecmpkit-geo", "nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-navigation", "nativecmpkit-share",
+            "nativecmpkit-camera-picker")) < set(lt.MINIMUM_MODULES["android-device"]))
 
     def test_api33_34_controller_selection_has_no_general_or_camera_fallback(self):
         for api in (33, 34):
-            device.validate_api_selection(api, ("calf-permissions/core",), lt.ANDROID_MEDIA_SELECTION_FOCUS)
-            for modules, focus in ((None, None), (("calf-permissions/core",), None),
-                (("calf-permissions/core",), lt.ANDROID_PERMISSION_DEMO_FOCUS), (("calf-camera-picker",), lt.ANDROID_CAMERA_PROVIDER_FOCUS)):
+            device.validate_api_selection(api, ("nativecmpkit-permissions/core",), lt.ANDROID_MEDIA_SELECTION_FOCUS)
+            for modules, focus in ((None, None), (("nativecmpkit-permissions/core",), None),
+                (("nativecmpkit-permissions/core",), lt.ANDROID_PERMISSION_DEMO_FOCUS), (("nativecmpkit-camera-picker",), lt.ANDROID_CAMERA_PROVIDER_FOCUS)):
                 with self.subTest(api=api, modules=modules, focus=focus), self.assertRaises(ValueError):
                     device.validate_api_selection(api, modules, focus)
         for api in (True, "33", 32, 36):
             with self.subTest(api=api), self.assertRaises(ValueError):
-                device.validate_api_selection(api, ("calf-permissions/core",), lt.ANDROID_MEDIA_SELECTION_FOCUS)
+                device.validate_api_selection(api, ("nativecmpkit-permissions/core",), lt.ANDROID_MEDIA_SELECTION_FOCUS)
 
     def test_source_contract_pins_public_native_calls_and_never_asserts_execution(self):
         self.assertIs(True, self.contract["source_policy_verified"])
@@ -144,11 +144,11 @@ class AndroidPermissionDemoGuardTest(unittest.TestCase):
             lt.gradle_command("android-device", self.plan, android_serial="emulator-5588", root=ROOT)
         compile_command = lt.gradle_command("android-device", self.plan, android_serial="emulator-5588", root=ROOT, for_assembly=True)
         self.assertNotIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedPermissionDemo=true", compile_command)
-        self.assertEqual(":calf-permissions:calf-permissions-core:assembleAndroidDeviceTest", compile_command[-1])
+        self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core:assembleAndroidDeviceTest", compile_command[-1])
         command = lt.gradle_command("android-device", self.plan, android_serial="emulator-5588", root=ROOT,
             android_permission_demo_receipt=prepared(self.contract))
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.nativecmpkitOwnedPermissionDemo=true", command)
-        self.assertEqual(":calf-permissions:calf-permissions-core:connectedAndroidDeviceTest", command[-1])
+        self.assertEqual(":nativecmpkit-permissions:nativecmpkit-permissions-core:connectedAndroidDeviceTest", command[-1])
         self.assertIn("-Pandroid.testInstrumentationRunnerArguments.class=" + lt.ANDROID_PERMISSION_DEVICE_SPECS[
             lt.ANDROID_PERMISSION_DEMO_FOCUS]["classname"], command)
 

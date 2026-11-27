@@ -24,9 +24,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "native"))
 import artifacts as native
 
 ROOT = Path(__file__).resolve().parents[2]
-MODULES = ("calf-file-picker", "calf-share")
+MODULES = ("nativecmpkit-file-picker", "nativecmpkit-share")
 ATTEMPTS = 2
-DEPENDENCY_PROBES = {"calf-file-picker": "raw-window-handle", "calf-share": "jni"}
+DEPENDENCY_PROBES = {"nativecmpkit-file-picker": "raw-window-handle", "nativecmpkit-share": "jni"}
 RECIPE_INPUTS = (
     "scripts/ci/native_lock_reproducibility.py",
     "scripts/ci/test_native_lock_reproducibility.py",

@@ -40,9 +40,9 @@ class AdaptiveNativeFocusTests(unittest.TestCase):
     def test_unknown_full_compiler_publish_other_modules_and_mixed_branch_requests_are_refused(self):
         for focus in adaptive.FOCUSES:
             good = adaptive.native_request(focus)
-            variants = [good[:1], good[:-2], good + good[-2:], [":calf-ui:compileTestKotlinIosSimulatorArm64"],
-                        [":calf-ui:publish"], ["check"], [good[0], "--tests", "*"],
-                        [good[0].replace("calf-ui", "calf-share"), *good[1:]]]
+            variants = [good[:1], good[:-2], good + good[-2:], [":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"],
+                        [":nativecmpkit-ui:publish"], ["check"], [good[0], "--tests", "*"],
+                        [good[0].replace("nativecmpkit-ui", "nativecmpkit-share"), *good[1:]]]
             mixed = good.copy(); mixed[2] = adaptive.selectors(adaptive.FOCUSES[1 - adaptive.FOCUSES.index(focus)])[0]
             variants.append(mixed)
             for request in variants:
@@ -121,7 +121,7 @@ class AdaptiveNativeFocusTests(unittest.TestCase):
 
     def test_distinct_native_init_matches_exact_sources_methods_and_does_not_expand_compile_only_authority(self):
         init = (ROOT / adaptive.INIT_SCRIPT).read_text()
-        sources = re.findall(r'"(calf-ui/src/iosTest/kotlin/[^"\n]+\.kt)"', init)
+        sources = re.findall(r'"(nativecmpkit-ui/src/iosTest/kotlin/[^"\n]+\.kt)"', init)
         self.assertEqual(list(adaptive.SOURCES), sources)
         for focus in adaptive.FOCUSES:
             self.assertIn('"' + focus + '" to listOf(', init)

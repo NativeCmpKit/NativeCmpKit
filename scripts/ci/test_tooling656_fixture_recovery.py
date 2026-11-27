@@ -21,7 +21,7 @@ import webview_content_policy_source_projection as content_history
 ROOT = Path(__file__).resolve().parents[2]
 CONTENT_FOCUS = "webview-content-policy-android"
 PERMISSION_FOCUS = "android-permission-demo-call-denial-recovery"
-PERMISSION_CORE = "calf-permissions/core"
+PERMISSION_CORE = "nativecmpkit-permissions/core"
 IMAGE_CONTROL = "scripts/ci/test_apple_image_launcher_source_projection.py"
 
 
@@ -147,10 +147,10 @@ class Tooling656FixtureRecoveryControls(unittest.TestCase):
         api_env["lt"] = types.SimpleNamespace(content_policy=api_env["selected_content_policy"])
         owner = function(ast.parse((ROOT / "scripts/ci/android_device_tests.py").read_bytes()), "validate_api_selection")
         exec(compile(ast.Module(body=[owner], type_ignores=[]), "unchanged-owning-api-source-only", "exec"), api_env)
-        self.assertIsNone(api_env["validate_api_selection"](35, ("calf-webview",), CONTENT_FOCUS))
-        for api, modules in ((True, ("calf-webview",)), ("35", ("calf-webview",)), (34, ("calf-webview",)),
-                             (36, ("calf-webview",)), (35, (PERMISSION_CORE,)), (35, ("calf-webview", "calf-io")),
-                             (35, None), (35, ["calf-webview"])):
+        self.assertIsNone(api_env["validate_api_selection"](35, ("nativecmpkit-webview",), CONTENT_FOCUS))
+        for api, modules in ((True, ("nativecmpkit-webview",)), ("35", ("nativecmpkit-webview",)), (34, ("nativecmpkit-webview",)),
+                             (36, ("nativecmpkit-webview",)), (35, (PERMISSION_CORE,)), (35, ("nativecmpkit-webview", "nativecmpkit-io")),
+                             (35, None), (35, ["nativecmpkit-webview"])):
             with self.subTest(api=api, modules=modules), self.assertRaises(ValueError):
                 api_env["validate_api_selection"](api, modules, CONTENT_FOCUS)
 

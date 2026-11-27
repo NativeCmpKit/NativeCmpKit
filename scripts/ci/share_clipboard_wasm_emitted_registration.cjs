@@ -14,7 +14,7 @@ const { performance } = require('node:perf_hooks');
 const BINDING_SHA256 = '0ecc52de878065b884d6797e5ea50a581a5cd3642a653c38f075974a7a050a84';
 const OLD_FIXTURE_SHA256 = '347953a8c9596091c3923a37f564b51a7cd7f6488169718222ffe7c6c99e53c8';
 const NEW_FIXTURE_SHA256 = 'e2f95d99ff2dd89fa95bd4de8fbedf9f3b60748284fed87ae6fe2ab3d2278a89';
-const CLASS = 'com.mohamedrejeb.calf.share.WebClipboardEnvironmentAcceptanceTest';
+const CLASS = 'io.github.apdelrahman1911.nativecmpkit.share.WebClipboardEnvironmentAcceptanceTest';
 const METHODS = Object.freeze([
   'secureContextWithAbsentClipboardApiReportsUnavailableWithoutPlatformCalls',
   'genuinelyInsecureHttpContextHasNoClipboardApiAndReportsUnavailable',
@@ -160,10 +160,10 @@ function cut(source, start, end) {
         // Any genuine clipboard scenario entry (nativeMode first) is a hard safety failure.
         // Also refuse accepted/foreign harness operations; the original selector excludes them.
         for (const key of Object.keys(jsCode)) {
-          if (/^com\.mohamedrejeb\.calf\.share\.native(?:Mode|Value|SecureContext|Activation|ApiAvailable|MaskApi|ObserveWrites|Permission|Arm|Cleanup)$/.test(key) ||
-              /^com\.mohamedrejeb\.calf\.share\.js(?:IsClipboardSupported|CopyToClipboard)$/.test(key)) {
+          if (/^com\.mohamedrejeb\.nativecmpkit\.share\.native(?:Mode|Value|SecureContext|Activation|ApiAvailable|MaskApi|ObserveWrites|Permission|Arm|Cleanup)$/.test(key) ||
+              /^com\.mohamedrejeb\.nativecmpkit\.share\.js(?:IsClipboardSupported|CopyToClipboard)$/.test(key)) {
             Object.defineProperty(jsCode, key, { ...Object.getOwnPropertyDescriptor(jsCode, key), value: guardInterop });
-          } else if (/^com\.mohamedrejeb\.calf\.share\.(?:install|field|file)$/.test(key)) {
+          } else if (/^com\.mohamedrejeb\.nativecmpkit\.share\.(?:install|field|file)$/.test(key)) {
             Object.defineProperty(jsCode, key, { ...Object.getOwnPropertyDescriptor(jsCode, key), value: guardOtherTestInterop });
           }
         }

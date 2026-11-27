@@ -43,8 +43,8 @@ IO_METHODS = (
     "extensionlessFileAndUnicodeNameArePreserved", "repeatedStreamUseLeavesSourceReadableAndDeletable",
 )
 EXPECTED_CASES = frozenset(
-    [("nativecmpkit.consumer.PublishedIoConsumerTest", method) for method in IO_METHODS]
-    + [("nativecmpkit.consumer.PublishedArtifactOriginTest", "runtimeLibraryClassesComeFromExactStagedDesktopJars")]
+    [("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedIoConsumerTest", method) for method in IO_METHODS]
+    + [("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedArtifactOriginTest", "runtimeLibraryClassesComeFromExactStagedDesktopJars")]
 )
 REPOSITORY = "build/verification-repo"
 GRADLE_HOME = "build/ci-consumer-cache/gradle-home"
@@ -114,7 +114,7 @@ def fixture_inputs(root: Path) -> dict[str, str]:
 def inputs(root: Path) -> dict[str, str]:
     result = lt.snapshot_inputs(root)
     result.update(fixture_inputs(root))
-    for relative in ("tests/consumer/verify_artifacts.py", "docs/migration/identity.json",
+    for relative in ("tests/consumer/verify_artifacts.py", "docs/migration/current-identity.json",
                      "tests/consumer/build.gradle.kts", "tests/consumer/settings.gradle.kts",
                      "tests/consumer/src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt",
                      "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
@@ -211,7 +211,7 @@ def module_file_bindings(repository: Path, staged: dict[str, dict]) -> dict[str,
         need(isinstance(variants, list) and 1 <= len(variants) <= 128, "Missing or unbounded target metadata variants")
         primary, usages = [], []
         canonical = module + '-' + VERSION + '.jar'
-        allowed_names = {canonical, module.replace('nativecmpkit-', 'calf-', 1) + '-' + VERSION + '.jar'}
+        allowed_names = {canonical, module.replace('nativecmpkit-', 'nativecmpkit-', 1) + '-' + VERSION + '.jar'}
         for variant in variants:
             need(isinstance(variant, dict), "Non-object target metadata variant")
             attributes = variant.get('attributes')
@@ -491,7 +491,7 @@ def run(root: Path, relative: str, timeout: int = 4200, reserve_mib: int = 8192)
                                      "log_sha256": lt.sha256(log) if log.exists() else None})
         need(result["exit_code"] == 0 and not result.get("stop_reason"), "Actual four-publication producer staging did not pass")
         markers = re.findall(r"(?m)^NATIVECMPKIT_PARTIAL_STAGE task=(:[A-Za-z0-9:-]+) group=" + re.escape(GROUP) + r" version=" + re.escape(VERSION) + r"$", log.read_text(errors="replace"))
-        expected_tasks = {f':calf-{module}:publish{publication}PublicationToNativecmpkitVerificationRepository'
+        expected_tasks = {f':nativecmpkit-{module}:publish{publication}PublicationToNativecmpkitVerificationRepository'
                           for module in ('core', 'io') for publication in ('KotlinMultiplatform', 'Desktop')}
         need(len(markers) == 4 and set(markers) == expected_tasks, "Exactly four actual Core/IO publication-task markers are required")
         record["actual_publication_task_markers"] = sorted(markers)

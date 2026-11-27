@@ -1,0 +1,60 @@
+// Modified for nativeCmpkit (2026-10-24): correctness, lifecycle, testing and build hardening.
+package io.github.apdelrahman1911.nativecmpkit.ui.button
+
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
+import io.github.apdelrahman1911.nativecmpkit.ui.utils.isIOS26OrAbove
+
+@Composable
+actual fun AdaptiveButton(
+    onClick: () -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    shape: Shape,
+    colors: ButtonColors,
+    liquidGlassColors: LiquidGlassButtonColors?,
+    contentPadding: PaddingValues,
+    interactionSource: MutableInteractionSource,
+    content: @Composable RowScope.() -> Unit,
+) {
+    if (isIOS26OrAbove()) {
+        LiquidGlassButtonImpl(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            colors = liquidGlassColors ?: LiquidGlassButtonDefaults.filledButtonColors(
+                surfaceColor = if (enabled) colors.containerColor else colors.disabledContainerColor,
+                contentColor = colors.contentColor,
+                disabledContentColor = colors.disabledContentColor,
+            ),
+            shape = shape,
+            contentPadding = contentPadding,
+            interactionSource = interactionSource,
+            disabledAlpha = if (liquidGlassColors == null) 1f else LiquidGlassButtonDefaults.DisabledAlpha,
+            content = content,
+        )
+    } else {
+        CupertinoButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            colors = CupertinoButtonDefaults.filledButtonColors(
+                containerColor = colors.containerColor,
+                contentColor = colors.contentColor,
+                disabledContainerColor = colors.disabledContainerColor,
+                disabledContentColor = colors.disabledContentColor,
+            ),
+            shape = shape,
+            contentPadding = contentPadding,
+            interactionSource = interactionSource,
+            content = content,
+        )
+    }
+}

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-package nativecmpkit.consumer.unpublished
+package io.github.apdelrahman1911.nativecmpkit.consumer.unpublished
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import com.google.android.gms.location.LocationResult
-import com.mohamedrejeb.calf.geo.LocationTracker
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTracker
 
 /** Retained Android signatures must typecheck through the library's API dependencies. */
 @Suppress("DEPRECATION")

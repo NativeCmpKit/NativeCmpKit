@@ -136,7 +136,7 @@ class RouteAdmission(unittest.TestCase):
                 camera.is_required(api, (camera.MODULE,), camera.FOCUS)
 
     def test_wrong_module_or_type_refused(self):
-        for modules in (None, (), [camera.MODULE], (camera.MODULE, "calf-io"), ("calf-io",)):
+        for modules in (None, (), [camera.MODULE], (camera.MODULE, "nativecmpkit-io"), ("nativecmpkit-io",)):
             with self.subTest(modules=modules), self.assertRaises(ValueError):
                 camera.is_required(35, modules, camera.FOCUS)
 
@@ -732,7 +732,7 @@ class ReporterModels(ModelFixture):
         self.assertEqual(self.device.actions, [])
 
     def test_wrong_classname_derived_package_metadata_refused(self):
-        self.metadata_data["applicationId"] = "com.mohamedrejeb.calf.camerapicker.test"
+        self.metadata_data["applicationId"] = "io.github.apdelrahman1911.nativecmpkit.camerapicker.test"
         self.metadata.write_text(json.dumps(self.metadata_data))
         self.model()
         with self.assertRaises(ValueError):
@@ -1129,7 +1129,7 @@ class ControllerOwnershipModels(unittest.TestCase):
             model.events.append("modeled-native-dispatch")
             return {"passed": model.native_pass, "totals": {"tests": 1}, "modules": []}
         lt = types.SimpleNamespace(safe_path=lambda root, relative: root / relative,
-            plan=lambda root, target, **kwargs: {"focus": kwargs.get("focus"), "expected": [{"project": ":calf-camera-picker", "task": ":modeled"}],
+            plan=lambda root, target, **kwargs: {"focus": kwargs.get("focus"), "expected": [{"project": ":nativecmpkit-camera-picker", "task": ":modeled"}],
                 "complete_suite_requested": False, "explicit_module_subset": True, "test_bearing_modules_not_requested": [],
                 "finite_only_device_modules_not_requested": []},
             android_io_documents_required=lambda plan: False, android_permission_demo_required=lambda plan: False,

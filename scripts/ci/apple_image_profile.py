@@ -24,7 +24,7 @@ import apple_memory_discovery as discovery
 import library_tests as lt
 import runtime_context as runtime
 
-NATIVE_SYMBOLS = ("com.mohamedrejeb.calf.ui.utils", "UIImageMemoryDiagnosticsTest", "ImageUtils.kt")
+NATIVE_SYMBOLS = ("io.github.apdelrahman1911.nativecmpkit.ui.utils", "UIImageMemoryDiagnosticsTest", "ImageUtils.kt")
 # A basename or unqualified test class cannot own an allocation frame. Require
 # the complete namespace in the same frame field; optional labels are whole symbols.
 NATIVE_FRAME_SYMBOL_PATTERNS = (

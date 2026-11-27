@@ -78,7 +78,7 @@ class IosWebViewRequestFocusTests(unittest.TestCase):
             "test_unfiltered_webview_still_requires_every_owning_host_and_native_method")
         self.addCleanup(parent.doCleanups)
         fixture = parent.fixture()
-        fixture.plan = lt.plan(fixture.root, "ios", only_modules=("calf-webview",),
+        fixture.plan = lt.plan(fixture.root, "ios", only_modules=("nativecmpkit-webview",),
                                focus=None if full else FOCUS)
         groups = lt.IOS_WEBVIEW_APPLICATION_REQUIRED_GROUPS if full else (lt.IOS_WEBVIEW_REQUEST_GROUP,)
         cases = [{"classname": group["classname"], "name": name, "status": "passed"}
@@ -101,18 +101,18 @@ class IosWebViewRequestFocusTests(unittest.TestCase):
         self.assertEqual(set(matrix.PROFILES), set(options))
         self.assertEqual(1, options.count(PROFILE))
         row, = matrix.matrix(PROFILE)["include"]
-        self.assertEqual(("ios-iphone", "ios", "calf-webview", FOCUS),
+        self.assertEqual(("ios-iphone", "ios", "nativecmpkit-webview", FOCUS),
                          tuple(row[key] for key in ("slot", "suite", "test-modules", "test-focus")))
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         for old_profile in ("all", "apple", "ios", "core", "browser"):
             self.assertTrue(all("test-focus" not in selected for selected in matrix.matrix(old_profile)["include"]))
-        for profile, modules in (("android-io-permission-storage-api35", "calf-io,calf-permissions/core"),
-                                 ("android-permission-storage-compatibility", "calf-permissions/core")):
+        for profile, modules in (("android-io-permission-storage-api35", "nativecmpkit-io,nativecmpkit-permissions/core"),
+                                 ("android-permission-storage-compatibility", "nativecmpkit-permissions/core")):
             android_row, = matrix.matrix(profile)["include"]
             self.assertEqual("android-device", android_row["suite"])
             self.assertEqual(modules, android_row["test-modules"])
             self.assertNotIn("test-focus", android_row)
-            self.assertNotIn("calf-webview", android_row["test-modules"])
+            self.assertNotIn("nativecmpkit-webview", android_row["test-modules"])
         workflow = (lt.ROOT / ".github/workflows/gradle.yml").read_text()
         self.assertIn("permissions:\n  contents: read", workflow)
         self.assertIn("native-webview-application/*/receipt.json", workflow)
@@ -129,17 +129,17 @@ class IosWebViewRequestFocusTests(unittest.TestCase):
             declared.update((group["classname"], name) for name in names)
         self.assertEqual(14, len(full))
         self.assertEqual(full, declared)
-        request_plan = lt.plan(lt.ROOT, "ios", only_modules=("calf-webview",), focus=FOCUS)
+        request_plan = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-webview",), focus=FOCUS)
         selected, = request_plan["expected"]
         self.assertEqual(2, len(selected["required_testcases"]))
         self.assertEqual(2, lt.gradle_command("ios", request_plan, simulator=runtime_fixture.DEVICE).count("--tests"))
         self.assertEqual("genuine-uikit-application", selected["native_test_host"])
-        self.assertEqual(":calf-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
+        self.assertEqual(":nativecmpkit-webview:" + lt.IOS_APPLICATION_TASK, selected["task"])
         self.assertEqual(requests.SOURCE, selected["ios_webview_request_fixture"])
         self.assertEqual(lt.sha256(lt.ROOT / requests.SOURCE), selected["ios_webview_request_fixture_sha256"])
         for focus, count in ((lt.IOS_WEBVIEW_LIFECYCLE_FOCUS, 10), (lt.IOS_WEBVIEW_RECOVERY_FOCUS, 7),
                              (lt.IOS_WEBVIEW_REMOUNT_RECOVERY_FOCUS, 1)):
-            old = lt.plan(lt.ROOT, "ios", only_modules=("calf-webview",), focus=focus)
+            old = lt.plan(lt.ROOT, "ios", only_modules=("nativecmpkit-webview",), focus=focus)
             self.assertEqual(count, len(old["expected"][0]["required_testcases"]))
             self.assertEqual(count, lt.gradle_command("ios", old, simulator=runtime_fixture.DEVICE).count("--tests"))
             self.assertNotIn(lt.IOS_WEBVIEW_REQUEST_CLASS, old["expected"][0]["test_filter"])
@@ -234,7 +234,7 @@ class IosWebViewRequestFocusTests(unittest.TestCase):
             "test_owned_only_install_launch_readback_uninstall_and_local_cleanup")
         helper.setUp()
         try:
-            binary = helper.root / app.APPLICATION_HOSTS["calf-webview"]["binary_directory"] / "test.kexe"
+            binary = helper.root / app.APPLICATION_HOSTS["nativecmpkit-webview"]["binary_directory"] / "test.kexe"
             binary.parent.mkdir(parents=True)
             binary.write_bytes(helper.binary.read_bytes())
             binary.chmod(0o700)

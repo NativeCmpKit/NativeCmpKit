@@ -2,7 +2,7 @@
 
 **Source fixture, not a published artifact, Maven consumer, sample application or
 commercial cloud provider.** No native execution is implied by source guards or
-by this README. The library's self-instrumenting `calf-io` tests are the real caller.
+by this README. The library's self-instrumenting `nativecmpkit-io` tests are the real caller.
 
 ## Native ownership and data
 
@@ -31,7 +31,7 @@ before public metadata/persistence. Actual optional write grant is recorded.
 
 ## Exactly two NEW native methods
 
-Class `com.mohamedrejeb.calf.io.AndroidIoRemoteDocumentsTest`:
+Class `io.github.apdelrahman1911.nativecmpkit.io.AndroidIoRemoteDocumentsTest`:
 
 1. `controlledRemoteTreeMetadataAndBoundedSourceCloseAreBackedByLiveHttp`:
    public folder metadata immediately and after Activity destruction/bookmark

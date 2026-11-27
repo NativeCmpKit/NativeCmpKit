@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
-package nativecmpkit.consumer.unpublished
+package io.github.apdelrahman1911.nativecmpkit.consumer.unpublished
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
-import com.mohamedrejeb.calf.geo.LocationStartResult
-import com.mohamedrejeb.calf.geo.LocationTracker
-import com.mohamedrejeb.calf.geo.LocationTrackingSnapshot
-import com.mohamedrejeb.calf.geo.createLocationTracker
-import com.mohamedrejeb.calf.navigation.AdaptiveNavHost
-import com.mohamedrejeb.calf.navigation.AdaptiveNavHostController
-import com.mohamedrejeb.calf.navigation.NavHostController
-import com.mohamedrejeb.calf.navigation.navigate as navigatePlatformBridge
-import com.mohamedrejeb.calf.navigation.popBackStack as popPlatformBridge
-import com.mohamedrejeb.calf.navigation.rememberAdaptiveNavController
-import com.mohamedrejeb.calf.navigation.rememberNavController
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationStartResult
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTracker
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTrackingSnapshot
+import io.github.apdelrahman1911.nativecmpkit.geo.createLocationTracker
+import io.github.apdelrahman1911.nativecmpkit.navigation.AdaptiveNavHost
+import io.github.apdelrahman1911.nativecmpkit.navigation.AdaptiveNavHostController
+import io.github.apdelrahman1911.nativecmpkit.navigation.NavHostController
+import io.github.apdelrahman1911.nativecmpkit.navigation.navigate as navigatePlatformBridge
+import io.github.apdelrahman1911.nativecmpkit.navigation.popBackStack as popPlatformBridge
+import io.github.apdelrahman1911.nativecmpkit.navigation.rememberAdaptiveNavController
+import io.github.apdelrahman1911.nativecmpkit.navigation.rememberNavController
 
 /** Both factory identities remain adaptive on every target, unlike the legacy bridge. */
 @Composable

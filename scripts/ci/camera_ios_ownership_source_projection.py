@@ -22,8 +22,8 @@ MAX_SOURCE_BYTES = 4 * 1024 * 1024
 MAX_SPEC_BYTES = 512 * 1024
 BOUND_PATHS = {
     '.github/workflows/gradle.yml',
-    'calf-camera-picker/build.gradle.kts',
-    'calf-camera-picker/src/iosTest/kotlin/com/mohamedrejeb/calf/camerapicker/internal/NativeCameraApplicationHost.kt',
+    'nativecmpkit-camera-picker/build.gradle.kts',
+    'nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt',
     'scripts/ci/ios_ui_application.py',
     'scripts/ci/library_tests.py',
     'scripts/ci/test_webview_content_policy_application_routing.py',
