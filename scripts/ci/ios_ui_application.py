@@ -97,9 +97,10 @@ WK_RESTORE_CASE = (
     lt.content_policy.spec(lt.content_policy.IOS_RESTORE_FOCUS)["methods"][0],
 )
 WK_RESTORE_PREFIX = "NATIVECMPKIT_WK_RESTORE_PROGRESS "
-WK_RESTORE_STEPS = (
-    "initial-unmounted", "remount-mounted", "remount-http-drained", "remount-native-ready",
-    "remount-dom-checked", "remount-history-check", "remount-history-checked", "remount-unmounted",
+WK_RESTORE_STEPS = tuple(
+    f"{row}-{step}" for row in ("url", "html", "navigator", "redirect", "null")
+    for step in ("prepare", "initial-mounted", "initial-check", "initial-verified", "initial-saved", "initial-unmounted",
+                 "saved-state-decoded", "remount-mounted", "remount-document-verified", "remount-verified", "remount-unmounted")
 )
 SLIDER_TAP_CASES = {
     "Liquid": (lt.IOS_SLIDER_LIFECYCLE_CLASS, lt.IOS_SLIDER_LIFECYCLE_METHODS[4]),
