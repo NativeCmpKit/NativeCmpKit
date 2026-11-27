@@ -225,7 +225,14 @@ class AndroidWebViewContentPolicyAcceptanceTest {
         val url = evaluate(state, "document.location.href")
         onMain {
             val native = assertNotNull(state.webView)
-            state.pageTitle?.takeIf { it.isNotEmpty() }?.let { assertEquals(JavascriptResult.Value(quoteJavascript(it)), title) }
+            state.pageTitle?.takeIf { it.isNotEmpty() }?.let {
+                val observation = when {
+                    title == JavascriptResult.Value("\"\"") -> "blank-dom"
+                    title is JavascriptResult.Value -> "different-dom"
+                    else -> "evaluation-failed"
+                }
+                assertEquals(JavascriptResult.Value(quoteJavascript(it)), title, "NATIVECMPKIT_ANDROID_RESTORE_TITLE:$observation")
+            }
             state.lastLoadedUrl?.takeIf { it.isNotEmpty() }?.let { assertEquals(JavascriptResult.Value(quoteJavascript(it)), url) }
             assertEquals(native.canGoBack(), navigator.canGoBack); assertEquals(native.canGoForward(), navigator.canGoForward)
         }

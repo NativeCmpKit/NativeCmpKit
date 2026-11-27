@@ -19,6 +19,7 @@ TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,90}\Z")
 FRAME = re.compile(r"\b([A-Za-z0-9_]+\.kt):(\d{1,5})\b")
 RESTORE_PHASE = re.compile(r"\bNATIVECMPKIT_WK_RESTORE:(?:(?:url|html|navigator|redirect|null):(?:initial|saved|remount)|wire:counters)\b")
 RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "null-recovery")
+ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
 
 
 def restore_stages(fixture):
@@ -76,12 +77,13 @@ def failure_rows(module, path, expected_digest=None):
         failed = next((child for child in case if child.tag in {"failure", "error"}), None)
         name = case.get("name", "").removesuffix("[iosSimulatorArm64]")
         if failed is not None and TOKEN.fullmatch(name):
+            failure_text = failed.get("message", "") + "\n" + (failed.text or "")
             yield {
                 "module": module, "case": name, "status": failed.tag,
                 "original_xml_sha256": digest,
                 "source_frames": list(dict.fromkeys(FRAME.findall(failed.text or "")))[:8],
-                "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(
-                    failed.get("message", "") + "\n" + (failed.text or ""))))[:4],
+                "restore_phases": list(dict.fromkeys(RESTORE_PHASE.findall(failure_text)))[:4],
+                "android_restore_title": list(dict.fromkeys(ANDROID_RESTORE_TITLE.findall(failure_text))),
             }
 
 

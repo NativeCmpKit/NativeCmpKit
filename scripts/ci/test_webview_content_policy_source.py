@@ -106,13 +106,33 @@ class WebViewContentPolicyNewSourceTest(unittest.TestCase):
     def test_android_production_diff_is_only_exact_metadata_restore_inverse(self):
         text = (ROOT / ANDROID_SOURCE).read_text()
         self.assertEqual(1, text.count(ANDROID_POSTIMAGE))
-        restore_order = ("        // Chromium reports the restored history title synchronously in restoreState.\n"
-                         "        // The clients can publish metadata once this WebView owns the state.\n"
-                         "        state.viewState?.let { view.restoreState(it) }\n"
-                         "        state.webView = view\n")
-        previous_order = "        state.webView = view\n        state.viewState?.let { view.restoreState(it) }\n"
-        self.assertEqual(1, text.count(restore_order))
-        reconstructed = text.replace(restore_order, previous_order, 1).replace(ANDROID_POSTIMAGE, ANDROID_PREIMAGE, 1).encode()
+        # Peel the later visible-commit title gate before comparing the older saver change.
+        changes = (
+            ("""        state.viewState?.let {
+            // A restored history title can arrive before any document is rendered.
+            state.awaitingRestoredDocument = true
+            if (view.restoreState(it) == null) state.awaitingRestoredDocument = false
+        }
+""", "        state.viewState?.let { view.restoreState(it) }\n"),
+            ("                state.awaitingRestoredDocument = false\n", ""),
+            ("""    override fun onPageCommitVisible(view: WebView, url: String) {
+        super.onPageCommitVisible(view, url)
+        if (state.webView !== view || !state.awaitingRestoredDocument) return
+        state.awaitingRestoredDocument = false
+        // The provider may have delivered the new title before the visible commit.
+        state.pageTitle = view.title
+    }
+
+""", ""),
+            ("if (state.webView === view && !state.awaitingRestoredDocument) state.pageTitle = title",
+             "if (state.webView === view) state.pageTitle = title"),
+            ("\n    internal var awaitingRestoredDocument = false\n", ""),
+        )
+        original = text
+        for current, previous in changes:
+            self.assertEqual(1, original.count(current))
+            original = original.replace(current, previous, 1)
+        reconstructed = original.replace(ANDROID_POSTIMAGE, ANDROID_PREIMAGE, 1).encode()
         self.assertEqual(ANDROID_PREIMAGE_SHA256, hashlib.sha256(reconstructed).hexdigest())
         for value in ('val pageTitleKey = "pagetitle"', 'val lastLoadedUrlKey = "lastloaded"', 'val stateBundle = "bundle"',
                       "view.saveState(saved)", "pageTitleKey to it.pageTitle", "lastLoadedUrlKey to it.lastLoadedUrl",

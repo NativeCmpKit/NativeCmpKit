@@ -2,7 +2,7 @@
 """Exact NativeCmpKit routing inputs and preserved predecessor manifests."""
 
 CONTRACT_INPUT_SHA256 = {
-    "scripts/ci/webview_content_policy_native_focus.py": "d8414bbb15f4a1067bdb0912fd33b85cf5b2ac9be61ee1dc3316eb9c0e4ceae1",
+    "scripts/ci/webview_content_policy_native_focus.py": "e2441a9293a2f13e5abdf25951818d020de5ab19ebb28c86f55b558f085b9934",
     "scripts/ci/ios_ui_application.py": "feec64b9047a4161f5fea5f20c275b0c7b53f13e564b6918c5a4a28839f5e285",
     "scripts/ci/fixtures/webview-content-policy-routing-source-inverse.json": "c44400087570740d3248704c2165c3222229f2c05ff1a2a3840dbda9aa04b916",
     "scripts/ci/fixtures/webview-current-contract667-source-inverse.json": "56574379b6d9621e8b72009cad3551115401b860250f5c40af23bf3be279f937",

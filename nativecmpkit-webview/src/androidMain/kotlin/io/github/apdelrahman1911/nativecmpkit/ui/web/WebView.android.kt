@@ -232,10 +232,12 @@ internal fun createAndroidWebView(
     val view = create()
     try {
         configure(view)
-        // Chromium reports the restored history title synchronously in restoreState.
-        // The clients can publish metadata once this WebView owns the state.
-        state.viewState?.let { view.restoreState(it) }
         state.webView = view
+        state.viewState?.let {
+            // A restored history title can arrive before any document is rendered.
+            state.awaitingRestoredDocument = true
+            if (view.restoreState(it) == null) state.awaitingRestoredDocument = false
+        }
         onCreated(view)
         return view
     } catch (error: Throwable) {
@@ -269,6 +271,7 @@ internal fun releaseAndroidWebView(
             {
             if (state.webView === view) {
                 state.webView = null
+                state.awaitingRestoredDocument = false
                 state.loadingState = LoadingState.Finished
             }
             },
@@ -353,6 +356,14 @@ public open class AccompanistWebViewClient : WebViewClient() {
         state.loadingState = LoadingState.Finished
     }
 
+    override fun onPageCommitVisible(view: WebView, url: String) {
+        super.onPageCommitVisible(view, url)
+        if (state.webView !== view || !state.awaitingRestoredDocument) return
+        state.awaitingRestoredDocument = false
+        // The provider may have delivered the new title before the visible commit.
+        state.pageTitle = view.title
+    }
+
     override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {
         super.doUpdateVisitedHistory(view, url, isReload)
 
@@ -403,7 +414,7 @@ public open class AccompanistWebChromeClient : WebChromeClient() {
 
     override fun onReceivedTitle(view: WebView, title: String?) {
         super.onReceivedTitle(view, title)
-        if (state.webView === view) state.pageTitle = title
+        if (state.webView === view && !state.awaitingRestoredDocument) state.pageTitle = title
     }
 
     override fun onReceivedIcon(view: WebView, icon: Bitmap?) {
@@ -504,6 +515,8 @@ actual class WebViewState actual constructor(webContent: WebContent) {
      */
     public var viewState: Bundle? = null
         internal set
+
+    internal var awaitingRestoredDocument = false
 
     // We need access to this in the state saver. An internal DisposableEffect or AndroidView
     // onDestroy is called after the state saver and so can't be used.
