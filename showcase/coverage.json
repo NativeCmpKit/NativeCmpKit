@@ -1,0 +1,3793 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "showcase/generate_coverage.py",
+  "base": {
+    "repository": "NativeCmpKit/NativeCmpKit",
+    "sha": "a2c48c0b9ebf3524192e680ecd4becc1f2880bb8",
+    "branch": "feature/showcase-ui-verification"
+  },
+  "app": {
+    "androidApplicationId": "io.github.apdelrahman1911.nativecmpkit.sample",
+    "iosBundleId": "io.github.apdelrahman1911.nativecmpkit.sample",
+    "entryPoint": "sample/common/src/commonMain/kotlin/io.github.apdelrahman1911.kira.sample/App.kt"
+  },
+  "platformRuntimes": {
+    "android": "GitHub-hosted ubuntu-24.04, KVM API 35 x86_64 Google APIs emulator",
+    "ios": "GitHub-hosted macos-26, explicitly selected iPhone simulator UDID",
+    "desktop": "not part of the mobile capture matrix",
+    "web": "not part of the mobile capture matrix"
+  },
+  "rows": [
+    {
+      "id": "UI-BUTTON-001",
+      "module": "kira-ui",
+      "component": "AdaptiveButton",
+      "variant": "filled enabled and disabled",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Button",
+      "setup": [],
+      "steps": [
+        "Open the Button screen",
+        "Tap the enabled filled button",
+        "Read the click counter"
+      ],
+      "expected": [
+        "Counter increments from 0 to 1",
+        "The disabled button stays visible and unchanged"
+      ],
+      "flowId": "android-phone-adaptivebutton-filled-enabled-and-disabled",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebutton/filled-enabled-and-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebutton/filled-enabled-and-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BUTTON-002",
+      "module": "kira-ui",
+      "component": "AdaptiveButton",
+      "variant": "icon and label content",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Button",
+      "setup": [],
+      "steps": [
+        "Open the Button screen",
+        "Inspect the icon-label row"
+      ],
+      "expected": [
+        "The label is visible",
+        "The leading icon has a non-empty content description where supplied"
+      ],
+      "flowId": "android-phone-adaptivebutton-icon-and-label-content",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebutton/icon-and-label-content/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebutton/icon-and-label-content/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BUTTON-003",
+      "module": "kira-ui",
+      "component": "AdaptiveIconButton",
+      "variant": "three enabled and one disabled",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Button",
+      "setup": [],
+      "steps": [
+        "Open the Button screen",
+        "Inspect the icon-button row"
+      ],
+      "expected": [
+        "Four icon buttons render",
+        "The disabled button cannot be activated"
+      ],
+      "flowId": "android-phone-adaptiveiconbutton-three-enabled-and-one-disabled",
+      "screenshot": {
+        "android": "screenshots/android/adaptiveiconbutton/three-enabled-and-one-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveiconbutton/three-enabled-and-one-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BUTTON-004",
+      "module": "kira-ui",
+      "component": "CupertinoButton",
+      "variant": "filled, bordered, plain, disabled",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Button",
+      "setup": [],
+      "steps": [
+        "Open the Button screen",
+        "Inspect the Cupertino section",
+        "Tap the filled variant"
+      ],
+      "expected": [
+        "All color factories render distinct containers",
+        "Disabled variant uses the disabled alpha and does not count as a tap"
+      ],
+      "flowId": "android-phone-cupertinobutton-filled-bordered-plain-disabled",
+      "screenshot": {
+        "android": "screenshots/android/cupertinobutton/filled-bordered-plain-disabled/api35-phone.png",
+        "ios": "screenshots/ios/cupertinobutton/filled-bordered-plain-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "The public API has no size parameter and no selected state."
+      ]
+    },
+    {
+      "id": "UI-CLICK-001",
+      "module": "kira-ui",
+      "component": "Modifier.adaptiveClickable",
+      "variant": "single, long, double, disabled",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "AdaptiveClickable",
+      "setup": [],
+      "steps": [
+        "Open the Adaptive Clickable screen",
+        "Tap, long-press, and double-tap the card",
+        "Read the event log"
+      ],
+      "expected": [
+        "Each gesture is counted once",
+        "The disabled card stays inert",
+        "The Material platform shows indication while iOS uses press scale"
+      ],
+      "flowId": "android-phone-modifier-adaptiveclickable-single-long-double-disabled",
+      "screenshot": {
+        "android": "screenshots/android/modifier-adaptiveclickable/single-long-double-disabled/api35-phone.png",
+        "ios": "screenshots/ios/modifier-adaptiveclickable/single-long-double-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-SWITCH-001",
+      "module": "kira-ui",
+      "component": "AdaptiveSwitch",
+      "variant": "on, off and disabled",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Switch",
+      "setup": [],
+      "steps": [
+        "Open the Switch screen",
+        "Toggle the first switch",
+        "Inspect the disabled switch"
+      ],
+      "expected": [
+        "The readout follows the checked state",
+        "The disabled switch does not change"
+      ],
+      "flowId": "android-phone-adaptiveswitch-on-off-and-disabled",
+      "screenshot": {
+        "android": "screenshots/android/adaptiveswitch/on-off-and-disabled/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveswitch/on-off-and-disabled/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-SWITCH-002",
+      "module": "kira-ui",
+      "component": "CupertinoSwitch",
+      "variant": "on, off, disabled, thumb content",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Switch",
+      "setup": [],
+      "steps": [
+        "Open the Switch screen",
+        "Inspect the Cupertino section"
+      ],
+      "expected": [
+        "The 51x31 track and thumb render on every target",
+        "The disabled switch cannot be toggled"
+      ],
+      "flowId": "android-phone-cupertinoswitch-on-off-disabled-thumb-content",
+      "screenshot": {
+        "android": "screenshots/android/cupertinoswitch/on-off-disabled-thumb-content/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoswitch/on-off-disabled-thumb-content/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "On iOS 26 AdaptiveSwitch drops thumbContent and custom colors; CupertinoSwitch is the parity control."
+      ]
+    },
+    {
+      "id": "UI-SLIDER-001",
+      "module": "kira-ui",
+      "component": "AdaptiveSlider",
+      "variant": "continuous value readout",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Slider",
+      "setup": [],
+      "steps": [
+        "Open the Slider screen",
+        "Drag the brightness slider",
+        "Read the percentage"
+      ],
+      "expected": [
+        "The percentage follows the thumb",
+        "The value stays within 0..100"
+      ],
+      "flowId": "android-phone-adaptiveslider-continuous-value-readout",
+      "screenshot": {
+        "android": "screenshots/android/adaptiveslider/continuous-value-readout/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/continuous-value-readout/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-SLIDER-002",
+      "module": "kira-ui",
+      "component": "AdaptiveSlider",
+      "variant": "discrete steps",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Slider",
+      "setup": [],
+      "steps": [
+        "Open the Slider screen",
+        "Move the stepped slider to several positions"
+      ],
+      "expected": [
+        "Values snap to the stepped positions",
+        "Tick marks are visible on iOS below 26"
+      ],
+      "flowId": "android-phone-adaptiveslider-discrete-steps",
+      "screenshot": {
+        "android": "screenshots/android/adaptiveslider/discrete-steps/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/discrete-steps/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "iOS 26 LiquidGlassSlider silently drops the steps parameter."
+      ]
+    },
+    {
+      "id": "UI-SLIDER-003",
+      "module": "kira-ui",
+      "component": "AdaptiveSlider",
+      "variant": "disabled and custom range",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Slider",
+      "setup": [],
+      "steps": [
+        "Open the Slider screen",
+        "Inspect the disabled slider",
+        "Drag the 0..100 slider"
+      ],
+      "expected": [
+        "The disabled slider does not move",
+        "The custom range readout reaches 100"
+      ],
+      "flowId": "android-phone-adaptiveslider-disabled-and-custom-range",
+      "screenshot": {
+        "android": "screenshots/android/adaptiveslider/disabled-and-custom-range/api35-phone.png",
+        "ios": "screenshots/ios/adaptiveslider/disabled-and-custom-range/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-PROGRESS-001",
+      "module": "kira-ui",
+      "component": "AdaptiveCircularProgressIndicator",
+      "variant": "indeterminate sizes",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ProgressBar",
+      "setup": [],
+      "steps": [
+        "Open the Progress Bar screen",
+        "Inspect the three sizes"
+      ],
+      "expected": [
+        "All three indeterminate indicators render and animate",
+        "No determinate progress control is advertised"
+      ],
+      "flowId": "android-phone-adaptivecircularprogressindicator-indeterminate-sizes",
+      "screenshot": {
+        "android": "screenshots/android/adaptivecircularprogressindicator/indeterminate-sizes/api35-phone.png",
+        "ios": "screenshots/ios/adaptivecircularprogressindicator/indeterminate-sizes/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-PROGRESS-002",
+      "module": "kira-ui",
+      "component": "CupertinoActivityIndicator",
+      "variant": "spinner",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ProgressBar",
+      "setup": [],
+      "steps": [
+        "Open the Progress Bar screen",
+        "Inspect the Cupertino spinner"
+      ],
+      "expected": [
+        "The eight-spoke spinner is visible",
+        "Progress semantics are present"
+      ],
+      "flowId": "android-phone-cupertinoactivityindicator-spinner",
+      "screenshot": {
+        "android": "screenshots/android/cupertinoactivityindicator/spinner/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoactivityindicator/spinner/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-PROGRESS-003",
+      "module": "kira-ui",
+      "component": "AdaptiveCircularProgressIndicator",
+      "variant": "determinate",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "ProgressBar",
+      "setup": [],
+      "steps": [
+        "Attempt to construct a determinate indicator from public API"
+      ],
+      "expected": [
+        "No determinate parameter or overload exists"
+      ],
+      "flowId": "android-phone-adaptivecircularprogressindicator-determinate",
+      "screenshot": {
+        "android": "screenshots/android/ui-progress/unsupported-determinate/api35-phone.png",
+        "ios": "screenshots/ios/ui-progress/unsupported-determinate/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "Determinate circular progress is not part of the public API."
+      ]
+    },
+    {
+      "id": "UI-FAB-001",
+      "module": "kira-ui",
+      "component": "AdaptiveExpandableFAB",
+      "variant": "expanded/collapsed",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Button",
+      "setup": [],
+      "steps": [
+        "Attempt to call AdaptiveExpandableFAB from the showcase module"
+      ],
+      "expected": [
+        "Compilation is impossible because the declaration is internal"
+      ],
+      "flowId": "android-phone-adaptiveexpandablefab-expanded-collapsed",
+      "screenshot": {
+        "android": "screenshots/android/ui-fab/unsupported-internal/api35-phone.png",
+        "ios": "screenshots/ios/ui-fab/unsupported-internal/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "AdaptiveExpandableFAB and UIKitExpandableFABItem are internal in this revision."
+      ]
+    },
+    {
+      "id": "UI-DATE-001",
+      "module": "kira-ui",
+      "component": "AdaptiveDatePicker",
+      "variant": "inline selection and readout",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker screen",
+        "Select a different day",
+        "Read the selected date"
+      ],
+      "expected": [
+        "The readout changes",
+        "The native iOS calendar or Material picker is used"
+      ],
+      "flowId": "android-phone-adaptivedatepicker-inline-selection-and-readout",
+      "screenshot": {
+        "android": "screenshots/android/adaptivedatepicker/inline-selection-and-readout/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedatepicker/inline-selection-and-readout/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-DATE-002",
+      "module": "kira-ui",
+      "component": "AdaptiveCompactDatePicker",
+      "variant": "open, confirm, cancel",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker screen",
+        "Open the compact picker",
+        "Cancel once",
+        "Open again and confirm a date"
+      ],
+      "expected": [
+        "Cancel leaves the previous selection",
+        "Confirm updates the readout"
+      ],
+      "flowId": "android-phone-adaptivecompactdatepicker-open-confirm-cancel",
+      "screenshot": {
+        "android": "screenshots/android/adaptivecompactdatepicker/open-confirm-cancel/api35-phone.png",
+        "ios": "screenshots/ios/adaptivecompactdatepicker/open-confirm-cancel/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-DATE-003",
+      "module": "kira-ui",
+      "component": "AdaptiveDateRangePicker",
+      "variant": "start and end transition",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker screen",
+        "Tap a start day",
+        "Tap a later end day",
+        "Tap inside the completed range"
+      ],
+      "expected": [
+        "The range start/end readout appears",
+        "A tap inside a completed range starts a new range",
+        "The iOS < 16.2 fallback is labelled as Material"
+      ],
+      "flowId": "android-phone-adaptivedaterangepicker-start-and-end-transition",
+      "screenshot": {
+        "android": "screenshots/android/adaptivedaterangepicker/start-and-end-transition/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedaterangepicker/start-and-end-transition/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-DATE-004",
+      "module": "kira-ui",
+      "component": "DateBounds and SelectableDates",
+      "variant": "bounded weekdays only",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker screen",
+        "Enable Weekdays only",
+        "Attempt a weekend",
+        "Choose Next 30 days"
+      ],
+      "expected": [
+        "Weekend selection is rejected or snapped to a selectable day",
+        "Dates outside the bound are unavailable"
+      ],
+      "flowId": "android-phone-datebounds-and-selectabledates-bounded-weekdays-only",
+      "screenshot": {
+        "android": "screenshots/android/datebounds-and-selectabledates/bounded-weekdays-only/api35-phone.png",
+        "ios": "screenshots/ios/datebounds-and-selectabledates/bounded-weekdays-only/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-DATE-005",
+      "module": "kira-ui",
+      "component": "UIKitDisplayMode",
+      "variant": "picker and wheels",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "DatePicker",
+      "setup": [],
+      "steps": [
+        "Open the Date Picker screen on iOS",
+        "Inspect the wheels picker"
+      ],
+      "expected": [
+        "The wheels presentation differs from the inline calendar",
+        "The mode is fixed at state creation"
+      ],
+      "flowId": "android-phone-uikitdisplaymode-picker-and-wheels",
+      "screenshot": {
+        "android": "screenshots/android/uikitdisplaymode/picker-and-wheels/api35-phone.png",
+        "ios": "screenshots/ios/uikitdisplaymode/picker-and-wheels/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-TIME-001",
+      "module": "kira-ui",
+      "component": "AdaptiveTimePicker",
+      "variant": "12-hour and 24-hour states",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "TimePicker",
+      "setup": [],
+      "steps": [
+        "Open the Time Picker screen",
+        "Inspect both states"
+      ],
+      "expected": [
+        "Both time readouts render",
+        "The iOS format follows the device locale even when is24Hour differs"
+      ],
+      "flowId": "android-phone-adaptivetimepicker-12-hour-and-24-hour-states",
+      "screenshot": {
+        "android": "screenshots/android/adaptivetimepicker/12-hour-and-24-hour-states/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetimepicker/12-hour-and-24-hour-states/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-001",
+      "module": "kira-ui",
+      "component": "AdaptiveAlertDialog",
+      "variant": "two-button confirm and cancel",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open the Alert Dialog screen",
+        "Show the simple dialog",
+        "Tap Cancel",
+        "Show again and tap Ok"
+      ],
+      "expected": [
+        "Cancel closes without a confirmation",
+        "Ok closes and records the confirmation"
+      ],
+      "flowId": "android-phone-adaptivealertdialog-two-button-confirm-and-cancel",
+      "screenshot": {
+        "android": "screenshots/android/adaptivealertdialog/two-button-confirm-and-cancel/api35-phone.png",
+        "ios": "screenshots/ios/adaptivealertdialog/two-button-confirm-and-cancel/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-002",
+      "module": "kira-ui",
+      "component": "AdaptiveAlertDialog",
+      "variant": "single button",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open the Alert Dialog screen",
+        "Show the single-button dialog",
+        "Tap Got it"
+      ],
+      "expected": [
+        "Only one action is visible",
+        "The dialog dismisses"
+      ],
+      "flowId": "android-phone-adaptivealertdialog-single-button",
+      "screenshot": {
+        "android": "screenshots/android/adaptivealertdialog/single-button/api35-phone.png",
+        "ios": "screenshots/ios/adaptivealertdialog/single-button/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-003",
+      "module": "kira-ui",
+      "component": "AdaptiveBasicAlertDialog",
+      "variant": "text fields and critical severity",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open the Alert Dialog screen on iOS",
+        "Show the text-field dialog",
+        "Type a name",
+        "Show the complex dialog"
+      ],
+      "expected": [
+        "The confirm action enables after typing",
+        "Secure/number-pad fields are configured",
+        "Critical severity is applied on supported UIKit hosts"
+      ],
+      "flowId": "android-phone-adaptivebasicalertdialog-text-fields-and-critical-severity",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebasicalertdialog/text-fields-and-critical-severity/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebasicalertdialog/text-fields-and-critical-severity/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ALERT-004",
+      "module": "kira-ui",
+      "component": "AlertDialogIosStyle.ActionSheet",
+      "variant": "iPhone sheet and iPad popover",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Dialog",
+      "setup": [],
+      "steps": [
+        "Open the Alert Dialog screen",
+        "Show the ActionSheet"
+      ],
+      "expected": [
+        "iPhone presents a bottom action sheet",
+        "iPad presents a centred popover because no public anchor API exists"
+      ],
+      "flowId": "android-phone-alertdialogiosstyle-actionsheet-iphone-sheet-and-ipad-popover",
+      "screenshot": {
+        "android": "screenshots/android/alertdialogiosstyle-actionsheet/iphone-sheet-and-ipad-popover/api35-phone.png",
+        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/iphone-sheet-and-ipad-popover/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "The iPad anchor is the presenting view, not a caller-selected source view or bar item."
+      ]
+    },
+    {
+      "id": "UI-SHEET-001",
+      "module": "kira-ui",
+      "component": "AdaptiveBottomSheet",
+      "variant": "show, content, dismiss",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "BottomSheet",
+      "setup": [],
+      "steps": [
+        "Open the Bottom Sheet screen",
+        "Open the sheet",
+        "Interact with its content",
+        "Swipe down"
+      ],
+      "expected": [
+        "The sheet presents with a drag handle",
+        "Dismissal reports back",
+        "The iOS inset/shape parameters are ignored"
+      ],
+      "flowId": "android-phone-adaptivebottomsheet-show-content-dismiss",
+      "screenshot": {
+        "android": "screenshots/android/adaptivebottomsheet/show-content-dismiss/api35-phone.png",
+        "ios": "screenshots/ios/adaptivebottomsheet/show-content-dismiss/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-MENU-001",
+      "module": "kira-ui",
+      "component": "AdaptiveDropDown",
+      "variant": "simple destructive and disabled items",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DropDown",
+      "setup": [],
+      "steps": [
+        "Open the Drop Down screen",
+        "Open the simple menu",
+        "Tap an enabled item",
+        "Reopen and inspect the disabled item"
+      ],
+      "expected": [
+        "The selected action readout changes",
+        "The destructive item is styled as destructive",
+        "The disabled item does not fire"
+      ],
+      "flowId": "android-phone-adaptivedropdown-simple-destructive-and-disabled-items",
+      "screenshot": {
+        "android": "screenshots/android/adaptivedropdown/simple-destructive-and-disabled-items/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedropdown/simple-destructive-and-disabled-items/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-MENU-002",
+      "module": "kira-ui",
+      "component": "AdaptiveDropDownSection",
+      "variant": "sections",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "DropDown",
+      "setup": [],
+      "steps": [
+        "Open the Drop Down screen",
+        "Open the sectioned menu"
+      ],
+      "expected": [
+        "iOS shows inline submenus",
+        "Material shows the caller-built section divider"
+      ],
+      "flowId": "android-phone-adaptivedropdownsection-sections",
+      "screenshot": {
+        "android": "screenshots/android/adaptivedropdownsection/sections/api35-phone.png",
+        "ios": "screenshots/ios/adaptivedropdownsection/sections/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-001",
+      "module": "kira-ui",
+      "component": "AdaptiveScaffold",
+      "variant": "top bar, bottom bar, content padding",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ScaffoldDemo",
+      "setup": [],
+      "steps": [
+        "Open the Scaffold screen",
+        "Inspect the content padding",
+        "Switch tabs"
+      ],
+      "expected": [
+        "Content is not obscured by the bars",
+        "The tab selection changes"
+      ],
+      "flowId": "android-phone-adaptivescaffold-top-bar-bottom-bar-content-padding",
+      "screenshot": {
+        "android": "screenshots/android/adaptivescaffold/top-bar-bottom-bar-content-padding/api35-phone.png",
+        "ios": "screenshots/ios/adaptivescaffold/top-bar-bottom-bar-content-padding/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-002",
+      "module": "kira-ui",
+      "component": "AdaptiveTopBar",
+      "variant": "title, leading, trailing, menu",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "TopBarDemo",
+      "setup": [],
+      "steps": [
+        "Open the Top Bar screen",
+        "Inspect the title and items",
+        "Open the trailing menu"
+      ],
+      "expected": [
+        "The title is visible",
+        "Bar items render natively on iOS",
+        "The menu action fires"
+      ],
+      "flowId": "android-phone-adaptivetopbar-title-leading-trailing-menu",
+      "screenshot": {
+        "android": "screenshots/android/adaptivetopbar/title-leading-trailing-menu/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetopbar/title-leading-trailing-menu/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-003",
+      "module": "kira-ui",
+      "component": "AdaptiveNavigationBar",
+      "variant": "items and selected index",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "NavigationBar",
+      "setup": [],
+      "steps": [
+        "Open the Navigation Bar screen",
+        "Select a different tab"
+      ],
+      "expected": [
+        "The selected tab changes",
+        "No selection is possible with an invalid index"
+      ],
+      "flowId": "android-phone-adaptivenavigationbar-items-and-selected-index",
+      "screenshot": {
+        "android": "screenshots/android/adaptivenavigationbar/items-and-selected-index/api35-phone.png",
+        "ios": "screenshots/ios/adaptivenavigationbar/items-and-selected-index/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-BAR-004",
+      "module": "kira-ui",
+      "component": "AdaptiveToolbar",
+      "variant": "collapsed and expanded",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Toolbar",
+      "setup": [],
+      "steps": [
+        "Open the Toolbar screen",
+        "Switch expanded state",
+        "Tap an item"
+      ],
+      "expected": [
+        "The Material toolbar expands",
+        "iOS requires non-empty iosItems and shows a native toolbar"
+      ],
+      "flowId": "android-phone-adaptivetoolbar-collapsed-and-expanded",
+      "screenshot": {
+        "android": "screenshots/android/adaptivetoolbar/collapsed-and-expanded/api35-phone.png",
+        "ios": "screenshots/ios/adaptivetoolbar/collapsed-and-expanded/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ICON-001",
+      "module": "kira-cupertino-icons",
+      "component": "CupertinoIcon catalog",
+      "variant": "search and category",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "CupertinoIconsCatalog",
+      "setup": [],
+      "steps": [
+        "Open the Cupertino Icons screen",
+        "Search for 'chevron'",
+        "Select a category",
+        "Inspect a representative grid"
+      ],
+      "expected": [
+        "The grid filters to matching names",
+        "The count updates",
+        "Representative glyphs render without tofu"
+      ],
+      "flowId": "android-phone-cupertinoicon-catalog-search-and-category",
+      "screenshot": {
+        "android": "screenshots/android/cupertinoicon-catalog/search-and-category/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoicon-catalog/search-and-category/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ICON-002",
+      "module": "kira-ui",
+      "component": "SFSymbol and UIKitImage",
+      "variant": "system name, vector, bitmap",
+      "support": {
+        "android": "unsupported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "TopBarDemo",
+      "setup": [],
+      "steps": [
+        "Open the Top Bar screen on iOS",
+        "Inspect the SF Symbol bar items"
+      ],
+      "expected": [
+        "System-name images render",
+        "The icon font fallback is not presented as an SF Symbol"
+      ],
+      "flowId": "android-phone-sfsymbol-and-uikitimage-system-name-vector-bitmap",
+      "screenshot": {
+        "android": "screenshots/android/sfsymbol-and-uikitimage/system-name-vector-bitmap/api35-phone.png",
+        "ios": "screenshots/ios/sfsymbol-and-uikitimage/system-name-vector-bitmap/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "UI-ICON-003",
+      "module": "kira-cupertino-icons",
+      "component": "CupertinoIcon",
+      "variant": "size and content description",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "CupertinoIconsCatalog",
+      "setup": [],
+      "steps": [
+        "Open the Cupertino Icons screen",
+        "Inspect 16/24/48dp samples"
+      ],
+      "expected": [
+        "Glyphs scale without clipping",
+        "Decorative icons expose no duplicate label"
+      ],
+      "flowId": "android-phone-cupertinoicon-size-and-content-description",
+      "screenshot": {
+        "android": "screenshots/android/cupertinoicon/size-and-content-description/api35-phone.png",
+        "ios": "screenshots/ios/cupertinoicon/size-and-content-description/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-CTX-001",
+      "module": "kira-core",
+      "component": "LocalPlatformContext",
+      "variant": "host context smoke",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open the File Picker screen",
+        "Read the context type readout"
+      ],
+      "expected": [
+        "Android reports Context",
+        "Other targets report the opaque sentinel"
+      ],
+      "flowId": "android-phone-localplatformcontext-host-context-smoke",
+      "screenshot": {
+        "android": "screenshots/android/localplatformcontext/host-context-smoke/api35-phone.png",
+        "ios": "screenshots/ios/localplatformcontext/host-context-smoke/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-FILE-001",
+      "module": "kira-io",
+      "component": "KmpFile",
+      "variant": "read, stream, name and path",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open the File Picker screen",
+        "Pick a small text file",
+        "Read bytes and stream",
+        "Inspect name and path"
+      ],
+      "expected": [
+        "Bytes are non-empty",
+        "Stream matches bytes",
+        "Path is platform-shaped, not always a filesystem path"
+      ],
+      "flowId": "android-phone-kmpfile-read-stream-name-and-path",
+      "screenshot": {
+        "android": "screenshots/android/kmpfile/read-stream-name-and-path/api35-phone.png",
+        "ios": "screenshots/ios/kmpfile/read-stream-name-and-path/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-PICK-001",
+      "module": "kira-file-picker",
+      "component": "rememberFilePickerLauncher",
+      "variant": "single selection",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open the File Picker screen",
+        "Tap single select",
+        "Choose a seeded file"
+      ],
+      "expected": [
+        "Exactly one result is shown",
+        "The file is readable"
+      ],
+      "flowId": "android-phone-rememberfilepickerlauncher-single-selection",
+      "screenshot": {
+        "android": "screenshots/android/rememberfilepickerlauncher/single-selection/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilepickerlauncher/single-selection/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-PICK-002",
+      "module": "kira-file-picker",
+      "component": "rememberFilePickerLauncher",
+      "variant": "multiple with limit",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open the File Picker screen",
+        "Enable multiple",
+        "Select more than the limit"
+      ],
+      "expected": [
+        "Results are truncated to maxItems",
+        "Cancelling yields an empty list"
+      ],
+      "flowId": "android-phone-rememberfilepickerlauncher-multiple-with-limit",
+      "screenshot": {
+        "android": "screenshots/android/rememberfilepickerlauncher/multiple-with-limit/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilepickerlauncher/multiple-with-limit/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-PICK-003",
+      "module": "kira-file-picker",
+      "component": "FilePickerFileType.Folder",
+      "variant": "folder and cancel",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "FilePicker",
+      "setup": [],
+      "steps": [
+        "Open the File Picker screen",
+        "Pick a folder",
+        "Cancel a file pick"
+      ],
+      "expected": [
+        "A folder result is shown where supported",
+        "Web folder selection returns empty",
+        "Cancel leaves the previous result unchanged"
+      ],
+      "flowId": "android-phone-filepickerfiletype-folder-folder-and-cancel",
+      "screenshot": {
+        "android": "screenshots/android/filepickerfiletype-folder/folder-and-cancel/api35-phone.png",
+        "ios": "screenshots/ios/filepickerfiletype-folder/folder-and-cancel/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-SAVE-001",
+      "module": "kira-file-picker",
+      "component": "rememberFileSaverLauncher",
+      "variant": "bytes save and reopen",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ProfilePicture",
+      "setup": [],
+      "steps": [
+        "Open the File Saver screen",
+        "Save generated bytes",
+        "Reopen the saved file"
+      ],
+      "expected": [
+        "Android/iOS/desktop return a readable KmpFile",
+        "Cancel returns null",
+        "Web triggers a download and does not invoke onResult"
+      ],
+      "flowId": "android-phone-rememberfilesaverlauncher-bytes-save-and-reopen",
+      "screenshot": {
+        "android": "screenshots/android/rememberfilesaverlauncher/bytes-save-and-reopen/api35-phone.png",
+        "ios": "screenshots/ios/rememberfilesaverlauncher/bytes-save-and-reopen/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-COIL-001",
+      "module": "kira-file-picker-coil",
+      "component": "KmpFileFetcher and AsyncImage",
+      "variant": "preview success",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "ImagePicker",
+      "setup": [],
+      "steps": [
+        "Open the Image Picker screen",
+        "Pick a seeded image"
+      ],
+      "expected": [
+        "The preview renders",
+        "The fetcher streams rather than copying the whole file"
+      ],
+      "flowId": "android-phone-kmpfilefetcher-and-asyncimage-preview-success",
+      "screenshot": {
+        "android": "screenshots/android/kmpfilefetcher-and-asyncimage/preview-success/api35-phone.png",
+        "ios": "screenshots/ios/kmpfilefetcher-and-asyncimage/preview-success/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "IO-CAMERA-001",
+      "module": "kira-camera-picker",
+      "component": "rememberCameraPickerLauncher",
+      "variant": "capture or fallback",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "CameraPickerScreen",
+      "setup": [],
+      "steps": [
+        "Open the Camera Picker screen",
+        "Grant camera permission",
+        "Tap capture"
+      ],
+      "expected": [
+        "A captured image returns on a camera-capable device",
+        "The iOS simulator falls back to the photo library",
+        "Desktop/web do nothing and never call back"
+      ],
+      "flowId": "android-phone-remembercamerapickerlauncher-capture-or-fallback",
+      "screenshot": {
+        "android": "screenshots/android/remembercamerapickerlauncher/capture-or-fallback/api35-phone.png",
+        "ios": "screenshots/ios/remembercamerapickerlauncher/capture-or-fallback/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-SINGLE-001",
+      "module": "kira-permissions",
+      "component": "rememberPermissionState",
+      "variant": "camera grant and deny",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Reset app permissions",
+        "Open Permissions",
+        "Request Camera",
+        "Grant or deny the OS prompt"
+      ],
+      "expected": [
+        "The row status reflects the OS result",
+        "A deny updates the rationale state"
+      ],
+      "flowId": "android-phone-rememberpermissionstate-camera-grant-and-deny",
+      "screenshot": {
+        "android": "screenshots/android/rememberpermissionstate/camera-grant-and-deny/api35-phone.png",
+        "ios": "screenshots/ios/rememberpermissionstate/camera-grant-and-deny/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-BULK-001",
+      "module": "kira-permissions",
+      "component": "rememberMultiplePermissionsState",
+      "variant": "camera and microphone",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Tap Request permissions",
+        "Answer the prompts"
+      ],
+      "expected": [
+        "allPermissionsGranted follows the results",
+        "revokedPermissions lists denied entries"
+      ],
+      "flowId": "android-phone-remembermultiplepermissionsstate-camera-and-microphone",
+      "screenshot": {
+        "android": "screenshots/android/remembermultiplepermissionsstate/camera-and-microphone/api35-phone.png",
+        "ios": "screenshots/ios/remembermultiplepermissionsstate/camera-and-microphone/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-STATE-001",
+      "module": "kira-permissions",
+      "component": "PermissionState",
+      "variant": "determined and settings return",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Grant a permission",
+        "Move the app to the background and return",
+        "Open app settings"
+      ],
+      "expected": [
+        "Granted is retained",
+        "The settings return refreshes status"
+      ],
+      "flowId": "android-phone-permissionstate-determined-and-settings-return",
+      "screenshot": {
+        "android": "screenshots/android/permissionstate/determined-and-settings-return/api35-phone.png",
+        "ios": "screenshots/ios/permissionstate/determined-and-settings-return/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-NOTIF-001",
+      "module": "kira-permissions",
+      "component": "Notification and RemoteNotification",
+      "variant": "local and remote notification",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Request Notification",
+        "Inspect RemoteNotification"
+      ],
+      "expected": [
+        "Android below API 33 reports no represented runtime permission",
+        "RemoteNotification has no Android mapping and reports Granted"
+      ],
+      "flowId": "android-phone-notification-and-remotenotification-local-and-remote-notification",
+      "screenshot": {
+        "android": "screenshots/android/notification-and-remotenotification/local-and-remote-notification/api35-phone.png",
+        "ios": "screenshots/ios/notification-and-remotenotification/local-and-remote-notification/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-LOC-001",
+      "module": "kira-permissions",
+      "component": "BackgroundLocation and location leaves",
+      "variant": "foreground and background location",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Request FineLocation",
+        "Request BackgroundLocation"
+      ],
+      "expected": [
+        "Foreground and background requests are separate",
+        "iOS Always requires a prior WhenInUse grant"
+      ],
+      "flowId": "android-phone-backgroundlocation-and-location-leaves-foreground-and-background-location",
+      "screenshot": {
+        "android": "screenshots/android/backgroundlocation-and-location-leaves/foreground-and-background-location/api35-phone.png",
+        "ios": "screenshots/ios/backgroundlocation-and-location-leaves/foreground-and-background-location/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-PIM-001",
+      "module": "kira-permissions",
+      "component": "contacts and calendar leaves",
+      "variant": "read and write",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Request contacts",
+        "Request calendar"
+      ],
+      "expected": [
+        "Read/write rows update independently",
+        "The iOS calendar helper is events-only"
+      ],
+      "flowId": "android-phone-contacts-and-calendar-leaves-read-and-write",
+      "screenshot": {
+        "android": "screenshots/android/contacts-and-calendar-leaves/read-and-write/api35-phone.png",
+        "ios": "screenshots/ios/contacts-and-calendar-leaves/read-and-write/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-BT-001",
+      "module": "kira-permissions",
+      "component": "Bluetooth and Wi-Fi leaves",
+      "variant": "scan/connect and nearby",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Request Bluetooth",
+        "Request Wi-Fi nearby devices"
+      ],
+      "expected": [
+        "Each leaf reports its own status",
+        "The iOS Wi-Fi probe is a local-network probe, not a Wi-Fi permission"
+      ],
+      "flowId": "android-phone-bluetooth-and-wi-fi-leaves-scan-connect-and-nearby",
+      "screenshot": {
+        "android": "screenshots/android/bluetooth-and-wi-fi-leaves/scan-connect-and-nearby/api35-phone.png",
+        "ios": "screenshots/ios/bluetooth-and-wi-fi-leaves/scan-connect-and-nearby/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-CORE-001",
+      "module": "kira-permissions",
+      "component": "storage, call and SMS leaves",
+      "variant": "legacy routes",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Open Permissions",
+        "Inspect storage/call/SMS rows"
+      ],
+      "expected": [
+        "SDK-window gaps are labelled not-represented",
+        "iOS SMS read/receive are NotGranted"
+      ],
+      "flowId": "android-phone-storage-call-and-sms-leaves-legacy-routes",
+      "screenshot": {
+        "android": "screenshots/android/storage-call-and-sms-leaves/legacy-routes/api35-phone.png",
+        "ios": "screenshots/ios/storage-call-and-sms-leaves/legacy-routes/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "PERM-STUB-001",
+      "module": "kira-permissions",
+      "component": "desktop and web permission stubs",
+      "variant": "unavailable",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Permission",
+      "setup": [],
+      "steps": [
+        "Run the showcase on desktop or web",
+        "Request any permission"
+      ],
+      "expected": [
+        "Status stays Denied(false)",
+        "No callback fires",
+        "The UI labels the platform as unavailable"
+      ],
+      "flowId": "android-phone-desktop-and-web-permission-stubs-unavailable",
+      "screenshot": {
+        "android": "screenshots/android/desktop-and-web-permission-stubs/unavailable/api35-phone.png",
+        "ios": "screenshots/ios/desktop-and-web-permission-stubs/unavailable/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "SHARE-001",
+      "module": "kira-share",
+      "component": "ShareContent.Text",
+      "variant": "native share sheet",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Share",
+      "setup": [],
+      "steps": [
+        "Open Share",
+        "Tap Share Text",
+        "Dismiss the share sheet"
+      ],
+      "expected": [
+        "The native share sheet opens",
+        "iOS reports Dismissed on cancel",
+        "Android reports Success when the chooser opens, not delivery"
+      ],
+      "flowId": "android-phone-sharecontent-text-native-share-sheet",
+      "screenshot": {
+        "android": "screenshots/android/sharecontent-text/native-share-sheet/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-text/native-share-sheet/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "SHARE-002",
+      "module": "kira-share",
+      "component": "ShareContent.Url",
+      "variant": "native share sheet",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Share",
+      "setup": [],
+      "steps": [
+        "Open Share",
+        "Tap Share URL",
+        "Dismiss the sheet"
+      ],
+      "expected": [
+        "The URL is accepted by the share sheet",
+        "The result readout updates"
+      ],
+      "flowId": "android-phone-sharecontent-url-native-share-sheet",
+      "screenshot": {
+        "android": "screenshots/android/sharecontent-url/native-share-sheet/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-url/native-share-sheet/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "SHARE-003",
+      "module": "kira-share",
+      "component": "ShareContent.File and Files",
+      "variant": "single and mixed files",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Share",
+      "setup": [],
+      "steps": [
+        "Open Share",
+        "Pick one file",
+        "Share File",
+        "Pick multiple files and share"
+      ],
+      "expected": [
+        "The file payload reaches the share sheet",
+        "No real external recipient is used"
+      ],
+      "flowId": "android-phone-sharecontent-file-and-files-single-and-mixed-files",
+      "screenshot": {
+        "android": "screenshots/android/sharecontent-file-and-files/single-and-mixed-files/api35-phone.png",
+        "ios": "screenshots/ios/sharecontent-file-and-files/single-and-mixed-files/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-001",
+      "module": "kira-webview",
+      "component": "WebViewState",
+      "variant": "deterministic HTML load",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Tap Load HTML",
+        "Read title and loading state"
+      ],
+      "expected": [
+        "The known title appears",
+        "Loading reaches Finished",
+        "isLoading is initially true on every platform"
+      ],
+      "flowId": "android-phone-webviewstate-deterministic-html-load",
+      "screenshot": {
+        "android": "screenshots/android/webviewstate/deterministic-html-load/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate/deterministic-html-load/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-002",
+      "module": "kira-webview",
+      "component": "WebViewNavigator",
+      "variant": "URL load, back and forward",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Load the owned second page",
+        "Go back",
+        "Go forward"
+      ],
+      "expected": [
+        "canGoBack/canGoForward follow the history",
+        "Desktop/web HTML base-URL and header parameters are ignored"
+      ],
+      "flowId": "android-phone-webviewnavigator-url-load-back-and-forward",
+      "screenshot": {
+        "android": "screenshots/android/webviewnavigator/url-load-back-and-forward/api35-phone.png",
+        "ios": "screenshots/ios/webviewnavigator/url-load-back-and-forward/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-003",
+      "module": "kira-webview",
+      "component": "WebViewState.errorsForCurrentRequest",
+      "variant": "bad destination",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Load an invalid destination",
+        "Read the error list"
+      ],
+      "expected": [
+        "Android/iOS append native errors",
+        "Desktop/web add a synthetic error"
+      ],
+      "flowId": "android-phone-webviewstate-errorsforcurrentrequest-bad-destination",
+      "screenshot": {
+        "android": "screenshots/android/webviewstate-errorsforcurrentrequest/bad-destination/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate-errorsforcurrentrequest/bad-destination/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-004",
+      "module": "kira-webview",
+      "component": "WebViewState.evaluateJavascript and settings",
+      "variant": "JavaScript on",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Enable JavaScript",
+        "Evaluate document.title"
+      ],
+      "expected": [
+        "The callback returns the known title",
+        "JavaScript is off by default"
+      ],
+      "flowId": "android-phone-webviewstate-evaluatejavascript-and-settings-javascript-on",
+      "screenshot": {
+        "android": "screenshots/android/webviewstate-evaluatejavascript-and-settings/javascript-on/api35-phone.png",
+        "ios": "screenshots/ios/webviewstate-evaluatejavascript-and-settings/javascript-on/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "WEB-005",
+      "module": "kira-webview",
+      "component": "CookieManager",
+      "variant": "set, get, remove",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "WebView",
+      "setup": [],
+      "steps": [
+        "Open Web View",
+        "Set a synthetic cookie",
+        "Read it back",
+        "Remove all cookies"
+      ],
+      "expected": [
+        "The cookie round-trips",
+        "Desktop generic handlers refuse removeAllCookies",
+        "Web only sees host-page cookies"
+      ],
+      "flowId": "android-phone-cookiemanager-set-get-remove",
+      "screenshot": {
+        "android": "screenshots/android/cookiemanager/set-get-remove/api35-phone.png",
+        "ios": "screenshots/ios/cookiemanager/set-get-remove/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "NAV-001",
+      "module": "kira-navigation",
+      "component": "AdaptiveNavHost",
+      "variant": "push, back, restore",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Open a component screen",
+        "Tap Back",
+        "Open it again"
+      ],
+      "expected": [
+        "The route stack returns to Home",
+        "Per-destination saveable state is dropped after pop"
+      ],
+      "flowId": "android-phone-adaptivenavhost-push-back-restore",
+      "screenshot": {
+        "android": "screenshots/android/adaptivenavhost/push-back-restore/api35-phone.png",
+        "ios": "screenshots/ios/adaptivenavhost/push-back-restore/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "NAV-002",
+      "module": "kira-navigation",
+      "component": "NavArgument",
+      "variant": "declared arguments",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Attempt to pass a value argument through navigate()"
+      ],
+      "expected": [
+        "Arguments are declarations only; no value is delivered",
+        "Nested graphs and deep links are absent"
+      ],
+      "flowId": "android-phone-navargument-declared-arguments",
+      "screenshot": {
+        "android": "screenshots/android/nav/unsupported-arguments/api35-phone.png",
+        "ios": "screenshots/ios/nav/unsupported-arguments/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "AdaptiveNavHostController.navigate(route, arguments) ignores arguments."
+      ]
+    },
+    {
+      "id": "GEO-001",
+      "module": "kira-geo",
+      "component": "LatLng",
+      "variant": "distance and bearing maths",
+      "support": {
+        "android": "supported",
+        "ios": "supported",
+        "desktop": "supported",
+        "web": "supported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Open the geo maths section",
+        "Read the distance and angle for fixed coordinates"
+      ],
+      "expected": [
+        "0,0 to 0,1 is about 111.19 km",
+        "Cardinal bearings round to 0/90/180/270"
+      ],
+      "flowId": "android-phone-latlng-distance-and-bearing-maths",
+      "screenshot": {
+        "android": "screenshots/android/latlng/distance-and-bearing-maths/api35-phone.png",
+        "ios": "screenshots/ios/latlng/distance-and-bearing-maths/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-run",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "GEO-002",
+      "module": "kira-geo",
+      "component": "LocationTracker",
+      "variant": "start, stop, updates",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Start the tracker",
+        "Wait for an update",
+        "Stop the tracker"
+      ],
+      "expected": [
+        "The public states are never populated on any platform",
+        "Android additionally needs an Android-only bind call"
+      ],
+      "flowId": "android-phone-locationtracker-start-stop-updates",
+      "screenshot": {
+        "android": "screenshots/android/geo/unsupported-tracker/api35-phone.png",
+        "ios": "screenshots/ios/geo/unsupported-tracker/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": [
+        "iOS/desktop/web are no-op stubs; Android LocationTracker does not update its public States."
+      ]
+    },
+    {
+      "id": "EXCL-MAPS-001",
+      "module": "kira-maps",
+      "component": "maps",
+      "variant": "excluded build-only module",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Inspect the module"
+      ],
+      "expected": [
+        "Only a build file exists; no app screen is advertised"
+      ],
+      "flowId": "android-phone-maps-excluded-build-only-module",
+      "screenshot": {
+        "android": "screenshots/android/maps/excluded-build-only-module/api35-phone.png",
+        "ios": "screenshots/ios/maps/excluded-build-only-module/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "EXCL-MEDIA-001",
+      "module": "kira-media",
+      "component": "media",
+      "variant": "excluded module",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Inspect the module"
+      ],
+      "expected": [
+        "Not included in settings.gradle.kts; no app screen is advertised"
+      ],
+      "flowId": "android-phone-media-excluded-module",
+      "screenshot": {
+        "android": "screenshots/android/media/excluded-module/api35-phone.png",
+        "ios": "screenshots/ios/media/excluded-module/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    },
+    {
+      "id": "EXCL-NOTIF-001",
+      "module": "kira-notifications",
+      "component": "notification scheduler",
+      "variant": "excluded module",
+      "support": {
+        "android": "unsupported",
+        "ios": "unsupported",
+        "desktop": "unsupported",
+        "web": "unsupported"
+      },
+      "windowClass": "phone",
+      "route": "Home",
+      "setup": [],
+      "steps": [
+        "Inspect the module"
+      ],
+      "expected": [
+        "Not included in settings.gradle.kts; the notification PERMISSION remains in scope"
+      ],
+      "flowId": "android-phone-notification-scheduler-excluded-module",
+      "screenshot": {
+        "android": "screenshots/android/notification-scheduler/excluded-module/api35-phone.png",
+        "ios": "screenshots/ios/notification-scheduler/excluded-module/iphone-simulator.png"
+      },
+      "execution": {
+        "android": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "ios": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "desktop": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        },
+        "web": {
+          "status": "not-applicable",
+          "run": null,
+          "attempt": null,
+          "job": null
+        }
+      },
+      "defect": null,
+      "limitations": []
+    }
+  ]
+}
