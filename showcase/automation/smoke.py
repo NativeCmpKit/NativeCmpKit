@@ -36,6 +36,22 @@ def find(ui, selector: dict, *, state: str = "present", timeout_ms: int = 8000):
     )
 
 
+SEARCH_SELECTORS = (
+    {"properties": {"editable": True}},
+    {"role": "textbox"},
+    {"text_contains": "Search components"},
+    {"name": "Search components"},
+)
+
+
+def find_search(ui, timeout_ms: int = 2500):
+    for selector in SEARCH_SELECTORS:
+        observation = find(ui, selector, timeout_ms=timeout_ms)
+        if observation.get("satisfied") and observation.get("nodes"):
+            return observation
+    return None
+
+
 def click_text(ui, text: str):
     observation = find(ui, {"text": text})
     if not observation.get("satisfied"):
@@ -50,11 +66,8 @@ def click_text(ui, text: str):
 
 
 def open_screen(ui, title: str):
-    search = ui.action(
-        "element.wait",
-        {"selector": {"properties": {"editable": True}}, "state": "present", "timeout_ms": 8000},
-    )
-    if not search.get("satisfied") or not search.get("nodes"):
+    search = find_search(ui, timeout_ms=8000)
+    if not search:
         raise RuntimeError("The Home search field was not found")
     node = search["nodes"][0]
     ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})

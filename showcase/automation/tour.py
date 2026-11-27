@@ -64,6 +64,22 @@ def find(ui, selector: dict, *, state: str = "present", timeout_ms: int = 8000):
     )
 
 
+SEARCH_SELECTORS = (
+    {"properties": {"editable": True}},
+    {"role": "textbox"},
+    {"text_contains": "Search components"},
+    {"name": "Search components"},
+)
+
+
+def find_search(ui, timeout_ms: int = 2500):
+    for selector in SEARCH_SELECTORS:
+        observation = find(ui, selector, timeout_ms=timeout_ms)
+        if observation.get("satisfied") and observation.get("nodes"):
+            return observation
+    return None
+
+
 def click_text(ui, text: str):
     observation = find(ui, {"text": text})
     if not observation.get("satisfied"):
@@ -83,8 +99,7 @@ def scroll_up(ui):
 
 def ensure_home(ui):
     for _ in range(6):
-        search = find(ui, {"properties": {"editable": True}}, timeout_ms=2500)
-        if search.get("satisfied") and search.get("nodes"):
+        if find_search(ui, timeout_ms=2500):
             return
         scroll_up(ui)
     raise RuntimeError("Could not return to the Home search field")
@@ -92,7 +107,9 @@ def ensure_home(ui):
 
 def open_screen(ui, title: str):
     ensure_home(ui)
-    search = find(ui, {"properties": {"editable": True}})
+    search = find_search(ui)
+    if not search:
+        raise RuntimeError("The Home search field was not found")
     node = search["nodes"][0]
     ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
     ui.action("text.insert", {"text": title, "replace": True})
@@ -183,8 +200,8 @@ def main() -> None:
                 click_text(ui, "Load invalid URL")
                 shot("webview", "invalid-destination")
             elif title == "Cupertino Icons":
-                search = find(ui, {"properties": {"editable": True}})
-                if search.get("satisfied") and search.get("nodes"):
+                search = find_search(ui)
+                if search:
                     node = search["nodes"][0]
                     ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
                     ui.action("text.insert", {"text": "chevron", "replace": True})

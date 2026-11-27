@@ -77,6 +77,12 @@ action. The workflow therefore clones the reviewed commit
 Only allowlisted actions (`checkout`, `setup-java`, `gradle/actions`,
 `upload-artifact`) are referenced. This does not change repository settings.
 
+The workflow uses the documented Cloudflare Quick Tunnel (`transport: auto`)
+because the controller is the external agent host; runner-local loopback is not
+reachable from there. No named tunnel, Access credential or private overlay is
+required. The raw token stays on the controller; only its SHA-256 digest is in
+Git.
+
 The workflow records:
 
 - the exact run/attempt/job and app revision;
