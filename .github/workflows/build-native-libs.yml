@@ -193,7 +193,7 @@ jobs:
 
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
-    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
+    runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || inputs.profile == 'identity-apple-ui-pre26' && 'macos-15' || inputs.profile == 'identity-apple-camera' && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
     timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
@@ -681,9 +681,10 @@ jobs:
           device="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["udid"])')"
           state="$(python3 -c 'import json; print(json.load(open("build/ci-identity/simulator.json"))["simulator"]["state"])')"
           if [[ "$IDENTITY_PROFILE" == identity-apple-camera ]]; then
-            # Own a fresh device with the same type/runtime to avoid reusing a
-            # preinstalled simulator that reports a failed data migration.
-            read -r device_type simulator_runtime < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["device_type"], s["runtime_identifier"])')
+            # On iOS 26.5 the grant returned zero but PhotoKit stayed not-determined.
+            # Use a fresh iOS 27 simulator and retain the same native authorization gate.
+            read -r device_type simulator_runtime runtime_version < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["device_type"], s["runtime_identifier"], s["runtime_version"])')
+            [[ "$runtime_version" == 27.* ]]
             original_device="$device"
             device="$(xcrun simctl create "NativeCmpKit Camera $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$device_type" "$simulator_runtime")"
             [[ "$device" =~ ^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$ && "$device" != "$original_device" ]]
