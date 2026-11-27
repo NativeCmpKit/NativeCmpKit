@@ -353,7 +353,7 @@ def main() -> None:
         if previous.get("device") == device:
             merged = {item["id"]: item for item in previous.get("flows", [])}
             merged.update({item["id"]: item for item in result["flows"]})
-            order = [item["id"] for item in FLOWS] + [item["id"] for item in BLOCKED]
+            order = [item[0] for item in FLOWS] + [item[0] for item in BLOCKED]
             result["flows"] = [merged[key] for key in order if key in merged]
             result["captured_at"] = previous.get("captured_at") or result["captured_at"]
             result["updated_at"] = datetime.now(timezone.utc).isoformat()
