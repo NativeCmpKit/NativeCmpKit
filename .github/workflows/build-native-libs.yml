@@ -250,11 +250,14 @@ jobs:
           python3 scripts/audit/source_inventory.py --check
           python3 scripts/development/validate_resolutions.py --check
           python3 scripts/development/generate_icon_catalogues.py --check
-      - name: Linux desktop tests
+      - name: Linux desktop tests with owned audio and FileChooser services
         if: inputs.profile == 'identity-linux'
+        shell: bash
         run: |
-          xvfb-run -a ./gradlew desktopTest --continue --max-workers=1 \
-            --no-parallel --no-configuration-cache --no-build-cache
+          sudo apt-get -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=- \
+            install --no-install-recommends -y xdg-desktop-portal xdg-desktop-portal-gtk xdotool pulseaudio libasound2-plugins
+          xvfb-run -a python3 scripts/ci/library_tests.py run --suite desktop \
+            --output build/ci-verification/identity-linux-desktop --timeout 2700
       - name: Recheck Linux picker tests in an owned FileChooser session
         if: inputs.profile == 'identity-linux-picker'
         shell: bash
@@ -533,4 +536,5 @@ jobs:
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
+            build/ci-verification/identity-linux-desktop/receipt.json
           if-no-files-found: error
