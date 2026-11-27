@@ -241,7 +241,7 @@ class OwnedGeometryLifecycleControls(unittest.TestCase):
         with patch.object(runtime_context.subprocess, "run") as run:
             run.return_value = subprocess.CompletedProcess([], 0, "", "")
             runtime_context.command("git", "status", "--porcelain", "--untracked-files=normal")
-            self.assertEqual(60, run.call_args.kwargs["timeout"])
+            self.assertEqual(180, run.call_args.kwargs["timeout"])
 
     def test_dirty_preboot_source_or_wrong_kind_fails_before_any_simulator_mutation(self):
         path = self.root / owned.SELECTION; selection = json.loads(path.read_bytes())

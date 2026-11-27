@@ -9,8 +9,9 @@ import runtime_context as r
 
 
 class SimulatorStartupBudgetTest(unittest.TestCase):
-    def test_only_the_two_finite_inventory_commands_get_a_cold_start_budget(self):
-        inventory = [("xcrun", "simctl", "list", kind, "--json") for kind in ("devices", "runtimes")]
+    def test_only_the_exact_inventory_and_checkout_status_commands_get_a_cold_start_budget(self):
+        cold_start = [("xcrun", "simctl", "list", kind, "--json") for kind in ("devices", "runtimes")]
+        cold_start.append(("git", "status", "--porcelain", "--untracked-files=normal"))
         ordinary = [
             ("java", "-version"), ("git", "rev-parse", "HEAD"),
             ("rustc", "--version", "--verbose"), ("xcodebuild", "-version"),
@@ -18,13 +19,14 @@ class SimulatorStartupBudgetTest(unittest.TestCase):
             ("xcrun", "simctl", "boot", "01234567-0123-0123-0123-0123456789AB"),
             ("xcrun", "simctl", "list", "devices"),
             ("xcrun", "simctl", "list", "devices", "--json", "extra"),
+            ("git", "status", "--porcelain", "--untracked-files=no"),
         ]
-        for args in inventory + ordinary:
+        for args in cold_start + ordinary:
             with self.subTest(args=args), mock.patch.object(r.subprocess, "run") as run:
                 run.return_value = subprocess.CompletedProcess(args, 0, stdout="{}", stderr="")
                 self.assertEqual("{}", r.command(*args))
                 run.assert_called_once_with(args, cwd=r.ROOT, capture_output=True, text=True,
-                                            timeout=180 if args in inventory else 60)
+                                            timeout=180 if args in cold_start else 60)
 
     def test_expired_inventory_remains_a_failure_and_is_not_retried(self):
         args = ("xcrun", "simctl", "list", "devices", "--json")

@@ -25,13 +25,13 @@ IOS_RUNTIME = re.compile(r"com\.apple\.CoreSimulator\.SimRuntime\.iOS-([0-9]+(?:
 SIMULATOR_INVENTORY_COMMANDS = frozenset(
     ("xcrun", "simctl", "list", kind, "--json") for kind in ("devices", "runtimes")
 )
+GIT_STATUS = ("git", "status", "--porcelain", "--untracked-files=normal")
 
 
 def command(*args: str) -> str:
-    # Hosted CoreSimulator inventory has exceeded the ordinary command budget
-    # before Gradle starts. Give only these two read-only startup commands a
-    # bounded budget; no retry, alternate device or readiness check is waived.
-    timeout = 180 if args in SIMULATOR_INVENTORY_COMMANDS else 60
+    # Simulator inventory and the full checkout status have exceeded the ordinary
+    # budget during hosted cold start. Both checks must still finish successfully.
+    timeout = 180 if args == GIT_STATUS or args in SIMULATOR_INVENTORY_COMMANDS else 60
     result = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
     if result.returncode:
         # Exception/terminal output can include paths or application data. Record
@@ -181,7 +181,7 @@ def capture(*, expected_arch: str | None = None, apple: bool = False, select: st
         raise ValueError("Actual runner architecture differs from the declared matrix slot")
     result = {"schema_version": 1, "observed_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
               "source_revision": command("git", "rev-parse", "HEAD").strip(),
-              "source_tree_dirty": bool(command("git", "status", "--porcelain", "--untracked-files=normal").strip()),
+              "source_tree_dirty": bool(command(*GIT_STATUS).strip()),
               "host": {"system": platform.system(), "architecture": arch, "python": platform.python_version()},
               "java": parse_java(command("java", "-version")),
               "rust": parse_rust(command("rustc", "--version", "--verbose"))}

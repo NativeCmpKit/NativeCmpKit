@@ -36,7 +36,7 @@ CAMERA_CALLBACK = {
     "scripts/ci/fresh-tests.init.gradle.kts": "9f49a87337d3314c89efeb572c029bb12bf8c876a2ceb5d893a7d686f4780abc",
     "scripts/ci/ios_popover_anchor_plan.py": "fd02ad32b0df43fc86b6fcdc3efee8f686db3e484e7c69d7e6ed1c3c10e70205",
     "scripts/ci/library_tests.py": "6ce464d4b9c1c34270a3d29716c3e3e2104e690b028f697889f89e46b40eb58f",
-    "scripts/ci/runtime_context.py": "56a3072e2164c3ff9d8113a94e68dd400a609c0040cf8ce0514d0c1ef1e79a96",
+    "scripts/ci/runtime_context.py": "d8dd1ad059414b46f5d5119bf5ab0e1d2b5ed5d05a1cad8ec78fecf6b8c71312",
     "scripts/ci/test_android_camera_callback_native_focus.py": "c172bad272a51211a90c11f37fb5468f2a06d1f64ea7cbcc489cc23754f679e7",
     "scripts/ci/test_android_camera_provider.py": "b3a8e6ee19a5a2313878d2d175bfe99c88da9481cb284df8e68d8cc86bfdcfd6",
     "scripts/ci/workflow_matrix.py": "114e19bb6f61b30495564783a678ac24f33092fbdfd00e206caea4b8caa4eb46",
