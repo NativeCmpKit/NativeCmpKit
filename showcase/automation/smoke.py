@@ -72,8 +72,25 @@ def open_screen(ui, title: str):
     node = search["nodes"][0]
     ui.action("element.click", {"id": node["id"], "snapshot_id": search["snapshot_id"]})
     ui.action("text.insert", {"text": title, "replace": True})
-    click_text(ui, title)
+    click_result(ui, title)
     find(ui, {"text": title}, timeout_ms=10000)
+
+
+def click_result(ui, text: str):
+    observation = find(ui, {"text": text})
+    if not observation.get("satisfied"):
+        observation = find(ui, {"name": text})
+    nodes = [
+        node for node in observation.get("nodes", [])
+        if not node.get("properties", {}).get("editable")
+    ]
+    if not nodes:
+        raise RuntimeError(f"No non-editable result for {text!r}")
+    node = next(
+        (item for item in nodes if item.get("properties", {}).get("clickable")),
+        nodes[0],
+    )
+    ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
 
 
 def back(ui, platform: str):
