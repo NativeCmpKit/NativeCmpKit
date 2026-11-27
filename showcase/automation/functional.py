@@ -111,6 +111,28 @@ def click_switch(ui):
     raise AssertionError("no switch-like element exposed")
 
 
+def click_switch_near(ui, label):
+    observation = tour.soft_find(ui, {"text": label}, timeout_ms=3000)
+    if not observation.get("satisfied") or not observation.get("nodes"):
+        raise AssertionError(f"no label {label!r}")
+    by_id = {node.get("id"): node for node in observation["nodes"]}
+    anchor = observation["nodes"][0]
+    parent = by_id.get(anchor.get("parent_id"))
+    candidates = []
+    if parent:
+        candidates.append(parent)
+        for node in observation["nodes"]:
+            if node.get("parent_id") == parent.get("id"):
+                candidates.append(node)
+    for node in candidates:
+        if node.get("properties", {}).get("checkable") or str(node.get("role", "")).lower() in (
+            "switch", "axswitch", "togglebutton",
+        ):
+            ui.action("element.click", {"id": node["id"], "snapshot_id": observation["snapshot_id"]})
+            return
+    click_switch(ui)
+
+
 def drag_slider(ui, needle: str):
     for role in ("slider", "AXSlider"):
         observation = tour.soft_find(ui, {"role": role}, timeout_ms=1500)
@@ -210,6 +232,33 @@ FLOWS = [
         tour.click_text(ui, "Request permissions"),
         deny_permission_dialogs(ui, p),
         assert_text(ui, "All permissions granted: false"),
+    )),
+    ("sheet-veto", "Adaptive Bottom Sheet", lambda ui, p: (
+        tour.click_text(ui, "Show Bottom Sheet"),
+        assert_text(ui, "Allow swipe to hide"),
+        click_switch_near(ui, "Allow swipe to hide"),
+        (lambda: (ui.action("keyboard.press", {"keys": ["BACK"]}) if p == "android"
+                  else ui.action("pointer.drag", {"x": 540, "y": 1200, "end_x": 540, "end_y": 2300,
+                                                  "duration_ms": 500})))(),
+        assert_text(ui, "Allow swipe to hide"),
+        click_switch_near(ui, "Allow swipe to hide"),
+        tour.click_text(ui, "Close"),
+        assert_absent(ui, "Allow swipe to hide"),
+    )),
+    ("date-display", "Adaptive Date Picker", lambda ui, p: (
+        assert_text(ui, "Inline display: Picker"),
+        click_switch_near(ui, "Inline display: Picker"),
+        assert_text(ui, "Inline display: Input"),
+    )),
+    ("webview-js", "Web View", lambda ui, p: (
+        assert_text(ui, "JavaScript: on"),
+        click_switch_near(ui, "JavaScript: on"),
+        assert_text(ui, "JavaScript: off"),
+        tour.click_text(ui, "Evaluate JavaScript title"),
+        assert_text(ui, "JS: null"),
+        click_switch_near(ui, "JavaScript: off"),
+        tour.click_text(ui, "Evaluate JavaScript title"),
+        assert_text(ui, "Kira WebView Demo"),
     )),
     ("sheet", "Adaptive Bottom Sheet", lambda ui, p: (
         tour.click_text(ui, "Show Bottom Sheet"),

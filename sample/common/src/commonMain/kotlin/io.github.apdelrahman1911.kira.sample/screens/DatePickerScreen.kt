@@ -34,6 +34,7 @@ import io.github.apdelrahman1911.kira.ui.datepicker.AdaptiveCompactDatePicker
 import io.github.apdelrahman1911.kira.ui.datepicker.AdaptiveDatePicker
 import io.github.apdelrahman1911.kira.ui.datepicker.AdaptiveDateRangePicker
 import io.github.apdelrahman1911.kira.ui.datepicker.DateBounds
+import io.github.apdelrahman1911.kira.ui.datepicker.DisplayMode
 import io.github.apdelrahman1911.kira.ui.datepicker.UIKitDisplayMode
 import io.github.apdelrahman1911.kira.ui.datepicker.and
 import io.github.apdelrahman1911.kira.ui.datepicker.rememberAdaptiveDatePickerState
@@ -157,6 +158,21 @@ fun DatePickerScreen(
                 AdaptiveSwitch(
                     checked = weekdaysOnly,
                     onCheckedChange = { weekdaysOnly = it },
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Inline display: ${if (inlineState.displayMode == DisplayMode.Input) "Input" else "Picker"}",
+                    modifier = Modifier.weight(1f),
+                )
+                AdaptiveSwitch(
+                    checked = inlineState.displayMode == DisplayMode.Input,
+                    onCheckedChange = {
+                        inlineState.displayMode = if (it) DisplayMode.Input else DisplayMode.Picker
+                    },
                 )
             }
 

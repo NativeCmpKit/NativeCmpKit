@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.kira.sample.currentPlatform
 import io.github.apdelrahman1911.kira.ui.button.AdaptiveIconButton
+import io.github.apdelrahman1911.kira.ui.toggle.AdaptiveSwitch
 import io.github.apdelrahman1911.kira.ui.ExperimentalKiraUiApi
 import io.github.apdelrahman1911.kira.ui.navigation.UIKitUIBarButtonItem
 import io.github.apdelrahman1911.kira.ui.toolbar.AdaptiveToolbar
@@ -103,6 +104,7 @@ fun WebViewScreen(
     val navigator = rememberWebViewNavigator()
     val scope = rememberCoroutineScope()
     var cookieStatus by remember { mutableStateOf("No cookie operation") }
+    var javaScriptEnabled by remember { mutableStateOf(true) }
 
     val iosItems by remember(navigator.canGoBack, navigator.canGoForward) {
         mutableStateOf(
@@ -219,6 +221,21 @@ fun WebViewScreen(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "JavaScript: ${if (javaScriptEnabled) "on" else "off"}",
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            AdaptiveSwitch(
+                                checked = javaScriptEnabled,
+                                onCheckedChange = {
+                                    javaScriptEnabled = it
+                                    state.settings.javaScriptEnabled = it
+                                },
+                            )
+                        }
                     }
                 }
             )
