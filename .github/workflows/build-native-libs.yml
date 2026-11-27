@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-camera, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-package, identity-apple-intel-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -561,7 +561,7 @@ jobs:
               | tee -a build/ci-identity/framework-identity.txt
           done
       - name: Tests requiring an owned UIKit application
-        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui'
+        if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui' || inputs.profile == 'identity-apple-camera'
         shell: bash
         env:
           IDENTITY_PROFILE: ${{ inputs.profile }}
@@ -599,6 +599,11 @@ jobs:
                 --output build/ci-verification/identity-share || result=1
               exit "$result"
               ;;
+            identity-apple-camera)
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-camera-picker \
+                --focus ios-camera-ownership-memory-callback --simulator "$device" --timeout 2700 \
+                --output build/ci-verification/identity-camera
+              ;;
             identity-apple-ui|identity-apple-app)
               task=iosSimulatorArm64ApplicationTest
               if [[ "$IDENTITY_PROFILE" == identity-apple-ui ]]; then task=":nativecmpkit-ui:$task"; fi
@@ -607,7 +612,7 @@ jobs:
               ;;
           esac
       - name: Retain bounded UIKit failure observations
-        if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui') }}
+        if: ${{ !cancelled() && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-ui' || inputs.profile == 'identity-apple-camera') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
       - name: Retain bounded Android WebView failure observations
         if: ${{ !cancelled() && (inputs.profile == 'identity-linux-android-webview-device' || inputs.profile == 'identity-linux-android-webview-restore') }}
@@ -646,6 +651,7 @@ jobs:
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
+            build/ci-verification/identity-camera/receipt.json
             build/ci-verification/identity-linux-desktop/receipt.json
             build/ci-verification/identity-android-webview-device/controller.json
             build/ci-verification/identity-android-webview-device/library/receipt.json

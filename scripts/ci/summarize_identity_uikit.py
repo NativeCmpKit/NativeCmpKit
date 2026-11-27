@@ -12,8 +12,8 @@ from library_tests import NoDtdBuilder, safe_path
 from ios_ui_application import WK_RESTORE_STEPS
 
 
-MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share")
-HOSTS = ("native-webview-application", "native-ui-application", "native-picker-application", "native-share-application")
+MODULES = ("nativecmpkit-webview", "nativecmpkit-ui", "nativecmpkit-file-picker", "nativecmpkit-share", "nativecmpkit-camera-picker")
+HOSTS = ("native-webview-application", "native-ui-application", "native-picker-application", "native-share-application", "native-camera-application")
 OWNED_ROOT = Path("build/ci-verification")
 MAX_BYTES = 4 * 1024 * 1024
 TOKEN = re.compile(r"[A-Za-z][A-Za-z0-9_-]{0,90}\Z")
@@ -35,7 +35,7 @@ def labels(document, fields):
 
 
 def receipt_rows():
-    for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in ("wk-identity", "identity-picker", "identity-share"))):
+    for parent in (OWNED_ROOT, *(OWNED_ROOT / name for name in ("wk-identity", "identity-picker", "identity-share", "identity-camera"))):
         for host in HOSTS:
             for path in sorted((parent / host).glob("*/receipt.json")):
                 if not re.fullmatch(r"[a-f0-9]{32}", path.parent.name) or not 0 < path.stat().st_size <= MAX_BYTES:
