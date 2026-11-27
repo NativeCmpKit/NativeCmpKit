@@ -6,7 +6,7 @@
       "WebView JavaFX dependencies compileOnly; explicit six-module application/test runtime helper."
     ],
     "affected_paths": [
-      "nativecmpkit-webview/build.gradle.kts",
+      "calf-webview/build.gradle.kts",
       "convention-plugins/src/main/kotlin/DesktopJavaFx.kt",
       "convention-plugins/src/main/kotlin/desktop.javafx.gradle.kts",
       "convention-plugins/src/main/kotlin/PublicationCoordinates.kt",
@@ -23,7 +23,7 @@
       },
       {
         "command": "Actual generated WebView root/desktop metadata plus :convention-plugins:test --tests PublicationCoordinatesTest at held dirty79861d7c source, subsequently committed unchanged owning inputs as b3be6dfd; failed five-host packaged consumer run40756542697 at f9f6631e; one Linux-only recovery40763811423 at b3be6dfd is dispatched, results pending",
-        "result": "Owning publication normalization executes six Kotlin schema methods6/6 plus actual metadata0/61.01s/JDK17/held836 inputs. Prior generation0/34.01s changes only eight NativeCmpKit Apple module/URL pairs and leaves entire desktop JSON unchanged. Initial eager/deferred helper failures retained. Five-host consumer attempt remains FAILED, zero evidenced consumer methods/XML; Linux static191 checks/eight old Apple redirects, two macOS191/191 static and equal selectors but pre-marker child failures, Linux Arm unknown producer failure, Windows java.exe preflight repaired. No runtime or #1 closure from static/source/tooling passes; first Linux-only recovery pending.",
+        "result": "Owning publication normalization executes six Kotlin schema methods6/6 plus actual metadata0/61.01s/JDK17/held836 inputs. Prior generation0/34.01s changes only eight Calf Apple module/URL pairs and leaves entire desktop JSON unchanged. Initial eager/deferred helper failures retained. Five-host consumer attempt remains FAILED, zero evidenced consumer methods/XML; Linux static191 checks/eight old Apple redirects, two macOS191/191 static and equal selectors but pre-marker child failures, Linux Arm unknown producer failure, Windows java.exe preflight repaired. No runtime or #1 closure from static/source/tooling passes; first Linux-only recovery pending.",
         "evidence": [
           "docs/development/evidence/webview-consumer-important-20261028/README.md",
           "docs/development/evidence/webview-consumer-important-20261028/recovery001/independent-failure-review.json",
@@ -71,7 +71,7 @@
     ],
     "affected_paths": [
       "gradle/libs.versions.toml",
-      "nativecmpkit-webview/build.gradle.kts",
+      "calf-webview/build.gradle.kts",
       ".github/workflows/gradle.yml",
       "scripts/ci/desktop_dependency_capture.py",
       "scripts/ci/test_desktop_dependency_capture.py"
@@ -175,8 +175,8 @@
       "scripts/native/artifacts.py",
       "scripts/native/test_artifacts.py",
       "convention-plugins/src/main/kotlin/NativeLibraries.kt",
-      "nativecmpkit-file-picker/build.gradle.kts",
-      "nativecmpkit-share/build.gradle.kts",
+      "calf-file-picker/build.gradle.kts",
+      "calf-share/build.gradle.kts",
       "scripts/ci/resource-collision-probe.init.gradle.kts"
     ],
     "tests": [
@@ -191,22 +191,22 @@
         "evidence": "docs/development/evidence/build/native-staging-abi-configuration-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Initial ordinary resource attempt exit1 because rustup was absent from the tool shell PATH; preserved failure, not source/runtime evidence.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "With the declared Cargo PATH, actual Linux-x64 native/resource task exit0,7s; Cargo incremental, not fresh/full-matrix compilation.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-path-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Expected exit1,10.04s; independently equal bytes from a distinct source path collided at the same destination and strict copy rejected them.",
         "evidence": "docs/development/evidence/build/resource-distinct-origin-negative.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Ordinary task restored exit0,7s; native/preparation UP-TO-DATE; processed MIME/native binary/manifest bytes independently matched generated inputs.",
         "evidence": "docs/development/evidence/build/resource-post-negative-restore.log.result.json"
       }
@@ -248,8 +248,8 @@
     ],
     "affected_paths": [
       "rust-toolchain.toml",
-      "nativecmpkit-file-picker/native/.gitignore",
-      "nativecmpkit-share/native/.gitignore",
+      "calf-file-picker/native/.gitignore",
+      "calf-share/native/.gitignore",
       "scripts/native/artifacts.py",
       "scripts/ci/native_lock_reproducibility.py",
       "scripts/ci/test_native_lock_reproducibility.py",
@@ -304,12 +304,12 @@
       "scripts/ci/native_test_policy.py",
       "scripts/ci/fresh-tests.init.gradle.kts",
       "docs/development/ci-templates/library-verification.yml.template",
-      "nativecmpkit-io/build.gradle.kts",
-      "nativecmpkit-file-picker/build.gradle.kts",
-      "nativecmpkit-camera-picker/build.gradle.kts",
-      "nativecmpkit-webview/build.gradle.kts",
-      "nativecmpkit-permissions/core/build.gradle.kts",
-      "nativecmpkit-share/build.gradle.kts",
+      "calf-io/build.gradle.kts",
+      "calf-file-picker/build.gradle.kts",
+      "calf-camera-picker/build.gradle.kts",
+      "calf-webview/build.gradle.kts",
+      "calf-permissions/core/build.gradle.kts",
+      "calf-share/build.gradle.kts",
       ".github/workflows/gradle.yml",
       "scripts/ci/workflow_matrix.py",
       "scripts/ci/test_workflow_matrix.py",
@@ -362,7 +362,7 @@
         "evidence": "docs/development/evidence/build/ci-kotlin-user-home-001/checkpoint.json"
       },
       {
-        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts :nativecmpkit-camera-picker:wasmJsBrowserTest :nativecmpkit-file-picker:wasmJsBrowserTest :nativecmpkit-geo:wasmJsBrowserTest :nativecmpkit-io:wasmJsBrowserTest :nativecmpkit-navigation:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-background-location:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-bluetooth:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-calendar:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-camera:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-contacts:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-core:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-gallery:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-location:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-microphone:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-notifications:wasmJsBrowserTest :nativecmpkit-permissions:nativecmpkit-permissions-wifi:wasmJsBrowserTest :nativecmpkit-share:wasmJsBrowserTest :nativecmpkit-ui:wasmJsBrowserTest :nativecmpkit-webview:wasmJsBrowserTest",
+        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts :calf-camera-picker:wasmJsBrowserTest :calf-file-picker:wasmJsBrowserTest :calf-geo:wasmJsBrowserTest :calf-io:wasmJsBrowserTest :calf-navigation:wasmJsBrowserTest :calf-permissions:calf-permissions-background-location:wasmJsBrowserTest :calf-permissions:calf-permissions-bluetooth:wasmJsBrowserTest :calf-permissions:calf-permissions-calendar:wasmJsBrowserTest :calf-permissions:calf-permissions-camera:wasmJsBrowserTest :calf-permissions:calf-permissions-contacts:wasmJsBrowserTest :calf-permissions:calf-permissions-core:wasmJsBrowserTest :calf-permissions:calf-permissions-gallery:wasmJsBrowserTest :calf-permissions:calf-permissions-location:wasmJsBrowserTest :calf-permissions:calf-permissions-microphone:wasmJsBrowserTest :calf-permissions:calf-permissions-notifications:wasmJsBrowserTest :calf-permissions:calf-permissions-wifi:wasmJsBrowserTest :calf-share:wasmJsBrowserTest :calf-ui:wasmJsBrowserTest :calf-webview:wasmJsBrowserTest",
         "result": "Exit1/418.94s; 211 passing cases in14/19 modules,33 XML. Missing suites not passing. Its14 fresh configs selected the default home instead of the requested prepared home; synthetic shell/bytecode analysis does not uniquely establish the original runtime mismatch cause.",
         "evidence": "docs/development/evidence/wasm-full-001/archive.json"
       },
@@ -387,7 +387,7 @@
         "evidence": "docs/development/evidence/js-full-004/archive.json"
       },
       {
-        "command": "/usr/bin/python3 scripts/ci/library_tests.py run --suite android-host --module nativecmpkit-io --output build/ci-verification/io-android-host-001 --timeout 600 --reserve-mib 8192",
+        "command": "/usr/bin/python3 scripts/ci/library_tests.py run --suite android-host --module calf-io --output build/ci-verification/io-android-host-001 --timeout 600 --reserve-mib 8192",
         "result": "Exit2/0.68s BEFORE Gradle, quarantine or library tests: integer-only runtime-context ApiLevel parser rejected installed37.0 metadata. Zero library/native tests; SDK unchanged; original refusal preserved.",
         "evidence": "docs/development/evidence/io-android-host-001-preflight/failure-review.json"
       },
@@ -402,22 +402,22 @@
         "evidence": "docs/development/evidence/build/runtime-context-android-api-001/receipt.json"
       },
       {
-        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts :nativecmpkit-io:testAndroidHostTest",
+        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts :calf-io:testAndroidHostTest",
         "result": "Actual separate IO-only Android-host002: exit0/53.01s,21/21 JVM/Robolectric cases in5 XML reports;693 post-parser inputs unchanged, fresh runtime marker and actual Android main/host-test compilation. Exact normalized SDK ApiLevel37.0 fingerprint independently recomputed. Not the19 synthetic parser tests, a whole-library Android suite, or device/emulator/consumer execution. Host001 preflight failure remains historical.",
         "evidence": "docs/development/evidence/build/io-android-host002-runtime-context-readback.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-io:generatePomFileForKotlinMultiplatformPublication --rerun :nativecmpkit-io:generateMetadataFileForKotlinMultiplatformPublication --rerun :nativecmpkit-io:generatePomFileForDesktopPublication --rerun :nativecmpkit-io:generateMetadataFileForDesktopPublication --rerun :nativecmpkit-io:generatePomFileForAndroidPublication --rerun :nativecmpkit-io:generateMetadataFileForAndroidPublication --rerun :nativecmpkit-io:generatePomFileForJsPublication --rerun :nativecmpkit-io:generateMetadataFileForJsPublication --rerun :nativecmpkit-io:generatePomFileForWasmJsPublication --rerun :nativecmpkit-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
+        "command": "./gradlew :calf-io:generatePomFileForKotlinMultiplatformPublication --rerun :calf-io:generateMetadataFileForKotlinMultiplatformPublication --rerun :calf-io:generatePomFileForDesktopPublication --rerun :calf-io:generateMetadataFileForDesktopPublication --rerun :calf-io:generatePomFileForAndroidPublication --rerun :calf-io:generateMetadataFileForAndroidPublication --rerun :calf-io:generatePomFileForJsPublication --rerun :calf-io:generateMetadataFileForJsPublication --rerun :calf-io:generatePomFileForWasmJsPublication --rerun :calf-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
         "result": "Offline root+four-target IO metadata001 FAILED exit1/26.01s at core transformCommonMainDependenciesMetadata with45 distinct uncached artifacts. Only root POM fresh; all5.module outputs absent; desktop POM stale. Prior dry-run exit0/42.01s,272 graph entries/10 requests is not execution success.693 inputs unchanged, zero library/consumer cases.",
         "evidence": "docs/development/evidence/build/io-metadata001-readback.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-io:generatePomFileForDesktopPublication --rerun :nativecmpkit-io:generateMetadataFileForDesktopPublication --rerun :nativecmpkit-io:generatePomFileForAndroidPublication --rerun :nativecmpkit-io:generateMetadataFileForAndroidPublication --rerun :nativecmpkit-io:generatePomFileForJsPublication --rerun :nativecmpkit-io:generateMetadataFileForJsPublication --rerun :nativecmpkit-io:generatePomFileForWasmJsPublication --rerun :nativecmpkit-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
+        "command": "./gradlew :calf-io:generatePomFileForDesktopPublication --rerun :calf-io:generateMetadataFileForDesktopPublication --rerun :calf-io:generatePomFileForAndroidPublication --rerun :calf-io:generateMetadataFileForAndroidPublication --rerun :calf-io:generatePomFileForJsPublication --rerun :calf-io:generateMetadataFileForJsPublication --rerun :calf-io:generatePomFileForWasmJsPublication --rerun :calf-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
         "result": "Separate offline target-only IO metadata002 FAILED exit1/24.01s at extractAndroidMainAnnotations because androidLintTool lacks lint-gradle32.4.0. Desktop POM/.module and Android POM fresh; Android.module and JS/Wasm generation not reached. Prior dry-run exit0/21.0s,189 graph entries/8 requests.693 unchanged inputs, zero tests; failed root001 remains open.",
         "evidence": "docs/development/evidence/build/io-metadata002-readback.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-io:generatePomFileForJsPublication --rerun :nativecmpkit-io:generateMetadataFileForJsPublication --rerun :nativecmpkit-io:generatePomFileForWasmJsPublication --rerun :nativecmpkit-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
+        "command": "./gradlew :calf-io:generatePomFileForJsPublication --rerun :calf-io:generateMetadataFileForJsPublication --rerun :calf-io:generatePomFileForWasmJsPublication --rerun :calf-io:generateMetadataFileForWasmJsPublication --rerun --offline --no-daemon --no-parallel --no-configuration-cache --max-workers=2 --console=plain",
         "result": "Separate offline JS/Wasm-only IO metadata003: exit0/27.01s and4/4 fresh requested POM/module outputs; prior dry-run exit0/23.0s,112 entries.693 inputs unchanged, zero tests. API/runtime/sources/resource variants observed for both browsers; compile/resource dependencies UP-TO-DATE, archives built. Root001 and Android002 failures remain unmet gates; no publish/stage/install/check bypass or full-KMP/consumer pass.",
         "evidence": "docs/development/evidence/build/io-metadata003-readback.json"
       },
@@ -451,7 +451,7 @@
       },
       {
         "command": "consumer-core-io / immutable Actions40480857516 atc5e14c95; exact command/runtime/source/ZIP in independent review",
-        "result": "FAILED actual producer Gradle1/41.02s before four publication tasks or any Kotlin consumer/XML. Root init script is also inherited by convention-plugins, where nativecmpkit-core is absent. All737 selected inputs reconstruct from Git and match before/after; six independent source-copy hashes match. Tooling passed; intentionally unselected library job skipped, not a test skip. Own controller lock removed; detached-daemon cleanup not attested.71891-byte artifact digest verified; no package/release/issue closure.",
+        "result": "FAILED actual producer Gradle1/41.02s before four publication tasks or any Kotlin consumer/XML. Root init script is also inherited by convention-plugins, where calf-core is absent. All737 selected inputs reconstruct from Git and match before/after; six independent source-copy hashes match. Tooling passed; intentionally unselected library job skipped, not a test skip. Own controller lock removed; detached-daemon cleanup not attested.71891-byte artifact digest verified; no package/release/issue closure.",
         "evidence": "docs/development/evidence/github-actions/40480857516/lead-independent-review.json"
       },
       {
@@ -907,27 +907,27 @@
         "evidence": "docs/development/evidence/build/native-staging-abi-configuration-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Initial ordinary resource attempt exit1 because rustup was absent from the tool shell PATH; preserved failure, not source/runtime evidence.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "With the declared Cargo PATH, actual Linux-x64 native/resource task exit0,7s; Cargo incremental, not fresh/full-matrix compilation.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-path-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Expected exit1,10.04s; independently equal bytes from a distinct source path collided at the same destination and strict copy rejected them.",
         "evidence": "docs/development/evidence/build/resource-distinct-origin-negative.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Ordinary task restored exit0,7s; native/preparation UP-TO-DATE; processed MIME/native binary/manifest bytes independently matched generated inputs.",
         "evidence": "docs/development/evidence/build/resource-post-negative-restore.log.result.json"
       },
       {
-        "command": "Actual locked/offline Linux desktop resource tasks twice; independent source/Cargo.lock/rust-toolchain byte mutation/restoration; fresh :nativecmpkit-file-picker:desktopTest --tests io.github.apdelrahman1911.nativecmpkit.picker.PickerContractTest",
+        "command": "Actual locked/offline Linux desktop resource tasks twice; independent source/Cargo.lock/rust-toolchain byte mutation/restoration; fresh :calf-file-picker:desktopTest --tests com.mohamedrejeb.calf.picker.PickerContractTest",
         "result": "Base1ceb9d68:9 actual Gradle commands exit0, actual JDK17 daemons. Both native/resource task groups UP-TO-DATE on unchanged repeat; independent exact nonsemantic source/lock changes rebuild only picker, shared toolchain change rebuilds both. Native/owning code remains Git blobs;360 hash comparisons/37 unique blobs match documented fixtures and stay unchanged per command. README-only control keeps dirty=true constant; no compiler/dependency graph version change or benchmark claim. Actual JVM4/4, one fresh XML, no failure/error/skip or foreign-target builds, host native tasks UP-TO-DATE. Original successful commands reused after controller-only repairs; all failures preserved. Closed145 directly after all3 original criteria/source/results review2026-10-28T09:49:35Z; not native full-matrix/JNI/dependency/legal/security/ABI/consumer/release clearance.",
         "evidence": [
           "docs/development/evidence/native-incremental-important-20261028/lead-source-and-results-review.json",
@@ -965,27 +965,27 @@
         "evidence": "docs/development/evidence/build/native-staging-abi-configuration-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Initial ordinary resource attempt exit1 because rustup was absent from the tool shell PATH; preserved failure, not source/runtime evidence.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "With the declared Cargo PATH, actual Linux-x64 native/resource task exit0,7s; Cargo incremental, not fresh/full-matrix compilation.",
         "evidence": "docs/development/evidence/build/resource-identical-origin-path-retry.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --init-script scripts/ci/resource-collision-probe.init.gradle.kts --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Expected exit1,10.04s; independently equal bytes from a distinct source path collided at the same destination and strict copy rejected them.",
         "evidence": "docs/development/evidence/build/resource-distinct-origin-negative.log.result.json"
       },
       {
-        "command": "./gradlew :nativecmpkit-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
+        "command": "./gradlew :calf-file-picker:desktopProcessResources --max-workers=2 --no-configuration-cache '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process",
         "result": "Ordinary task restored exit0,7s; native/preparation UP-TO-DATE; processed MIME/native binary/manifest bytes independently matched generated inputs.",
         "evidence": "docs/development/evidence/build/resource-post-negative-restore.log.result.json"
       },
       {
-        "command": "Actual :nativecmpkit-file-picker:desktopJar :nativecmpkit-share:desktopJar at immutable9608ca19; two focused native tool regressions; production artifacts.py assemble positive/foreign-only/mixed with actual extracted Linux bytes",
+        "command": "Actual :calf-file-picker:desktopJar :calf-share:desktopJar at immutable9608ca19; two focused native tool regressions; production artifacts.py assemble positive/foreign-only/mixed with actual extracted Linux bytes",
         "result": "All3 original module-scoping requirements verified. Both desktopJar/native preparation tasks ran; command0/37.01s/JDK17/795 own-Git inputs held, zero runtime tests. Actual picker453188bytes/120entries and share256034bytes/84entries have zero duplicate entries and disjoint native/manifest paths; embedded bytes match actual staged/processed resources, clean current revision/version/source/CPU manifest contract. Six actual staging commands: own payloads2 accepted, foreign-only/missing-own2 and mixed2 fail closed; no candidate binaries uploaded. Focused synthetic2/2 methods exercise2modules×5platforms, not native runtime. #146 readback was ALREADY migration-closed; this is additive verification, not another closure. Full native distribution/upload-download/JNI/BUILD-003/ABI/consumer/legal/security/release gates remain separate. Prior rustup/PATH failure retained.",
         "evidence": [
           "docs/development/evidence/native-jar-scope-important-20261028/jar001/accepted-review.json",
@@ -1005,8 +1005,8 @@
       "2026-10-29: actual owning Linux GTK/JNI open/multiple/folder/empty/binary-save/each-kind cancellation and fresh reopen reviewed as one maintained portal-chain batch; #147 closed/completed directly after all three original criteria review, before additive documentation. The save driver replaces the complete native entry without changing production destination paths."
     ],
     "affected_paths": [
-      "nativecmpkit-file-picker/native/Cargo.toml",
-      "nativecmpkit-file-picker/native/Cargo.lock"
+      "calf-file-picker/native/Cargo.toml",
+      "calf-file-picker/native/Cargo.lock"
     ],
     "tests": [
       {
@@ -1018,7 +1018,7 @@
         "result": "Two actual scans exit0:93picker/48share complete unions, zero vulnerabilities and warnings; no ignore/target/severity/stale filters, informational warnings included.5native inputs held and Git-bound to67539481; all1381loaded advisory markdowns (1361crate +20Rust-toolchain) match exact Git tree. Tool JSON commit/time fieldsnull; independent Git binding is explicit. Initial archive-review crate-only count assumption is preserved/corrected without replaying successful scans. Exact source install=0.22.2/--locked/Rust1.98 exit0/383.1s is compilation, not NativeCmpKit runtime testing. #147 remainsopen; functionality/security/release criteria are not promoted."
       },
       {
-        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts --init-script scripts/ci/daemon-jvm.init.gradle.kts :nativecmpkit-file-picker:desktopTest --tests io.github.apdelrahman1911.nativecmpkit.picker.NativeLinuxPortalFunctionalityTest.folderAndSaveDialogsReturnTheSelectedDirectoryAndExactEmptyAndBinaryFiles",
+        "command": "./gradlew --continue --no-daemon --console=plain --no-configuration-cache --max-workers=2 '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8' -Pkotlin.compiler.execution.strategy=in-process -Pkotlin.native.jvmArgs=-Xmx2048m --init-script scripts/ci/fresh-tests.init.gradle.kts --init-script scripts/ci/daemon-jvm.init.gradle.kts :calf-file-picker:desktopTest --tests com.mohamedrejeb.calf.picker.NativeLinuxPortalFunctionalityTest.folderAndSaveDialogsReturnTheSelectedDirectoryAndExactEmptyAndBinaryFiles",
         "evidence": [
           "docs/development/evidence/linux-portal-functionality-batch-important-20261029/save-recovery003/github-ci001/review.json",
           "docs/development/evidence/linux-portal-functionality-batch-important-20261029/save-recovery003/github-ci001/original-criteria-review-BUILD012.json",

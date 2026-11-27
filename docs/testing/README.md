@@ -198,8 +198,8 @@ download. No dependency versions were downgraded to make the Gradle build pass.
 |---|---|---|
 | Original baseline focused desktop suite, offline, provisioning disabled | **Failed before configuration**: requires JetBrains JDK17, while installed JDK17/21 were Ubuntu OpenJDK. | [`baseline-desktop-offline.log`](evidence/baseline-desktop-offline.log) |
 | Same tasks, only daemon criteria disabled in detached worktree, offline | **Failed before project compilation**: kotlin-dsl6.7.3 plugin not cached. Artifact was subsequently verified to exist online. | [`baseline-desktop-daemon-override.log`](evidence/baseline-desktop-daemon-override.log) |
-| Online `:nativecmpkit-io:desktopTest :nativecmpkit-file-picker:desktopTest :nativecmpkit-ui:desktopTest :nativecmpkit-navigation:desktopTest`, capped heap/workers, Xvfb | Convention plugins compiled and projects configured. **Terminated at disk reserve**, exit143, before any library tests; no test XML files generated. | [`baseline-desktop-online.log`](evidence/baseline-desktop-online.log), [`disk-safety-stop.json`](evidence/disk-safety-stop.json) |
-| Focused IO desktop test, offline after configuration caches existed | Reached `:nativecmpkit-core:compileKotlinDesktop`; **failed on17 uncached Compose/Skiko JARs**, not a source diagnostic. | [`baseline-io-desktop-offline-focused.log`](evidence/baseline-io-desktop-offline-focused.log) |
+| Online `:calf-io:desktopTest :calf-file-picker:desktopTest :calf-ui:desktopTest :calf-navigation:desktopTest`, capped heap/workers, Xvfb | Convention plugins compiled and projects configured. **Terminated at disk reserve**, exit143, before any library tests; no test XML files generated. | [`baseline-desktop-online.log`](evidence/baseline-desktop-online.log), [`disk-safety-stop.json`](evidence/disk-safety-stop.json) |
+| Focused IO desktop test, offline after configuration caches existed | Reached `:calf-core:compileKotlinDesktop`; **failed on17 uncached Compose/Skiko JARs**, not a source diagnostic. | [`baseline-io-desktop-offline-focused.log`](evidence/baseline-io-desktop-offline-focused.log) |
 | Retry focused IO online | **Not started**: free disk below1GiB reserve (guard exit75). | [`baseline-io-desktop-online-focused.log.result.json`](evidence/baseline-io-desktop-online-focused.log.result.json) |
 | Migrated four-module desktop suite after disk recovered, first attempt | Wrapper9.7.1 downloaded and Gradle progressed into real compilation; **failed starting Cargo**, which was installed but absent from PATH. No desktop test task executed in this attempt. | [`migrated-desktop-cargo-path-failure.log`](evidence/migrated-desktop-cargo-path-failure.log), adjacent result JSON |
 | Migrated suite with explicit Cargo PATH and `--continue` | **77 real Gradle tests passed**: IO6, UI69, navigation2;11 XML reports, no failed/skipped cases. Whole command still **failed** at picker native compilation because `wayland-client.pc` was absent. No dependency replacements or framework stubs. | [`migrated-desktop-wayland-failure.log`](evidence/migrated-desktop-wayland-failure.log), [`77-case summary`](evidence/migrated-desktop-before-wayland-summary.json), [`preserved XML manifest`](evidence/local-gradle/attempt2-wayland-missing/manifest.json) |
@@ -208,13 +208,13 @@ download. No dependency versions were downgraded to make the Gradle build pass.
 | Original IO/picker JUnit tests through direct cached compiler | **Passed15 original tests** (IO6, cache6, MIME3), unchanged baseline source, real context expect/actual and **no stubs**, Kotlin2.4.20/IO0.9.1/coroutines1.11.0/JUnit4.13.2. Does not test Gradle/Compose/native UI. | [`io-original-desktop-tests.log`](evidence/io-original-desktop-tests.log), [`io_original_tests.py`](../../scripts/audit/io_original_tests.py) |
 | Original UI common assertion bodies through direct cached compiler | **Passed32 existing assertion bodies**, plus3 expected-defect characterizations, under Kotlin2.4.20. Exact common algorithm/model source and unchanged assertions; `@Test` registration removed, Compose/Material/platform types explicitly stubbed. Not a real framework or native UI test run. | [`ui-source-probes.txt`](evidence/ui-source-probes.txt), [`ui-source-probes.py`](ui-source-probes.py) |
 | Permissions/geo source-isolated probes | **Passed16 deterministic checks** (11 permission/helper,5 coordinate controls), with explicit Android/CoreLocation/Compose adapters. A separate5,000,000-trial seeded antipodal search found no NaN witness; trials are not test-case counts or numerical proof. | [`permissions-geo-baseline.txt`](evidence/permissions-geo-baseline.txt), [`permissions_geo.py`](reproductions/permissions_geo.py) |
-| Baseline `:nativecmpkit-ui:tasks --all` and WebView desktop POM generation | **Passed**,42s; confirmed exact test/compile task names and host-specific JavaFX POM classifier defect. No publication. | [`baseline-task-inventory-and-webview-pom.log`](evidence/baseline-task-inventory-and-webview-pom.log), [`baseline-webview-desktop-linux.pom`](evidence/baseline-webview-desktop-linux.pom) |
+| Baseline `:calf-ui:tasks --all` and WebView desktop POM generation | **Passed**,42s; confirmed exact test/compile task names and host-specific JavaFX POM classifier defect. No publication. | [`baseline-task-inventory-and-webview-pom.log`](evidence/baseline-task-inventory-and-webview-pom.log), [`baseline-webview-desktop-linux.pom`](evidence/baseline-webview-desktop-linux.pom) |
 | Migrated root/desktop POM generation plus icons resource generation | **Passed**,87s;42 POMs validated and exact resource package retained. Initial publication guard/convention scripts compiled. Later guard extensions need the final revision's configuration/CI evidence, not this earlier log. | [`migrated-poms-and-resource-package.log`](evidence/migrated-poms-and-resource-package.log), [`migrated-coordinate-and-res-checks.json`](evidence/migrated-coordinate-and-res-checks.json) |
-| Cargo offline metadata, picker/share | Cache-miss failures; not Rust compiler failures. | `evidence/nativecmpkit-*-cargo-dependencies.json` |
-| Cargo online metadata, picker/share | **Passed resolution**:197/48 packages including roots,202 distinct non-root name/version pairs combined. No native compilation or tests implied. | `evidence/nativecmpkit-*-cargo-dependencies-online.json` |
-| Remote native matrix, both crates on Linux/macOS26/Windows | **Passed all three jobs / six `cargo test` invocations; each explicitly ran0tests.** Confirms host Rust compilation/test-harness startup, not native GUI/JNI behavior. Commit `cf6547931d8e339d673e7605ff5fd141a5e42091`. | [Run40106895492](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40106895492), `evidence/github-actions/native-{run,jobs,log}-40106895492.*` |
-| First remote Gradle matrix, commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6` | **Overall failed**: both hosts used an invalid SDK package identifier; desktop/Android/Apple steps skipped. Linux's independent browser step **passed32 JS +32 Wasm common tests**, then JS sample distribution completed with warnings; Wasm production compilation exhausted its2GiB heap. macOS ran0 tests. Archive/audit validation job passed. | [Run40110188721](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40110188721), [inspected results below](#inspected-remote-results) |
-| Corrected remote Linux job, commit `1160893ca17404891b312990bc829535cddb75a2` | **Succeeded**:182 fresh test executions across25 XML reports (86 desktop,32 Android host,32 JS,32 Wasm), no failures/errors/skips. Android sample debug assembly and both browser distribution tasks succeeded; JS production compile/webpack came from cache, while Wasm production compilation/optimization/webpack executed freshly at4GiB. macOS is a separate job. | [Run40114966617](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40114966617), [`Linux terminal log`](evidence/github-actions/gradle-linux-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-linux-40114966617.json) |
+| Cargo offline metadata, picker/share | Cache-miss failures; not Rust compiler failures. | `evidence/calf-*-cargo-dependencies.json` |
+| Cargo online metadata, picker/share | **Passed resolution**:197/48 packages including roots,202 distinct non-root name/version pairs combined. No native compilation or tests implied. | `evidence/calf-*-cargo-dependencies-online.json` |
+| Remote native matrix, both crates on Linux/macOS26/Windows | **Passed all three jobs / six `cargo test` invocations; each explicitly ran0tests.** Confirms host Rust compilation/test-harness startup, not native GUI/JNI behavior. Commit `cf6547931d8e339d673e7605ff5fd141a5e42091`. | [Run40106895492](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40106895492), `evidence/github-actions/native-{run,jobs,log}-40106895492.*` |
+| First remote Gradle matrix, commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6` | **Overall failed**: both hosts used an invalid SDK package identifier; desktop/Android/Apple steps skipped. Linux's independent browser step **passed32 JS +32 Wasm common tests**, then JS sample distribution completed with warnings; Wasm production compilation exhausted its2GiB heap. macOS ran0 tests. Archive/audit validation job passed. | [Run40110188721](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40110188721), [inspected results below](#inspected-remote-results) |
+| Corrected remote Linux job, commit `1160893ca17404891b312990bc829535cddb75a2` | **Succeeded**:182 fresh test executions across25 XML reports (86 desktop,32 Android host,32 JS,32 Wasm), no failures/errors/skips. Android sample debug assembly and both browser distribution tasks succeeded; JS production compile/webpack came from cache, while Wasm production compilation/optimization/webpack executed freshly at4GiB. macOS is a separate job. | [Run40114966617](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40114966617), [`Linux terminal log`](evidence/github-actions/gradle-linux-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-linux-40114966617.json) |
 | Corrected remote macOS job, same commit/run | **Succeeded**:118 fresh executions across17 XML reports (86 desktop,32 common iOS-simulator tests), no failures/errors/skips;713/713 actionable tasks executed. WebView Objective-C cinterop and the static sample simulator framework link succeeded. Overall corrected run's three jobs succeeded:42 XML reports/300 target executions of86 original functions, not300 distinct tests. | [`macOS terminal log`](evidence/github-actions/gradle-macos-log-40114966617.txt), [`independent XML summary`](evidence/github-actions/gradle-junit-macos-40114966617.json), [`complete run summary`](evidence/github-actions/gradle-verification-summary-40114966617.json) |
 | Official wrapper/declared toolchain checks | **Passed** wrapper JAR/distribution digests; Kotlin2.4.20/AGP9.4.0/CMP1.12.0/kotlin-dsl6.7.3 artifacts accessible. | [`registry-version-checks.json`](evidence/registry-version-checks.json) |
 | Exact direct Maven advisory scan |45 queries, one low-severity JavaFX media advisory match; exploitability unverified. | [`osv-direct-maven-query.json`](evidence/osv-direct-maven-query.json) |
@@ -465,7 +465,7 @@ for audit evidence is not publication of library packages.
 
 ### Inspected remote results
 
-[Native run40106895492, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40106895492)
+[Native run40106895492, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40106895492)
 completed successfully on commit
 `cf6547931d8e339d673e7605ff5fd141a5e42091`. The archived jobs and text log were
 inspected: Windows, macOS26 and Ubuntu jobs all succeeded, both crates' `cargo test`
@@ -479,7 +479,7 @@ Archived evidence: [`native-run-40106895492.json`](evidence/github-actions/nativ
 The lead disabled Actions again after that controlled run. Full remote Gradle,
 Android and Apple results must be interpreted separately from native compilation.
 
-[Gradle run40110188721, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40110188721)
+[Gradle run40110188721, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40110188721)
 completed **failure** on commit `3d2b772b27bed3da0f34677225b843d29f1c3ba6`,
 2026-10-24 16:08:43–16:47:04 UTC. Job metadata, all three sanitized job logs and both
 downloaded report artifacts were inspected, not merely the run badge.
@@ -488,8 +488,8 @@ downloaded report artifacts were inspected, not merely the run badge.
 |---|---|
 | Archive/documentation job | Passed migration verification and audit structural validation (164 findings,424 locations,607 inventory files). No library tests in this job. |
 | SDK setup on Ubuntu24.04.5 x64 and macOS26.6.2 arm64 | Failed `sdkmanager 'platforms;android-37'`: package not found. Official package is37.0; API37 itself and the project's `compileSdk=37` are valid. Both hosts skipped desktop/Android/Apple steps requiring successful setup. |
-| Linux `:nativecmpkit-ui:jsBrowserTest` | Executed32 tests,4 XML reports,0 failures/errors/skips, ChromeHeadless155.0.0.0. |
-| Linux `:nativecmpkit-ui:wasmJsBrowserTest` | Executed the same32 common tests on Wasm,4 XML reports,0 failures/errors/skips, ChromeHeadless155.0.0.0. Neither test task was cached or `UP-TO-DATE`. |
+| Linux `:calf-ui:jsBrowserTest` | Executed32 tests,4 XML reports,0 failures/errors/skips, ChromeHeadless155.0.0.0. |
+| Linux `:calf-ui:wasmJsBrowserTest` | Executed the same32 common tests on Wasm,4 XML reports,0 failures/errors/skips, ChromeHeadless155.0.0.0. Neither test task was cached or `UP-TO-DATE`. |
 | Linux `:sample:web-js:jsBrowserDistribution` | Completed. Webpack5.108.1 reported4 warnings, including unresolved Node `os`/`path` modules and large emitted assets (8.09MiB JS,8.24MiB Skiko Wasm). This is bundling evidence, not deployed/runtime sample validation or measured user performance. |
 | Linux `:sample:web-wasm:compileProductionExecutableKotlinWasmJs` | Failed with `OutOfMemoryError: Java heap space`; configured in-process heap2GiB. Whole browser/distribution Gradle command exit1 after37m16s,527 actionable tasks executed. This does not invalidate the earlier64 passing browser test executions or establish a library source defect. |
 | macOS test artifact | Contains only the explicit0-file/0-test summary; no Apple test, framework link or Android build ran. |
@@ -521,7 +521,7 @@ by a read-only test job.
 
 ### Corrected Gradle run: successful, with explicit coverage limits
 
-[Run40114966617, attempt1](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/40114966617)
+[Run40114966617, attempt1](https://github.com/Apdelrahman1911/nativeCmpkit/actions/runs/40114966617)
 on `1160893ca17404891b312990bc829535cddb75a2` completed **success** on all three jobs,
 2026-10-24 17:11:10–17:34:44 UTC. All terminal logs and both artifact archives were
 downloaded and inspected; each ZIP digest matched GitHub's advertised SHA-256,
@@ -532,13 +532,13 @@ reports were included in the new artifacts.
 |---|---|
 | Archive/documentation |536 migration checks passed; audit validation passed164 findings,424 locations and607 inventory files with no errors/warnings. Tooling integrity, not library behavior. |
 | Linux desktop |86 tests across IO/picker/UI/navigation;13 XML reports. All four populated `desktopTest` tasks freshly executed. |
-| Linux Android host |32 common UI tests;4 XML reports; `:nativecmpkit-ui:testAndroidHostTest` freshly executed. Other host-test tasks had no sources. No emulator/device instrumentation. |
+| Linux Android host |32 common UI tests;4 XML reports; `:calf-ui:testAndroidHostTest` freshly executed. Other host-test tasks had no sources. No emulator/device instrumentation. |
 | Linux JS and Wasm browser |32 common tests each;8 XML reports; both browser-test tasks freshly executed under ChromeHeadless155.0.0.0. |
 | Linux Android sample |`:sample:android:assembleDebug` completed after actual Android compilation. APK not installed, distributed or retained as a release artifact. |
 | Linux browser production |Both distribution tasks succeeded. JS compiler and webpack were `FROM-CACHE`; Wasm compiler, Binaryen optimizer and webpack freshly executed with4GiB/one worker. Wasm webpack reported4 warnings, including a dynamic dependency expression and asset/entry-size warnings (534KiB JS,5.71MiB application Wasm,8.24MiB Skiko Wasm). No sample startup or user-perceived performance measured. |
 | macOS desktop |86 tests,13 XML reports, all four populated desktop test tasks freshly executed. This is an additional host execution of the same functions. |
-| macOS iOS simulator |32 common tests,4 XML reports; `:nativecmpkit-ui:iosSimulatorArm64Test` freshly executed. The four classes are date bounds, selectable bounds, range selection and dialog action policy—not UIKit/delegate/permission/device tests. |
-| macOS framework/cinterop |`:nativecmpkit-webview:cinteropNskeyvalueobservingIosSimulatorArm64` and `:sample:common:linkDebugFrameworkIosSimulatorArm64` freshly executed successfully. This is a static simulator framework build, not a signed Xcode app or physical-device artifact. |
+| macOS iOS simulator |32 common tests,4 XML reports; `:calf-ui:iosSimulatorArm64Test` freshly executed. The four classes are date bounds, selectable bounds, range selection and dialog action policy—not UIKit/delegate/permission/device tests. |
+| macOS framework/cinterop |`:calf-webview:cinteropNskeyvalueobservingIosSimulatorArm64` and `:sample:common:linkDebugFrameworkIosSimulatorArm64` freshly executed successfully. This is a static simulator framework build, not a signed Xcode app or physical-device artifact. |
 
 Totals: **Linux25 reports/182 executions, macOS17 reports/118 executions; zero
 failures/errors/skips.** The32 common functions run on desktop twice and Android
@@ -610,8 +610,8 @@ observed client/daemon diagnostics with6 exact bindings. It is not library/
 consumer testing, ordinary dependency enforcement, independent trust, wrapper/
 compiler/native-cache use or forced-daemon-cleanup proof. Read its frozen scope.
 
-For nativecmpkit-ui iOS presenter acceptance, use the distinct
-`:nativecmpkit-ui:iosSimulatorArm64ApplicationTest`, **not** default Skiko/spawn as an app
+For calf-ui iOS presenter acceptance, use the distinct
+`:calf-ui:iosSimulatorArm64ApplicationTest`, **not** default Skiko/spawn as an app
 substitute. The source-aware `scripts/ci/library_tests.py` iOS plan selects it
 automatically, threads a fresh owned receipt root into the child, and requires
 complete actual KGP XML/application protocol/runtime/cleanup agreement. Existing
@@ -682,7 +682,7 @@ Gradle cleanup, Apple/native or strict packaged-consumer executions in015.
 Later [D2 staging/DSL and metadata-cache repair](../development/checkpoint-consumer-metadata-alert-20261027.md#actual-coreio-staging-and-consumer-dsl-failure)
 actually executes all four producer tasks and308 partial static checks, then
 fails the independent child before any methods/XML. Source-held standalone
-`help` configures the corrected DSL only. Metadata `files.name` may retain a NativeCmpKit
+`help` configures the corrected DSL only. Metadata `files.name` may retain a Calf
 display label; require its actual canonical URL, exact staged/loaded hash and
 metadata binding, not an arbitrary alias. Schema2 still requires all four
 classpaths/seven methods. Consumers now have fresh uncached Gradle/HOME/tmp
@@ -691,7 +691,7 @@ v2 declaration/runtime keys do not reuse build/test results or certify trust.
 
 [Actual first partial attempt](../development/checkpoint-consumer-uikit-20261027.md#actual-partial-staging-failure-and-exact-root-build-repair)
 at immutablec5e14c95 passes tooling but fails actual producer Gradle1/41.02s:
-the init script is inherited by included builds and looks up `nativecmpkit-core` in
+the init script is inherited by included builds and looks up `calf-core` in
 `convention-plugins`. All737 source inputs match Git/before/after and all six
 independent copy hashes match; **zero Kotlin consumer methods/XML**. Exact
 canonical producer-root marker and early nonmatching-build return are repaired;
