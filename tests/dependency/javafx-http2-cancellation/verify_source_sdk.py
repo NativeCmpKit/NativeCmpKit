@@ -426,7 +426,9 @@ if __name__ == "__main__":
     options = parser.parse_args()
     checkout, evidence = options.source.resolve(strict=True), options.output.absolute()
     pin = json.loads(LOCK.read_text(encoding="utf-8"))
-    pin["materials"] = [item for item in pin["materials"] if item.get("platform", options.platform) == options.platform]
+    pin["materials"] = [item for item in pin["materials"]
+                        if item.get("platform", options.platform) == options.platform
+                        and item.get("architecture", options.arch) == options.arch]
     if options.operation == "prepare":
         prepare(checkout, evidence, pin, options.materials)
     else:

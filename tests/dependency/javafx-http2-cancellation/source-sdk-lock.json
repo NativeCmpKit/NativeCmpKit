@@ -9,6 +9,64 @@
   "gradle_wrapper_properties_sha256": "eb62b1afb8d95f61cd229ecc30efe4662f9745edcb42a0edfa8903efcf81981c",
   "materials": [
     {
+      "file": "gcc-13.5.0.tar.xz",
+      "url": "https://gcc.gnu.org/pub/gcc/releases/gcc-13.5.0/gcc-13.5.0.tar.xz",
+      "bytes": 90977816,
+      "sha256": "ec3df0015ed01411f91f9a9cd5b4da3070eb1222b02fadf4133c30c090399855",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false,
+      "provenance": {
+        "signing_fingerprint": "7F74F97C103468EE5D750B583AB00996FC26A641",
+        "primary_fingerprint": "13975A70E63C361C73AE69EF6EEB81F8981C74C7"
+      }
+    },
+    {
+      "file": "gmp-6.2.1.tar.bz2",
+      "url": "https://gcc.gnu.org/pub/gcc/infrastructure/gmp-6.2.1.tar.bz2",
+      "bytes": 2493916,
+      "sha256": "eae9326beb4158c386e39a356818031bd28f3124cf915f8c5b1dc4c7a36b4d7c",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false
+    },
+    {
+      "file": "mpfr-4.1.0.tar.bz2",
+      "url": "https://gcc.gnu.org/pub/gcc/infrastructure/mpfr-4.1.0.tar.bz2",
+      "bytes": 1747243,
+      "sha256": "feced2d430dd5a97805fa289fed3fc8ff2b094c02d05287fd6133e7f1f0ec926",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false
+    },
+    {
+      "file": "mpc-1.2.1.tar.gz",
+      "url": "https://gcc.gnu.org/pub/gcc/infrastructure/mpc-1.2.1.tar.gz",
+      "bytes": 838731,
+      "sha256": "17503d2c395dfcf106b622dc142683c1199431d095367c6aacba6eec30340459",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false
+    },
+    {
+      "file": "isl-0.24.tar.bz2",
+      "url": "https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2",
+      "bytes": 2261594,
+      "sha256": "fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false
+    },
+    {
+      "file": "cmake-3.31.12-linux-x86_64.tar.gz",
+      "url": "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-linux-x86_64.tar.gz",
+      "bytes": 55005786,
+      "sha256": "0dc2e9a6860f06bf10bd8fadc03e35d9eeb4df46e33763a7e480e987758f385c",
+      "platform": "linux",
+      "architecture": "x64",
+      "ivy_input": false
+    },
+    {
       "file": "antlr4-4.7.2-complete.jar",
       "url": "https://www.antlr.org/download/antlr-4.7.2-complete.jar",
       "bytes": 2079769,

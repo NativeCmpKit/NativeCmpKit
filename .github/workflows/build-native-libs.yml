@@ -48,7 +48,7 @@ jobs:
           path: build/openjfx-source
           persist-credentials: false
       - name: Bind OpenJFX source and build materials before compilation
-        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS"
+        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS" --arch "$SOURCE_ARCH"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin
@@ -132,14 +132,18 @@ jobs:
         run: |
           ivy_path="$GITHUB_WORKSPACE/$EVIDENCE_DIR/ivy"
           if (
-            cd "$SOURCE_DIR"
-            SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
-            export SOURCE_DATE_EPOCH
-            set -x
-            bash gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
-              -PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true -PNUM_COMPILE_THREADS=2 \
-              -PBUILD_LIBAV_STUBS="$BUILD_AV_STUBS" -PBUILD_WORKING_LIBAV=false \
-              -PicuVersion=77.1 -PJFX_DEPS_URL="file://$ivy_path"
+            if [[ "$SOURCE_OS" == linux && "$SOURCE_ARCH" == x64 ]]; then
+              bash tests/dependency/javafx-http2-cancellation/build_linux_x64.sh "$SOURCE_DIR" "$EVIDENCE_DIR"
+            else
+              cd "$SOURCE_DIR"
+              SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+              export SOURCE_DATE_EPOCH
+              set -x
+              bash gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
+                -PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true -PNUM_COMPILE_THREADS=2 \
+                -PBUILD_LIBAV_STUBS="$BUILD_AV_STUBS" -PBUILD_WORKING_LIBAV=false \
+                -PicuVersion=77.1 -PJFX_DEPS_URL="file://$ivy_path"
+            fi
           ) 2>&1 | tee "$EVIDENCE_DIR/build.log"; then
             printf '0\n' > "$EVIDENCE_DIR/build-exit.txt"
           else
@@ -253,6 +257,10 @@ jobs:
             build/openjfx-source-verification/source-tree.tsv
             build/openjfx-source-verification/legal-source-inventory.json
             build/openjfx-source-verification/toolchain.txt
+            build/openjfx-source-verification/compat-image.txt
+            build/openjfx-source-verification/compat-toolchain.txt
+            build/openjfx-source-verification/compat-rpm-sha256.txt
+            build/openjfx-source-verification/compat-compiler-build.log
             build/openjfx-source-verification/cygwin-installed.txt
             build/openjfx-source-verification/build.log
             build/openjfx-source-verification/build-exit.txt
