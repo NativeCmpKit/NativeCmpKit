@@ -531,19 +531,24 @@ def source_before_current_context620(relative, payload, root=ROOT):
 
 
 @lru_cache(maxsize=1)
-def _android_archive_identity():
+def _archive_identity():
     inventory = _json(_ordinary(ROOT, "docs/migration/identity.json", MAX_SPEC)[0])
-    module, = (item for item in inventory["modules"] if item["new_artifact"] == "nativecmpkit-permissions")
-    return module["source_directory"], inventory["public_kotlin_namespace"].replace(".", "/")
+    modules = {item["new_artifact"]: item["source_directory"] for item in inventory["modules"]}
+    return MappingProxyType(modules), inventory["public_kotlin_namespace"]
 
 
-def _android_archive_path(relative):
+def archived_module_path(relative):
+    """Name a sealed source record without changing the live checkout path."""
     module, separator, path = relative.partition("/")
-    if not separator or module != "nativecmpkit-permissions":
+    if not separator or not module.startswith("nativecmpkit-"):
         return relative
-    old_module, old_namespace = _android_archive_identity()
-    return old_module + "/" + path.replace("/kotlin/io/github/apdelrahman1911/nativecmpkit/",
-                                           f"/kotlin/{old_namespace}/", 1)
+    modules, namespace = _archive_identity()
+    if module not in modules:
+        return relative
+    path = path.replace("/kotlin/io/github/apdelrahman1911/nativecmpkit/",
+                        f"/kotlin/{namespace.replace('.', '/')}/", 1)
+    path = path.replace("/kotlin/io.github.apdelrahman1911.nativecmpkit/", f"/kotlin/{namespace}/", 1)
+    return f"{modules[module]}/{path}"
 
 
 def _android_transition(root=ROOT):
@@ -552,8 +557,8 @@ def _android_transition(root=ROOT):
     need((sha(raw), len(raw)) == (ANDROID_TRANSITION_ENDPOINT["sha256"], ANDROID_TRANSITION_ENDPOINT["bytes"]),
          "exact-separately-sealed-Android18-transition-required")
     document = _json(raw)
-    archived_patch_counts = {_android_archive_path(path): count for path, count in ANDROID_PATCH_FRAGMENT_COUNTS.items()}
-    archived_inputs = {_android_archive_path(path) for path in ANDROID_SOURCE_INPUTS}
+    archived_patch_counts = {archived_module_path(path): count for path, count in ANDROID_PATCH_FRAGMENT_COUNTS.items()}
+    archived_inputs = {archived_module_path(path) for path in ANDROID_SOURCE_INPUTS}
     need(type(document) is dict and set(document) == {"schema_version", "scope",
          "original_recipe_sha256", "original_final_map_sha256", "original_bindings",
          "current_context_bindings", "source_inputs"} and
@@ -589,7 +594,7 @@ def _android_transition(root=ROOT):
 
 def _android_before(relative, payload, document):
     """One finite exact after-only inverse; no source import or restored execution."""
-    row = (document["original_bindings"] | document["current_context_bindings"]).get(_android_archive_path(relative))
+    row = (document["original_bindings"] | document["current_context_bindings"]).get(archived_module_path(relative))
     if row is None:
         return payload
     inverse = {"before_sha256": row["after_sha256"], "before_bytes": row["after_bytes"],
@@ -636,7 +641,7 @@ def peel_android_lifecycle_for_history(relative, payload, root=ROOT):
             return payload  # Old299 context is data, never new-current admission.
         payload = _current_context620_before(relative, payload, context)
     document = _android_transition(root)
-    row = (document["original_bindings"] | document["current_context_bindings"])[_android_archive_path(relative)]
+    row = (document["original_bindings"] | document["current_context_bindings"])[archived_module_path(relative)]
     if sha(payload) != row["after_sha256"] or len(payload) != row["after_bytes"]:
         return payload
     return _android_before(relative, payload, document)
@@ -706,8 +711,9 @@ def _shape(document, root=ROOT):
             _endpoint(row)
             need(row["sha256"] == ancestors[view][relative], "sealed-share-CI-ancestor-identity-required")
     # Resolve the five real ancestor conflicts by owning identity, not union order.
+    webview_build = archived_module_path("nativecmpkit-webview/build.gradle.kts")
     owning = {WORKFLOW: CI_VIEW, LIBRARY: SHARE_VIEW, CI_OWNER: CI_VIEW,
-              "nativecmpkit-webview/build.gradle.kts": COOKIE_VIEW,
+              webview_build: COOKIE_VIEW,
               "scripts/ci/ios_ui_application.py": COOKIE_VIEW}
     base = {}
     conflicts = set()
@@ -724,18 +730,19 @@ def _shape(document, root=ROOT):
     need(len(base) == 260, "exact-historical-three-view-import260-required")
     producer = ancestors[PRODUCER_VIEW]
     producer_conflicts = {name for name in set(base) & set(producer) if base[name] != producer[name]}
-    need(producer_conflicts == {CI_OWNER, LIBRARY, "nativecmpkit-webview/build.gradle.kts",
+    need(producer_conflicts == {CI_OWNER, LIBRARY, webview_build,
          "scripts/ci/ios_ui_application.py", OFFLINE, UI_SPLIT_CONTROL, CI_CONTROL},
          "exact-seven-producer-Cookie-Share-source-conflicts-required")
     base.update(producer)
     # Explicit owning decisions, never a union-order overlay or blanket repin.
     for relative, view in {CI_OWNER: CI_VIEW, LIBRARY: SHARE_VIEW,
-            "nativecmpkit-webview/build.gradle.kts": COOKIE_VIEW,
+            webview_build: COOKIE_VIEW,
             "scripts/ci/ios_ui_application.py": COOKIE_VIEW,
             OFFLINE: PRODUCER_VIEW, UI_SPLIT_CONTROL: PRODUCER_VIEW,
             CI_CONTROL: PRODUCER_VIEW}.items():
         base[relative] = ancestors[view][relative]
-    need(len(base) == 275 and set(document["raw_inputs"]) == set(base) | ADDED_INPUTS,
+    archived_additions = {archived_module_path(path) for path in ADDED_INPUTS}
+    need(len(base) == 275 and set(document["raw_inputs"]) == set(base) | archived_additions,
          "complete-finite-joint-raw301-plus-owner-spec-required")
     for relative, row in document["raw_inputs"].items():
         _identity(relative, b"source-identity-only")
@@ -966,7 +973,7 @@ def _peel_for_history_document(relative, payload, view, document, root):
         return payload  # Old299 context is not a current620 descendant.
     if relative in ANDROID_BOUND_PATHS and relative in document["predecessor_inputs"][view]:
         android = _android_transition(root)
-        row = (android["original_bindings"] | android["current_context_bindings"])[_android_archive_path(relative)]
+        row = (android["original_bindings"] | android["current_context_bindings"])[archived_module_path(relative)]
         if sha(payload) == row["after_sha256"] and len(payload) == row["after_bytes"]:
             return _view(view, relative, payload, document, root)
         return payload  # Old/partial Android or context bytes are data, not new-current descendants.
