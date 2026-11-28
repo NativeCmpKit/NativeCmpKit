@@ -215,6 +215,11 @@ class PopoverGeometryControls(unittest.TestCase):
         self.assertLess(submission.index("if (scene.interfaceOrientation == target)"),
                         submission.index("scene.requestGeometryUpdateWithPreferences"))
         self.assertIn("check(!requireRotation)", submission)
+        readback = source.split('tracePhase("$phase-returned")', 1)[1].split("        try {", 1)[0]
+        self.assertIn("UIApplicationStateActive", readback)
+        self.assertIn("window.isKeyWindow()", readback)
+        self.assertIn("sameNativeObject(window.windowScene, scene)", readback)
+        self.assertNotIn("requireOwnedApplicationWindow()", readback)
 
     def test_scene_delegate_owns_connection_before_real_activation(self):
         import ios_popover_geometry_plan as geometry

@@ -248,6 +248,7 @@ IPAD_ROTATION_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_IPAD_ROTATION_OWNED_PROCESS "
 IPAD_ROTATION_PHASES = (
     "set-content", "scene-identity", "portrait-request", "portrait-request-returned",
     "present-in-portrait", "initial-anchor", "landscape-request", "landscape-request-returned",
+    "landscape-readback-entered", "landscape-readback-returned",
     "landscape-anchor", "fallback-set", "return-portrait-request", "return-portrait-request-returned",
     "fallback-anchor", "cleanup", "cleanup-returned",
 )

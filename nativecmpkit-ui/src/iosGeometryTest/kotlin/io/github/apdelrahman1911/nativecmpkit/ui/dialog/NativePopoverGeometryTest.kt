@@ -88,12 +88,24 @@ class NativePopoverGeometryTest {
                 }
             }
             tracePhase("$phase-returned")
+            var firstLandscapeReadback = rotateWhilePresented && phase == "landscape-request"
             waitForNative {
+                if (firstLandscapeReadback) tracePhase("landscape-readback-entered")
                 geometryError?.let { failure -> error("Owned public OS geometry request failed: code=${failure.code}") }
-                sameNativeObject(requireOwnedApplicationWindow(), window) && sameNativeObject(window.windowScene, scene) &&
+                // The owned scene can be inactive or have unsettled views during rotation.
+                // Require the same live window at completion without throwing during the transition.
+                val ready = UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
+                    window.isKeyWindow() && !window.hidden &&
+                    sameNativeObject(window.rootViewController?.view?.window, window) &&
+                    sameNativeObject(parent.view.window, window) && sameNativeObject(window.windowScene, scene) &&
                     scene.activationState == UISceneActivationStateForegroundActive && scene.interfaceOrientation == target &&
                     window.bounds.useContents { validGeometry(size.width, size.height, target) } &&
                     parent.view.bounds.useContents { validGeometry(size.width, size.height, target) }
+                if (firstLandscapeReadback) {
+                    tracePhase("landscape-readback-returned")
+                    firstLandscapeReadback = false
+                }
+                ready
             }
         }
 
