@@ -39,16 +39,16 @@ def main() -> int:
         if flow not in flow_ids + blocked_ids:
             problems.append(f"mapping for an unknown flow: {flow}")
         for row_id in row_ids:
-            row = rows.get(row_id)
-            if row is None:
+            if row_id not in rows:
                 problems.append(f"{flow}: unknown row {row_id}")
-            elif row.get("windowClass") == "tablet":
-                problems.append(f"{flow}: phone flow maps the tablet row {row_id}")
 
     for row_id, row in rows.items():
-        if row["execution"]["android"]["status"] == "passed" or row["execution"]["ios"]["status"] == "passed":
-            if not row.get("functional"):
-                problems.append(f"{row_id}: passed without functional evidence")
+        for platform in ("android", "ios"):
+            if row["execution"][platform]["status"] == "passed" and not any(
+                entry.get("platform") == platform and entry.get("status") == "passed"
+                for entry in row.get("functional", [])
+            ):
+                problems.append(f"{row_id}: {platform} passed without functional evidence")
         for platform in ("android", "ios"):
             status = row["execution"][platform]["status"]
             path = row.get("screenshot", {}).get(platform)

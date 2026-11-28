@@ -5065,11 +5065,12 @@
       "setup": [],
       "steps": [
         "Open Alert Dialog on iPad",
-        "Show the ActionSheet"
+        "Show the ActionSheet",
+        "Tap outside the popover"
       ],
       "expected": [
-        "The action sheet is a centred popover",
-        "Cancel is reachable"
+        "The action sheet is a centred popover with Ok/Remove",
+        "UIKit omits the cancel action in a popover, so an outside tap dismisses it"
       ],
       "flowId": "android-phone-alertdialogiosstyle-actionsheet-ipad-popover",
       "screenshot": {
@@ -6005,10 +6006,11 @@
           "device": "api35-phone"
         },
         "ios": {
-          "status": "not-run",
+          "status": "blocked",
           "run": null,
           "attempt": null,
-          "job": null
+          "job": null,
+          "reason": "the pinned ui-test-actions revision exposes no iOS rotation command"
         },
         "desktop": {
           "status": "not-run",

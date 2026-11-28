@@ -12,6 +12,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import tour  # noqa: E402
 
+CURRENT_DEVICE = ""
+
 
 def assert_text(ui, text: str, timeout_ms: int = 6000):
     observation = tour.soft_find(ui, {"text_contains": text}, timeout_ms=timeout_ms)
@@ -46,6 +48,31 @@ def click_any(ui, labels):
         except Exception:
             continue
     raise AssertionError(f"none of {labels!r} were clickable")
+
+
+def click_first(ui, labels):
+    last = None
+    for label in labels:
+        try:
+            tour.click_text(ui, label)
+            return
+        except Exception as error:  # noqa: BLE001
+            last = error
+    raise AssertionError(f"none of {labels!r} were clickable: {last}")
+
+
+def _ios_action_sheet(ui):
+    if "ipad" in CURRENT_DEVICE:
+        # UIKit presents an action sheet as a popover and intentionally omits
+        # the cancel action; dismissal is an outside tap.
+        assert_text(ui, "Ok")
+        assert_absent(ui, "Cancel", timeout_ms=2000)
+        ui.action("pointer.click", {"x": 8, "y": 200})
+        assert_absent(ui, "This is a native alert dialog from Kira")
+        return
+    assert_text(ui, "Cancel")
+    tour.click_text(ui, "Cancel")
+    assert_absent(ui, "This is a native alert dialog from Kira")
 
 
 def deny_permission_dialogs(ui, platform):
@@ -171,10 +198,11 @@ def click_switch_near(ui, label, expect=None):
         )
         if not looks_like_switch:
             continue
+        if node.get("visible") is False:
+            continue
         if abs(node_bounds["y"] - bounds["y"]) <= 80 and node_bounds["x"] > bounds["x"]:
-            ui.action("pointer.click", {
-                "x": node_bounds["x"] + node_bounds["width"] // 2,
-                "y": node_bounds["y"] + node_bounds["height"] // 2,
+            ui.action("element.click", {
+                "id": node["id"], "snapshot_id": snapshot["snapshot_id"],
             })
             clicked = True
             break
@@ -225,11 +253,22 @@ def drag_slider(ui, needle: str):
             break
     if not track:
         raise AssertionError("no slider track exposed")
-    ui.action("pointer.drag", {
-        "x": track["x"] + track["width"] // 2, "y": track["y"] + track["height"] // 2,
-        "end_x": track["x"] + track["width"] - 8, "end_y": track["y"] + track["height"] // 2,
-        "duration_ms": 500,
-    })
+    start_y = track["y"] + track["height"] // 2
+    attempts = (
+        (track["x"] + int(track["width"] * 0.5), track["x"] + int(track["width"] * 0.9), 1200),
+        (track["x"] + int(track["width"] * 0.2), track["x"] + int(track["width"] * 0.8), 800),
+        (track["x"] + int(track["width"] * 0.5), track["x"] + int(track["width"] * 0.95), 400),
+    )
+    before = text_value(ui, needle)
+    for start_x, end_x, duration in attempts:
+        ui.action("pointer.drag", {
+            "x": start_x, "y": start_y, "end_x": end_x, "end_y": start_y,
+            "duration_ms": duration,
+        })
+        if text_value(ui, needle) != before:
+            return
+    # tap-to-seek fallback
+    ui.action("pointer.click", {"x": track["x"] + int(track["width"] * 0.85), "y": start_y})
 
 
 FLOWS = [
@@ -296,9 +335,8 @@ FLOWS = [
     ("action-sheet", "Adaptive Alert Dialog", lambda ui, p: (
         click_text_scroll(ui, "Show ActionSheet"),
         assert_text(ui, "Alert Dialog"),
-        (assert_text(ui, "Cancel"), tour.click_text(ui, "Cancel"),
-         assert_absent(ui, "This is a native alert dialog from Kira")) if p == "ios"
-        else (assert_text(ui, "Confirm"), tour.click_text(ui, "Confirm")),
+        _ios_action_sheet(ui) if p == "ios" else
+        (assert_text(ui, "Confirm"), tour.click_text(ui, "Confirm")),
     )),
     ("permissions-sms-rows", "Permissions", lambda ui, p: (
         assert_text(ui, "ReadSms"),
@@ -335,13 +373,13 @@ FLOWS = [
     )),
     ("webview-js", "Web View", lambda ui, p: (
         assert_text(ui, "JavaScript: on"),
-        click_switch_near(ui, "JavaScript: on"),
+        tour.click_text(ui, "JavaScript: on"),
         assert_text(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
         assert_text(ui, "JS:"),
         (lambda value: (_ for _ in ()).throw(AssertionError("JS result leaked the title"))
          if "Kira WebView Demo" in value else None)(text_value(ui, "JS:")),
-        click_switch_near(ui, "JavaScript: off"),
+        tour.click_text(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
         (lambda value: None if "Kira WebView Demo" in value
          else (_ for _ in ()).throw(AssertionError(f"JS on did not return the title: {value!r}")))(
@@ -384,11 +422,11 @@ FLOWS = [
     )),
     ("liquidglass", "Liquid Glass", lambda ui, p: (
         (find_any(ui, "LiquidGlassButton") if p == "ios" else assert_text(ui, "Liquid Glass is iOS 26 only")),
-        (tour.click_text(ui, "Glass click 0"), assert_text(ui, "Glass click 1")) if p == "ios" else None,
+        (click_text_scroll(ui, "Glass click 0"), assert_text(ui, "Glass click 1")) if p == "ios" else None,
     )),
     ("webview", "Web View", lambda ui, p: (
         assert_text(ui, "Kira WebView Demo"),
-        tour.click_text(ui, "Load second HTML page" if p == "android" else "embed code"),
+        click_first(ui, ["Load second HTML page", "embed code", "HTML"]),
         assert_text(ui, "Kira Second Page"),
         tour.click_text(ui, "Evaluate JavaScript title"),
         assert_text(ui, "JS:"),
@@ -446,6 +484,8 @@ def main() -> None:
     args = parser.parse_args()
 
     device = args.device or ("api35-phone" if args.platform == "android" else "iphone-simulator")
+    global CURRENT_DEVICE
+    CURRENT_DEVICE = device
     LiveUI = tour.load_client(args.client_dir)
     ui = LiveUI.open(args.connection, args.token_file)
     identity = ui.identify()

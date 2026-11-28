@@ -452,8 +452,9 @@ ROWS = [
         ["The confirm action enables after typing", "Critical severity is applied"]),
     row("UI-ALERT-006", "kira-ui", "AlertDialogIosStyle.ActionSheet", "iPad popover",
         "ios", "Dialog",
-        ["Open Alert Dialog on iPad", "Show the ActionSheet"],
-        ["The action sheet is a centred popover", "Cancel is reachable"],
+        ["Open Alert Dialog on iPad", "Show the ActionSheet", "Tap outside the popover"],
+        ["The action sheet is a centred popover with Ok/Remove",
+         "UIKit omits the cancel action in a popover, so an outside tap dismisses it"],
         window="tablet"),
     row("NAV-004", "kira-ui", "HomeScreen", "large-screen index layout",
         "mobile", "Home",
@@ -542,7 +543,8 @@ def render(document: dict) -> None:
         "",
         "Statuses: **passed** = a functional flow asserted observable state; "
         "**captured** = a reviewed screenshot only; **failed** = flow ran and the "
-        "assertion failed; **not-run** = no hosted evidence yet; "
+        "assertion failed; **blocked** = the pinned harness cannot drive the surface; "
+        "**not-run** = no hosted evidence yet; "
         "**not-applicable** = the API or sample section does not exist on that platform.",
         "",
     ]

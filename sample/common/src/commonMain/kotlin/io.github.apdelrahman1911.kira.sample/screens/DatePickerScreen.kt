@@ -124,6 +124,21 @@ fun DatePickerScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Inline display: ${if (inlineState.displayMode == DisplayMode.Input) "Input" else "Picker"}",
+                    modifier = Modifier.weight(1f),
+                )
+                AdaptiveSwitch(
+                    checked = inlineState.displayMode == DisplayMode.Input,
+                    onCheckedChange = {
+                        inlineState.displayMode = if (it) DisplayMode.Input else DisplayMode.Picker
+                    },
+                )
+            }
+
             Text(
                 text = "Selectable range",
                 style = MaterialTheme.typography.labelLarge,
@@ -165,21 +180,6 @@ fun DatePickerScreen(
                 AdaptiveSwitch(
                     checked = weekdaysOnly,
                     onCheckedChange = { weekdaysOnly = it },
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Inline display: ${if (inlineState.displayMode == DisplayMode.Input) "Input" else "Picker"}",
-                    modifier = Modifier.weight(1f),
-                )
-                AdaptiveSwitch(
-                    checked = inlineState.displayMode == DisplayMode.Input,
-                    onCheckedChange = {
-                        inlineState.displayMode = if (it) DisplayMode.Input else DisplayMode.Picker
-                    },
                 )
             }
 

@@ -101,21 +101,7 @@ fun BottomSheetScreen(
                 ) {
                     item {
                         Text("Bottom Sheet")
-                        Spacer(modifier = Modifier.height(16.dp))
-                        AdaptiveButton(
-                            onClick = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        openBottomSheet = false
-                                    }
-                                }
-                            }
-                        ) {
-                            Text("Close")
-                        }
-                    }
-
-                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
@@ -126,6 +112,18 @@ fun BottomSheetScreen(
                                 }
                             )
                             Text("Allow swipe to hide")
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        AdaptiveButton(
+                            onClick = {
+                                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                    if (!sheetState.isVisible) {
+                                        openBottomSheet = false
+                                    }
+                                }
+                            }
+                        ) {
+                            Text("Close")
                         }
                     }
 

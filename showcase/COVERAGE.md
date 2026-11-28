@@ -5,10 +5,10 @@ Base: `a2c48c0b9ebf3524192e680ecd4becc1f2880bb8` on `feature/showcase-ui-verific
 The authoritative machine-readable manifest is [coverage.json](coverage.json).
 Regenerate both files with `python3 showcase/generate_coverage.py`.
 
-Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
+Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **blocked** = the pinned harness cannot drive the surface; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
 
 - android: 41 captured, 2 failed, 20 not-applicable, 25 passed
-- ios: 55 captured, 4 failed, 9 not-applicable, 1 not-run, 19 passed
+- ios: 1 blocked, 55 captured, 4 failed, 9 not-applicable, 19 passed
 
 Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<platform>/functional-<device>.json`.
 
@@ -97,7 +97,7 @@ Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<pl
 | WEB-006 | WebSettings | JavaScript off and on | supported | supported | WebView | failed (46099102700) | passed (46108448068) |
 | IO-PICK-004 | FilePickerFileType.Custom/Extension | filter modes | supported | supported | FilePicker | captured (46114711444) | captured (46114716852) |
 | IO-SAVE-002 | FileSaverLauncher | file and stream save | supported | supported | ProfilePicture | captured (46114711444) | captured (46114716852) |
-| NAV-003 | rememberNavController | saveable state restoration | supported | supported | Home | passed (46099102700) | not-run |
+| NAV-003 | rememberNavController | saveable state restoration | supported | supported | Home | passed (46099102700) | blocked |
 | GEO-003 | ExtendedLocation types | altitude, speed, azimuth | supported | supported | Geo | captured (46114711444) | captured (46114716852) |
 | EXCL-MAPS-001 | maps | excluded build-only module | unsupported | unsupported | Limitations | not-applicable | not-applicable |
 | EXCL-MEDIA-001 | media | excluded module | unsupported | unsupported | Limitations | not-applicable | not-applicable |

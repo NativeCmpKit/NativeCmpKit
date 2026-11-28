@@ -2,6 +2,7 @@
 package io.github.apdelrahman1911.kira.sample.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -112,30 +113,36 @@ fun WebViewScreen(
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.chevronLeft),
                     enabled = navigator.canGoBack,
+                    accessibilityLabel = "Navigate Back",
                     onClick = { navigator.navigateBack() },
                 ),
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.chevronRight),
                     enabled = navigator.canGoForward,
+                    accessibilityLabel = "Navigate Forward",
                     onClick = { navigator.navigateForward() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.arrowClockwise),
+                    accessibilityLabel = "Reload",
                     onClick = { navigator.reload() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.xmark),
+                    accessibilityLabel = "Stop Loading",
                     onClick = { navigator.stopLoading() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.globe),
+                    accessibilityLabel = "Load URL",
                     onClick = { navigator.loadUrl(INITIAL_URL) },
                 ),
                 UIKitUIBarButtonItem.image(
                     image = UIKitImage.SystemName(SFSymbol.chevronLeftForwardslashChevronRight),
+                    accessibilityLabel = "Load second HTML page",
                     onClick = { navigator.loadHtml(DUMMY_HTML) },
                 ),
             )
@@ -248,6 +255,10 @@ fun WebViewScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .align(Alignment.TopStart)
+                    .clickable {
+                        javaScriptEnabled = !javaScriptEnabled
+                        state.settings.javaScriptEnabled = javaScriptEnabled
+                    }
                     .padding(8.dp)
                     .background(
                         MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),

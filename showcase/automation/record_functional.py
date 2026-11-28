@@ -20,7 +20,7 @@ FLOW_ROWS = {
     "alert-cancel": ["UI-ALERT-001"],
     "alert-confirm": ["UI-ALERT-001"],
     "alert-text-field": ["UI-ALERT-003", "UI-ALERT-005"],
-    "action-sheet": ["UI-ALERT-004"],
+    "action-sheet": ["UI-ALERT-004", "UI-ALERT-006"],
     "sheet": ["UI-SHEET-001"],
     "sheet-veto": ["UI-SHEET-002"],
     "date-display": ["UI-DATE-006"],
@@ -52,11 +52,13 @@ def main() -> None:
     parser.add_argument("--attempt", default="1")
     parser.add_argument("--job", required=True)
     parser.add_argument("--allow-device", action="store_true")
+    parser.add_argument("--tablet-rows", action="store_true")
     args = parser.parse_args()
 
     result = json.loads(args.functional.read_text(encoding="utf-8"))
     canonical = ("api35-phone", "iphone-simulator")
-    if result.get("device") not in canonical and not args.allow_device:
+    if (result.get("device") not in canonical and not args.allow_device
+            and not args.tablet_rows):
         raise SystemExit(
             f"{args.functional} is from device {result.get('device')!r}; the "
             "coverage execution slots are bound to the canonical phone devices. "
@@ -68,10 +70,16 @@ def main() -> None:
     for flow in result.get("flows", []):
         for row_id in FLOW_ROWS.get(flow["id"], []):
             row = rows[row_id]
+            if args.tablet_rows and row.get("windowClass") != "tablet":
+                continue
+            if not args.tablet_rows and row.get("windowClass") == "tablet":
+                continue
             execution = row["execution"][args.platform]
             if execution["status"] == "not-applicable":
                 continue
             execution["status"] = flow["status"]
+            if flow["status"] == "passed" and (row.get("defect") or {}).get("platform") == args.platform:
+                row["defect"] = None
             execution["run"] = args.run
             execution["attempt"] = args.attempt
             execution["job"] = args.job
