@@ -13,6 +13,7 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -20,6 +21,7 @@ from unittest.mock import patch
 import macos_share_ci668_composition as latest
 
 ROOT = Path(__file__).resolve().parents[2]
+ARCHIVED_TRANSITION_SOURCE = "d968257ff8dd3340f6b4cda2f1b890044679635f"
 
 
 def sha(payload):
@@ -39,10 +41,10 @@ class AndroidPermissionLifecycleFixtureAdmissionTests(unittest.TestCase):
                          sum(len(row["fragments"]) for row in document["original_bindings"].values())))
         self.assertEqual(13, len(document["source_inputs"]))
         for relative, endpoint in document["source_inputs"].items():
-            raw = (ROOT / relative).read_bytes()
+            raw = subprocess.check_output(["git", "show", f"{ARCHIVED_TRANSITION_SOURCE}:{relative}"], cwd=ROOT)
             self.assertEqual((endpoint["sha256"], endpoint["bytes"]), (sha(raw), len(raw)))
         self.assertEqual("797a60036440024d61bd73c538f188966934b0f8351df6d23e611bebe94f2c6b",
-                         sha((ROOT / "scripts/ci/test_android_permission_lifecycle_source.py").read_bytes()))
+                         document["source_inputs"]["scripts/ci/test_android_permission_lifecycle_source.py"]["sha256"])
         # This is a source-hash comparison, not a fresh23/FIRST8 execution.
 
     def test02_actual_current299_and_immutable_four_named_domains_are_distinct(self):

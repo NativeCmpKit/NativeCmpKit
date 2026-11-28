@@ -530,12 +530,30 @@ def source_before_current_context620(relative, payload, root=ROOT):
     return _current_context620_before(relative, payload, _transition620_document(root))
 
 
+@lru_cache(maxsize=1)
+def _android_archive_identity():
+    inventory = _json(_ordinary(ROOT, "docs/migration/identity.json", MAX_SPEC)[0])
+    module, = (item for item in inventory["modules"] if item["new_artifact"] == "nativecmpkit-permissions")
+    return module["source_directory"], inventory["public_kotlin_namespace"].replace(".", "/")
+
+
+def _android_archive_path(relative):
+    module, separator, path = relative.partition("/")
+    if not separator or module != "nativecmpkit-permissions":
+        return relative
+    old_module, old_namespace = _android_archive_identity()
+    return old_module + "/" + path.replace("/kotlin/io/github/apdelrahman1911/nativecmpkit/",
+                                           f"/kotlin/{old_namespace}/", 1)
+
+
 def _android_transition(root=ROOT):
     """Fresh separately sealed Android18/data-only context; never named admission."""
     raw = _ordinary(root, ANDROID_SPEC, MAX_SPEC)[0]
     need((sha(raw), len(raw)) == (ANDROID_TRANSITION_ENDPOINT["sha256"], ANDROID_TRANSITION_ENDPOINT["bytes"]),
          "exact-separately-sealed-Android18-transition-required")
     document = _json(raw)
+    archived_patch_counts = {_android_archive_path(path): count for path, count in ANDROID_PATCH_FRAGMENT_COUNTS.items()}
+    archived_inputs = {_android_archive_path(path) for path in ANDROID_SOURCE_INPUTS}
     need(type(document) is dict and set(document) == {"schema_version", "scope",
          "original_recipe_sha256", "original_final_map_sha256", "original_bindings",
          "current_context_bindings", "source_inputs"} and
@@ -544,12 +562,12 @@ def _android_transition(root=ROOT):
          document["original_recipe_sha256"] == ANDROID_AUTHOR_RECIPE_SHA256 and
          document["original_final_map_sha256"] == ANDROID_AUTHOR_FINAL_MAP_SHA256 and
          type(document["original_bindings"]) is dict and
-         set(document["original_bindings"]) == ANDROID_PATCH_PATHS and
+         set(document["original_bindings"]) == set(archived_patch_counts) and
          type(document["current_context_bindings"]) is dict and
          set(document["current_context_bindings"]) == set(ANDROID_CONTEXT_FRAGMENT_COUNTS) and
-         type(document["source_inputs"]) is dict and set(document["source_inputs"]) == ANDROID_SOURCE_INPUTS,
+         type(document["source_inputs"]) is dict and set(document["source_inputs"]) == archived_inputs,
          "finite-original-six36-and-separate-Android-current-context-required")
-    for key, counts in (("original_bindings", ANDROID_PATCH_FRAGMENT_COUNTS),
+    for key, counts in (("original_bindings", archived_patch_counts),
                         ("current_context_bindings", ANDROID_CONTEXT_FRAGMENT_COUNTS)):
         for relative, row in document[key].items():
             _identity(relative, b"source-identity-only")
@@ -562,7 +580,7 @@ def _android_transition(root=ROOT):
     for relative, endpoint in document["source_inputs"].items():
         _identity(relative, b"source-identity-only")
         _endpoint(endpoint)
-        if relative in ANDROID_PATCH_PATHS:
+        if relative in archived_patch_counts:
             row = document["original_bindings"][relative]
             need(endpoint == {"sha256": row["after_sha256"], "bytes": row["after_bytes"]},
                  "new-Android-manifest-source-identity-must-match-original-patch-endpoint")
@@ -571,7 +589,7 @@ def _android_transition(root=ROOT):
 
 def _android_before(relative, payload, document):
     """One finite exact after-only inverse; no source import or restored execution."""
-    row = (document["original_bindings"] | document["current_context_bindings"]).get(relative)
+    row = (document["original_bindings"] | document["current_context_bindings"]).get(_android_archive_path(relative))
     if row is None:
         return payload
     inverse = {"before_sha256": row["after_sha256"], "before_bytes": row["after_bytes"],
@@ -618,7 +636,7 @@ def peel_android_lifecycle_for_history(relative, payload, root=ROOT):
             return payload  # Old299 context is data, never new-current admission.
         payload = _current_context620_before(relative, payload, context)
     document = _android_transition(root)
-    row = (document["original_bindings"] | document["current_context_bindings"])[relative]
+    row = (document["original_bindings"] | document["current_context_bindings"])[_android_archive_path(relative)]
     if sha(payload) != row["after_sha256"] or len(payload) != row["after_bytes"]:
         return payload
     return _android_before(relative, payload, document)
@@ -948,7 +966,7 @@ def _peel_for_history_document(relative, payload, view, document, root):
         return payload  # Old299 context is not a current620 descendant.
     if relative in ANDROID_BOUND_PATHS and relative in document["predecessor_inputs"][view]:
         android = _android_transition(root)
-        row = (android["original_bindings"] | android["current_context_bindings"])[relative]
+        row = (android["original_bindings"] | android["current_context_bindings"])[_android_archive_path(relative)]
         if sha(payload) == row["after_sha256"] and len(payload) == row["after_bytes"]:
             return _view(view, relative, payload, document, root)
         return payload  # Old/partial Android or context bytes are data, not new-current descendants.
