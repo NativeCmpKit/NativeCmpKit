@@ -135,7 +135,7 @@ class PopoverGeometryControls(unittest.TestCase):
             with self.assertRaises(ValueError):
                 geometry.process_launch_environment(simulator(), geometry.FOCUSES[0], environment=environment)
 
-    def test_exact_four_input_compiler_and_one_method_filter(self):
+    def test_exact_five_input_compiler_and_one_method_filter(self):
         import ios_popover_geometry_plan as geometry
         source = (ROOT / geometry.INIT_SCRIPT).read_text()
         self.assertEqual(list(geometry.SOURCES), re.findall(r'"(nativecmpkit-ui/src/ios[^"\n]+\.kt)"', source))
@@ -215,6 +215,8 @@ class PopoverGeometryControls(unittest.TestCase):
         self.assertLess(submission.index("if (scene.interfaceOrientation == target)"),
                         submission.index("scene.requestGeometryUpdateWithPreferences"))
         self.assertIn("check(!requireRotation)", submission)
+        self.assertIn('nativeXcuiInput("device-orientation"', submission)
+        self.assertIn('UIInterfaceOrientationLandscapeLeft -> "landscape-right"', submission)
         readback = source.split('tracePhase("$phase-returned")', 1)[1].split("        try {", 1)[0]
         self.assertIn("import platform.UIKit.UIApplicationState.UIApplicationStateActive", source)
         self.assertIn("UIApplicationStateActive", readback)

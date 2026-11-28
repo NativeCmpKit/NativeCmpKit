@@ -20,15 +20,17 @@ NATIVE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/n
 SCENE = "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt"
 HOST = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt"
 IDENTITY = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt"
+INPUT = "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeXcuiInput.kt"
 INIT_SCRIPT = "scripts/ci/ios_popover_geometry_compile.init.gradle.kts"
 SOURCE = "scripts/ci/ios_popover_geometry_plan.py"
-SOURCES = (NATIVE, HOST, IDENTITY, SCENE)
+SOURCES = (NATIVE, HOST, IDENTITY, SCENE, INPUT)
 SOURCE_SHA256 = {
-    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "2d6730f678329b018cfd44067e6960fdc10f5009269f0674c03ccb2c4cad747e",
+    "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeXcuiInput.kt": "bd8884ef1f0e2b6c341391bf8d071d95e284d5c4e1cd4bf936b8aa8d1ec66c77",
+    "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/NativePopoverGeometryTest.kt": "5694ce3964693db3e44b3cdef97b4ffcb115769a2d4af4335ad44543a8b137be",
     "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt": "2594edcf1060ae1bc54cf8b35cda81011306d6c182b0bebc183b492ea42fd698",
     "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt": "262319f38945fb86e292934f619695f1acb061cd12cb33527d0bbf9f0a4eacc8",
     "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt": "5f96c3aaf035f4f82a9b8f93c019e92709f3a189eb7188d9f31d9a94ad8ed53a",
-    "scripts/ci/ios_popover_geometry_compile.init.gradle.kts": "5d65b18ad5b1b641d41c3829855f5b377d8b61de89e7a13993f157cd3b4ce23d",
+    "scripts/ci/ios_popover_geometry_compile.init.gradle.kts": "05a6bd02009158fe069706df5c2a1e8fa6bc88c4e9ffccf7e92ea73fa1935e47",
     "scripts/ci/fixtures/ios-popover-geometry-source-inverse.json": "a19b28201b2e77644109c97f636323865ff7a250b2e58474a6ac567a36cbc723",
 }
 ORIENTATIONS = ["UIInterfaceOrientationPortrait", "UIInterfaceOrientationLandscapeLeft",
@@ -110,7 +112,7 @@ def application_fixture(root: Path, simulator: dict, focus: str) -> dict:
             "scene_mode_requested": True, "legacy_activation_fallback_allowed": False,
             "scene_information": scene_information(), "launch_environment": launch_environment(simulator, focus),
             "source_sha256": {path: hashlib.sha256(_ordinary_bytes(root, path)[0]).hexdigest()
-                              for path in (SOURCE, INIT_SCRIPT, NATIVE, HOST, IDENTITY, SCENE)},
+                              for path in (SOURCE, INIT_SCRIPT, *SOURCES)},
             "real_split_view_verified": False, "packages_published": False, "release_readiness_certified": False}
 
 

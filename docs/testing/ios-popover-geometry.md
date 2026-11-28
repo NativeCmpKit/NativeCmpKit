@@ -33,7 +33,8 @@ populations remain unchanged reuse, not new executions.
    Preinstalled devices are preserved; failed/unknown creation/boot is never
    retried or guessed. See [575–578 qualification](../development/evidence/current-platform-recovery-20261101/ios-owned-geometry575-578/README.md).
 1. The focused init script admits exactly the geometry test, geometry scene
-   delegate, existing application host and exact native-object identity helper.
+   delegate, existing application host, native-object identity helper, and
+   independent XCTest input helper.
    `iosGeometryTest` is deliberately excluded from ordinary source-set inheritance.
 2. The application wrapper verifies source/runtime/owned installation as before.
    Its plist enables one real `UIWindowScene`, the exported geometry delegate and
@@ -45,8 +46,8 @@ populations remain unchanged reuse, not new executions.
    enters the original timer/readiness/Worker machinery. No manually called UIKit
    scene callback or legacy-activation fallback is admitted in this mode.
 5. The phone method verifies portrait/compact traits and real view-local anchoring.
-   The iPad method requests public `UIWindowScene` portrait/landscape geometry,
-   requires actual orientation and positive native geometry, regular traits and
+   The iPad method uses `XCUIDevice` to change the simulated device orientation,
+   then requires actual UIKit interface orientation, positive geometry, regular traits and
    automatic owned view/fallback anchor updates while the same alert remains
    presented. No bounds/trait overrides or manually invoked reposition callbacks.
 6. Owned alert/view cleanup runs even after failure; the original interface
@@ -54,9 +55,10 @@ populations remain unchanged reuse, not new executions.
    suppressed cleanup failures stay failures. Existing Worker termination, source
    custody, original XML and owned-app cleanup still decide acceptance.
 
-Public geometry requests exercise OS window-scene geometry, not physical device
-rotation or independent XCUI touch delivery. The API has an error callback but no
-success callback; positive native orientation/bounds are the actual observations.
+On the hosted simulator, UIKit refused the direct in-app landscape request with
+code 101. The independent XCTest runner supplies the two device orientation
+changes. The library test checks the resulting orientation and bounds in UIKit.
+[Apple's XCTest orientation API](https://developer.apple.com/documentation/xcuiautomation/xcuidevice/orientation)
 These tests do **not** establish real split view, every iOS version, physical
 devices, packaged consumer integration, ABI compatibility or release readiness.
 

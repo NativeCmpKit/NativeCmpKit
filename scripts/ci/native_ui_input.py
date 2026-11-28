@@ -31,6 +31,10 @@ ACTION_SHEET_OPERATION = "action-sheet-button"
 ACTION_SHEET_CASE = "defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad"
 ACTION_SHEET_REQUEST = {"sequence": 1, "operation": ACTION_SHEET_OPERATION, "case": ACTION_SHEET_CASE,
                         "title": "Choose a value", "label": "Cancel selection"}
+ROTATION_FOCUS = "ui-native-popover-os-rotation"
+ROTATION_CASE = "nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation"
+ROTATION_OPERATION = "device-orientation"
+ROTATION_ORIENTATIONS = ("landscape-right", "portrait")
 SOURCE = "scripts/ci/native_ui_input.py"
 SWIFT = "tests/native-ui-input/NativeCmpKitInputTests.swift"
 PROJECT = "tests/native-ui-input/NativeCmpKitInput.xcodeproj/project.pbxproj"
@@ -103,6 +107,10 @@ def validate_request(document: dict, sequence: int) -> dict:
         keys |= {"title", "label"}
         if operation == "alert-field":
             keys |= {"text"}
+    elif operation == ROTATION_OPERATION:
+        keys.add("orientation")
+        if document.get("orientation") not in ROTATION_ORIENTATIONS:
+            raise ValueError("Unreviewed native device orientation")
     elif operation in {"tap", "drag"}:
         coordinates = {"x", "y"} | ({"toX", "toY"} if operation == "drag" else set())
         keys |= coordinates
@@ -197,6 +205,12 @@ def owns_phone_action_sheet(focus: str | None, simulator: dict) -> bool:
             device_type.startswith("com.apple.CoreSimulator.SimDeviceType.iPhone-"))
 
 
+def owns_ipad_rotation(focus: str | None, simulator: dict) -> bool:
+    device_type = simulator.get("device_type")
+    return (focus == ROTATION_FOCUS and type(device_type) is str and
+            device_type.startswith("com.apple.CoreSimulator.SimDeviceType.iPad"))
+
+
 def foreground_refusal_observations(raw: bytes, auth: str, session_token: str) -> list[dict]:
     """Failure-only public state scalars, never a foreground/input acceptance."""
     if (type(raw) is not bytes or len(raw) > 16 * 1024**2 or
@@ -224,11 +238,14 @@ class InputDriver:
                 not UUID.fullmatch(device) or not TOKEN.fullmatch(token) or not BUNDLE.fullmatch(bundle_id) or
                 not bundle_id.endswith(".t" + token) or not HASH.fullmatch(signed_hash) or not HASH.fullmatch(plist_hash)):
             raise ValueError("Exact owned application/simulator/session required")
-        if focus not in (FOCUS, ACTION_SHEET_FOCUS):
+        if focus not in (FOCUS, ACTION_SHEET_FOCUS, ROTATION_FOCUS):
             raise ValueError("Unreviewed native input focus")
         self._initialize(root, device, bundle_id, token, execute)
         if focus == ACTION_SHEET_FOCUS:
             self.methods = (ACTION_SHEET_CASE,)
+            self.receipt["focus"] = focus
+        elif focus == ROTATION_FOCUS:
+            self.methods = (ROTATION_CASE,)
             self.receipt["focus"] = focus
         self.receipt.update(signed_application_executable_sha256=signed_hash, application_plist_sha256=plist_hash)
 
@@ -470,8 +487,12 @@ class InputDriver:
                 if self.receipt["focus"] == ACTION_SHEET_FOCUS:
                     if current != ACTION_SHEET_REQUEST:
                         raise ValueError("Only the one owned iPhone Cancel action is admitted")
-                elif current["operation"] == ACTION_SHEET_OPERATION:
-                    raise ValueError("Action-sheet input requires its owning focus")
+                elif self.receipt["focus"] == ROTATION_FOCUS:
+                    if (current["operation"] != ROTATION_OPERATION or sequence > len(ROTATION_ORIENTATIONS) or
+                            current["orientation"] != ROTATION_ORIENTATIONS[sequence - 1]):
+                        raise ValueError("Only the two owned iPad orientation changes are admitted")
+                elif current["operation"] in (ACTION_SHEET_OPERATION, ROTATION_OPERATION):
+                    raise ValueError("This native input requires its owning focus")
                 current_hash = hashlib.sha256(raw).hexdigest()
                 if self.pending is not None and (current != self.pending or current_hash != self.pending_hash):
                     raise ValueError("Pending native input mutated")
@@ -482,7 +503,7 @@ class InputDriver:
                 sequence = self.pending["sequence"]
                 if (type(body.get("sequence")) is not int or body["sequence"] != sequence or
                         type(body.get("status")) is not str or body["status"] not in {"delivered", "refused"} or
-                        set(body)-{"sequence","status","operation","unique","enabled","hittable","value","foreground","reason"}):
+                        set(body)-{"sequence","status","operation","unique","enabled","hittable","value","foreground","orientation","reason"}):
                     raise ValueError("Unknown or out-of-order native input response")
                 operation = self.pending["operation"]
                 directory = self._input_directory()
@@ -499,8 +520,11 @@ class InputDriver:
                     flags = ({"unique", "enabled", "hittable"} if operation in {"alert-button", ACTION_SHEET_OPERATION} else
                              {"unique"} if operation == "alert-field" else {"foreground"})
                     expected |= flags | ({"value"} if operation == "alert-field" else set())
+                    if operation == ROTATION_OPERATION:
+                        expected.add("orientation")
                     if (set(body) != expected or body.get("operation") != operation or
                             any(body.get(key) is not True for key in flags) or
+                            (operation == ROTATION_OPERATION and body.get("orientation") != self.pending["orientation"]) or
                             (operation == "alert-field" and
                              (type(body.get("value")) is not str or len(body["value"]) > 128))):
                         raise ValueError("Native operation evidence is incomplete")
@@ -513,6 +537,7 @@ class InputDriver:
                 self.receipt["operations"].append({"sequence": sequence, "operation": self.pending["operation"],
                     "case": self.pending["case"], "status": body["status"],
                     **({"reason": body["reason"]} if body["status"] == "refused" else {}),
+                    **({"orientation": body["orientation"]} if operation == ROTATION_OPERATION and body["status"] == "delivered" else {}),
                     "request_sha256": self.pending_hash})
                 self.pending = None
                 self.pending_hash = None
@@ -665,15 +690,18 @@ class InputDriver:
 def validate_receipt(receipt: dict, root: Path, required_methods: tuple[str, ...], *, bundle_id: str,
                      device: str, native_pid: int, signed_hash: str, plist_hash: str,
                      focus: str = FOCUS) -> bool:
-    if (focus not in (FOCUS, ACTION_SHEET_FOCUS) or type(receipt) is not dict or
+    if (focus not in (FOCUS, ACTION_SHEET_FOCUS, ROTATION_FOCUS) or type(receipt) is not dict or
             receipt.get("verified") is not True or receipt.get("focus") != focus):
         return False
     try:
         expected = {relative: hashlib.sha256(read_ordinary(root / relative, 256 * 1024)).hexdigest()
                     for relative in (SOURCE, SWIFT, PROJECT, SCHEME, NATIVE)}
         operations = receipt["operations"]
-        allowed_operations = {ACTION_SHEET_OPERATION} if focus == ACTION_SHEET_FOCUS else {
-            "alert-button", "alert-field", "tap", "drag"}
+        allowed_operations = {FOCUS: {"alert-button", "alert-field", "tap", "drag"},
+                              ACTION_SHEET_FOCUS: {ACTION_SHEET_OPERATION}, ROTATION_FOCUS: {ROTATION_OPERATION}}[focus]
+        operation_fields = {"sequence", "operation", "case", "status", "request_sha256"}
+        if focus == ROTATION_FOCUS:
+            operation_fields.add("orientation")
         token = bundle_id.rsplit(".t", 1)[-1]
         return (type(receipt.get("schema_version")) is int and receipt["schema_version"] == 1 and
                 type(bundle_id) is str and BUNDLE.fullmatch(bundle_id) and
@@ -687,10 +715,12 @@ def validate_receipt(receipt: dict, root: Path, required_methods: tuple[str, ...
                 type(native_pid) is int and 0 < native_pid < 2**31 and
                 type(receipt.get("native_launch_pid")) is int and receipt["native_launch_pid"] == native_pid and
                 type(operations) is list and 1 <= len(operations) <= MAX_OPERATIONS and
-                all(type(r) is dict and set(r) == {"sequence", "operation", "case", "status", "request_sha256"} for r in operations) and
+                all(type(r) is dict and set(r) == operation_fields for r in operations) and
                 all(type(r["sequence"]) is int for r in operations) and
                 [r["sequence"] for r in operations] == list(range(1, len(operations)+1)) and
                 (focus != ACTION_SHEET_FOCUS or (len(operations) == 1 and required_methods == (ACTION_SHEET_CASE,))) and
+                (focus != ROTATION_FOCUS or (required_methods == (ROTATION_CASE,) and
+                                              tuple(r["orientation"] for r in operations) == ROTATION_ORIENTATIONS)) and
                 all(r["status"] == "delivered" and r["operation"] in allowed_operations and
                     re.fullmatch(r"[0-9a-f]{64}", r["request_sha256"]) for r in operations) and
                 {r["case"] for r in operations} == set(required_methods) and

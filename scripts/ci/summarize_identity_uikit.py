@@ -11,7 +11,7 @@ from xml.etree import ElementTree as ET
 from library_tests import IOS_DEFAULT_ACTION_SHEET_METHOD, NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
-from native_ui_input import ACTION_SHEET_FOCUS
+from native_ui_input import ACTION_SHEET_FOCUS, ROTATION_FOCUS
 from ios_ui_application import (
     CAMERA_DISPOSAL_PHASES, DEFAULT_ACTION_SHEET_PHASES, IPAD_ROTATION_PHASES, IPAD_ROTATION_STACK_MARKERS,
     PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
@@ -196,6 +196,14 @@ def receipt_rows():
                         "operations": [labels(operation, ("operation", "status", "reason"))
                                        for operation in native_input.get("operations", [])[:1]],
                     }} if native_input.get("focus") == ACTION_SHEET_FOCUS else {}),
+                    **({"ipad_rotation_input": {
+                        "ready": native_input.get("runner_ready") is True,
+                        "verified": native_input.get("verified") is True,
+                        "phase": labels(native_input, ("phase",)).get("phase"),
+                        "build_exit_code": observed_exit(native_input.get("build")),
+                        "operations": [labels(operation, ("operation", "orientation", "status", "reason"))
+                                       for operation in native_input.get("operations", [])[:2]],
+                    }} if native_input.get("focus") == ROTATION_FOCUS else {}),
                     **({"camera_photos": camera_photo_summary(data, protocol),
                         "camera_disposal_progress": [step for step in protocol.get("camera_disposal_progress", [])[:len(CAMERA_DISPOSAL_PHASES)]
                                                      if step in CAMERA_DISPOSAL_PHASES]}

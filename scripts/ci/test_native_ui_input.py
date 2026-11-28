@@ -100,6 +100,40 @@ class NativeUiInputControls(unittest.TestCase):
         self.assertFalse(native.owns_phone_action_sheet(native.ACTION_SHEET_FOCUS, ipad))
         self.assertFalse(native.owns_phone_action_sheet(native.FOCUS, phone))
 
+    def test_ipad_rotation_admits_only_owned_ordered_orientation_requests(self):
+        self.assertEqual(library.IOS_POPOVER_ROTATION_FOCUS, native.ROTATION_FOCUS)
+        self.assertEqual(library.IOS_POPOVER_GEOMETRY_METHODS[1], native.ROTATION_CASE)
+        self.assertTrue(native.owns_ipad_rotation(native.ROTATION_FOCUS,
+                                                {"device_type": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro"}))
+        self.assertFalse(native.owns_ipad_rotation(native.ROTATION_FOCUS,
+                                                 {"device_type": "com.apple.CoreSimulator.SimDeviceType.iPhone-Air"}))
+        def rotation(sequence, orientation):
+            return {"sequence": sequence, "operation": native.ROTATION_OPERATION, "case": native.ROTATION_CASE,
+                    "orientation": orientation}
+        with driver_fixture(native.ROTATION_FOCUS) as driver:
+            driver.handle("POST", "/ready", {})
+            publish_request(driver, rotation(1, "portrait"))
+            with self.assertRaisesRegex(ValueError, "two owned iPad orientation changes"):
+                driver.handle("GET", "/next", None)
+            for sequence, orientation in enumerate(native.ROTATION_ORIENTATIONS, 1):
+                original = rotation(sequence, orientation)
+                publish_request(driver, original)
+                self.assertEqual(original, driver.handle("GET", "/next", None))
+                response = {"sequence": sequence, "operation": native.ROTATION_OPERATION,
+                            "orientation": orientation, "foreground": True, "status": "delivered"}
+                with self.assertRaisesRegex(ValueError, "evidence is incomplete"):
+                    driver.handle("POST", "/response", {**response, "orientation": "foreign"})
+                driver.handle("POST", "/response", response)
+            self.assertEqual(native.ROTATION_ORIENTATIONS, tuple(op["orientation"] for op in driver.receipt["operations"]))
+            publish_request(driver, rotation(3, "portrait"))
+            with self.assertRaisesRegex(ValueError, "two owned iPad orientation changes"):
+                driver.handle("GET", "/next", None)
+        with driver_fixture() as driver:
+            driver.handle("POST", "/ready", {})
+            publish_request(driver, {**rotation(1, "landscape-right"), "case": CASE})
+            with self.assertRaisesRegex(ValueError, "owning focus"):
+                driver.handle("GET", "/next", None)
+
     def test_ordinary_files_reject_empty_oversized_links_directories_fifo_and_read_mutation(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -406,6 +440,19 @@ class NativeUiInputControls(unittest.TestCase):
                            ("case", "ForeignCase"), ("request_sha256", "short"), ("operation", "launch")):
             malformed = copy.deepcopy(receipt); malformed["operations"][0][key] = value
             self.assertFalse(admitted(malformed))
+        rotated = {**receipt, "focus": native.ROTATION_FOCUS,
+                   "operations": [{"sequence": index, "operation": native.ROTATION_OPERATION,
+                                   "orientation": orientation, "case": native.ROTATION_CASE,
+                                   "status": "delivered", "request_sha256": HASH}
+                                  for index, orientation in enumerate(native.ROTATION_ORIENTATIONS, 1)]}
+        def admitted_rotation(candidate):
+            return native.validate_receipt(candidate, ROOT, (native.ROTATION_CASE,), bundle_id=BUNDLE,
+                device=DEVICE, native_pid=1234, signed_hash=HASH, plist_hash=HASH, focus=native.ROTATION_FOCUS)
+        self.assertTrue(admitted_rotation(rotated))
+        self.assertFalse(admitted_rotation({**rotated, "operations": rotated["operations"][:1]}))
+        for item in rotated["operations"]:
+            item["orientation"] = "portrait"
+        self.assertFalse(admitted_rotation(rotated))
 
 
 if __name__ == "__main__":

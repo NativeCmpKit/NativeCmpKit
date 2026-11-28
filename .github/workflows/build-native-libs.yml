@@ -757,6 +757,19 @@ jobs:
             }
             trap cleanup_camera_simulator EXIT
             xcrun simctl boot "$device"
+          elif [[ "$simulator_kind" == ipad ]]; then
+            read -r device_type simulator_runtime < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["device_type"], s["runtime_identifier"])')
+            template="$device"
+            device="$(xcrun simctl create "NativeCmpKit Rotation $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$device_type" "$simulator_runtime")"
+            [[ "$device" =~ ^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$ && "$device" != "$template" ]]
+            cleanup_rotation_simulator() {
+              result=$?
+              xcrun simctl shutdown "$device" || true
+              if ! xcrun simctl delete "$device"; then result=1; fi
+              exit "$result"
+            }
+            trap cleanup_rotation_simulator EXIT
+            xcrun simctl boot "$device"
           elif [[ "$state" == Shutdown ]]; then
             xcrun simctl boot "$device"
             trap 'xcrun simctl shutdown "$device"' EXIT

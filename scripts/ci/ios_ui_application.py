@@ -1604,13 +1604,15 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
         if host["module"] == "nativecmpkit-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
             import ios_popover_geometry_plan as geometry_plan
             native_environment = geometry_plan.process_launch_environment(before["simulator"], focus)
-        if host["module"] == "nativecmpkit-ui" and focus in (lt.IOS_MODAL_XCUI_FOCUS, lt.IOS_DEFAULT_ACTION_SHEET_FOCUS):
+        if host["module"] == "nativecmpkit-ui" and (focus in (lt.IOS_MODAL_XCUI_FOCUS, lt.IOS_DEFAULT_ACTION_SHEET_FOCUS) or
+                focus == lt.IOS_POPOVER_ROTATION_FOCUS):
             import native_ui_input
-            if focus == lt.IOS_MODAL_XCUI_FOCUS or native_ui_input.owns_phone_action_sheet(focus, before["simulator"]):
+            if (focus == lt.IOS_MODAL_XCUI_FOCUS or native_ui_input.owns_phone_action_sheet(focus, before["simulator"]) or
+                    native_ui_input.owns_ipad_rotation(focus, before["simulator"])):
                 phase = "prepare-independent-owned-xctest-input"
                 native_input_driver = native_ui_input.InputDriver(
                     root, device, bundle_id, token, execute_control, signed_hash, plist_hash, focus=focus)
-                native_environment = native_input_driver.prepare()
+                native_environment = {**(native_environment or {}), **native_input_driver.prepare()}
         if host["module"] == "nativecmpkit-ui" and focus in (None, lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES):
             import apple_image_profile
             phase = "prepare-owned-image-memory-profile"

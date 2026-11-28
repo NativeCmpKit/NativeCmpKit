@@ -12,6 +12,7 @@ import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosPopo
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosProperties
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosStyle
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeApplicationUiTest
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.nativeXcuiInput
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.onApplicationMain
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.runApplicationUiTest
@@ -85,22 +86,38 @@ class NativePopoverGeometryTest {
         if (rotateWhilePresented) assertEquals("ipad", expectedIdiom)
 
         fun geometry(target: Long, requireRotation: Boolean = false) {
-            // Request UIKit geometry directly on Main. The native predicate below
-            // observes the resulting layout, including an already settled target.
-            onApplicationMain {
+            val changeOrientation = onApplicationMain {
                 assertTrue(sameNativeObject(requireOwnedApplicationWindow(), window))
                 assertTrue(sameNativeObject(window.windowScene, scene))
                 assertEquals(UISceneActivationStateForegroundActive, scene.activationState)
                 geometryErrorCode = null
                 if (scene.interfaceOrientation == target) {
                     check(!requireRotation) { "The popover must be presented during a real orientation change" }
+                    false
+                } else if (rotateWhilePresented) {
+                    attemptedGeometry = true
+                    true
                 } else {
                     attemptedGeometry = true // Own restoration before an uncertain native request.
                     scene.requestGeometryUpdateWithPreferences(
                         UIWindowSceneGeometryPreferencesIOS(interfaceOrientations = orientationMask(target)),
                         errorHandler = { error -> geometryErrorCode = error?.code ?: -1L },
                     )
+                    false
                 }
+            }
+            if (changeOrientation) {
+                // UIDevice's landscape-right maps to the interface's landscape-left.
+                val orientation = when (target) {
+                    UIInterfaceOrientationLandscapeLeft -> "landscape-right"
+                    UIInterfaceOrientationPortrait -> "portrait"
+                    else -> error("Unexpected owned rotation target")
+                }
+                val response = nativeXcuiInput("device-orientation", mapOf(
+                    "case" to "nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation",
+                    "orientation" to orientation,
+                ))
+                assertEquals(orientation, response["orientation"])
             }
             tracePhase("$phase-returned")
             var firstLandscapeReadback = rotateWhilePresented && phase == "landscape-request"
@@ -144,6 +161,7 @@ class NativePopoverGeometryTest {
                 assertEquals(if (expectedIdiom == "ipad") UIUserInterfaceIdiomPad else UIUserInterfaceIdiomPhone,
                     UIDevice.currentDevice.userInterfaceIdiom)
                 originalOrientation = scene.interfaceOrientation.also { orientationMask(it) }
+                if (rotateWhilePresented) assertEquals(UIInterfaceOrientationPortrait, originalOrientation)
             }
             enterPhase("portrait-request")
             geometry(UIInterfaceOrientationPortrait)

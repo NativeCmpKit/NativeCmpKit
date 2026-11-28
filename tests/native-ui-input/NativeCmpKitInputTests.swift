@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 import Foundation
+import UIKit
 import XCTest
 
 /// Independent, public XCTest input only. Never launches/relaunches the library
@@ -9,6 +10,7 @@ final class NativeCmpKitInputTests: XCTestCase {
     private var token = ""
     private var application: XCUIApplication!
     private var session: URLSession!
+    private var setOrientation = false
 
     override func setUpWithError() throws {
         startup("setup-enter")
@@ -42,6 +44,9 @@ final class NativeCmpKitInputTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        if setOrientation && XCUIDevice.shared.orientation != .portrait {
+            XCUIDevice.shared.orientation = .portrait
+        }
         session?.invalidateAndCancel()
     }
 
@@ -126,6 +131,18 @@ final class NativeCmpKitInputTests: XCTestCase {
                 from.press(forDuration: 0.1, thenDragTo: to, withVelocity: .slow, thenHoldForDuration: 0.2)
             }
             return ["operation": operation, "foreground": true]
+        case "device-orientation":
+            let selected = try required(request["orientation"] as? String)
+            let orientation: UIDeviceOrientation
+            switch selected {
+            case "landscape-right": orientation = .landscapeRight
+            case "portrait": orientation = .portrait
+            default: throw InputError.unknownOperation
+            }
+            setOrientation = true
+            XCUIDevice.shared.orientation = orientation
+            guard XCUIDevice.shared.orientation == orientation else { throw InputError.transport }
+            return ["operation": operation, "foreground": true, "orientation": selected]
         default: throw InputError.unknownOperation
         }
     }

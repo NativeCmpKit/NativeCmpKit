@@ -3,7 +3,7 @@ import org.gradle.api.file.FileCollection
 import groovy.json.JsonOutput
 import java.security.MessageDigest
 
-// Four opt-in library OS-geometry inputs only, one fresh selected method.
+// Five opt-in library OS-geometry inputs only, one fresh selected method.
 // Ordinary source sets, production/dependencies and previous native bodies stay unchanged.
 // The original application/Worker/XML/custody/cleanup gates remain mandatory.
 gradle.projectsEvaluated {
@@ -28,12 +28,13 @@ gradle.projectsEvaluated {
         "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeUiApplicationHost.kt",
         "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeObjectIdentity.kt",
         "nativecmpkit-ui/src/iosGeometryTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativePopoverGeometryScene.kt",
+        "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/internal/NativeXcuiInput.kt",
     )
     val files = paths.map { relative ->
         val file = rootProject.file(relative)
         check(file.isFile && file.absoluteFile == file.canonicalFile &&
             file.canonicalFile.toPath().startsWith(rootProject.projectDir.canonicalFile.toPath())) {
-            "Only the ordinary exact four focused Kotlin sources may be compiled"
+            "Only the ordinary exact five focused Kotlin sources may be compiled"
         }
         file.canonicalFile
     }
@@ -47,7 +48,7 @@ gradle.projectsEvaluated {
     common.setFrom(emptyList<Any>())
     val actual = compilation.javaClass.getMethod("getSources").invoke(compilation) as FileCollection
     check(actual.files.map { it.canonicalFile }.toSet() == files.toSet() && common.files.isEmpty()) {
-        "Effective focused test sources differ from the exact four-file compilation"
+        "Effective focused test sources differ from the exact five-file compilation"
     }
     compilation.doFirst {
         check(actual.files.map { it.canonicalFile }.toSet() == files.toSet() && common.files.isEmpty()) {
@@ -69,6 +70,6 @@ gradle.projectsEvaluated {
             "native_tests_executed" to 0,
             "scope" to "Actual precompiler source admission only; compiler exit and fresh native XML decide outcomes",
         ))) + "\n")
-        logger.lifecycle("NATIVECMPKIT_UI_FOCUSED_COMPILE sources=4 nativeTestsExecuted=0 productionChanged=false")
+        logger.lifecycle("NATIVECMPKIT_UI_FOCUSED_COMPILE sources=5 nativeTestsExecuted=0 productionChanged=false")
     }
 }

@@ -2,7 +2,7 @@
 """Exact current AppKit runner and migrated native harness inputs."""
 
 APPKIT_INPUTS = {
-    ".github/workflows/build-native-libs.yml": "51ffb5ac76224c89b31ae2579081e86b6e28eeff6db498a45c8b819a213ee589",
+    ".github/workflows/build-native-libs.yml": "23a6ea867de9baebd67c5263fd0e61ad494ce4aac8dc0eafe567617f264d272e",
     ".github/workflows/gradle.yml": "370e60e916226e7d019e8e1135e61d639e77370c6975867b4e93dd0f2b4c576c",
     "convention-plugins/src/main/kotlin/NativeLibraries.kt": "45d4651e7f3a9532917ac87997ab9f011ec80ed12397f6586eee231233b6de79",
     "docs/testing/macos-share-key-wait-observation.md": "539efcfa88bc0e4f5e5b16bae07b2ec8303b0f3c27f73ab00efec62463aa8ee1",
@@ -25,7 +25,7 @@ APPKIT_INPUTS = {
     "scripts/ci/fixtures/macos-share-missing-ci-source-inverse.json": "79fa2b0394b10026402bef72992385c38684f19b70414606ed1833b40e3178b9",
     "scripts/ci/fresh-tests.init.gradle.kts": "9f49a87337d3314c89efeb572c029bb12bf8c876a2ceb5d893a7d686f4780abc",
     "scripts/ci/ios_popover_anchor_plan.py": "fd02ad32b0df43fc86b6fcdc3efee8f686db3e484e7c69d7e6ed1c3c10e70205",
-    "scripts/ci/library_tests.py": "a4d16447799c12cfd74bb106782a7ef952242b74eda309daf2fde34994ec9532",
+    "scripts/ci/library_tests.py": "bf6f6fa6b7a183a920a9136e5ec49d93c18a1463ea0f399bea928f3f70d85fca",
     "scripts/ci/macos_share_appkit_lifecycle.py": "38dad5370bc66b6d68247c4e3e019bc205e3ec70dff21541dabe693bd670108f",
     "scripts/ci/macos_share_appkit_only_route.py": "56ae9c078d8a1437cc1ff59c1f2fd8af143f3e9d0dcdeae56608488297981b21",
     "scripts/ci/macos_share_appkit_only_source_projection.py": "b6b28d9b1c6addafcdf8a73db9551a19a90123b648c9fc2138b1731535ac1bfd",
