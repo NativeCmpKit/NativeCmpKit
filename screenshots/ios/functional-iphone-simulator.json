@@ -1,22 +1,24 @@
 {
-  "captured_at": "2026-11-28T05:53:59.850050+00:00",
+  "captured_at": "2026-11-28T13:09:54.048831+00:00",
   "target": "ios",
-  "session": "94d14fe6200ca745bebcc14b",
+  "session": "86af809a032b546b83597f2a",
   "device": "iphone-simulator",
   "flows": [
     {
       "id": "buttons",
       "screen": "Adaptive Buttons",
-      "status": "passed",
-      "before": "screenshots/ios/functional/buttons/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/buttons/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": "screenshots/ios/functional/buttons/iphone-simulator-failed-after.png",
+      "error": "ClientError('The action response was lost. Inspect the live UI or query GET /v2/action/{request_id} before deciding whether to retry.')"
     },
     {
       "id": "clickable",
       "screen": "Adaptive Clickable",
-      "status": "passed",
+      "status": "failed",
       "before": "screenshots/ios/functional/clickable/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/clickable/iphone-simulator-after.png"
+      "after": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png",
+      "error": "ClientError('The action response was lost. Inspect the live UI or query GET /v2/action/{request_id} before deciding whether to retry.')"
     },
     {
       "id": "switch",
@@ -28,10 +30,9 @@
     {
       "id": "slider",
       "screen": "Adaptive Slider",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/slider/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png",
-      "error": "AssertionError('slider did not move')"
+      "after": "screenshots/ios/functional/slider/iphone-simulator-after.png"
     },
     {
       "id": "dropdown",
@@ -109,7 +110,7 @@
       "status": "failed",
       "before": "screenshots/ios/functional/sheet-veto/iphone-simulator-before.png",
       "after": "screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png",
-      "error": "AssertionError(\"no node for 'Allow swipe to hide'\")"
+      "error": "ClientError('HTTP 400 (invalid_arguments)')"
     },
     {
       "id": "date-display",
@@ -117,55 +118,141 @@
       "status": "failed",
       "before": "screenshots/ios/functional/date-display/iphone-simulator-before.png",
       "after": "screenshots/ios/functional/date-display/iphone-simulator-failed-after.png",
-      "error": "AssertionError(\"missing visible text 'Inline display: Input'\")"
+      "error": "ClientError('HTTP 400 (invalid_arguments)')"
     },
     {
       "id": "webview-js",
       "screen": "Web View",
-      "status": "passed",
+      "status": "failed",
       "before": "screenshots/ios/functional/webview-js/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/webview-js/iphone-simulator-after.png"
+      "after": null,
+      "error": "ClientError('HTTP 400 (invalid_arguments)')"
     },
     {
       "id": "sheet",
       "screen": "Adaptive Bottom Sheet",
-      "status": "passed",
-      "before": "screenshots/ios/functional/sheet/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/sheet/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
     },
     {
       "id": "topbar",
       "screen": "Adaptive Top Bar",
-      "status": "passed",
-      "before": "screenshots/ios/functional/topbar/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/topbar/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
     },
     {
       "id": "toolbar",
       "screen": "Adaptive Toolbar",
-      "status": "passed",
-      "before": "screenshots/ios/functional/toolbar/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/toolbar/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
     },
     {
       "id": "navbar",
       "screen": "Adaptive Navigation Bar",
-      "status": "passed",
-      "before": "screenshots/ios/functional/navbar/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/navbar/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
     },
     {
       "id": "icons-category",
       "screen": "Cupertino Icons",
-      "status": "passed",
-      "before": "screenshots/ios/functional/icons-category/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/icons-category/iphone-simulator-after.png"
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "nav-restore",
+      "screen": "Geo Maths",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "geo-math",
+      "screen": "Geo Maths",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "limitations",
+      "screen": "Known Limitations",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "liquidglass",
+      "screen": "Liquid Glass",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "webview",
+      "screen": "Web View",
+      "status": "failed",
+      "before": null,
+      "after": null,
+      "error": "ClientError('HTTP 530 (http_error)')"
+    },
+    {
+      "id": "permission-camera",
+      "screen": "Permissions",
+      "status": "blocked",
+      "reason": "OS permission dialog targeting is not enabled in the baseline",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "file-picker",
+      "screen": "File Picker",
+      "status": "blocked",
+      "reason": "system document picker; no seeded file selection in this run",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "file-saver",
+      "screen": "File Saver",
+      "status": "blocked",
+      "reason": "system export dialog; no save destination in this run",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "share",
+      "screen": "Content Sharing",
+      "status": "blocked",
+      "reason": "system share sheet; no external recipient",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "camera",
+      "screen": "Camera Picker",
+      "status": "blocked",
+      "reason": "emulator camera source is not seeded",
+      "before": null,
+      "after": null
     }
   ],
   "summary": {
-    "passed": 19,
-    "failed": 3,
-    "blocked": 0
+    "passed": 12,
+    "failed": 15,
+    "blocked": 5
   },
-  "updated_at": "2026-11-28T05:55:12.549322+00:00"
+  "updated_at": "2026-11-28T13:30:19.566335+00:00"
 }

@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-11-28T06:32:41.401630+00:00",
+  "captured_at": "2026-11-28T13:51:22.173969+00:00",
   "target": "android",
-  "session": "6e856d2693f00f5ebd3d0198",
+  "session": "fe3e7222dbe80becb9bb00bd",
   "device": "api35-phone",
   "flows": [
     {
@@ -122,10 +122,9 @@
     {
       "id": "webview-js",
       "screen": "Web View",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/android/functional/webview-js/api35-phone-before.png",
-      "after": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
-      "error": "AssertionError(\"missing visible text 'JavaScript: off'\")"
+      "after": "screenshots/android/functional/webview-js/api35-phone-after.png"
     },
     {
       "id": "sheet",
@@ -239,9 +238,9 @@
     }
   ],
   "summary": {
-    "passed": 23,
-    "failed": 2,
+    "passed": 24,
+    "failed": 1,
     "blocked": 5
   },
-  "updated_at": "2026-11-28T06:34:41.452513+00:00"
+  "updated_at": "2026-11-28T13:52:46.301020+00:00"
 }

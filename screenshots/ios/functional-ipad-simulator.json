@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-11-28T03:44:01.732761+00:00",
+  "captured_at": "2026-11-28T14:25:44.075604+00:00",
   "target": "ios",
-  "session": "295bce8ad2a99337536c8d56",
+  "session": "f7f704dc316cf2b88d2847d8",
   "device": "ipad-simulator",
   "flows": [
     {
@@ -17,7 +17,7 @@
       "status": "failed",
       "before": "screenshots/ios/functional/clickable/ipad-simulator-before.png",
       "after": "screenshots/ios/functional/clickable/ipad-simulator-failed-after.png",
-      "error": "ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')"
+      "error": "AssertionError(\"missing visible text 'Double: 1'\")"
     },
     {
       "id": "switch",
@@ -29,10 +29,9 @@
     {
       "id": "slider",
       "screen": "Adaptive Slider",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/slider/ipad-simulator-before.png",
-      "after": "screenshots/ios/functional/slider/ipad-simulator-failed-after.png",
-      "error": "AssertionError('slider did not move')"
+      "after": "screenshots/ios/functional/slider/ipad-simulator-after.png"
     },
     {
       "id": "dropdown",
@@ -79,10 +78,9 @@
     {
       "id": "action-sheet",
       "screen": "Adaptive Alert Dialog",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/action-sheet/ipad-simulator-before.png",
-      "after": "screenshots/ios/functional/action-sheet/ipad-simulator-failed-after.png",
-      "error": "AssertionError(\"missing visible text 'Cancel'\")"
+      "after": "screenshots/ios/functional/action-sheet/ipad-simulator-after.png"
     },
     {
       "id": "permissions-sms-rows",
@@ -108,10 +106,9 @@
     {
       "id": "sheet-veto",
       "screen": "Adaptive Bottom Sheet",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/sheet-veto/ipad-simulator-before.png",
-      "after": "screenshots/ios/functional/sheet-veto/ipad-simulator-failed-after.png",
-      "error": "AssertionError(\"no node for 'Allow swipe to hide'\")"
+      "after": "screenshots/ios/functional/sheet-veto/ipad-simulator-after.png"
     },
     {
       "id": "date-display",
@@ -119,7 +116,7 @@
       "status": "failed",
       "before": "screenshots/ios/functional/date-display/ipad-simulator-before.png",
       "after": "screenshots/ios/functional/date-display/ipad-simulator-failed-after.png",
-      "error": "AssertionError(\"switch did not produce 'Inline display: Input'\")"
+      "error": "AssertionError(\"missing visible text 'Inline display: Input'\")"
     },
     {
       "id": "webview-js",
@@ -167,10 +164,9 @@
     {
       "id": "nav-restore",
       "screen": "Geo Maths",
-      "status": "not-applicable",
-      "reason": "sample section is android-only",
-      "before": null,
-      "after": null
+      "status": "passed",
+      "before": "screenshots/ios/functional/nav-restore/ipad-simulator-before.png",
+      "after": "screenshots/ios/functional/nav-restore/ipad-simulator-after.png"
     },
     {
       "id": "geo-math",
@@ -192,7 +188,7 @@
       "status": "failed",
       "before": "screenshots/ios/functional/liquidglass/ipad-simulator-before.png",
       "after": "screenshots/ios/functional/liquidglass/ipad-simulator-failed-after.png",
-      "error": "RuntimeError(\"No visible element for 'Glass click 0'\")"
+      "error": "AssertionError(\"could not scroll to 'Glass click 0'\")"
     },
     {
       "id": "webview",
@@ -244,9 +240,9 @@
     }
   ],
   "summary": {
-    "passed": 18,
-    "failed": 8,
+    "passed": 22,
+    "failed": 5,
     "blocked": 5
   },
-  "updated_at": "2026-11-28T04:17:52.146065+00:00"
+  "updated_at": "2026-11-28T14:57:53.635889+00:00"
 }
