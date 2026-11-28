@@ -47,6 +47,8 @@ gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
 ```
 
 ```sh
+gh run download <RUN> -R NativeCmpKit/NativeCmpKit \
+  -n ui-session-ios-phone-<attempt>-<session> -D /tmp/opencode/session-ios
 python3 -u showcase/automation/functional.py ... --platform ios \
   --device iphone-simulator \
   --only clickable,slider,date-bounds,sheet-veto,date-display,webview-js
@@ -71,6 +73,8 @@ gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
 ```
 
 ```sh
+gh run download <RUN> -R NativeCmpKit/NativeCmpKit \
+  -n ui-session-ios-tablet-<attempt>-<session> -D /tmp/opencode/session-ipad
 python3 -u showcase/automation/tour.py ... --platform ios \
   --device ipad-simulator --output-root screenshots --continue-on-error
 python3 -u showcase/automation/functional.py ... --platform ios \
@@ -96,6 +100,8 @@ gh workflow run showcase-ui.yml -R NativeCmpKit/NativeCmpKit \
 ```
 
 ```sh
+gh run download <RUN> -R NativeCmpKit/NativeCmpKit \
+  -n ui-session-android-tablet-<attempt>-<session> -D /tmp/opencode/session-android-tablet
 python3 -u showcase/automation/tour.py ... --platform android \
   --device api35-tablet --output-root screenshots --continue-on-error
 python3 -u showcase/automation/functional.py ... --platform android \
