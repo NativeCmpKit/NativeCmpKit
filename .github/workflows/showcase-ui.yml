@@ -44,7 +44,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  UI_TEST_ACTIONS_REF: 0c818c5d72e8c30c59bd1287c330a40392bf8e89
+  UI_TEST_ACTIONS_REF: 1c0d90debd7319c7580279bcbe2fb5ab19d6feea
   ANDROID_APP_ID: io.github.apdelrahman1911.nativecmpkit.sample
   IOS_BUNDLE_ID: io.github.apdelrahman1911.nativecmpkit.sample
   AXE_VERSION: v2.1.1
