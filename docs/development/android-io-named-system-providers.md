@@ -49,7 +49,7 @@ Four actual1204 maps, setup/KVM and owned guest disposal hold; grants/public IO
 remain unreached. Diagnose before another changed-source request; no guessed
 case normalization, relaxed selector or unchanged retry. #55/cloud C1 stay open.
 
-Issue [#55 / IO-019](https://github.com/Apdelrahman1911/nativeCmpkit/issues/55)
+Issue [#55 / IO-019](https://github.com/NativeCmpKit/NativeCmpKit/issues/55)
 remains open. This fixture covers the missing **local named-provider** portion,
 not cloud providers, minimum Android versions or packaged consumers.
 
@@ -80,7 +80,7 @@ Existing controlled-provider/outage, IO, picker and Coil methods are excluded.
 
 ## Implementation and evidence boundaries
 
-- `calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/` contains the
+- `nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/` contains the
   two methods, nonexported caller and `NamedSystemDocumentsUi` ownership helper.
 - `scripts/ci/android_io_named_system_documents.py` binds source and manifest
   admission. A source receipt explicitly cannot certify native/cloud behavior.

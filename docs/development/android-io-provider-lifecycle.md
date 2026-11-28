@@ -12,7 +12,7 @@ retain their historical scope. No accepted lifecycle replay is required.
 
 ## Scope and execution flow
 
-`calf-io/src/androidDeviceTest/.../AndroidIoProviderLifecycleTest.kt` exercises
+`nativecmpkit-io/src/androidDeviceTest/.../AndroidIoProviderLifecycleTest.kt` exercises
 public KmpFile/bookmark/child metadata APIs and the real Coil KmpFileFetcher
 pipeline. `tests/consumer/android-io-documents/` is an independent Java fixture,
 not a sample application or published consumer. It uses a separate Android UID;
@@ -53,7 +53,7 @@ Read-only plans, before any cost/mutation:
 
 ```sh
 python3 scripts/ci/workflow_matrix.py android-io-provider-lifecycle
-python3 scripts/ci/android_device_tests.py plan --output build/ci-verification/io-provider-plan --api-level 35 --module calf-io --focus android-io-provider-lifecycle
+python3 scripts/ci/android_device_tests.py plan --output build/ci-verification/io-provider-plan --api-level 35 --module nativecmpkit-io --focus android-io-provider-lifecycle
 ```
 
 Use the exact immutable GitHub `gradle.yml` profile through the lead's one-shot

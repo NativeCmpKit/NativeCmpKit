@@ -1,7 +1,7 @@
 # Android default Coil decoder regression
 
 The proper library fixture is
-`calf-io/src/androidDeviceTest/kotlin/com/mohamedrejeb/calf/io/AndroidIoDefaultDecodeTest.kt`.
+`nativecmpkit-io/src/androidDeviceTest/kotlin/io/github/apdelrahman1911/nativecmpkit/io/AndroidIoDefaultDecodeTest.kt`.
 The [reviewed source proposal](evidence/android-io-default-decode-20261031/README.md)
 and [held APK build](evidence/important-coil-yarn-local-20261031/README.md) retain
 source hashes, root cause of a repaired test-only bitmap cleanup gap, original
