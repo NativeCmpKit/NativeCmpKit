@@ -19,7 +19,7 @@ concurrency:
 jobs:
   openjfx-source-sdk:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'openjfx-source-')
-    runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-24.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26","openjfx-source-windows-x64":"windows-2022"}')[inputs.profile] }}
+    runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-22.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26","openjfx-source-windows-x64":"windows-2022"}')[inputs.profile] }}
     timeout-minutes: 330
     defaults:
       run:
@@ -58,17 +58,38 @@ jobs:
       - name: Install and record the hosted Linux build environment
         if: runner.os == 'Linux'
         run: |
-          ubuntu_apt=(-o Dir::Etc::sourcelist=/etc/apt/sources.list.d/ubuntu.sources -o Dir::Etc::sourceparts=-)
+          ubuntu_sources=/etc/apt/sources.list.d/ubuntu.sources
+          if [[ ! -s "$ubuntu_sources" ]]; then ubuntu_sources=/etc/apt/sources.list; fi
+          if [[ "$SOURCE_ARCH" == arm64 ]]; then
+            test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
+            compiler=(gcc-12=12.3.0-1ubuntu1~22.04.3 g++-12=12.3.0-1ubuntu1~22.04.3)
+          else
+            compiler=(g++)
+          fi
+          test -s "$ubuntu_sources"
+          ubuntu_apt=(-o "Dir::Etc::sourcelist=$ubuntu_sources" -o Dir::Etc::sourceparts=-)
           sudo apt-get "${ubuntu_apt[@]}" update
-          sudo apt-get "${ubuntu_apt[@]}" install --no-install-recommends -y bison cmake flex g++ gperf libasound2-dev \
+          sudo apt-get "${ubuntu_apt[@]}" install --no-install-recommends -y "${compiler[@]}" bison cmake flex gperf libasound2-dev \
             libfreetype-dev libgl1-mesa-dev libgtk-3-dev libpango1.0-dev libx11-dev libxxf86vm-dev \
             libxtst-dev ninja-build perl pkg-config ruby xauth xvfb
+          if [[ "$SOURCE_ARCH" == arm64 ]]; then
+            compiler_bin="$RUNNER_TEMP/openjfx-compiler"
+            mkdir "$compiler_bin"
+            ln -s /usr/bin/gcc-12 "$compiler_bin/gcc"
+            ln -s /usr/bin/g++-12 "$compiler_bin/g++"
+            export PATH="$compiler_bin:$PATH"
+            printf '%s\n' "$compiler_bin" >> "$GITHUB_PATH"
+            printf 'CC=%s/gcc\nCXX=%s/g++\n' "$compiler_bin" "$compiler_bin" >> "$GITHUB_ENV"
+            test "$(g++ -dumpfullversion)" = '12.3.0'
+          fi
           {
             uname -sm
             cat /etc/os-release
+            getconf GNU_LIBC_VERSION
             df -h .
             java -version
             gcc --version
+            g++ --version
             cmake --version
             ninja --version
             pkg-config --modversion gtk+-3.0
