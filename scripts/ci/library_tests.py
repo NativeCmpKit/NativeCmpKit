@@ -542,17 +542,26 @@ IOS_ALERT_LIFECYCLE_GROUP = {
 }
 UI_APPLICATION_FOCUS_SPECS = {
     IOS_MAIN_RANGE_HIGHLIGHT_FOCUS: {
-        "classname": "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.NativeRangeHighlightTest",
-        "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/NativeRangeHighlightTest.kt",
-        "methods": (
-            "fullRangeUsesOnlyTheCurrentMonthAndItsNeighbours",
-            "replacingRulesAndBoundsRebuildsHighlightsWithUnchangedEndpoints",
-            "nativeDeselectionRestoresTheOnlyDayAndNotifiesTheOwnerOnce",
-            "disposalInvalidatesAQueuedRefreshAndClearsTheNativeDelegates",
-            "queuedRefreshUsesTheLatestEndpointsRulesAndBounds",
-            "nativeSelectionDeliversTheCompleteEndpointsToTheOwner",
+        "groups": (
+            {
+                "classname": "io.github.apdelrahman1911.nativecmpkit.ui.datepicker.NativeRangeHighlightTest",
+                "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/datepicker/NativeRangeHighlightTest.kt",
+                "methods": (
+                    "fullRangeUsesOnlyTheCurrentMonthAndItsNeighbours",
+                    "replacingRulesAndBoundsRebuildsHighlightsWithUnchangedEndpoints",
+                    "nativeDeselectionRestoresTheOnlyDayAndNotifiesTheOwnerOnce",
+                    "disposalInvalidatesAQueuedRefreshAndClearsTheNativeDelegates",
+                    "queuedRefreshUsesTheLatestEndpointsRulesAndBounds",
+                    "nativeSelectionDeliversTheCompleteEndpointsToTheOwner",
+                ),
+            },
+            {
+                "classname": "io.github.apdelrahman1911.nativecmpkit.ui.utils.SystemVersionTest",
+                "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/SystemVersionTest.kt",
+                "methods": ("laterMajorReleasesSatisfyAMinorRequirement", "earlierReleasesDoNot", "majorOnlyChecksIgnoreTheMinor"),
+            },
         ),
-        "scope": "Six controlled UIKit range-highlight, queued delegate, and disposal methods ported from main.",
+        "scope": "Six controlled UIKit range-highlight and lifecycle methods and three iOS version policy methods ported from main.",
     },
     IOS_MAIN_IDENTITY_FOCUS: {
         "groups": (
