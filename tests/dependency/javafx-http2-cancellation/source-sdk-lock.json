@@ -20,7 +20,24 @@
       "url": "https://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/plugins/org.eclipse.swt.gtk.linux.x86_64_3.105.3.v20170228-0512.jar",
       "bytes": 2767604,
       "sha256": "a963351d5f7b82b890c4994e158d80555dae38b00af3b8d73f3875c21ff398bc",
+      "platform": "linux",
       "ivy_input": true
+    },
+    {
+      "file": "org.eclipse.swt.cocoa.macosx.x86_64_3.105.3.v20170228-0512.jar",
+      "url": "https://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.105.3.v20170228-0512.jar",
+      "bytes": 2457231,
+      "sha256": "ff48e1c05fd5e3701b53fc9ac59a2745d61daf1484d9aa24dc2f79a74e381cf8",
+      "platform": "macos",
+      "ivy_input": true
+    },
+    {
+      "file": "cmake-3.31.12-macos-universal.tar.gz",
+      "url": "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-macos-universal.tar.gz",
+      "bytes": 79954716,
+      "sha256": "799af7fd545db9bf1b9cfe72f8095880e727a2d4e0df0e3dffc3bc7b95c2d3b0",
+      "platform": "macos",
+      "ivy_input": false
     },
     {
       "file": "icu4c-77_1-data-bin-l.zip",

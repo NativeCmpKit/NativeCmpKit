@@ -10,16 +10,16 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
   group: nativecmpkit-native-${{ github.ref }}-${{ inputs.profile }}
   cancel-in-progress: false
 jobs:
-  openjfx-source-linux:
-    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'openjfx-source-linux-x64' || inputs.profile == 'openjfx-source-linux-arm64')
-    runs-on: ${{ inputs.profile == 'openjfx-source-linux-arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+  openjfx-source-sdk:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'openjfx-source-')
+    runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-24.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26"}')[inputs.profile] }}
     timeout-minutes: 260
     defaults:
       run:
@@ -28,7 +28,8 @@ jobs:
       LC_ALL: C.UTF-8
       TZ: UTC
       SOURCE_DIR: openjfx-source
-      SOURCE_ARCH: ${{ inputs.profile == 'openjfx-source-linux-arm64' && 'arm64' || 'x64' }}
+      SOURCE_ARCH: ${{ endsWith(inputs.profile, 'arm64') && 'arm64' || 'x64' }}
+      SOURCE_OS: ${{ startsWith(inputs.profile, 'openjfx-source-macos-') && 'macos' || 'linux' }}
       SOURCE_CHECK: tests/dependency/javafx-http2-cancellation/verify_source_sdk.py
       EVIDENCE_DIR: build/openjfx-source-verification
     steps:
@@ -43,7 +44,7 @@ jobs:
           path: openjfx-source
           persist-credentials: false
       - name: Bind OpenJFX source and build materials before compilation
-        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
+        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin
@@ -51,6 +52,7 @@ jobs:
           verify-signature: true
           overwrite-settings: false
       - name: Install and record the hosted Linux build environment
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y bison cmake flex g++ gperf libasound2-dev \
@@ -69,6 +71,32 @@ jobs:
             dpkg-query -W
           } > "$EVIDENCE_DIR/toolchain.txt" 2>&1
           grep -F 'Temurin-17.0.21+9' "$EVIDENCE_DIR/toolchain.txt"
+          available_kib=$(df -Pk . | awk 'NR == 2 {print $4}')
+          test "$available_kib" -ge $((12 * 1024 * 1024))
+      - name: Verify and record the hosted macOS build environment
+        if: runner.os == 'macOS'
+        run: |
+          cmake_root="$RUNNER_TEMP/openjfx-cmake"
+          mkdir "$cmake_root"
+          tar -xzf "$EVIDENCE_DIR/sources/cmake-3.31.12-macos-universal.tar.gz" -C "$cmake_root" --strip-components=1
+          cmake_bin="$cmake_root/CMake.app/Contents/bin"
+          export PATH="$cmake_bin:$PATH"
+          printf '%s\n' "$cmake_bin" >> "$GITHUB_PATH"
+          {
+            uname -sm
+            sw_vers
+            df -h .
+            java -version
+            xcodebuild -version
+            xcrun --sdk macosx --show-sdk-version
+            clang --version
+            cmake --version
+            ninja --version
+            ruby --version
+            gperf --version
+          } > "$EVIDENCE_DIR/toolchain.txt" 2>&1
+          grep -F 'Temurin-17.0.21+9' "$EVIDENCE_DIR/toolchain.txt"
+          grep -F 'cmake version 3.31.12' "$EVIDENCE_DIR/toolchain.txt"
           available_kib=$(df -Pk . | awk 'NR == 2 {print $4}')
           test "$available_kib" -ge $((12 * 1024 * 1024))
       - name: Build the complete SDK and native WebKit from source
@@ -92,7 +120,7 @@ jobs:
             exit "$status"
           fi
       - name: Inspect SDK binaries and run the real WebView cancellation cases
-        run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --arch "$SOURCE_ARCH"
+        run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS" --arch "$SOURCE_ARCH"
       - name: Preserve source-build and cancellation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
@@ -107,8 +135,7 @@ jobs:
             build/openjfx-source-verification/build.log
             build/openjfx-source-verification/build-exit.txt
             build/openjfx-source-verification/sdk-binaries.json
-            build/openjfx-source-verification/webkit-elf.txt
-            build/openjfx-source-verification/native-elf-inventory.txt
+            build/openjfx-source-verification/native-binary-inventory.txt
             build/openjfx-source-verification/loader-cancellation.txt
             build/openjfx-source-verification/probe-execution.json
             build/openjfx-source-verification/probe.stdout

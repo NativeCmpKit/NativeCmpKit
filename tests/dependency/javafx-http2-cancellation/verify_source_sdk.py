@@ -102,49 +102,74 @@ def prepare(source, output, lock, materials):
 
 
 def run_probe(sdk, classes, output, evidence_name, class_name, *options):
-    command = ["timeout", "--kill-after=5s", "120s", "xvfb-run", "-a", "java", "--module-path", str(sdk),
+    command = ["java", "--module-path", str(sdk),
                "--add-modules", "javafx.controls,javafx.web,jdk.management", "-cp", str(classes), class_name, *options]
+    if platform.system() == "Linux":
+        command = ["timeout", "--kill-after=5s", "120s", "xvfb-run", "-a", *command]
     started = time.monotonic()
     stdout_file = output / f"{evidence_name}.stdout"
+    status, timed_out = None, False
     with stdout_file.open("xb") as stdout, (output / f"{evidence_name}.stderr").open("xb") as stderr:
-        result = subprocess.run(command, cwd=output, stdout=stdout, stderr=stderr)
-    write_json(output / f"{evidence_name}-execution.json", {
-        "argv": command, "exit_code": result.returncode, "elapsed_seconds": time.monotonic() - started,
-        "repository_revision": os.environ.get("GITHUB_SHA"),
-    })
-    result.check_returncode()
+        try:
+            result = subprocess.run(command, cwd=output, stdout=stdout, stderr=stderr, timeout=130)
+            status = result.returncode
+            timed_out = platform.system() == "Linux" and status == 124
+            result.check_returncode()
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            raise
+        finally:
+            write_json(output / f"{evidence_name}-execution.json", {
+                "argv": command, "exit_code": status, "timed_out": timed_out,
+                "elapsed_seconds": time.monotonic() - started,
+                "repository_revision": os.environ.get("GITHUB_SHA"),
+            })
     return stdout_file.read_text(encoding="utf-8")
 
 
-def verify_sdk(source, output, lock, architecture):
+def linux_binary_inventory(sdk, binaries, architecture):
     expected_cpu, elf_machine = {"x64": ("x86_64", "Advanced Micro Devices X86-64"),
                                  "arm64": ("aarch64", "AArch64")}[architecture]
     need(platform.system() == "Linux" and platform.machine() == expected_cpu, "Linux runtime architecture differs")
+    need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
+    native_files = [str(path) for path in binaries if path.suffix == ".so"]
+    inventory = subprocess.check_output(["readelf", "-h", "-d", "--version-info", *native_files],
+                                        timeout=60, text=True)
+    rows = [line for line in inventory.splitlines() if line.strip().startswith("Machine:")]
+    need(len(rows) == len(native_files) and all(elf_machine in line for line in rows),
+         "An SDK native library uses the wrong architecture")
+    return inventory
+
+
+def macos_binary_inventory(sdk, binaries, architecture):
+    expected_cpu = {"x64": "x86_64", "arm64": "arm64"}[architecture]
+    need(platform.system() == "Darwin" and platform.machine() == expected_cpu, "macOS runtime architecture differs")
+    need((sdk / "libjfxwebkit.dylib").is_file(), "The upstream build emitted no native WebKit library")
+    native_files = [str(path) for path in binaries if path.suffix == ".dylib"]
+    for path in native_files:
+        cpu = subprocess.check_output(["xcrun", "lipo", "-archs", path], timeout=15, text=True).strip()
+        need(cpu == expected_cpu, "An SDK native library uses the wrong architecture")
+    return subprocess.check_output(["xcrun", "otool", "-l", "-L", *native_files], timeout=60, text=True)
+
+
+def verify_sdk(source, output, lock, target, architecture):
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
     sdk = source / "build/sdk/lib"
     modules = ["javafx.base", "javafx.controls", "javafx.graphics", "javafx.media", "javafx.web"]
-    binaries = sorted(path for path in sdk.iterdir() if path.suffix in {".jar", ".so"})
+    binaries = sorted(path for path in sdk.iterdir() if path.suffix in {".jar", ".so", ".dylib"})
     need(all((sdk / f"{module}.jar").is_file() for module in modules), "SDK modules missing")
     need(all(path.name.startswith("javafx") for path in binaries if path.suffix == ".jar"),
          "A build-only dependency appeared in the SDK runtime")
-    need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
-    native_arch = subprocess.check_output(["readelf", "-h", str(sdk / "libjfxwebkit.so")], timeout=10, text=True)
-    need(elf_machine in native_arch, "WebKit architecture differs from its Linux host")
-    native_files = [str(path) for path in binaries if path.suffix == ".so"]
-    native_inventory = subprocess.check_output(["readelf", "-h", "-d", "--version-info", *native_files],
-                                               timeout=60, text=True)
-    machine_rows = [line for line in native_inventory.splitlines() if line.strip().startswith("Machine:")]
-    need(len(machine_rows) == len(native_files) and all(elf_machine in line for line in machine_rows),
-         "An SDK native library uses the wrong architecture")
+    inspector = macos_binary_inventory if target == "macos" else linux_binary_inventory
+    native_inventory = inspector(sdk, binaries, architecture)
     bytecode = subprocess.check_output(["javap", "-p", "-c", "-classpath", str(sdk / "javafx.web.jar"),
                                         "com.sun.webkit.network.HTTP2Loader"], timeout=15, text=True)
     cancel_method = bytecode.split("public void fwkCancel();", 1)[1].split("private void callBackIfNotCanceled", 1)[0]
     need("java/util/concurrent/CompletableFuture.cancel:(Z)Z" in cancel_method, "Source change absent from SDK")
     before = {path.name: sha256(path) for path in binaries}
     write_json(output / "sdk-binaries.json", before)
-    (output / "webkit-elf.txt").write_text(native_arch, encoding="utf-8")
-    (output / "native-elf-inventory.txt").write_text(native_inventory, encoding="utf-8")
+    (output / "native-binary-inventory.txt").write_text(native_inventory, encoding="utf-8")
     (output / "loader-cancellation.txt").write_text(cancel_method, encoding="utf-8")
 
     classes = output / "probe-classes"
@@ -174,11 +199,13 @@ if __name__ == "__main__":
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--arch", choices=["x64", "arm64"], default="x64")
+    parser.add_argument("--platform", choices=["linux", "macos"], default="linux")
     parser.add_argument("--materials", type=Path, help="Verify pre-fetched copies of the pinned build materials")
     options = parser.parse_args()
     checkout, evidence = options.source.resolve(strict=True), options.output.absolute()
     pin = json.loads(LOCK.read_text(encoding="utf-8"))
+    pin["materials"] = [item for item in pin["materials"] if item.get("platform", options.platform) == options.platform]
     if options.operation == "prepare":
         prepare(checkout, evidence, pin, options.materials)
     else:
-        verify_sdk(checkout, evidence, pin, options.arch)
+        verify_sdk(checkout, evidence, pin, options.platform, options.arch)
