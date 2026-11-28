@@ -6,10 +6,10 @@ Generated from `showcase/coverage.json`; regenerate with
 | Flow | Coverage rows | Android | iOS |
 | --- | --- | --- | --- |
 | `buttons` | UI-BUTTON-001 | passed | passed |
-| `clickable` | UI-CLICK-001 | passed | failed |
+| `clickable` | UI-CLICK-001 | passed | failed, passed |
 | `switch` | UI-SWITCH-001 | passed | passed |
 | `slider` | UI-SLIDER-001 | passed | failed |
-| `date-bounds` | UI-DATE-004 | failed, passed | failed |
+| `date-bounds` | UI-DATE-004 | failed, passed | failed, passed |
 | `alert-cancel` | UI-ALERT-001 | passed | passed |
 | `alert-confirm` | UI-ALERT-001 | passed | passed |
 | `alert-text-field` | UI-ALERT-003, UI-ALERT-005 | — | passed |
@@ -29,7 +29,7 @@ Generated from `showcase/coverage.json`; regenerate with
 | `sheet-veto` | UI-SHEET-002 | passed | failed |
 | `date-display` | UI-DATE-006 | failed | failed |
 | `time-24h` | UI-TIME-002 | passed | passed |
-| `webview-js` | WEB-006 | failed | failed |
+| `webview-js` | WEB-006 | failed | failed, passed |
 | `nav-restore` | NAV-003 | passed | — |
 
 ## Row verdicts without a flow record

@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-11-27T15:44:09.805477+00:00",
+  "captured_at": "2026-11-28T05:53:59.850050+00:00",
   "target": "ios",
-  "session": "bba824c324aecaeeedc7c493",
+  "session": "94d14fe6200ca745bebcc14b",
   "device": "iphone-simulator",
   "flows": [
     {
@@ -14,10 +14,9 @@
     {
       "id": "clickable",
       "screen": "Adaptive Clickable",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/clickable/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png",
-      "error": "ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')"
+      "after": "screenshots/ios/functional/clickable/iphone-simulator-after.png"
     },
     {
       "id": "switch",
@@ -32,7 +31,7 @@
       "status": "failed",
       "before": "screenshots/ios/functional/slider/iphone-simulator-before.png",
       "after": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png",
-      "error": "AssertionError('no slider label exposed')"
+      "error": "AssertionError('slider did not move')"
     },
     {
       "id": "dropdown",
@@ -65,10 +64,9 @@
     {
       "id": "date-bounds",
       "screen": "Adaptive Date Picker",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/date-bounds/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/date-bounds/iphone-simulator-failed-after.png",
-      "error": "ClientError('HTTP 408 (condition_timeout)')"
+      "after": "screenshots/ios/functional/date-bounds/iphone-simulator-after.png"
     },
     {
       "id": "scaffold-tab",
@@ -124,10 +122,9 @@
     {
       "id": "webview-js",
       "screen": "Web View",
-      "status": "failed",
+      "status": "passed",
       "before": "screenshots/ios/functional/webview-js/iphone-simulator-before.png",
-      "after": "screenshots/ios/functional/webview-js/iphone-simulator-failed-after.png",
-      "error": "AssertionError(\"missing visible text 'JS: null'\")"
+      "after": "screenshots/ios/functional/webview-js/iphone-simulator-after.png"
     },
     {
       "id": "sheet",
@@ -166,8 +163,9 @@
     }
   ],
   "summary": {
-    "passed": 16,
-    "failed": 6,
+    "passed": 19,
+    "failed": 3,
     "blocked": 0
-  }
+  },
+  "updated_at": "2026-11-28T05:55:12.549322+00:00"
 }

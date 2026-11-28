@@ -56,9 +56,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -98,6 +98,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/buttons/api35-phone-before.png",
           "after": "screenshots/android/functional/buttons/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "buttons",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/buttons/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/buttons/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -301,7 +313,7 @@
       "flowId": "android-phone-modifier-adaptiveclickable-single-long-double-disabled",
       "screenshot": {
         "android": "screenshots/android/functional/clickable/api35-phone-after.png",
-        "ios": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png"
+        "ios": "screenshots/ios/functional/clickable/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
@@ -312,10 +324,10 @@
           "device": "api35-phone"
         },
         "ios": {
-          "status": "failed",
-          "run": "46014167086",
+          "status": "passed",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -355,6 +367,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/clickable/api35-phone-before.png",
           "after": "screenshots/android/functional/clickable/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "clickable",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/clickable/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/clickable/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -398,9 +422,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -440,6 +464,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/switch/api35-phone-before.png",
           "after": "screenshots/android/functional/switch/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "switch",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/switch/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/switch/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -541,9 +577,9 @@
         },
         "ios": {
           "status": "failed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -584,6 +620,18 @@
           "before": "screenshots/android/functional/slider/api35-phone-before.png",
           "after": "screenshots/android/functional/slider/api35-phone-after.png",
           "error": null,
+          "reason": null
+        },
+        {
+          "flow": "slider",
+          "platform": "ios",
+          "status": "failed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/slider/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png",
+          "error": "AssertionError('slider did not move')",
           "reason": null
         }
       ]
@@ -1128,7 +1176,7 @@
       "flowId": "android-phone-datebounds-and-selectabledates-bounded-weekdays-only",
       "screenshot": {
         "android": "screenshots/android/functional/date-bounds/api35-phone-after.png",
-        "ios": "screenshots/ios/functional/date-bounds/iphone-simulator-failed-after.png"
+        "ios": "screenshots/ios/functional/date-bounds/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
@@ -1139,10 +1187,10 @@
           "device": "api35-phone"
         },
         "ios": {
-          "status": "failed",
-          "run": "46014167086",
+          "status": "passed",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1194,6 +1242,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/date-bounds/api35-phone-before.png",
           "after": "screenshots/android/functional/date-bounds/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "date-bounds",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/date-bounds/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/date-bounds/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -1350,9 +1410,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1416,6 +1476,30 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/alert-confirm/api35-phone-before.png",
           "after": "screenshots/android/functional/alert-confirm/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-cancel",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/alert-cancel/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/alert-cancel/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-confirm",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/alert-confirm/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/alert-confirm/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -1517,9 +1601,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1545,6 +1629,18 @@
           "run": "46014167086",
           "attempt": "1",
           "job": "140556939197",
+          "before": "screenshots/ios/functional/alert-text-field/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/alert-text-field/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-text-field",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
           "before": "screenshots/ios/functional/alert-text-field/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/alert-text-field/iphone-simulator-after.png",
           "error": null,
@@ -1588,9 +1684,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1618,6 +1714,18 @@
           "run": "46014167086",
           "attempt": "1",
           "job": "140556939197",
+          "before": "screenshots/ios/functional/action-sheet/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/action-sheet/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "action-sheet",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
           "before": "screenshots/ios/functional/action-sheet/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/action-sheet/iphone-simulator-after.png",
           "error": null,
@@ -1665,9 +1773,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1707,6 +1815,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/sheet/api35-phone-before.png",
           "after": "screenshots/android/functional/sheet/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "sheet",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/sheet/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/sheet/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -1752,9 +1872,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1806,6 +1926,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/dropdown/api35-phone-before.png",
           "after": "screenshots/android/functional/dropdown/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "dropdown",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/dropdown/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/dropdown/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -1905,9 +2037,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -1961,6 +2093,18 @@
           "after": "screenshots/android/functional/scaffold-tab/api35-phone-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "scaffold-tab",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/scaffold-tab/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/scaffold-tab/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -2003,9 +2147,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -2045,6 +2189,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/topbar/api35-phone-before.png",
           "after": "screenshots/android/functional/topbar/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "topbar",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/topbar/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/topbar/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -2087,9 +2243,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -2129,6 +2285,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/navbar/api35-phone-before.png",
           "after": "screenshots/android/functional/navbar/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "navbar",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/navbar/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/navbar/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -2172,9 +2340,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -2214,6 +2382,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/toolbar/api35-phone-before.png",
           "after": "screenshots/android/functional/toolbar/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "toolbar",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/toolbar/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/toolbar/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -2946,9 +3126,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -2988,6 +3168,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/permissions-bulk-deny/api35-phone-before.png",
           "after": "screenshots/android/functional/permissions-bulk-deny/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "permissions-bulk-deny",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -4452,9 +4644,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -4508,6 +4700,18 @@
           "after": "screenshots/android/functional/permissions-sms-rows/api35-phone-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "permissions-sms-rows",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/permissions-sms-rows/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/permissions-sms-rows/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -4549,9 +4753,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -4591,6 +4795,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/icons-category/api35-phone-before.png",
           "after": "screenshots/android/functional/icons-category/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "icons-category",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/icons-category/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/icons-category/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -4633,9 +4849,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -4661,6 +4877,18 @@
           "run": "46014167086",
           "attempt": "1",
           "job": "140556939197",
+          "before": "screenshots/ios/functional/alert-text-field/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/alert-text-field/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-text-field",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
           "before": "screenshots/ios/functional/alert-text-field/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/alert-text-field/iphone-simulator-after.png",
           "error": null,
@@ -4943,9 +5171,9 @@
         },
         "ios": {
           "status": "failed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -4986,6 +5214,18 @@
           "before": "screenshots/android/functional/sheet-veto/api35-phone-before.png",
           "after": "screenshots/android/functional/sheet-veto/api35-phone-after.png",
           "error": null,
+          "reason": null
+        },
+        {
+          "flow": "sheet-veto",
+          "platform": "ios",
+          "status": "failed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/sheet-veto/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png",
+          "error": "AssertionError(\"no node for 'Allow swipe to hide'\")",
           "reason": null
         }
       ]
@@ -5028,9 +5268,9 @@
         },
         "ios": {
           "status": "failed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -5070,6 +5310,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/date-display/api35-phone-before.png",
           "after": "screenshots/android/functional/date-display/api35-phone-failed-after.png",
+          "error": "AssertionError(\"missing visible text 'Inline display: Input'\")",
+          "reason": null
+        },
+        {
+          "flow": "date-display",
+          "platform": "ios",
+          "status": "failed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/date-display/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/date-display/iphone-simulator-failed-after.png",
           "error": "AssertionError(\"missing visible text 'Inline display: Input'\")",
           "reason": null
         }
@@ -5112,9 +5364,9 @@
         },
         "ios": {
           "status": "passed",
-          "run": "46014167086",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -5154,6 +5406,18 @@
           "job": "140837241882",
           "before": "screenshots/android/functional/time-24h/api35-phone-before.png",
           "after": "screenshots/android/functional/time-24h/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "time-24h",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/time-24h/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/time-24h/iphone-simulator-after.png",
           "error": null,
           "reason": null
         }
@@ -5353,7 +5617,7 @@
       "flowId": "android-phone-websettings-javascript-off-and-on",
       "screenshot": {
         "android": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
-        "ios": "screenshots/ios/functional/webview-js/iphone-simulator-failed-after.png"
+        "ios": "screenshots/ios/functional/webview-js/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
@@ -5364,10 +5628,10 @@
           "device": "api35-phone"
         },
         "ios": {
-          "status": "failed",
-          "run": "46014167086",
+          "status": "passed",
+          "run": "46108448068",
           "attempt": "1",
-          "job": "140556939197",
+          "job": "140866374272",
           "device": "iphone-simulator"
         },
         "desktop": {
@@ -5408,6 +5672,18 @@
           "before": "screenshots/android/functional/webview-js/api35-phone-before.png",
           "after": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
           "error": "AssertionError(\"missing visible text 'JavaScript: off'\")",
+          "reason": null
+        },
+        {
+          "flow": "webview-js",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46108448068",
+          "attempt": "1",
+          "job": "140866374272",
+          "before": "screenshots/ios/functional/webview-js/iphone-simulator-before.png",
+          "after": "screenshots/ios/functional/webview-js/iphone-simulator-after.png",
+          "error": null,
           "reason": null
         }
       ]

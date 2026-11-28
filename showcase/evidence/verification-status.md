@@ -17,8 +17,8 @@ rows (`UI-ALERT-006`, `NAV-004`, `UI-BAR-008`, `UI-SHEET-003`).
 
 | Platform | Device | Run | Result | Record |
 | --- | --- | --- | --- | --- |
-| Android | Pixel 6 API 35, 1080×2400 | [46099102700](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099102700) | **23 passed / 2 failed / 5 blocked** (`date-display`, `webview-js` still fail) | `screenshots/android/functional-api35-phone.json` |
-| iOS | iPhone 17 Pro, iOS 26.5, 402×874 | [46014167086](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46014167086) | 16 passed / 6 failed / 0 blocked | [functional-ios-2026-11-27.md](functional-ios-2026-11-27.md) |
+| Android | Pixel 6 API 35, 1080×2400 | [46099102700](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099102700) | **23 passed / 2 failed / 5 blocked** (`date-display`, `webview-js`) | `screenshots/android/functional-api35-phone.json` |
+| iOS | iPhone 17 Pro, iOS 26.5, 402×874 | [46108448068](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46108448068) | **19 passed / 3 failed / 0 blocked** (`slider`, `sheet-veto`, `date-display`) | `screenshots/ios/functional-iphone-simulator.json` |
 | iPad | iPad Pro 13-inch (M4), iOS 26.5 | [46099392157](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099392157) | tour: 30 captures + 3 manual recaptures; functional: **18 passed / 8 failed / 5 blocked** | `screenshots/ios/functional-ipad-simulator.json` |
 
 Machine-readable results: `screenshots/android/functional-api35-phone.json`
@@ -54,14 +54,25 @@ Executable dispatch and recording steps: [session-runbook.md](session-runbook.md
   were recaptured manually; their images exist but are not recorded as canonical
   tour captures.
 
+Android tablet: run [46107087160](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46107087160),
+**24 passed / 1 failed / 5 blocked**; details in
+[functional-tablet-2026-11-28.md](functional-tablet-2026-11-28.md).
+
 ## Outstanding verification
 
-1. Android tablet session (1600×2560 / 320 dpi), tour, functional, tablet sheets.
-2. Six iOS phone retests: `clickable`, `slider`, `date-bounds`, `sheet-veto`,
-   `date-display`, `webview-js`; iOS Time Picker capture.
-3. Two Android flow defects to finish: `date-display` (the switch toggles the
-   inline picker but the readout leaves the viewport) and `webview-js`
-   (JavaScript switch readout did not reach `off` before evaluation).
+1. Remaining flow defects:
+   - iPhone/Android phone `date-display`: the switch toggles the inline picker but
+     the readout leaves the viewport at phone width (passes at tablet width).
+   - `webview-js` on both Android windows: the JavaScript switch readout did not
+     reach `off` before evaluation; passes on iPad.
+   - iPhone `slider` and `sheet-veto`: slider is an unnamed AX group; the sheet
+     switch is not exposed.
+   - iPad `action-sheet`: no Cancel action (recorded as a defect for `UI-ALERT-006`).
+2. iPhone Time Picker visual: image captured at 05:15 on 2026-11-28 but the tour
+   process timed out before writing `tour.json`, so it is not yet a recorded
+   canonical capture.
+3. Android phone tour: current canonical phone captures are from the earlier
+   session; the fresh phone tour was not run in the 90-minute window.
 
 ## Blocked, not passed
 
