@@ -216,6 +216,8 @@ def unavailable(reason):
 
 def post_failure_snapshot(stderr: bytes, *, source_hash: str, failed_case: str, source_absolute: str):
     """Only finite late fields from one qualified owned stream; not an original operand."""
+    from macos_share_current_source_pins import KEY_WAIT_PANIC_LINE
+
     if (type(source_hash) is not str or source_hash != cases_after_sha256() or
             failed_case != "missing_content_view" or type(source_absolute) is not str):
         return unavailable("unqualified-late-snapshot-source-or-case")
@@ -230,7 +232,7 @@ def post_failure_snapshot(stderr: bytes, *, source_hash: str, failed_case: str, 
         return unavailable("original-key-wait-frame-absent-or-ambiguous")
     index, frame = frames[0]
     allowed = {CASES_SOURCE, "tests/appkit_lifecycle/cases.rs", posixpath.normpath(source_absolute)}
-    if (posixpath.normpath(frame[1]) not in allowed or int(frame[2]) != 61 or index + 1 >= len(lines) or
+    if (posixpath.normpath(frame[1]) not in allowed or int(frame[2]) != KEY_WAIT_PANIC_LINE or index + 1 >= len(lines) or
             lines[index + 1] != "Owned AppKit window did not become key"):
         return unavailable("exact-original-key-wait-panic-not-observed")
     emitted = [(offset, line) for offset, line in enumerate(lines) if _PREFIX in line]

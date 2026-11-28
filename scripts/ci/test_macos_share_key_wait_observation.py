@@ -13,6 +13,7 @@ import unittest
 from unittest.mock import patch
 
 import macos_share_appkit_lifecycle as runner
+from macos_share_current_source_pins import KEY_WAIT_PANIC_LINE
 import macos_share_missing_only as original
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,7 +31,7 @@ class KeyWaitPostFailureControls(unittest.TestCase):
         self.assertIsNotNone(importlib.util.find_spec(MODULE), "NEW exact late-snapshot owner is missing")
         return importlib.import_module(MODULE)
 
-    def panic(self, *, reason=SOURCE_REASON, line=61, source=CASES):
+    def panic(self, *, reason=SOURCE_REASON, line=KEY_WAIT_PANIC_LINE, source=CASES):
         # Deliberately synthetic text, NOT a download or replay of Share650 stderr.
         return (f"thread 'main' (987654) panicked at {source}:{line}:9:\n{reason}\n"
                 "note: source/mock only; private text is never exported\n").encode()
@@ -71,6 +72,8 @@ class KeyWaitPostFailureControls(unittest.TestCase):
 
     def test02_exact_primary_panic_gate_then_protected_observation_then_independent_cleanup(self):
         source = (ROOT / CASES).read_text()
+        self.assertEqual('        assert!(Instant::now() < deadline, "{reason}");',
+                         source.splitlines()[KEY_WAIT_PANIC_LINE - 1])
         self.assertIn("if failed_owned_key_wait(name, &result) {", source)
         hook = source.split("let result = catch_unwind(AssertUnwindSafe(|| autoreleasepool(|_| case())));", 1)[1]
         self.assertLess(hook.index("failed_owned_key_wait(name, &result)"), hook.index("cleanup_owned"))

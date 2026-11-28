@@ -168,6 +168,7 @@ fn wait_result(id: i64, expected: i32) {
 
 fn with_window(body: impl FnOnce(&NSWindow)) {
     let main = MainThreadMarker::new().expect("Actual process Main is required");
+    let app = NSApplication::sharedApplication(main);
     let window = unsafe {
         NSWindow::initWithContentRect_styleMask_backing_defer(
             NSWindow::alloc(main),
@@ -183,7 +184,14 @@ fn with_window(body: impl FnOnce(&NSWindow)) {
     ));
     window.makeKeyAndOrderFront(None);
     TEST_WINDOW.with(|owned| *owned.borrow_mut() = Some(window.clone()));
+    // AppKit may defer key status until activation of the process with its window present.
+    app.activate();
+    let mut requested_key = false;
     pump_until("Owned AppKit window did not become key", || {
+        if app.isActive() && !requested_key && !window.isKeyWindow() {
+            requested_key = true;
+            window.makeKeyWindow();
+        }
         window.isKeyWindow()
     });
     body(&window);
