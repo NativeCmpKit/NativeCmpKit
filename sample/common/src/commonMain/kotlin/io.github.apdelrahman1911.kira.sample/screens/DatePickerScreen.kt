@@ -2,6 +2,7 @@
 
 package io.github.apdelrahman1911.kira.sample.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -129,6 +130,15 @@ fun DatePickerScreen(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        inlineState.displayMode = if (inlineState.displayMode == DisplayMode.Input) {
+                            DisplayMode.Picker
+                        } else {
+                            DisplayMode.Input
+                        }
+                    },
             ) {
                 Text(
                     text = "Inline display: ${if (inlineState.displayMode == DisplayMode.Input) "Input" else "Picker"}",
