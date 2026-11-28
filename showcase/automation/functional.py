@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -242,7 +243,18 @@ def toggle_switch(ui, label, target=None):
     checked = node.get("properties", {}).get("checked")
     if target is not None and checked is not None and checked == target:
         return
-    ui.action("element.click", {"id": node["id"], "snapshot_id": snapshot["snapshot_id"]})
+    switch_nodes = [
+        item for item in snapshot.get("nodes", [])
+        if str(item.get("role", "")).lower() in ("switch", "checkbox", "axcheckbox", "togglebutton")
+    ]
+    ordinal = next((index for index, item in enumerate(switch_nodes) if item.get("id") == node.get("id")), None)
+    params = {"selector": {"role": str(node.get("role"))}}
+    if ordinal is not None:
+        params["index"] = ordinal
+    if target is not None:
+        params["target_state"] = target
+    ui.action("element.toggle", params)
+    time.sleep(0.35)
 
 
 def click_switch_near(ui, label, expect=None):
@@ -372,8 +384,7 @@ FLOWS = [
         ui.action("element.scroll_into_view", {"selector": {"label_contains": "Allow swipe to hide"}}),
         assert_text(ui, "Allow swipe to hide"),
         toggle_switch(ui, "Allow swipe to hide", target=False),
-        (lambda: (ui.action("keyboard.press", {"keys": ["BACK"]}) if p == "android"
-                  else drag_from_text(ui, "Allow swipe to hide")))(),
+        drag_from_text(ui, "Allow swipe to hide", dy=520),
         assert_text(ui, "Allow swipe to hide"),
         toggle_switch(ui, "Allow swipe to hide", target=True),
         tour.click_text(ui, "Close"),
@@ -388,7 +399,7 @@ FLOWS = [
     )),
     ("webview-js", "Web View", lambda ui, p: (
         assert_text(ui, "JavaScript: on"),
-        toggle_switch(ui, "JavaScript", target=False),
+        tour.click_text(ui, "JavaScript: on"),
         assert_text(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
         assert_text(ui, "JS:"),
