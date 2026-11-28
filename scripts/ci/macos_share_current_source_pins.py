@@ -13,7 +13,7 @@ APPKIT_INPUTS = {
     "nativecmpkit-share/native/src/lib.rs": "f394a85503ea16da4614bb714e9e4c45faf6a66b7f0d93860efe3032da7aac0f",
     "nativecmpkit-share/native/src/macos.rs": "22c545dcc5c999f513b04990978fe0a157cdcd2a3e6c1a97ba7e7d3b6ef27e51",
     "nativecmpkit-share/native/src/operation.rs": "926b8c1fd41c2039e6bb8a81e9d05333165ed459aa10b9381ab28d140ed62942",
-    "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs": "6c0f7be1cfea38ae4de06b77e24323c3269f3b1f1cfe4f894393ed232428611a",
+    "nativecmpkit-share/native/tests/appkit_lifecycle/cases.rs": "dc95ec2d95804e8c1ce67b0cb588efac49d4a6d64051814582d423a53d800852",
     "nativecmpkit-share/native/tests/appkit_lifecycle_main.rs": "b31cad1ca8403b8649b33f43067d778459fe5816099c90c40059465d6b6bbd79",
     "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/ShareLauncher.desktop.kt": "6433e3e34e56d17f8c7cd67c58e7c9f84e7999d4df481e2afcb45fbc70009ad6",
     "nativecmpkit-share/src/desktopMain/kotlin/io/github/apdelrahman1911/nativecmpkit/share/platform/NativeShareBridge.kt": "9a5dca8922ed4b957356daecb803228408a9b046de2d28275b377d19abb9e176",

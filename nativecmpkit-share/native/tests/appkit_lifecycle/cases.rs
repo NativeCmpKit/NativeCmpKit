@@ -2,11 +2,15 @@
 //! deliberately controlled Objective-C messages, NOT user delivery or an external recipient.
 use super::*;
 use crate::{begin_share, cancel_share};
+use block2::RcBlock;
 use objc2::rc::Weak;
 use objc2::MainThreadOnly;
-use objc2_app_kit::{NSApplicationActivationPolicy, NSBackingStoreType, NSWindowStyleMask};
-use objc2_foundation::{NSDate, NSDefaultRunLoopMode, NSRunLoop};
+use objc2_app_kit::{
+    NSApplicationActivationPolicy, NSBackingStoreType, NSEventMask, NSWindowStyleMask,
+};
+use objc2_foundation::{NSDate, NSDefaultRunLoopMode, NSRunLoop, NSTimer};
 use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::ptr::NonNull;
 use std::sync::atomic::{AtomicBool, Ordering as AtomicOrdering};
 use std::time::{Duration, Instant};
 
@@ -56,14 +60,20 @@ fn begin() -> i64 {
 }
 
 fn pump_until(reason: &str, mut condition: impl FnMut() -> bool) {
+    let app = NSApplication::sharedApplication(MainThreadMarker::new().unwrap());
     let deadline = Instant::now() + Duration::from_secs(10);
     while !condition() {
         assert!(Instant::now() < deadline, "{reason}");
         autoreleasepool(|_| {
-            NSRunLoop::mainRunLoop().runMode_beforeDate(
+            let next = app.nextEventMatchingMask_untilDate_inMode_dequeue(
+                NSEventMask::Any,
+                Some(&NSDate::dateWithTimeIntervalSinceNow(0.005)),
                 unsafe { NSDefaultRunLoopMode },
-                &NSDate::dateWithTimeIntervalSinceNow(0.005),
+                true,
             );
+            if let Some(event) = next {
+                app.sendEvent(&event);
+            }
         });
     }
 }
@@ -453,9 +463,6 @@ pub(crate) fn run() {
         "The disposable harness must not own an existing application window"
     );
     assert!(app.setActivationPolicy(NSApplicationActivationPolicy::Regular));
-    app.finishLaunching();
-    #[allow(deprecated)]
-    app.activateIgnoringOtherApps(true);
     let args: Vec<_> = std::env::args().skip(1).collect();
     let selected = match args.as_slice() {
         [] => FINITE.to_vec(),
@@ -470,6 +477,29 @@ pub(crate) fn run() {
         _ => panic!("Select zero or one exact --case=NAME; no unrelated test replay"),
     };
     assert!(!selected.is_empty(), "Unknown native case selection");
+
+    // Enter the WindowServer event loop before running the fixture. Scheduling
+    // on the run loop leaves the Main dispatch queue available to share callbacks.
+    let start = RcBlock::new(move |_: NonNull<NSTimer>| {
+        let result = catch_unwind(AssertUnwindSafe(|| {
+            let app = NSApplication::sharedApplication(MainThreadMarker::new().unwrap());
+            assert!(
+                app.isRunning(),
+                "The AppKit application event loop must be running"
+            );
+            app.activate();
+            run_selected(&selected)
+        }));
+        std::process::exit(i32::from(!matches!(result, Ok(true))));
+    });
+    // The timer is scheduled on actual Main and holds the owned callback.
+    let _start =
+        unsafe { NSTimer::scheduledTimerWithTimeInterval_repeats_block(0.001, false, &start) };
+    app.run();
+    panic!("The AppKit event loop exited before the owned test finished");
+}
+
+fn run_selected(selected: &[(&str, fn())]) -> bool {
     // Fresh per-process reports are assertions from THIS real native executable. They do not
     // restore Cargo/JVM XML, convert compiler success to tests or report unreached methods.
     let output = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -479,7 +509,7 @@ pub(crate) fn run() {
     std::fs::create_dir(&output)
         .expect("Native report output exists or cannot be exclusively created");
     let mut failed = false;
-    for (name, case) in selected {
+    for &(name, case) in selected {
         let started = Instant::now();
         let result = catch_unwind(AssertUnwindSafe(|| autoreleasepool(|_| case())));
         if failed_owned_key_wait(name, &result) {
@@ -507,9 +537,7 @@ pub(crate) fn run() {
             break;
         }
     }
-    if failed {
-        std::process::exit(1);
-    }
+    !failed
 }
 
 fn failed_owned_key_wait(
