@@ -72,6 +72,83 @@
       "ivy_input": false
     },
     {
+      "file": "v9.14.tar.gz",
+      "url": "https://github.com/libav/libav/archive/v9.14.tar.gz",
+      "bytes": 5793531,
+      "sha256": "ffb2167e2601fa5cc93967b85055c748d55b3b536cd7006f275bffb202ae9c2c",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "git_revision": "3ecbd911ff9177097820e5d00401c9bf29e5d167"
+      }
+    },
+    {
+      "file": "v11.4.tar.gz",
+      "url": "https://github.com/libav/libav/archive/v11.4.tar.gz",
+      "bytes": 6924464,
+      "sha256": "c070cc70d2e6800909bfccce14e21f76f857fe7b84d51573a582f422c9c87780",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "git_revision": "0069d4597bda5723fbcae410784bbfa4750df706"
+      }
+    },
+    {
+      "file": "v12.1.tar.gz",
+      "url": "https://github.com/libav/libav/archive/v12.1.tar.gz",
+      "bytes": 7580600,
+      "sha256": "84a735373f309db946dacbbf5d5150c60c17559170f13ec1a3a8ad763684ed3c",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "git_revision": "c9ea47b37813c513e9d5e46bfceaa54f63e8e8bd"
+      }
+    },
+    {
+      "file": "ffmpeg-3.3.3.tar.gz",
+      "url": "https://www.ffmpeg.org/releases/ffmpeg-3.3.3.tar.gz",
+      "bytes": 12395300,
+      "sha256": "66000646f487496bc33cf0ab72ca1cd4c8bd52f295c45428ed69735925a2bf3c",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "signing_fingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8"
+      }
+    },
+    {
+      "file": "ffmpeg-4.0.2.tar.gz",
+      "url": "https://www.ffmpeg.org/releases/ffmpeg-4.0.2.tar.gz",
+      "bytes": 13004482,
+      "sha256": "a56ef203c14ffab56b97690a1005522cfa0dc2c42c3c40c33c0bec4875b706eb",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "signing_fingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8"
+      }
+    },
+    {
+      "file": "ffmpeg-5.1.2.tar.gz",
+      "url": "https://www.ffmpeg.org/releases/ffmpeg-5.1.2.tar.gz",
+      "bytes": 15074081,
+      "sha256": "87fe8defa37ce5f7449e36047171fed5e4c3f4bb73eaccea8c954ee81393581c",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "signing_fingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8"
+      }
+    },
+    {
+      "file": "ffmpeg-6.0.tar.gz",
+      "url": "https://www.ffmpeg.org/releases/ffmpeg-6.0.tar.gz",
+      "bytes": 15428402,
+      "sha256": "f4ccf961403752c93961927715f524576d1f4dd02cd76d8c76aed3bbe6686656",
+      "platform": "linux",
+      "ivy_input": true,
+      "provenance": {
+        "signing_fingerprint": "FCF986EA15E6E293A5644F10B4322F04D67658D8"
+      }
+    },
+    {
       "file": "icu4c-77_1-data-bin-l.zip",
       "url": "https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-data-bin-l.zip",
       "bytes": 12441528,

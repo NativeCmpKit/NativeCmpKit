@@ -27,6 +27,10 @@ CLASSIFIERS = {
     ("macos", "x64"): ("mac", "mac"), ("macos", "arm64"): ("mac", "mac-aarch64"),
     ("windows", "x64"): ("win", "win"),
 }
+LINUX_MEDIA_PLUGINS = {f"libavplugin{family}-{major}.so" for family, majors in
+                       (("", (54, 56, 57)), ("-ffmpeg", (56, 57, 58, 59, 60))) for major in majors}
+LINUX_STUB_PREFIXES = ("libavcodec.so", "libavdevice.so", "libavfilter.so", "libavformat.so", "libavresample.so",
+                       "libavutil.so", "libswresample.so", "libswscale.so", "libpostproc.so")
 
 
 def sha256(path):
@@ -99,6 +103,16 @@ def prepare(source, output, lock, materials):
         native_counts[module] = sum(row.split(b"\t", 1)[1].startswith(prefix) for row in rows)
     need(all(native_counts.values()), "Upstream native source trees are incomplete")
     (output / "source-tree.tsv").write_bytes(full_manifest)
+    legal = {"LICENSE", "ASSEMBLY_EXCEPTION", "ADDITIONAL_LICENSE_INFO"}
+    legal_dirs = tuple(f"modules/javafx.{module}/src/main/legal/" for module in CONSUMER_MODULES)
+    legal_inputs = {}
+    for raw in rows:
+        entry = raw.split(b"\t", 1)[1].decode()
+        if entry in legal or entry.startswith(legal_dirs):
+            legal_inputs[entry] = sha256(source / entry)
+    need(legal.issubset(legal_inputs) and "modules/javafx.web/src/main/legal/webkit.md" in legal_inputs,
+         "The pinned source is missing its license or WebKit notice")
+    write_json(output / "legal-source-inventory.json", legal_inputs)
     write_json(output / "source.json", {
         "repository": lock["repository"], "tag": lock["tag"], "tag_object": lock["tag_object"],
         "revision": lock["revision"], "tree": lock["tree"], "native_source_entries": native_counts,
@@ -140,6 +154,10 @@ def linux_binary_inventory(sdk, binaries, architecture):
                                  "arm64": ("aarch64", "AArch64")}[architecture]
     need(platform.system() == "Linux" and platform.machine() == expected_cpu, "Linux runtime architecture differs")
     need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
+    emitted_plugins = {path.name for path in binaries if path.name.startswith("libavplugin")}
+    need(emitted_plugins == LINUX_MEDIA_PLUGINS, "The Linux SDK must retain the upstream media plugin set")
+    need(not any(path.name.startswith(LINUX_STUB_PREFIXES) for path in sdk.iterdir()),
+         "A build-time media stub appeared in the Linux SDK runtime")
     native_files = [str(path) for path in binaries if path.suffix == ".so"]
     inventory = subprocess.check_output(["readelf", "-h", "-d", "--version-info", *native_files],
                                         timeout=60, text=True)
@@ -187,6 +205,8 @@ def stage_consumer_jars(source, output, target, architecture, sdk_hashes):
         with ZipFile(original) as jar, ZipFile(sdk_jar) as sdk:
             leaves = [entry for entry in jar.infolist() if not entry.is_dir()]
             need(len({entry.filename for entry in leaves}) == len(leaves), "Repeated entry in generated OpenJFX JAR")
+            need(not any(Path(entry.filename).name.startswith(LINUX_STUB_PREFIXES) for entry in leaves),
+                 "A build-time media stub appeared in a staged OpenJFX JAR")
             need("module-info.class" in jar.namelist(), f"Missing module descriptor: {original.name}")
             if module == "web":
                 loader = "com/sun/webkit/network/HTTP2Loader.class"
