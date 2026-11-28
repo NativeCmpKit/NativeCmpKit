@@ -32,9 +32,14 @@ def assert_absent(ui, text: str, timeout_ms: int = 6000):
 
 
 def text_value(ui, needle: str) -> str:
-    observation = tour.soft_find(ui, {"text_contains": needle}, timeout_ms=4000)
+    observation = tour.soft_find(ui, {"label_contains": needle}, timeout_ms=4000)
     for node in observation.get("nodes", []):
-        value = node.get("text") or node.get("name")
+        value = node.get("text") or node.get("label") or node.get("name")
+        if value and needle in value:
+            return value
+    observation = tour.soft_find(ui, {"text_contains": needle}, timeout_ms=2000)
+    for node in observation.get("nodes", []):
+        value = node.get("text") or node.get("label") or node.get("name")
         if value and needle in value:
             return value
     raise AssertionError(f"no text containing {needle!r}")
@@ -239,8 +244,9 @@ def click_switch_near(ui, label, expect=None):
 def drag_slider(ui, needle: str):
     before = text_value(ui, needle)
     candidates = (
-        {"within": {"label_contains": needle}, "properties": {"adjustable": True}},
-        {"within": {"label_contains": needle}, "role": "slider"},
+        {"label": needle},
+        {"label_contains": needle, "role": "genericelement"},
+        {"role": "slider"},
     )
     for selector in candidates:
         try:
@@ -260,7 +266,7 @@ def drag_slider(ui, needle: str):
         raise AssertionError("no slider element exposed")
     bounds = nodes[0]["bounds"]
     ui.action("element.drag", {
-        "target_selector": {"within": {"label_contains": needle}, "properties": {"adjustable": True}},
+        "target_selector": {"label": needle},
         "dx": int(bounds["width"] * 0.3), "dy": 0, "duration_ms": 600, "steps": 12,
     })
     if text_value(ui, needle) == before:
