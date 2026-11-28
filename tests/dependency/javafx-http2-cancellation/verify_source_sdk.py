@@ -126,6 +126,8 @@ def verify_sdk(source, output, lock, architecture):
     modules = ["javafx.base", "javafx.controls", "javafx.graphics", "javafx.media", "javafx.web"]
     binaries = sorted(path for path in sdk.iterdir() if path.suffix in {".jar", ".so"})
     need(all((sdk / f"{module}.jar").is_file() for module in modules), "SDK modules missing")
+    need(all(path.name.startswith("javafx") for path in binaries if path.suffix == ".jar"),
+         "A build-only dependency appeared in the SDK runtime")
     need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
     native_arch = subprocess.check_output(["readelf", "-h", str(sdk / "libjfxwebkit.so")], timeout=10, text=True)
     need(elf_machine in native_arch, "WebKit architecture differs from its Linux host")

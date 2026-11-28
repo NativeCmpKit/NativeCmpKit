@@ -35,6 +35,27 @@
       "bytes": 27384265,
       "sha256": "588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061",
       "ivy_input": false
+    },
+    {
+      "file": "lucene-core-7.7.3.jar",
+      "url": "https://archive.apache.org/dist/lucene/java/7.7.3/maven/org/apache/lucene/lucene-core/7.7.3/lucene-core-7.7.3.jar",
+      "bytes": 3089727,
+      "sha256": "8eb03335c1a3c6a8b188df74d761baa83569953582ab440b534c88449ea8e0de",
+      "ivy_input": true
+    },
+    {
+      "file": "lucene-grouping-7.7.3.jar",
+      "url": "https://archive.apache.org/dist/lucene/java/7.7.3/maven/org/apache/lucene/lucene-grouping/7.7.3/lucene-grouping-7.7.3.jar",
+      "bytes": 87265,
+      "sha256": "2f5bcd63b25743d30c313986224d107f75c52938714954253510c57d3f67beb8",
+      "ivy_input": true
+    },
+    {
+      "file": "lucene-queryparser-7.7.3.jar",
+      "url": "https://archive.apache.org/dist/lucene/java/7.7.3/maven/org/apache/lucene/lucene-queryparser/7.7.3/lucene-queryparser-7.7.3.jar",
+      "bytes": 381935,
+      "sha256": "1775c9fe8edd9686d3b7a647778fa44eaa96f1cc0c499315087133e1a9839e84",
+      "ivy_input": true
     }
   ]
 }
