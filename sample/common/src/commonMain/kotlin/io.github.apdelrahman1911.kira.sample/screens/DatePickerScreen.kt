@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -96,6 +97,8 @@ fun DatePickerScreen(
         if (weekdaysOnly) bounds and WeekdaysOnly else bounds
     }
 
+    val screenScroll = rememberScrollState()
+    LaunchedEffect(Unit) { screenScroll.scrollTo(0) }
     val inlineState = rememberAdaptiveDatePickerState(selectableDates = selectableDates)
     val compactState = rememberAdaptiveDatePickerState(selectableDates = selectableDates)
     val rangeState = rememberAdaptiveDateRangePickerState(selectableDates = selectableDates)
@@ -112,7 +115,7 @@ fun DatePickerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(screenScroll)
                 .padding(16.dp)
         ) {
             Text(

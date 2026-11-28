@@ -372,10 +372,8 @@ FLOWS = [
     ("date-display", "Adaptive Date Picker", lambda ui, p: (
         # The compact date field grabs focus on launch and the column scrolls
         # down; reset to the top before reading or tapping the switch.
-        scroll_top(ui),
         assert_text(ui, "Inline display: Picker"),
         click_switch_near(ui, "Inline display: Picker"),
-        scroll_top(ui),
         assert_text(ui, "Inline display: Input"),
     )),
     ("webview-js", "Web View", lambda ui, p: (
