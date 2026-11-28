@@ -152,18 +152,36 @@ def macos_binary_inventory(sdk, binaries, architecture):
     return subprocess.check_output(["xcrun", "otool", "-l", "-L", *native_files], timeout=60, text=True)
 
 
+def windows_binary_inventory(sdk, binaries, architecture):
+    need(platform.system() == "Windows" and platform.machine().lower() == "amd64" and architecture == "x64",
+         "Windows runtime architecture differs")
+    need((sdk / "bin/jfxwebkit.dll").is_file(), "The upstream build emitted no native WebKit library")
+    native_files = [str(path) for path in binaries if path.suffix == ".dll"]
+    inventory = subprocess.check_output(["llvm-readobj", "--file-headers", "--coff-imports", *native_files],
+                                        timeout=60, text=True)
+    rows = [line for line in inventory.splitlines() if line.strip().startswith("Machine:")]
+    need(len(rows) == len(native_files) and all("IMAGE_FILE_MACHINE_AMD64" in line for line in rows),
+         "An SDK native library uses the wrong architecture")
+    return inventory
+
+
 def verify_sdk(source, output, lock, target, architecture):
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
-    sdk = source / "build/sdk/lib"
+    sdk = source / "build/sdk"
+    module_path = sdk / "lib"
     modules = ["javafx.base", "javafx.controls", "javafx.graphics", "javafx.media", "javafx.web"]
-    binaries = sorted(path for path in sdk.iterdir() if path.suffix in {".jar", ".so", ".dylib"})
-    need(all((sdk / f"{module}.jar").is_file() for module in modules), "SDK modules missing")
+    binaries = sorted([path for path in module_path.iterdir() if path.suffix in {".jar", ".so", ".dylib"}]
+                      + (list((sdk / "bin").glob("*.dll")) if target == "windows" else []))
+    need(all((module_path / f"{module}.jar").is_file() for module in modules), "SDK modules missing")
     need(all(path.name.startswith("javafx") for path in binaries if path.suffix == ".jar"),
          "A build-only dependency appeared in the SDK runtime")
-    inspector = macos_binary_inventory if target == "macos" else linux_binary_inventory
-    native_inventory = inspector(sdk, binaries, architecture)
-    bytecode = subprocess.check_output(["javap", "-p", "-c", "-classpath", str(sdk / "javafx.web.jar"),
+    inspector, native_root = {
+        "linux": (linux_binary_inventory, module_path), "macos": (macos_binary_inventory, module_path),
+        "windows": (windows_binary_inventory, sdk),
+    }[target]
+    native_inventory = inspector(native_root, binaries, architecture)
+    bytecode = subprocess.check_output(["javap", "-p", "-c", "-classpath", str(module_path / "javafx.web.jar"),
                                         "com.sun.webkit.network.HTTP2Loader"], timeout=15, text=True)
     cancel_method = bytecode.split("public void fwkCancel();", 1)[1].split("private void callBackIfNotCanceled", 1)[0]
     need("java/util/concurrent/CompletableFuture.cancel:(Z)Z" in cancel_method, "Source change absent from SDK")
@@ -174,18 +192,19 @@ def verify_sdk(source, output, lock, target, architecture):
 
     classes = output / "probe-classes"
     classes.mkdir()
-    subprocess.run(["javac", "--module-path", str(sdk), "--add-modules", "javafx.controls,javafx.web,jdk.management",
+    subprocess.run(["javac", "--module-path", str(module_path), "--add-modules", "javafx.controls,javafx.web,jdk.management",
                     "-d", str(classes), str(HERE / "JavaFxPublicCancellationProbe.java"),
                     str(HERE / "JavaFxCancellationLifecycleProbe.java")], check=True, timeout=60)
-    stdout = run_probe(sdk, classes, output, "probe", "JavaFxPublicCancellationProbe", ",".join(CASES))
+    stdout = run_probe(module_path, classes, output, "probe", "JavaFxPublicCancellationProbe", ",".join(CASES))
     write_json(output / "case-results.json", case_results(stdout, list(CASES)))
-    stdout = run_probe(sdk, classes, output, "lifecycle", "JavaFxCancellationLifecycleProbe")
+    stdout = run_probe(module_path, classes, output, "lifecycle", "JavaFxCancellationLifecycleProbe")
     summaries = [line for line in stdout.splitlines() if line.startswith('{"replacementNavigation":')]
     need(len(summaries) == 1, "Expected one lifecycle summary")
     lifecycle = document(summaries[0])
     need(lifecycle["replacementNavigation"] is True and lifecycle["detachAfterCancel"] is True
          and lifecycle["repeatPeerEofs"] == 16 and lifecycle["worstCancelNanos"] > 0
-         and 0 < lifecycle["openDescriptorsAfter"] <= lifecycle["openDescriptorsBefore"] + 4,
+         and lifecycle["resourceMetric"] == ("win32-process-handles" if target == "windows" else "unix-file-descriptors")
+         and 0 < lifecycle["openResourcesAfter"] <= lifecycle["openResourcesBefore"] + 4,
          "Incomplete lifecycle or socket resource observations")
     write_json(output / "lifecycle-results.json", lifecycle)
     need(before == {path.name: sha256(path) for path in binaries}, "SDK binaries changed during execution")
@@ -199,7 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--arch", choices=["x64", "arm64"], default="x64")
-    parser.add_argument("--platform", choices=["linux", "macos"], default="linux")
+    parser.add_argument("--platform", choices=["linux", "macos", "windows"], default="linux")
     parser.add_argument("--materials", type=Path, help="Verify pre-fetched copies of the pinned build materials")
     options = parser.parse_args()
     checkout, evidence = options.source.resolve(strict=True), options.output.absolute()

@@ -40,6 +40,38 @@
       "ivy_input": false
     },
     {
+      "file": "org.eclipse.swt.win32.win32.x86_64_3.105.3.v20170228-0512.jar",
+      "url": "https://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/plugins/org.eclipse.swt.win32.win32.x86_64_3.105.3.v20170228-0512.jar",
+      "bytes": 2872490,
+      "sha256": "2be43498f3f91613ff865449ea8495d8e16b714f1f0564c276f56aa9e17ca2ea",
+      "platform": "windows",
+      "ivy_input": true
+    },
+    {
+      "file": "cmake-3.31.12-windows-x86_64.zip",
+      "url": "https://github.com/Kitware/CMake/releases/download/v3.31.12/cmake-3.31.12-windows-x86_64.zip",
+      "bytes": 46666397,
+      "sha256": "0c4baa40f28b3f8225eb3fdf6946c987b4fe901403b4eaf2fbbd9378100aaa0c",
+      "platform": "windows",
+      "ivy_input": false
+    },
+    {
+      "file": "setup-2.941.x86_64.exe",
+      "url": "https://cygwin.com/setup/setup-2.941.x86_64.exe",
+      "bytes": 1604240,
+      "sha256": "9d31ffc08b14eaaf5ddf15799a934f6bc1be3d87ed986736cb1980c508ed9502",
+      "platform": "windows",
+      "ivy_input": false
+    },
+    {
+      "file": "getoptlong-0.2.1.gem",
+      "url": "https://rubygems.org/downloads/getoptlong-0.2.1.gem",
+      "bytes": 13824,
+      "sha256": "fd23f07397b994bf9310d4531cfdb4332629a9b8e8c9c457c32b7edf5bf21ba5",
+      "platform": "windows",
+      "ivy_input": false
+    },
+    {
       "file": "icu4c-77_1-data-bin-l.zip",
       "url": "https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-data-bin-l.zip",
       "bytes": 12441528,

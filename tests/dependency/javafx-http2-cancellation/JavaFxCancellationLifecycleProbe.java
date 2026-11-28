@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import java.lang.management.ManagementFactory;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
@@ -16,6 +18,24 @@ import javafx.stage.Stage;
 public final class JavaFxCancellationLifecycleProbe {
     private static final int REPEATS = 16;
     private record Fixture(Stage stage, WebEngine engine) {}
+
+    private static long openResources(boolean windows) throws Exception {
+        if (!windows) {
+            var os = ManagementFactory.getPlatformMXBean(com.sun.management.UnixOperatingSystemMXBean.class);
+            JavaFxPublicCancellationProbe.require(os != null, "Expected a hosted Unix descriptor counter");
+            return os.getOpenFileDescriptorCount();
+        }
+        var process = new ProcessBuilder("powershell.exe", "-NoProfile", "-NonInteractive", "-Command",
+            "(Get-Process -Id " + ProcessHandle.current().pid() + " -ErrorAction Stop).HandleCount")
+            .redirectErrorStream(true).start();
+        try (var output = process.getInputStream()) {
+            JavaFxPublicCancellationProbe.require(process.waitFor(10, TimeUnit.SECONDS), "Windows handle query timeout");
+            JavaFxPublicCancellationProbe.require(process.exitValue() == 0, "Windows handle query failed");
+            return Long.parseLong(new String(output.readNBytes(64), StandardCharsets.US_ASCII).trim());
+        } finally {
+            if (process.isAlive()) process.destroyForcibly();
+        }
+    }
 
     private static void navigationReplacesPendingExchange(WebEngine engine) throws Exception {
         try (var pending = new JavaFxPublicCancellationProbe.HeldPeer("zero-header")) {
@@ -73,8 +93,8 @@ public final class JavaFxCancellationLifecycleProbe {
         JavaFxPublicCancellationProbe.require(args.length == 0, "Lifecycle probe has no options");
         JavaFxPublicCancellationProbe.require(System.getProperty("com.sun.webkit.useHTTP2Loader") == null,
             "Private loader route override refused");
-        var os = ManagementFactory.getPlatformMXBean(com.sun.management.UnixOperatingSystemMXBean.class);
-        JavaFxPublicCancellationProbe.require(os != null, "Expected a hosted Unix descriptor counter");
+        boolean windows = System.getProperty("os.name").toLowerCase(Locale.ROOT).startsWith("windows");
+        String resourceMetric = windows ? "win32-process-handles" : "unix-file-descriptors";
         var startup = new CountDownLatch(1);
         Platform.startup(startup::countDown);
         try {
@@ -91,18 +111,19 @@ public final class JavaFxCancellationLifecycleProbe {
                 WebEngine engine = fixture.engine();
                 navigationReplacesPendingExchange(engine);
                 for (int cycle = 0; cycle < 3; cycle++) cancelExchange(engine);
-                long descriptorsBefore = os.getOpenFileDescriptorCount();
+                long resourcesBefore = openResources(windows);
                 long worstCancelNanos = 0;
                 for (int cycle = 0; cycle < REPEATS; cycle++) {
                     worstCancelNanos = Math.max(worstCancelNanos, cancelExchange(engine));
                 }
-                JavaFxPublicCancellationProbe.waitFor(() -> os.getOpenFileDescriptorCount() <= descriptorsBefore + 4,
-                    "file descriptors after repeated cancellation settle near the warm baseline");
-                long descriptorsAfter = os.getOpenFileDescriptorCount();
+                JavaFxPublicCancellationProbe.waitFor(() -> openResources(windows) <= resourcesBefore + 4,
+                    "process resources after repeated cancellation settle near the warm baseline");
+                long resourcesAfter = openResources(windows);
                 detachAfterCancelling(fixture.stage(), engine);
                 System.out.printf("{\"replacementNavigation\":true,\"detachAfterCancel\":true,"
-                    + "\"repeatPeerEofs\":%d,\"openDescriptorsBefore\":%d,\"openDescriptorsAfter\":%d,"
-                    + "\"worstCancelNanos\":%d}%n", REPEATS, descriptorsBefore, descriptorsAfter, worstCancelNanos);
+                    + "\"repeatPeerEofs\":%d,\"resourceMetric\":\"%s\",\"openResourcesBefore\":%d,"
+                    + "\"openResourcesAfter\":%d,\"worstCancelNanos\":%d}%n",
+                    REPEATS, resourceMetric, resourcesBefore, resourcesAfter, worstCancelNanos);
             } finally {
                 JavaFxPublicCancellationProbe.fx(() -> { fixture.stage().close(); return null; });
             }

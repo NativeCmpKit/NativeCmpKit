@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -19,7 +19,7 @@ concurrency:
 jobs:
   openjfx-source-sdk:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'openjfx-source-')
-    runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-24.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26"}')[inputs.profile] }}
+    runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-24.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26","openjfx-source-windows-x64":"windows-2022"}')[inputs.profile] }}
     timeout-minutes: 260
     defaults:
       run:
@@ -29,10 +29,13 @@ jobs:
       TZ: UTC
       SOURCE_DIR: openjfx-source
       SOURCE_ARCH: ${{ endsWith(inputs.profile, 'arm64') && 'arm64' || 'x64' }}
-      SOURCE_OS: ${{ startsWith(inputs.profile, 'openjfx-source-macos-') && 'macos' || 'linux' }}
+      SOURCE_OS: ${{ startsWith(inputs.profile, 'openjfx-source-macos-') && 'macos' || inputs.profile == 'openjfx-source-windows-x64' && 'windows' || 'linux' }}
       SOURCE_CHECK: tests/dependency/javafx-http2-cancellation/verify_source_sdk.py
       EVIDENCE_DIR: build/openjfx-source-verification
     steps:
+      - name: Preserve exact source line endings on Windows
+        if: runner.os == 'Windows'
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
@@ -100,6 +103,7 @@ jobs:
           available_kib=$(df -Pk . | awk 'NR == 2 {print $4}')
           test "$available_kib" -ge $((12 * 1024 * 1024))
       - name: Build the complete SDK and native WebKit from source
+        if: runner.os != 'Windows'
         env:
           GRADLE_USER_HOME: ${{ runner.temp }}/openjfx-gradle
         run: |
@@ -119,6 +123,74 @@ jobs:
             printf '%s\n' "$status" > "$EVIDENCE_DIR/build-exit.txt"
             exit "$status"
           fi
+      - name: Install and record the hosted Windows build environment
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = (Resolve-Path $env:EVIDENCE_DIR).Path
+          $cygwin = Join-Path $env:RUNNER_TEMP 'openjfx-cygwin'
+          $cache = Join-Path $env:RUNNER_TEMP 'openjfx-cygwin-packages'
+          New-Item -ItemType Directory -Path $cache | Out-Null
+          $install = Start-Process -Wait -NoNewWindow -PassThru -FilePath "$evidence/sources/setup-2.941.x86_64.exe" -ArgumentList @(
+            '--quiet-mode', '--only-site', '--no-admin', '--no-desktop', '--no-shortcuts', '--no-startmenu',
+            '--root', "`"$cygwin`"", '--local-package-dir', "`"$cache`"", '--site', 'https://mirrors.kernel.org/sourceware/cygwin',
+            '--packages', 'make,zip,unzip,makedepend,bison,flex,perl,python3,ruby,rubygems,gperf'
+          )
+          if ($install.ExitCode -ne 0) { throw "Cygwin setup exited $($install.ExitCode)" }
+          Copy-Item "$cygwin/etc/setup/installed.db" "$evidence/cygwin-installed.txt"
+          $cmake = Join-Path $env:RUNNER_TEMP 'openjfx-cmake'
+          Expand-Archive "$evidence/sources/cmake-3.31.12-windows-x86_64.zip" $cmake
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -version '[17.0,18.0)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (!$vs) { throw 'Expected the hosted Visual Studio 2022 C++ toolchain' }
+          $vsTools = Join-Path $vs 'VC/Auxiliary/Build'
+          $msvc = (Get-Content "$vsTools/Microsoft.VCToolsVersion.default.txt" -TotalCount 1).Trim()
+          $jdk = (& java -version 2>&1) -join "`n"
+          if ($LASTEXITCODE -ne 0 -or $jdk -notmatch 'Temurin-17\.0\.21\+9') { throw 'Expected the pinned Temurin boot JDK' }
+          $windowsPath = "$cmake/cmake-3.31.12-windows-x86_64/bin;$cygwin/bin"
+          $env:Path = "$windowsPath;$env:Path"
+          $gem = (& "$cygwin/bin/cygpath.exe" -u "$evidence/sources/getoptlong-0.2.1.gem").Trim()
+          & "$cygwin/bin/bash.exe" -lc "gem install --local --ignore-dependencies --no-document '$gem'"
+          if ($LASTEXITCODE -ne 0) { throw 'Installing the verified Ruby option parser failed' }
+          @(
+            $jdk
+            "Visual Studio: $vs"
+            "MSVC version: $msvc"
+            (& cmake --version)
+            (& clang-cl --version)
+            (& ninja --version)
+            (& "$cygwin/bin/bash.exe" -lc 'ruby --version && python3 --version && gperf --version && bison --version')
+            (Get-PSDrive $PWD.Drive.Name | Format-Table | Out-String)
+          ) | Set-Content "$evidence/toolchain.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows native build tool inventory failed' }
+          if ((Get-PSDrive $PWD.Drive.Name).Free -lt 12GB) { throw 'Require 12 GiB for the native SDK build' }
+          "OPENJFX_WINDOWS_PATH=$windowsPath" >> $env:GITHUB_ENV
+          "VS150COMNTOOLS=$vsTools" >> $env:GITHUB_ENV
+          "WINDOWS_CRT_VER=143" >> $env:GITHUB_ENV
+          "Python3_ROOT_DIR=$cygwin" >> $env:GITHUB_ENV
+      - name: Build the complete Windows SDK and native WebKit from source
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          GRADLE_USER_HOME: ${{ runner.temp }}/openjfx-gradle
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = (Resolve-Path $env:EVIDENCE_DIR).Path
+          $ivy = ([Uri](Join-Path $evidence 'ivy')).AbsoluteUri
+          $nativeBuildPath = "$env:OPENJFX_WINDOWS_PATH;$env:Path"
+          Remove-Item Env:Path
+          $env:PATH = $nativeBuildPath
+          Set-Location $env:SOURCE_DIR
+          $env:SOURCE_DATE_EPOCH = (& git log -1 --format=%ct).Trim()
+          $gradleArguments = @('--no-daemon', '--offline', '--max-workers=2', '--console=plain', 'sdk',
+            '-PCOMPILE_WEBKIT=true', '-PCOMPILE_MEDIA=true', '-PNUM_COMPILE_THREADS=2',
+            '-PCHMOD_ARTIFACTS=false', '-PBUILD_LIBAV_STUBS=false', '-PicuVersion=77.1', "-PJFX_DEPS_URL=$ivy")
+          ('.\gradlew.bat ' + ($gradleArguments -join ' ')) | Tee-Object -FilePath "$evidence/build.log"
+          & .\gradlew.bat @gradleArguments 2>&1 | Tee-Object -FilePath "$evidence/build.log" -Append
+          $status = $LASTEXITCODE
+          $status | Set-Content "$evidence/build-exit.txt"
+          exit $status
       - name: Inspect SDK binaries and run the real WebView cancellation cases
         run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS" --arch "$SOURCE_ARCH"
       - name: Preserve source-build and cancellation evidence
@@ -132,6 +204,7 @@ jobs:
             build/openjfx-source-verification/source.json
             build/openjfx-source-verification/source-tree.tsv
             build/openjfx-source-verification/toolchain.txt
+            build/openjfx-source-verification/cygwin-installed.txt
             build/openjfx-source-verification/build.log
             build/openjfx-source-verification/build-exit.txt
             build/openjfx-source-verification/sdk-binaries.json
