@@ -1,0 +1,40 @@
+passed: buttons 
+passed: clickable 
+passed: switch 
+passed: slider 
+passed: dropdown 
+passed: alert-cancel 
+not-applicable: alert-text-field
+passed: alert-confirm 
+passed: date-bounds 
+passed: scaffold-tab 
+not-applicable: action-sheet
+passed: permissions-sms-rows 
+passed: time-24h 
+passed: permissions-bulk-deny 
+passed: sheet-veto 
+failed: date-display AssertionError("switch did not produce 'Inline display: Input'")
+failed: webview-js RuntimeError("Could not find the Home entry for 'Web View'")
+passed: sheet 
+passed: topbar 
+passed: toolbar 
+passed: navbar 
+passed: icons-category 
+passed: nav-restore 
+passed: geo-math 
+passed: limitations 
+passed: liquidglass 
+failed: webview RuntimeError("Could not find the Home entry for 'Web View'")
+blocked: permission-camera (OS permission dialog targeting is not enabled in the baseline)
+blocked: file-picker (system document picker; no seeded file selection in this run)
+blocked: file-saver (system export dialog; no save destination in this run)
+blocked: share (system share sheet; no external recipient)
+blocked: camera (emulator camera source is not seeded)
+{"passed": 22, "failed": 3, "blocked": 5}
+Traceback (most recent call last):
+  File "/root/.t3/worktrees/nativeCmpKit/showcase/showcase/automation/functional.py", line 516, in <module>
+    main()
+  File "/root/.t3/worktrees/nativeCmpKit/showcase/showcase/automation/functional.py", line 512, in main
+    raise SystemExit(0 if failed == 0 else 1)
+                          ^^^^^^
+NameError: name 'failed' is not defined

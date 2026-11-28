@@ -1,0 +1,37 @@
+captured screenshots/ios/home/index/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-clickable/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-time-picker/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png
+FAILED Adaptive Alert Dialog: could not scroll to 'Show ActionSheet'
+captured screenshots/ios/ui-adaptive-bottom-sheet/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-bottom-sheet/expanded/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-dropdown/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-scaffold/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-navigation-bar/overview/iphone-simulator.png
+captured screenshots/ios/ui-adaptive-toolbar/overview/iphone-simulator.png
+captured screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png
+captured screenshots/ios/ui-cupertino-icons/category-arrows/iphone-simulator.png
+captured screenshots/ios/ui-cupertino-icons/category-communication/iphone-simulator.png
+captured screenshots/ios/io-file-picker/overview/iphone-simulator.png
+captured screenshots/ios/io-image-picker/overview/iphone-simulator.png
+captured screenshots/ios/io-file-saver/overview/iphone-simulator.png
+captured screenshots/ios/io-camera-picker/overview/iphone-simulator.png
+captured screenshots/ios/share/overview/iphone-simulator.png
+captured screenshots/ios/webview/overview/iphone-simulator.png
+captured screenshots/ios/webview/after-back/iphone-simulator.png
+FAILED Web View: No visible element for 'Evaluate JavaScript title'
+captured screenshots/ios/permissions/overview/iphone-simulator.png
+captured screenshots/ios/geo-math/overview/iphone-simulator.png
+captured screenshots/ios/ui-liquid-glass/overview/iphone-simulator.png
+captured screenshots/ios/limitations/known-limitations/iphone-simulator.png
+retry failed Adaptive Alert Dialog: HTTP 400 (invalid_arguments)
+retry failed Web View: HTTP 400 (invalid_arguments)
+{"ok": false, "captures": 32, "errors": 2}

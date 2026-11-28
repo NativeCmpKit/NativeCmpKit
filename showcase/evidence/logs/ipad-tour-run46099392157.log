@@ -1,0 +1,39 @@
+captured screenshots/ios/home/index/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-button/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-clickable/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-switch/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-slider/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-progress/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-date-picker/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-time-picker/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-alert-dialog/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-alert-dialog/simple/ipad-simulator.png
+FAILED Adaptive Alert Dialog: could not scroll to 'Show ActionSheet'
+captured screenshots/ios/ui-adaptive-bottom-sheet/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-bottom-sheet/expanded/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-dropdown/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-dropdown/menu/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-scaffold/overview/ipad-simulator.png
+captured screenshots/ios/ui-adaptive-top-bar/overview/ipad-simulator.png
+FAILED Adaptive Navigation Bar: HTTP 408 (condition_timeout)
+captured screenshots/ios/ui-adaptive-toolbar/overview/ipad-simulator.png
+captured screenshots/ios/ui-cupertino-icons/overview/ipad-simulator.png
+captured screenshots/ios/ui-cupertino-icons/category-arrows/ipad-simulator.png
+captured screenshots/ios/ui-cupertino-icons/category-communication/ipad-simulator.png
+captured screenshots/ios/io-file-picker/overview/ipad-simulator.png
+captured screenshots/ios/io-image-picker/overview/ipad-simulator.png
+captured screenshots/ios/io-file-saver/overview/ipad-simulator.png
+captured screenshots/ios/io-camera-picker/overview/ipad-simulator.png
+captured screenshots/ios/share/overview/ipad-simulator.png
+captured screenshots/ios/webview/overview/ipad-simulator.png
+captured screenshots/ios/webview/after-back/ipad-simulator.png
+FAILED Web View: No visible element for 'Evaluate JavaScript title'
+captured screenshots/ios/permissions/overview/ipad-simulator.png
+captured screenshots/ios/geo-math/overview/ipad-simulator.png
+captured screenshots/ios/ui-liquid-glass/overview/ipad-simulator.png
+FAILED Known Limitations: HTTP 408 (condition_timeout)
+retry failed Adaptive Alert Dialog: HTTP 400 (invalid_arguments)
+retry failed Adaptive Navigation Bar: HTTP 400 (invalid_arguments)
+retry failed Web View: HTTP 400 (invalid_arguments)
+retry failed Known Limitations: HTTP 400 (invalid_arguments)
+{"ok": false, "captures": 30, "errors": 4}

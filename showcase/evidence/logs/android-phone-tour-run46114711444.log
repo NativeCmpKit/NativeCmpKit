@@ -1,0 +1,40 @@
+captured screenshots/android/home/index/api35-phone.png
+captured screenshots/android/ui-adaptive-button/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-clickable/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-switch/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-slider/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-progress/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-time-picker/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png
+captured screenshots/android/ui-adaptive-bottom-sheet/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-phone.png
+captured screenshots/android/ui-adaptive-dropdown/overview/api35-phone.png
+FAILED Adaptive Drop Down: No visible element for 'More options'
+captured screenshots/android/ui-adaptive-scaffold/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-navigation-bar/overview/api35-phone.png
+captured screenshots/android/ui-adaptive-toolbar/overview/api35-phone.png
+captured screenshots/android/ui-cupertino-icons/overview/api35-phone.png
+captured screenshots/android/ui-cupertino-icons/category-arrows/api35-phone.png
+captured screenshots/android/ui-cupertino-icons/category-communication/api35-phone.png
+captured screenshots/android/io-file-picker/overview/api35-phone.png
+captured screenshots/android/io-image-picker/overview/api35-phone.png
+captured screenshots/android/io-file-saver/overview/api35-phone.png
+captured screenshots/android/io-camera-picker/overview/api35-phone.png
+captured screenshots/android/share/overview/api35-phone.png
+captured screenshots/android/webview/overview/api35-phone.png
+captured screenshots/android/webview/second-page/api35-phone.png
+captured screenshots/android/webview/after-back/api35-phone.png
+captured screenshots/android/webview/after-forward/api35-phone.png
+captured screenshots/android/webview/javascript-title/api35-phone.png
+captured screenshots/android/webview/cookie-roundtrip/api35-phone.png
+captured screenshots/android/webview/cookies-cleared/api35-phone.png
+captured screenshots/android/webview/invalid-destination/api35-phone.png
+captured screenshots/android/permissions/overview/api35-phone.png
+captured screenshots/android/geo-math/overview/api35-phone.png
+captured screenshots/android/ui-liquid-glass/overview/api35-phone.png
+captured screenshots/android/limitations/known-limitations/api35-phone.png
+retry failed Adaptive Drop Down: HTTP 400 (invalid_arguments)
+{"ok": false, "captures": 37, "errors": 1}

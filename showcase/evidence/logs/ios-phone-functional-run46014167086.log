@@ -1,0 +1,22 @@
+passed: buttons 
+failed: clickable ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')
+passed: switch 
+failed: slider AssertionError('no slider label exposed')
+passed: dropdown 
+passed: alert-cancel 
+passed: alert-text-field 
+passed: alert-confirm 
+failed: date-bounds ClientError('HTTP 408 (condition_timeout)')
+passed: scaffold-tab 
+passed: action-sheet 
+passed: permissions-sms-rows 
+passed: time-24h 
+passed: permissions-bulk-deny 
+failed: sheet-veto AssertionError("no node for 'Allow swipe to hide'")
+failed: date-display AssertionError("missing visible text 'Inline display: Input'")
+failed: webview-js AssertionError("missing visible text 'JS: null'")
+passed: sheet 
+passed: topbar 
+passed: toolbar 
+passed: navbar 
+passed: icons-category 

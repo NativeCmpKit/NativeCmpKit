@@ -489,6 +489,22 @@ workflow (`/sdcard/Download`, iOS photo library) but selection is not automated.
 | [46114716852](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46114716852) | `140885832699` | success; 32 phone captures incl. Time Picker |
 | [46099392157](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099392157) | `140838141915` | success; 30+3 iPad captures, 18/8/5 |
 
+### Raw session logs
+
+Committed verbatim (no tokens or tunnel URLs): `showcase/evidence/logs/`.
+
+| Log | Session |
+| --- | --- |
+| `android-phone-functional-run46099102700.log` | Android phone functional pass |
+| `android-phone-tour-run46114711444.log` | Android phone tour |
+| `android-tablet-functional-run46107087160.log` | Android tablet functional pass |
+| `android-tablet-tour-run46107087160.log` | Android tablet tour |
+| `ios-phone-functional-run46014167086.log` | first iPhone functional pass (cut off) |
+| `ios-phone-tour-run46108448068.log` | iPhone tour that timed out before `tour.json` |
+| `ios-phone-tour-run46114716852.log` | iPhone tour including Time Picker |
+| `ipad-functional-run46099392157.log` | iPad functional pass |
+| `ipad-tour-run46099392157.log` | iPad tour |
+
 ### Repository evidence (pinned to `042f5116`)
 
 - Contract: [`showcase/coverage.json`](https://github.com/NativeCmpKit/NativeCmpKit/blob/042f51168fea7a1156127276bdab7e10ab410157/showcase/coverage.json),

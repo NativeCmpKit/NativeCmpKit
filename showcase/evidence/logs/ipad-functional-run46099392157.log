@@ -1,0 +1,33 @@
+passed: buttons 
+failed: clickable ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')
+passed: switch 
+failed: slider AssertionError('slider did not move')
+passed: dropdown 
+passed: alert-cancel 
+passed: alert-text-field 
+passed: alert-confirm 
+passed: date-bounds 
+passed: scaffold-tab 
+failed: action-sheet AssertionError("missing visible text 'Cancel'")
+passed: permissions-sms-rows 
+passed: time-24h 
+passed: permissions-bulk-deny 
+failed: sheet-veto AssertionError("no node for 'Allow swipe to hide'")
+failed: date-display AssertionError("switch did not produce 'Inline display: Input'")
+passed: webview-js 
+passed: sheet 
+failed: topbar RuntimeError("Could not find the Home entry for 'Adaptive Top Bar': HTTP 408 (condition_timeout)")
+passed: toolbar 
+passed: navbar 
+passed: icons-category 
+not-applicable: nav-restore
+passed: geo-math 
+passed: limitations 
+failed: liquidglass RuntimeError("No visible element for 'Glass click 0'")
+failed: webview AssertionError("missing visible text 'Kira Second Page'")
+blocked: permission-camera (OS permission dialog targeting is not enabled in the baseline)
+blocked: file-picker (system document picker; no seeded file selection in this run)
+blocked: file-saver (system export dialog; no save destination in this run)
+blocked: share (system share sheet; no external recipient)
+blocked: camera (emulator camera source is not seeded)
+{"passed": 18, "failed": 8, "blocked": 5}

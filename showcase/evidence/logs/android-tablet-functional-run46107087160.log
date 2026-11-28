@@ -1,0 +1,33 @@
+passed: buttons 
+passed: clickable 
+passed: switch 
+passed: slider 
+passed: dropdown 
+passed: alert-cancel 
+not-applicable: alert-text-field
+passed: alert-confirm 
+passed: date-bounds 
+passed: scaffold-tab 
+not-applicable: action-sheet
+passed: permissions-sms-rows 
+passed: time-24h 
+passed: permissions-bulk-deny 
+passed: sheet-veto 
+passed: date-display 
+failed: webview-js AssertionError("missing visible text 'JavaScript: off'")
+passed: sheet 
+passed: topbar 
+passed: toolbar 
+passed: navbar 
+passed: icons-category 
+passed: nav-restore 
+passed: geo-math 
+passed: limitations 
+passed: liquidglass 
+passed: webview 
+blocked: permission-camera (OS permission dialog targeting is not enabled in the baseline)
+blocked: file-picker (system document picker; no seeded file selection in this run)
+blocked: file-saver (system export dialog; no save destination in this run)
+blocked: share (system share sheet; no external recipient)
+blocked: camera (emulator camera source is not seeded)
+{"passed": 24, "failed": 1, "blocked": 5}

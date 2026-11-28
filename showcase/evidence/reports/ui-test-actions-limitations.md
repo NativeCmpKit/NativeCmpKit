@@ -844,7 +844,16 @@ connection.
 
 ---
 
-## 5. What worked well
+## 5. Raw session logs
+
+The failure lines quoted above are committed under `showcase/evidence/logs/`
+(`android-phone-functional-run46099102700.log`,
+`android-tablet-functional-run46107087160.log`,
+`ios-phone-functional-run46014167086.log`,
+`ipad-functional-run46099392157.log`, and the tour logs). They contain status
+lines and errors only; no token or tunnel URL.
+
+## 6. What worked well
 
 For balance: the following were reliable across many runs and should not be
 regressed.
