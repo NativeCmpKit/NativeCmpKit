@@ -28,17 +28,18 @@ driver wrote results at the end and its rerun file is partial.
 
 ## Visual matrix
 
-- Android: 34 canonical high-res captures from run `45957524569` plus icon
-  recapture from `45973585586`.
-- iOS: 31 canonical captures from run `45968953555` (the workflow run was
-  cancelled at session teardown after the captures were taken; the PNGs are the
-  device bytes), including recovered Alert Dialog and WebView JS/cookie/error
-  states. Icon recapture run `45973585586` was cancelled the same way.
-- Both matrices are scheduled for a fresh full recapture on the next successful
-  phone sessions; captured status will then cite a non-cancelled run.
-- 24 paired comparison sheets under `screenshots/compare/`.
-- Missing visual states: iOS Time Picker, iOS action-sheet capture (functional
-  verdict exists), WebView second page on iOS after the toolbar-label change.
+- Android phone: 37 canonical captures from run
+  [46114711444](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46114711444),
+  including icon categories.
+- iOS phone: 32 canonical captures from run
+  [46114716852](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46114716852),
+  including the **Time Picker** and the WebView state captures.
+- Android tablet: 37 captures from `46107087160`; iPad: 30 tour captures plus 3
+  manual recaptures from `46099392157`.
+- 31 phone comparison sheets under `screenshots/compare/` and 31 tablet sheets
+  under `screenshots/compare-tablet/`.
+- Captures from the earlier cancelled runs have been replaced by these
+  successful-session images.
 
 Executable dispatch and recording steps: [session-runbook.md](session-runbook.md).
 
@@ -58,9 +59,14 @@ Android tablet: run [46107087160](https://github.com/NativeCmpKit/NativeCmpKit/a
 **24 passed / 1 failed / 5 blocked**; details in
 [functional-tablet-2026-11-28.md](functional-tablet-2026-11-28.md).
 
+## Final contract state
+
+- Android: 25 passed, 41 captured, 2 failed, 20 not-applicable (88 rows).
+- iOS: 19 passed, 55 captured, 4 failed, 9 not-applicable, 1 not-run.
+
 ## Outstanding verification
 
-1. Remaining flow defects:
+1. Remaining flow defects (recorded as failures, not hidden):
    - iPhone/Android phone `date-display`: the switch toggles the inline picker but
      the readout leaves the viewport at phone width (passes at tablet width).
    - `webview-js` on both Android windows: the JavaScript switch readout did not
@@ -68,11 +74,8 @@ Android tablet: run [46107087160](https://github.com/NativeCmpKit/NativeCmpKit/a
    - iPhone `slider` and `sheet-veto`: slider is an unnamed AX group; the sheet
      switch is not exposed.
    - iPad `action-sheet`: no Cancel action (recorded as a defect for `UI-ALERT-006`).
-2. iPhone Time Picker visual: image captured at 05:15 on 2026-11-28 but the tour
-   process timed out before writing `tour.json`, so it is not yet a recorded
-   canonical capture.
-3. Android phone tour: current canonical phone captures are from the earlier
-   session; the fresh phone tour was not run in the 90-minute window.
+2. `NAV-003` on iOS remains not-run: the pinned driver does not expose device
+   rotation for iOS, so the configuration-change assertion is Android-only.
 
 ## Blocked, not passed
 

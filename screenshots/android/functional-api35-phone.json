@@ -1,7 +1,7 @@
 {
-  "captured_at": "2026-11-28T04:00:33.159701+00:00",
+  "captured_at": "2026-11-28T06:32:41.401630+00:00",
   "target": "android",
-  "session": "8abe6c5ab2da7c6f114787a3",
+  "session": "6e856d2693f00f5ebd3d0198",
   "device": "api35-phone",
   "flows": [
     {
@@ -243,5 +243,5 @@
     "failed": 2,
     "blocked": 5
   },
-  "updated_at": "2026-11-28T04:01:32.952836+00:00"
+  "updated_at": "2026-11-28T06:34:41.452513+00:00"
 }

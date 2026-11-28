@@ -93,7 +93,7 @@ def main() -> None:
             if (row.get("windowClass") == "tablet") != args.tablet:
                 continue
             execution = row["execution"][args.platform]
-            if execution["status"] not in ("not-applicable", "passed"):
+            if execution["status"] not in ("not-applicable", "passed", "failed"):
                 execution["status"] = "passed" if row_id in passed else "captured"
                 execution["run"] = args.run
                 execution["attempt"] = args.attempt
@@ -108,6 +108,7 @@ def main() -> None:
                 "capture": capture["path"],
             })
 
+    captured_components = {capture["component"] for capture in tour.get("captures", [])}
     for failure in tour.get("errors", []):
         component = TITLE_COMPONENTS.get(failure.get("screen", ""), failure.get("screen", ""))
         for row_id in SCREEN_ROWS.get(component, []):
@@ -117,8 +118,18 @@ def main() -> None:
             if (row.get("windowClass") == "tablet") != args.tablet:
                 continue
             execution = row["execution"][args.platform]
+            if execution["status"] == "passed":
+                row["captureError"] = {
+                    "platform": args.platform, "run": args.run, "attempt": args.attempt,
+                    "job": args.job, "error": failure.get("error"),
+                }
+                continue
             if execution["status"] != "not-applicable":
-                execution["status"] = "failed"
+                # A failed sub-step after the screen capture does not invalidate
+                # the rendered state; keep it captured and record the step error.
+                execution["status"] = (
+                    "captured" if component in captured_components else "failed"
+                )
                 execution["run"] = args.run
                 execution["attempt"] = args.attempt
                 execution["job"] = args.job
