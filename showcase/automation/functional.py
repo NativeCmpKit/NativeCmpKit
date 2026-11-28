@@ -235,7 +235,10 @@ def toggle_switch(ui, label, target=None):
     if not candidates:
         raise AssertionError(f"no switch-like element near {label!r}")
     candidates.sort(key=lambda item: item[0])
-    node = candidates[-1][1] if target is None else (candidates[-1][1] if not target else candidates[0][1])
+    node = candidates[0][1]
+    checked = node.get("properties", {}).get("checked")
+    if target is not None and checked is not None and checked == target:
+        return
     ui.action("element.click", {"id": node["id"], "snapshot_id": snapshot["snapshot_id"]})
 
 
