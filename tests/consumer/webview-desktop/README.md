@@ -1,7 +1,7 @@
 # NativeCmpKit packaged desktop WebView consumer
 
 Independent **WebView-only** verification, not a sample, the successful Core/IO
-consumer, or the full21-root release gate. Two real public tests run with both
+consumer, or the full publication release gate. Two real public tests run with both
 Gradle module metadata and POM-only resolution in separate fresh Gradle/HOME/tmp
 directories. Each consuming host explicitly selects its own six JavaFX21.0.13
 classifiers. The public Compose WebView attaches to a real window and JavaFX

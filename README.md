@@ -8,8 +8,8 @@ are documented explicitly.
 
 **Status: audited migration with platform verification in progress.** The existing
 [0.1.0-preview.1 release](https://github.com/NativeCmpKit/NativeCmpKit/releases/tag/v0.1.0-preview.1)
-belongs to the earlier Kira publication identity. This branch stages the proposed
-`io.github.apdelrahman1911.nativecmpkit` coordinates for verification. Known defects
+belongs to the earlier Kira publication identity. This branch stages all 23
+NativeCmpKit candidates under `io.github.apdelrahman1911.nativecmpkit`. Known defects
 and device-verification gaps are tracked in the [technical audit](docs/audit/README.md)
 and [roadmap](docs/roadmap/README.md). Imported Calf tags retain their original history.
 GitHub Actions uses a selected action allowlist, mandatory commit SHA pinning and
@@ -57,7 +57,7 @@ See [installation](docs/installation.md) and the
 | `nativecmpkit-webview` | Android WebView, iOS WKWebView, desktop JavaFX, browser iframe; not equivalent APIs |
 | `nativecmpkit-permissions` and 11 subprojects | Per-feature Android/iOS permissions; desktop/web stubs are not permission checks |
 | `nativecmpkit-cupertino-icons` | Bundled MIT-licensed Cupertino icon font; distinct from Apple's SF Symbols |
-| `nativecmpkit-navigation`, `nativecmpkit-geo` | Incomplete experimental implementations, not published by the build |
+| `nativecmpkit-navigation`, `nativecmpkit-geo` | Adaptive navigation and location APIs with platform-specific support. Both are included in Maven staging |
 | `nativecmpkit-maps`, `nativecmpkit-media`, `nativecmpkit-notifications` | Empty / excluded prototypes, **not working features** |
 
 Android, iOS, desktop JVM, JavaScript and Wasm targets are not promises of full

@@ -19,8 +19,8 @@ imported Git history, tags, authorship, license, and upstream attribution. The
   `nativecmpkitVerificationTargets`, and `nativecmpkitNativeMode`.
 - Find build projects and sample projects in [settings.gradle.kts](settings.gradle.kts).
   `nativecmpkit-maps` contains a build file. The media and notifications modules
-  are outside the current build. On this branch, navigation and geo are outside
-  Maven staging. See the [identity manifest](docs/migration/current-identity.json).
+  are outside the current build. Maven staging covers all 23 roots, including
+  Geo and Navigation. See the [identity manifest](docs/migration/current-identity.json).
 - Supported Kotlin targets are Android, desktop JVM, JS, WasmJS, iOS arm64, and
   iOS Simulator arm64. Desktop and browser camera and permissions have explicit
   unsupported behavior.

@@ -32,7 +32,7 @@ gradle --no-daemon --no-parallel --no-configuration-cache --max-workers=2 \
 ```
 
 The exact draft version is local/unpublished; this is not a registry consumer.
-The main `../build.gradle.kts` **still requires all21 roots** and remains the
+The main `../build.gradle.kts` requires all 23 publication roots and remains the
 full-matrix gate. This two-root desktop diagnostic does not certify the missing
 roots, KMP metadata/common consumption, Android/Apple/browser/native behavior,
 minimum-platform compatibility, ABI, complete dependency/legal provenance or

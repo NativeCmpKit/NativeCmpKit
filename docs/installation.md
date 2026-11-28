@@ -11,6 +11,8 @@ uses a separate set of coordinates documented on `main`:
 implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-ui:0.1.0-SNAPSHOT")
 implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-file-picker:0.1.0-SNAPSHOT")
 implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-permissions-camera:0.1.0-SNAPSHOT")
+implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-navigation:0.1.0-SNAPSHOT")
+implementation("io.github.apdelrahman1911.nativecmpkit:nativecmpkit-geo:0.1.0-SNAPSHOT")
 ```
 
 A future publication requires owner authorization, namespace verification,
