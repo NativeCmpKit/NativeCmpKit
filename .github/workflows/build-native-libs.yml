@@ -839,6 +839,17 @@ jobs:
                 --continue --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
               ;;
           esac
+      - name: Retain bounded UIKit compiler failure diagnostics
+        if: ${{ failure() && (inputs.profile == 'identity-apple-ui-ipad-rotation' || inputs.profile == 'identity-apple-ui-pre26-diagnostic') }}
+        shell: bash
+        run: |
+          case "$IDENTITY_PROFILE" in
+            identity-apple-ui-ipad-rotation) output=build/ci-verification/identity-ui-ipad-rotation ;;
+            identity-apple-ui-pre26-diagnostic) output=build/ci-verification/identity-ui-pre26-negative-steps ;;
+          esac
+          if [[ -d "$output" ]]; then
+            python3 -B scripts/ci/failure_diagnostics.py --output "$output"
+          fi
       - name: Retain bounded UIKit failure observations
         if: ${{ always() && steps.checkout.outcome == 'success' && (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal') }}
         run: python3 scripts/ci/summarize_identity_uikit.py
@@ -888,7 +899,9 @@ jobs:
             build/ci-verification/identity-main-ui/receipt.json
             build/ci-verification/identity-ui-action-sheet/receipt.json
             build/ci-verification/identity-ui-ipad-rotation/receipt.json
+            build/ci-verification/identity-ui-ipad-rotation/failure-diagnostics.json
             build/ci-verification/identity-ui-pre26-negative-steps/receipt.json
+            build/ci-verification/identity-ui-pre26-negative-steps/failure-diagnostics.json
             build/ci-verification/identity-ui-pre26-toolbar/receipt.json
             build/ci-verification/identity-ui-pre26-customization/receipt.json
             build/ci-verification/sample-platforms-apple/receipt.json

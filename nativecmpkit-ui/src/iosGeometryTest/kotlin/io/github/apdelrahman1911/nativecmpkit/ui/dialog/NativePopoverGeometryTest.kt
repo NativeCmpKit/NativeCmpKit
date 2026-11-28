@@ -25,6 +25,7 @@ import platform.Foundation.NSBundle
 import platform.Foundation.NSError
 import platform.Foundation.NSProcessInfo
 import platform.UIKit.*
+import platform.UIKit.UIApplicationState.UIApplicationStateActive
 import platform.posix.getpid
 import kotlin.math.abs
 import kotlin.test.*

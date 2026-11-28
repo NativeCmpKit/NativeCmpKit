@@ -216,6 +216,7 @@ class PopoverGeometryControls(unittest.TestCase):
                         submission.index("scene.requestGeometryUpdateWithPreferences"))
         self.assertIn("check(!requireRotation)", submission)
         readback = source.split('tracePhase("$phase-returned")', 1)[1].split("        try {", 1)[0]
+        self.assertIn("import platform.UIKit.UIApplicationState.UIApplicationStateActive", source)
         self.assertIn("UIApplicationStateActive", readback)
         self.assertIn("window.isKeyWindow()", readback)
         self.assertIn("sameNativeObject(window.windowScene, scene)", readback)
