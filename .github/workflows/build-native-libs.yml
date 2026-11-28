@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-consumer-webview, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-apple-consumer-wkwebview, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-picker-mime, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-consumer-webview, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-bitmap-raster, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-apple-consumer-wkwebview, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -585,6 +585,15 @@ jobs:
               raise SystemExit("The owned portal did not shut down cleanly")
           raise SystemExit(result.returncode)
           PYTHON
+      - name: Recheck migrated Desktop Picker MIME validation
+        if: inputs.profile == 'identity-linux-picker-mime'
+        run: |
+          ./gradlew :nativecmpkit-file-picker:desktopTest \
+            --tests io.github.apdelrahman1911.nativecmpkit.picker.platform.MimeFilterRegressionTest \
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+          python3 -B scripts/audit/summarize_junit.py --root nativecmpkit-file-picker \
+            --output build/ci-identity/picker-mime-results.json --require-reports
+          python3 -c 'import json; assert json.load(open("build/ci-identity/picker-mime-results.json"))["by_task"] == {"desktopTest": {"tests": 7, "failures": 0, "errors": 0, "skipped": 0}}'
       - name: Recheck the Linux desktop WebView cookie-path regression
         if: inputs.profile == 'identity-linux-webview'
         run: |
@@ -1060,6 +1069,11 @@ jobs:
                 --focus identity-ios-main-range-highlights --simulator "$device" --timeout 2700 \
                 --output build/ci-verification/identity-ui-date-range
               ;;
+            identity-apple-ui-bitmap-raster)
+              python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
+                --focus identity-ios-bitmap-raster-guard --simulator "$device" --timeout 2700 \
+                --output build/ci-verification/identity-ui-bitmap-raster
+              ;;
             identity-apple-ui-action-sheet)
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
                 --focus identity-ios-default-action-sheet --simulator "$device" --timeout 3600 \
@@ -1209,6 +1223,7 @@ jobs:
             build/ci-identity/publication-artifacts.json
             build/ci-identity/jni-exports.json
             build/ci-identity/jvm-api.json
+            build/ci-identity/picker-mime-results.json
             build/ci-identity/framework-identity.txt
             build/ci-identity/uikit-diagnostics.json
             build/ci-identity/uikit-ipad-rotation-diagnostics.json
@@ -1227,6 +1242,7 @@ jobs:
             build/ci-verification/identity-camera/receipt.json
             build/ci-verification/identity-main-ui/receipt.json
             build/ci-verification/identity-ui-date-range/receipt.json
+            build/ci-verification/identity-ui-bitmap-raster/receipt.json
             build/ci-verification/identity-ui-action-sheet/receipt.json
             build/ci-verification/identity-ui-ipad-rotation/receipt.json
             build/ci-verification/identity-ui-ipad-rotation/failure-diagnostics.json

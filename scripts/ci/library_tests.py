@@ -526,6 +526,7 @@ IOS_MAIN_BAR_METHODS = (
 )
 IOS_MAIN_ALERT_METHOD = "emptyTextIsOmittedOnPresentationAndOnVisibleUpdates"
 IOS_MAIN_RANGE_HIGHLIGHT_FOCUS = "identity-ios-main-range-highlights"
+IOS_BITMAP_RASTER_GUARD_FOCUS = "identity-ios-bitmap-raster-guard"
 IOS_DEFAULT_ACTION_SHEET_FOCUS = "identity-ios-default-action-sheet"
 IOS_DEFAULT_ACTION_SHEET_METHOD = "defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad"
 IOS_ALERT_LIFECYCLE_GROUP = {
@@ -541,6 +542,14 @@ IOS_ALERT_LIFECYCLE_GROUP = {
     ),
 }
 UI_APPLICATION_FOCUS_SPECS = {
+    IOS_BITMAP_RASTER_GUARD_FOCUS: {
+        "groups": ({
+            "classname": "io.github.apdelrahman1911.nativecmpkit.ui.utils.ImageBitmapRasterGuardTest",
+            "source": "nativecmpkit-ui/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/utils/ImageBitmapRasterGuardTest.kt",
+            "methods": ("emptyOrOverflowedDimensionsStopBeforeReadingPixelsOrAllocating",),
+        },),
+        "scope": "One UIKit bitmap dimension guard before pixel reads and native allocation.",
+    },
     IOS_MAIN_RANGE_HIGHLIGHT_FOCUS: {
         "groups": (
             {
