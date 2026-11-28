@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-picker-mime, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-consumer-webview, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-bitmap-raster, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-apple-consumer-wkwebview, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-picker-mime, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-consumer-webview, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-bitmap-raster, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-linux-sample-automation, identity-apple-sample-automation, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-apple-consumer-wkwebview, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -483,7 +483,7 @@ jobs:
   identity-verification:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'identity-')
     runs-on: ${{ inputs.profile == 'identity-linux-arm64-package' && 'ubuntu-24.04-arm' || inputs.profile == 'identity-apple-intel-package' && 'macos-26-intel' || (inputs.profile == 'identity-apple-ui-pre26' || inputs.profile == 'identity-apple-ui-pre26-diagnostic') && 'macos-15' || (inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal') && 'xcode-27' || startsWith(inputs.profile, 'identity-apple') && 'macos-26' || startsWith(inputs.profile, 'identity-windows') && 'windows-2025' || 'ubuntu-24.04' }}
-    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-consumer-desktop-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || inputs.profile == 'identity-apple-sample' || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
+    timeout-minutes: ${{ (inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-package' || inputs.profile == 'identity-apple-consumer-package' || inputs.profile == 'identity-apple-consumer-desktop-package' || inputs.profile == 'identity-apple-ownership' || inputs.profile == 'identity-apple-webview-restore' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-framework' || startsWith(inputs.profile, 'identity-apple-sample') || inputs.profile == 'identity-linux-android-ownership') && 90 || 60 }}
     env:
       GIT_CONFIG_COUNT: '2'
       GIT_CONFIG_KEY_0: core.autocrlf
@@ -503,6 +503,17 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: Check out the verified UI Test Actions v4.1.0 source
+        if: endsWith(inputs.profile, '-sample-automation')
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: ui-test-actions/ui-test-actions
+          ref: e22f6c35fe6ca50a83890f54e4a6ec29ef0e2951
+          path: build/ci-ui-test-actions
+          persist-credentials: false
+      - name: Set up the isolated UI Test Actions Python environment
+        if: endsWith(inputs.profile, '-sample-automation')
+        run: python3 -m venv "$RUNNER_TEMP/nativecmpkit-ui-python"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin
@@ -552,6 +563,8 @@ jobs:
           packages=('cmdline-tools;23.0' 'platforms;android-37.0')
           if [[ "$IDENTITY_PROFILE" == identity-linux-android-consumer-webview ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-23;google_apis;x86_64')
+          elif [[ "$IDENTITY_PROFILE" == identity-linux-sample-automation ]]; then
+            packages+=('platforms;android-35' 'build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           elif [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$ANDROID_REMOTE_IO_ENABLED" == true ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
@@ -650,6 +663,36 @@ jobs:
           python3 -B scripts/audit/summarize_junit.py --root nativecmpkit-file-picker \
             --output build/ci-identity/picker-mime-results.json --require-reports
           python3 -c 'import json; assert json.load(open("build/ci-identity/picker-mime-results.json"))["by_task"] == {"desktopTest": {"tests": 7, "failures": 0, "errors": 0, "skipped": 0}}'
+      - name: Verify sample alert cancellation, confirmation and restart on Android
+        if: inputs.profile == 'identity-linux-sample-automation'
+        shell: bash
+        run: |
+          ./gradlew :sample:android:assembleDebug --max-workers=1 --no-parallel --no-configuration-cache
+          set -- sample/android/build/outputs/apk/debug/*.apk
+          test "$#" -eq 1 && test -f "$1"
+          apk=$1
+          adb="$ANDROID_HOME/platform-tools/adb"
+          test "$("$adb" devices | tr -d '\r' | sed '/^$/d')" = 'List of devices attached'
+          test -c /dev/kvm
+          sudo chown "$(id -u)" /dev/kvm
+          export ANDROID_AVD_HOME="$RUNNER_TEMP/nativecmpkit-ui-avd"
+          mkdir "$ANDROID_AVD_HOME"
+          avd="nativecmpkit-alert-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          printf 'no\n' | "$ANDROID_HOME/cmdline-tools/23.0/bin/avdmanager" create avd \
+            --name "$avd" --package 'system-images;android-35;google_apis;x86_64' --device pixel_6
+          "$ANDROID_HOME/emulator/emulator" -avd "$avd" -port 5554 -no-window -no-snapshot -no-audio \
+            -gpu swiftshader_indirect > "$RUNNER_TEMP/nativecmpkit-alert-emulator.log" 2>&1 &
+          emulator_pid=$!
+          trap 'kill "$emulator_pid" 2>/dev/null || true; wait "$emulator_pid" 2>/dev/null || true' EXIT
+          serial=emulator-5554
+          timeout 180 "$adb" -s "$serial" wait-for-device
+          timeout 120 bash -c 'until [[ $("$1" -s "$2" shell getprop sys.boot_completed) == 1 ]]; do sleep 1; done' _ "$adb" "$serial"
+          test "$("$adb" -s "$serial" emu avd name | head -n1 | tr -d '\r')" = "$avd"
+          "$adb" -s "$serial" install "$apk"
+          "$adb" -s "$serial" shell am start -W -n io.github.apdelrahman1911.nativecmpkit.sample/.MainActivity
+          "$RUNNER_TEMP/nativecmpkit-ui-python/bin/python" -B scripts/ci/mobile_alert_journey.py \
+            --upstream build/ci-ui-test-actions --platform android --device "$serial" \
+            --output build/ci-verification/native-mobile-alert-journey
       - name: Recheck the Linux desktop WebView cookie-path regression
         if: inputs.profile == 'identity-linux-webview'
         run: |
@@ -989,7 +1032,7 @@ jobs:
               | tee -a "$receipt"
           done
       - name: Build the NativeCmpKit sample application with Xcode
-        if: inputs.profile == 'identity-apple-sample'
+        if: startsWith(inputs.profile, 'identity-apple-sample')
         shell: bash
         run: |
           python3 -B scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
@@ -997,12 +1040,30 @@ jobs:
           read -r template device_type simulator_runtime < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["udid"], s["device_type"], s["runtime_identifier"])')
           device="$(xcrun simctl create "NativeCmpKit Sample $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$device_type" "$simulator_runtime")"
           [[ "$device" =~ ^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$ && "$device" != "$template" ]]
-          # This checks the unsigned build and does not run the app. Xcode only needs a destination.
           trap 'if ! xcrun simctl delete "$device"; then exit 1; fi' EXIT
           python3 -B scripts/ci/sample_platform_verification.py run --mode apple --build-only \
             --simulator "$device" --timeout 3600 --xcode-timeout 1200
+          if [[ "$IDENTITY_PROFILE" == identity-apple-sample-automation ]]; then
+            axe_dir="$RUNNER_TEMP/nativecmpkit-axe"
+            mkdir "$axe_dir"
+            asset=AXe-macOS-v2.1.1-universal.tar.gz
+            curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+              --output "$axe_dir/$asset" "https://github.com/cameroncooke/AXe/releases/download/v2.1.1/$asset"
+            printf '%s  %s\n' 8788838b1b32059d143cf06541b72fcaead85c16274457cdbff086510a5b17fa "$axe_dir/$asset" | shasum -a 256 -c -
+            tar -xzf "$axe_dir/$asset" -C "$axe_dir"
+            axe=$(find "$axe_dir" -type f -name axe -print -quit)
+            test -x "$axe"
+            app=build/ci-sample-xcode/Build/Products/Debug-iphonesimulator/NativeCmpKit.app
+            codesign --force --deep --sign - "$app"
+            xcrun simctl bootstatus "$device" -b
+            xcrun simctl install "$device" "$app"
+            xcrun simctl launch "$device" io.github.apdelrahman1911.nativecmpkit.sample
+            "$RUNNER_TEMP/nativecmpkit-ui-python/bin/python" -B scripts/ci/mobile_alert_journey.py \
+              --upstream build/ci-ui-test-actions --platform ios --device "$device" --axe "$axe" \
+              --output build/ci-verification/native-mobile-alert-journey
+          fi
       - name: Retain bounded Xcode sample failure diagnostics
-        if: ${{ failure() && inputs.profile == 'identity-apple-sample' }}
+        if: ${{ failure() && startsWith(inputs.profile, 'identity-apple-sample') }}
         shell: bash
         run: |
           output=build/ci-verification/sample-platforms-apple
@@ -1293,6 +1354,7 @@ jobs:
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-android-consumer-webview/
             build/ci-verification/identity-apple-consumer-wkwebview/
+            build/ci-verification/native-mobile-alert-journey/
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
             build/ci-verification/identity-camera/receipt.json
