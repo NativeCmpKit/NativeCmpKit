@@ -10,6 +10,8 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
+import sys
+from tempfile import TemporaryDirectory
 import time
 from zipfile import ZipFile
 
@@ -123,8 +125,8 @@ def prepare(source, output, lock, materials):
     })
 
 
-def run_probe(sdk, classes, output, evidence_name, class_name, *options):
-    command = ["java", "--module-path", str(sdk),
+def run_probe(sdk, classes, output, evidence_name, class_name, *options, java_options=()):
+    command = ["java", *java_options, "--module-path", str(sdk),
                "--add-modules", "javafx.controls,javafx.web,jdk.management", "-cp", str(classes), class_name, *options]
     if platform.system() == "Linux":
         command = ["timeout", "--kill-after=5s", "120s", "xvfb-run", "-a", *command]
@@ -147,6 +149,52 @@ def run_probe(sdk, classes, output, evidence_name, class_name, *options):
                 "repository_revision": os.environ.get("GITHUB_SHA"),
             })
     return stdout_file.read_text(encoding="utf-8")
+
+
+def verify_http2(module_path, classes, output, lock):
+    wheels = [str(material_path(output, row)) for row in lock["materials"] if row.get("python_test_input") is True]
+    need(len(wheels) == 3, "Expected the three exact pure-Python HTTP/2 test dependencies")
+    with TemporaryDirectory(prefix="http2-fixture-", dir=output) as scratch:
+        directory = Path(scratch)
+        key, certificate, trust = (directory / name for name in ("key.pem", "cert.pem", "trust.p12"))
+        probe_password = "nativecmpkit-fixture"
+        subprocess.run(["openssl", "req", "-x509", "-nodes", "-newkey", "rsa:2048", "-sha256",
+                        "-subj", "/CN=127.0.0.1", "-addext", "subjectAltName=IP:127.0.0.1", "-days", "1",
+                        "-keyout", str(key), "-out", str(certificate)], check=True, timeout=30, stderr=subprocess.DEVNULL)
+        subprocess.run(["keytool", "-importcert", "-noprompt", "-storetype", "PKCS12", "-storepass", probe_password,
+                        "-keystore", str(trust), "-file", str(certificate), "-alias", "nativecmpkit-loopback"],
+                       check=True, timeout=30, stderr=subprocess.DEVNULL)
+        environment = {**os.environ, "PYTHONPATH": os.pathsep.join(wheels), "PYTHONNOUSERSITE": "1"}
+        arguments = [sys.executable, "-B", str(HERE / "http2_peer.py"), str(directory), str(certificate), str(key)]
+        with (output / "http2-peer.stderr").open("xb") as errors:
+            peer = subprocess.Popen(arguments, cwd=directory, env=environment, stderr=errors)
+            try:
+                deadline = time.monotonic() + 15
+                port_file = directory / "port.json"
+                while not port_file.is_file():
+                    need(peer.poll() is None and time.monotonic() < deadline, "HTTP/2 test peer startup failed")
+                    time.sleep(0.05)
+                port = json.loads(port_file.read_text(encoding="utf-8"))
+                need(type(port) is int and 0 < port <= 65535, "Invalid owned loopback fixture port")
+                run_probe(module_path, classes, output, "http2-probe", "JavaFxHttp2CancellationProbe", str(port), str(directory),
+                          java_options=(f"-Djavax.net.ssl.trustStore={trust}", "-Djavax.net.ssl.trustStoreType=PKCS12",
+                                        f"-Djavax.net.ssl.trustStorePassword={probe_password}"))
+                need(peer.wait(timeout=5) == 0, "HTTP/2 peer verification failed independently of the browser")
+                report = document((directory / "peer.json").read_text(encoding="utf-8"))
+                streams = [report[key] for key in ("cancelled_stream", "other_stream", "recovery_stream")]
+                need(report["alpn"] == "h2" and report["single_connection"] is True and report["reset_code"] == 8 and
+                     report["response_started_before_cancel"] is False and sorted(set(streams)) == streams and
+                     all(type(stream) is int and stream > 0 and stream % 2 for stream in streams),
+                     "Missing exact multiplexed HTTP/2 reset and recovery witness")
+                write_json(output / "http2-results.json", report)
+            finally:
+                if peer.poll() is None:
+                    peer.terminate()
+                    try:
+                        peer.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        peer.kill()
+                        peer.wait(timeout=5)
 
 
 def linux_binary_inventory(sdk, binaries, architecture):
@@ -264,7 +312,8 @@ def verify_sdk(source, output, lock, target, architecture):
     classes.mkdir()
     subprocess.run(["javac", "--module-path", str(module_path), "--add-modules", "javafx.controls,javafx.web,jdk.management",
                     "-d", str(classes), str(HERE / "JavaFxPublicCancellationProbe.java"),
-                    str(HERE / "JavaFxCancellationLifecycleProbe.java")], check=True, timeout=60)
+                    str(HERE / "JavaFxCancellationLifecycleProbe.java"),
+                    str(HERE / "JavaFxHttp2CancellationProbe.java")], check=True, timeout=60)
     stdout = run_probe(module_path, classes, output, "probe", "JavaFxPublicCancellationProbe", ",".join(CASES))
     write_json(output / "case-results.json", case_results(stdout, list(CASES)))
     stdout = run_probe(module_path, classes, output, "lifecycle", "JavaFxCancellationLifecycleProbe")
@@ -277,6 +326,7 @@ def verify_sdk(source, output, lock, target, architecture):
          and 0 < lifecycle["openResourcesAfter"] <= lifecycle["openResourcesBefore"] + 4,
          "Incomplete lifecycle or socket resource observations")
     write_json(output / "lifecycle-results.json", lifecycle)
+    verify_http2(module_path, classes, output, lock)
     need(before == {path.name: sha256(path) for path in binaries}, "SDK binaries changed during execution")
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
