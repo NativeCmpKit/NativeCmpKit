@@ -114,15 +114,17 @@ jobs:
       - name: Build the debug APK
         shell: bash
         run: |
-          for attempt in 1 2 3; do
+          delays=(60 180 300)
+          for attempt in 1 2 3 4; do
             if ./gradlew :sample:android:assembleDebug --no-configuration-cache --max-workers=2 \
               '-Dorg.gradle.jvmargs=-Xmx3072m -Dfile.encoding=UTF-8' \
               -Pkotlin.compiler.execution.strategy=in-process; then
               break
             fi
-            if [[ "$attempt" == 3 ]]; then exit 1; fi
-            echo "Gradle build failed (attempt $attempt); cooling down for repository throttling" >&2
-            sleep 60
+            if [[ "$attempt" == 4 ]]; then exit 1; fi
+            delay=${delays[$((attempt-1))]}
+            echo "Gradle build failed (attempt $attempt); cooling down ${delay}s for repository throttling" >&2
+            sleep "$delay"
           done
           apk=$(find sample/android/build/outputs/apk/debug -name '*.apk' -type f | head -1)
           test -n "$apk"
@@ -326,7 +328,8 @@ jobs:
       - name: Build the iOS simulator app
         shell: bash
         run: |
-          for attempt in 1 2 3; do
+          delays=(60 180 300)
+          for attempt in 1 2 3 4; do
             if xcodebuild -project sample/ios/Kira.xcodeproj -scheme Kira \
               -configuration Debug -sdk iphonesimulator \
               -destination 'generic/platform=iOS Simulator' \
@@ -334,9 +337,10 @@ jobs:
               CODE_SIGNING_ALLOWED=NO build; then
               break
             fi
-            if [[ "$attempt" == 3 ]]; then exit 1; fi
-            echo "xcodebuild failed (attempt $attempt); cooling down for repository throttling" >&2
-            sleep 60
+            if [[ "$attempt" == 4 ]]; then exit 1; fi
+            delay=${delays[$((attempt-1))]}
+            echo "xcodebuild failed (attempt $attempt); cooling down ${delay}s for repository throttling" >&2
+            sleep "$delay"
           done
           app=$(find build/Build/Products -maxdepth 2 -name '*.app' -type d | head -1)
           test -n "$app"
