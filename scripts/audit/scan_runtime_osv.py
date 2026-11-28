@@ -41,7 +41,7 @@ def queries_from_graph(graph):
 def request_json(path, payload=None):
     request = Request(OSV + path,
                       data=None if payload is None else json.dumps(payload).encode(),
-                      headers={"Accept": "application/json", "User-Agent": "nativeCmpkit-public-dependency-audit",
+                      headers={"Accept": "application/json", "User-Agent": "NativeCmpKit-public-dependency-audit",
                                **({"Content-Type": "application/json"} if payload is not None else {})})
     with urlopen(request, timeout=60) as response:
         return json.load(response)
