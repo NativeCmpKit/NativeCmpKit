@@ -57,7 +57,7 @@ Status meanings:
 | `AdaptiveAlertDialog` | one/two button, confirm/dismiss, preferred, destructive | Material | UIAlertController | Material | Material | Alert Dialog | captured; Cancel and Ok asserted on Android and iPhone |
 | `AdaptiveBasicAlertDialog` | alert/action sheet, severity, text fields, secure/number pad | Material content | UIKit properties | Material content | Material content | Alert Dialog | captured; text-field and action-sheet asserted on iPhone |
 | `AlertDialogIosStyle.ActionSheet` | iPhone sheet, iPad centred popover | n/a | supported | n/a | n/a | Alert Dialog | iPhone sheet asserted; iPad popover **pending** |
-| `AdaptiveBottomSheet` / `AdaptiveSheetState` | detents, drag handle, veto, insets, dismissal | Material | page sheet; insets/shape ignored | Material | Material | Bottom Sheet | captured |
+| `AdaptiveBottomSheet` / `AdaptiveSheetState` | detents, drag handle, veto, insets, dismissal | Material | page sheet; insets/shape ignored | Material | Material | Bottom Sheet | captured; veto/dismissal flow ready, retest pending |
 | `AdaptiveDropDown` / `Item` / `Section` | simple, sections, disabled, destructive, iOS anchor parent | Material | UIMenu | Material | Material | Drop Down | captured |
 | `UIKitUIBarButtonItem` + system items | title/image/system/flexible/fixed/withMenu | n/a | supported | n/a | n/a | Top Bar / Toolbar | captured; title, image, system Add and spacing driven |
 
@@ -131,7 +131,7 @@ Known Limitations screen states this. No ordered/sequential request API exists.
 | `rememberShareLauncher` / `ShareContent` | Text, Url, File, Files, subject | chooser; Success=opened | UIActivityViewController | clipboard/open/macOS picker | Web Share/clipboard | Content Sharing | screen captured; sheet **blocked** |
 | `WebView` / `WebViewState` | Url, Data, NavigatorOnly; title/url/loading/errors | android.webkit | WKWebView | JavaFX | iframe | Web View | captured; JS/cookie/invalid passed on Android |
 | `WebViewNavigator` | loadUrl/loadHtml/back/forward/reload/stop | supported | supported | supported | supported | Web View | Android second page/JS/cookies asserted; iOS JS/cookies captured; iOS second page **pending** |
-| `WebSettings` | JavaScript off/on, platform knobs | supported | supported | supported | supported | Web View | JS toggle not driven |
+| `WebSettings` | JavaScript off/on, platform knobs | supported | supported | supported | supported | Web View | toggle rendered; assertion retest pending |
 | `CookieManager` / `Cookie` | set/get/removeAll | supported | supported | generic handler refusal | host cookies | Web View | Android cookie round-trip captured; iOS captured |
 
 ## kira-navigation / kira-geo
