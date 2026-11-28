@@ -28,12 +28,14 @@ import runtime_context
 
 ROOT = Path(__file__).resolve().parents[2]
 GROUP = "io.github.apdelrahman1911.nativecmpkit"
+SUPERSEDED_GROUPS = {".".join(("com", "mohamedrejeb", "calf")), ".".join(("io", "github", "apdelrahman1911", "kira"))}
 VERSION = "0.1.0-preview.1"
 MODULE = "nativecmpkit-webview"
 COORDINATES = {MODULE, MODULE + "-desktop"}
 MODES = ("module", "pom")
 FIXTURE = "tests/consumer/webview-desktop"
 FILES = ("README.md", "settings.gradle.kts", "build.gradle.kts", "gradle.properties",
+         "src/test/kotlin/nativecmpkit/consumer/PublishedWebViewCancellationTest.kt",
          "src/test/kotlin/nativecmpkit/consumer/PublishedWebViewConsumerTest.kt")
 CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedWebViewConsumerTest"
 METHODS = {"loadedPublicClassesComeFromTheExactStagedJar", "publicComposableLoadsEvaluatesAndReleasesTheRealNativeView"}
@@ -45,7 +47,7 @@ HOSTS = {
     "windows-x64": ("Windows", "x64", "win"),
 }
 CACHE = "build/ci-consumer-cache/webview-producer-gradle"
-SCOPE = "PARTIAL WebView desktop Maven consumer; no full21-root/device/ABI/security/release certification"
+SCOPE = "PARTIAL WebView desktop Maven consumer; no full23-root/device/ABI/security/release certification"
 
 
 class EvidenceError(ValueError):
@@ -250,7 +252,7 @@ def resolution_contract(document, staged, host, mode):
     need(document.get('schema_version') == 2 and document.get('scope') == 'PARTIAL WebView desktop Maven consumer' and
          document.get('candidate_group') == GROUP and document.get('candidate_version') == VERSION and
          document.get('publication_roots_requested') == [MODULE] and document.get('metadata_mode') == mode and
-         document.get('complete_21_root_KMP_matrix_requested') is False and document.get('release_readiness_certified') is False,
+         document.get('complete_23_root_KMP_matrix_requested') is False and document.get('release_readiness_certified') is False,
          "Consumer resolution scope/identity mismatch")
     rows = document.get('resolved_artifacts')
     need(isinstance(rows, list) and 1 <= len(rows) <= 4096, "Missing independent Maven resolution")
@@ -261,15 +263,15 @@ def resolution_contract(document, staged, host, mode):
         need(isinstance(row, dict) and row.get('configuration') in CLASSPATHS and all(isinstance(row.get(k), str) and row[k]
              for k in ('group', 'module', 'version', 'file', 'sha256')), "Invalid resolved Maven row")
         need(type(row.get('bytes')) is int and row['bytes'] > 0 and re.fullmatch(r'[0-9a-f]{64}', row['sha256']), "Invalid resolved artifact size/hash")
-        need(row['group'] != 'io.github.apdelrahman1911.nativecmpkit' and row['file'] == PurePosixPath(row['file']).name and '\\' not in row['file'], "Original/source/path substitute in consumer")
+        need(row['group'] not in SUPERSEDED_GROUPS and row['file'] == PurePosixPath(row['file']).name
+             and '\\' not in row['file'] and row['file'] not in {'.', '..'}, "Superseded Maven group or noncanonical artifact filename")
         identity = tuple(row[k] for k in ('configuration', 'group', 'module', 'version', 'file'))
         need(identity not in identities, "Duplicate consumer artifact row")
         identities.add(identity)
         if row['group'] == GROUP:
             target = MODULE + '-desktop'
             canonical = target + '-' + VERSION + '.jar'
-            allowed_labels = {canonical, 'nativecmpkit-webview-desktop-' + VERSION + '.jar'}
-            need(row['module'] == target and row['version'] == VERSION and row.get('declared_file_name') in allowed_labels and
+            need(row['module'] == target and row['version'] == VERSION and row.get('declared_file_name') == canonical and
                  row.get('declared_file_url') == canonical and row.get('resolved_file_name') == row['file'] and
                  row['file'] == (row['declared_file_name'] if mode == 'module' else canonical), "Wrong candidate metadata/Maven-name binding")
             relative = GROUP.replace('.', '/') + '/' + target + '/' + VERSION + '/'

@@ -20,7 +20,7 @@ require(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?")
     && !candidateVersion.endsWith("-SNAPSHOT")) {
     "nativecmpkitVersion must be an exact non-SNAPSHOT candidate version"
 }
-// Fixed WebView-only scope. Never replace the full21-root or successful Core/IO consumers.
+// Fixed WebView-only scope independent of the full 23-root and Core/IO consumers.
 val candidateRoots = listOf("nativecmpkit-webview")
 val metadataMode = providers.gradleProperty("nativecmpkitMetadataMode").get()
 require(metadataMode in setOf("module", "pom"))
@@ -150,7 +150,9 @@ val verifyCandidateResolution = tasks.register("verifyCandidateResolution") {
                     val id = artifact.id.componentIdentifier
                     check(id !is ProjectComponentIdentifier) { "Project substitution in $name: $id" }
                     check(id is ModuleComponentIdentifier) { "Non-Maven artifact in $name: $id" }
-                    check(id.group != "com.mohamedrejeb.calf") { "Original Calf dependency in $name: $id" }
+                    check(id.group != "com.mohamedrejeb.calf" && id.group != "io.github.apdelrahman1911.kira") {
+                        "Superseded Maven dependency in $name: $id"
+                    }
                     val hash = artifactSha256(artifact.file)
                     if (id.group == candidateGroup) {
                         check(id.version == candidateVersion && id.module in allowedCandidates) {
@@ -172,7 +174,7 @@ val verifyCandidateResolution = tasks.register("verifyCandidateResolution") {
             "publication_roots_requested" to candidateRoots,
             "metadata_mode" to providers.gradleProperty("nativecmpkitMetadataMode").get(),
             "candidate_variants_resolved" to candidateVariants.sorted(),
-            "complete_21_root_KMP_matrix_requested" to false, "release_readiness_certified" to false,
+            "complete_23_root_KMP_matrix_requested" to false, "release_readiness_certified" to false,
             "resolved_artifacts" to rows)
         report.get().asFile.apply {
             parentFile.mkdirs()
@@ -182,16 +184,27 @@ val verifyCandidateResolution = tasks.register("verifyCandidateResolution") {
     }
 }
 
+val networkCancellationTest by tasks.registering(Test::class) {
+    description = "Verify transport cancellation from the packaged Desktop WebView"
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+}
+
 tasks.withType<Test>().configureEach {
     dependsOn(verifyCandidateResolution)
     maxParallelForks = 1
     maxHeapSize = "512m"
     jvmArgs("-Xcheck:jni")
+    val testClass = if (name == "networkCancellationTest") {
+        "PublishedWebViewCancellationTest"
+    } else {
+        "PublishedWebViewConsumerTest"
+    }
     filter {
-        includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.PublishedWebViewConsumerTest")
+        includeTestsMatching("io.github.apdelrahman1911.nativecmpkit.consumer.$testClass")
         isFailOnNoMatchingTests = true
     }
-    // Always execute both methods; an old XML/test task result is not evidence.
+    // Retain fresh, task-specific reports from the staged classpath.
     outputs.upToDateWhen { false }
     val ownHome = layout.buildDirectory.dir("test-home/$name")
     val ownTmp = layout.buildDirectory.dir("test-tmp/$name")

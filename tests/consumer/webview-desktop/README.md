@@ -18,3 +18,10 @@ The configured five-host workflow requires Linux x64/arm64, macOS x64/arm64 and
 Windows x64. Linux requires a real display, usually `xvfb-run -a`. A missing
 graphical/native runtime fails; tests do not use assumption skips or substitute
 internal owners. Cross-host dependency-selector comparison is reviewed separately.
+
+For OpenJFX cancellation qualification, run `networkCancellationTest` with the
+same staged publication and resolution properties as `test`, using the candidate
+JavaFX coordinates. That task mounts the packaged library in a real Desktop window
+and requires three live loopback exchanges to reach client EOF after public Stop,
+navigation replacement, and Compose disposal. It keeps the standard two-method
+population independent from the OpenJFX adoption gate.

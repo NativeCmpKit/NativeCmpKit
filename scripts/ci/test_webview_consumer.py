@@ -29,7 +29,7 @@ def resolution(host='linux-x64', mode='module'):
                          'file': 'javafx-' + module + '-21.0.13-' + c.HOSTS[host][2] + '.jar', 'bytes': 23, 'sha256': 'c' * 64})
     document = {'schema_version': 2, 'scope': 'PARTIAL WebView desktop Maven consumer', 'candidate_group': c.GROUP,
                 'candidate_version': c.VERSION, 'publication_roots_requested': [c.MODULE], 'metadata_mode': mode,
-                'complete_21_root_KMP_matrix_requested': False, 'release_readiness_certified': False,
+                'complete_23_root_KMP_matrix_requested': False, 'release_readiness_certified': False,
                 'candidate_variants_resolved': [target], 'resolved_artifacts': rows}
     return document, staged
 
@@ -80,10 +80,13 @@ class WebViewConsumerControllerTests(unittest.TestCase):
 
     def test_duplicate_rows_original_group_and_unselected_candidate_are_rejected(self):
         original, staged = resolution()
-        cases = [deepcopy(original) for _ in range(3)]
+        cases = [deepcopy(original) for _ in range(2)]
         cases[0]['resolved_artifacts'].append(deepcopy(cases[0]['resolved_artifacts'][0]))
-        cases[1]['resolved_artifacts'][0]['group'] = 'io.github.apdelrahman1911.nativecmpkit'
-        cases[2]['resolved_artifacts'][0]['module'] = 'nativecmpkit-io-desktop'
+        cases[1]['resolved_artifacts'][0]['module'] = 'nativecmpkit-io-desktop'
+        for group in c.SUPERSEDED_GROUPS:
+            modified = deepcopy(original)
+            modified['resolved_artifacts'][0]['group'] = group
+            cases.append(modified)
         for document in cases:
             with self.assertRaises(c.EvidenceError):
                 c.resolution_contract(document, staged, 'linux-x64', 'module')
@@ -98,14 +101,13 @@ class WebViewConsumerControllerTests(unittest.TestCase):
             with self.subTest(key=key), self.assertRaises(c.EvidenceError):
                 c.resolution_contract(document, staged, 'linux-x64', 'module')
 
-    def test_pom_canonical_filename_is_not_silently_accepted_as_a_module_display_label(self):
+    def test_pom_receipt_cannot_pass_as_module_receipt_when_labels_are_identical(self):
         document, staged = resolution(mode='pom')
-        document['metadata_mode'] = 'module'
-        with self.assertRaises(c.EvidenceError):
+        with self.assertRaisesRegex(c.EvidenceError, 'scope/identity mismatch'):
             c.resolution_contract(document, staged, 'linux-x64', 'module')
 
     def test_partial_resolution_cannot_claim_full_matrix_or_release_readiness(self):
-        for key in ('complete_21_root_KMP_matrix_requested', 'release_readiness_certified'):
+        for key in ('complete_23_root_KMP_matrix_requested', 'release_readiness_certified'):
             document, staged = resolution()
             document[key] = True
             with self.subTest(key=key), self.assertRaises(c.EvidenceError):
