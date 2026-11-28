@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 from statistics import median
 import subprocess
@@ -34,6 +35,11 @@ LINUX_MEDIA_PLUGINS = {f"libavplugin{family}-{major}.so" for family, majors in
                        (("", (54, 56, 57)), ("-ffmpeg", (56, 57, 58, 59, 60))) for major in majors}
 LINUX_STUB_PREFIXES = ("libavcodec.so", "libavdevice.so", "libavfilter.so", "libavformat.so", "libavresample.so",
                        "libavutil.so", "libswresample.so", "libswscale.so", "libpostproc.so")
+STOCK_ABI_FLOORS = {
+    ("linux", "x64"): (2, 17), ("linux", "arm64"): (2, 38),
+    ("macos", "x64"): (11, 0), ("macos", "arm64"): (11, 0),
+    ("windows", "x64"): (10, 0),
+}
 
 
 def sha256(path):
@@ -286,6 +292,32 @@ def windows_binary_inventory(sdk, binaries, architecture):
     return inventory
 
 
+def native_abi_floor(inventory, target, architecture):
+    if target == "linux":
+        versions = re.findall(r"\bName: GLIBC_(\d+(?:\.\d+)+)\b", inventory)
+        kind = "GLIBC symbol versions"
+    elif target == "macos":
+        versions = re.findall(r"(?m)^[ \t]+minos (\d+(?:\.\d+)+)[ \t]*$", inventory)
+        kind = "Mach-O deployment version"
+    else:
+        versions = [f"{major}.{minor}" for major, minor in re.findall(
+            r"MajorSubsystemVersion:\s+(\d+)\s+MinorSubsystemVersion:\s+(\d+)", inventory
+        )]
+        kind = "PE subsystem version"
+    need(versions, f"Could not read {kind} from the emitted SDK")
+
+    def version_tuple(value):
+        return tuple(map(int, value.split(".")))
+
+    current = max(map(version_tuple, versions))
+    ordinary = STOCK_ABI_FLOORS[target, architecture]
+    # A zero patch component does not increase the compatibility floor.
+    padded_ordinary = ordinary + (0,) * max(0, len(current) - len(ordinary))
+    return {"measurement": kind, "target": target, "architecture": architecture,
+            "ordinary_openjfx_version": "21.0.13", "ordinary_maximum": list(ordinary), "source_maximum": list(current),
+            "source_within_ordinary_floor": current <= padded_ordinary}
+
+
 def stage_consumer_jars(source, output, target, architecture, sdk_hashes):
     """Stage upstream Gradle's exact modular JARs for an isolated artifact-only consumer."""
     upstream_classifier, consumer_classifier = CLASSIFIERS[target, architecture]
@@ -353,6 +385,7 @@ def verify_sdk(source, output, lock, target, architecture):
     before = {path.name: sha256(path) for path in binaries}
     write_json(output / "sdk-binaries.json", before)
     (output / "native-binary-inventory.txt").write_text(native_inventory, encoding="utf-8")
+    write_json(output / "native-abi-floor.json", native_abi_floor(native_inventory, target, architecture))
     (output / "loader-cancellation.txt").write_text(cancel_method, encoding="utf-8")
 
     classes = output / "probe-classes"
