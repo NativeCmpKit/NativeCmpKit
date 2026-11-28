@@ -189,6 +189,20 @@ class PartialProtocolTests(unittest.TestCase):
                          result["pre26_negative_steps_progress"])
         self.assertEqual(0, result["counts"]["passed"])
 
+    def test_negative_steps_diagnostics_retain_controlled_composition_and_reject_mixed_routes(self):
+        protocol = a.NativeProtocol()
+        suite, method = a.PRE26_NEGATIVE_STEPS_CASE
+        prefix = a.PRE26_NEGATIVE_STEPS_PREFIX
+        for line in (f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
+            protocol.feed(line)
+        phases = ("compose-enter", "compose-content-enter", "adaptive-slider-enter",
+                  "validation-caught", "public-validation-verified", "composition-disposed")
+        for phase in (*phases[:2], "main-throw-control-verified", "public-validation-verified", *phases[2:]):
+            protocol.feed(prefix + phase)
+        result = protocol.partial()
+        self.assertEqual(list(phases), result["pre26_negative_steps_progress"])
+        self.assertEqual(0, result["counts"]["passed"])
+
     def test_pre26_customization_records_only_ordered_phases_from_its_open_case(self):
         protocol = a.NativeProtocol()
         suite, method = a.PRE26_CUSTOMIZATION_CASE

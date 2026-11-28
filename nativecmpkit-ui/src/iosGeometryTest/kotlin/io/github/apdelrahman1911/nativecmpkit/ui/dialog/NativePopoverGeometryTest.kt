@@ -22,7 +22,6 @@ import kotlinx.cinterop.useContents
 import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectMake
 import platform.Foundation.NSBundle
-import platform.Foundation.NSError
 import platform.Foundation.NSProcessInfo
 import platform.UIKit.*
 import platform.UIKit.UIApplicationState.UIApplicationStateActive
@@ -64,7 +63,7 @@ class NativePopoverGeometryTest {
         var source: UIView? = null
         var manager: AlertDialogManager? = null
         var primary: Throwable? = null
-        var geometryError: NSError? = null // Main-confined; checked by every awaited predicate.
+        var geometryErrorCode: Long? = null // Main-confined; checked by every awaited predicate.
         assertTrue(NSProcessInfo.processInfo.operatingSystemVersion.useContents { majorVersion >= 16 })
         val expectedIdiom = NSProcessInfo.processInfo.environment["NATIVECMPKIT_POPOVER_GEOMETRY_IDIOM"] as? String
         assertTrue(expectedIdiom in setOf("iphone", "ipad"))
@@ -77,22 +76,24 @@ class NativePopoverGeometryTest {
                 assertTrue(sameNativeObject(requireOwnedApplicationWindow(), window))
                 assertTrue(sameNativeObject(window.windowScene, scene))
                 assertEquals(UISceneActivationStateForegroundActive, scene.activationState)
-                geometryError = null
+                geometryErrorCode = null
                 if (scene.interfaceOrientation == target) {
                     check(!requireRotation) { "The popover must be presented during a real orientation change" }
                 } else {
                     attemptedGeometry = true // Own restoration before an uncertain native request.
                     scene.requestGeometryUpdateWithPreferences(
                         UIWindowSceneGeometryPreferencesIOS(interfaceOrientations = orientationMask(target)),
-                        errorHandler = { error -> geometryError = checkNotNull(error) },
+                        errorHandler = { error -> geometryErrorCode = error?.code ?: -1L },
                     )
                 }
             }
             tracePhase("$phase-returned")
             var firstLandscapeReadback = rotateWhilePresented && phase == "landscape-request"
+            var refusal: Long? = null
             waitForNative {
                 if (firstLandscapeReadback) tracePhase("landscape-readback-entered")
-                geometryError?.let { failure -> error("Owned public OS geometry request failed: code=${failure.code}") }
+                refusal = geometryErrorCode
+                if (refusal != null) return@waitForNative true
                 // The owned scene can be inactive or have unsettled views during rotation.
                 // Require the same live window at completion without throwing during the transition.
                 val ready = UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
@@ -107,6 +108,10 @@ class NativePopoverGeometryTest {
                     firstLandscapeReadback = false
                 }
                 ready
+            }
+            refusal?.let { code ->
+                if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_GEOMETRY_REFUSED phase=$phase code=$code")
+                error("Owned public OS geometry request failed: code=$code")
             }
         }
 
@@ -184,6 +189,15 @@ class NativePopoverGeometryTest {
                 }
             }
         } catch (failure: Throwable) {
+            if (rotateWhilePresented) {
+                val kind = when (failure) {
+                    is AssertionError -> "assertion"
+                    is IllegalArgumentException -> "argument"
+                    is IllegalStateException -> "state"
+                    else -> "other"
+                }
+                println("NATIVECMPKIT_IPAD_ROTATION_FAILED phase=$phase kind=$kind")
+            }
             val marked = if (rotateWhilePresented) IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:$phase", failure) else failure
             primary = marked
             throw marked

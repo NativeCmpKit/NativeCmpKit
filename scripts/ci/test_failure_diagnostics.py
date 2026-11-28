@@ -9,6 +9,14 @@ import failure_diagnostics as d
 
 
 class FailureDiagnosticsTests(unittest.TestCase):
+    def test_ipad_geometry_captures_only_the_known_failure_and_numeric_code(self):
+        refusal = "NATIVECMPKIT_IPAD_GEOMETRY_REFUSED phase=landscape-request code=101"
+        failure = "NATIVECMPKIT_IPAD_ROTATION_FAILED phase=landscape-request kind=state"
+        result = d.sections(["unrelated output", "  " + refusal, failure, refusal + " extra",
+                             failure.replace("state", "foreign"), refusal.replace("101", "unchecked")])
+        self.assertEqual(["ipad-rotation-failure", "ipad-rotation-failure"], [row["kind"] for row in result])
+        self.assertEqual([refusal, failure], [row["text"].strip() for row in result])
+
     def test_sample_xcode_source_error_is_retained_without_full_build_or_console_output(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -218,13 +218,19 @@ PRE26_NEGATIVE_STEPS_CASE = (
     "pre26PublicNegativeStepsAreRejected",
 )
 PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
-PRE26_NEGATIVE_STEPS_PHASES = (
+PRE26_NEGATIVE_STEPS_LEGACY = (
     "compose-enter", "main-throw-control-verified", "composition-throw-control-start",
     "composition-throw-control-entered", "composition-throw-control-verified",
-    "set-content-enter", "adaptive-slider-enter", "compose-content-enter", "compose-content-returned",
-    "validation-caught", "composition-disposed",
-    "set-content-returned", "public-validation-verified",
+    "set-content-enter", "adaptive-slider-enter",
 )
+PRE26_NEGATIVE_STEPS_CONTROLLED = ("compose-enter", "compose-content-enter", "adaptive-slider-enter")
+PRE26_NEGATIVE_STEPS_ROUTES = (
+    (*PRE26_NEGATIVE_STEPS_LEGACY, "set-content-returned", "public-validation-verified"),
+    (*PRE26_NEGATIVE_STEPS_LEGACY, "public-validation-verified"),
+    (*PRE26_NEGATIVE_STEPS_CONTROLLED, "validation-caught", "public-validation-verified", "composition-disposed"),
+    (*PRE26_NEGATIVE_STEPS_CONTROLLED, "compose-content-returned", "composition-disposed"),
+)
+PRE26_NEGATIVE_STEPS_PHASES = tuple(dict.fromkeys(phase for route in PRE26_NEGATIVE_STEPS_ROUTES for phase in route))
 PRE26_TOOLBAR_CASE = (
     "io.github.apdelrahman1911.nativecmpkit.ui.toolbar.AdaptiveToolbarFallbackNativeTest",
     "pre26EmptyAndPopulatedItemsRenderMaterialSlotsAndCallerPlacement",
@@ -902,9 +908,8 @@ class NativeProtocol:
             return
         progress = self.pre26_negative_steps_progress
         phase = line.removeprefix(PRE26_NEGATIVE_STEPS_PREFIX)
-        if phase == "public-validation-verified" and progress == list(PRE26_NEGATIVE_STEPS_PHASES[:-2]):
-            progress.append(phase)
-        elif len(progress) < len(PRE26_NEGATIVE_STEPS_PHASES) and phase == PRE26_NEGATIVE_STEPS_PHASES[len(progress)]:
+        observed = (*progress, phase)
+        if any(observed == route[:len(observed)] for route in PRE26_NEGATIVE_STEPS_ROUTES):
             progress.append(phase)
 
     def observe_pre26_toolbar(self, line: str) -> None:

@@ -32,6 +32,11 @@ CREDENTIAL = re.compile(
     r"BEGIN .*PRIVATE KEY|https?://[^/\s]+@|[?&](?:sig|key|auth)=)")
 TASK = re.compile(r"^> Task (:[a-zA-Z0-9:_-]+)(?:\s|$)")
 XCODE_SOURCE_ERROR = re.compile(r"^[^\r\n]{1,1024}\.(?:swift|m|mm|c|h|cpp):[0-9]+:[0-9]+: (?:fatal )?error: ")
+IPAD_ROTATION_FAILURE = re.compile(
+    r"NATIVECMPKIT_IPAD_(?:GEOMETRY_REFUSED phase=(?:portrait-request|landscape-request|return-portrait-request|cleanup) code=-?\d{1,10}"
+    r"|ROTATION_FAILED phase=(?:set-content|scene-identity|portrait-request|present-in-portrait|initial-anchor|landscape-request|"
+    r"landscape-anchor|fallback-set|return-portrait-request|fallback-anchor|cleanup) kind=(?:assertion|argument|state|other))\Z"
+)
 
 
 def sanitized(lines: list[str]) -> str:
@@ -75,6 +80,8 @@ def sections(lines: list[str]) -> list[dict]:
             # Exact source diagnostics from the real unsigned sample Xcode
             # build, not surrounding Swift application or full build output.
             ranges.append((i, i + 1, "xcode-source-error"))
+        elif IPAD_ROTATION_FAILURE.fullmatch(line.strip()):
+            ranges.append((i, i + 1, "ipad-rotation-failure"))
         elif line.startswith("*** Terminating app due to uncaught exception "):
             # A real UIKit launch can fail before activation/TeamCity/JUnit.
             # Retain only the explicit Objective-C exception header; no nearby
