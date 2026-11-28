@@ -27,10 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.github.apdelrahman1911.nativecmpkit.sample.navigation.Screen
 import io.github.apdelrahman1911.nativecmpkit.sample.navigation.ScreenCategory
@@ -64,17 +61,7 @@ fun HomeScreen(
         )
 
         Text(
-            text = buildAnnotatedString {
-                val spanStyle = SpanStyle(fontWeight = FontWeight.Bold, color = colorScheme.primary)
-                withStyle(spanStyle) { append("C") }
-                append("ompose ")
-                withStyle(spanStyle) { append("A") }
-                append("daptive ")
-                withStyle(spanStyle) { append("L") }
-                append("ook & ")
-                withStyle(spanStyle) { append("F") }
-                append("eel")
-            },
+            text = "Native components for Compose Multiplatform",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
