@@ -206,10 +206,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Windows native build tool inventory failed' }
           if ((Get-PSDrive $PWD.Drive.Name).Free -lt 12GB) { throw 'Require 12 GiB for the native SDK build' }
           "OPENJFX_WINDOWS_PATH=$windowsPath" >> $env:GITHUB_ENV
+          "OPENJFX_VISUAL_STUDIO=$vs" >> $env:GITHUB_ENV
           "VS150COMNTOOLS=$vsTools" >> $env:GITHUB_ENV
           "WINDOWS_CRT_VER=143" >> $env:GITHUB_ENV
           "Python3_ROOT_DIR=$cygwin" >> $env:GITHUB_ENV
       - name: Build the complete Windows SDK and native WebKit from source
+        id: windows_sdk
         if: runner.os == 'Windows'
         shell: pwsh
         env:
@@ -247,6 +249,13 @@ jobs:
             --output build/ci-webview-consumer/source-sdk)
           if [[ "$SOURCE_OS" == linux ]]; then command=(xvfb-run -a "${command[@]}"); fi
           "${command[@]}"
+      - name: Verify the Microsoft redistributable inputs in the x64 SDK
+        if: runner.os == 'Windows' && !cancelled() && steps.windows_sdk.outcome == 'success'
+        shell: pwsh
+        run: |
+          & './tests/dependency/javafx-http2-cancellation/verify_windows_runtime.ps1' `
+            -Sdk "$env:SOURCE_DIR/build/sdk" -VisualStudio "$env:OPENJFX_VISUAL_STUDIO" `
+            -Report "$env:EVIDENCE_DIR/windows-runtime-provenance.json"
       - name: Require the stock-runtime ABI floor after collecting runtime evidence
         run: |
           python3 -B - "$EVIDENCE_DIR/native-abi-floor.json" <<'PY'
@@ -276,6 +285,7 @@ jobs:
             build/openjfx-source-verification/compat-compiler-build.log
             build/openjfx-source-verification/cygwin-installed.txt
             build/openjfx-source-verification/cygwin-input-packages.json
+            build/openjfx-source-verification/windows-runtime-provenance.json
             build/openjfx-source-verification/setup.xz
             build/openjfx-source-verification/setup.xz.sig
             build/openjfx-source-verification/build.log
