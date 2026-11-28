@@ -17,8 +17,9 @@ rows (`UI-ALERT-006`, `NAV-004`, `UI-BAR-008`, `UI-SHEET-003`).
 
 | Platform | Device | Run | Result | Record |
 | --- | --- | --- | --- | --- |
-| Android | Pixel 6 API 35, 1080×2400 | [45993784178](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/45993784178) | 17 passed / 6 failed / 5 blocked in the full pass; failures were flow-targeting bugs (fixed) and one iOS-only section | [functional-android-2026-11-27.md](functional-android-2026-11-27.md) |
+| Android | Pixel 6 API 35, 1080×2400 | [46099102700](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099102700) | **23 passed / 2 failed / 5 blocked** (`date-display`, `webview-js` still fail) | `screenshots/android/functional-api35-phone.json` |
 | iOS | iPhone 17 Pro, iOS 26.5, 402×874 | [46014167086](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46014167086) | 16 passed / 6 failed / 0 blocked | [functional-ios-2026-11-27.md](functional-ios-2026-11-27.md) |
+| iPad | iPad Pro 13-inch (M4), iOS 26.5 | [46099392157](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46099392157) | tour: 30 captures + 3 manual recaptures; functional: **18 passed / 8 failed / 5 blocked** | `screenshots/ios/functional-ipad-simulator.json` |
 
 Machine-readable results: `screenshots/android/functional-api35-phone.json`
 (partial rerun file) and `screenshots/ios/functional-iphone-simulator.json`.
@@ -41,15 +42,26 @@ driver wrote results at the end and its rerun file is partial.
 
 Executable dispatch and recording steps: [session-runbook.md](session-runbook.md).
 
+## Tablet findings (run 46099392157)
+
+- The iPad ActionSheet popover shows **Ok** and **Remove** but exposes **no Cancel**
+  action; both the tour and the functional flow failed to find it. `UI-ALERT-006`
+  is recorded `failed` with the iPad screenshot and defect note.
+- The in-sheet veto switch (`sheet-veto`) is not reachable in the iPad sheet
+  presentation; `UI-SHEET-002` stays failed on iPad.
+- `webview-js` passed on iPad, including the JavaScript-off/on evaluation.
+- iPad tour failures (`Adaptive Navigation Bar`, `Web View`, `Known Limitations`)
+  were recaptured manually; their images exist but are not recorded as canonical
+  tour captures.
+
 ## Outstanding verification
 
-1. Android full functional re-run on the current branch (all flows, including the
-   new veto/display-mode/JS/rotation flows) and Android tour recapture.
-2. Six iOS retests: `clickable`, `slider`, `date-bounds`, `sheet-veto`,
-   `date-display`, `webview-js`.
-3. iPad session: tour, functional, action-sheet popover (`UI-ALERT-006`).
-4. Android tablet session (1600×2560 / 320 dpi), tour, functional, tablet sheets.
-5. iOS Time Picker capture.
+1. Android tablet session (1600×2560 / 320 dpi), tour, functional, tablet sheets.
+2. Six iOS phone retests: `clickable`, `slider`, `date-bounds`, `sheet-veto`,
+   `date-display`, `webview-js`; iOS Time Picker capture.
+3. Two Android flow defects to finish: `date-display` (the switch toggles the
+   inline picker but the readout leaves the viewport) and `webview-js`
+   (JavaScript switch readout did not reach `off` before evaluation).
 
 ## Blocked, not passed
 
