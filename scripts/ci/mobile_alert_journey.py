@@ -33,7 +33,7 @@ def exercise(ui, output, platform, device):
                 "screenshot.capture", "tree.diff", "tree.snapshot", "ui.settle"}
     if not required.issubset(commands):
         raise ValueError(f"The native driver lacks these journey commands: {required - set(commands)}")
-    info = ui.device_info()
+    info = ui.device_info()["result"]
     hardware = "emulator" if platform == "android" else "simulator"
     if info["platform"] != platform or info["device_id"] != device or info["form_factor_hardware"] != hardware:
         raise ValueError("The native driver is not attached to the owned hosted device")
@@ -41,28 +41,38 @@ def exercise(ui, output, platform, device):
     ui.settle(mode="target", target_selector=selector(HOME), timeout_ms=7000)
     events = []
 
-    def click(label, *, contains=False):
-        target = selector(label) if not contains else {"label_contains": label, "visible": True}
+    def click(label, *, ref=None):
+        target = {"ref": ref} if ref else {"selector": selector(label)}
         since = time.monotonic()
-        change = ui.click(target, settle="fast", return_diff=True)
-        events.append({"action": label, "elapsed_seconds": time.monotonic() - since, "observation": change})
+        change = ui.click(**target, settle="fast", return_diff=True)
+        events.append({"action": label, "elapsed_seconds": time.monotonic() - since, "observation": change["result"]})
+
+    def open_sample():
+        snapshot = ui.inspect(format="compact", visible_only=True)["result"]
+        references = [node["ref"] for node in snapshot["nodes"] if node.get("ref") and
+                      (node.get("label") or "").split(" · ", 1)[0] == SCREEN]
+        if len(references) != 1:
+            raise ValueError("Expected one actionable Adaptive Alert Dialog entry in the current sample menu")
+        click(SCREEN, ref=references[0])
+        ui.wait(selector("Show Alert Dialog"), state="visible", timeout_ms=8000)
 
     def assert_closed(message):
         ui.wait(selector(message), state="absent", timeout_ms=7000)
         ui.assert_element(selector("Show Alert Dialog"), state="visible")
 
-    click(SCREEN, contains=True)
-    ui.wait(selector("Show Alert Dialog"), state="visible", timeout_ms=8000)
+    open_sample()
     click("Show Alert Dialog")
     ui.wait(selector(ALERT_MESSAGE), state="visible", timeout_ms=8000)
-    dialog = ui.inspect(format="compact", visible_only=True)
+    dialog = ui.inspect(format="compact", visible_only=True)["result"]
     engine = "a11y_daemon" if platform == "android" else "axe_serve"
     if dialog.get("performance", {}).get("engine") != engine:
         raise ValueError(f"The alert was not observed through the persistent {engine} engine")
     screenshot = ui.screenshot(wait_stable_ms=200, bind_snapshot=True)
-    if not screenshot.startswith(b"\x89PNG\r\n\x1a\n"):
-        raise ValueError("The alert screenshot is not a PNG")
-    (output / "alert.png").write_bytes(screenshot)
+    png = screenshot.pop("png")
+    if (not png.startswith(b"\x89PNG\r\n\x1a\n") or not screenshot.get("snapshot_id") or
+            screenshot.get("sha256") != hashlib.sha256(png).hexdigest()):
+        raise ValueError("Expected a PNG matching its bound alert screenshot metadata")
+    (output / "alert.png").write_bytes(png)
     click("Cancel")
     assert_closed(ALERT_MESSAGE)
 
@@ -79,11 +89,10 @@ def exercise(ui, output, platform, device):
 
     ui.action("app.restart", {"id": APP, "wait_ready": True, "timeout_ms": 20000})
     ui.wait(selector(HOME), state="visible", timeout_ms=10000)
-    click(SCREEN, contains=True)
-    ui.wait(selector("Show Alert Dialog"), state="visible", timeout_ms=8000)
+    open_sample()
     ui.assert_element(selector(ALERT_MESSAGE), state="absent")
     return {"cases_passed": ["cancel", "confirm_after_reopen", "confirm_without_cancel", "restart_and_reenter"],
-            "device": info, "dialog_snapshot": dialog, "actions": events}
+            "device": info, "dialog_snapshot": dialog, "screenshot": screenshot, "actions": events}
 
 
 def run(upstream, platform, device, output, axe):
