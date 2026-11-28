@@ -20,6 +20,16 @@ class IconCatalogueTest(unittest.TestCase):
     def setUpClass(cls):
         cls.manifest, cls.cupertino, cls.symbols = generator.load_inputs()
         cls.glyphs = generator.unicode_glyphs((generator.ROOT / cls.manifest["font"]["path"]).read_bytes())
+        cls.baseline_paths = subprocess.check_output(
+            ["git", "ls-tree", "-r", "--name-only", cls.manifest["baseline"]], cwd=generator.ROOT, text=True,
+        ).splitlines()
+
+    def original_text(self, current_path):
+        paths = [path for path in self.baseline_paths if Path(path).name == current_path.name]
+        self.assertEqual(1, len(paths), f"Expected one original catalogue source for {current_path.name}")
+        return subprocess.check_output(
+            ["git", "show", f"{self.manifest['baseline']}:{paths[0]}"], cwd=generator.ROOT, text=True,
+        )
 
     def test_generated_current_sources_match_reviewed_inputs(self):
         for path, text in generator.render(self.cupertino, self.symbols).items():
@@ -33,11 +43,7 @@ class IconCatalogueTest(unittest.TestCase):
         ) + ")\n"
         self.assertIn(expected, output)
         self.assertEqual(1, output.count("internal val IconCategories:"))
-        baseline = subprocess.check_output(
-            ["git", "show", self.manifest["baseline"] + ":" + str(generator.SAMPLE)],
-            cwd=generator.ROOT,
-        ).decode()
-        self.assertIn(expected, baseline)
+        self.assertIn(expected, self.original_text(generator.SAMPLE))
 
     def test_all_generated_outputs_preserve_exact_modification_notice_once(self):
         notice = "// Modified for nativeCmpkit (2026-10-24): correctness, lifecycle, testing and build hardening.\n"
@@ -51,7 +57,7 @@ class IconCatalogueTest(unittest.TestCase):
     def test_every_original_public_constant_is_retained_exactly(self):
         for path, pattern in [(generator.CUPERTINO, r"const val (`?\w+`?): Int = (0x[0-9A-F]+)"),
                               (generator.SF, r'const val (`?\w+`?) = "([^"]+)"')]:
-            baseline = subprocess.check_output(["git", "show", self.manifest["baseline"] + ":" + str(path)], cwd=generator.ROOT).decode()
+            baseline = self.original_text(path)
             self.assertEqual(re.findall(pattern, baseline), re.findall(pattern, (generator.ROOT / path).read_text()))
 
     def test_each_cupertino_mapping_has_an_actual_nonzero_unicode_glyph(self):

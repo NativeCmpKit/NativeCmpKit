@@ -51,7 +51,9 @@ class CurrentIdentityTest(unittest.TestCase):
         identity = json.loads((ROOT / "docs/migration/current-identity.json").read_bytes())
         self.assertEqual("io.github.apdelrahman1911.nativecmpkit", identity["maven_group"])
         self.assertEqual("io.github.apdelrahman1911.nativecmpkit", identity["public_kotlin_namespace"])
-        self.assertEqual(21, len(identity["modules"]))
+        self.assertEqual(23, len(identity["modules"]))
+        self.assertLessEqual({"nativecmpkit-geo", "nativecmpkit-navigation"},
+                             {module["new_artifact"] for module in identity["modules"]})
         self.assertTrue(all(m["new_artifact"].startswith("nativecmpkit-") and m["gradle_project"].startswith(":nativecmpkit-")
                             for m in identity["modules"]))
         self.assertFalse(identity["binary_compatibility_verified"])

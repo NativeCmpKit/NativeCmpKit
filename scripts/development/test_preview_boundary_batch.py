@@ -28,7 +28,7 @@ class PreviewBoundaryBatchTests(unittest.TestCase):
         self.assertNotIn('module.publication', maps)
         self.assertEqual([], list((ROOT / "nativecmpkit-maps/src").rglob('*.kt')))
         modules = json.loads((ROOT / "docs/migration/current-identity.json").read_text())['modules']
-        self.assertEqual(21, len(modules))
+        self.assertEqual(23, len(modules))
         self.assertTrue(all(module['source_directory'] not in {'nativecmpkit-maps', 'nativecmpkit-media', 'nativecmpkit-notifications'} for module in modules))
 
     def test_future_experimental_enabling_keeps_explicit_upstream_references_and_release_gates(self):
@@ -52,7 +52,7 @@ class PreviewBoundaryBatchTests(unittest.TestCase):
                 'tests/dependency/javafx-http2-cancellation/artifacts.json',
             ),
         }
-        self.assertEqual({'gradle.yml', 'build-native-libs.yml', *push_paths}, {path.name for path in workflows})
+        self.assertEqual({'gradle.yml', 'build-native-libs.yml', 'release.yml', *push_paths}, {path.name for path in workflows})
         for path in workflows:
             text = re.sub(r'(?m)^\s*#.*$', '', path.read_text())
             blocks = re.findall(r'(?ms)^on:\n(.*?)(?=^\S|\Z)', text)
@@ -68,6 +68,10 @@ class PreviewBoundaryBatchTests(unittest.TestCase):
                     '      - ' + name + '\n' for name in push_paths[path.name])
                 self.assertEqual(allowed.strip(), push[0].strip())
                 self.assertIn("github.ref == 'refs/heads/development/preview-hardening'", text)
+            if path.name == 'release.yml':
+                self.assertIn("github.repository == 'NativeCmpKit/NativeCmpKit' && github.ref_type == 'tag'", text)
+                self.assertIn('git merge-base --is-ancestor HEAD refs/remotes/origin/main', text)
+                self.assertIn('python3 -B scripts/migration/plan_tag_release.py --ref "$GITHUB_REF"', text)
             self.assertIn('workflow_dispatch:', text)
             self.assertIn('permissions:\n  contents: read', text)
             self.assertNotRegex(text, r'(?m)^\s*[\w-]+:\s*(?:write|write-all)\s*$')
