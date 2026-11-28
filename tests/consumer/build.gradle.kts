@@ -145,6 +145,14 @@ kotlin {
             implementation("io.coil-kt.coil3:coil:3.6.2")
         }
         commonTest.dependencies { implementation(kotlin("test")) }
+        if ("web" in consumerTargets) {
+            named("webTest") {
+                dependencies {
+                    implementation("org.jetbrains.kotlinx:kotlinx-browser:0.5.0")
+                    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
+                }
+            }
+        }
         if ("desktop" in consumerTargets) {
             named("desktopMain") {
                 dependencies {

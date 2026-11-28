@@ -34,6 +34,9 @@ CONSUMER_FILES = (
     "src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt",
     "src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt",
     "src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt",
+    "src/jsTest/kotlin/nativecmpkit/consumer/PackagedWebViewRenderer.js.kt",
+    "src/wasmJsTest/kotlin/nativecmpkit/consumer/PackagedWebViewRenderer.wasmJs.kt",
+    "src/webTest/kotlin/nativecmpkit/consumer/PublishedBrowserWebViewTest.kt",
 )
 CHECKER_MODULES = (
     "verify_artifacts", "native_license_supplements", "native_license_legacy_winapi",
@@ -47,7 +50,7 @@ SCOPE = "Independent full consumer source/checker carriage with inert exact orig
 
 # Bind the complete publication scope, public API probes, and test methods.
 PRESERVED_CONSUMER_INPUTS = MappingProxyType({
-    'build.gradle.kts': '13eba286774d29b926543e3652c51c0b5bf1a24341f5a5d02ad50a3db3477986',
+    'build.gradle.kts': '8ab2df8d5288ef3577ea0ddba7c702b2f2b03235f461c1399a735efab6518ea5',
     'src/androidMain/kotlin/nativecmpkit/consumer/PublishedAndroidBindings.kt': '0cf00b18bf3c2a4b6c3e963dd601b22cb00e987923eca2de8abfb91af4438e2a',
     'settings.gradle.kts': '0a5eb5ae6d16ab58dfae5b7d5c99b982184391169fe426c845363da00975544d',
     'gradle.properties': 'bf8bbec28b310adfdc5b6d3319217bc2cf8657f44cdba2f38214eca4035ddf3b',
@@ -55,6 +58,9 @@ PRESERVED_CONSUMER_INPUTS = MappingProxyType({
     'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': '88d98825392b67739a1a65b84fa0e251c72b50686e1b2f1b64005afe2ce0b444',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt': '6e465280638b566661cd6387a3a7b66a2d75a3faa86e219937c10f9765fbc440',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt': '9f7f8f42fdb3a5a1f5b0b418178f3fbf19ba6ce86e2a193338dc8c33a1d5735a',
+    'src/jsTest/kotlin/nativecmpkit/consumer/PackagedWebViewRenderer.js.kt': 'f88f076d4225c21b309e3cee404a5e81013d60b13fa309c7aee2731b2d1b2e73',
+    'src/wasmJsTest/kotlin/nativecmpkit/consumer/PackagedWebViewRenderer.wasmJs.kt': 'c4e2ec4c679099fd0d2745fbdc56d3858064018d647f655648fece6ec26545c4',
+    'src/webTest/kotlin/nativecmpkit/consumer/PublishedBrowserWebViewTest.kt': '0d0a386058e7d6bc8098a272c5fac179ff9fb22674082db936ba4d15d9a58e83',
 })
 
 # Exact663 catalog/f510 metadata originals, not a mutable producer-report waiver.
@@ -153,7 +159,7 @@ def snapshot(root: Path, expected: str) -> tuple[Input, ...]:
         else:
             target = "inert-material-context/metadata/" + Path(relative).name
         held.append(Input(relative, target, payload))
-    require(len(held) == 38 and len({item.target for item in held}) == len(held)
+    require(len(held) == 41 and len({item.target for item in held}) == len(held)
             and sum(len(item.payload) for item in held) <= MAX_INPUT_BYTES,
             "Carriage source/material inventory differs or exceeds its bound")
     # Clean status alone must not admit ignored/untracked input or an edited

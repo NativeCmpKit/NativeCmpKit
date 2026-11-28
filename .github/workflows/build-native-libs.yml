@@ -850,7 +850,7 @@ jobs:
           reports = json.loads(Path(sys.argv[1]).read_text())["by_task"]
           expected = {"desktopTest": 19}
           if sys.argv[2] == "identity-apple-consumer-package":
-              expected.update(testAndroidHostTest=10, jsBrowserTest=10, wasmJsBrowserTest=10, iosSimulatorArm64Test=10)
+              expected.update(testAndroidHostTest=10, jsBrowserTest=11, wasmJsBrowserTest=11, iosSimulatorArm64Test=10)
           elif sys.argv[2] != "identity-apple-consumer-desktop-package":
               raise SystemExit("Unsupported Apple consumer profile")
           if set(reports) != set(expected) or any(
