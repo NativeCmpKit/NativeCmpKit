@@ -5075,7 +5075,7 @@
       "flowId": "android-phone-alertdialogiosstyle-actionsheet-ipad-popover",
       "screenshot": {
         "android": "screenshots/android/alertdialogiosstyle-actionsheet/ipad-popover/api35-phone.png",
-        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png"
+        "ios": "screenshots/ios/functional/action-sheet/ipad-simulator-after.png"
       },
       "execution": {
         "android": {
@@ -5085,10 +5085,10 @@
           "job": null
         },
         "ios": {
-          "status": "failed",
-          "run": "46099392157",
+          "status": "passed",
+          "run": "46152315681",
           "attempt": "1",
-          "job": "140838141915",
+          "job": "141001425657",
           "device": "ipad-simulator"
         },
         "desktop": {
@@ -5104,14 +5104,22 @@
           "job": null
         }
       },
-      "defect": {
-        "platform": "ios",
-        "run": "46099392157",
-        "attempt": "1",
-        "job": "140838141915",
-        "error": "iPad ActionSheet popover exposes Ok and Remove but no Cancel action; the tour and the functional pass both failed to find Cancel"
-      },
-      "limitations": []
+      "defect": null,
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "action-sheet",
+          "platform": "ios",
+          "status": "passed",
+          "run": "46152315681",
+          "attempt": "1",
+          "job": "141001425657",
+          "before": "screenshots/ios/functional/action-sheet/ipad-simulator-before.png",
+          "after": "screenshots/ios/functional/action-sheet/ipad-simulator-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "NAV-004",

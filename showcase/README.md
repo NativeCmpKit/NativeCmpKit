@@ -73,7 +73,7 @@ printf '3\n' > ci/showcase-trigger
 
 The repository Actions allowlist does not include the ui-test-actions composite
 action. The workflow therefore clones the reviewed commit
-`1c0d90debd7319c7580279bcbe2fb5ab19d6feea` and runs its `lifecycle.py` directly.
+`e22f6c35fe6ca50a83890f54e4a6ec29ef0e2951` and runs its `lifecycle.py` directly.
 Only allowlisted actions (`checkout`, `setup-java`, `gradle/actions`,
 `upload-artifact`) are referenced. This does not change repository settings.
 

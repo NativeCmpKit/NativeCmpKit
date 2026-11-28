@@ -6,7 +6,7 @@ the external-client scripts used to drive and capture it.
 
 ## Pinned execution
 
-- Runner scripts: `1c0d90debd7319c7580279bcbe2fb5ab19d6feea`
+- Runner scripts: `e22f6c35fe6ca50a83890f54e4a6ec29ef0e2951`
 - Captured by `.github/workflows/showcase-ui.yml`; the action itself is not on
   this repository's Actions allowlist, so the workflow clones that exact commit
   and starts `lifecycle.py` directly.

@@ -4,7 +4,7 @@ Exact sequence for the remaining verification. Replace `<RUN>` with the
 workflow run id and download the matching session artifact. The token file is
 private and is never printed or committed.
 
-All sessions use the pinned client `1c0d90debd7319c7580279bcbe2fb5ab19d6feea`
+All sessions use the pinned client `e22f6c35fe6ca50a83890f54e4a6ec29ef0e2951`
 (`--client-dir /tmp/opencode/ui-test-actions`) and the token at
 `/tmp/opencode/showcase-token`.
 

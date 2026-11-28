@@ -8,7 +8,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **blocked** = the pinned harness cannot drive the surface; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
 
 - android: 41 captured, 2 failed, 20 not-applicable, 25 passed
-- ios: 1 blocked, 55 captured, 4 failed, 9 not-applicable, 19 passed
+- ios: 1 blocked, 55 captured, 3 failed, 9 not-applicable, 20 passed
 
 Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<platform>/functional-<device>.json`.
 
@@ -84,7 +84,7 @@ Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<pl
 | PERM-SMS-001 | ReadSms, ReceiveSms, SendSms | legacy SMS routes | supported | supported | Permission | passed (46099102700) | passed (46108448068) |
 | UI-ICON-004 | CupertinoIcon catalog | category filters | supported | supported | CupertinoIconsCatalog | passed (46099102700) | passed (46108448068) |
 | UI-ALERT-005 | AdaptiveBasicAlertDialog | text field and critical severity | unsupported | supported | Dialog | not-applicable | passed (46108448068) |
-| UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | failed (46099392157) |
+| UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | passed (46152315681) |
 | NAV-004 | HomeScreen | large-screen index layout | supported | supported | Home | captured (46107087160) | captured (46099392157) |
 | UI-BAR-008 | AdaptiveScaffold | tablet tab and bar layout | supported | supported | Scaffold | captured (46107087160) | captured (46099392157) |
 | UI-SHEET-003 | AdaptiveBottomSheet | tablet presentation | supported | supported | BottomSheet | captured (46107087160) | captured (46099392157) |
