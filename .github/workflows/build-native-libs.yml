@@ -74,6 +74,8 @@ jobs:
           ivy_path="$GITHUB_WORKSPACE/$EVIDENCE_DIR/ivy"
           if (
             cd "$SOURCE_DIR"
+            SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
+            export SOURCE_DATE_EPOCH
             set -x
             ./gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
               -PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true -PNUM_COMPILE_THREADS=2 \
@@ -102,6 +104,7 @@ jobs:
             build/openjfx-source-verification/build-exit.txt
             build/openjfx-source-verification/sdk-binaries.json
             build/openjfx-source-verification/webkit-elf.txt
+            build/openjfx-source-verification/native-elf-inventory.txt
             build/openjfx-source-verification/loader-cancellation.txt
             build/openjfx-source-verification/probe-execution.json
             build/openjfx-source-verification/probe.stdout

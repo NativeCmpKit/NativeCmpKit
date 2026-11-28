@@ -125,6 +125,8 @@ def verify_sdk(source, output, lock):
     need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
     native_arch = subprocess.check_output(["readelf", "-h", str(sdk / "libjfxwebkit.so")], timeout=10, text=True)
     need("Advanced Micro Devices X86-64" in native_arch, "Expected a Linux x86-64 WebKit library")
+    native_inventory = subprocess.check_output(["readelf", "-h", "-d", *(str(path) for path in binaries
+                                                        if path.suffix == ".so")], timeout=60, text=True)
     bytecode = subprocess.check_output(["javap", "-p", "-c", "-classpath", str(sdk / "javafx.web.jar"),
                                         "com.sun.webkit.network.HTTP2Loader"], timeout=15, text=True)
     cancel_method = bytecode.split("public void fwkCancel();", 1)[1].split("private void callBackIfNotCanceled", 1)[0]
@@ -132,6 +134,7 @@ def verify_sdk(source, output, lock):
     before = {path.name: sha256(path) for path in binaries}
     write_json(output / "sdk-binaries.json", before)
     (output / "webkit-elf.txt").write_text(native_arch, encoding="utf-8")
+    (output / "native-elf-inventory.txt").write_text(native_inventory, encoding="utf-8")
     (output / "loader-cancellation.txt").write_text(cancel_method, encoding="utf-8")
 
     classes = output / "probe-classes"
