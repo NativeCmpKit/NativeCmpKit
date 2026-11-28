@@ -86,13 +86,15 @@ class PickerJniPathReceipts(unittest.TestCase):
 
     def test_failure_only_native_workflow_does_not_replay_accepted_hosts_or_unrelated_gradle_and_gui(self):
         workflow = (r.library.ROOT / ".github/workflows/build-native-libs.yml").read_text()
-        self.assertIn('options: [all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]', workflow)
+        options = workflow.split('options: [', 1)[1].split(']', 1)[0].split(', ')
+        self.assertTrue({'all', 'picker-jni-macos-domain', 'native-lock-reproducibility',
+                         'native-lock-windows-source'} <= set(options))
         self.assertIn("&& inputs.profile == 'all'", workflow)
-        recovery = workflow.split('\n  picker-jni-macos-domain:', 1)[1]
+        recovery = workflow.split('\n  picker-jni-macos-domain:', 1)[1].split('\n  identity-verification:', 1)[0]
         for required in ("inputs.profile == 'picker-jni-macos-domain'", 'runs-on: macos-26',
                          '--expected-arch arm64 --require-clean --apple',
                          '--focus macos-domain --output build/ci-verification/picker-jni-macos-domain',
-                         'unittest discover -s scripts/ci -p test_picker_jni_paths.py',
+                         'PYTHONPATH=scripts/ci python3 -B -m unittest test_picker_jni_paths',
                          'persist-credentials: false', 'build/ci-verification/picker-jni-macos-domain/*.json'):
             self.assertIn(required, recovery)
         for forbidden in ('matrix:', 'gradlew', 'setup-android', 'xvfb', 'xdotool',

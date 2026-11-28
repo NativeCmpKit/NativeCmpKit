@@ -266,8 +266,11 @@ class StorageOperationalGuards(unittest.TestCase):
     def test_all_existing_profiles_and_eleven_full_slots_are_unchanged(self):
         self.assertTrue(set(FROZEN_PROFILE_NAMES) <= matrix.PROFILES.keys())
         observed = {profile: matrix.matrix(profile) for profile in FROZEN_PROFILE_NAMES}
-        self.assertEqual(FROZEN_PROFILE_MATRIX_SHA256, hashlib.sha256(json.dumps(observed, separators=(",", ":"), sort_keys=True).encode()).hexdigest())
-        self.assertEqual(FROZEN_FULL_SLOTS_SHA256, hashlib.sha256(json.dumps(matrix.SLOTS, separators=(",", ":"), sort_keys=True).encode()).hexdigest())
+        archived_identity = json.loads((lt.ROOT / "docs/migration/identity.json").read_bytes())
+        archived_prefix = (archived_identity["public_kotlin_namespace"].rsplit(".", 1)[1] + "-").encode()
+        for document, pinned in ((observed, FROZEN_PROFILE_MATRIX_SHA256), (matrix.SLOTS, FROZEN_FULL_SLOTS_SHA256)):
+            serialized = json.dumps(document, separators=(",", ":"), sort_keys=True).encode()
+            self.assertEqual(pinned, hashlib.sha256(serialized.replace(b"nativecmpkit-", archived_prefix)).hexdigest())
         self.assertEqual(11, len(matrix.matrix("all")["include"]))
         for row in storage.ROWS:
             selected = matrix.matrix(row.profile)["include"]

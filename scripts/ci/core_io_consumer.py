@@ -4,7 +4,7 @@
 Stage four real publications into the producer's isolated FILE repository, then
 copy the standalone fixture and resolve/execute it independently. Never uploads
 packages, selects arbitrary tasks, substitutes producer projects/classes, or
-certifies the full21-root/native/ABI/legal/dependency/release matrix. This is a
+certifies the full 23-root/native/ABI/legal/dependency/release matrix. This is a
 bounded process-group controller, not an OS sandbox, trusted-builder attestation,
 or the narrowly supported controlled dependency-fixture daemon owner.
 """
@@ -28,6 +28,7 @@ import runtime_context
 
 ROOT = Path(__file__).resolve().parents[2]
 GROUP = "io.github.apdelrahman1911.nativecmpkit"
+SUPERSEDED_GROUPS = {".".join(("com", "mohamedrejeb", "calf")), ".".join(("io", "github", "apdelrahman1911", "kira"))}
 VERSION = "0.1.0-preview.1"
 ROOTS = ("nativecmpkit-core", "nativecmpkit-io")
 COORDINATES = frozenset(module + suffix for module in ROOTS for suffix in ("", "-desktop"))
@@ -319,7 +320,7 @@ def environment(root: Path, output: Path, *, consumer: bool = False) -> dict[str
 
 def verify_static(root: Path, repository: Path) -> dict:
     # The exact existing gate, with a deliberately explicit two-root filter;
-    # its default full21-root behavior and required target/native matrix stay intact.
+    # its default full 23-root behavior and required target/native matrix stay intact.
     sys.path.insert(0, str(ROOT / "tests/consumer"))
     import verify_artifacts
     result = verify_artifacts.ArtifactVerifier(root, repository, VERSION, list(ROOTS), ["desktop"], ["linux-x64"]).run()
@@ -341,8 +342,8 @@ def resolution_contract(document: dict, staged: dict[str, dict], bindings: dict[
          and document.get("scope") == "PARTIAL Core/IO desktop Maven consumer"
          and document.get("candidate_group") == GROUP and document.get("candidate_version") == VERSION
          and document.get("publication_roots_requested") == list(ROOTS), "Unexpected independent consumer resolution schema/identity")
-    need(document.get("complete_21_root_KMP_matrix_requested") is False and document.get("release_readiness_certified") is False,
-         "Partial resolution must not certify the full21-root matrix or release")
+    need(document.get("complete_23_root_KMP_matrix_requested") is False and document.get("release_readiness_certified") is False,
+         "Partial resolution must not certify the full 23-root matrix or release")
     rows = document.get("resolved_artifacts")
     need(isinstance(rows, list) and 1 <= len(rows) <= 4096, "Missing or unbounded independently resolved artifact rows")
     required = {m + "-desktop" for m in ROOTS}
@@ -357,7 +358,7 @@ def resolution_contract(document: dict, staged: dict[str, dict], bindings: dict[
              "Unexpected resolved artifact row fields")
         need(row["configuration"] in CLASSPATHS and all(isinstance(row[k], str) and row[k] for k in ("group", "module", "version", "file", "sha256")),
              "Invalid resolved Maven identity or selected classpath")
-        need(row["group"] != "com.mohamedrejeb.calf", "Original Calf artifact in independent consumer")
+        need(row["group"] not in SUPERSEDED_GROUPS, "Superseded Maven artifact in independent consumer")
         need(type(row["bytes"]) is int and row["bytes"] > 0 and re.fullmatch(r"[0-9a-f]{64}", row["sha256"]),
              "Invalid resolved artifact byte identity")
         identity = tuple(row[k] for k in ("configuration", "group", "module", "version", "file"))
@@ -449,7 +450,7 @@ def run(root: Path, relative: str, timeout: int = 4200, reserve_mib: int = 8192)
     record = {"schema_version": 1, "scope": SCOPE, "passed": False, "source_revision": lt.git_revision(root),
               "started_utc": lt.utc_now(), "candidate_group": GROUP, "candidate_version": VERSION,
               "publication_roots_requested": list(ROOTS), "target": "desktop", "native_platform": "linux-x64",
-              "complete_21_root_KMP_matrix_requested": False, "release_readiness_certified": False,
+              "complete_23_root_KMP_matrix_requested": False, "release_readiness_certified": False,
               "packages_published": False, "release_created": False, "ordinary_dependency_trust_certified": False,
               "process_cleanup_scope": "Bounded owned process group only; detached Gradle/other descendant cleanup is not attested by this controller",
               "executions": [], "actual_consumer_methods_verified": 0}

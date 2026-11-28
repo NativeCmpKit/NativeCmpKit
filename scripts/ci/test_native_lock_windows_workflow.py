@@ -40,8 +40,8 @@ class NativeLockWindowsWorkflowTest(unittest.TestCase):
         self.assertIn("if: inputs.profile == 'native-lock-reproducibility'", old)
         changed = block.split("- name: Changed checkout", 1)[1]
         self.assertIn("if: inputs.profile == 'native-lock-windows-source'", changed)
-        self.assertIn("test_native_lock_windows_workflow.py", changed)
-        self.assertNotIn("test_native_lock_reproducibility.py", changed)
+        self.assertIn("PYTHONPATH=scripts/ci python3 -B -m unittest test_native_lock_windows_workflow -v", changed)
+        self.assertNotIn("test_native_lock_reproducibility", changed)
 
 
 if __name__ == "__main__": unittest.main()

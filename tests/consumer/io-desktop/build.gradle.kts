@@ -131,7 +131,9 @@ val verifyCandidateResolution = tasks.register("verifyCandidateResolution") {
                     val id = artifact.id.componentIdentifier
                     check(id !is ProjectComponentIdentifier) { "Project substitution in $name: $id" }
                     check(id is ModuleComponentIdentifier) { "Non-Maven artifact in $name: $id" }
-                    check(id.group != "com.mohamedrejeb.calf") { "Original Calf dependency in $name: $id" }
+                    check(id.group != "com.mohamedrejeb.calf" && id.group != "io.github.apdelrahman1911.kira") {
+                        "Superseded Maven dependency in $name: $id"
+                    }
                     val hash = artifactSha256(artifact.file)
                     if (id.group == candidateGroup) {
                         check(id.version == candidateVersion && id.module in allowedCandidates) {
@@ -152,7 +154,7 @@ val verifyCandidateResolution = tasks.register("verifyCandidateResolution") {
             "candidate_group" to candidateGroup, "candidate_version" to candidateVersion,
             "publication_roots_requested" to candidateRoots,
             "candidate_variants_resolved" to candidateVariants.sorted(),
-            "complete_21_root_KMP_matrix_requested" to false, "release_readiness_certified" to false,
+            "complete_23_root_KMP_matrix_requested" to false, "release_readiness_certified" to false,
             "resolved_artifacts" to rows)
         report.get().asFile.apply {
             parentFile.mkdirs()

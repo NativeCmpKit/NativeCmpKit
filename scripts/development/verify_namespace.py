@@ -91,7 +91,8 @@ def main():
             )):
                 errors.append(f"{relative}: Kotlin package is outside the project namespace")
         for number, line in enumerate(source.splitlines(), 1):
-            if relative in {"tests/consumer/build.gradle.kts", "tests/consumer/webview-desktop/build.gradle.kts"} and line.strip() == (
+            if relative in {"tests/consumer/build.gradle.kts", "tests/consumer/io-desktop/build.gradle.kts",
+                            "tests/consumer/webview-desktop/build.gradle.kts"} and line.strip() == (
                 'check(id.group != "com.mohamedrejeb.calf" && id.group != "io.github.apdelrahman1911.kira") {'
             ):
                 continue

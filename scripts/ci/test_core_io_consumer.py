@@ -70,7 +70,7 @@ class TemporaryTest(unittest.TestCase):
         return {"schema_version": 2, "scope": "PARTIAL Core/IO desktop Maven consumer",
                 "candidate_group": c.GROUP, "candidate_version": c.VERSION, "publication_roots_requested": list(c.ROOTS),
                 "candidate_variants_resolved": sorted(m + "-desktop" for m in c.ROOTS),
-                "complete_21_root_KMP_matrix_requested": False, "release_readiness_certified": False,
+                "complete_23_root_KMP_matrix_requested": False, "release_readiness_certified": False,
                 "resolved_artifacts": rows}, staged, bindings
 
     def reports(self):
@@ -261,8 +261,9 @@ class ResolutionTests(TemporaryTest):
 
     def test_foreign_old_nativecmpkit_coordinate_or_wrong_version_fail(self):
         document, staged, bindings = self.resolution()
-        for key, value in [('group', 'io.github.apdelrahman1911.nativecmpkit'), ('module', 'nativecmpkit-share-desktop'),
-                           ('module', 'nativecmpkit-core'), ('version', '0.1.0-preview.2')]:
+        for key, value in [*(('group', group) for group in sorted(c.SUPERSEDED_GROUPS)),
+                           ('module', 'nativecmpkit-share-desktop'), ('module', 'nativecmpkit-core'),
+                           ('version', '0.1.0-preview.2')]:
             with self.subTest(key=key, value=value):
                 changed = deepcopy(document)
                 changed['resolved_artifacts'][0][key] = value
@@ -283,7 +284,7 @@ class ResolutionTests(TemporaryTest):
 
     def test_partial_report_cannot_claim_full_matrix_release_or_another_variant_inventory(self):
         document, staged, bindings = self.resolution()
-        for key, value in [('complete_21_root_KMP_matrix_requested', True), ('release_readiness_certified', True),
+        for key, value in [('complete_23_root_KMP_matrix_requested', True), ('release_readiness_certified', True),
                            ('candidate_variants_resolved', ['nativecmpkit-core-desktop']), ('candidate_version', '0.1.0-preview.2'),
                            ('publication_roots_requested', ['nativecmpkit-core']), ('schema_version', True), ('schema_version', 1)]:
             with self.subTest(key=key, value=value):
