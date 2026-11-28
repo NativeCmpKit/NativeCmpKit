@@ -56,6 +56,19 @@ class AssemblyDiagnosticsTests(unittest.TestCase):
             self.assertNotIn("ipad_rotation_phases", foreign)
             self.assertNotIn("private diagnostic", str(rotation))
 
+    def test_ipad_rotation_reads_bounded_details_from_the_outer_failure_message(self):
+        with tempfile.TemporaryDirectory() as output:
+            path = Path(output) / "TEST-fixture.xml"
+            for observed, detail in (("orientation-unsettled", {}), ("refused code=101", {"code": 101})):
+                raw = ("<testsuite><testcase name='nativeOSRotationRefreshesOwnedAnchorsAndRestoresTheOriginalOrientation'>"
+                       "<failure message='NATIVECMPKIT_IPAD_ROTATION:landscape-request kind=state readback="
+                       + observed + "'>unrelated details</failure></testcase></testsuite>").encode()
+                path.write_bytes(raw)
+                result, = failure_rows("nativecmpkit-ui", path, hashlib.sha256(raw).hexdigest())
+                self.assertEqual({"phase": "landscape-request", "kind": "state", "readback": observed.split()[0], **detail},
+                                 result["ipad_rotation_failure"])
+                self.assertNotIn("unrelated details", str(result))
+
     def test_remote_io_failed_junit_keeps_only_known_categories_and_source_frames(self):
         original = b"""<testsuite><testcase name="cancelOwnedOpen"><failure message="private-data awaiting cancellation socket/native producer terminal">java.lang.AssertionError
  at owned.NativeTests.cancel(AndroidIoRemoteDocumentsTest.kt:123)

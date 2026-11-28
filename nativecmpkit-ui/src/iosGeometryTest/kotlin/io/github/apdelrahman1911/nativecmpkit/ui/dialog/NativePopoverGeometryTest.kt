@@ -46,12 +46,27 @@ class NativePopoverGeometryTest {
             }
         }
         var phase = "set-content"
+        var readback = "unobserved"
+        var refusal: Long? = null
         fun tracePhase(value: String) {
             if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_ROTATION_PHASE $value")
         }
         fun enterPhase(value: String) {
             phase = value
+            readback = "unobserved"
+            refusal = null
             tracePhase(value)
+        }
+        fun markFailure(failure: Throwable): Throwable {
+            if (!rotateWhilePresented) return failure
+            val kind = when (failure) {
+                is AssertionError -> "assertion"
+                is IllegalArgumentException -> "argument"
+                is IllegalStateException -> "state"
+                else -> "other"
+            }
+            val code = refusal?.let { " code=$it" }.orEmpty()
+            return IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:$phase kind=$kind readback=$readback$code", failure)
         }
         enterPhase("set-content")
         lateinit var parent: UIViewController
@@ -89,25 +104,29 @@ class NativePopoverGeometryTest {
             }
             tracePhase("$phase-returned")
             var firstLandscapeReadback = rotateWhilePresented && phase == "landscape-request"
-            var refusal: Long? = null
             waitForNative {
                 if (firstLandscapeReadback) tracePhase("landscape-readback-entered")
                 refusal = geometryErrorCode
-                if (refusal != null) return@waitForNative true
                 // The owned scene can be inactive or have unsettled views during rotation.
                 // Require the same live window at completion without throwing during the transition.
-                val ready = UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
-                    window.isKeyWindow() && !window.hidden &&
-                    sameNativeObject(window.rootViewController?.view?.window, window) &&
-                    sameNativeObject(parent.view.window, window) && sameNativeObject(window.windowScene, scene) &&
-                    scene.activationState == UISceneActivationStateForegroundActive && scene.interfaceOrientation == target &&
-                    window.bounds.useContents { validGeometry(size.width, size.height, target) } &&
-                    parent.view.bounds.useContents { validGeometry(size.width, size.height, target) }
+                readback = when {
+                    refusal != null -> "refused"
+                    UIApplication.sharedApplication.applicationState != UIApplicationStateActive -> "app-inactive"
+                    !window.isKeyWindow() || window.hidden -> "window-inactive"
+                    !sameNativeObject(window.rootViewController?.view?.window, window) -> "root-detached"
+                    !sameNativeObject(parent.view.window, window) -> "parent-detached"
+                    !sameNativeObject(window.windowScene, scene) -> "scene-changed"
+                    scene.activationState != UISceneActivationStateForegroundActive -> "scene-inactive"
+                    scene.interfaceOrientation != target -> "orientation-unsettled"
+                    !window.bounds.useContents { validGeometry(size.width, size.height, target) } -> "window-bounds-unsettled"
+                    !parent.view.bounds.useContents { validGeometry(size.width, size.height, target) } -> "parent-bounds-unsettled"
+                    else -> "ready"
+                }
                 if (firstLandscapeReadback) {
                     tracePhase("landscape-readback-returned")
                     firstLandscapeReadback = false
                 }
-                ready
+                readback == "ready" || refusal != null
             }
             refusal?.let { code ->
                 if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_GEOMETRY_REFUSED phase=$phase code=$code")
@@ -189,16 +208,7 @@ class NativePopoverGeometryTest {
                 }
             }
         } catch (failure: Throwable) {
-            if (rotateWhilePresented) {
-                val kind = when (failure) {
-                    is AssertionError -> "assertion"
-                    is IllegalArgumentException -> "argument"
-                    is IllegalStateException -> "state"
-                    else -> "other"
-                }
-                println("NATIVECMPKIT_IPAD_ROTATION_FAILED phase=$phase kind=$kind")
-            }
-            val marked = if (rotateWhilePresented) IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:$phase", failure) else failure
+            val marked = markFailure(failure)
             primary = marked
             throw marked
         } finally {
@@ -213,10 +223,7 @@ class NativePopoverGeometryTest {
             cleanup { runOnIdle { manager?.dispose(); source?.removeFromSuperview() } }
             cleanup { waitForNative { parent.presentedViewController == null } }
             if (attemptedGeometry) cleanup { geometry(checkNotNull(originalOrientation)) }
-            cleanupFailure?.let {
-                if (rotateWhilePresented) throw IllegalStateException("NATIVECMPKIT_IPAD_ROTATION:cleanup", it)
-                throw it
-            }
+            cleanupFailure?.let { throw markFailure(it) }
         }
     }
 

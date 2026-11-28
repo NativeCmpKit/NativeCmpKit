@@ -30,6 +30,11 @@ RESTORE_STAGES = ("url", "html-recovery", "navigator", "redirect", "final", "nul
 IPAD_ROTATION_PHASE = re.compile(
     r"\bNATIVECMPKIT_IPAD_ROTATION:(" + "|".join(map(re.escape, IPAD_ROTATION_PHASES)) + r")(?![A-Za-z0-9_-])"
 )
+IPAD_ROTATION_FAILURE = re.compile(
+    IPAD_ROTATION_PHASE.pattern + r" kind=(assertion|argument|state|other) readback="
+    r"(unobserved|refused|app-inactive|window-inactive|root-detached|parent-detached|scene-changed|scene-inactive|"
+    r"orientation-unsettled|window-bounds-unsettled|parent-bounds-unsettled|ready)(?: code=(-?[0-9]{1,10}))?(?=\s|$)"
+)
 DEFAULT_ACTION_SHEET_PHASE = re.compile(
     r"\bNATIVECMPKIT_DEFAULT_ACTION_SHEET:(" + "|".join(map(re.escape, (*DEFAULT_ACTION_SHEET_PHASES, "ipad-anchor"))) +
     r")(?![A-Za-z0-9_-])"
@@ -231,6 +236,13 @@ def failure_rows(module, path, expected_digest=None):
             if module == "nativecmpkit-ui" and name == POPOVER_GEOMETRY_METHODS[1]:
                 diagnostics["ipad_rotation_phases"] = list(dict.fromkeys(IPAD_ROTATION_PHASE.findall(failure_text)))[:2]
                 diagnostics["ipad_geometry_request_refused"] = "Owned public OS geometry request failed:" in failure_text
+                details = IPAD_ROTATION_FAILURE.search(failure_text)
+                if details is not None:
+                    phase, kind, readback, code = details.groups()
+                    diagnostics["ipad_rotation_failure"] = {"phase": phase, "kind": kind, "readback": readback}
+                    if readback == "refused" and code is not None:
+                        diagnostics["ipad_geometry_request_refused"] = True
+                        diagnostics["ipad_rotation_failure"]["code"] = int(code)
             if module == "nativecmpkit-ui" and name == IOS_DEFAULT_ACTION_SHEET_METHOD:
                 diagnostics["default_action_sheet_phases"] = list(dict.fromkeys(DEFAULT_ACTION_SHEET_PHASE.findall(failure_text)))[:2]
             yield {
