@@ -312,6 +312,10 @@ def main() -> None:
             {"component": component, "scenario": scenario, "path": path.as_posix(),
              "bytes": path.stat().st_size}
         )
+        record["ok"] = not record["errors"]
+        out = args.output_root / args.platform / "tour.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
         print(f"captured {path}")
         return path.as_posix()
 
