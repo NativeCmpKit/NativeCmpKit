@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-consumer-webview, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-apple-consumer-wkwebview, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, openjfx-source-macos-x64, openjfx-source-macos-arm64, openjfx-source-windows-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -494,7 +494,9 @@ jobs:
           test -x "$sdkmanager"
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --licenses < <(yes) > /dev/null
           packages=('cmdline-tools;23.0' 'platforms;android-37.0')
-          if [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$ANDROID_REMOTE_IO_ENABLED" == true ]]; then
+          if [[ "$IDENTITY_PROFILE" == identity-linux-android-consumer-webview ]]; then
+            packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-23;google_apis;x86_64')
+          elif [[ "$IDENTITY_PROFILE" == identity-linux-android-webview-device || "$IDENTITY_PROFILE" == identity-linux-android-webview-restore || "$ANDROID_REMOTE_IO_ENABLED" == true ]]; then
             packages+=('build-tools;36.0.0' 'emulator' 'system-images;android-35;google_apis;x86_64')
           fi
           "$sdkmanager" --sdk_root="$ANDROID_HOME" --install "${packages[@]}"
@@ -1140,6 +1142,60 @@ jobs:
         run: |
           cargo test --locked --manifest-path nativecmpkit-file-picker/native/Cargo.toml
           cargo test --locked --manifest-path nativecmpkit-share/native/Cargo.toml
+      - name: Verify an independent packaged Android WebView on the API 23 emulator
+        if: inputs.profile == 'identity-linux-android-consumer-webview'
+        run: |
+          test "$RUNNER_OS/$RUNNER_ARCH" = Linux/X64
+          ./gradlew :nativecmpkit-webview:publishKotlinMultiplatformPublicationToNativecmpkitVerificationRepository \
+            :nativecmpkit-webview:publishAndroidPublicationToNativecmpkitVerificationRepository \
+            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=all \
+            -PnativeCmpkit.version="$IDENTITY_STAGING_VERSION" --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+          bash tests/consumer/webview-android/run-hosted.sh "$PWD/build/verification-repo" "$IDENTITY_STAGING_VERSION" \
+            "$PWD/build/ci-verification/identity-android-consumer-webview"
+      - name: Verify an independent packaged WKWebView in an actual Swift application
+        if: inputs.profile == 'identity-apple-consumer-wkwebview'
+        run: |
+          test "$RUNNER_OS/$RUNNER_ARCH" = macOS/ARM64
+          output="$PWD/build/ci-verification/identity-apple-consumer-wkwebview"
+          mkdir -p "$output"
+          consumer="$RUNNER_TEMP/nativecmpkit-webview-ios"
+          test ! -e "$consumer"
+          cp -R tests/consumer/webview-ios "$consumer"
+          ./gradlew :nativecmpkit-webview:publishKotlinMultiplatformPublicationToNativecmpkitVerificationRepository \
+            :nativecmpkit-webview:publishIosSimulatorArm64PublicationToNativecmpkitVerificationRepository \
+            -PnativecmpkitVerification=true -PnativecmpkitVerificationTargets=all \
+            -PnativeCmpkit.version="$IDENTITY_STAGING_VERSION" --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+          ./gradlew -p "$consumer" verifyPublishedWebViewBinding linkDebugFrameworkIosSimulatorArm64 \
+            -PnativecmpkitRepository="$PWD/build/verification-repo" -PnativecmpkitVersion="$IDENTITY_STAGING_VERSION" \
+            --max-workers=1 --no-parallel --no-configuration-cache --no-build-cache
+          executable=NativeCmpKitWebViewConsumer
+          app="$consumer/build/$executable.app"
+          frameworks="$consumer/build/bin/iosSimulatorArm64/debugFramework"
+          mkdir "$app"
+          xcrun --sdk iphonesimulator swiftc -parse-as-library -module-name NativeCmpKitWebViewHost \
+            -target arm64-apple-ios18.5-simulator -sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" \
+            -F "$frameworks" -framework "$executable" -framework WebKit "$consumer/Runner.swift" -o "$app/$executable"
+          cp "$consumer/Info.plist" "$app/Info.plist"
+          test "$(xcrun lipo -archs "$app/$executable")" = arm64
+          xcrun vtool -show-build "$app/$executable" > "$output/native-image.txt"
+          grep -Eq 'platform[[:space:]]+(IOSSIMULATOR|7)([[:space:]]|$)' "$output/native-image.txt"
+          codesign --force --sign - "$app"
+          python3 -B scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
+            --output "$output/selected-runtime.json"
+          device=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["simulator"]["udid"])' "$output/selected-runtime.json")
+          state=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["simulator"]["state"])' "$output/selected-runtime.json")
+          app_id=io.github.apdelrahman1911.nativecmpkit.consumer.wkwebview
+          cleanup() {
+            xcrun simctl terminate "$device" "$app_id" 2>/dev/null || true
+            xcrun simctl uninstall "$device" "$app_id" 2>/dev/null || true
+            if [[ "$state" == Shutdown ]]; then xcrun simctl shutdown "$device" 2>/dev/null || true; fi
+          }
+          trap cleanup EXIT
+          xcrun simctl bootstatus "$device" -b
+          python3 -B scripts/ci/runtime_context.py --expected-arch arm64 --apple --simulator "$device" --require-booted \
+            --output "$output/booted-runtime.json"
+          xcrun simctl install "$device" "$app"
+          python3 -B "$consumer/check_console.py" "$device" "$output"
       - name: Summarize available Gradle test reports
         if: always() && steps.checkout.outcome == 'success'
         shell: bash
@@ -1164,6 +1220,8 @@ jobs:
             build/ci-verification/desktop-macos-arm64-appkit/cases/*/fresh-reports/TEST-*.xml
             build/ci-verification/desktop-macos-arm64/receipt.json
             build/ci-verification/wk-identity/receipt.json
+            build/ci-verification/identity-android-consumer-webview/
+            build/ci-verification/identity-apple-consumer-wkwebview/
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json
             build/ci-verification/identity-camera/receipt.json

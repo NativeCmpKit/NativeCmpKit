@@ -32,6 +32,21 @@ also exercised on each selected mobile and browser target. Native test reflectio
 The test JVM has `-Xcheck:jni`, a task-owned empty `java.library.path`, and an
 isolated user home; an installed old binary must not satisfy the test.
 
+### Packaged WebView on mobile and web
+
+The full consumer adds one real iframe test to each browser target. The test
+checks the default isolated policy, explicitly loads trusted inline HTML,
+evaluates JavaScript, and observes Compose disposal of the actual iframe.
+
+The `identity-linux-android-consumer-webview` and
+`identity-apple-consumer-wkwebview` profiles stage the WebView root plus the
+selected platform variant in the local verification repository. Their
+independent apps compare the resolved AAR or KLIB with the staged bytes and
+exercise HTML loading, the public JavaScript result, and native disposal on an
+API 23 emulator or an iPhone simulator. Each profile records its source
+revision and actual test result. The desktop consumer has its own qualification
+route for JavaFX and transport cancellation. [Desktop consumer](webview-desktop/README.md)
+
 ### Separate, deliberately partial Core/IO diagnostic
 
 The [new standalone JVM fixture](io-desktop/README.md) selects only Core/IO
@@ -122,7 +137,7 @@ python3 -B tests/consumer/native_consumer_carriage.py \
   --output "$FRESH_EXTERNAL_INDEPENDENT_BUNDLE"
 ```
 
-This copies exactly15 consumer/config/checker files, including
+This copies 19 consumer, configuration and checker files, including
 `native_license_legacy_winapi.py`, the active schema4 reader and its unchanged
 inert-v2 primitive dependency, without altering the full21 dependency or
 original17 desktop-method source. Its separate `inert-material-context/` contains
