@@ -77,6 +77,9 @@ def application_timeout_seconds(focus: str | None) -> int:
         return 360
     if focus == lt.content_policy.IOS_RESTORE_FOCUS:
         return 600
+    if focus == lt.IOS_POPOVER_ROTATION_FOCUS:
+        # One short geometry case. Keep compilation outside this transport budget.
+        return 360
     return (SLIDER_TIMEOUT_SECONDS if focus in (
         lt.IOS_SLIDER_LIFECYCLE_FOCUS, lt.IOS_SLIDER_REMAINING_FOCUS, lt.IOS_SLIDER_STRUCTURE_FOCUS,
         lt.IOS_VECTOR_THEME_FOCUS,
@@ -251,6 +254,15 @@ DEFAULT_ACTION_SHEET_PHASES = (
     "set-content", "present", "await-sheet", "style", "compact-size", "activate-cancel", "cancel-delivered",
     "await-dismissal", "callback-counts",
 )
+IPAD_ROTATION_STACK_MARKERS = {
+    "main-dispatch": (b"dispatch_sync", b"__DISPATCH_WAIT_FOR_QUEUE__"),
+    "rotation-fixture": (b"NativePopoverGeometryTest",),
+    "scene-geometry": (b"requestGeometryUpdate", b"UIWindowSceneGeometry"),
+    "popover-reposition": (b"willRepositionPopover", b"UIPopoverPresentationController"),
+    "popover-anchor-update": (b"AlertDialogManager.applyPopoverAnchor", b"AlertDialogManager.refreshPopoverAnchor"),
+    "layout": (b"layoutSubviews", b"layoutIfNeeded"),
+    "native-mutex": (b"__psynch_mutexwait", b"os_unfair_lock_lock_slow"),
+}
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
@@ -1122,8 +1134,8 @@ def matches_installed_process(pid: int, installed_executable: Path) -> bool:
         return False
 
 
-def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) -> dict | None:
-    if protocol.open_case not in PRE26_STALL_CASES or protocol.active is None or protocol.completed is not None:
+def observe_owned_stall(protocol: NativeProtocol, installed_executable: Path, cases, markers) -> dict | None:
+    if protocol.open_case not in cases or protocol.active is None or protocol.completed is not None:
         return None
     launch_pid = protocol.observed_launch_pid
     native_pid = protocol.pre26_native_pid
@@ -1151,16 +1163,21 @@ def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) ->
                     return {"status": "sample-output-refused"}
             if not matches_installed_process(pid, installed_executable):
                 return {"status": "owned-process-changed"}
-            known_frames = [name for name, markers in PRE26_STACK_MARKERS.items() if any(marker in raw for marker in markers)]
+            known_frames = [name for name, needles in markers.items() if any(needle in raw for needle in needles)]
             return {"status": "observed", "known_frames": known_frames}
     except (OSError, ValueError, subprocess.SubprocessError):
         return {"status": "sample-tool-unavailable"}
 
 
+def observe_pre26_stall(protocol: NativeProtocol, installed_executable: Path) -> dict | None:
+    return observe_owned_stall(protocol, installed_executable, PRE26_STALL_CASES, PRE26_STACK_MARKERS)
+
+
 def forward_application(argv: list[str], protocol: NativeProtocol, timeout: int = APP_TIMEOUT_SECONDS,
                         environment: dict[str, str] | None = None,
                         provider_c3_installed_executable: Path | None = None,
-                        pre26_installed_executable: Path | None = None) -> dict:
+                        pre26_installed_executable: Path | None = None,
+                        ipad_rotation_installed_executable: Path | None = None) -> dict:
     """Preserve real frames verbatim through KGP, while bounding owned transport."""
     started = time.monotonic()
     transport = {"started_at_utc": lt.utc_now(), "timeout_seconds": timeout, "console_process_exit": None,
@@ -1228,6 +1245,11 @@ def forward_application(argv: list[str], protocol: NativeProtocol, timeout: int 
             observation = observe_pre26_stall(protocol, pre26_installed_executable)
             if observation is not None:
                 transport["pre26_stall_sample"] = observation
+        if isinstance(error, TimeoutError) and stage == "protocol-read" and ipad_rotation_installed_executable is not None:
+            observation = observe_owned_stall(protocol, ipad_rotation_installed_executable,
+                                              (IPAD_ROTATION_CASE,), IPAD_ROTATION_STACK_MARKERS)
+            if observation is not None:
+                transport["ipad_rotation_stall_sample"] = observation
         raise
     finally:
         transport["console_process_exit"] = process.poll()
@@ -1594,6 +1616,10 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
             diagnostic_options["provider_c3_installed_executable"] = installed_executable
         if focus == lt.ui_related.PRE26_RECOVERY_FOCUSES[0] or focus in lt.ui_related.PRE26_PENDING_FOCUSES:
             diagnostic_options["pre26_installed_executable"] = (
+                Path(container.stdout.decode("utf-8", errors="strict").strip()) / APP_EXECUTABLE
+            )
+        if focus == lt.IOS_POPOVER_ROTATION_FOCUS:
+            diagnostic_options["ipad_rotation_installed_executable"] = (
                 Path(container.stdout.decode("utf-8", errors="strict").strip()) / APP_EXECUTABLE
             )
         phase = "launch-and-real-test-transport"

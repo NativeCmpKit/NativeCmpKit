@@ -576,6 +576,11 @@ class InputDriver:
             if match and -(2**31) <= int(match[2]) < 2**31:
                 startup.append({"phase": "transport", "domain": match[1], "code": int(match[2])})
         self.receipt["startup_diagnostics"] = startup
+        self.receipt["swift_error_lines"] = sorted({
+            int(match[1]) for match in re.finditer(
+                rb"NativeCmpKitInputTests\.swift:([1-9][0-9]{0,4}):[0-9]{1,5}: error:", raw
+            )
+        })[:24]
         diagnostics = []
         for line in raw.decode("utf-8", errors="replace").splitlines():
             if len(diagnostics) >= 24: break

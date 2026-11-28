@@ -13,7 +13,7 @@ from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
 from native_ui_input import ACTION_SHEET_FOCUS
 from ios_ui_application import (
-    CAMERA_DISPOSAL_PHASES, DEFAULT_ACTION_SHEET_PHASES, IPAD_ROTATION_PHASES,
+    CAMERA_DISPOSAL_PHASES, DEFAULT_ACTION_SHEET_PHASES, IPAD_ROTATION_PHASES, IPAD_ROTATION_STACK_MARKERS,
     PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
     PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
 )
@@ -89,6 +89,11 @@ def labels(document, fields):
     return {key: value for key in fields if isinstance(value := document.get(key), str) and TOKEN.fullmatch(value)}
 
 
+def observed_exit(document, key="exit_code"):
+    value = document.get(key) if isinstance(document, dict) else None
+    return value if type(value) is int and -(2**31) <= value < 2**31 else None
+
+
 def camera_photo_summary(data, protocol):
     lease = data.get("camera_photos") or {}
     observation = protocol.get("camera_photo_authorization") or {}
@@ -104,15 +109,19 @@ def camera_photo_summary(data, protocol):
     return outcomes
 
 
-def pre26_sample_summary(transport):
-    sample = transport.get("pre26_stall_sample")
+def stall_sample_summary(transport, field, markers):
+    sample = transport.get(field)
     if not isinstance(sample, dict) or sample.get("status") not in PRE26_SAMPLE_STATUSES:
         return {}
     summary = {"status": sample["status"]}
     if sample["status"] == "observed":
         frames = sample.get("known_frames")
-        summary["known_frames"] = [name for name in PRE26_STACK_MARKERS if isinstance(frames, list) and name in frames]
-    return {"pre26_stall_sample": summary}
+        summary["known_frames"] = [name for name in markers if isinstance(frames, list) and name in frames]
+    return {field: summary}
+
+
+def pre26_sample_summary(transport):
+    return stall_sample_summary(transport, "pre26_stall_sample", PRE26_STACK_MARKERS)
 
 
 def receipt_rows():
@@ -139,6 +148,7 @@ def receipt_rows():
                     "error": labels(data.get("error") or {}, ("phase", "type")),
                     "transport_failure": labels(transport, ("failure_stage", "failure_reason")),
                     **pre26_sample_summary(transport),
+                    **stall_sample_summary(transport, "ipad_rotation_stall_sample", IPAD_ROTATION_STACK_MARKERS),
                     "finished_case_counts": dict(Counter(case["status"] for case in protocol.get("testcases", [])
                                                         if case.get("status") in {"passed", "failed", "error", "skipped"})),
                     "unfinished_testcase": labels(protocol.get("unfinished_testcase") or {}, ("name",)),
@@ -164,6 +174,20 @@ def receipt_rows():
                     **({"default_action_sheet_input": {
                         "ready": native_input.get("runner_ready") is True,
                         "verified": native_input.get("verified") is True,
+                        "phase": labels(native_input, ("phase",)).get("phase"),
+                        "build_exit_code": observed_exit(native_input.get("build")),
+                        "startup_exit_code": observed_exit(native_input.get("runner_startup"), "process_exit_code"),
+                        "startup_deadline": (native_input.get("runner_startup") or {}).get("deadline_reached") is True,
+                        "swift_error_lines": [
+                            line for line in native_input.get("swift_error_lines", [])[:24]
+                            if type(line) is int and 1 <= line <= 99999
+                        ],
+                        "startup_phases": [
+                            labels(step, ("phase", "domain")) |
+                            ({"code": step["code"]} if type(step.get("code")) is int and
+                             -(2**31) <= step["code"] < 2**31 else {})
+                            for step in native_input.get("startup_diagnostics", [])[:24]
+                        ],
                         "operations": [labels(operation, ("operation", "status", "reason"))
                                        for operation in native_input.get("operations", [])[:1]],
                     }} if native_input.get("focus") == ACTION_SHEET_FOCUS else {}),

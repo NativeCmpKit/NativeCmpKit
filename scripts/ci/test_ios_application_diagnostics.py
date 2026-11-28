@@ -12,7 +12,9 @@ import unittest
 from unittest.mock import patch
 
 import ios_ui_application as a
-from summarize_identity_uikit import android_assembly_summaries, android_receipt_failures, failure_rows, pre26_sample_summary
+from summarize_identity_uikit import (
+    android_assembly_summaries, android_receipt_failures, failure_rows, pre26_sample_summary, stall_sample_summary,
+)
 import test_ios_ui_application as f
 
 BUNDLE = "io.github.apdelrahman1911.nativecmpkit.verification.ui.r" + "a" * 12 + ".t" + "b" * 32
@@ -105,6 +107,25 @@ e: file:///private/build/AndroidCameraProviderTest.kt:41:73 private Kotlin messa
 
 
 class PartialProtocolTests(unittest.TestCase):
+    def test_rotation_sample_is_selected_for_the_open_case_and_preserves_only_fixed_frames(self):
+        protocol = a.NativeProtocol(bundle_id=BUNDLE)
+        executable = Path("/owned/NativeCmpkitLibraryTests.app") / a.APP_EXECUTABLE
+        suite, method = a.IPAD_ROTATION_CASE
+        for frame in (f.ACTIVE, f.frame("testSuiteStarted", name=suite),
+                      f.frame("testStarted", name=method), BUNDLE + ": 123"):
+            protocol.feed(frame)
+        with patch.object(a, "matches_installed_process", return_value=False) as identity, \
+             patch.object(a, "execute_control") as control:
+            self.assertIsNone(a.observe_pre26_stall(protocol, executable))
+            self.assertEqual({"status": "owned-process-unavailable"}, a.observe_owned_stall(
+                protocol, executable, (a.IPAD_ROTATION_CASE,), a.IPAD_ROTATION_STACK_MARKERS))
+            identity.assert_called_once_with(123, executable)
+            control.assert_not_called()
+        sample = {"status": "observed", "known_frames": ["layout", "private", "popover-reposition"]}
+        key = "ipad_rotation_stall_sample"
+        self.assertEqual({key: {"status": "observed", "known_frames": ["popover-reposition", "layout"]}},
+                         stall_sample_summary({key: sample}, key, a.IPAD_ROTATION_STACK_MARKERS))
+
     def test_pre26_stall_samples_only_the_observed_owned_process_and_exports_known_categories(self):
         suite, method = a.PRE26_CUSTOMIZATION_CASE
         protocol = a.NativeProtocol(bundle_id=BUNDLE)
