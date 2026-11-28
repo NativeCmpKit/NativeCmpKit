@@ -43,7 +43,7 @@ gradle.projectsEvaluated {
         "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt",
     )
     val expectedHashes = mapOf(
-        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "b319becacabbb047a80347079c55bbc627e506de6a3a69eb9fa5b6c44d349769",
+        "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/IosCameraOwnershipAcceptanceTest.kt" to "3025dab9c952561dbfcaa799a1f8543825937f633d1cb0eb5a5c01eedc63325b",
         "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraApplicationHost.kt" to "fc6ddb7e7531ef9500388fceaeda04a4aa346f4a9c7601b13c67593c9c8352c5",
         "nativecmpkit-camera-picker/src/iosTest/kotlin/io/github/apdelrahman1911/nativecmpkit/camerapicker/internal/NativeCameraObjectIdentity.kt" to "77ef5f5037b621f1c6cfe4c92c9d469bdbd3d56ba7318632106c2907c9234379",
     )

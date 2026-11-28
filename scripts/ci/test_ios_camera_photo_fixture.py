@@ -273,6 +273,23 @@ class IosCameraPhotoFixtureControls(unittest.TestCase):
             with self.assertRaises(ValueError):
                 observer.feed(line)
 
+    def test_disposal_phase_is_observed_without_consuming_the_privacy_namespace(self):
+        observer = protocol()
+        method = focus.DISPOSAL_METHOD
+        for line in (marker(), BUNDLE + ": " + str(PID), ACTIVE,
+                     f"##teamcity[testSuiteStarted name='{focus.CLASS}']", f"##teamcity[testStarted name='{method}']",
+                     application.CAMERA_DISPOSAL_PREFIX + "entered"):
+            observer.feed(line)
+        self.assertEqual(["entered"], observer.partial()["camera_disposal_progress"])
+        self.assertEqual(native_status(), observer.partial()["camera_photo_authorization"])
+        self.assertEqual(0, observer.partial()["counts"]["executed"])
+        for line in (f"##teamcity[testFinished name='{method}' duration='1']",
+                     f"##teamcity[testSuiteFinished name='{focus.CLASS}']", COMPLETE):
+            observer.feed(line)
+        self.assertEqual(1, observer.finish(0)["counts"]["passed"])
+        with self.assertRaisesRegex(ValueError, "Unknown or failing Camera"):
+            protocol().feed("NATIVECMPKIT_CAMERA_DISPOSAL_PHASE entered")
+
     def test_actual_authorized_main_marker_is_required_once_before_worker_and_other_states_are_retained_failures(self):
         for status in ("limited", "not-determined", "denied", "restricted", "unknown"):
             observer = protocol()

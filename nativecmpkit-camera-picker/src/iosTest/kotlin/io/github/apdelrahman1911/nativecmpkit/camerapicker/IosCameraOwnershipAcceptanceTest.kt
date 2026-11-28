@@ -163,7 +163,7 @@ class IosCameraOwnershipAcceptanceTest {
     }
 
     @Test fun compositionDisposalDuringObservedPresentingAndPresentedPhasesFinishesOwnedTeardown() = runCameraApplicationUiTest {
-        fun trace(phase: String) = println("NATIVECMPKIT_CAMERA_DISPOSAL_PHASE $phase")
+        fun trace(phase: String) = println("NATIVECMPKIT_OBSERVED_CAMERA_DISPOSAL_PHASE $phase")
         trace("entered")
         setContent {}
         val foreign = runOnIdle { ForeignWindowModal() }

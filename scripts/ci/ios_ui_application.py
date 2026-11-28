@@ -227,7 +227,8 @@ PRE26_TOOLBAR_PREFIX = "NATIVECMPKIT_ADAPTIVE_TOOLBAR_PHASE "
 PRE26_TOOLBAR_PHASES = ("compose-enter", "set-content-enter", "set-content-returned", "first-idle", "first-width-verified")
 PRE26_STALL_CASES = (PRE26_CUSTOMIZATION_CASE, PRE26_NEGATIVE_STEPS_CASE, PRE26_TOOLBAR_CASE)
 CAMERA_DISPOSAL_CASE = (lt.camera_ios.CLASS, lt.camera_ios.DISPOSAL_METHOD)
-CAMERA_DISPOSAL_PREFIX = "NATIVECMPKIT_CAMERA_DISPOSAL_PHASE "
+# The Camera Photos protocol reserves NATIVECMPKIT_CAMERA_ for privacy and lifecycle markers.
+CAMERA_DISPOSAL_PREFIX = "NATIVECMPKIT_OBSERVED_CAMERA_DISPOSAL_PHASE "
 CAMERA_DISPOSAL_PHASES = (
     "entered", "foreign-presented",
     *(f"{variant}-{phase}" for variant in ("presenting", "presented") for phase in (
