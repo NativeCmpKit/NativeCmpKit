@@ -42,14 +42,14 @@ jobs:
           ref: refs/tags/21.0.13.1+1
           path: openjfx-source
           persist-credentials: false
+      - name: Bind OpenJFX source and build materials before compilation
+        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin
-          java-version: '17.0.21.1+2'
+          java-version: '17.0.21+9'
           verify-signature: true
           overwrite-settings: false
-      - name: Bind OpenJFX source and build materials before compilation
-        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
       - name: Install and record the hosted Linux build environment
         run: |
           sudo apt-get update
@@ -66,6 +66,7 @@ jobs:
             ninja --version
             dpkg-query -W
           } > "$EVIDENCE_DIR/toolchain.txt" 2>&1
+          grep -F 'Temurin-17.0.21+9' "$EVIDENCE_DIR/toolchain.txt"
           available_kib=$(df -Pk . | awk 'NR == 2 {print $4}')
           test "$available_kib" -ge $((12 * 1024 * 1024))
       - name: Build the complete SDK and native WebKit from source
