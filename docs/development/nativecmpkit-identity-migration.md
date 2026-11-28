@@ -48,6 +48,11 @@ the published preview tag and its history. Packages,
 releases, Pages and deployments remain gated pending the physical-device check
 and the existing release requirements.
 
+The hosted staging checks read the JNI methods from both published Desktop
+bridge classes and compare their names with the Rust declarations and the
+actual exports in the matching native binaries. Each host keeps the results in
+`ci-identity/jni-exports.json` for File Picker and Share.
+
 ## Integration review against `main`
 
 The review uses `main` at `a2c48c0b9ebf3524192e680ecd4becc1f2880bb8`. The

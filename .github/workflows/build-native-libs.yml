@@ -824,7 +824,7 @@ jobs:
             --repository build/verification-repo --version "$IDENTITY_STAGING_VERSION" \
             "${selection[@]}" --expected-native-revision "$GITHUB_SHA" \
             --output build/ci-identity/publication-artifacts.json
-      - name: Verify staged desktop JNI exports
+      - name: Match staged desktop JNI exports to the published JVM bridges
         if: ${{ !cancelled() && steps.identity-stage.outcome == 'success' }}
         shell: bash
         run: |
@@ -848,22 +848,30 @@ jobs:
           }[host]
           version = os.environ["IDENTITY_STAGING_VERSION"]
           repository = Path("build/verification-repo") / GROUP.replace(".", "/")
+          identity = json.loads(Path("docs/migration/current-identity.json").read_text(encoding="utf-8"))
           records = []
           with tempfile.TemporaryDirectory() as directory:
               for module in NATIVE_MODULES:
                   coordinate = module + "-desktop"
                   jar = repository / coordinate / version / f"{coordinate}-{version}.jar"
+                  bridge = identity["native_libraries"][module]["bridge"]
+                  declarations = subprocess.check_output(
+                      ["javap", "-p", "-classpath", str(jar), bridge], text=True, timeout=30,
+                  )
+                  methods = re.findall(r"\bnative\s+\S+\s+([A-Za-z][A-Za-z0-9_]*)\(", declarations)
+                  bridge_prefix = "Java_" + bridge.replace("_", "_1").replace(".", "_") + "_"
+                  jni_declarations = {bridge_prefix + method.replace("_", "_1") for method in methods}
                   filename = native_filename(module, platform)
                   binary = Path(directory) / filename
                   with zipfile.ZipFile(jar) as archive:
                       binary.write_bytes(archive.read(f"native/{platform}/{filename}"))
-                  output = subprocess.check_output([*nm, str(binary)], text=True)
+                  output = subprocess.check_output([*nm, str(binary)], text=True, timeout=30)
                   exports = {symbol.removeprefix("_") for symbol in re.findall(r"\b_?Java_[A-Za-z0-9_]+\b", output)}
-                  source = (Path(module) / "native/src/lib.rs").read_text()
-                  expected = set(re.findall(r'pub extern "system" fn (Java_[A-Za-z0-9_]+)', source))
-                  prefix = "Java_" + GROUP.replace(".", "_") + "_"
-                  passed = bool(expected) and exports == expected and all(symbol.startswith(prefix) for symbol in exports)
-                  records.append({"module": module, "platform": platform, "expected": sorted(expected),
+                  source = (Path(module) / "native/src/lib.rs").read_text(encoding="utf-8")
+                  rust_exports = set(re.findall(r'pub extern "system" fn (Java_[A-Za-z0-9_]+)', source))
+                  passed = bool(exports) and len(methods) == len(jni_declarations) and exports == rust_exports == jni_declarations
+                  records.append({"module": module, "platform": platform, "bridge": bridge,
+                                  "jvm_native_methods": sorted(methods), "expected": sorted(rust_exports),
                                   "exports": sorted(exports), "passed": passed})
           output = Path("build/ci-identity/jni-exports.json")
           output.parent.mkdir(parents=True, exist_ok=True)
