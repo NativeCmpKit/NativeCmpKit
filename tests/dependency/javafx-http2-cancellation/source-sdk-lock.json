@@ -1,0 +1,40 @@
+{
+  "repository": "https://github.com/openjdk/jfx21u.git",
+  "tag": "21.0.13.1+1",
+  "tag_object": "a60d77b9c435e0f5b290511421a9909c162f0202",
+  "revision": "5497f2f46abff58bea405b310fb6c9670686709e",
+  "tree": "da752df02e00bee383a8aa139d6eda2e3fd05e55",
+  "loader_sha256": "e2413d1ac8cb78be77f97fc6add5e17bee1859e1c5fcbb97481444eb62eac43f",
+  "patch_sha256": "12e0dce72745fd747f653ae4b555d7b87ae28973e72fdd982adee25b3eb45624",
+  "gradle_wrapper_properties_sha256": "eb62b1afb8d95f61cd229ecc30efe4662f9745edcb42a0edfa8903efcf81981c",
+  "materials": [
+    {
+      "file": "antlr4-4.7.2-complete.jar",
+      "url": "https://www.antlr.org/download/antlr-4.7.2-complete.jar",
+      "bytes": 2079769,
+      "sha256": "6852386d7975eff29171dae002cc223251510d35f291ae277948f381a7b380b4",
+      "ivy_input": true
+    },
+    {
+      "file": "org.eclipse.swt.gtk.linux.x86_64_3.105.3.v20170228-0512.jar",
+      "url": "https://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/plugins/org.eclipse.swt.gtk.linux.x86_64_3.105.3.v20170228-0512.jar",
+      "bytes": 2767604,
+      "sha256": "a963351d5f7b82b890c4994e158d80555dae38b00af3b8d73f3875c21ff398bc",
+      "ivy_input": true
+    },
+    {
+      "file": "icu4c-77_1-data-bin-l.zip",
+      "url": "https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-data-bin-l.zip",
+      "bytes": 12441528,
+      "sha256": "0913674ff673c585f8bc08370916b6a6ccc30ffb6408a5c1bc3edbf5a687fd96",
+      "ivy_input": true
+    },
+    {
+      "file": "icu4c-77_1-src.tgz",
+      "url": "https://github.com/unicode-org/icu/releases/download/release-77-1/icu4c-77_1-src.tgz",
+      "bytes": 27384265,
+      "sha256": "588e431f77327c39031ffbb8843c0e3bc122c211374485fa87dc5f3faff24061",
+      "ivy_input": false
+    }
+  ]
+}

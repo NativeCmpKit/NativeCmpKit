@@ -10,13 +10,104 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
   group: nativecmpkit-native-${{ github.ref }}-${{ inputs.profile }}
   cancel-in-progress: false
 jobs:
+  openjfx-source-linux-x64:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'openjfx-source-linux-x64'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 260
+    defaults:
+      run:
+        shell: bash
+    env:
+      LC_ALL: C.UTF-8
+      TZ: UTC
+      SOURCE_DIR: openjfx-source
+      SOURCE_CHECK: tests/dependency/javafx-http2-cancellation/verify_source_sdk.py
+      EVIDENCE_DIR: build/openjfx-source-verification
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+          sparse-checkout: tests/dependency/javafx-http2-cancellation
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: openjdk/jfx21u
+          ref: refs/tags/21.0.13.1+1
+          path: openjfx-source
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+        with:
+          distribution: temurin
+          java-version: '17.0.21.1+2'
+          verify-signature: true
+          overwrite-settings: false
+      - name: Bind OpenJFX source and build materials before compilation
+        run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
+      - name: Install and record the hosted Linux build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y bison cmake flex g++ gperf libasound2-dev \
+            libfreetype-dev libgl1-mesa-dev libgtk-3-dev libpango1.0-dev libx11-dev libxxf86vm-dev \
+            libxtst-dev ninja-build perl pkg-config ruby xauth xvfb
+          {
+            uname -sm
+            cat /etc/os-release
+            df -h .
+            java -version
+            gcc --version
+            cmake --version
+            ninja --version
+            dpkg-query -W
+          } > "$EVIDENCE_DIR/toolchain.txt" 2>&1
+          available_kib=$(df -Pk . | awk 'NR == 2 {print $4}')
+          test "$available_kib" -ge $((12 * 1024 * 1024))
+      - name: Build the complete SDK and native WebKit from source
+        env:
+          GRADLE_USER_HOME: ${{ runner.temp }}/openjfx-gradle
+        run: |
+          ivy_path="$GITHUB_WORKSPACE/$EVIDENCE_DIR/ivy"
+          if (
+            cd "$SOURCE_DIR"
+            set -x
+            ./gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
+              -PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true -PNUM_COMPILE_THREADS=2 \
+              -PBUILD_LIBAV_STUBS=false -PicuVersion=77.1 -PJFX_DEPS_URL="file://$ivy_path"
+          ) 2>&1 | tee "$EVIDENCE_DIR/build.log"; then
+            printf '0\n' > "$EVIDENCE_DIR/build-exit.txt"
+          else
+            status=$?
+            printf '%s\n' "$status" > "$EVIDENCE_DIR/build-exit.txt"
+            exit "$status"
+          fi
+      - name: Inspect SDK binaries and run the real WebView cancellation cases
+        run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
+      - name: Preserve source-build and cancellation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: openjfx-source-linux-x64-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            build/openjfx-source-verification/source.json
+            build/openjfx-source-verification/source-tree.tsv
+            build/openjfx-source-verification/toolchain.txt
+            build/openjfx-source-verification/build.log
+            build/openjfx-source-verification/build-exit.txt
+            build/openjfx-source-verification/sdk-binaries.json
+            build/openjfx-source-verification/webkit-elf.txt
+            build/openjfx-source-verification/loader-cancellation.txt
+            build/openjfx-source-verification/probe-execution.json
+            build/openjfx-source-verification/probe.stdout
+            build/openjfx-source-verification/probe.stderr
+            build/openjfx-source-verification/case-results.json
+
   native-check:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'all'
     strategy:

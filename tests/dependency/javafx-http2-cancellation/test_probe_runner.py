@@ -196,7 +196,7 @@ class WorkflowSourceTests(unittest.TestCase):
 class CheckoutRecoveryTests(unittest.TestCase):
     def test_byte_preservation_and_long_paths_precede_checkout(self):
         source = (runner.HERE.parents[2] / ".github/workflows/javafx-dependency-regression.yml").read_text()
-        checkout = source.index("uses: actions/checkout@v4")
+        checkout = source.index("uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803")
         self.assertLess(source.index("git config --global core.autocrlf false"), checkout)
         self.assertLess(source.index("git config --global core.longpaths true"), checkout)
 
