@@ -22,6 +22,9 @@ ROOT = Path(__file__).resolve().parents[2]
 SHA = re.compile(r"^[0-9a-f]{40}$")
 HEX256 = re.compile(r"^[0-9a-f]{64}$")
 DESTINATION = "NativeCmpKit/NativeCmpKit"
+ARCHIVE_BRANCH = "refs/heads/archive/legacy-work"
+ARCHIVE_INDEX = "archive-index.json"
+PAGES_BRANCH = "refs/heads/gh-pages"
 TRANSFER_SNAPSHOT = "docs/migration/upstream-updates/20261024T183300Z/destination/repository.json"
 DEPENDENCY_WORKFLOWS = frozenset({".github/workflows/javafx-dependency-regression.yml",
                                  ".github/workflows/javafx-library-candidate.yml"})
@@ -96,6 +99,58 @@ def matches_kira_preview(releases: list[dict], remote_refs: dict[str, str]) -> b
     return (len(releases) == 1
             and all(releases[0].get(key) == value for key, value in PUBLISHED_KIRA_PREVIEW.items())
             and remote_refs.get(tag) == KIRA_PREVIEW_DEPLOYMENT["sha"])
+
+
+def archived_origin_heads(index: dict) -> dict[str, str]:
+    if (type(index) is not dict or index.keys() != {"schema_version", "repository", "entries"}
+            or type(index["schema_version"]) is not int or index["schema_version"] != 1
+            or index["repository"] != DESTINATION or type(index["entries"]) is not list):
+        raise ValueError("Unexpected branch archive index")
+    seen = set()
+    heads = {}
+    for entry in index["entries"]:
+        if (type(entry) is not dict or entry.keys() != {"scope", "ref", "tip", "purpose", "recovery"}
+                or entry["scope"] not in ("local", "origin")
+                or not isinstance(entry["ref"], str) or not entry["ref"].startswith("refs/heads/")
+                or entry["ref"] in {"refs/heads/main", ARCHIVE_BRANCH, PAGES_BRANCH}
+                or not isinstance(entry["tip"], str) or not SHA.fullmatch(entry["tip"])
+                or not all(isinstance(entry[field], str) and entry[field].strip() for field in ("purpose", "recovery"))):
+            raise ValueError("Unexpected branch archive entry")
+        command("git", "check-ref-format", entry["ref"])
+        key = entry["scope"], entry["ref"]
+        if key in seen:
+            raise ValueError("Duplicate branch in archive index")
+        seen.add(key)
+        if entry["scope"] == "origin":
+            heads[entry["ref"]] = entry["tip"]
+    return heads
+
+
+def historical_ref_custody(expected: dict[str, str], remote: dict[str, str]) -> dict:
+    archived, missing, changed = [], [], []
+    archive_revision = remote.get(ARCHIVE_BRANCH)
+    archive_heads = {}
+    absent_heads = {ref for ref in expected if ref not in remote and ref.startswith("refs/heads/") and ref != PAGES_BRANCH}
+    if archive_revision is not None and absent_heads:
+        if not SHA.fullmatch(archive_revision):
+            raise ValueError("Unexpected archive branch revision")
+        raw = command("git", "show", f"{archive_revision}:{ARCHIVE_INDEX}")
+        archive_heads = archived_origin_heads(json.loads(raw))
+    for ref, original in expected.items():
+        if ref in remote:
+            if remote[ref] != original:
+                changed.append(ref)
+        elif ref not in absent_heads or archive_heads.get(ref) != original:
+            missing.append(ref)
+        else:
+            result = subprocess.run(["git", "merge-base", "--is-ancestor", original, archive_revision],
+                                    cwd=ROOT, capture_output=True)
+            if result.returncode == 0:
+                archived.append(ref)
+            else:
+                missing.append(ref)
+    return {"preserved": len(expected) - len(changed) - len(missing), "indexed_in_archive": archived,
+            "changed_refs": changed, "missing_refs": missing, "archive_revision": archive_revision}
 
 
 def command(*args: str) -> str:
@@ -422,7 +477,8 @@ def main() -> int:
             report["unfinished_verification_runs"] = [run["id"] for run in runs if run["status"] != "completed"]
             report["completed_nonsuccess_verification_runs"] = [run["id"] for run in runs if run["status"] == "completed" and run["conclusion"] != "success"]
             preserved = {ref: oid for ref, oid in expected.items() if ref.startswith(("refs/heads/", "refs/tags/")) and ref != "refs/heads/main"}
-            check("historical_remote_refs_identical", all(remote.get(ref) == oid for ref, oid in preserved.items()), f"{len(preserved)} non-main heads/tags are byte-identical object IDs")
+            custody = historical_ref_custody(preserved, remote)
+            check("historical_remote_refs_identical", custody["preserved"] == len(preserved), custody)
             report["observed_remote_main_sha"] = remote.get("refs/heads/main")
             check("remote_ref_matches_checkout", remote.get(args.remote_ref) == report["observed_checkout_sha"],
                   {"ref": args.remote_ref, "sha": remote.get(args.remote_ref)})

@@ -3,6 +3,7 @@ import unittest
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import tempfile
 from unittest.mock import call, patch
 
@@ -138,6 +139,57 @@ jobs:
         self.assertFalse(module.matches_kira_preview([release, {"id": 1}], refs))
         self.assertFalse(module.matches_kira_preview([{**release, "prerelease": False}], refs))
         self.assertFalse(module.matches_kira_preview([release], {tag: "a" * 40}))
+
+
+class HistoricalRefCustodyTests(unittest.TestCase):
+    branch, tip, archive = "refs/heads/imported-feature", "a" * 40, "b" * 40
+
+    def index(self, *, scope="origin", ref=None, tip=None):
+        return {"schema_version": 1, "repository": module.DESTINATION, "entries": [{
+            "scope": scope, "ref": ref or self.branch, "tip": tip or self.tip,
+            "purpose": "Original branch", "recovery": "git branch restored <tip>",
+        }]}
+
+    def test_published_ref_is_checked_directly(self):
+        result = module.historical_ref_custody({self.branch: self.tip}, {self.branch: self.tip})
+        self.assertEqual(result["preserved"], 1)
+        self.assertEqual(result["indexed_in_archive"], [])
+
+    def test_index_and_git_ancestry_are_both_required_for_a_retired_ref(self):
+        remote = {module.ARCHIVE_BRANCH: self.archive}
+        for exit_code in (0, 1, 128):
+            with self.subTest(exit_code=exit_code), \
+                 patch.object(module, "command", return_value=json.dumps(self.index())) as git, \
+                 patch.object(module.subprocess, "run", return_value=subprocess.CompletedProcess([], exit_code)) as ancestry:
+                result = module.historical_ref_custody({self.branch: self.tip}, remote)
+                git.assert_any_call("git", "show", self.archive + ":" + module.ARCHIVE_INDEX)
+                ancestry.assert_called_once_with(["git", "merge-base", "--is-ancestor", self.tip, self.archive],
+                                                 cwd=module.ROOT, capture_output=True)
+                self.assertEqual(result["indexed_in_archive"], [self.branch] if exit_code == 0 else [])
+                self.assertEqual(result["missing_refs"], [] if exit_code == 0 else [self.branch])
+
+    def test_an_archive_cannot_hide_a_moved_remote_branch(self):
+        remote = {module.ARCHIVE_BRANCH: self.archive, self.branch: "c" * 40}
+        with patch.object(module, "command") as git:
+            result = module.historical_ref_custody({self.branch: self.tip}, remote)
+        git.assert_not_called()
+        self.assertEqual(result["changed_refs"], [self.branch])
+
+    def test_tags_and_the_protected_pages_head_require_their_live_refs(self):
+        expected = {"refs/tags/v1": self.tip, module.PAGES_BRANCH: self.tip}
+        with patch.object(module, "command") as git:
+            result = module.historical_ref_custody(expected, {module.ARCHIVE_BRANCH: self.archive})
+        git.assert_not_called()
+        self.assertEqual(result["missing_refs"], list(expected))
+
+    def test_local_only_rows_and_duplicate_or_malformed_archive_records(self):
+        self.assertEqual(module.archived_origin_heads(self.index(scope="local")), {})
+        duplicate = self.index()
+        duplicate["entries"] *= 2
+        for index in (duplicate, self.index(ref="refs/tags/v1"), self.index(tip="no-sha"),
+                      self.index(ref=module.PAGES_BRANCH), {**self.index(), "schema_version": True}):
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                module.archived_origin_heads(index)
 
 
 class PagesResolutionTests(unittest.TestCase):
