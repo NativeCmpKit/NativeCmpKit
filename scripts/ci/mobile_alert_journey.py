@@ -73,6 +73,8 @@ def exercise(ui, output, platform, device):
             screenshot.get("sha256") != hashlib.sha256(png).hexdigest()):
         raise ValueError("Expected a PNG matching its bound alert screenshot metadata")
     (output / "alert.png").write_bytes(png)
+    alert_evidence = {"device": info, "dialog_snapshot": dialog, "screenshot": screenshot}
+    (output / "alert-evidence.json").write_text(json.dumps(alert_evidence, indent=2) + "\n", encoding="utf-8")
     click("Cancel")
     assert_closed(ALERT_MESSAGE)
 
@@ -92,7 +94,7 @@ def exercise(ui, output, platform, device):
     open_sample()
     ui.assert_element(selector(ALERT_MESSAGE), state="absent")
     return {"cases_passed": ["cancel", "confirm_after_reopen", "confirm_without_cancel", "restart_and_reenter"],
-            "device": info, "dialog_snapshot": dialog, "screenshot": screenshot, "actions": events}
+            **alert_evidence, "actions": events}
 
 
 def run(upstream, platform, device, output, axe):

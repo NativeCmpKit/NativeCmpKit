@@ -1,4 +1,5 @@
 import hashlib
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -47,6 +48,19 @@ class MobileAlertJourneyTests(unittest.TestCase):
         with TemporaryDirectory() as folder:
             with self.assertRaisesRegex(ValueError, "bound alert screenshot metadata"):
                 exercise(self.ui, Path(folder), "android", "emulator-5554")
+            self.assertFalse((Path(folder) / "alert-evidence.json").exists())
+
+    def test_evidence_survives_a_later_interaction_failure(self):
+        reply = self.ui.click.return_value
+        self.ui.click.side_effect = [reply, reply, RuntimeError("Cancel failed")]
+        with TemporaryDirectory() as folder:
+            output = Path(folder)
+            with self.assertRaisesRegex(RuntimeError, "Cancel failed"):
+                exercise(self.ui, output, "android", "emulator-5554")
+            evidence = json.loads((output / "alert-evidence.json").read_text(encoding="utf-8"))
+            captured = (output / "alert.png").read_bytes()
+        self.assertEqual(evidence["screenshot"]["sha256"], hashlib.sha256(captured).hexdigest())
+        self.assertEqual(evidence["screenshot"]["snapshot_id"], "alert-snapshot")
 
     def test_an_unexpected_device_is_refused_before_mutation(self):
         self.ui.device_info.return_value["result"]["form_factor_hardware"] = "physical"

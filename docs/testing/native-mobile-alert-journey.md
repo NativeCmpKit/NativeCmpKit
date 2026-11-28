@@ -21,7 +21,8 @@ four outcomes.
 The SDK settles after mutations and requests snapshot diffs. The artifact
 retains the compact alert observation, a snapshot-bound screenshot, action
 timings, device provenance, and the exact NativeCmpKit and driver revisions.
-Runtime counts come from the completed assertions. The device tests for file
-providers, popover anchoring and permission dialogs, and the release's
+The screenshot and its `alert-evidence.json` receipt are available if a later
+interaction fails. Runtime counts come from the completed assertions. The device
+tests for file providers, popover anchoring and permission dialogs, and the release's
 physical-device checklist retain their own procedures.
 [Workflow](../../.github/workflows/build-native-libs.yml) · [Physical-device procedure](nativecmpkit-physical-device-verification.md)
