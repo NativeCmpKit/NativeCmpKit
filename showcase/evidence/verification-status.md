@@ -29,8 +29,12 @@ driver wrote results at the end and its rerun file is partial.
 
 - Android: 34 canonical high-res captures from run `45957524569` plus icon
   recapture from `45973585586`.
-- iOS: 31 canonical captures from run `45968953555`, including recovered Alert
-  Dialog and WebView JS/cookie/error states.
+- iOS: 31 canonical captures from run `45968953555` (the workflow run was
+  cancelled at session teardown after the captures were taken; the PNGs are the
+  device bytes), including recovered Alert Dialog and WebView JS/cookie/error
+  states. Icon recapture run `45973585586` was cancelled the same way.
+- Both matrices are scheduled for a fresh full recapture on the next successful
+  phone sessions; captured status will then cite a non-cancelled run.
 - 24 paired comparison sheets under `screenshots/compare/`.
 - Missing visual states: iOS Time Picker, iOS action-sheet capture (functional
   verdict exists), WebView second page on iOS after the toolbar-label change.

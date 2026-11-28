@@ -96,10 +96,21 @@ def main() -> None:
             summary = data.get("summary", {})
             flow_count = len(data.get("flows", []))
             suffix = " (partial result file; see showcase/evidence/)" if flow_count < 30 else ""
+            runs = sorted({
+                entry.get("run")
+                for row in rows
+                for entry in row.get("functional", [])
+                if entry.get("platform") == platform and entry.get("run")
+            })
+            run_links = ", ".join(
+                f"[{run}](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/{run})"
+                for run in runs
+            )
             lines.append(
                 f"- `{platform}/{functional.name}` — device `{data.get('device', 'unknown')}`: "
                 f"**{summary.get('passed', 0)} passed**, {summary.get('failed', 0)} failed, "
-                f"{summary.get('blocked', 0)} blocked, {flow_count} flows{suffix}."
+                f"{summary.get('blocked', 0)} blocked, {flow_count} flows{suffix}. "
+                f"Runs: {run_links or 'none recorded'}."
             )
             any_functional = True
     if not any_functional:
