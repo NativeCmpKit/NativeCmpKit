@@ -17,6 +17,7 @@ import io
 import json
 import os
 from pathlib import Path
+import plistlib
 import shutil
 import stat
 import struct
@@ -94,11 +95,11 @@ def declared_native_names(names):
 
 
 @contextmanager
-def model():
+def model(*, workspace_bundle=False):
     """Independent fixture authoring; no native processes, real runtime or keys."""
     with tempfile.TemporaryDirectory(prefix="appkit607-model-") as folder:
         root = Path(folder).resolve()
-        source_names = source.fixture_inputs(ROOT)
+        source_names = source.validate_migrated_sources(ROOT) if workspace_bundle else source.fixture_inputs(ROOT)
         for name in sorted(source_names):
             target = root / name
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -108,6 +109,9 @@ def model():
         parent = root / route.PARENT
         parent.mkdir(parents=True)
         context = model_context()
+        if workspace_bundle:
+            workflow, job, profile = route.IDENTITY_WORKFLOW
+            context.update(workflow=workflow, job=job, profile=profile, ref=route.IDENTITY_REF)
         git = {"source_revision": context["source_revision"], "source_tree_dirty": False}
         base = time.time_ns() - 10_000_000_000
         def utc(ns):
@@ -159,10 +163,34 @@ def model():
                    "case": case, **identity(original)}
             case_row = {"classname": route.CLASS, "name": case, "status": "passed"}
             marker = {"name": case, "passed": True, "live": 0, "registry": 0, "cleanup": True}
-            native_execution = execution(folder, "native", pid, start,
-                                         (f"NATIVECMPKIT_APPKIT_CASE name={case} passed=true seconds=0.100000 live=0 registry=0 cleanup=true\n").encode())
+            stdout = f"NATIVECMPKIT_APPKIT_CASE name={case} passed=true seconds=0.100000 live=0 registry=0 cleanup=true\n"
+            bundle_fields = {}
+            native_executable = binary_name
+            if workspace_bundle:
+                contents = child_dir / "NativeCmpKitAppKitLifecycle.app/Contents"
+                bundled = contents / "MacOS/appkit_lifecycle"
+                bundled.parent.mkdir(parents=True)
+                shutil.copyfile(binary, bundled)
+                bundled.chmod(0o700)
+                info = contents / "Info.plist"
+                identifier = f"io.github.apdelrahman1911.nativecmpkit.appkit.verification.{index:032x}"
+                info.write_bytes(plistlib.dumps({
+                    "CFBundleExecutable": "appkit_lifecycle", "CFBundleIdentifier": identifier,
+                    "CFBundleInfoDictionaryVersion": "6.0", "CFBundleName": "NativeCmpKit AppKit Lifecycle",
+                    "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "1.0", "CFBundleVersion": "1",
+                }))
+                native_executable = bundled.relative_to(root).as_posix()
+                bundle_fields = {
+                    "bundle_held": True, "owned_bundle_acknowledged": True,
+                    "launch_bundle": {"identifier": identifier, "executable": native_executable,
+                                      "executable_identity": identity(bundled),
+                                      "info_plist": info.relative_to(root).as_posix(), "info_identity": identity(info)},
+                }
+                stdout = f"NATIVECMPKIT_APPKIT_BUNDLE pid={pid}\n" + stdout
+            native_execution = execution(folder, "native", pid, start, stdout.encode())
             record = {"case": case, "passed": True, "errors": [], "phase": "final-custody",
-                      "native_case_arguments": ["--case=" + case], "native_command": [binary_name, "--case=" + case],
+                      "native_case_arguments": ["--case=" + case], "native_command": [native_executable, "--case=" + case],
+                      **bundle_fields,
                       "git_before": git, "git_after": git, "runtime_before": runtime, "runtime_after": runtime,
                       "artifact_before": file, "artifact_after": file, "native_execution": native_execution,
                       "reports_held": True, "preexisting_reports_unchanged": True,
@@ -383,6 +411,32 @@ class AppKitOnly607Tests(unittest.TestCase):
         self.assertIn("--missing-only-share630", step)
         self.assertIn("scripts/ci/library_tests.py run", step)
         self.assertNotIn("./gradlew", step)
+
+    def test_migration_bundle_requires_original_executable_and_same_workspace_pid(self):
+        with model(workspace_bundle=True) as (root, receipt, context):
+            result = route.reference_parent(root, context, time.time_ns())
+            self.assertTrue(result["passed"])
+            record = receipt["native_case_runs"][0]
+            folder = root / route.PARENT / "cases" / record["case"]
+            log = record["native_execution"]["private_logs"][0]
+            path = root / log["relative_path"]
+            raw = path.read_bytes()
+            path.write_bytes(raw.replace(b"pid=900002", b"pid=900003"))
+            log.update(identity(path))
+            write_json(folder / "receipt.json", record)
+            save_parent(root, receipt)
+            with self.assertRaisesRegex(ValueError, "workspace-must-confirm-the-actual-supervised-AppKit-PID"):
+                route.reference_parent(root, context, time.time_ns())
+            path.write_bytes(raw)
+            log.update(identity(path))
+            bundle = record["launch_bundle"]
+            executable = root / bundle["executable"]
+            executable.write_bytes(b"not-the-admitted-executable")
+            bundle["executable_identity"] = identity(executable)
+            write_json(folder / "receipt.json", record)
+            save_parent(root, receipt)
+            with self.assertRaisesRegex(ValueError, "held-AppKit-bundle-bytes"):
+                route.reference_parent(root, context, time.time_ns())
 
     def test11_root_and_relative_traversal_are_never_admitted(self):
         with tempfile.TemporaryDirectory(prefix="appkit607-path-") as folder:

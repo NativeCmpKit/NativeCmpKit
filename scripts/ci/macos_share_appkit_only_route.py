@@ -12,6 +12,7 @@ import datetime as dt
 import hashlib
 import json
 import math
+import plistlib
 import os
 from pathlib import Path
 import re
@@ -411,12 +412,35 @@ def reference_parent(root: Path, context: dict, now_ns: int):
          [row.get("case") for row in runs] == list(CASES),
          "six-serial-AppKit-owning-process-receipts-required")
     pids, report_rows, previous_end = {compile_execution["pid"]}, [], compile_execution["ended_at_ns"]
+    bundle_ids = set()
     for case, row in zip(CASES, runs):
         folder = PARENT + "/cases/" + case
         record, _ = load(folder + "/receipt.json")
+        executable = artifact["relative_path"]
+        if context["profile"] == IDENTITY_PROFILE:
+            bundle = record.get("launch_bundle") if type(record) is dict else None
+            contents = folder + "/NativeCmpKitAppKitLifecycle.app/Contents"
+            executable, info = contents + "/MacOS/appkit_lifecycle", contents + "/Info.plist"
+            need(type(bundle) is dict and bundle.get("executable") == executable and
+                 bundle.get("info_plist") == info and type(bundle.get("identifier")) is str and
+                 re.fullmatch(r"io\.github\.apdelrahman1911\.nativecmpkit\.appkit\.verification\.[0-9a-f]{32}",
+                              bundle["identifier"]) and bundle["identifier"] not in bundle_ids and
+                 record.get("bundle_held") is True and record.get("owned_bundle_acknowledged") is True,
+                 "fresh-owned-AppKit-bundle-and-workspace-acknowledgement-required")
+            bundle_ids.add(bundle["identifier"])
+            launched, launched_identity = read(executable, 64 * 1024 * 1024)
+            plist, plist_identity = read(info, 8192)
+            need(launched == binary and launched_identity["mode"] & 0o111 and
+                 launched_identity == _file_identity(bundle.get("executable_identity")) and
+                 plist_identity == _file_identity(bundle.get("info_identity")) and
+                 plistlib.loads(plist) == {
+                     "CFBundleExecutable": "appkit_lifecycle", "CFBundleIdentifier": bundle["identifier"],
+                     "CFBundleInfoDictionaryVersion": "6.0", "CFBundleName": "NativeCmpKit AppKit Lifecycle",
+                     "CFBundlePackageType": "APPL", "CFBundleShortVersionString": "1.0", "CFBundleVersion": "1",
+                 }, "held-AppKit-bundle-bytes-must-match-admitted-executable-and-identity")
         need(type(record) is dict and row == record and record.get("passed") is True and record.get("errors") == [] and
              record.get("phase") == "final-custody" and record.get("native_case_arguments") == ["--case=" + case] and
-             record.get("native_command") == [artifact["relative_path"], "--case=" + case] and
+             record.get("native_command") == [executable, "--case=" + case] and
              all(record.get(k) is True for k in ("inputs_after_held", "native_inputs_after_held", "git_after_held", "runtime_after_held", "artifact_after_held", "reports_held", "preexisting_reports_unchanged")) and
              record.get("git_before") == git == record.get("git_after") and
              record.get("runtime_before") == parent["runtime_before"] == record.get("runtime_after") and
@@ -431,7 +455,12 @@ def reference_parent(root: Path, context: dict, now_ns: int):
             need(value == parent["runtime_before"], "AppKit-child-runtime-payload-held-required")
         execution = record.get("native_execution")
         _execution(execution, 240)
-        _console(_logs(root, execution, folder, "native", 4 * 1024 * 1024, read=read), case)
+        stdout = _logs(root, execution, folder, "native", 4 * 1024 * 1024, read=read)
+        _console(stdout, case)
+        if context["profile"] == IDENTITY_PROFILE:
+            markers = [line for line in stdout.splitlines() if line.startswith(b"NATIVECMPKIT_APPKIT_BUNDLE")]
+            need(markers == [f"NATIVECMPKIT_APPKIT_BUNDLE pid={execution['pid']}".encode()],
+                 "workspace-must-confirm-the-actual-supervised-AppKit-PID")
         need(execution["pid"] not in pids and previous_end <= execution["started_at_ns"] <= execution["ended_at_ns"] <= finish + FRESHNESS_SLOP,
              "serial-fresh-owned-AppKit-PIDs-required")
         pids.add(execution["pid"]); previous_end = execution["ended_at_ns"]

@@ -102,7 +102,7 @@ class NativeBatchControls(unittest.TestCase):
 
         with patch.object(appkit_only, "workflow_context",
                           return_value={"source_mock_only": True, "authenticated": False,
-                                        "host": "source/mock-not-native"}), \
+                                        "host": "source/mock-not-native", "profile": appkit_only.PROFILE}), \
                 patch.object(runner, "build_environment", return_value={"NATIVECMPKIT_NATIVE_UI_TESTS": "true"}), \
                 patch.object(runner, "git_identity", return_value={"source_revision": "d" * 40, "source_tree_dirty": False}), \
                 patch.object(runner.library, "snapshot_inputs", side_effect=inputs), \

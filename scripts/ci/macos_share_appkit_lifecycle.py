@@ -17,6 +17,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import plistlib
 import re
 import shutil
 import signal
@@ -27,6 +28,7 @@ import sys
 import tempfile
 import time
 import tomllib
+import uuid
 import xml.etree.ElementTree as ET
 
 import library_tests as library
@@ -563,9 +565,42 @@ def missing_view_failure_observation(root: Path, output: Path, execution: dict,
         return recovery.unavailable("private-failure-stream-custody-refused")
 
 
+def stage_owned_app(root: Path, case_output: Path, artifact_path: Path, artifact: dict):
+    """Keep the admitted Cargo executable as the directly supervised child."""
+    bundle = case_output / "NativeCmpKitAppKitLifecycle.app"
+    executable = bundle / "Contents/MacOS/appkit_lifecycle"
+    executable.parent.mkdir(parents=True, mode=0o700)
+    with artifact_path.open("rb") as source, executable.open("xb") as target:
+        shutil.copyfileobj(source, target)
+    executable.chmod(0o700)
+    identity = file_identity(executable)
+    require(identity["sha256"] == artifact["sha256"] and identity["size"] == artifact["size"],
+            "owned-app-executable-differs-from-Cargo-artifact")
+    identifier = "io.github.apdelrahman1911.nativecmpkit.appkit.verification." + uuid.uuid4().hex
+    info = bundle / "Contents/Info.plist"
+    with info.open("xb") as stream:
+        plistlib.dump({
+            "CFBundleExecutable": executable.name,
+            "CFBundleIdentifier": identifier,
+            "CFBundleInfoDictionaryVersion": "6.0",
+            "CFBundleName": "NativeCmpKit AppKit Lifecycle",
+            "CFBundlePackageType": "APPL",
+            "CFBundleShortVersionString": "1.0",
+            "CFBundleVersion": "1",
+        }, stream)
+    return executable, {
+        "identifier": identifier,
+        "executable": executable.relative_to(root).as_posix(),
+        "executable_identity": identity,
+        "info_plist": info.relative_to(root).as_posix(),
+        "info_identity": file_identity(info),
+    }
+
+
 def run_missing_six(root: Path, output: Path, artifact_path: Path, artifact: dict,
                     environment: dict, before: dict, native_before: dict,
-                    git_before: dict, runtime_before: dict, baseline: dict) -> tuple[dict, list[dict]]:
+                    git_before: dict, runtime_before: dict, baseline: dict, *,
+                    launch_bundle: bool = False) -> tuple[dict, list[dict]]:
     """One admitted compilation; SIX fixed cases, serial fresh processes, stop on first refusal."""
     runs, current_baseline = [], baseline
     folders = output / "cases"
@@ -598,17 +633,34 @@ def run_missing_six(root: Path, output: Path, artifact_path: Path, artifact: dic
                     "executable-changed-before-selected-native-case")
             require(report_state(root) == current_baseline, "reports-changed-before-selected-native-case")
             library.write_json(case_output / "preexisting-native-reports.json", current_baseline)
+            executable, case_environment = artifact_path, environment
+            if launch_bundle:
+                executable, bundle = stage_owned_app(root, case_output, artifact_path, artifact)
+                record["launch_bundle"] = bundle
+                record["native_command"] = [bundle["executable"], "--case=" + case]
+                case_environment = {**environment, "NATIVECMPKIT_APPKIT_OWNED_BUNDLE": bundle["identifier"]}
             record["phase"] = "native"
             execution, stdout = logged_execution(root, case_output, "native",
-                                                 [str(artifact_path), "--case=" + case], environment,
+                                                 [str(executable), "--case=" + case], case_environment,
                                                  NATIVE_SECONDS, MAX_NATIVE_LOG)
             record["native_execution"] = execution
             record["native_reports"] = collect_reports(root, case_output, execution,
                                                         current_baseline, stdout, (case,))
+            if launch_bundle:
+                marker = f"NATIVECMPKIT_APPKIT_BUNDLE pid={execution.get('pid')}".encode()
+                observed = [line for line in stdout.splitlines() if line.startswith(b"NATIVECMPKIT_APPKIT_BUNDLE")]
+                record["owned_bundle_acknowledged"] = observed == [marker]
+                record["bundle_held"] = (
+                    file_identity(ordinary_file(root, bundle["executable"])) == bundle["executable_identity"]
+                    and file_identity(ordinary_file(root, bundle["info_plist"])) == bundle["info_identity"]
+                )
+                require(record["bundle_held"], "owned-app-bundle-changed")
             if case == "missing_content_view" and execution.get("passed") is False:
                 record["missing_view_failure_observation"] = missing_view_failure_observation(
                     root, case_output, execution, record["native_reports"], before)
             require(record["native_reports"]["passed"], "selected-native-case-not-accepted")
+            require(not launch_bundle or record["owned_bundle_acknowledged"],
+                    "workspace-did-not-acknowledge-supervised-AppKit-process")
             record["phase"] = "final-custody"
         except (Exception, KeyboardInterrupt) as error:
             record["errors"].append(str(error) if isinstance(error, Refusal) else (
@@ -767,7 +819,8 @@ def run(root: Path, output_relative: str, case: str | None = None, *, missing_on
                            stop_on_first_failure=True)
             summary, runs = run_missing_six(root, output, artifact_path, artifact, environment,
                                             before, native_before, receipt["git_before"],
-                                            receipt["runtime_before"], baseline)
+                                            receipt["runtime_before"], baseline,
+                                            launch_bundle=receipt["workflow_context"]["profile"] == appkit_only.IDENTITY_PROFILE)
             receipt.update(native_reports=summary, native_case_runs=runs)
         else:
             receipt.update(native_command=[artifact["relative_path"], *arguments], native_case_arguments=arguments)

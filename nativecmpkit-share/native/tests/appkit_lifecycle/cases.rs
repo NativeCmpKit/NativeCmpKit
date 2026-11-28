@@ -6,12 +6,13 @@ use block2::RcBlock;
 use objc2::rc::Weak;
 use objc2::MainThreadOnly;
 use objc2_app_kit::{
-    NSApplicationActivationPolicy, NSBackingStoreType, NSEventMask, NSWindowStyleMask,
+    NSApplicationActivationPolicy, NSBackingStoreType, NSEventMask, NSRunningApplication,
+    NSWindowStyleMask, NSWorkspace, NSWorkspaceOpenConfiguration,
 };
-use objc2_foundation::{NSDate, NSDefaultRunLoopMode, NSRunLoop, NSTimer};
+use objc2_foundation::{NSBundle, NSDate, NSDefaultRunLoopMode, NSError, NSRunLoop, NSTimer};
 use std::panic::{catch_unwind, AssertUnwindSafe};
 use std::ptr::NonNull;
-use std::sync::atomic::{AtomicBool, Ordering as AtomicOrdering};
+use std::sync::atomic::{AtomicBool, AtomicU8, Ordering as AtomicOrdering};
 use std::time::{Duration, Instant};
 
 const SUBJECT: &str = "NativeCmpKit controlled AppKit lifecycle subject; no recipient is opened";
@@ -453,7 +454,66 @@ fn cleanup_owned() {
     WITNESSES.with(|witnesses| witnesses.borrow_mut().clear());
 }
 
+fn activate_owned_bundle(identifier: &str) {
+    let pid = std::process::id() as i32;
+    let bundle = NSBundle::mainBundle();
+    let running = NSRunningApplication::currentApplication();
+    let expected_identifier = NSString::from_str(identifier);
+    assert_eq!(
+        bundle.bundleIdentifier().as_deref(),
+        Some(&*expected_identifier)
+    );
+    assert_eq!(
+        running.bundleIdentifier().as_deref(),
+        Some(&*expected_identifier)
+    );
+    assert_eq!(running.processIdentifier(), pid);
+
+    // Ask the workspace to foreground the already registered, supervised process.
+    // Any unexpected new instance receives only a selector that the harness refuses.
+    let configuration = NSWorkspaceOpenConfiguration::new();
+    configuration.setCreatesNewApplicationInstance(false);
+    configuration.setAllowsRunningApplicationSubstitution(false);
+    configuration.setPromptsUserIfNeeded(false);
+    configuration.setAddsToRecentItems(false);
+    configuration.setActivates(true);
+    configuration.setArguments(&NSArray::from_retained_slice(&[NSString::from_str(
+        "--refuse-unowned-relaunch",
+    )]));
+    let state = Arc::new(AtomicU8::new(0));
+    let acknowledged = state.clone();
+    let completed = RcBlock::new(
+        move |opened: *mut NSRunningApplication, error: *mut NSError| {
+            let same_process = error.is_null()
+                && unsafe { opened.as_ref() }.is_some_and(|app| app.processIdentifier() == pid);
+            acknowledged.store(if same_process { 1 } else { 2 }, AtomicOrdering::Release);
+        },
+    );
+    NSWorkspace::sharedWorkspace().openApplicationAtURL_configuration_completionHandler(
+        &bundle.bundleURL(),
+        &configuration,
+        Some(&completed),
+    );
+    pump_until(
+        "AppKit workspace did not acknowledge owned bundle activation",
+        || state.load(AtomicOrdering::Acquire) != 0,
+    );
+    assert_eq!(
+        state.load(AtomicOrdering::Acquire),
+        1,
+        "AppKit workspace did not return the same owned process"
+    );
+    println!("NATIVECMPKIT_APPKIT_BUNDLE pid={pid}");
+}
+
 pub(crate) fn run() {
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    assert!(
+        !args
+            .iter()
+            .any(|argument| argument == "--refuse-unowned-relaunch"),
+        "AppKit bundle opened without the test controller"
+    );
     assert_eq!(
         Ok("true".into()),
         std::env::var("NATIVECMPKIT_NATIVE_UI_TESTS"),
@@ -471,7 +531,6 @@ pub(crate) fn run() {
         "The disposable harness must not own an existing application window"
     );
     assert!(app.setActivationPolicy(NSApplicationActivationPolicy::Regular));
-    let args: Vec<_> = std::env::args().skip(1).collect();
     let selected = match args.as_slice() {
         [] => FINITE.to_vec(),
         [selector] if selector == "--case=stress_2048" => {
@@ -485,6 +544,26 @@ pub(crate) fn run() {
         _ => panic!("Select zero or one exact --case=NAME; no unrelated test replay"),
     };
     assert!(!selected.is_empty(), "Unknown native case selection");
+    let bundle_identifier = std::env::var("NATIVECMPKIT_APPKIT_OWNED_BUNDLE").ok();
+    let staged_bundle = NSBundle::mainBundle()
+        .bundleIdentifier()
+        .is_some_and(|identifier| {
+            identifier
+                .to_string()
+                .starts_with("io.github.apdelrahman1911.nativecmpkit.appkit.verification.")
+        });
+    if staged_bundle {
+        assert!(
+            bundle_identifier.is_some(),
+            "The AppKit bundle requires its owning controller"
+        );
+        assert_eq!(args.len(), 1, "The AppKit bundle requires one owned case");
+    } else {
+        assert!(
+            bundle_identifier.is_none(),
+            "The AppKit bundle must match the staged application"
+        );
+    }
 
     // Enter the WindowServer event loop before running the fixture. Scheduling
     // on the run loop leaves the Main dispatch queue available to share callbacks.
@@ -495,7 +574,11 @@ pub(crate) fn run() {
                 app.isRunning(),
                 "The AppKit application event loop must be running"
             );
-            app.activate();
+            if let Some(identifier) = bundle_identifier.as_deref() {
+                activate_owned_bundle(identifier);
+            } else {
+                app.activate();
+            }
             run_selected(&selected)
         }));
         std::process::exit(i32::from(!matches!(result, Ok(true))));
