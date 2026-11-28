@@ -84,6 +84,7 @@ def main() -> None:
             ]
             entries.append({
                 "flow": flow["id"],
+                "platform": args.platform,
                 "status": flow["status"],
                 "run": args.run,
                 "attempt": args.attempt,

@@ -78,6 +78,7 @@
       "functional": [
         {
           "flow": "buttons",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -321,6 +322,7 @@
       "functional": [
         {
           "flow": "clickable",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
@@ -392,6 +394,7 @@
       "functional": [
         {
           "flow": "switch",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -521,6 +524,7 @@
       "functional": [
         {
           "flow": "slider",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
@@ -1107,6 +1111,7 @@
       "functional": [
         {
           "flow": "date-bounds",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
@@ -1118,6 +1123,7 @@
         },
         {
           "flow": "date-bounds",
+          "platform": "android",
           "status": "failed",
           "run": "45993784178",
           "attempt": "1",
@@ -1302,6 +1308,7 @@
       "functional": [
         {
           "flow": "alert-cancel",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1313,6 +1320,7 @@
         },
         {
           "flow": "alert-confirm",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1443,6 +1451,7 @@
       "functional": [
         {
           "flow": "alert-text-field",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1515,6 +1524,7 @@
       "functional": [
         {
           "flow": "action-sheet",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1588,6 +1598,7 @@
       "functional": [
         {
           "flow": "sheet",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1662,6 +1673,7 @@
       "functional": [
         {
           "flow": "dropdown",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1673,6 +1685,7 @@
         },
         {
           "flow": "dropdown",
+          "platform": "android",
           "status": "passed",
           "run": "45993784178",
           "attempt": "1",
@@ -1801,6 +1814,7 @@
       "functional": [
         {
           "flow": "scaffold-tab",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1812,6 +1826,7 @@
         },
         {
           "flow": "scaffold-tab",
+          "platform": "android",
           "status": "passed",
           "run": "45993784178",
           "attempt": "1",
@@ -1884,6 +1899,7 @@
       "functional": [
         {
           "flow": "topbar",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -1954,6 +1970,7 @@
       "functional": [
         {
           "flow": "navbar",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -2025,6 +2042,7 @@
       "functional": [
         {
           "flow": "toolbar",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -2785,6 +2803,7 @@
       "functional": [
         {
           "flow": "permissions-bulk-deny",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -4173,6 +4192,7 @@
       "functional": [
         {
           "flow": "permissions-sms-rows",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -4184,6 +4204,7 @@
         },
         {
           "flow": "permissions-sms-rows",
+          "platform": "android",
           "status": "passed",
           "run": "45993784178",
           "attempt": "1",
@@ -4255,6 +4276,7 @@
       "functional": [
         {
           "flow": "icons-category",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -4326,6 +4348,7 @@
       "functional": [
         {
           "flow": "alert-text-field",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -4621,6 +4644,7 @@
       "functional": [
         {
           "flow": "sheet-veto",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
@@ -4692,6 +4716,7 @@
       "functional": [
         {
           "flow": "date-display",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
@@ -4762,6 +4787,7 @@
       "functional": [
         {
           "flow": "time-24h",
+          "platform": "ios",
           "status": "passed",
           "run": "46014167086",
           "attempt": "1",
@@ -5001,6 +5027,7 @@
       "functional": [
         {
           "flow": "webview-js",
+          "platform": "ios",
           "status": "failed",
           "run": "46014167086",
           "attempt": "1",
