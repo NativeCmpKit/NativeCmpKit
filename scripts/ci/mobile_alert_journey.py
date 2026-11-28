@@ -106,6 +106,11 @@ def run(upstream, platform, device, output, axe):
             "PATH", "HOME", "TMPDIR", "LANG", "LC_ALL", "JAVA_HOME", "ANDROID_HOME", "ANDROID_SDK_ROOT",
             "ANDROID_AVD_HOME", "RUNNER_TEMP", "GITHUB_STEP_SUMMARY", "XCODE_SELECT_PATH", "DEVELOPER_DIR",
         ) if name in os.environ}
+        if platform == "android":
+            platform_tools = Path(env["ANDROID_HOME"]) / "platform-tools"
+            if not os.access(platform_tools / "adb", os.X_OK):
+                raise ValueError("The hosted Android SDK does not contain an executable adb")
+            env["PATH"] = os.pathsep.join((str(platform_tools), env["PATH"]))
         env.update(UI_TEST_TARGET=platform, UI_TEST_DEVICE=device, UI_TEST_APP_IDS=APP,
                    UI_TEST_TOKEN_SHA256=hashlib.sha256(token.encode("ascii")).hexdigest(),
                    UI_TEST_TRANSPORT="local", UI_TEST_TRANSPORT_FALLBACK="none", UI_TEST_DURATION="5",
@@ -139,7 +144,17 @@ def run(upstream, platform, device, output, axe):
                 if metadata["transport"] != "local" or address.scheme != "http" or address.hostname != "127.0.0.1":
                     raise ValueError("The native UI journey requires a runner-local listener")
                 ui = LiveUI.open(connection, token_file)
-                result = exercise(ui, output, platform, device)
+                try:
+                    result = exercise(ui, output, platform, device)
+                except Exception:
+                    try:
+                        observed = ui.inspect(format="compact", visible_only=True, limit=80)
+                        (output / "failure-observation.json").write_text(
+                            json.dumps(observed, indent=2) + "\n", encoding="utf-8"
+                        )
+                    except Exception as diagnostic:
+                        print(f"Unable to capture a compact failure observation: {diagnostic}", file=sys.stderr)
+                    raise
                 ui.close_session()
                 (control / "stop").touch()
                 if server.wait(timeout=20) != 0 or (control / "outcome").read_text() != "success":
