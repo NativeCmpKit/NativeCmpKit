@@ -79,7 +79,7 @@ jobs:
             SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
             export SOURCE_DATE_EPOCH
             set -x
-            ./gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
+            bash gradlew --no-daemon --offline --max-workers=2 --console=plain sdk \
               -PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true -PNUM_COMPILE_THREADS=2 \
               -PBUILD_LIBAV_STUBS=false -PicuVersion=77.1 -PJFX_DEPS_URL="file://$ivy_path"
           ) 2>&1 | tee "$EVIDENCE_DIR/build.log"; then
