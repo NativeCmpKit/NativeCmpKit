@@ -7,7 +7,7 @@ Regenerate both files with `python3 showcase/generate_coverage.py`.
 
 Statuses: **passed** = a functional flow asserted observable state; **captured** = a reviewed screenshot only; **failed** = flow ran and the assertion failed; **not-run** = no hosted evidence yet; **not-applicable** = the API or sample section does not exist on that platform.
 
-- android: 35 captured, 2 failed, 20 not-applicable, 6 not-run, 25 passed
+- android: 38 captured, 2 failed, 20 not-applicable, 3 not-run, 25 passed
 - ios: 45 captured, 7 failed, 9 not-applicable, 11 not-run, 16 passed
 
 Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<platform>/functional-<device>.json`.
@@ -85,9 +85,9 @@ Functional flow evidence lives under [evidence/](evidence/) and `screenshots/<pl
 | UI-ICON-004 | CupertinoIcon catalog | category filters | supported | supported | CupertinoIconsCatalog | passed (46099102700) | passed (46014167086) |
 | UI-ALERT-005 | AdaptiveBasicAlertDialog | text field and critical severity | unsupported | supported | Dialog | not-applicable | passed (46014167086) |
 | UI-ALERT-006 | AlertDialogIosStyle.ActionSheet | iPad popover | unsupported | supported | Dialog | not-applicable | failed (46099392157) |
-| NAV-004 | HomeScreen | large-screen index layout | supported | supported | Home | not-run | captured (46099392157) |
-| UI-BAR-008 | AdaptiveScaffold | tablet tab and bar layout | supported | supported | Scaffold | not-run | captured (46099392157) |
-| UI-SHEET-003 | AdaptiveBottomSheet | tablet presentation | supported | supported | BottomSheet | not-run | captured (46099392157) |
+| NAV-004 | HomeScreen | large-screen index layout | supported | supported | Home | captured (46107087160) | captured (46099392157) |
+| UI-BAR-008 | AdaptiveScaffold | tablet tab and bar layout | supported | supported | Scaffold | captured (46107087160) | captured (46099392157) |
+| UI-SHEET-003 | AdaptiveBottomSheet | tablet presentation | supported | supported | BottomSheet | captured (46107087160) | captured (46099392157) |
 | UI-SHEET-002 | AdaptiveSheetState | detents, veto and dismissal | supported | supported | BottomSheet | passed (46099102700) | failed (46014167086) |
 | UI-DATE-006 | AdaptiveDatePicker | picker and input display modes | supported | supported | DatePicker | failed (46099102700) | failed (46014167086) |
 | UI-TIME-002 | AdaptiveTimePicker | 24-hour state | supported | supported | TimePicker | passed (46099102700) | passed (46014167086) |

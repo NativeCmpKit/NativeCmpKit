@@ -4755,15 +4755,16 @@
       ],
       "flowId": "android-phone-homescreen-large-screen-index-layout",
       "screenshot": {
-        "android": "screenshots/android/homescreen/large-screen-index-layout/api35-phone.png",
+        "android": "screenshots/android/home/index/api35-tablet.png",
         "ios": "screenshots/ios/home/index/ipad-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46107087160",
+          "attempt": "1",
+          "job": "140862145867",
+          "device": "api35-tablet"
         },
         "ios": {
           "status": "captured",
@@ -4812,15 +4813,16 @@
       ],
       "flowId": "android-phone-adaptivescaffold-tablet-tab-and-bar-layout",
       "screenshot": {
-        "android": "screenshots/android/adaptivescaffold/tablet-tab-and-bar-layout/api35-phone.png",
+        "android": "screenshots/android/ui-adaptive-scaffold/overview/api35-tablet.png",
         "ios": "screenshots/ios/ui-adaptive-scaffold/overview/ipad-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46107087160",
+          "attempt": "1",
+          "job": "140862145867",
+          "device": "api35-tablet"
         },
         "ios": {
           "status": "captured",
@@ -4869,15 +4871,16 @@
       ],
       "flowId": "android-phone-adaptivebottomsheet-tablet-presentation",
       "screenshot": {
-        "android": "screenshots/android/adaptivebottomsheet/tablet-presentation/api35-phone.png",
+        "android": "screenshots/android/ui-adaptive-bottom-sheet/overview/api35-tablet.png",
         "ios": "screenshots/ios/ui-adaptive-bottom-sheet/overview/ipad-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46107087160",
+          "attempt": "1",
+          "job": "140862145867",
+          "device": "api35-tablet"
         },
         "ios": {
           "status": "captured",

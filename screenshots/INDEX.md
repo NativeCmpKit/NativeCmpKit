@@ -73,39 +73,76 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 | `functional/webview-js` | functional | See coverage.json | ![functional webview-js](android/functional/webview-js/api35-phone-before.png) |
 | `functional/webview-js` | functional | JavaScript is off by default / Enabling it allows the evaluation | ![functional webview-js](android/functional/webview-js/api35-phone-failed-after.png) |
 | `geo-math/overview` | geo-math | Deterministic LatLng distance/bearing plus the tracker-unavailable state. | ![geo-math overview](android/geo-math/overview/api35-phone.png) |
+| `geo-math/overview` | geo-math | Deterministic LatLng distance/bearing plus the tracker-unavailable state. | ![geo-math overview](android/geo-math/overview/api35-tablet.png) |
 | `home/index` | home | Searchable component index, stable routes and per-screen reset. | ![home index](android/home/index/api35-phone.png) |
+| `home/index` | home | Searchable component index, stable routes and per-screen reset. | ![home index](android/home/index/api35-tablet.png) |
 | `io-camera-picker/overview` | io-camera-picker | Camera launch and the platform-specific unavailable fallback. | ![io-camera-picker overview](android/io-camera-picker/overview/api35-phone.png) |
+| `io-camera-picker/overview` | io-camera-picker | Camera launch and the platform-specific unavailable fallback. | ![io-camera-picker overview](android/io-camera-picker/overview/api35-tablet.png) |
 | `io-file-picker/overview` | io-file-picker | Platform file selection, filters, metadata and streaming readout. | ![io-file-picker overview](android/io-file-picker/overview/api35-phone.png) |
+| `io-file-picker/overview` | io-file-picker | Platform file selection, filters, metadata and streaming readout. | ![io-file-picker overview](android/io-file-picker/overview/api35-tablet.png) |
 | `io-file-saver/overview` | io-file-saver | Save/export entry point and result state. | ![io-file-saver overview](android/io-file-saver/overview/api35-phone.png) |
+| `io-file-saver/overview` | io-file-saver | Save/export entry point and result state. | ![io-file-saver overview](android/io-file-saver/overview/api35-tablet.png) |
 | `io-image-picker/overview` | io-image-picker | Picked image preview through the KmpFile Coil pipeline. | ![io-image-picker overview](android/io-image-picker/overview/api35-phone.png) |
+| `io-image-picker/overview` | io-image-picker | Picked image preview through the KmpFile Coil pipeline. | ![io-image-picker overview](android/io-image-picker/overview/api35-tablet.png) |
 | `limitations/known-limitations` | limitations | Source-confirmed unsupported and internal APIs; not working parity. | ![limitations known-limitations](android/limitations/known-limitations/api35-phone.png) |
+| `limitations/known-limitations` | limitations | Source-confirmed unsupported and internal APIs; not working parity. | ![limitations known-limitations](android/limitations/known-limitations/api35-tablet.png) |
 | `permissions/overview` | permissions | Public permission status and request rows; OS dialogs are separate. | ![permissions overview](android/permissions/overview/api35-phone.png) |
+| `permissions/overview` | permissions | Public permission status and request rows; OS dialogs are separate. | ![permissions overview](android/permissions/overview/api35-tablet.png) |
 | `share/overview` | share | Native share payloads and terminal result state. | ![share overview](android/share/overview/api35-phone.png) |
+| `share/overview` | share | Native share payloads and terminal result state. | ![share overview](android/share/overview/api35-tablet.png) |
 | `ui-adaptive-alert-dialog/overview` | ui-adaptive-alert-dialog | The confirm action enables after typing / Secure/number-pad fields are configured / Critical severity is applied on supported UIKit hosts | ![ui-adaptive-alert-dialog overview](android/ui-adaptive-alert-dialog/overview/api35-phone.png) |
+| `ui-adaptive-alert-dialog/overview` | ui-adaptive-alert-dialog | See coverage.json | ![ui-adaptive-alert-dialog overview](android/ui-adaptive-alert-dialog/overview/api35-tablet.png) |
 | `ui-adaptive-alert-dialog/simple` | ui-adaptive-alert-dialog | Only one action is visible / The dialog dismisses | ![ui-adaptive-alert-dialog simple](android/ui-adaptive-alert-dialog/simple/api35-phone.png) |
+| `ui-adaptive-alert-dialog/simple` | ui-adaptive-alert-dialog | See coverage.json | ![ui-adaptive-alert-dialog simple](android/ui-adaptive-alert-dialog/simple/api35-tablet.png) |
 | `ui-adaptive-bottom-sheet/expanded` | ui-adaptive-bottom-sheet | See coverage.json | ![ui-adaptive-bottom-sheet expanded](android/ui-adaptive-bottom-sheet/expanded/api35-phone.png) |
+| `ui-adaptive-bottom-sheet/expanded` | ui-adaptive-bottom-sheet | See coverage.json | ![ui-adaptive-bottom-sheet expanded](android/ui-adaptive-bottom-sheet/expanded/api35-tablet.png) |
 | `ui-adaptive-bottom-sheet/overview` | ui-adaptive-bottom-sheet | See coverage.json | ![ui-adaptive-bottom-sheet overview](android/ui-adaptive-bottom-sheet/overview/api35-phone.png) |
+| `ui-adaptive-bottom-sheet/overview` | ui-adaptive-bottom-sheet | The sheet uses the wide presentation / Close dismisses it | ![ui-adaptive-bottom-sheet overview](android/ui-adaptive-bottom-sheet/overview/api35-tablet.png) |
 | `ui-adaptive-button/overview` | ui-adaptive-button | The label is visible / The leading icon has a non-empty content description where supplied | ![ui-adaptive-button overview](android/ui-adaptive-button/overview/api35-phone.png) |
+| `ui-adaptive-button/overview` | ui-adaptive-button | See coverage.json | ![ui-adaptive-button overview](android/ui-adaptive-button/overview/api35-tablet.png) |
 | `ui-adaptive-clickable/overview` | ui-adaptive-clickable | See coverage.json | ![ui-adaptive-clickable overview](android/ui-adaptive-clickable/overview/api35-phone.png) |
+| `ui-adaptive-clickable/overview` | ui-adaptive-clickable | See coverage.json | ![ui-adaptive-clickable overview](android/ui-adaptive-clickable/overview/api35-tablet.png) |
 | `ui-adaptive-date-picker/overview` | ui-adaptive-date-picker | The readout changes / The native iOS calendar or Material picker is used | ![ui-adaptive-date-picker overview](android/ui-adaptive-date-picker/overview/api35-phone.png) |
+| `ui-adaptive-date-picker/overview` | ui-adaptive-date-picker | See coverage.json | ![ui-adaptive-date-picker overview](android/ui-adaptive-date-picker/overview/api35-tablet.png) |
 | `ui-adaptive-dropdown/menu` | ui-adaptive-dropdown | iOS shows inline submenus / Material shows the caller-built section divider | ![ui-adaptive-dropdown menu](android/ui-adaptive-dropdown/menu/api35-phone.png) |
 | `ui-adaptive-dropdown/overview` | ui-adaptive-dropdown | See coverage.json | ![ui-adaptive-dropdown overview](android/ui-adaptive-dropdown/overview/api35-phone.png) |
+| `ui-adaptive-dropdown/overview` | ui-adaptive-dropdown | See coverage.json | ![ui-adaptive-dropdown overview](android/ui-adaptive-dropdown/overview/api35-tablet.png) |
 | `ui-adaptive-navigation-bar/overview` | ui-adaptive-navigation-bar | See coverage.json | ![ui-adaptive-navigation-bar overview](android/ui-adaptive-navigation-bar/overview/api35-phone.png) |
+| `ui-adaptive-navigation-bar/overview` | ui-adaptive-navigation-bar | See coverage.json | ![ui-adaptive-navigation-bar overview](android/ui-adaptive-navigation-bar/overview/api35-tablet.png) |
 | `ui-adaptive-progress/overview` | ui-adaptive-progress | All three indeterminate indicators render and animate / No determinate progress control is advertised | ![ui-adaptive-progress overview](android/ui-adaptive-progress/overview/api35-phone.png) |
+| `ui-adaptive-progress/overview` | ui-adaptive-progress | See coverage.json | ![ui-adaptive-progress overview](android/ui-adaptive-progress/overview/api35-tablet.png) |
 | `ui-adaptive-scaffold/overview` | ui-adaptive-scaffold | See coverage.json | ![ui-adaptive-scaffold overview](android/ui-adaptive-scaffold/overview/api35-phone.png) |
+| `ui-adaptive-scaffold/overview` | ui-adaptive-scaffold | Bars span the window / Tab content updates without clipping | ![ui-adaptive-scaffold overview](android/ui-adaptive-scaffold/overview/api35-tablet.png) |
 | `ui-adaptive-slider/overview` | ui-adaptive-slider | Values snap to the stepped positions / Tick marks are visible on iOS below 26 | ![ui-adaptive-slider overview](android/ui-adaptive-slider/overview/api35-phone.png) |
+| `ui-adaptive-slider/overview` | ui-adaptive-slider | See coverage.json | ![ui-adaptive-slider overview](android/ui-adaptive-slider/overview/api35-tablet.png) |
 | `ui-adaptive-switch/overview` | ui-adaptive-switch | The 51x31 track and thumb render on every target / The disabled switch cannot be toggled | ![ui-adaptive-switch overview](android/ui-adaptive-switch/overview/api35-phone.png) |
+| `ui-adaptive-switch/overview` | ui-adaptive-switch | See coverage.json | ![ui-adaptive-switch overview](android/ui-adaptive-switch/overview/api35-tablet.png) |
 | `ui-adaptive-time-picker/overview` | ui-adaptive-time-picker | Both time readouts render / The iOS format follows the device locale even when is24Hour differs | ![ui-adaptive-time-picker overview](android/ui-adaptive-time-picker/overview/api35-phone.png) |
+| `ui-adaptive-time-picker/overview` | ui-adaptive-time-picker | See coverage.json | ![ui-adaptive-time-picker overview](android/ui-adaptive-time-picker/overview/api35-tablet.png) |
 | `ui-adaptive-toolbar/overview` | ui-adaptive-toolbar | See coverage.json | ![ui-adaptive-toolbar overview](android/ui-adaptive-toolbar/overview/api35-phone.png) |
+| `ui-adaptive-toolbar/overview` | ui-adaptive-toolbar | See coverage.json | ![ui-adaptive-toolbar overview](android/ui-adaptive-toolbar/overview/api35-tablet.png) |
 | `ui-adaptive-top-bar/overview` | ui-adaptive-top-bar | System-name and rasterized vector images render / The icon font fallback is not presented as an SF Symbol / The UIKitImage.Bitmap variant is not exercised by this screen | ![ui-adaptive-top-bar overview](android/ui-adaptive-top-bar/overview/api35-phone.png) |
+| `ui-adaptive-top-bar/overview` | ui-adaptive-top-bar | See coverage.json | ![ui-adaptive-top-bar overview](android/ui-adaptive-top-bar/overview/api35-tablet.png) |
+| `ui-cupertino-icons/category-arrows` | ui-cupertino-icons | See coverage.json | ![ui-cupertino-icons category-arrows](android/ui-cupertino-icons/category-arrows/api35-tablet.png) |
+| `ui-cupertino-icons/category-communication` | ui-cupertino-icons | See coverage.json | ![ui-cupertino-icons category-communication](android/ui-cupertino-icons/category-communication/api35-tablet.png) |
 | `ui-cupertino-icons/overview` | ui-cupertino-icons | See coverage.json | ![ui-cupertino-icons overview](android/ui-cupertino-icons/overview/api35-phone.png) |
+| `ui-cupertino-icons/overview` | ui-cupertino-icons | See coverage.json | ![ui-cupertino-icons overview](android/ui-cupertino-icons/overview/api35-tablet.png) |
 | `ui-cupertino-icons/search-chevron` | ui-cupertino-icons | The grid filters to matching names / The count updates / Representative glyphs render without tofu | ![ui-cupertino-icons search-chevron](android/ui-cupertino-icons/search-chevron/api35-phone.png) |
+| `ui-liquid-glass/overview` | ui-liquid-glass | See coverage.json | ![ui-liquid-glass overview](android/ui-liquid-glass/overview/api35-tablet.png) |
+| `webview/after-back` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview after-back](android/webview/after-back/api35-tablet.png) |
+| `webview/after-forward` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview after-forward](android/webview/after-forward/api35-tablet.png) |
 | `webview/cookie-roundtrip` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview cookie-roundtrip](android/webview/cookie-roundtrip/api35-phone.png) |
+| `webview/cookie-roundtrip` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview cookie-roundtrip](android/webview/cookie-roundtrip/api35-tablet.png) |
 | `webview/cookies-cleared` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview cookies-cleared](android/webview/cookies-cleared/api35-phone.png) |
+| `webview/cookies-cleared` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview cookies-cleared](android/webview/cookies-cleared/api35-tablet.png) |
 | `webview/invalid-destination` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview invalid-destination](android/webview/invalid-destination/api35-phone.png) |
+| `webview/invalid-destination` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview invalid-destination](android/webview/invalid-destination/api35-tablet.png) |
 | `webview/javascript-title` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview javascript-title](android/webview/javascript-title/api35-phone.png) |
+| `webview/javascript-title` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview javascript-title](android/webview/javascript-title/api35-tablet.png) |
 | `webview/overview` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview overview](android/webview/overview/api35-phone.png) |
+| `webview/overview` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview overview](android/webview/overview/api35-tablet.png) |
 | `webview/second-page` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview second-page](android/webview/second-page/api35-phone.png) |
+| `webview/second-page` | webview | Deterministic HTML, navigation/errors, JavaScript and cookie state. | ![webview second-page](android/webview/second-page/api35-tablet.png) |
 
 ## ios
 
@@ -316,6 +353,40 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 - [webview/invalid-destination.png](compare/webview/invalid-destination.png)
 - [webview/javascript-title.png](compare/webview/javascript-title.png)
 - [webview/overview.png](compare/webview/overview.png)
+
+## Side-by-side tablet windows
+
+- [geo-math/overview/tablet.png](compare-tablet/geo-math/overview/tablet.png)
+- [home/index/tablet.png](compare-tablet/home/index/tablet.png)
+- [io-camera-picker/overview/tablet.png](compare-tablet/io-camera-picker/overview/tablet.png)
+- [io-file-picker/overview/tablet.png](compare-tablet/io-file-picker/overview/tablet.png)
+- [io-file-saver/overview/tablet.png](compare-tablet/io-file-saver/overview/tablet.png)
+- [io-image-picker/overview/tablet.png](compare-tablet/io-image-picker/overview/tablet.png)
+- [limitations/known-limitations/tablet.png](compare-tablet/limitations/known-limitations/tablet.png)
+- [permissions/overview/tablet.png](compare-tablet/permissions/overview/tablet.png)
+- [share/overview/tablet.png](compare-tablet/share/overview/tablet.png)
+- [ui-adaptive-alert-dialog/overview/tablet.png](compare-tablet/ui-adaptive-alert-dialog/overview/tablet.png)
+- [ui-adaptive-alert-dialog/simple/tablet.png](compare-tablet/ui-adaptive-alert-dialog/simple/tablet.png)
+- [ui-adaptive-bottom-sheet/expanded/tablet.png](compare-tablet/ui-adaptive-bottom-sheet/expanded/tablet.png)
+- [ui-adaptive-bottom-sheet/overview/tablet.png](compare-tablet/ui-adaptive-bottom-sheet/overview/tablet.png)
+- [ui-adaptive-button/overview/tablet.png](compare-tablet/ui-adaptive-button/overview/tablet.png)
+- [ui-adaptive-clickable/overview/tablet.png](compare-tablet/ui-adaptive-clickable/overview/tablet.png)
+- [ui-adaptive-date-picker/overview/tablet.png](compare-tablet/ui-adaptive-date-picker/overview/tablet.png)
+- [ui-adaptive-dropdown/overview/tablet.png](compare-tablet/ui-adaptive-dropdown/overview/tablet.png)
+- [ui-adaptive-navigation-bar/overview/tablet.png](compare-tablet/ui-adaptive-navigation-bar/overview/tablet.png)
+- [ui-adaptive-progress/overview/tablet.png](compare-tablet/ui-adaptive-progress/overview/tablet.png)
+- [ui-adaptive-scaffold/overview/tablet.png](compare-tablet/ui-adaptive-scaffold/overview/tablet.png)
+- [ui-adaptive-slider/overview/tablet.png](compare-tablet/ui-adaptive-slider/overview/tablet.png)
+- [ui-adaptive-switch/overview/tablet.png](compare-tablet/ui-adaptive-switch/overview/tablet.png)
+- [ui-adaptive-time-picker/overview/tablet.png](compare-tablet/ui-adaptive-time-picker/overview/tablet.png)
+- [ui-adaptive-toolbar/overview/tablet.png](compare-tablet/ui-adaptive-toolbar/overview/tablet.png)
+- [ui-adaptive-top-bar/overview/tablet.png](compare-tablet/ui-adaptive-top-bar/overview/tablet.png)
+- [ui-cupertino-icons/category-arrows/tablet.png](compare-tablet/ui-cupertino-icons/category-arrows/tablet.png)
+- [ui-cupertino-icons/category-communication/tablet.png](compare-tablet/ui-cupertino-icons/category-communication/tablet.png)
+- [ui-cupertino-icons/overview/tablet.png](compare-tablet/ui-cupertino-icons/overview/tablet.png)
+- [ui-liquid-glass/overview/tablet.png](compare-tablet/ui-liquid-glass/overview/tablet.png)
+- [webview/after-back/tablet.png](compare-tablet/webview/after-back/tablet.png)
+- [webview/overview/tablet.png](compare-tablet/webview/overview/tablet.png)
 
 ## Functional flows
 

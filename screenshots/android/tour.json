@@ -1,8 +1,8 @@
 {
-  "captured_at": "2026-11-27T07:49:45.297192+00:00",
+  "captured_at": "2026-11-28T04:34:28.825242+00:00",
   "target": "android",
-  "session": "bb97409ca8f33b40ae1a9e9a",
-  "device": "api35-phone",
+  "session": "d032373908554579ba47786b",
+  "device": "api35-tablet",
   "commands": [
     "app.close",
     "app.deeplink",
@@ -37,215 +37,233 @@
     {
       "component": "home",
       "scenario": "index",
-      "path": "screenshots/android/home/index/api35-phone.png",
-      "bytes": 256604
+      "path": "screenshots/android/home/index/api35-tablet.png",
+      "bytes": 303027
     },
     {
       "component": "ui-adaptive-button",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
-      "bytes": 119608
+      "path": "screenshots/android/ui-adaptive-button/overview/api35-tablet.png",
+      "bytes": 100383
     },
     {
       "component": "ui-adaptive-clickable",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-clickable/overview/api35-phone.png",
-      "bytes": 54436
+      "path": "screenshots/android/ui-adaptive-clickable/overview/api35-tablet.png",
+      "bytes": 55232
     },
     {
       "component": "ui-adaptive-switch",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png",
-      "bytes": 120890
+      "path": "screenshots/android/ui-adaptive-switch/overview/api35-tablet.png",
+      "bytes": 102037
     },
     {
       "component": "ui-adaptive-slider",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png",
-      "bytes": 103678
+      "path": "screenshots/android/ui-adaptive-slider/overview/api35-tablet.png",
+      "bytes": 88053
     },
     {
       "component": "ui-adaptive-progress",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-progress/overview/api35-phone.png",
-      "bytes": 96831
+      "path": "screenshots/android/ui-adaptive-progress/overview/api35-tablet.png",
+      "bytes": 81737
     },
     {
       "component": "ui-adaptive-date-picker",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
-      "bytes": 164037
+      "path": "screenshots/android/ui-adaptive-date-picker/overview/api35-tablet.png",
+      "bytes": 195804
     },
     {
       "component": "ui-adaptive-time-picker",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-time-picker/overview/api35-phone.png",
-      "bytes": 132333
+      "path": "screenshots/android/ui-adaptive-time-picker/overview/api35-tablet.png",
+      "bytes": 131002
     },
     {
       "component": "ui-adaptive-alert-dialog",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-phone.png",
-      "bytes": 96986
+      "path": "screenshots/android/ui-adaptive-alert-dialog/overview/api35-tablet.png",
+      "bytes": 78837
     },
     {
       "component": "ui-adaptive-alert-dialog",
       "scenario": "simple",
-      "path": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png",
-      "bytes": 108189
+      "path": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-tablet.png",
+      "bytes": 95032
     },
     {
       "component": "ui-adaptive-bottom-sheet",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-bottom-sheet/overview/api35-phone.png",
-      "bytes": 50629
+      "path": "screenshots/android/ui-adaptive-bottom-sheet/overview/api35-tablet.png",
+      "bytes": 57008
     },
     {
       "component": "ui-adaptive-bottom-sheet",
       "scenario": "expanded",
-      "path": "screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-phone.png",
-      "bytes": 92357
+      "path": "screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-tablet.png",
+      "bytes": 97325
     },
     {
       "component": "ui-adaptive-dropdown",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-dropdown/overview/api35-phone.png",
-      "bytes": 105757
-    },
-    {
-      "component": "ui-adaptive-dropdown",
-      "scenario": "menu",
-      "path": "screenshots/android/ui-adaptive-dropdown/menu/api35-phone.png",
-      "bytes": 119507
+      "path": "screenshots/android/ui-adaptive-dropdown/overview/api35-tablet.png",
+      "bytes": 85750
     },
     {
       "component": "ui-adaptive-scaffold",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-scaffold/overview/api35-phone.png",
-      "bytes": 86205
+      "path": "screenshots/android/ui-adaptive-scaffold/overview/api35-tablet.png",
+      "bytes": 69599
     },
     {
       "component": "ui-adaptive-top-bar",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png",
-      "bytes": 181200
+      "path": "screenshots/android/ui-adaptive-top-bar/overview/api35-tablet.png",
+      "bytes": 134018
     },
     {
       "component": "ui-adaptive-navigation-bar",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-navigation-bar/overview/api35-phone.png",
-      "bytes": 104876
+      "path": "screenshots/android/ui-adaptive-navigation-bar/overview/api35-tablet.png",
+      "bytes": 88246
     },
     {
       "component": "ui-adaptive-toolbar",
       "scenario": "overview",
-      "path": "screenshots/android/ui-adaptive-toolbar/overview/api35-phone.png",
-      "bytes": 49356
+      "path": "screenshots/android/ui-adaptive-toolbar/overview/api35-tablet.png",
+      "bytes": 47012
     },
     {
       "component": "ui-cupertino-icons",
       "scenario": "overview",
-      "path": "screenshots/android/ui-cupertino-icons/overview/api35-phone.png",
-      "bytes": 133881
+      "path": "screenshots/android/ui-cupertino-icons/overview/api35-tablet.png",
+      "bytes": 323104
     },
     {
       "component": "ui-cupertino-icons",
-      "scenario": "search-chevron",
-      "path": "screenshots/android/ui-cupertino-icons/search-chevron/api35-phone.png",
-      "bytes": 107031
+      "scenario": "category-arrows",
+      "path": "screenshots/android/ui-cupertino-icons/category-arrows/api35-tablet.png",
+      "bytes": 297752
+    },
+    {
+      "component": "ui-cupertino-icons",
+      "scenario": "category-communication",
+      "path": "screenshots/android/ui-cupertino-icons/category-communication/api35-tablet.png",
+      "bytes": 227911
     },
     {
       "component": "io-file-picker",
       "scenario": "overview",
-      "path": "screenshots/android/io-file-picker/overview/api35-phone.png",
-      "bytes": 98689
+      "path": "screenshots/android/io-file-picker/overview/api35-tablet.png",
+      "bytes": 92268
     },
     {
       "component": "io-image-picker",
       "scenario": "overview",
-      "path": "screenshots/android/io-image-picker/overview/api35-phone.png",
-      "bytes": 62923
+      "path": "screenshots/android/io-image-picker/overview/api35-tablet.png",
+      "bytes": 58952
     },
     {
       "component": "io-file-saver",
       "scenario": "overview",
-      "path": "screenshots/android/io-file-saver/overview/api35-phone.png",
-      "bytes": 77279
+      "path": "screenshots/android/io-file-saver/overview/api35-tablet.png",
+      "bytes": 67251
     },
     {
       "component": "io-camera-picker",
       "scenario": "overview",
-      "path": "screenshots/android/io-camera-picker/overview/api35-phone.png",
-      "bytes": 62465
+      "path": "screenshots/android/io-camera-picker/overview/api35-tablet.png",
+      "bytes": 53843
     },
     {
       "component": "share",
       "scenario": "overview",
-      "path": "screenshots/android/share/overview/api35-phone.png",
-      "bytes": 129210
-    },
-    {
-      "component": "permissions",
-      "scenario": "overview",
-      "path": "screenshots/android/permissions/overview/api35-phone.png",
-      "bytes": 184529
-    },
-    {
-      "component": "geo-math",
-      "scenario": "overview",
-      "path": "screenshots/android/geo-math/overview/api35-phone.png",
-      "bytes": 163493
-    },
-    {
-      "component": "limitations",
-      "scenario": "known-limitations",
-      "path": "screenshots/android/limitations/known-limitations/api35-phone.png",
-      "bytes": 262156
+      "path": "screenshots/android/share/overview/api35-tablet.png",
+      "bytes": 107099
     },
     {
       "component": "webview",
       "scenario": "overview",
-      "path": "screenshots/android/webview/overview/api35-phone.png",
-      "bytes": 496784
+      "path": "screenshots/android/webview/overview/api35-tablet.png",
+      "bytes": 641171
     },
     {
       "component": "webview",
       "scenario": "second-page",
-      "path": "screenshots/android/webview/second-page/api35-phone.png",
-      "bytes": 60570
+      "path": "screenshots/android/webview/second-page/api35-tablet.png",
+      "bytes": 70026
+    },
+    {
+      "component": "webview",
+      "scenario": "after-back",
+      "path": "screenshots/android/webview/after-back/api35-tablet.png",
+      "bytes": 641099
+    },
+    {
+      "component": "webview",
+      "scenario": "after-forward",
+      "path": "screenshots/android/webview/after-forward/api35-tablet.png",
+      "bytes": 69928
     },
     {
       "component": "webview",
       "scenario": "javascript-title",
-      "path": "screenshots/android/webview/javascript-title/api35-phone.png",
-      "bytes": 60146
+      "path": "screenshots/android/webview/javascript-title/api35-tablet.png",
+      "bytes": 71162
     },
     {
       "component": "webview",
       "scenario": "cookie-roundtrip",
-      "path": "screenshots/android/webview/cookie-roundtrip/api35-phone.png",
-      "bytes": 60146
+      "path": "screenshots/android/webview/cookie-roundtrip/api35-tablet.png",
+      "bytes": 68425
     },
     {
       "component": "webview",
       "scenario": "cookies-cleared",
-      "path": "screenshots/android/webview/cookies-cleared/api35-phone.png",
-      "bytes": 60146
+      "path": "screenshots/android/webview/cookies-cleared/api35-tablet.png",
+      "bytes": 69784
     },
     {
       "component": "webview",
       "scenario": "invalid-destination",
-      "path": "screenshots/android/webview/invalid-destination/api35-phone.png",
-      "bytes": 108858
+      "path": "screenshots/android/webview/invalid-destination/api35-tablet.png",
+      "bytes": 94104
+    },
+    {
+      "component": "permissions",
+      "scenario": "overview",
+      "path": "screenshots/android/permissions/overview/api35-tablet.png",
+      "bytes": 219372
+    },
+    {
+      "component": "geo-math",
+      "scenario": "overview",
+      "path": "screenshots/android/geo-math/overview/api35-tablet.png",
+      "bytes": 128939
+    },
+    {
+      "component": "ui-liquid-glass",
+      "scenario": "overview",
+      "path": "screenshots/android/ui-liquid-glass/overview/api35-tablet.png",
+      "bytes": 48106
+    },
+    {
+      "component": "limitations",
+      "scenario": "known-limitations",
+      "path": "screenshots/android/limitations/known-limitations/api35-tablet.png",
+      "bytes": 297385
     }
   ],
-  "errors": [],
-  "ok": true,
-  "attempts": [
+  "errors": [
     {
-      "screen": "Web View",
-      "error": "ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')",
-      "recovered": true
+      "screen": "Adaptive Drop Down",
+      "error": "RuntimeError(\"No visible element for 'More options'\")",
+      "retried": true,
+      "retry_error": "ClientError('HTTP 400 (invalid_arguments)')"
     }
-  ]
+  ],
+  "ok": false
 }
