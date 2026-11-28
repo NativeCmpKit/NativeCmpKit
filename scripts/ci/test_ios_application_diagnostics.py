@@ -196,10 +196,11 @@ class PartialProtocolTests(unittest.TestCase):
         self.assertEqual(list(a.PRE26_TOOLBAR_PHASES[:3]), protocol.partial()["pre26_toolbar_progress"])
         self.assertEqual(0, protocol.partial()["counts"]["passed"])
 
-    def test_camera_and_ipad_phases_require_the_named_open_case_and_original_order(self):
+    def test_owned_phases_require_the_named_open_case_and_original_order(self):
         for case, prefix, phases, key in (
             (a.CAMERA_DISPOSAL_CASE, a.CAMERA_DISPOSAL_PREFIX, a.CAMERA_DISPOSAL_PHASES, "camera_disposal_progress"),
             (a.IPAD_ROTATION_CASE, a.IPAD_ROTATION_PREFIX, a.IPAD_ROTATION_PHASES, "ipad_rotation_progress"),
+            (a.DEFAULT_ACTION_SHEET_CASE, a.DEFAULT_ACTION_SHEET_PREFIX, a.DEFAULT_ACTION_SHEET_PHASES, "default_action_sheet_progress"),
         ):
             with self.subTest(case=case):
                 protocol = a.NativeProtocol()

@@ -164,6 +164,12 @@ class NativeAlertLifecycleTest {
     }
 
     @Test fun defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad() = runApplicationUiTest {
+        var phase = "set-content"
+        fun enterPhase(value: String) {
+            phase = value
+            println("NATIVECMPKIT_DEFAULT_ACTION_SHEET_PHASE $value")
+        }
+        enterPhase("set-content")
         lateinit var parent: UIViewController
         setContent { parent = LocalUIViewController.current }
         val isPhone = runOnIdle { UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone }
@@ -172,9 +178,9 @@ class NativeAlertLifecycleTest {
         var dismissals = 0
         var confirms = 0
         val cancelTitle = "Cancel selection"
-        var phase = "present"
         var primaryFailure: Throwable? = null
         try {
+            enterPhase("present")
             runOnIdle {
                 manager = AlertDialogManager(parent, { dismissals++ }, AlertDialogIosProperties(
                     title = "Choose a value",
@@ -186,7 +192,7 @@ class NativeAlertLifecycleTest {
                     ),
                 ), DialogProperties()).also { it.showAlertDialog() }
             }
-            phase = "await-sheet"
+            enterPhase("await-sheet")
             waitForNative {
                 val alert = parent.presentedViewController as? UIAlertController
                 alert != null && alert.title == "Choose a value" &&
@@ -194,31 +200,31 @@ class NativeAlertLifecycleTest {
             }
             val sheet = runOnIdle { parent.presentedViewController as UIAlertController }
             runOnIdle {
-                phase = "style"
+                enterPhase("style")
                 assertEquals(UIAlertControllerStyleActionSheet, sheet.preferredStyle)
                 if (isPhone) {
-                    phase = "compact-size"
+                    enterPhase("compact-size")
                     assertEquals(UIUserInterfaceSizeClassCompact, parent.traitCollection.horizontalSizeClass)
-                    phase = "find-cancel"
+                    enterPhase("find-cancel")
                     val window = requireOwnedApplicationWindow()
                     val candidates = sheet.view.visibleDescendants().filter {
                         it.accessibilityLabel == cancelTitle &&
                             (it.accessibilityTraits and UIAccessibilityTraitButton) != 0UL && sameNativeObject(it.window, window)
                     }
                     assertEquals(1, candidates.size, "Expect one visible UIKit Cancel action")
-                    phase = "activate-cancel"
+                    enterPhase("activate-cancel")
                     assertTrue(candidates.single().accessibilityActivate(), "The visible UIKit Cancel button must accept input")
                 } else {
-                    phase = "ipad-anchor"
+                    enterPhase("ipad-anchor")
                     val popover = requireNotNull(sheet.popoverPresentationController)
                     assertTrue(sameNativeObject(parent.view, popover.sourceView))
                     assertNull(popover.barButtonItem)
                     manager?.dispose()
                 }
             }
-            phase = "await-dismissal"
+            enterPhase("await-dismissal")
             waitForNative { parent.presentedViewController == null && sheet.view.window == null }
-            phase = "callback-counts"
+            enterPhase("callback-counts")
             runOnIdle {
                 assertEquals(if (isPhone) 1 else 0, cancels)
                 assertEquals(0, confirms)

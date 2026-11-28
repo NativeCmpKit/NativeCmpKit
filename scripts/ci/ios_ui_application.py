@@ -243,6 +243,12 @@ IPAD_ROTATION_PHASES = (
     "set-content", "scene-identity", "portrait-request", "present-in-portrait", "initial-anchor",
     "landscape-request", "landscape-anchor", "fallback-set", "return-portrait-request", "fallback-anchor", "cleanup",
 )
+DEFAULT_ACTION_SHEET_CASE = (lt.IOS_ALERT_LIFECYCLE_GROUP["classname"], lt.IOS_DEFAULT_ACTION_SHEET_METHOD)
+DEFAULT_ACTION_SHEET_PREFIX = "NATIVECMPKIT_DEFAULT_ACTION_SHEET_PHASE "
+DEFAULT_ACTION_SHEET_PHASES = (
+    "set-content", "present", "await-sheet", "style", "compact-size", "find-cancel", "activate-cancel",
+    "await-dismissal", "callback-counts",
+)
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
 PRE26_STACK_MARKERS = {
     "kotlin-throw": (b"ThrowException", b"_Unwind_RaiseException", b"__cxa_throw"),
@@ -378,6 +384,7 @@ class NativeProtocol:
         self.wk_restore_progress = []
         self.camera_disposal_progress = []
         self.ipad_rotation_progress = []
+        self.default_action_sheet_progress = []
         self.pre26_customization_host_confirmed = False
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
@@ -420,6 +427,10 @@ class NativeProtocol:
         if line.startswith(IPAD_ROTATION_PREFIX):
             self.observe_owned_phase(line, IPAD_ROTATION_CASE, IPAD_ROTATION_PREFIX,
                                      IPAD_ROTATION_PHASES, self.ipad_rotation_progress)
+            return
+        if line.startswith(DEFAULT_ACTION_SHEET_PREFIX):
+            self.observe_owned_phase(line, DEFAULT_ACTION_SHEET_CASE, DEFAULT_ACTION_SHEET_PREFIX,
+                                     DEFAULT_ACTION_SHEET_PHASES, self.default_action_sheet_progress)
             return
         if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
             self.observe_pre26_process(line)
@@ -829,6 +840,10 @@ class NativeProtocol:
                 for output_line in fields.get("out", "").splitlines():
                     self.observe_owned_phase(output_line, IPAD_ROTATION_CASE, IPAD_ROTATION_PREFIX,
                                              IPAD_ROTATION_PHASES, self.ipad_rotation_progress)
+            if self.open_case == DEFAULT_ACTION_SHEET_CASE and fields.get("name") == self.open_case[1]:
+                for output_line in fields.get("out", "").splitlines():
+                    self.observe_owned_phase(output_line, DEFAULT_ACTION_SHEET_CASE, DEFAULT_ACTION_SHEET_PREFIX,
+                                             DEFAULT_ACTION_SHEET_PHASES, self.default_action_sheet_progress)
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
 
@@ -910,6 +925,7 @@ class NativeProtocol:
                 "image_lifetime_observation": self.image_lifetime_observation,
                 **({"camera_disposal_progress": self.camera_disposal_progress} if self.camera_disposal_progress else {}),
                 **({"ipad_rotation_progress": self.ipad_rotation_progress} if self.ipad_rotation_progress else {}),
+                **({"default_action_sheet_progress": self.default_action_sheet_progress} if self.default_action_sheet_progress else {}),
                 **({"wk_restore_progress": self.wk_restore_progress} if self.wk_restore_progress else {}),
                 **({"pre26_customization_progress": self.pre26_customization_progress}
                    if self.pre26_customization_progress else {}),

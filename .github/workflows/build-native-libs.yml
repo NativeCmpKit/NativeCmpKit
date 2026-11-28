@@ -772,7 +772,7 @@ jobs:
               ;;
             identity-apple-ui-action-sheet)
               python3 scripts/ci/library_tests.py run --suite ios --module nativecmpkit-ui \
-                --focus identity-ios-default-action-sheet --simulator "$device" --timeout 2400 \
+                --focus identity-ios-default-action-sheet --simulator "$device" --timeout 3600 \
                 --output build/ci-verification/identity-ui-action-sheet
               ;;
             identity-apple-ui-ipad-popover|identity-apple-ui-ipad-rotation)

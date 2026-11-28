@@ -12,7 +12,7 @@ from library_tests import IOS_DEFAULT_ACTION_SHEET_METHOD, NoDtdBuilder, safe_pa
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
 from ios_ui_application import (
-    CAMERA_DISPOSAL_PHASES, IPAD_ROTATION_PHASES,
+    CAMERA_DISPOSAL_PHASES, DEFAULT_ACTION_SHEET_PHASES, IPAD_ROTATION_PHASES,
     PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
     PRE26_STACK_MARKERS, PRE26_TOOLBAR_PHASES, WK_RESTORE_STEPS,
 )
@@ -30,8 +30,8 @@ IPAD_ROTATION_PHASE = re.compile(
     r"\bNATIVECMPKIT_IPAD_ROTATION:(" + "|".join(map(re.escape, IPAD_ROTATION_PHASES)) + r")(?![A-Za-z0-9_-])"
 )
 DEFAULT_ACTION_SHEET_PHASE = re.compile(
-    r"\bNATIVECMPKIT_DEFAULT_ACTION_SHEET:(present|await-sheet|style|compact-size|find-cancel|activate-cancel|ipad-anchor|"
-    r"await-dismissal|callback-counts)(?![A-Za-z0-9_-])"
+    r"\bNATIVECMPKIT_DEFAULT_ACTION_SHEET:(" + "|".join(map(re.escape, (*DEFAULT_ACTION_SHEET_PHASES, "ipad-anchor"))) +
+    r")(?![A-Za-z0-9_-])"
 )
 ANDROID_RESTORE_TITLE = re.compile(r"\bNATIVECMPKIT_ANDROID_RESTORE_TITLE:(blank-dom|different-dom|evaluation-failed)\b")
 ANDROID_REMOTE_IO_FAILURE_MARKERS = {
@@ -155,6 +155,10 @@ def receipt_rows():
                                                if step in PRE26_TOOLBAR_PHASES],
                     "ipad_rotation_progress": [step for step in protocol.get("ipad_rotation_progress", [])[:len(IPAD_ROTATION_PHASES)]
                                                if step in IPAD_ROTATION_PHASES],
+                    "default_action_sheet_progress": [
+                        step for step in protocol.get("default_action_sheet_progress", [])[:len(DEFAULT_ACTION_SHEET_PHASES)]
+                        if step in DEFAULT_ACTION_SHEET_PHASES
+                    ],
                     **({"camera_photos": camera_photo_summary(data, protocol),
                         "camera_disposal_progress": [step for step in protocol.get("camera_disposal_progress", [])[:len(CAMERA_DISPOSAL_PHASES)]
                                                      if step in CAMERA_DISPOSAL_PHASES]}
