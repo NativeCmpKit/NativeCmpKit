@@ -10,7 +10,7 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
@@ -709,6 +709,22 @@ jobs:
           if [[ -d "$output" ]]; then
             python3 -B scripts/ci/failure_diagnostics.py --output "$output"
           fi
+      - name: Execute and verify the six pending macOS AppKit share cases
+        if: inputs.profile == 'identity-apple-appkit-share'
+        env:
+          SLOT: desktop-macos-arm64
+          SUITE: desktop
+          TEST_MODULES: nativecmpkit-share
+          TEST_FOCUS: macos-share-timeout-retention-recovery
+          NATIVECMPKIT_NATIVE_UI_TESTS: 'true'
+        run: |
+          python3 -B scripts/ci/library_tests.py plan --suite "$SUITE" --module "$TEST_MODULES" --focus "$TEST_FOCUS" > /dev/null
+          result=0
+          python3 -B scripts/ci/macos_share_appkit_lifecycle.py --missing-only-share630 \
+            --output "build/ci-verification/$SLOT-appkit" || result=1
+          python3 -B scripts/ci/library_tests.py run --suite "$SUITE" --module "$TEST_MODULES" --focus "$TEST_FOCUS" \
+            --output "build/ci-verification/$SLOT" --timeout 3000 --reserve-mib 8192 || result=1
+          exit "$result"
       - name: Tests requiring an owned UIKit application
         if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal'
         shell: bash
@@ -893,6 +909,9 @@ jobs:
             build/ci-identity/android-ownership-diagnostics.json
             build/ci-identity/consumer/
             build/ci-verification/adaptive-controls-native-source-admission.json
+            build/ci-verification/desktop-macos-arm64-appkit/receipt.json
+            build/ci-verification/desktop-macos-arm64-appkit/cases/*/fresh-reports/TEST-*.xml
+            build/ci-verification/desktop-macos-arm64/receipt.json
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json

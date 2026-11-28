@@ -31,6 +31,10 @@ host, browser, package staging, iOS simulator and UIKit application scopes. Hist
 profiles require separate results. The identity profiles do not issue an
 offline-tooling reuse certificate.
 
+`identity-apple-appkit-share` runs the six outstanding AppKit lifecycle cases on
+macOS ARM64 and verifies their original Rust reports in the same job. It keeps
+the broader historical-tooling qualification as a separate integration gate.
+
 The [physical-device checklist](../testing/nativecmpkit-physical-device-verification.md)
 covers manual Android, iPhone and iPad release verification.
 

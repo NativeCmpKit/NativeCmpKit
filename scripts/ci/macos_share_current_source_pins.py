@@ -2,6 +2,7 @@
 """Exact current AppKit runner and migrated native harness inputs."""
 
 APPKIT_INPUTS = {
+    ".github/workflows/build-native-libs.yml": "51ffb5ac76224c89b31ae2579081e86b6e28eeff6db498a45c8b819a213ee589",
     ".github/workflows/gradle.yml": "370e60e916226e7d019e8e1135e61d639e77370c6975867b4e93dd0f2b4c576c",
     "convention-plugins/src/main/kotlin/NativeLibraries.kt": "45d4651e7f3a9532917ac87997ab9f011ec80ed12397f6586eee231233b6de79",
     "docs/testing/macos-share-key-wait-observation.md": "539efcfa88bc0e4f5e5b16bae07b2ec8303b0f3c27f73ab00efec62463aa8ee1",
@@ -26,14 +27,14 @@ APPKIT_INPUTS = {
     "scripts/ci/ios_popover_anchor_plan.py": "fd02ad32b0df43fc86b6fcdc3efee8f686db3e484e7c69d7e6ed1c3c10e70205",
     "scripts/ci/library_tests.py": "a4d16447799c12cfd74bb106782a7ef952242b74eda309daf2fde34994ec9532",
     "scripts/ci/macos_share_appkit_lifecycle.py": "38dad5370bc66b6d68247c4e3e019bc205e3ec70dff21541dabe693bd670108f",
-    "scripts/ci/macos_share_appkit_only_route.py": "2d526984d29c044b13e83cb04711be9bcd7aaecf2996e65444ad95132ca8e407",
+    "scripts/ci/macos_share_appkit_only_route.py": "56ae9c078d8a1437cc1ff59c1f2fd8af143f3e9d0dcdeae56608488297981b21",
     "scripts/ci/macos_share_appkit_only_source_projection.py": "b6b28d9b1c6addafcdf8a73db9551a19a90123b648c9fc2138b1731535ac1bfd",
     "scripts/ci/macos_share_key_wait_observation.py": "e49c2a9e60493fe8cea9bf3a12ffb861cdadc4b073b906d3ecaa77baa36b6653",
     "scripts/ci/macos_share_missing_ci.py": "1c0c1af05215d79ad2d3c22826ff4ed1a46a7dd6603441a09222b6f86b6b06a3",
     "scripts/ci/macos_share_missing_only.py": "0deec78f35f116cdc9396cf770cc592d156f9c6a46e416685bc1172cd981fcae",
     "scripts/ci/runtime_context.py": "d8dd1ad059414b46f5d5119bf5ab0e1d2b5ed5d05a1cad8ec78fecf6b8c71312",
     "scripts/ci/test_macos_share_appkit_lifecycle_runner.py": "152d0c8457b6036f5bc4afd3ad2d6aa99eaeaa1cbbe0150e18457c4baed22a89",
-    "scripts/ci/test_macos_share_appkit_only_route607.py": "4497c247dc62e0079ae2cd401c1647b46bca8ecc282ff7f6a8702cd65b6de019",
+    "scripts/ci/test_macos_share_appkit_only_route607.py": "7789816521d577fd228b636fdbb2c24a3d44b054d444aa50d7c9a6251a410cc3",
     "scripts/ci/test_macos_share_key_wait_observation.py": "bb68efbec88bd3a572abee3f5f2067750314d9918a7e9d3917b66a6499008e9a",
     "scripts/ci/test_macos_share_missing_only.py": "5ebdba519f72ecdb1d9ebf8241210d482083e935567579142393126d790af662",
     "scripts/ci/workflow_matrix.py": "114e19bb6f61b30495564783a678ac24f33092fbdfd00e206caea4b8caa4eb46",

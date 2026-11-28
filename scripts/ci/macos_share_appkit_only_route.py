@@ -23,6 +23,10 @@ import xml.etree.ElementTree as ET
 import macos_share_appkit_only_source_projection as source
 
 PROFILE = "macos-share-missing-lifecycle"
+IDENTITY_PROFILE = "identity-apple-appkit-share"
+VERIFICATION_WORKFLOW = ("NativeCmpKit verification", "library-tests", PROFILE)
+IDENTITY_WORKFLOW = ("NativeCmpKit native verification", "identity-verification", IDENTITY_PROFILE)
+IDENTITY_REF = "refs/heads/development/preview-hardening"
 ENTRY_FOCUS = "macos-share-timeout-retention-recovery"  # Existing workflow entry; JNI execution retired.
 EFFECTIVE_FOCUS = "macos-share-appkit6-only-recovery"
 MODULE = "nativecmpkit-share"
@@ -52,10 +56,10 @@ def need(value, code):
 
 
 def _context(value):
-    constants = {"repository": "NativeCmpKit/NativeCmpKit", "workflow": "NativeCmpKit verification",
-                 "job": "library-tests", "profile": PROFILE, "slot": SLOT,
+    constants = {"repository": "NativeCmpKit/NativeCmpKit", "slot": SLOT,
                  "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS}
-    need(type(value) is dict and set(value) == {*constants, "run_id", "run_attempt", "source_revision", "ref"} and
+    need(type(value) is dict and set(value) == {*constants, "workflow", "job", "profile", "run_id", "run_attempt",
+                                               "source_revision", "ref"} and
          all(value.get(key) == wanted for key, wanted in constants.items()) and
          all(type(value.get(key)) is str for key in ("run_id", "run_attempt", "source_revision", "ref")) and
          re.fullmatch(r"[1-9][0-9]{0,19}", value["run_id"]) and
@@ -64,23 +68,33 @@ def _context(value):
          re.fullmatch(r"refs/heads/development/[A-Za-z0-9][A-Za-z0-9._/-]{0,240}", value["ref"]) and
          ".." not in value["ref"] and "//" not in value["ref"] and not value["ref"].endswith("/"),
          "complete-same-AppKit-workflow-job-identity-required")
+    owner = tuple(value[key] for key in ("workflow", "job", "profile"))
+    need(owner == VERIFICATION_WORKFLOW or (owner == IDENTITY_WORKFLOW and value["ref"] == IDENTITY_REF),
+         "complete-same-AppKit-workflow-job-identity-required")
     return value
 
 
 def workflow_context():
-    """Only actual existing-job identifiers; missing/foreign inputs are refusal."""
+    """Admit either exact owning workflow job with a checked source and profile."""
+    workflow, job = os.environ.get("GITHUB_WORKFLOW"), os.environ.get("GITHUB_JOB")
+    profile = PROFILE
+    if (workflow, job) == IDENTITY_WORKFLOW[:2]:
+        need(os.environ.get("IDENTITY_PROFILE") == IDENTITY_PROFILE and
+             os.environ.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and
+             os.environ.get("GITHUB_WORKFLOW_REF") ==
+             "NativeCmpKit/NativeCmpKit/.github/workflows/build-native-libs.yml@" + IDENTITY_REF,
+             "exact-identity-AppKit-workflow-dispatch-required")
+        profile = IDENTITY_PROFILE
     need(os.environ.get("GITHUB_ACTIONS") == "true" and
          os.environ.get("GITHUB_REPOSITORY") == "NativeCmpKit/NativeCmpKit" and
-         os.environ.get("GITHUB_WORKFLOW") == "NativeCmpKit verification" and
-         os.environ.get("GITHUB_JOB") == "library-tests" and
          os.environ.get("SLOT") == SLOT and os.environ.get("SUITE") == "desktop" and
          os.environ.get("TEST_MODULES") == MODULE and os.environ.get("TEST_FOCUS") == ENTRY_FOCUS and
          os.environ.get("NATIVECMPKIT_NATIVE_UI_TESTS") == "true", "exact-existing-AppKit-workflow-job-required")
-    return _context({"repository": "NativeCmpKit/NativeCmpKit", "workflow": "NativeCmpKit verification",
-                     "job": "library-tests", "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+    return _context({"repository": "NativeCmpKit/NativeCmpKit", "workflow": workflow,
+                     "job": job, "run_id": os.environ.get("GITHUB_RUN_ID", ""),
                      "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
                      "source_revision": os.environ.get("GITHUB_SHA", ""), "ref": os.environ.get("GITHUB_REF", ""),
-                     "profile": PROFILE, "slot": SLOT, "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS})
+                     "profile": profile, "slot": SLOT, "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS})
 
 
 def plan(root: Path):
@@ -518,7 +532,7 @@ def main_for_existing_profile(root: Path, args):
     need(args.output == OUTPUT, "exact-existing-AppKit-result-reference-output-required")
     source.validate_migrated_sources(root)
     context = workflow_context()
-    receipt = {"schema_version": 1, "suite": "native-AppKit-reference-not-JVM", "profile": PROFILE,
+    receipt = {"schema_version": 1, "suite": "native-AppKit-reference-not-JVM", "profile": context["profile"],
                "entry_focus": ENTRY_FOCUS, "effective_focus": EFFECTIVE_FOCUS,
                "started_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(), "workflow_context": context,
                "passed": False, "errors": [], "complete_suite_requested": False, "explicit_module_subset": [MODULE],

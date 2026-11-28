@@ -361,6 +361,29 @@ class AppKitOnly607Tests(unittest.TestCase):
         with patch.dict(os.environ, {}, clear=True), self.assertRaises(ValueError):
             route.workflow_context()
 
+    def test_migration_appkit_admission_requires_the_exact_repository_workflow_and_profile(self):
+        workflow, job, profile = route.IDENTITY_WORKFLOW
+        wf_ref = "NativeCmpKit/NativeCmpKit/.github/workflows/build-native-libs.yml@" + route.IDENTITY_REF
+        environment = {**model_environment(), "GITHUB_WORKFLOW": workflow, "GITHUB_JOB": job,
+                       "GITHUB_REF": route.IDENTITY_REF, "GITHUB_WORKFLOW_REF": wf_ref,
+                       "GITHUB_EVENT_NAME": "workflow_dispatch", "IDENTITY_PROFILE": profile}
+        expected = {**model_context(), "workflow": workflow, "job": job, "profile": profile, "ref": route.IDENTITY_REF}
+        with patch.dict(os.environ, environment, clear=True):
+            self.assertEqual(expected, route.workflow_context())
+        for name, wrong in (("GITHUB_WORKFLOW_REF", wf_ref.replace("build-native-libs", "gradle")),
+                            ("GITHUB_EVENT_NAME", "push"), ("IDENTITY_PROFILE", "identity-apple-package"),
+                            ("GITHUB_REF", "refs/heads/main"), ("GITHUB_REPOSITORY", "Unrelated/NativeCmpKit")):
+            with self.subTest(name=name), patch.dict(os.environ, {**environment, name: wrong}, clear=True), self.assertRaises(ValueError):
+                route.workflow_context()
+        source = (ROOT / ".github/workflows/build-native-libs.yml").read_text()
+        step = source.split("- name: Execute and verify the six pending macOS AppKit share cases", 1)[1]
+        step = step.split("- name: Tests requiring an owned UIKit application", 1)[0]
+        self.assertIn("inputs.profile == '" + profile + "'", step)
+        self.assertIn("TEST_FOCUS: " + route.ENTRY_FOCUS, step)
+        self.assertIn("--missing-only-share630", step)
+        self.assertIn("scripts/ci/library_tests.py run", step)
+        self.assertNotIn("./gradlew", step)
+
     def test11_root_and_relative_traversal_are_never_admitted(self):
         with tempfile.TemporaryDirectory(prefix="appkit607-path-") as folder:
             root = Path(folder).resolve(); (root / "safe").write_bytes(b"data")
