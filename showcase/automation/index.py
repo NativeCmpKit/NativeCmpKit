@@ -85,7 +85,9 @@ def main() -> None:
         lines.extend([f"## {title}", ""])
         for png in sorted(compare.rglob("*.png")):
             relative = png.relative_to(compare)
-            lines.append(f"- [{relative.as_posix()}]({png.as_posix()})")
+            lines.append(
+                f"- [{relative.as_posix()}]({png.relative_to(args.root).as_posix()})"
+            )
         lines.append("")
 
     lines.extend(["## Functional flows", ""])
