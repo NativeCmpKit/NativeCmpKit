@@ -99,6 +99,7 @@ jobs:
           python3 showcase/generate_coverage.py
           git diff --exit-code -- showcase/coverage.json showcase/COVERAGE.md
           python3 showcase/automation/check_flows.py
+          python3 showcase/automation/check_dispatch.py
 
       - name: Install Android SDK and emulator image
         shell: bash
