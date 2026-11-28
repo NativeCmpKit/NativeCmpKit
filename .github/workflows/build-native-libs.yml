@@ -107,6 +107,10 @@ jobs:
             build/openjfx-source-verification/probe.stdout
             build/openjfx-source-verification/probe.stderr
             build/openjfx-source-verification/case-results.json
+            build/openjfx-source-verification/lifecycle-execution.json
+            build/openjfx-source-verification/lifecycle.stdout
+            build/openjfx-source-verification/lifecycle.stderr
+            build/openjfx-source-verification/lifecycle-results.json
 
   native-check:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'all'

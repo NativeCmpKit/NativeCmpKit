@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import time
 
-from probe_runner import CASES, HERE, case_results, compare_patch, need, patch_source
+from probe_runner import CASES, HERE, case_results, compare_patch, document, need, patch_source
 
 
 LOCK = HERE / "source-sdk-lock.json"
@@ -100,6 +100,21 @@ def prepare(source, output, lock, materials):
     })
 
 
+def run_probe(sdk, classes, output, evidence_name, class_name, *options):
+    command = ["timeout", "--kill-after=5s", "120s", "xvfb-run", "-a", "java", "--module-path", str(sdk),
+               "--add-modules", "javafx.controls,javafx.web,jdk.management", "-cp", str(classes), class_name, *options]
+    started = time.monotonic()
+    stdout_file = output / f"{evidence_name}.stdout"
+    with stdout_file.open("xb") as stdout, (output / f"{evidence_name}.stderr").open("xb") as stderr:
+        result = subprocess.run(command, cwd=output, stdout=stdout, stderr=stderr)
+    write_json(output / f"{evidence_name}-execution.json", {
+        "argv": command, "exit_code": result.returncode, "elapsed_seconds": time.monotonic() - started,
+        "repository_revision": os.environ.get("GITHUB_SHA"),
+    })
+    result.check_returncode()
+    return stdout_file.read_text(encoding="utf-8")
+
+
 def verify_sdk(source, output, lock):
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
@@ -121,22 +136,23 @@ def verify_sdk(source, output, lock):
 
     classes = output / "probe-classes"
     classes.mkdir()
-    subprocess.run(["javac", "--module-path", str(sdk), "--add-modules", "javafx.controls,javafx.web",
-                    "-d", str(classes), str(HERE / "JavaFxPublicCancellationProbe.java")], check=True, timeout=60)
-    argv = ["xvfb-run", "-a", "java", "--module-path", str(sdk), "--add-modules", "javafx.controls,javafx.web",
-            "-cp", str(classes), "JavaFxPublicCancellationProbe", ",".join(CASES)]
-    started = time.monotonic()
-    with (output / "probe.stdout").open("xb") as stdout, (output / "probe.stderr").open("xb") as stderr:
-        result = subprocess.run(["timeout", "--kill-after=5s", "120s", *argv], cwd=output, stdout=stdout, stderr=stderr)
-    write_json(output / "probe-execution.json", {"argv": argv, "exit_code": result.returncode,
-                                                "elapsed_seconds": time.monotonic() - started,
-                                                "repository_revision": os.environ.get("GITHUB_SHA")})
-    result.check_returncode()
-    rows = case_results((output / "probe.stdout").read_text(encoding="utf-8"), list(CASES))
+    subprocess.run(["javac", "--module-path", str(sdk), "--add-modules", "javafx.controls,javafx.web,jdk.management",
+                    "-d", str(classes), str(HERE / "JavaFxPublicCancellationProbe.java"),
+                    str(HERE / "JavaFxCancellationLifecycleProbe.java")], check=True, timeout=60)
+    stdout = run_probe(sdk, classes, output, "probe", "JavaFxPublicCancellationProbe", ",".join(CASES))
+    write_json(output / "case-results.json", case_results(stdout, list(CASES)))
+    stdout = run_probe(sdk, classes, output, "lifecycle", "JavaFxCancellationLifecycleProbe")
+    summaries = [line for line in stdout.splitlines() if line.startswith('{"replacementNavigation":')]
+    need(len(summaries) == 1, "Expected one lifecycle summary")
+    lifecycle = document(summaries[0])
+    need(lifecycle["replacementNavigation"] is True and lifecycle["detachAfterCancel"] is True
+         and lifecycle["repeatPeerEofs"] == 16 and lifecycle["worstCancelNanos"] > 0
+         and 0 < lifecycle["openDescriptorsAfter"] <= lifecycle["openDescriptorsBefore"] + 4,
+         "Incomplete lifecycle or socket resource observations")
+    write_json(output / "lifecycle-results.json", lifecycle)
     need(before == {path.name: sha256(path) for path in binaries}, "SDK binaries changed during execution")
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
-    write_json(output / "case-results.json", rows)
 
 
 if __name__ == "__main__":
