@@ -240,8 +240,10 @@ CAMERA_DISPOSAL_PHASES = (
 IPAD_ROTATION_CASE = (lt.IOS_POPOVER_GEOMETRY_CLASS, lt.IOS_POPOVER_GEOMETRY_METHODS[1])
 IPAD_ROTATION_PREFIX = "NATIVECMPKIT_IPAD_ROTATION_PHASE "
 IPAD_ROTATION_PHASES = (
-    "set-content", "scene-identity", "portrait-request", "present-in-portrait", "initial-anchor",
-    "landscape-request", "landscape-anchor", "fallback-set", "return-portrait-request", "fallback-anchor", "cleanup",
+    "set-content", "scene-identity", "portrait-request", "portrait-request-returned",
+    "present-in-portrait", "initial-anchor", "landscape-request", "landscape-request-returned",
+    "landscape-anchor", "fallback-set", "return-portrait-request", "return-portrait-request-returned",
+    "fallback-anchor", "cleanup", "cleanup-returned",
 )
 DEFAULT_ACTION_SHEET_CASE = (lt.IOS_ALERT_LIFECYCLE_GROUP["classname"], lt.IOS_DEFAULT_ACTION_SHEET_METHOD)
 DEFAULT_ACTION_SHEET_PREFIX = "NATIVECMPKIT_DEFAULT_ACTION_SHEET_PHASE "

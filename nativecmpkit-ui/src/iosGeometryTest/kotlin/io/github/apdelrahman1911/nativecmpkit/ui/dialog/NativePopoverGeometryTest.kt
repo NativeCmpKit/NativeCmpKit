@@ -12,6 +12,7 @@ import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosPopo
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosProperties
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.AlertDialogIosStyle
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.NativeApplicationUiTest
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.onApplicationMain
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.runApplicationUiTest
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.sameNativeObject
@@ -38,9 +39,12 @@ class NativePopoverGeometryTest {
 
     private fun NativeApplicationUiTest.exerciseOwnedGeometry(rotateWhilePresented: Boolean) {
         var phase = "set-content"
+        fun tracePhase(value: String) {
+            if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_ROTATION_PHASE $value")
+        }
         fun enterPhase(value: String) {
             phase = value
-            if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_ROTATION_PHASE $value")
+            tracePhase(value)
         }
         enterPhase("set-content")
         lateinit var parent: UIViewController
@@ -58,18 +62,25 @@ class NativePopoverGeometryTest {
         assertTrue(expectedIdiom in setOf("iphone", "ipad"))
         if (rotateWhilePresented) assertEquals("ipad", expectedIdiom)
 
-        fun geometry(target: Long) {
-            runOnIdle {
+        fun geometry(target: Long, requireRotation: Boolean = false) {
+            // Request UIKit geometry directly on Main. The native predicate below
+            // observes the resulting layout, including an already settled target.
+            onApplicationMain {
                 assertTrue(sameNativeObject(requireOwnedApplicationWindow(), window))
                 assertTrue(sameNativeObject(window.windowScene, scene))
                 assertEquals(UISceneActivationStateForegroundActive, scene.activationState)
                 geometryError = null
-                attemptedGeometry = true // Own restoration before an uncertain native request.
-                scene.requestGeometryUpdateWithPreferences(
-                    UIWindowSceneGeometryPreferencesIOS(interfaceOrientations = orientationMask(target)),
-                    errorHandler = { error -> geometryError = checkNotNull(error) },
-                )
+                if (scene.interfaceOrientation == target) {
+                    check(!requireRotation) { "The popover must be presented during a real orientation change" }
+                } else {
+                    attemptedGeometry = true // Own restoration before an uncertain native request.
+                    scene.requestGeometryUpdateWithPreferences(
+                        UIWindowSceneGeometryPreferencesIOS(interfaceOrientations = orientationMask(target)),
+                        errorHandler = { error -> geometryError = checkNotNull(error) },
+                    )
+                }
             }
+            tracePhase("$phase-returned")
             waitForNative {
                 geometryError?.let { failure -> error("Owned public OS geometry request failed: code=${failure.code}") }
                 sameNativeObject(requireOwnedApplicationWindow(), window) && sameNativeObject(window.windowScene, scene) &&
@@ -121,7 +132,7 @@ class NativePopoverGeometryTest {
             if (rotateWhilePresented) {
                 // Genuine WindowScene geometry input; no manager/property/delegate update after rotation.
                 enterPhase("landscape-request")
-                geometry(UIInterfaceOrientationLandscapeLeft)
+                geometry(UIInterfaceOrientationLandscapeLeft, requireRotation = true)
                 enterPhase("landscape-anchor")
                 waitForNative {
                     sameNativeObject(alert, parent.presentedViewController) && sameNativeObject(source, popover.sourceView) &&
@@ -139,7 +150,7 @@ class NativePopoverGeometryTest {
                     assertEquals(0uL, popover.permittedArrowDirections)
                 }
                 enterPhase("return-portrait-request")
-                geometry(UIInterfaceOrientationPortrait)
+                geometry(UIInterfaceOrientationPortrait, requireRotation = true)
                 enterPhase("fallback-anchor")
                 waitForNative {
                     sameNativeObject(alert, parent.presentedViewController) && sameNativeObject(parent.view, popover.sourceView) &&

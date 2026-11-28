@@ -205,8 +205,16 @@ class PopoverGeometryControls(unittest.TestCase):
         for token in ("setOverrideTraitCollection", "UIDevice.currentDevice.setValue", "willRepositionPopoverToRect",
                       "performSelector", "setBounds", "@Ignore", "@Disabled"):
             self.assertNotIn(token, source)
-        between = source.split("geometry(UIInterfaceOrientationLandscapeLeft)", 1)[1].split("waitForNative", 1)[0]
+        landscape_request = "geometry(UIInterfaceOrientationLandscapeLeft, requireRotation = true)"
+        self.assertIn("geometry(UIInterfaceOrientationPortrait, requireRotation = true)", source)
+        between = source.split(landscape_request, 1)[1].split("waitForNative", 1)[0]
         self.assertNotIn("manager", between)
+        submission = source.split("fun geometry(", 1)[1].split("waitForNative", 1)[0]
+        self.assertIn("onApplicationMain {", submission)
+        self.assertNotIn("runOnIdle", submission)
+        self.assertLess(submission.index("if (scene.interfaceOrientation == target)"),
+                        submission.index("scene.requestGeometryUpdateWithPreferences"))
+        self.assertIn("check(!requireRotation)", submission)
 
     def test_scene_delegate_owns_connection_before_real_activation(self):
         import ios_popover_geometry_plan as geometry
