@@ -341,6 +341,22 @@ def native_abi_floor(inventory, target, architecture):
             "source_within_ordinary_floor": current <= padded_ordinary}
 
 
+def verify_sdk_notices(sdk_legal, output):
+    source_notices = document((output / "legal-source-inventory.json").read_text(encoding="utf-8"))
+    common = {name: source_notices[name] for name in ("LICENSE", "ASSEMBLY_EXCEPTION", "ADDITIONAL_LICENSE_INFO")}
+    observed = {}
+    for module in CONSUMER_MODULES:
+        name = f"javafx.{module}"
+        prefix = f"modules/{name}/src/main/legal/"
+        expected = common | {path.removeprefix(prefix): digest for path, digest in source_notices.items()
+                             if path.startswith(prefix)}
+        folder = sdk_legal / name
+        notices = {path.relative_to(folder).as_posix(): sha256(path) for path in folder.rglob("*") if path.is_file()}
+        need(notices == expected, f"SDK notices differ from the pinned source for {name}")
+        observed[name] = notices
+    write_json(output / "sdk-legal-inventory.json", observed)
+
+
 def stage_consumer_jars(source, output, target, architecture, sdk_hashes):
     """Stage upstream Gradle's exact modular JARs for an isolated artifact-only consumer."""
     upstream_classifier, consumer_classifier = CLASSIFIERS[target, architecture]
@@ -410,6 +426,7 @@ def verify_sdk(source, output, lock, target, architecture):
     (output / "native-binary-inventory.txt").write_text(native_inventory, encoding="utf-8")
     write_json(output / "native-abi-floor.json", native_abi_floor(native_inventory, target, architecture))
     (output / "loader-cancellation.txt").write_text(cancel_method, encoding="utf-8")
+    verify_sdk_notices(sdk / "legal", output)
 
     classes = output / "probe-classes"
     classes.mkdir()
