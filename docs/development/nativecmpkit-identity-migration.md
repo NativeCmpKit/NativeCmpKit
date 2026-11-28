@@ -48,6 +48,24 @@ the published preview tag and its history. Packages,
 releases, Pages and deployments remain gated pending the physical-device check
 and the existing release requirements.
 
+## Integration review against `main`
+
+The review uses `main` at `a2c48c0b9ebf3524192e680ecd4becc1f2880bb8`. The
+integration candidate keeps the published preview available through its original
+tag, with Git retaining the earlier release scripts, notes and coordinates.
+
+| Main behavior | Migration disposition |
+| --- | --- |
+| UIKit bar tint and VoiceOver, action-sheet anchoring, and alerts with omitted empty text | Preserve these in the migrated native bar and alert managers. Their ownership and stale-event checks remain in place. |
+| Range highlighting limited by the displayed month | Preserve the main-queue coalescing, latest rule and bound snapshots, and post-disposal suppression in the migrated backend. The dedicated simulator profile checks six UIKit cases and three OS-version cases. |
+| Bitmap ownership and Cupertino icon accessibility | Preserve the migrated CoreGraphics-owned pixel allocation, explicit premultiplication, sRGB, and private-glyph semantics behavior. Adapt the main-only invalid-bitmap-dimension case and retain the existing ownership and memory suites. |
+| Desktop MIME filters and Coil streaming | Preserve main's rejection of unsupported entries in comma-separated filters, with the migration branch's explicit extension validation and locale-safe lookup. Coil uses the Kotlin IO to Okio stream adapter and keeps cancellation and source ownership coverage. |
+| Foundation copies and Desktop cookie scope | Keep the migrated checked Foundation copies and duplicate-name cookie path/domain handling. These changes have separate native or runtime verification routes. |
+| Native packaging and versioned release | The current 23-root stage and independent artifact verifier cover the native identity, licenses and generated metadata. The former tag-triggered deployment cannot establish current release eligibility. The destination tag preflight remains read-only and checks the migrated coordinates. |
+| Desktop WebView runtime | The existing `main` dependency selects standard OpenJFX 21.0.13, where transport cancellation remains unresolved. Source and binary qualification runs separately until an adoptable dependency passes the matching desktop and independent consumer checks. |
+
+## Android provider cancellation
+
 The API 35 remote IO cancellation fixture opens the granted tree URI through
 `ContentProviderClient.openFile`. Android 15 routes a read-only
 `ContentResolver.openFileDescriptor` call through a wildcard typed-open path
