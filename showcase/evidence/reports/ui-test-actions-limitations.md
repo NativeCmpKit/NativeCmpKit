@@ -853,6 +853,26 @@ The failure lines quoted above are committed under `showcase/evidence/logs/`
 `ipad-functional-run46099392157.log`, and the tour logs). They contain status
 lines and errors only; no token or tunnel URL.
 
+### Direct screenshot evidence
+
+| Finding | Image |
+| --- | --- |
+| iOS slider not moved | [`slider` failed-after](../../../screenshots/ios/functional/slider/iphone-simulator-failed-after.png) |
+| iOS sheet switch missing | [`sheet-veto` failed-after](../../../screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png) |
+| Android date display readout | [`date-display` failed-after](../../../screenshots/android/functional/date-display/api35-phone-failed-after.png) |
+| Android JS readout | [`webview-js` failed-after](../../../screenshots/android/functional/webview-js/api35-phone-failed-after.png) |
+| iPad popover without Cancel | [iPad ActionSheet](../../../screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png) |
+| Android double tap | [`clickable` failed-after](../../../screenshots/android/functional/clickable/api35-phone-failed-after.png) |
+
+### Direct log evidence
+
+- Android phone: [`../logs/android-phone-functional-run46099102700.log`](../logs/android-phone-functional-run46099102700.log)
+- Android tablet: [`../logs/android-tablet-functional-run46107087160.log`](../logs/android-tablet-functional-run46107087160.log)
+- iPhone functional: [`../logs/ios-phone-functional-run46014167086.log`](../logs/ios-phone-functional-run46014167086.log)
+- iPad functional: [`../logs/ipad-functional-run46099392157.log`](../logs/ipad-functional-run46099392157.log)
+- Tours: [`../logs/ios-phone-tour-run46114716852.log`](../logs/ios-phone-tour-run46114716852.log),
+  [`../logs/ipad-tour-run46099392157.log`](../logs/ipad-tour-run46099392157.log)
+
 ## 6. What worked well
 
 For balance: the following were reliable across many runs and should not be
