@@ -11,11 +11,13 @@ import platform.UIKit.UICalendarSelectionMultiDate
 import platform.UIKit.UICalendarSelectionMultiDateDelegateProtocol
 import platform.UIKit.UIView
 import platform.darwin.NSObject
+import platform.darwin.dispatch_async
+import platform.darwin.dispatch_get_main_queue
 
 /**
  * Range calendar backed by `UICalendarView` (iOS 16+) with multi-date selection. Taps are
- * folded into a [DateRangeSelection], and every day of the range is highlighted. Days rejected
- * by [isDaySelectable] are greyed out.
+ * folded into a [DateRangeSelection]. UIKit receives highlights for the visible month and its
+ * neighbours. The state retains the complete range, and unavailable days are greyed out.
  */
 internal class CalendarRangePickerBackend(
     initialSelection: DateRangeSelection,
@@ -23,10 +25,17 @@ internal class CalendarRangePickerBackend(
     onDisplayedMonthChanged: (Long) -> Unit,
     private val onSelectionChanged: (selection: DateRangeSelection) -> Unit,
     private val isDaySelectable: (utcTimeMillis: Long) -> Boolean,
+    private val enqueueRefresh: (() -> Unit) -> Unit = { refresh ->
+        dispatch_async(dispatch_get_main_queue()) { refresh() }
+    },
 ) {
     private val host = CalendarViewHost()
-
     private var selection = initialSelection
+    private var bounds = DateBounds()
+    private var disposed = false
+    private var rendering = false
+    private var refreshQueued = false
+    private var renderedDays: List<Long>? = null
 
     private val selectionDelegate = object : NSObject(), UICalendarSelectionMultiDateDelegateProtocol {
         @ObjCSignatureOverride
@@ -49,13 +58,13 @@ internal class CalendarRangePickerBackend(
         override fun multiDateSelection(
             selection: UICalendarSelectionMultiDate,
             canSelectDate: NSDateComponents,
-        ): Boolean = isDaySelectable(canSelectDate.toUtcDayMillis())
+        ): Boolean = !disposed && canSelectDay(canSelectDate.toUtcDayMillis())
 
         @ObjCSignatureOverride
         override fun multiDateSelection(
             selection: UICalendarSelectionMultiDate,
             canDeselectDate: NSDateComponents,
-        ): Boolean = true
+        ): Boolean = !disposed
     }
 
     private val multiSelection = UICalendarSelectionMultiDate(delegate = selectionDelegate)
@@ -69,50 +78,86 @@ internal class CalendarRangePickerBackend(
     init {
         host.calendarView.selectionBehavior = multiSelection
         host.onVisibleMonthChanged = {
-            render(animated = false)
+            requestRender()
             onDisplayedMonthChanged(it)
         }
         host.showMonth(initialDisplayedMonthMillis, animated = false)
-        render(animated = false)
+        render()
         host.calendarView.sizeToFit()
         aspectRatio = host.calendarView.aspectRatioOrZero()
     }
 
     private fun onTap(utcTimeMillis: Long) {
+        if (disposed || rendering) return
         selection = selection.afterTap(utcTimeMillis)
-        render(animated = true)
+        // UIKit may have deselected a day that is still part of the owner's range.
+        renderedDays = null
+        requestRender()
         onSelectionChanged(selection)
     }
 
-    private fun render(animated: Boolean) {
-        // At most three months (~92 days), independent of the selected range's length.
-        val highlightedDays = host.daysAroundVisibleMonth().filter {
-            val day = it.toUtcDayMillis()
-            selection.contains(day) && isDaySelectable(day)
+    private fun requestRender() {
+        if (disposed || refreshQueued) return
+        refreshQueued = true
+        // Leave UIKit's selection or layout callback before writing its selection.
+        enqueueRefresh {
+            refreshQueued = false
+            render()
         }
-        multiSelection.setSelectedDates(highlightedDays, animated = animated)
+    }
+
+    private fun canSelectDay(day: Long): Boolean = bounds.isSelectableDate(day) && isDaySelectable(day)
+
+    private fun render() {
+        if (disposed || rendering) return
+        val highlightedDays = host.daysAroundVisibleMonth()
+            .map { it.toUtcDayMillis() }
+            .filter { selection.contains(it) && canSelectDay(it) }
+        if (highlightedDays == renderedDays) return
+        rendering = true
+        try {
+            host.preservingVisibleMonth {
+                multiSelection.setSelectedDates(highlightedDays.map(::utcDayToDateComponents), animated = false)
+            }
+            renderedDays = highlightedDays
+        } finally {
+            rendering = false
+        }
     }
 
     fun setSelectedRange(newSelection: DateRangeSelection) {
-        if (newSelection == selection) return
+        if (disposed || newSelection == selection) return
         selection = newSelection
-        render(animated = true)
+        render()
     }
 
-    fun setDisplayedMonth(utcTimeMillis: Long) = host.showMonth(utcTimeMillis, animated = false)
+    fun setDisplayedMonth(utcTimeMillis: Long) {
+        if (!disposed) host.showMonth(utcTimeMillis, animated = false)
+    }
 
     fun applyDateBounds(minDateMillis: Long?, maxDateMillis: Long?) {
+        if (disposed) return
+        bounds = DateBounds(minDateMillis, maxDateMillis)
         host.applyDateBounds(minDateMillis, maxDateMillis)
         updateSelectableDates()
     }
 
     fun updateSelectableDates() {
+        if (disposed) return
         multiSelection.updateSelectableDates()
-        render(animated = false)
+        render()
         host.refresh()
     }
 
+    fun dispose() {
+        if (disposed) return
+        disposed = true
+        host.dispose()
+        host.calendarView.selectionBehavior = null
+    }
+
     fun applyColors(containerColor: Color, dayContentColor: Color, selectedDayContainerColor: Color) {
+        if (disposed) return
         host.applyColors(containerColor, dayContentColor, selectedDayContainerColor)
     }
 }

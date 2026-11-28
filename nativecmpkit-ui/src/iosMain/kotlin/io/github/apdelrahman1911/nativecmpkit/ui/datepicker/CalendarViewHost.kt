@@ -138,6 +138,11 @@ internal class CalendarViewHost {
         calendarView.userInteractionEnabled = enabled && !emptyBounds
     }
 
+    fun dispose() {
+        onVisibleMonthChanged = {}
+        calendarView.delegate = null
+    }
+
     /** Every day of the visible month and its two neighbours, which may be partly on screen. */
     fun daysAroundVisibleMonth(): List<NSDateComponents> {
         val visible = calendarView.visibleDateComponents
@@ -150,6 +155,7 @@ internal class CalendarViewHost {
         val end = firstOfMonth.plus(2, DateTimeUnit.MONTH)
         return generateSequence(start) { it.plus(1, DateTimeUnit.DAY) }
             .takeWhile { it < end }
+            .filter { it.year in 1..MAX_SUPPORTED_YEAR.toInt() }
             .map { date ->
                 NSDateComponents().apply {
                     calendar = gregorianCalendar()
