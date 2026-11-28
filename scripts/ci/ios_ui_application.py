@@ -242,6 +242,7 @@ CAMERA_DISPOSAL_PHASES = (
 )
 IPAD_ROTATION_CASE = (lt.IOS_POPOVER_GEOMETRY_CLASS, lt.IOS_POPOVER_GEOMETRY_METHODS[1])
 IPAD_ROTATION_PREFIX = "NATIVECMPKIT_IPAD_ROTATION_PHASE "
+IPAD_ROTATION_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_IPAD_ROTATION_OWNED_PROCESS "
 IPAD_ROTATION_PHASES = (
     "set-content", "scene-identity", "portrait-request", "portrait-request-returned",
     "present-in-portrait", "initial-anchor", "landscape-request", "landscape-request-returned",
@@ -403,8 +404,8 @@ class NativeProtocol:
         self.pre26_customization_progress = []
         self.pre26_negative_steps_progress = []
         self.pre26_toolbar_progress = []
-        self.pre26_native_pid = None
-        self.pre26_native_pid_conflict = False
+        self.diagnostic_native_pid = None
+        self.diagnostic_native_pid_conflict = False
         self.worker_lifecycle_observations = []
         self.picker_admission_observations = []
         self.picker_host_observations = []
@@ -446,8 +447,8 @@ class NativeProtocol:
             self.observe_owned_phase(line, DEFAULT_ACTION_SHEET_CASE, DEFAULT_ACTION_SHEET_PREFIX,
                                      DEFAULT_ACTION_SHEET_PHASES, self.default_action_sheet_progress)
             return
-        if line.startswith(PRE26_OWNED_PROCESS_PREFIX):
-            self.observe_pre26_process(line)
+        if line.startswith((PRE26_OWNED_PROCESS_PREFIX, IPAD_ROTATION_OWNED_PROCESS_PREFIX)):
+            self.observe_diagnostic_process(line)
             return
         if line.startswith(WK_RESTORE_PREFIX):
             step = line.removeprefix(WK_RESTORE_PREFIX)
@@ -838,7 +839,7 @@ class NativeProtocol:
         elif kind == "testStdOut":
             if self.open_case in PRE26_STALL_CASES and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
-                    self.observe_pre26_process(output_line)
+                    self.observe_diagnostic_process(output_line)
                     self.observe_pre26_toolbar(output_line)
             if self.open_case == PRE26_CUSTOMIZATION_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
@@ -852,6 +853,7 @@ class NativeProtocol:
                                              CAMERA_DISPOSAL_PHASES, self.camera_disposal_progress)
             if self.open_case == IPAD_ROTATION_CASE and fields.get("name") == self.open_case[1]:
                 for output_line in fields.get("out", "").splitlines():
+                    self.observe_diagnostic_process(output_line)
                     self.observe_owned_phase(output_line, IPAD_ROTATION_CASE, IPAD_ROTATION_PREFIX,
                                              IPAD_ROTATION_PHASES, self.ipad_rotation_progress)
             if self.open_case == DEFAULT_ACTION_SHEET_CASE and fields.get("name") == self.open_case[1]:
@@ -861,15 +863,21 @@ class NativeProtocol:
         elif kind not in {"testStdErr", "message", "testCount"}:
             raise ValueError("Unreviewed native test protocol record")
 
-    def observe_pre26_process(self, line: str) -> None:
-        if self.active is None or self.open_case not in PRE26_STALL_CASES or self.expected_bundle is None:
+    def observe_diagnostic_process(self, line: str) -> None:
+        if self.active is None or self.expected_bundle is None:
             return
-        payload = line.removeprefix(PRE26_OWNED_PROCESS_PREFIX)
+        if self.open_case == IPAD_ROTATION_CASE:
+            prefix = IPAD_ROTATION_OWNED_PROCESS_PREFIX
+        elif self.open_case in PRE26_STALL_CASES:
+            prefix = PRE26_OWNED_PROCESS_PREFIX
+        else:
+            return
+        payload = line.removeprefix(prefix)
         marker = re.fullmatch(r"bundle=" + re.escape(self.expected_bundle) + r" pid=([1-9][0-9]{0,9})", payload)
         if payload != line and marker and int(marker[1]) < 2**31:
             pid = int(marker[1])
-            self.pre26_native_pid_conflict |= self.pre26_native_pid not in (None, pid)
-            self.pre26_native_pid = pid
+            self.diagnostic_native_pid_conflict |= self.diagnostic_native_pid not in (None, pid)
+            self.diagnostic_native_pid = pid
 
     def observe_pre26_customization(self, line: str) -> None:
         if self.open_case != PRE26_CUSTOMIZATION_CASE:
@@ -1138,8 +1146,8 @@ def observe_owned_stall(protocol: NativeProtocol, installed_executable: Path, ca
     if protocol.open_case not in cases or protocol.active is None or protocol.completed is not None:
         return None
     launch_pid = protocol.observed_launch_pid
-    native_pid = protocol.pre26_native_pid
-    if protocol.pre26_native_pid_conflict or (launch_pid is not None and native_pid is not None and launch_pid != native_pid):
+    native_pid = protocol.diagnostic_native_pid
+    if protocol.diagnostic_native_pid_conflict or (launch_pid is not None and native_pid is not None and launch_pid != native_pid):
         return {"status": "owned-process-mismatch"}
     pid = native_pid if native_pid is not None else launch_pid
     if pid is None:

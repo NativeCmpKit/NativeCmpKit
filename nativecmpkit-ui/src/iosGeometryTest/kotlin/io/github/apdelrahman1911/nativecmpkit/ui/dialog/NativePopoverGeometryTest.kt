@@ -21,9 +21,11 @@ import kotlinx.cinterop.CValue
 import kotlinx.cinterop.useContents
 import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectMake
+import platform.Foundation.NSBundle
 import platform.Foundation.NSError
 import platform.Foundation.NSProcessInfo
 import platform.UIKit.*
+import platform.posix.getpid
 import kotlin.math.abs
 import kotlin.test.*
 
@@ -38,6 +40,11 @@ class NativePopoverGeometryTest {
     }
 
     private fun NativeApplicationUiTest.exerciseOwnedGeometry(rotateWhilePresented: Boolean) {
+        if (rotateWhilePresented) {
+            NSBundle.mainBundle.bundleIdentifier?.let { bundle ->
+                println("NATIVECMPKIT_IPAD_ROTATION_OWNED_PROCESS bundle=$bundle pid=${getpid()}")
+            }
+        }
         var phase = "set-content"
         fun tracePhase(value: String) {
             if (rotateWhilePresented) println("NATIVECMPKIT_IPAD_ROTATION_PHASE $value")

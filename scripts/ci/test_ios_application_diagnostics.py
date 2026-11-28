@@ -111,9 +111,13 @@ class PartialProtocolTests(unittest.TestCase):
         protocol = a.NativeProtocol(bundle_id=BUNDLE)
         executable = Path("/owned/NativeCmpkitLibraryTests.app") / a.APP_EXECUTABLE
         suite, method = a.IPAD_ROTATION_CASE
-        for frame in (f.ACTIVE, f.frame("testSuiteStarted", name=suite),
-                      f.frame("testStarted", name=method), BUNDLE + ": 123"):
+        for frame in (f.ACTIVE, f.frame("testSuiteStarted", name=suite), f.frame("testStarted", name=method)):
             protocol.feed(frame)
+        protocol.feed(a.PRE26_OWNED_PROCESS_PREFIX + f"bundle={BUNDLE} pid=456")
+        protocol.feed(a.IPAD_ROTATION_OWNED_PROCESS_PREFIX + "bundle=foreign.bundle pid=456")
+        self.assertEqual({"status": "owned-pid-not-observed"}, a.observe_owned_stall(
+            protocol, executable, (a.IPAD_ROTATION_CASE,), a.IPAD_ROTATION_STACK_MARKERS))
+        protocol.feed(a.IPAD_ROTATION_OWNED_PROCESS_PREFIX + f"bundle={BUNDLE} pid=123")
         with patch.object(a, "matches_installed_process", return_value=False) as identity, \
              patch.object(a, "execute_control") as control:
             self.assertIsNone(a.observe_pre26_stall(protocol, executable))
@@ -121,6 +125,9 @@ class PartialProtocolTests(unittest.TestCase):
                 protocol, executable, (a.IPAD_ROTATION_CASE,), a.IPAD_ROTATION_STACK_MARKERS))
             identity.assert_called_once_with(123, executable)
             control.assert_not_called()
+        protocol.feed(BUNDLE + ": 456")
+        self.assertEqual({"status": "owned-process-mismatch"}, a.observe_owned_stall(
+            protocol, executable, (a.IPAD_ROTATION_CASE,), a.IPAD_ROTATION_STACK_MARKERS))
         sample = {"status": "observed", "known_frames": ["layout", "private", "popover-reposition"]}
         key = "ipad_rotation_stall_sample"
         self.assertEqual({key: {"status": "observed", "known_frames": ["popover-reposition", "layout"]}},
