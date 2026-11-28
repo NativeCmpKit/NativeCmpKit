@@ -24,6 +24,15 @@ Binary redistribution requires reproduction of the copyright, conditions,
 and disclaimer in the accompanying documentation/materials. Verify that
 artifact notice packaging includes them before future publication.
 
+## CESU-8 Rust dependency
+
+The File Picker and Share Rust libraries lock `cesu8` 1.1.0. The verified crate
+contains the Rust copyright notice and its README. The complete Apache 2.0 and
+MIT texts preserved from the earlier publication are included with that README
+under [`licenses/native-cargo/cesu8`](licenses/native-cargo/cesu8). The README
+matches both the published crate and upstream source. The two license texts
+match the Rust 1.0.0 source bytes. [CESU-8 source](https://github.com/emk/cesu8-rs/tree/f18962a9de5189f21600b7ff2898845157df4447) · [Rust source](https://github.com/rust-lang/rust/tree/a59de37e99060162a2674e3ff45409ac73595c0e)
+
 ## Cupertino Icons font
 
 `nativecmpkit-cupertino-icons/src/commonMain/composeResources/font/sf_symbols.ttf` is
