@@ -23,15 +23,18 @@ tasks.register("verifyPublishedWebViewBinding") {
         val resolved = configurations.getByName("iosSimulatorArm64CompileKlibraries").incoming.artifacts.artifacts.filter {
             val id = it.id.componentIdentifier
             id is ModuleComponentIdentifier && id.group == group && id.module == module && id.version == candidateVersion
-        }.map { it.file }
-        check(resolved.size == names.size && resolved.map { it.name }.toSet() == names) {
-            "WKWebView compile resolution must carry both exact published KLIBs, got ${resolved.map { it.name }}"
+        }.map { it.file }.toMutableList()
+        check(resolved.size == names.size && resolved.all { it.isFile && it.extension == "klib" }) {
+            "WKWebView compile resolution must carry both published KLIBs, got ${resolved.map { it.name }}"
         }
-        for (artifact in resolved) {
-            check(Files.mismatch(staged.getValue(artifact.name).toPath(), artifact.toPath()) == -1L) {
-                "Resolved WKWebView differs from staged ${artifact.name}"
+        for ((name, stagedKlib) in staged.toSortedMap()) {
+            // Gradle can materialize a KLIB under the producer name from module metadata.
+            val artifact = resolved.singleOrNull { Files.mismatch(stagedKlib.toPath(), it.toPath()) == -1L }
+            checkNotNull(artifact) {
+                "Expected a distinct byte-for-byte resolved WKWebView match for $name, got ${resolved.map { it.name }}"
             }
-            println("Independent WKWebView input: $group:$module:$candidateVersion ${artifact.name} (${artifact.length()} bytes)")
+            resolved.remove(artifact)
+            println("Independent WKWebView input: $group:$module:$candidateVersion $name (${artifact.length()} bytes, resolved as ${artifact.name})")
         }
     }
 }
