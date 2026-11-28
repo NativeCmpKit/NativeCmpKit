@@ -110,37 +110,37 @@ fun WebViewScreen(
     val iosItems by remember(navigator.canGoBack, navigator.canGoForward) {
         mutableStateOf(
             listOf(
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.chevronLeft),
                     enabled = navigator.canGoBack,
                     accessibilityLabel = "Navigate Back",
                     onClick = { navigator.navigateBack() },
                 ),
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.chevronRight),
                     enabled = navigator.canGoForward,
                     accessibilityLabel = "Navigate Forward",
                     onClick = { navigator.navigateForward() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.arrowClockwise),
                     accessibilityLabel = "Reload",
                     onClick = { navigator.reload() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.xmark),
                     accessibilityLabel = "Stop Loading",
                     onClick = { navigator.stopLoading() },
                 ),
                 UIKitUIBarButtonItem.flexibleSpace(),
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.globe),
                     accessibilityLabel = "Load URL",
                     onClick = { navigator.loadUrl(INITIAL_URL) },
                 ),
-                UIKitUIBarButtonItem.image(
+                UIKitUIBarButtonItem(
                     image = UIKitImage.SystemName(SFSymbol.chevronLeftForwardslashChevronRight),
                     accessibilityLabel = "Load second HTML page",
                     onClick = { navigator.loadHtml(DUMMY_HTML) },
