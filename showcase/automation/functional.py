@@ -111,7 +111,10 @@ def click_node(ui, text, count=1, hold_ms=0, double=False):
         raise AssertionError(f"no bounds for {text!r}")
     params = {"x": bounds["x"] + bounds["width"] // 2, "y": bounds["y"] + bounds["height"] // 2}
     if double:
-        ui.action("pointer.double_tap", params)
+        ui.action("element.click", {
+            "id": node["id"], "snapshot_id": observation["snapshot_id"],
+            "count": 2, "interval_ms": 90,
+        })
         return
     if count > 1:
         params["count"] = count
@@ -208,28 +211,32 @@ def drag_from_text(ui, text, dy=300):
 
 
 def toggle_switch(ui, label, target=None):
-    selector = {"properties": {"checkable": True}, "within": {"label_contains": label}}
     try:
         ui.action("element.scroll_into_view", {"selector": {"label_contains": label}})
     except Exception:
         pass
-    params = {"selector": selector}
-    if target is not None:
-        params["target_state"] = target
-    try:
-        ui.action("element.toggle", params)
-    except Exception as error:  # noqa: BLE001 - fall back to a role selector
-        fallback = {"role": "switch", "within": {"label_contains": label}}
-        if target is not None:
-            ui.action("element.toggle", {"selector": fallback, "target_state": target})
-        else:
-            ui.action("element.toggle", {"selector": fallback})
-        return
-    if target is not None:
-        ui.action("element.wait", {
-            "selector": selector, "state": "checked" if target else "unchecked",
-            "timeout_ms": 5000,
-        })
+    label_row = ui.action("element.find", {"selector": {"label_contains": label}, "index": 0})["result"]
+    anchor = (label_row.get("nodes") or [{}])[0]
+    anchor_bounds = anchor.get("bounds") or {}
+    snapshot = ui.action("tree.snapshot")["result"]
+    candidates = []
+    for node in snapshot.get("nodes", []):
+        role = str(node.get("role", "")).lower()
+        properties = node.get("properties", {})
+        if not (role in ("switch", "checkbox", "axcheckbox", "togglebutton")
+                or properties.get("checkable") is True or properties.get("checked") is not None):
+            continue
+        bounds = node.get("bounds")
+        if not bounds or node.get("visible") is False:
+            continue
+        if anchor_bounds and abs(bounds["y"] - anchor_bounds["y"]) > 80:
+            continue
+        candidates.append((abs(bounds["x"] - anchor_bounds.get("x", 0)), node))
+    if not candidates:
+        raise AssertionError(f"no switch-like element near {label!r}")
+    candidates.sort(key=lambda item: item[0])
+    node = candidates[-1][1] if target is None else (candidates[-1][1] if not target else candidates[0][1])
+    ui.action("element.click", {"id": node["id"], "snapshot_id": snapshot["snapshot_id"]})
 
 
 def click_switch_near(ui, label, expect=None):
