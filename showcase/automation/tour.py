@@ -92,6 +92,8 @@ def find_search(ui, timeout_ms: int = 2500):
 def click_text_scroll(ui, text, scrolls=8):
     for _ in range(scrolls):
         observation = soft_find(ui, {"text": text}, timeout_ms=1200)
+        if not (observation.get("satisfied") and observation.get("nodes")):
+            observation = soft_find(ui, {"name": text}, timeout_ms=1200)
         if observation.get("satisfied") and observation.get("nodes"):
             click_text(ui, text)
             return
