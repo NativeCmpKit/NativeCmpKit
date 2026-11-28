@@ -42,6 +42,8 @@ driver wrote results at the end and its rerun file is partial.
   successful-session images.
 
 Executable dispatch and recording steps: [session-runbook.md](session-runbook.md).
+Full technical reports: [showcase-verification-report.md](reports/showcase-verification-report.md)
+and [ui-test-actions-limitations.md](reports/ui-test-actions-limitations.md).
 
 ## Tablet findings (run 46099392157)
 

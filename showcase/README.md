@@ -182,6 +182,8 @@ Temporary sessions, logs and failure captures stay out of the canonical tree.
 
 Current evidence levels and gaps: [evidence/verification-status.md](evidence/verification-status.md).
 Hosted dispatch and recording steps: [evidence/session-runbook.md](evidence/session-runbook.md).
+Technical reports: [showcase verification](evidence/reports/showcase-verification-report.md),
+[`ui-test-actions` limitations](evidence/reports/ui-test-actions-limitations.md).
 The source-audited component/API view is [INVENTORY.md](INVENTORY.md)
 ([public-api.json](public-api.json) is the raw declaration extract). The
 versioned contract is [coverage.json](coverage.json), with a readable
