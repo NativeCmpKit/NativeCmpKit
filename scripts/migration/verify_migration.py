@@ -25,7 +25,9 @@ DESTINATION = "NativeCmpKit/NativeCmpKit"
 TRANSFER_SNAPSHOT = "docs/migration/upstream-updates/20261024T183300Z/destination/repository.json"
 DEPENDENCY_WORKFLOWS = frozenset({".github/workflows/javafx-dependency-regression.yml",
                                  ".github/workflows/javafx-library-candidate.yml"})
-VERIFICATION_WORKFLOWS = DEPENDENCY_WORKFLOWS | {".github/workflows/gradle.yml", ".github/workflows/build-native-libs.yml"}
+VERIFICATION_WORKFLOWS = DEPENDENCY_WORKFLOWS | {
+    ".github/workflows/gradle.yml", ".github/workflows/build-native-libs.yml", ".github/workflows/release.yml",
+}
 REMOTE_ACTION = re.compile(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*@[0-9a-f]{40}")
 PUBLISHED_KIRA_PREVIEW = {"id": 449677531, "tag_name": "v0.1.0-preview.1", "draft": False,
                           "prerelease": True, "published_at": "2026-11-18T08:02:22Z"}
