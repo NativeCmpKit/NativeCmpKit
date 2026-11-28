@@ -215,7 +215,7 @@ def toggle_switch(ui, label, target=None):
         ui.action("element.scroll_into_view", {"selector": {"label_contains": label}})
     except Exception:
         pass
-    label_row = ui.action("element.find", {"selector": {"label_contains": label}, "index": 0})["result"]
+    label_row = ui.action("element.find", {"selector": {"label_contains": label}})["result"]
     anchor = (label_row.get("nodes") or [{}])[0]
     anchor_bounds = anchor.get("bounds") or {}
     snapshot = ui.action("tree.snapshot")["result"]
@@ -499,6 +499,21 @@ def main() -> None:
     CURRENT_DEVICE = device
     LiveUI = tour.load_client(args.client_dir)
     ui = LiveUI.open(args.connection, args.token_file)
+
+    original_action = ui.action
+
+    def resilient_action(command, params=None, request_id=None, **kwargs):
+        import uuid
+
+        rid = request_id or uuid.uuid4().hex
+        try:
+            return original_action(command, params, request_id=rid, **kwargs)
+        except Exception as error:  # noqa: BLE001 - recover an unknown outcome
+            if "response was lost" in str(error).lower():
+                return ui.client.recover_action(rid)
+            raise
+
+    ui.action = resilient_action
     identity = ui.identify()
     selected = {item.strip() for item in args.only.split(",") if item.strip()}
     result = {
