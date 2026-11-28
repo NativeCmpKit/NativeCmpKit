@@ -190,20 +190,6 @@ jobs:
           adb -s emulator-5554 shell wm size
           adb -s emulator-5554 shell wm density
 
-      - name: Build the iOS XCTest runner
-        if: steps.mode.outputs.mode == 'session'
-        shell: bash
-        run: |
-          xcodebuild build-for-testing \
-            -project "$RUNNER_TEMP/ui-test-actions/ios_xctest/UitaXCTestRunner.xcodeproj" \
-            -scheme UitaRunnerUITests -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath "$RUNNER_TEMP/uitaxctest" CODE_SIGNING_ALLOWED=NO
-          run=$(find "$RUNNER_TEMP/uitaxctest" -name '*.xctestrun' -type f | head -1)
-          test -n "$run"
-          echo "UI_TEST_IOS_XCTEST_RUN=$run" >> "$GITHUB_ENV"
-          echo "XCTest run: $run"
-
       - name: Create a disposable Python environment
         if: steps.mode.outputs.mode == 'session'
         shell: bash
@@ -454,6 +440,20 @@ jobs:
           git -C "$RUNNER_TEMP/ui-test-actions" checkout "$UI_TEST_ACTIONS_REF"
           test "$(git -C "$RUNNER_TEMP/ui-test-actions" rev-parse HEAD)" = "$UI_TEST_ACTIONS_REF"
           python3 --version
+
+      - name: Build the iOS XCTest runner
+        if: steps.mode.outputs.mode == 'session'
+        shell: bash
+        run: |
+          xcodebuild build-for-testing \
+            -project "$RUNNER_TEMP/ui-test-actions/ios_xctest/UitaXCTestRunner.xcodeproj" \
+            -scheme UitaRunnerUITests -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/uitaxctest" CODE_SIGNING_ALLOWED=NO
+          run=$(find "$RUNNER_TEMP/uitaxctest" -name '*.xctestrun' -type f | head -1)
+          test -n "$run"
+          echo "UI_TEST_IOS_XCTEST_RUN=$run" >> "$GITHUB_ENV"
+          echo "XCTest run: $run"
 
       - name: Resolve the one-time token digest
         if: steps.mode.outputs.mode == 'session'
