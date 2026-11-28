@@ -7,6 +7,7 @@ import io.github.apdelrahman1911.nativecmpkit.ui.internal.runApplicationUiTest
 import androidx.compose.ui.uikit.LocalUIViewController
 import androidx.compose.ui.window.DialogProperties
 import io.github.apdelrahman1911.nativecmpkit.ui.dialog.uikit.*
+import io.github.apdelrahman1911.nativecmpkit.ui.internal.nativeXcuiInput
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.requireOwnedApplicationWindow
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.sameNativeObject
 import io.github.apdelrahman1911.nativecmpkit.ui.internal.waitForNative
@@ -177,13 +178,14 @@ class NativeAlertLifecycleTest {
         var cancels = 0
         var dismissals = 0
         var confirms = 0
+        val sheetTitle = "Choose a value"
         val cancelTitle = "Cancel selection"
         var primaryFailure: Throwable? = null
         try {
             enterPhase("present")
             runOnIdle {
                 manager = AlertDialogManager(parent, { dismissals++ }, AlertDialogIosProperties(
-                    title = "Choose a value",
+                    title = sheetTitle,
                     animated = false,
                     style = AlertDialogIosStyle.ActionSheet,
                     actions = listOf(
@@ -195,7 +197,7 @@ class NativeAlertLifecycleTest {
             enterPhase("await-sheet")
             waitForNative {
                 val alert = parent.presentedViewController as? UIAlertController
-                alert != null && alert.title == "Choose a value" &&
+                alert != null && alert.title == sheetTitle &&
                     sameNativeObject(alert.view.window, requireOwnedApplicationWindow())
             }
             val sheet = runOnIdle { parent.presentedViewController as UIAlertController }
@@ -205,15 +207,6 @@ class NativeAlertLifecycleTest {
                 if (isPhone) {
                     enterPhase("compact-size")
                     assertEquals(UIUserInterfaceSizeClassCompact, parent.traitCollection.horizontalSizeClass)
-                    enterPhase("find-cancel")
-                    val window = requireOwnedApplicationWindow()
-                    val candidates = sheet.view.visibleDescendants().filter {
-                        it.accessibilityLabel == cancelTitle &&
-                            (it.accessibilityTraits and UIAccessibilityTraitButton) != 0UL && sameNativeObject(it.window, window)
-                    }
-                    assertEquals(1, candidates.size, "Expect one visible UIKit Cancel action")
-                    enterPhase("activate-cancel")
-                    assertTrue(candidates.single().accessibilityActivate(), "The visible UIKit Cancel button must accept input")
                 } else {
                     enterPhase("ipad-anchor")
                     val popover = requireNotNull(sheet.popoverPresentationController)
@@ -221,6 +214,15 @@ class NativeAlertLifecycleTest {
                     assertNull(popover.barButtonItem)
                     manager?.dispose()
                 }
+            }
+            if (isPhone) {
+                enterPhase("activate-cancel")
+                nativeXcuiInput("action-sheet-button", mapOf(
+                    "case" to "defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad",
+                    "title" to sheetTitle,
+                    "label" to cancelTitle,
+                ))
+                enterPhase("cancel-delivered")
             }
             enterPhase("await-dismissal")
             waitForNative { parent.presentedViewController == null && sheet.view.window == null }
@@ -243,10 +245,5 @@ class NativeAlertLifecycleTest {
                 if (primary !== cleanup) primary.addSuppressed(cleanup)
             }
         }
-    }
-
-    private fun UIView.visibleDescendants(): List<UIView> {
-        if (hidden || alpha <= 0.0) return emptyList()
-        return listOf(this) + subviews.filterIsInstance<UIView>().flatMap { it.visibleDescendants() }
     }
 }

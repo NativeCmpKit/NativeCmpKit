@@ -26,6 +26,11 @@ import threading
 import time
 
 FOCUS = "ui-native-modal-xcui-batch"
+ACTION_SHEET_FOCUS = "identity-ios-default-action-sheet"
+ACTION_SHEET_OPERATION = "action-sheet-button"
+ACTION_SHEET_CASE = "defaultActionSheetKeepsIPhoneCancelAndAnchorsIPad"
+ACTION_SHEET_REQUEST = {"sequence": 1, "operation": ACTION_SHEET_OPERATION, "case": ACTION_SHEET_CASE,
+                        "title": "Choose a value", "label": "Cancel selection"}
 SOURCE = "scripts/ci/native_ui_input.py"
 SWIFT = "tests/native-ui-input/NativeCmpKitInputTests.swift"
 PROJECT = "tests/native-ui-input/NativeCmpKitInput.xcodeproj/project.pbxproj"
@@ -94,7 +99,7 @@ def validate_request(document: dict, sequence: int) -> dict:
     operation = document.get("operation")
     if type(operation) is not str: raise ValueError("Explicit native operation required")
     keys = {"sequence", "operation", "case"}
-    if operation in {"alert-button", "alert-field"}:
+    if operation in {"alert-button", "alert-field", ACTION_SHEET_OPERATION}:
         keys |= {"title", "label"}
         if operation == "alert-field":
             keys |= {"text"}
@@ -186,6 +191,12 @@ def validate_sources(root: Path) -> bool:
     return True
 
 
+def owns_phone_action_sheet(focus: str | None, simulator: dict) -> bool:
+    device_type = simulator.get("device_type")
+    return (focus == ACTION_SHEET_FOCUS and type(device_type) is str and
+            device_type.startswith("com.apple.CoreSimulator.SimDeviceType.iPhone-"))
+
+
 def foreground_refusal_observations(raw: bytes, auth: str, session_token: str) -> list[dict]:
     """Failure-only public state scalars, never a foreground/input acceptance."""
     if (type(raw) is not bytes or len(raw) > 16 * 1024**2 or
@@ -208,12 +219,17 @@ def foreground_refusal_observations(raw: bytes, auth: str, session_token: str) -
 
 class InputDriver:
     def __init__(self, root: Path, device: str, bundle_id: str, token: str, execute,
-                 signed_hash: str, plist_hash: str):
+                 signed_hash: str, plist_hash: str, *, focus: str = FOCUS):
         if (any(type(value) is not str for value in (device, token, bundle_id, signed_hash, plist_hash)) or
                 not UUID.fullmatch(device) or not TOKEN.fullmatch(token) or not BUNDLE.fullmatch(bundle_id) or
                 not bundle_id.endswith(".t" + token) or not HASH.fullmatch(signed_hash) or not HASH.fullmatch(plist_hash)):
             raise ValueError("Exact owned application/simulator/session required")
+        if focus not in (FOCUS, ACTION_SHEET_FOCUS):
+            raise ValueError("Unreviewed native input focus")
         self._initialize(root, device, bundle_id, token, execute)
+        if focus == ACTION_SHEET_FOCUS:
+            self.methods = (ACTION_SHEET_CASE,)
+            self.receipt["focus"] = focus
         self.receipt.update(signed_application_executable_sha256=signed_hash, application_plist_sha256=plist_hash)
 
     def _initialize(self, root, device, bundle_id, token, execute):
@@ -451,6 +467,11 @@ class InputDriver:
                 current = validate_request(decode(raw), sequence)
                 if current["case"] not in self.methods:
                     raise ValueError("Only the selected native test identities are admitted")
+                if self.receipt["focus"] == ACTION_SHEET_FOCUS:
+                    if current != ACTION_SHEET_REQUEST:
+                        raise ValueError("Only the one owned iPhone Cancel action is admitted")
+                elif current["operation"] == ACTION_SHEET_OPERATION:
+                    raise ValueError("Action-sheet input requires its owning focus")
                 current_hash = hashlib.sha256(raw).hexdigest()
                 if self.pending is not None and (current != self.pending or current_hash != self.pending_hash):
                     raise ValueError("Pending native input mutated")
@@ -475,7 +496,7 @@ class InputDriver:
                         raise ValueError("Exact native refusal required")
                 else:
                     expected = {"sequence", "status", "operation"}
-                    flags = ({"unique", "enabled", "hittable"} if operation == "alert-button" else
+                    flags = ({"unique", "enabled", "hittable"} if operation in {"alert-button", ACTION_SHEET_OPERATION} else
                              {"unique"} if operation == "alert-field" else {"foreground"})
                     expected |= flags | ({"value"} if operation == "alert-field" else set())
                     if (set(body) != expected or body.get("operation") != operation or
@@ -637,13 +658,17 @@ class InputDriver:
 
 
 def validate_receipt(receipt: dict, root: Path, required_methods: tuple[str, ...], *, bundle_id: str,
-                     device: str, native_pid: int, signed_hash: str, plist_hash: str) -> bool:
-    if type(receipt) is not dict or receipt.get("verified") is not True or receipt.get("focus") != FOCUS:
+                     device: str, native_pid: int, signed_hash: str, plist_hash: str,
+                     focus: str = FOCUS) -> bool:
+    if (focus not in (FOCUS, ACTION_SHEET_FOCUS) or type(receipt) is not dict or
+            receipt.get("verified") is not True or receipt.get("focus") != focus):
         return False
     try:
         expected = {relative: hashlib.sha256(read_ordinary(root / relative, 256 * 1024)).hexdigest()
                     for relative in (SOURCE, SWIFT, PROJECT, SCHEME, NATIVE)}
         operations = receipt["operations"]
+        allowed_operations = {ACTION_SHEET_OPERATION} if focus == ACTION_SHEET_FOCUS else {
+            "alert-button", "alert-field", "tap", "drag"}
         token = bundle_id.rsplit(".t", 1)[-1]
         return (type(receipt.get("schema_version")) is int and receipt["schema_version"] == 1 and
                 type(bundle_id) is str and BUNDLE.fullmatch(bundle_id) and
@@ -660,7 +685,8 @@ def validate_receipt(receipt: dict, root: Path, required_methods: tuple[str, ...
                 all(type(r) is dict and set(r) == {"sequence", "operation", "case", "status", "request_sha256"} for r in operations) and
                 all(type(r["sequence"]) is int for r in operations) and
                 [r["sequence"] for r in operations] == list(range(1, len(operations)+1)) and
-                all(r["status"] == "delivered" and r["operation"] in {"alert-button","alert-field","tap","drag"} and
+                (focus != ACTION_SHEET_FOCUS or (len(operations) == 1 and required_methods == (ACTION_SHEET_CASE,))) and
+                all(r["status"] == "delivered" and r["operation"] in allowed_operations and
                     re.fullmatch(r"[0-9a-f]{64}", r["request_sha256"]) for r in operations) and
                 {r["case"] for r in operations} == set(required_methods) and
                 receipt.get("loopback_only") is True and receipt.get("separate_public_xctest_runner") is True and

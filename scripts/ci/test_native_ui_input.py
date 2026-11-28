@@ -35,11 +35,11 @@ def no_native(*args, **kwargs):
 
 
 @contextmanager
-def driver_fixture():
+def driver_fixture(focus=native.FOCUS):
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary)
         with patch.object(native.secrets, "token_hex", return_value=AUTH):
-            driver = native.InputDriver(root, DEVICE, BUNDLE, TOKEN, no_native, HASH, HASH)
+            driver = native.InputDriver(root, DEVICE, BUNDLE, TOKEN, no_native, HASH, HASH, focus=focus)
         driver.directory = root / TOKEN
         driver.directory.mkdir()
         info = driver.directory.stat()
@@ -66,6 +66,40 @@ def publish_request(driver, document):
 
 
 class NativeUiInputControls(unittest.TestCase):
+    def test_phone_action_sheet_admits_only_the_exact_cancel_tap(self):
+        self.assertEqual(library.IOS_DEFAULT_ACTION_SHEET_FOCUS, native.ACTION_SHEET_FOCUS)
+        self.assertEqual(library.IOS_DEFAULT_ACTION_SHEET_METHOD, native.ACTION_SHEET_CASE)
+        request = native.ACTION_SHEET_REQUEST
+        with driver_fixture(native.ACTION_SHEET_FOCUS) as driver:
+            driver.handle("POST", "/ready", {})
+            for changed in (dict(request, label="Confirm selection"), dict(request, title="Other sheet"),
+                            dict(request, operation="alert-button")):
+                publish_request(driver, changed)
+                with self.assertRaisesRegex(ValueError, "one owned iPhone Cancel"):
+                    driver.handle("GET", "/next", None)
+            publish_request(driver, request)
+            self.assertEqual(request, driver.handle("GET", "/next", None))
+            reply = {"sequence": 1, "status": "delivered", "operation": native.ACTION_SHEET_OPERATION,
+                     "unique": True, "enabled": True, "hittable": True}
+            with self.assertRaisesRegex(ValueError, "evidence is incomplete"):
+                driver.handle("POST", "/response", dict(reply, hittable=False))
+            self.assertEqual({"acknowledged": 1}, driver.handle("POST", "/response", reply))
+            publish_request(driver, dict(request, sequence=2))
+            with self.assertRaisesRegex(ValueError, "one owned iPhone Cancel"):
+                driver.handle("GET", "/next", None)
+        with driver_fixture() as driver:
+            driver.handle("POST", "/ready", {})
+            publish_request(driver, dict(request, case=CASE))
+            with self.assertRaisesRegex(ValueError, "owning focus"):
+                driver.handle("GET", "/next", None)
+
+    def test_action_sheet_input_route_requires_the_phone_and_exact_focus(self):
+        phone = {"device_type": "com.apple.CoreSimulator.SimDeviceType.iPhone-Air"}
+        ipad = {"device_type": "com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5"}
+        self.assertTrue(native.owns_phone_action_sheet(native.ACTION_SHEET_FOCUS, phone))
+        self.assertFalse(native.owns_phone_action_sheet(native.ACTION_SHEET_FOCUS, ipad))
+        self.assertFalse(native.owns_phone_action_sheet(native.FOCUS, phone))
+
     def test_ordinary_files_reject_empty_oversized_links_directories_fifo_and_read_mutation(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

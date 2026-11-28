@@ -11,6 +11,7 @@ from xml.etree import ElementTree as ET
 from library_tests import IOS_DEFAULT_ACTION_SHEET_METHOD, NoDtdBuilder, safe_path
 from camera_ios_ownership_native_focus import DISPOSAL_METHOD
 from ios_popover_geometry_plan import METHODS as POPOVER_GEOMETRY_METHODS
+from native_ui_input import ACTION_SHEET_FOCUS
 from ios_ui_application import (
     CAMERA_DISPOSAL_PHASES, DEFAULT_ACTION_SHEET_PHASES, IPAD_ROTATION_PHASES,
     PRE26_CUSTOMIZATION_PHASES, PRE26_MISSING_THUMB_PIXELS, PRE26_NEGATIVE_STEPS_PHASES,
@@ -130,6 +131,7 @@ def receipt_rows():
                 transport = data.get("application_transport") or {}
                 crash = data.get("owned_crash_diagnostics") or {}
                 fixture = data.get("webview_content_policy_fixture") or {}
+                native_input = data.get("native_xctest_input") or {}
                 yield {
                     "host": host,
                     "original_receipt_sha256": hashlib.sha256(raw).hexdigest(),
@@ -159,6 +161,12 @@ def receipt_rows():
                         step for step in protocol.get("default_action_sheet_progress", [])[:len(DEFAULT_ACTION_SHEET_PHASES)]
                         if step in DEFAULT_ACTION_SHEET_PHASES
                     ],
+                    **({"default_action_sheet_input": {
+                        "ready": native_input.get("runner_ready") is True,
+                        "verified": native_input.get("verified") is True,
+                        "operations": [labels(operation, ("operation", "status", "reason"))
+                                       for operation in native_input.get("operations", [])[:1]],
+                    }} if native_input.get("focus") == ACTION_SHEET_FOCUS else {}),
                     **({"camera_photos": camera_photo_summary(data, protocol),
                         "camera_disposal_progress": [step for step in protocol.get("camera_disposal_progress", [])[:len(CAMERA_DISPOSAL_PHASES)]
                                                      if step in CAMERA_DISPOSAL_PHASES]}

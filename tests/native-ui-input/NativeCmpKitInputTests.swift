@@ -95,13 +95,14 @@ final class NativeCmpKitInputTests: XCTestCase {
         }
         let operation = try required(request["operation"] as? String)
         switch operation {
-        case "alert-button", "alert-field":
+        case "alert-button", "alert-field", "action-sheet-button":
             let title = try required(request["title"] as? String)
             let label = try required(request["label"] as? String)
-            let alert = application.alerts.element(boundBy: 0)
-            guard alert.waitForExistence(timeout: 5), application.alerts.count == 1,
+            let containers = operation == "action-sheet-button" ? application.sheets : application.alerts
+            let alert = containers.element(boundBy: 0)
+            guard alert.waitForExistence(timeout: 5), containers.count == 1,
                   alert.staticTexts.matching(identifier: title).count == 1 else { throw InputError.notUnique }
-            if operation == "alert-button" {
+            if operation == "alert-button" || operation == "action-sheet-button" {
                 let query = alert.buttons.matching(identifier: label)
                 let button = query.element(boundBy: 0)
                 guard button.waitForExistence(timeout: 5), query.count == 1,

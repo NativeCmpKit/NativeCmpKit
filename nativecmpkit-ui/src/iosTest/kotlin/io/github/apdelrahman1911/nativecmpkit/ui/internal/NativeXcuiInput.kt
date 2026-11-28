@@ -25,7 +25,7 @@ private var nativeInputSequence = 0
  */
 internal fun nativeXcuiInput(operation: String, fields: Map<String, Any> = emptyMap()): Map<*, *> {
     check(!NSThread.isMainThread) { "Native input must not block UIKit's main loop" }
-    check(operation in setOf("alert-button", "alert-field", "tap", "drag"))
+    check(operation in setOf("alert-button", "alert-field", "action-sheet-button", "tap", "drag"))
     val token = NSProcessInfo.processInfo.environment["NATIVECMPKIT_NATIVE_INPUT_TOKEN"] as? String
         ?: error("This test requires the independent XCTest native-input profile")
     check(Regex("[0-9a-f]{32}").matches(token))

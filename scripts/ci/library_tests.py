@@ -2515,7 +2515,7 @@ def plan(root: Path, suite: str, minimum_modules: tuple[str, ...] | None = None,
                 re.search(r"@(Ignore|Disabled|IgnoredTest)\b", safe_path(root, name).read_text(encoding="utf-8"))
                 for name in (IOS_POPOVER_GEOMETRY_SOURCE, IOS_POPOVER_GEOMETRY_SCENE_SOURCE)):
             raise ValueError("OS geometry requires enabled exact native inputs, not skipped/disabled declarations")
-        if focus == IOS_MODAL_XCUI_FOCUS:
+        if focus in (IOS_MODAL_XCUI_FOCUS, IOS_DEFAULT_ACTION_SHEET_FOCUS):
             import native_ui_input
             if native_ui_input.NATIVE not in selected[0]["test_source_files"]:
                 raise ValueError("Native modal input requires its exact enabled zero-test Kotlin helper")
@@ -4940,6 +4940,17 @@ def collect_one_ios_application_receipt(root: Path, test_plan: dict, output: Pat
                     native_pid=protocol.get("observed_launch_pid"),
                     signed_hash=document["signed_application_executable_sha256"], plist_hash=document["application_plist_sha256"]),
                  "Native modal interaction cases require independent owned public XCTest input and cleanup")
+        if test_plan.get("explicit_test_focus") == IOS_DEFAULT_ACTION_SHEET_FOCUS:
+            import native_ui_input
+            if native_ui_input.owns_phone_action_sheet(IOS_DEFAULT_ACTION_SHEET_FOCUS, context["simulator"]):
+                need(native_ui_input.validate_receipt(document.get("native_xctest_input"), root,
+                        (IOS_DEFAULT_ACTION_SHEET_METHOD,), bundle_id=document["bundle_id"],
+                        device=context["simulator"]["udid"], native_pid=protocol.get("observed_launch_pid"),
+                        signed_hash=document["signed_application_executable_sha256"],
+                        plist_hash=document["application_plist_sha256"], focus=IOS_DEFAULT_ACTION_SHEET_FOCUS),
+                     "The iPhone Cancel action requires exactly one independent owned XCTest tap and cleanup")
+            else:
+                need("native_xctest_input" not in document, "The iPad anchor case does not transport iPhone input")
         if any((IOS_WEBVIEW_REQUEST_CLASS, method) in cases for method in IOS_WEBVIEW_REQUEST_METHODS):
             import ios_webview_request_fixture as wk_requests
             fixture_hash = sha256(safe_path(root, IOS_WEBVIEW_REQUEST_FIXTURE))

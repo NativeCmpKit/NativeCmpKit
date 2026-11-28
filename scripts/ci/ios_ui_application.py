@@ -248,7 +248,7 @@ IPAD_ROTATION_PHASES = (
 DEFAULT_ACTION_SHEET_CASE = (lt.IOS_ALERT_LIFECYCLE_GROUP["classname"], lt.IOS_DEFAULT_ACTION_SHEET_METHOD)
 DEFAULT_ACTION_SHEET_PREFIX = "NATIVECMPKIT_DEFAULT_ACTION_SHEET_PHASE "
 DEFAULT_ACTION_SHEET_PHASES = (
-    "set-content", "present", "await-sheet", "style", "compact-size", "find-cancel", "activate-cancel",
+    "set-content", "present", "await-sheet", "style", "compact-size", "activate-cancel", "cancel-delivered",
     "await-dismissal", "callback-counts",
 )
 PRE26_OWNED_PROCESS_PREFIX = "NATIVECMPKIT_PRE26_OWNED_PROCESS "
@@ -1565,11 +1565,13 @@ def run(binary_relative: str, arguments: list[str], *, image_diagnostics: str | 
         if host["module"] == "nativecmpkit-ui" and focus in lt.IOS_POPOVER_GEOMETRY_FOCUSES:
             import ios_popover_geometry_plan as geometry_plan
             native_environment = geometry_plan.process_launch_environment(before["simulator"], focus)
-        if host["module"] == "nativecmpkit-ui" and focus == lt.IOS_MODAL_XCUI_FOCUS:
+        if host["module"] == "nativecmpkit-ui" and focus in (lt.IOS_MODAL_XCUI_FOCUS, lt.IOS_DEFAULT_ACTION_SHEET_FOCUS):
             import native_ui_input
-            phase = "prepare-independent-owned-xctest-input"
-            native_input_driver = native_ui_input.InputDriver(root, device, bundle_id, token, execute_control, signed_hash, plist_hash)
-            native_environment = native_input_driver.prepare()
+            if focus == lt.IOS_MODAL_XCUI_FOCUS or native_ui_input.owns_phone_action_sheet(focus, before["simulator"]):
+                phase = "prepare-independent-owned-xctest-input"
+                native_input_driver = native_ui_input.InputDriver(
+                    root, device, bundle_id, token, execute_control, signed_hash, plist_hash, focus=focus)
+                native_environment = native_input_driver.prepare()
         if host["module"] == "nativecmpkit-ui" and focus in (None, lt.IOS_IMAGE_MEMORY_FOCUS, *lt.IOS_IMAGE_DARWIN_FOCUSES):
             import apple_image_profile
             phase = "prepare-owned-image-memory-profile"
