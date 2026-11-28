@@ -159,14 +159,26 @@ jobs:
           $evidence = (Resolve-Path $env:EVIDENCE_DIR).Path
           $cygwin = Join-Path $env:RUNNER_TEMP 'openjfx-cygwin'
           $cache = Join-Path $env:RUNNER_TEMP 'openjfx-cygwin-packages'
+          $mirror = 'https://sourceware.org/pub/cygwin'
           New-Item -ItemType Directory -Path $cache | Out-Null
+          foreach ($inputFile in @('setup.xz', 'setup.xz.sig')) {
+            & curl.exe --fail --silent --show-error --location --proto '=https' --proto-redir '=https' --max-time 60 `
+              --output "$evidence/$inputFile" "$mirror/x86_64/$inputFile"
+            if ($LASTEXITCODE -ne 0) { throw "Fetching the signed Cygwin input $inputFile failed" }
+          }
           $install = Start-Process -Wait -NoNewWindow -PassThru -FilePath "$evidence/sources/setup-2.941.x86_64.exe" -ArgumentList @(
             '--quiet-mode', '--only-site', '--no-admin', '--no-desktop', '--no-shortcuts', '--no-startmenu',
-            '--root', "`"$cygwin`"", '--local-package-dir', "`"$cache`"", '--site', 'https://mirrors.kernel.org/sourceware/cygwin',
+            '--root', "`"$cygwin`"", '--local-package-dir', "`"$cache`"", '--site', $mirror,
             '--packages', 'make,zip,unzip,makedepend,bison,flex,perl,python3,ruby,rubygems,gperf'
           )
           if ($install.ExitCode -ne 0) { throw "Cygwin setup exited $($install.ExitCode)" }
           Copy-Item "$cygwin/etc/setup/installed.db" "$evidence/cygwin-installed.txt"
+          $gitRoot = Split-Path -Parent (Split-Path -Parent (Get-Command git.exe).Source)
+          & python -B tests/dependency/javafx-http2-cancellation/cygwin_materials.py --cache $cache `
+            --index "$evidence/setup.xz" --signature "$evidence/setup.xz.sig" `
+            --public-key "$evidence/sources/cygwin-pubring.asc" --gpg "$gitRoot/usr/bin/gpg.exe" `
+            --output "$evidence/cygwin-input-packages.json"
+          if ($LASTEXITCODE -ne 0) { throw 'Cygwin package provenance verification failed' }
           $cmake = Join-Path $env:RUNNER_TEMP 'openjfx-cmake'
           Expand-Archive "$evidence/sources/cmake-3.31.12-windows-x86_64.zip" $cmake
           $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
@@ -262,6 +274,9 @@ jobs:
             build/openjfx-source-verification/compat-rpm-sha256.txt
             build/openjfx-source-verification/compat-compiler-build.log
             build/openjfx-source-verification/cygwin-installed.txt
+            build/openjfx-source-verification/cygwin-input-packages.json
+            build/openjfx-source-verification/setup.xz
+            build/openjfx-source-verification/setup.xz.sig
             build/openjfx-source-verification/build.log
             build/openjfx-source-verification/build-exit.txt
             build/openjfx-source-verification/sdk-binaries.json

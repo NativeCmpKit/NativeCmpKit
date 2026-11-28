@@ -122,6 +122,14 @@
       "ivy_input": false
     },
     {
+      "file": "cygwin-pubring.asc",
+      "url": "https://cygwin.com/key/pubring.asc",
+      "bytes": 3122,
+      "sha256": "9b7a0601b17571453e2e5fb2d8854412fefc8b7f0323ae4b4316242a23f415e1",
+      "platform": "windows",
+      "ivy_input": false
+    },
+    {
       "file": "getoptlong-0.2.1.gem",
       "url": "https://rubygems.org/downloads/getoptlong-0.2.1.gem",
       "bytes": 13824,
