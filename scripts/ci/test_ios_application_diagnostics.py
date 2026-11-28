@@ -177,11 +177,15 @@ class PartialProtocolTests(unittest.TestCase):
         self.assertEqual(["compose-enter"], protocol.partial()["pre26_negative_steps_progress"])
         protocol.feed(prefix + "main-throw-control-verified")
         protocol.feed(prefix + "set-content-enter")
+        self.assertEqual(list(a.PRE26_NEGATIVE_STEPS_PHASES[:2]),
+                         protocol.partial()["pre26_negative_steps_progress"])
+        for phase in a.PRE26_NEGATIVE_STEPS_PHASES[2:5]:
+            protocol.feed(prefix + phase)
+        protocol.feed(prefix + "set-content-enter")
         protocol.feed(f.frame("testStdOut", name=method, out=prefix + "adaptive-slider-enter"))
         protocol.feed(prefix + "public-validation-verified")
         result = protocol.partial()
-        self.assertEqual(["compose-enter", "main-throw-control-verified", "set-content-enter",
-                          "adaptive-slider-enter", "public-validation-verified"],
+        self.assertEqual([*a.PRE26_NEGATIVE_STEPS_PHASES[:7], "public-validation-verified"],
                          result["pre26_negative_steps_progress"])
         self.assertEqual(0, result["counts"]["passed"])
 

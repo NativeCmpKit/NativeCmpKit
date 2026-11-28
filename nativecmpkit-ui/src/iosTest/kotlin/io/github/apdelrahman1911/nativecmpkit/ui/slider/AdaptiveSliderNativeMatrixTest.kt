@@ -196,6 +196,18 @@ class AdaptiveSliderNativeMatrixTest {
                 assertEquals("validation control", control.message)
             }
             trace("main-throw-control-verified")
+            trace("composition-throw-control-start")
+            val control = assertFailsWith<IllegalArgumentException> {
+                runComposeUiTest {
+                    setContent {
+                        trace("composition-throw-control-entered")
+                        throw IllegalArgumentException("composition validation control")
+                    }
+                    waitForIdle()
+                }
+            }
+            assertEquals("composition validation control", control.message)
+            trace("composition-throw-control-verified")
             val failure = assertFailsWith<IllegalArgumentException> {
                 runComposeUiTest {
                     trace("set-content-enter")
