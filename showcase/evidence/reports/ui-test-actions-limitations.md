@@ -862,7 +862,6 @@ lines and errors only; no token or tunnel URL.
 | Android date display readout | [`date-display` failed-after](../../../screenshots/android/functional/date-display/api35-phone-failed-after.png) |
 | Android JS readout | [`webview-js` failed-after](../../../screenshots/android/functional/webview-js/api35-phone-failed-after.png) |
 | iPad popover without Cancel | [iPad ActionSheet](../../../screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png) |
-| Android double tap | [`clickable` failed-after](../../../screenshots/android/functional/clickable/api35-phone-failed-after.png) |
 
 ### Direct log evidence
 
