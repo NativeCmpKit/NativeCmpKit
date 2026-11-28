@@ -15,6 +15,8 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import time
+from urllib.error import HTTPError
+from urllib.request import urlopen
 from zipfile import ZipFile
 
 from probe_runner import CASES, HERE, case_results, checked_artifact, compare_patch, document, need, patch_source
@@ -204,14 +206,34 @@ def verify_http2(module_path, classes, output, lock):
                         peer.wait(timeout=5)
 
 
+def stage_stock_runtime_jar(directory, row):
+    try:
+        checked_artifact(directory, row, download=True)
+        return row["url"]
+    except HTTPError as error:
+        if error.code not in {429, 503}:
+            raise
+        error.close()
+
+    mirror = row["url"].replace("https://repo.maven.apache.org/maven2/",
+                                "https://maven-central.storage-download.googleapis.com/maven2/", 1)
+    with urlopen(mirror, timeout=120) as response:
+        need(response.geturl() == mirror, "OpenJFX baseline mirror redirect refused")
+        payload = response.read(row["bytes"] + 1)
+    need(len(payload) == row["bytes"] and hashlib.sha256(payload).hexdigest() == row["sha256"],
+         "OpenJFX baseline mirror bytes differ from the exact Central artifact pin")
+    with (directory / row["file"]).open("xb") as artifact:
+        artifact.write(payload)
+    return mirror
+
+
 def compare_navigation_performance(module_path, classes, output, target, architecture):
     _, classifier = CLASSIFIERS[target, architecture]
     stock = output / "ordinary-runtime"
     stock.mkdir()
     expected = document((HERE / "artifacts.json").read_text(encoding="utf-8"))["platforms"][classifier]
     need(len(expected) == 5, "Expected five exact aligned baseline runtime modules")
-    for row in expected:
-        checked_artifact(stock, row, download=True)
+    observed_urls = {row["file"]: stage_stock_runtime_jar(stock, row) for row in expected}
 
     records = {"ordinary": [], "source": []}
     for number, (runtime, module_dir) in enumerate((
@@ -242,7 +264,8 @@ def compare_navigation_performance(module_path, classes, output, target, archite
     regressions = [metric for metric, floor in thresholds.items()
                    if metrics["source"][metric] > max(metrics["ordinary"][metric] * 1.5, metrics["ordinary"][metric] + floor)]
     write_json(output / "navigation-performance.json", {
-        "ordinary_artifacts": expected, "classifier": classifier, "process_order": ["ordinary", "source", "source", "ordinary"],
+        "ordinary_artifacts": expected, "ordinary_artifact_sources": observed_urls,
+        "classifier": classifier, "process_order": ["ordinary", "source", "source", "ordinary"],
         "absolute_threshold_nanos": thresholds, "relative_threshold": 1.5, "suspect_regressions": regressions,
         "metrics": metrics, "observations": records,
         "scope": "Matched small local WebView navigations on this exact runner and JDK",
