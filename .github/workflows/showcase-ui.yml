@@ -44,6 +44,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  GRADLE_OPTS: >-
+    -Dorg.gradle.internal.repository.max.retries=10
+    -Dorg.gradle.internal.repository.initial.backoff=5000
   UI_TEST_ACTIONS_REF: 1c0d90debd7319c7580279bcbe2fb5ab19d6feea
   ANDROID_APP_ID: io.github.apdelrahman1911.nativecmpkit.sample
   IOS_BUNDLE_ID: io.github.apdelrahman1911.nativecmpkit.sample
