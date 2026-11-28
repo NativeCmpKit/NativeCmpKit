@@ -10,16 +10,16 @@ on:
         type: choice
         required: true
         default: all
-        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
+        options: [identity-linux, identity-linux-picker, identity-linux-webview, identity-linux-android, identity-linux-android-recovery, identity-linux-android-webview-device, identity-linux-android-webview-restore, identity-linux-android-ownership, identity-linux-android-remote-io, identity-linux-android-remote-io-cancel, identity-linux-browser, identity-linux-browser-camera, identity-linux-package, identity-linux-arm64-package, identity-linux-consumer, identity-apple, identity-apple-app, identity-apple-ui, identity-apple-ui-pre26, identity-apple-ui-pre26-diagnostic, identity-apple-main-ui, identity-apple-ui-date-range, identity-apple-ui-action-sheet, identity-apple-ui-ipad-popover, identity-apple-ui-ipad-rotation, identity-apple-camera, identity-apple-camera-disposal, identity-apple-ownership, identity-apple-appkit-share, identity-apple-webview, identity-apple-webview-restore, identity-apple-framework, identity-apple-sample, identity-apple-package, identity-apple-intel-package, identity-apple-consumer-package, identity-apple-consumer-desktop-package, identity-windows, identity-windows-share, identity-windows-package, openjfx-source-linux-x64, openjfx-source-linux-arm64, all, picker-jni-macos-domain, native-lock-reproducibility, native-lock-windows-source]
 permissions:
   contents: read
 concurrency:
   group: nativecmpkit-native-${{ github.ref }}-${{ inputs.profile }}
   cancel-in-progress: false
 jobs:
-  openjfx-source-linux-x64:
-    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'openjfx-source-linux-x64'
-    runs-on: ubuntu-24.04
+  openjfx-source-linux:
+    if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && (inputs.profile == 'openjfx-source-linux-x64' || inputs.profile == 'openjfx-source-linux-arm64')
+    runs-on: ${{ inputs.profile == 'openjfx-source-linux-arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     timeout-minutes: 260
     defaults:
       run:
@@ -28,6 +28,7 @@ jobs:
       LC_ALL: C.UTF-8
       TZ: UTC
       SOURCE_DIR: openjfx-source
+      SOURCE_ARCH: ${{ inputs.profile == 'openjfx-source-linux-arm64' && 'arm64' || 'x64' }}
       SOURCE_CHECK: tests/dependency/javafx-http2-cancellation/verify_source_sdk.py
       EVIDENCE_DIR: build/openjfx-source-verification
     steps:
@@ -88,12 +89,12 @@ jobs:
             exit "$status"
           fi
       - name: Inspect SDK binaries and run the real WebView cancellation cases
-        run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR"
+        run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --arch "$SOURCE_ARCH"
       - name: Preserve source-build and cancellation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          name: openjfx-source-linux-x64-${{ github.run_id }}-${{ github.run_attempt }}
+          name: ${{ inputs.profile }}-${{ github.run_id }}-${{ github.run_attempt }}
           if-no-files-found: error
           retention-days: 14
           path: |

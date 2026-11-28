@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import platform
 import shutil
 import subprocess
 import time
@@ -115,7 +116,10 @@ def run_probe(sdk, classes, output, evidence_name, class_name, *options):
     return stdout_file.read_text(encoding="utf-8")
 
 
-def verify_sdk(source, output, lock):
+def verify_sdk(source, output, lock, architecture):
+    expected_cpu, elf_machine = {"x64": ("x86_64", "Advanced Micro Devices X86-64"),
+                                 "arm64": ("aarch64", "AArch64")}[architecture]
+    need(platform.system() == "Linux" and platform.machine() == expected_cpu, "Linux runtime architecture differs")
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
     sdk = source / "build/sdk/lib"
@@ -124,9 +128,13 @@ def verify_sdk(source, output, lock):
     need(all((sdk / f"{module}.jar").is_file() for module in modules), "SDK modules missing")
     need((sdk / "libjfxwebkit.so").is_file(), "The upstream build emitted no native WebKit library")
     native_arch = subprocess.check_output(["readelf", "-h", str(sdk / "libjfxwebkit.so")], timeout=10, text=True)
-    need("Advanced Micro Devices X86-64" in native_arch, "Expected a Linux x86-64 WebKit library")
-    native_inventory = subprocess.check_output(["readelf", "-h", "-d", *(str(path) for path in binaries
-                                                        if path.suffix == ".so")], timeout=60, text=True)
+    need(elf_machine in native_arch, "WebKit architecture differs from its Linux host")
+    native_files = [str(path) for path in binaries if path.suffix == ".so"]
+    native_inventory = subprocess.check_output(["readelf", "-h", "-d", "--version-info", *native_files],
+                                               timeout=60, text=True)
+    machine_rows = [line for line in native_inventory.splitlines() if line.strip().startswith("Machine:")]
+    need(len(machine_rows) == len(native_files) and all(elf_machine in line for line in machine_rows),
+         "An SDK native library uses the wrong architecture")
     bytecode = subprocess.check_output(["javap", "-p", "-c", "-classpath", str(sdk / "javafx.web.jar"),
                                         "com.sun.webkit.network.HTTP2Loader"], timeout=15, text=True)
     cancel_method = bytecode.split("public void fwkCancel();", 1)[1].split("private void callBackIfNotCanceled", 1)[0]
@@ -163,6 +171,7 @@ if __name__ == "__main__":
     parser.add_argument("operation", choices=["prepare", "verify"])
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--arch", choices=["x64", "arm64"], default="x64")
     parser.add_argument("--materials", type=Path, help="Verify pre-fetched copies of the pinned build materials")
     options = parser.parse_args()
     checkout, evidence = options.source.resolve(strict=True), options.output.absolute()
@@ -170,4 +179,4 @@ if __name__ == "__main__":
     if options.operation == "prepare":
         prepare(checkout, evidence, pin, options.materials)
     else:
-        verify_sdk(checkout, evidence, pin)
+        verify_sdk(checkout, evidence, pin, options.arch)
