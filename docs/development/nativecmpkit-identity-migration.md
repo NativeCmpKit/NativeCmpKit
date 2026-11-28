@@ -31,6 +31,9 @@ host, browser, package staging, iOS simulator and UIKit application scopes. Hist
 profiles require separate results. The identity profiles do not issue an
 offline-tooling reuse certificate.
 
+The [physical-device checklist](../testing/nativecmpkit-physical-device-verification.md)
+covers manual Android, iPhone and iPad release verification.
+
 The API 35 remote IO cancellation fixture opens the granted tree URI through
 `ContentProviderClient.openFile`. Android 15 routes a read-only
 `ContentResolver.openFileDescriptor` call through a wildcard typed-open path
