@@ -1,6 +1,9 @@
 package io.github.apdelrahman1911.nativecmpkit.consumer
 
 import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcons
+import io.github.apdelrahman1911.nativecmpkit.geo.LatLng
+import io.github.apdelrahman1911.nativecmpkit.geo.Location
+import io.github.apdelrahman1911.nativecmpkit.navigation.AdaptiveNavHostController
 import io.github.apdelrahman1911.nativecmpkit.permissions.*
 import io.github.apdelrahman1911.nativecmpkit.picker.*
 import io.github.apdelrahman1911.nativecmpkit.share.*
@@ -70,5 +73,30 @@ class PublishedCommonContractTest {
         assertTrue(CupertinoIcons.house in 0..0xffff)
         assertNotEquals(CupertinoIcons.house, CupertinoIcons.heartFill)
         assertNotNull(consumeCoilFactory())
+    }
+
+    @Test fun navigationRetainsIndependentVisitsAndPopsTheCurrentEntry() {
+        val navigation = AdaptiveNavHostController()
+        navigation.navigate("home")
+        navigation.navigateWithValues("detail", mapOf("id" to 3))
+        navigation.navigateWithValues("detail", mapOf("id" to 7))
+        val visits = navigation.backStackEntries
+        assertEquals(listOf("home", "detail", "detail"), visits.map { it.route })
+        assertNotEquals(visits[1].id, visits[2].id)
+        assertEquals(7, navigation.currentBackStackEntry?.arguments?.get("id"))
+        assertTrue(navigation.popBackStack())
+        assertEquals("detail", navigation.currentDestination)
+        assertEquals(3, navigation.currentBackStackEntry?.arguments?.get("id"))
+        assertTrue(navigation.popBackStack())
+        assertEquals("home", navigation.currentDestination)
+        assertFalse(navigation.popBackStack())
+    }
+
+    @Test fun geoCoordinatesValidateAndMeasureAcrossTheAntimeridian() {
+        val start = LatLng.validated(0.0, 179.0)
+        val end = LatLng.normalized(0.0, 181.0)
+        assertEquals(Location(LatLng(0.0, -179.0), 8.0), Location(end, 8.0))
+        assertTrue(assertNotNull(start.distanceToOrNull(end)) in 222.0..223.0)
+        assertNull(start.distanceToOrNull(LatLng(91.0, 0.0)))
     }
 }

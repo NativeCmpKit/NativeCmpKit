@@ -62,10 +62,24 @@
       "publication_status": "unpublished"
     },
     {
+      "source_directory": "nativecmpkit-geo",
+      "gradle_project": ":nativecmpkit-geo",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-geo",
+      "publication_status": "unpublished"
+    },
+    {
       "source_directory": "nativecmpkit-io",
       "gradle_project": ":nativecmpkit-io",
       "new_group": "io.github.apdelrahman1911.nativecmpkit",
       "new_artifact": "nativecmpkit-io",
+      "publication_status": "unpublished"
+    },
+    {
+      "source_directory": "nativecmpkit-navigation",
+      "gradle_project": ":nativecmpkit-navigation",
+      "new_group": "io.github.apdelrahman1911.nativecmpkit",
+      "new_artifact": "nativecmpkit-navigation",
       "publication_status": "unpublished"
     },
     {

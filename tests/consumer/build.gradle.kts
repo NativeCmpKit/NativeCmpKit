@@ -45,7 +45,7 @@ val candidateGroup = "io.github.apdelrahman1911.nativecmpkit"
 // This list is deliberately independent of the producer's project model. The static validator
 // reconciles it with the identity map, so removing an artifact cannot silently shrink the test.
 val candidateModules = listOf(
-    "camera-picker", "core", "cupertino-icons", "file-picker", "file-picker-coil", "io",
+    "camera-picker", "core", "cupertino-icons", "file-picker", "file-picker-coil", "geo", "io", "navigation",
     "permissions", "permissions-background-location", "permissions-bluetooth", "permissions-calendar",
     "permissions-camera", "permissions-contacts", "permissions-core", "permissions-gallery",
     "permissions-location", "permissions-microphone", "permissions-notifications", "permissions-wifi",
@@ -302,7 +302,7 @@ val nativePackagePreflight = if ("desktop" in consumerTargets) tasks.register<Ex
         if (consumerTestFocus == "native") {
             check(!focusedNativeResults.get().asFile.exists()) { "Focused native XML directory must be fresh for this invocation" }
         }
-        // The default module list is all21. No dirty diagnostic or reduced-root
+        // The default module list covers every publication. No dirty diagnostic or reduced-root
         // switch may bypass native/notice/material gates in this readiness path.
         commandLine(nativePython.get(), checker.absolutePath,
             "--source-root", sourceRoot.absolutePath, "--repository", candidateRepository.absolutePath,

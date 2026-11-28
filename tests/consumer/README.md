@@ -1,7 +1,7 @@
 # Independent package consumer and release checks
 
 This is **not a sample application or an included producer project**. It resolves
-all 21 published nativeCmpkit module roots from an explicitly supplied **local
+all 23 NativeCmpKit candidate publication roots from an explicitly supplied **local
 Maven repository**. It never uses `project(...)`, `includeBuild`, `mavenLocal`, a
 producer source directory, or a remote fallback for the nativeCmpkit group.
 Missing artifacts must fail. Third-party dependencies still come from Google,
@@ -16,9 +16,9 @@ in [`docs/development/evidence/`](../../docs/development/evidence/).
 | Check | What it does | What it does not prove |
 |---|---|---|
 | `verify_artifacts.py` | POM/module identity, exact internal versions, target redirects, file hashes/sizes, safe archives, notices, no duplicate desktop classes, native byte/header/independent revision/clean-producer contract | Correct runtime behavior, trusted-builder attestation, signing identity, legal clearance, release readiness |
-| `verifyCandidateResolution` | Resolves selected classpaths to all 21 Maven roots; rejects original Calf/project substitutions | Any function was executed |
-| `PublicApiConsumer.kt` | Compiles representative public Compose/Coil/core/IO/picker/camera/share/WebView and every modular permission API; retains exhaustive legacy sealed consumers | Rendering, permission prompts, launch/dismiss or all API/ABI compatibility |
-| `PublishedCommonContractTest` | Eight executable packaged value/identity/default/API-linking tests | Native feature parity |
+| `verifyCandidateResolution` | Resolves all 23 Maven roots on the selected classpaths and rejects project substitution | Runtime behavior |
+| `PublicApiConsumer.kt` and `PublishedAndroidBindings.kt` | Compile representative library APIs, including the Navigation host and Geo tracker. The Android probe exercises dependency resolution for AndroidX navigation and the public Geo binding types | Native rendering, permissions, or exhaustive ABI coverage |
+| `PublishedCommonContractTest` | Ten packaged value, API-linking and state tests, including Geo coordinates and Navigation back-stack entries | Native feature parity |
 | `PublishedIoConsumerTest` | Six real filesystem/stream boundary, empty, Unicode, independent-concurrency and repeated-close tests | iOS security scope, Android providers, native save-dialog outcomes, exhaustive leak/sanitizer campaign |
 | `PublishedNativeConsumerTest` | Three tests require exact staged loaded-bridge JAR names/hashes and same-owning-JAR native resources, then initialize bridges, query native share capability and create/destroy 100 valid picker configurations | Displaying/cancelling a dialog, real AppKit sharing, stale/invalid handles, physical device behavior; the full packaged run is still pending |
 | `verifyNativeConsumerResults` / `verify_native_test_results.py` | Native-only focus requires a fresh invocation directory and exactly the three original class/method identities, zero fail/error/skip and no foreign XML; preserves original JVM assertions | Synthetic XML/source controls are not actual JNI execution, binary authenticity, native minima or release readiness; actual Gradle/finalizer wiring is pending |
@@ -26,9 +26,8 @@ in [`docs/development/evidence/`](../../docs/development/evidence/).
 | `binary_linkage.py` | Compiles a six-case Java fixture against source-bound baseline JARs; runs unchanged class bytes on baseline and staged artifacts, or explicitly separate receipt-bound local-JAR diagnostics | Complete Kotlin/default/inline/Compose or non-JVM ABI certification; two local candidates passed 6 cases / 31 assertions, but staged Maven execution remains pending |
 | `collect_native_licenses.py` | Raw texts from checksum-verified public `.crate` archives; optional explicit reviewed pinned-VCS missing-text supplements retain exact origin/proofs | Signed authenticity, native functionality, or a legal determination that every obligation has been discharged |
 
-There are **17 intended desktop test methods**, reusing the eight common methods
-on other selected targets. Do not call 17 functions plus repeats on three targets
-four independent libraries. Native test reflection intentionally crosses Kotlin
+There are **19 intended desktop test methods**, including the ten common methods
+also exercised on each selected mobile and browser target. Native test reflection intentionally crosses Kotlin
 `internal` to verify retained JNI entry points from a real external artifact.
 The test JVM has `-Xcheck:jni`, a task-owned empty `java.library.path`, and an
 isolated user home; an installed old binary must not satisfy the test.
@@ -41,8 +40,8 @@ actual loaded-class JAR-origin/hash method. Finite `consumer-core-io` verificati
 stages four actual publications and copies that fixture independently; all seven
 named methods/two fresh XML, four exact resolved classpaths and source/staging/
 runtime bindings are mandatory. No project/composite/source/old-NativeCmpKit/Maven-local
-or remote candidate-group fallback is allowed. The full21-root build/settings
-and17-method inventory above remain unchanged and unexecuted.
+or remote candidate-group fallback is allowed. The records for this diagnostic
+cover its two selected publication roots.
 
 At [the contained2026-10-27 checkpoint](../../docs/development/checkpoint-consumer-uikit-20261027.md),
 the adapter/Kotlin consumer remains uncompiled/unexecuted. Scoped201 Python
@@ -97,10 +96,10 @@ methods on one intended host**:
 ```
 
 This is the **prepared task contract, not an executed Gradle/JNI pass**. The
-fixture still resolves all21 roots and compiles the original public consumer;
-the focus does not reduce dependencies or modify any of the original17 methods.
-Omit `nativecmpkitConsumerTestFocus=native` and use `desktopTest` for the original
-17-method inventory, with the same independent producer properties. Do not
+fixture resolves all 23 roots and compiles the public API probes. The native
+focus selects the original three JNI methods. Omit
+`nativecmpkitConsumerTestFocus=native` and use `desktopTest` for the full
+19-method inventory, with the same independent producer properties. Do not
 replay accepted methods merely to fill a report; the lead checks applicability.
 
 Every desktop Test now depends on `verifyCandidateNativePackages`, which first
@@ -169,7 +168,7 @@ python3 tests/consumer/verify_artifacts.py \
 
 The static command is a **partial Linux/desktop scope**, not a release pass. It
 still checks every publication root. Omit target/native-platform filters for the
-full static 21 × 7-coordinate / five-native-slot matrix, after all host artifacts
+full static 23 × 7-coordinate / five-native-slot matrix, after all host artifacts
 are assembled. Timestamped SNAPSHOT repositories are deliberately excluded from
 the static release check; use an exact non-SNAPSHOT local candidate version.
 

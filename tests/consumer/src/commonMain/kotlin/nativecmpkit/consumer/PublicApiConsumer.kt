@@ -7,8 +7,12 @@ import io.github.apdelrahman1911.nativecmpkit.core.ExperimentalNativeCmpKitApi
 import io.github.apdelrahman1911.nativecmpkit.core.PlatformContext
 import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcon
 import io.github.apdelrahman1911.nativecmpkit.cupertino.icons.CupertinoIcons
+import io.github.apdelrahman1911.nativecmpkit.geo.LocationTracker
+import io.github.apdelrahman1911.nativecmpkit.geo.createLocationTracker
 import io.github.apdelrahman1911.nativecmpkit.io.KmpFile
 import io.github.apdelrahman1911.nativecmpkit.io.source
+import io.github.apdelrahman1911.nativecmpkit.navigation.AdaptiveNavHost
+import io.github.apdelrahman1911.nativecmpkit.navigation.rememberAdaptiveNavController
 import io.github.apdelrahman1911.nativecmpkit.permissions.*
 import io.github.apdelrahman1911.nativecmpkit.picker.*
 import io.github.apdelrahman1911.nativecmpkit.picker.coil.KmpFileFetcher
@@ -39,6 +43,15 @@ fun PublicApiConsumer(onFile: (KmpFile) -> Unit) {
 // Public RawSource must be consumable via the IO artifact's API dependency.
 suspend fun consumeStream(file: KmpFile, context: PlatformContext): RawSource = file.source(context)
 fun consumeCoilFactory(): Fetcher.Factory<KmpFile> = KmpFileFetcher.Factory()
+
+@Composable
+fun consumePublishedNavigationHost() {
+    AdaptiveNavHost(rememberAdaptiveNavController(), startDestination = "home") {
+        composable("home") {}
+    }
+}
+
+fun consumePublishedLocationTracker(): LocationTracker = createLocationTracker()
 
 fun allModularPermissions(): List<Permission> = listOf(
     Permission.Camera, Permission.Gallery, Permission.ReadImage, Permission.ReadVideo,

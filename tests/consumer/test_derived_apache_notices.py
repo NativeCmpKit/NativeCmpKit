@@ -28,17 +28,22 @@ UI_ROOT = "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecm
 COMMON_SLIDER = "nativecmpkit-ui/src/commonMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/slider/CupertinoSlider.kt"
 COMMON_SLIDER_ADDITION = "6eb7c66eb01b390353100c63882cd102846c7b8d"
 COMMON_SLIDER_PARENT = "94d2492e99d5cbc060409d94d9f88febd06222d5"
+ARCHIVED_NAMESPACE = json.loads((gate.ROOT / "docs/migration/identity.json").read_text())["public_kotlin_namespace"]
+ARCHIVED_PREFIX = ARCHIVED_NAMESPACE.rsplit(".", 1)[-1]
+ARCHIVED_NAV_ROOT = f"{ARCHIVED_PREFIX}-navigation/src/commonMain/kotlin/{ARCHIVED_NAMESPACE}/navigation/"
+ARCHIVED_UI_ROOT = f"{ARCHIVED_PREFIX}-ui/src/iosMain/kotlin/{ARCHIVED_NAMESPACE.replace('.', '/')}/ui/"
+ARCHIVED_COMMON_SLIDER = ARCHIVED_UI_ROOT.replace("/iosMain/", "/commonMain/") + "slider/CupertinoSlider.kt"
 INTRODUCTIONS = {
-    **{NAV_ROOT + name + ".kt": ("9e1b08df630cea4ed29aeca63a44847154b45a90", NAV_ROOT + name + ".kt")
+    **{ARCHIVED_NAV_ROOT + name + ".kt": ("9e1b08df630cea4ed29aeca63a44847154b45a90", ARCHIVED_NAV_ROOT + name + ".kt")
        for name in ("NavArgument", "AdaptiveNavType", "AdaptiveBaseBundle", "AdaptiveBundle")},
-    UI_ROOT + "slider/CupertinoSlider.kt": ("fce1638c011f1d5528cbf0c833bee44b64a97e90", UI_ROOT + "slider/CupertinoSlider.kt"),
-    UI_ROOT + "button/LiquidGlassButton.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210", UI_ROOT + "button/LiquidGlassButton.kt"),
-    UI_ROOT + "slider/LiquidGlassSlider.kt": ("fce1638c011f1d5528cbf0c833bee44b64a97e90", UI_ROOT + "slider/LiquidGlassSlider.kt"),
-    UI_ROOT + "utils/DragGestureInspector.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
-        "nativecmpkit-ui/src/iosArm64Main/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/DragGestureInspector.kt"),
-    UI_ROOT + "utils/DampedDragAnimation.kt": ("01a070e9866fd7cb97424f1d09249378cdec0c28", UI_ROOT + "utils/DampedDragAnimation.kt"),
-    UI_ROOT + "utils/InteractiveHighlight.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
-        "nativecmpkit-ui/src/iosArm64Main/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/button/InteractiveHighlight.kt"),
+    ARCHIVED_UI_ROOT + "slider/CupertinoSlider.kt": ("fce1638c011f1d5528cbf0c833bee44b64a97e90", ARCHIVED_UI_ROOT + "slider/CupertinoSlider.kt"),
+    ARCHIVED_UI_ROOT + "button/LiquidGlassButton.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210", ARCHIVED_UI_ROOT + "button/LiquidGlassButton.kt"),
+    ARCHIVED_UI_ROOT + "slider/LiquidGlassSlider.kt": ("fce1638c011f1d5528cbf0c833bee44b64a97e90", ARCHIVED_UI_ROOT + "slider/LiquidGlassSlider.kt"),
+    ARCHIVED_UI_ROOT + "utils/DragGestureInspector.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
+        ARCHIVED_UI_ROOT.replace("/iosMain/", "/iosArm64Main/") + "button/DragGestureInspector.kt"),
+    ARCHIVED_UI_ROOT + "utils/DampedDragAnimation.kt": ("01a070e9866fd7cb97424f1d09249378cdec0c28", ARCHIVED_UI_ROOT + "utils/DampedDragAnimation.kt"),
+    ARCHIVED_UI_ROOT + "utils/InteractiveHighlight.kt": ("caff0465ffd5ffc23741d5e4f21015bceda8a210",
+        ARCHIVED_UI_ROOT.replace("/iosMain/", "/iosArm64Main/") + "button/InteractiveHighlight.kt"),
 }
 APACHE_BODY = ''' * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +107,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
 
     def test_introduction_trace_matches_retained_added_paths_blobs_and_authors(self):
         history = json.loads((gate.ROOT / "licenses/derived-apache-introduction-history.json").read_text())
-        self.assertEqual(BASELINE, history["reviewed_nativecmpkit_baseline"])
+        self.assertEqual(BASELINE, history[f"reviewed_{ARCHIVED_PREFIX}_baseline"])
         self.assertFalse(history["source_history_rewritten"])
         self.assertFalse(history["exact_original_copy_revisions_established"])
         records = {record["baseline_source_path"]: record for record in history["records"]}
@@ -113,7 +118,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
             with self.subTest(source=baseline_path):
                 self.assertEqual(commit, record["introduction_commit"])
                 self.assertEqual(introduced_path, record["introduced_source"]["path"])
-                current_path = COMMON_SLIDER if baseline_path == UI_ROOT + "slider/CupertinoSlider.kt" else baseline_path
+                current_path = ARCHIVED_COMMON_SLIDER if baseline_path == ARCHIVED_UI_ROOT + "slider/CupertinoSlider.kt" else baseline_path
                 self.assertEqual(current_path, record["current_source_path"])
                 # Only fixed commits/paths above reach Git; JSON cannot inject options.
                 self.assertEqual("A\t" + introduced_path,
@@ -137,21 +142,21 @@ class DerivedApacheSourceTest(unittest.TestCase):
         # This later path replacement is not rewritten into a Git rename or
         # an original third-party copy revision. Its fixed retained objects
         # independently establish the commonMain A / historical iosMain D.
-        baseline_path = UI_ROOT + "slider/CupertinoSlider.kt"
+        baseline_path = ARCHIVED_UI_ROOT + "slider/CupertinoSlider.kt"
         transition = records[baseline_path]["post_baseline_path_transition"]
         self.assertEqual(COMMON_SLIDER_ADDITION, transition["commit"])
         self.assertEqual(COMMON_SLIDER_PARENT, transition["parent_commit"])
         self.assertFalse(transition["git_follow_reports_rename"])
         self.assertTrue(transition["reviewed_baseline_is_ancestor"])
         self.assertEqual(b"", git_bytes("merge-base", "--is-ancestor", BASELINE, COMMON_SLIDER_ADDITION))
-        self.assertEqual([{"status": "A", "paths": [COMMON_SLIDER]},
+        self.assertEqual([{"status": "A", "paths": [ARCHIVED_COMMON_SLIDER]},
                           {"status": "D", "paths": [baseline_path]}], transition["path_events"])
-        self.assertEqual("A\t" + COMMON_SLIDER + "\nD\t" + baseline_path,
+        self.assertEqual("A\t" + ARCHIVED_COMMON_SLIDER + "\nD\t" + baseline_path,
             git_bytes("diff-tree", "--no-commit-id", "--name-status", "-r", "-M",
-                COMMON_SLIDER_ADDITION, "--", COMMON_SLIDER, baseline_path).decode().strip())
-        self.assertEqual([COMMON_SLIDER_ADDITION, "", "A\t" + COMMON_SLIDER],
+                COMMON_SLIDER_ADDITION, "--", ARCHIVED_COMMON_SLIDER, baseline_path).decode().strip())
+        self.assertEqual([COMMON_SLIDER_ADDITION, "", "A\t" + ARCHIVED_COMMON_SLIDER],
             git_bytes("log", "--follow", "--name-status", "--format=%H",
-                COMMON_SLIDER_ADDITION, "--", COMMON_SLIDER).decode().strip().splitlines())
+                COMMON_SLIDER_ADDITION, "--", ARCHIVED_COMMON_SLIDER).decode().strip().splitlines())
         metadata = git_bytes("show", "--no-patch", "--format=%H%x00%an%x00%aI%x00%cn%x00%cI%x00%P%x00%s",
             COMMON_SLIDER_ADDITION).decode().rstrip("\n").split("\0")
         self.assertEqual(COMMON_SLIDER_ADDITION, metadata[0])
@@ -165,7 +170,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
         self.assertEqual({"name": metadata[3], "timestamp": metadata[4]}, transition["committer"])
         self.assertEqual(metadata[6], transition["subject"])
         for revision, path, facts in ((COMMON_SLIDER_PARENT, baseline_path, transition["parent_ios_source"]),
-            (COMMON_SLIDER_ADDITION, COMMON_SLIDER, transition["added_common_source"])):
+            (COMMON_SLIDER_ADDITION, ARCHIVED_COMMON_SLIDER, transition["added_common_source"])):
             self.assertEqual(path, facts["path"])
             self.assertEqual(git_bytes("rev-parse", revision + ":" + path).decode().strip(), facts["git_blob_oid"])
             source = git_bytes("show", revision + ":" + path)
@@ -176,7 +181,7 @@ class DerivedApacheSourceTest(unittest.TestCase):
         history = json.loads((gate.ROOT / "licenses/derived-apache-introduction-history.json").read_text())
         records = {record["baseline_source_path"]: record for record in history["records"]}
         for name, rename_status in (("DragGestureInspector", "R098"), ("InteractiveHighlight", "R096")):
-            baseline_path = UI_ROOT + "utils/" + name + ".kt"
+            baseline_path = ARCHIVED_UI_ROOT + "utils/" + name + ".kt"
             commit, introduced_path = INTRODUCTIONS[baseline_path]
             record = records[baseline_path]
             with self.subTest(source=name):
@@ -314,41 +319,18 @@ class DerivedApacheArtifactTest(unittest.TestCase):
         self.temporary.cleanup()
 
     def verifier(self, module, target="metadata"):
-        if module != "nativecmpkit-navigation":
-            return gate.ArtifactVerifier(gate.ROOT, self.repository, self.VERSION,
-                modules=[module], targets=[target])
-        # NAV is an unpublished experiment, not one of the 21 publication roots.
-        # Model its future archive policy without changing the real allowlist or
-        # mocking archive/metadata parsing and checks after construction.
-        identity_bytes = (gate.ROOT / "docs/migration/current-identity.json").read_bytes()
-        identity = gate.load_json_bytes(identity_bytes)
-        self.assertNotIn(module, {item["new_artifact"] for item in identity["modules"]})
-        fixture_identity = {**identity, "modules": [*identity["modules"],
-            {"new_artifact": module, "publication_status": "synthetic-fixture-only"}]}
-        with mock.patch.object(gate, "load_json_bytes", return_value=fixture_identity) as load_identity:
-            verifier = gate.ArtifactVerifier(gate.ROOT, self.repository, self.VERSION,
-                modules=[module], targets=[target])
-            load_identity.assert_called_once_with(identity_bytes)
-        return verifier
+        return gate.ArtifactVerifier(gate.ROOT, self.repository, self.VERSION,
+            modules=[module], targets=[target])
 
-    def test_navigation_model_identity_is_scoped_and_default_rejection_remains(self):
-        parser = gate.load_json_bytes
-        identity_path = gate.ROOT / "docs/migration/current-identity.json"
-        original = identity_path.read_bytes()
+    def test_published_navigation_keeps_derived_notice_checks_and_unknown_roots_are_refused(self):
         declared = self.verifier("nativecmpkit-ui").all_modules
-        self.assertEqual(21, len(declared))
-        self.assertNotIn("nativecmpkit-navigation", declared)
-        for phase in ("before", "after"):
-            if phase == "after":
-                fixture = self.verifier("nativecmpkit-navigation")
-                self.assertEqual(set(declared) | {"nativecmpkit-navigation"}, set(fixture.all_modules))
-                self.assertIs(parser, gate.load_json_bytes)
-            for module in ("nativecmpkit-navigation", "nativecmpkit-fixture-unknown"):
-                with self.subTest(phase=phase, module=module):
-                    with self.assertRaisesRegex(gate.InvalidArtifact, "Unknown selected module"):
-                        gate.ArtifactVerifier(gate.ROOT, self.repository, self.VERSION,
-                            modules=[module], targets=["metadata"])
-        self.assertEqual(original, identity_path.read_bytes())
+        self.assertEqual(23, len(declared))
+        self.assertIn("nativecmpkit-geo", declared)
+        navigation = self.verifier("nativecmpkit-navigation")
+        self.assertEqual(set(declared), set(navigation.all_modules))
+        self.assertTrue(navigation.expected_derived_apache_sources["nativecmpkit-navigation"])
+        with self.assertRaisesRegex(gate.InvalidArtifact, "Unknown selected module"):
+            self.verifier("nativecmpkit-fixture-unknown")
 
     @staticmethod
     def applicable_sources(verifier, module, target):
@@ -444,6 +426,8 @@ class DerivedApacheArtifactTest(unittest.TestCase):
             for target, kind in (("metadata", "jar"), ("desktop", "jar"), ("android", "aar")):
                 verifier = self.verifier(module, target)
                 entries = self.notices(verifier, module)
+                if kind == "aar":
+                    entries["classes.jar"] = archive_bytes({})
                 with self.subTest(module=module, target=target):
                     self.assert_passes(self.inspect(module, target, kind, entries))
                     entry = gate.NOTICE_PREFIX + "nativecmpkit-" + module.removeprefix("nativecmpkit-") + "/licenses/androidx-aosp-NOTICE.txt"
@@ -480,6 +464,7 @@ class DerivedApacheArtifactTest(unittest.TestCase):
 <modelVersion>4.0.0</modelVersion><groupId>{gate.GROUP}</groupId><artifactId>{module}</artifactId><version>{self.VERSION}</version>
 <name>NativeCmpKit - {module.removeprefix("nativecmpkit-")}</name><url>{gate.DESTINATION}</url>
 <licenses><license><name>Apache-2.0</name></license></licenses><scm><url>{gate.DESTINATION}</url></scm>
+<issueManagement><url>{gate.DESTINATION}/issues</url></issueManagement>
 <developers><developer><id>Apdelrahman1911</id></developer><developer><id>MohamedRejeb</id></developer></developers></project>''')
         # Deliberately omit a sources variant: the owning runner must independently
         # require the publication's source JAR, not rely on producer-selected variants.

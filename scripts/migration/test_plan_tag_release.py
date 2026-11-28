@@ -9,11 +9,10 @@ from plan_tag_release import MAVEN_GROUP, ROOT, publication_roots, tag_version
 class TagPreflightTests(unittest.TestCase):
     def test_current_roots_match_the_in_scope_gradle_publications(self):
         roots = publication_roots(ROOT)
-        self.assertEqual(21, len(roots))
-        for module in ("core", "file-picker", "permissions-location", "share", "webview"):
+        self.assertEqual(23, len(roots))
+        for module in ("core", "file-picker", "geo", "navigation", "permissions-location", "share", "webview"):
             self.assertIn(f"{MAVEN_GROUP}:nativecmpkit-{module}", roots)
-        for module in ("geo", "maps", "navigation"):
-            self.assertNotIn(f"{MAVEN_GROUP}:nativecmpkit-{module}", roots)
+        self.assertNotIn(f"{MAVEN_GROUP}:nativecmpkit-maps", roots)
 
     def test_configured_root_drift_refuses_even_if_the_manifest_is_valid(self):
         with tempfile.TemporaryDirectory() as directory:

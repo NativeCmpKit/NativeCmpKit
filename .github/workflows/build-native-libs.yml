@@ -615,9 +615,9 @@ jobs:
           from pathlib import Path
 
           reports = json.loads(Path(sys.argv[1]).read_text())["by_task"]
-          expected = {"desktopTest": 17}
+          expected = {"desktopTest": 19}
           if sys.argv[2] == "identity-apple-consumer-package":
-              expected.update(testAndroidHostTest=8, jsBrowserTest=8, wasmJsBrowserTest=8, iosSimulatorArm64Test=8)
+              expected.update(testAndroidHostTest=10, jsBrowserTest=10, wasmJsBrowserTest=10, iosSimulatorArm64Test=10)
           elif sys.argv[2] != "identity-apple-consumer-desktop-package":
               raise SystemExit("Unsupported Apple consumer profile")
           if set(reports) != set(expected) or any(

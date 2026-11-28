@@ -4,7 +4,7 @@
 KEY_WAIT_PANIC_LINE = 67
 
 APPKIT_INPUTS = {
-    ".github/workflows/build-native-libs.yml": "23a6ea867de9baebd67c5263fd0e61ad494ce4aac8dc0eafe567617f264d272e",
+    ".github/workflows/build-native-libs.yml": "2c2061fb70870bcd8f019b61c79c32ede2dd68e7dc3ef097fc109098e1bce3d4",
     ".github/workflows/gradle.yml": "370e60e916226e7d019e8e1135e61d639e77370c6975867b4e93dd0f2b4c576c",
     "convention-plugins/src/main/kotlin/NativeLibraries.kt": "45d4651e7f3a9532917ac87997ab9f011ec80ed12397f6586eee231233b6de79",
     "docs/testing/macos-share-key-wait-observation.md": "539efcfa88bc0e4f5e5b16bae07b2ec8303b0f3c27f73ab00efec62463aa8ee1",

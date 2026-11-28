@@ -903,7 +903,7 @@ def main() -> int:
     parser.add_argument("--repository", type=Path, required=True)
     parser.add_argument("--version", required=True)
     parser.add_argument("--source-root", type=Path, default=ROOT)
-    parser.add_argument("--module", action="append", help="Explicit partial scope; defaults to all 21 identity modules")
+    parser.add_argument("--module", action="append", help="Explicit partial scope; defaults to all publication roots in the identity manifest")
     parser.add_argument("--target", action="append", choices=list(TARGET_SUFFIXES), help="Explicit partial scope; metadata always included")
     parser.add_argument("--native-platform", action="append", choices=NATIVE_PLATFORMS, help="Explicit partial scope; defaults to all five intended slots")
     parser.add_argument("--expected-native-revision", help="Independent reviewed producer commit, required for native desktop inspection; never read from a candidate manifest")

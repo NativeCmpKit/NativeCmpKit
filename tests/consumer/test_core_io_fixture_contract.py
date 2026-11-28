@@ -30,7 +30,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
 
     def test_stream_scenario_uses_the_public_api_not_an_excluded_full_consumer_helper(self):
         # The partial fixture has no commonMain helper sources. Do not add a
-        # fake library API or pull unrelated 21-module consumer source into it.
+        # fake library API or pull unrelated full-consumer source into it.
         for path in (FIXTURE / IO_TEST, ROOT / "tests/consumer/src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt"):
             with self.subTest(path=path.relative_to(ROOT).as_posix()):
                 source = path.read_text()
@@ -41,7 +41,7 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         files = sorted(p.relative_to(FIXTURE).as_posix() for p in (FIXTURE / "src").rglob("*") if p.is_file())
         self.assertEqual(["src/test/kotlin/nativecmpkit/consumer/PublishedArtifactOriginTest.kt", IO_TEST.as_posix()], files)
 
-    def test_fixed_two_root_scope_does_not_shrink_the_original21_root_gate(self):
+    def test_fixed_two_root_scope_does_not_shrink_the_full_publication_gate(self):
         build = self.code("build.gradle.kts")
         self.assertIn('val candidateRoots = listOf("nativecmpkit-core", "nativecmpkit-io")', build)
         full = (ROOT / "tests/consumer/build.gradle.kts").read_text()
@@ -50,7 +50,8 @@ class CoreIoFixtureContractTest(unittest.TestCase):
         names = set(re.findall(r'"([a-z0-9-]+)"', selected.group(1)))
         identity = json.loads((ROOT / "docs/migration/current-identity.json").read_bytes())
         expected = {x["new_artifact"].removeprefix("nativecmpkit-") for x in identity["modules"]}
-        self.assertEqual(21, len(names))
+        self.assertEqual(23, len(names))
+        self.assertTrue({"geo", "navigation"} <= names)
         self.assertEqual(expected, names)
 
     def test_candidate_group_remains_exclusive_to_an_absolute_existing_repository(self):
@@ -139,16 +140,20 @@ class CoreIoFixtureContractTest(unittest.TestCase):
                 self.assertNotIn("val digest = java.security.", source)
         self.assertIn("val candidateRepository = File(", self.code("build.gradle.kts"))
 
-    def test_metadata_to_maven_binding_is_identical_in_partial_and_full_fixtures(self):
+    def test_partial_and_full_fixtures_bind_metadata_to_the_exact_staged_bytes(self):
         sources = [(FIXTURE / 'build.gradle.kts').read_text(), (ROOT / 'tests/consumer/build.gradle.kts').read_text()]
-        helpers = [source.split('fun bindCandidateArtifact(', 1)[1].split('\n}\n', 1)[0] for source in sources]
-        self.assertEqual(helpers[0], helpers[1])
-        for expression in ('declaredName in setOf(canonicalName, producerName)', 'declared["url"] == canonicalName',
-                           'id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata"',
-                           'resolved.name in setOf(declaredName, canonicalName)',
-                           '"staged_file" to stagedRelative', '"metadata_sha256" to artifactSha256(metadataFile)',
-                           'artifactSha256(staged) == hash', 'primaryBindings.size == 1'):
-            self.assertIn(expression, helpers[0])
+        partial, full = [source.split('fun bindCandidateArtifact(', 1)[1].split('\n}\n', 1)[0]
+                         for source in sources]
+        for helper in (partial, full):
+            for expression in ('declared["url"]', 'id.module == root && attributes["org.gradle.usage"] == "kotlin-metadata"',
+                               'resolved.name in setOf(declaredName, canonicalName)',
+                               '"staged_file" to stagedRelative', '"metadata_sha256" to artifactSha256(metadataFile)',
+                               'artifactSha256(staged) == hash', 'declared["sha256"] == hash'):
+                self.assertIn(expression, helper)
+        self.assertIn('declaredName in setOf(canonicalName, producerName)', partial)
+        self.assertIn('primaryBindings.size == 1', partial)
+        self.assertIn('declaredName in allowedNames', full)
+        self.assertIn('bindings.size == 1', full)
 
     def test_partial_resolution_and_loaded_class_names_follow_actual_declared_metadata(self):
         build = self.code('build.gradle.kts')

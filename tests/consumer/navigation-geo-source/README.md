@@ -1,9 +1,9 @@
-# Unpublished navigation/geo common consumer
+# Navigation and Geo source consumer
 
-This standalone Gradle project consumes only the public common APIs of the two
-**unpublished experiments**, through two explicit composite substitutions to this
-checkout. It is **source integration**, never packaged Maven/ABI/release evidence.
-The existing independent packaged consumers are unchanged.
+This standalone Gradle project checks the public Navigation and Geo APIs through
+two explicit composite substitutions to this checkout. It exercises source
+integration. The [independent package consumer](../README.md) resolves both
+modules from the staged Maven repository.
 
 The single common file typechecks both adaptive factories, the public host,
 the deliberately different legacy platform bridge, and geo's common factory,

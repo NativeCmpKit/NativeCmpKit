@@ -29,6 +29,7 @@ CONSUMER_FILES = (
     "verify_artifacts.py", "native_license_supplements.py", "native_license_legacy_winapi.py",
     "native_license_objc2_material.py", "native_license_material_v2.py",
     "collect_native_licenses.py", "verify_native_test_results.py",
+    "src/androidMain/kotlin/nativecmpkit/consumer/PublishedAndroidBindings.kt",
     "src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt",
     "src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt",
     "src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt",
@@ -44,13 +45,14 @@ MAX_RECEIPT_BYTES = 64 * 1024
 METADATA_ORIGIN_REVISION = "7d6b6d5b43f93ae085dc66a3377b3c7967400bf7"
 SCOPE = "Independent full consumer source/checker carriage with inert exact original schema3 context; not execution or readiness"
 
-# Preserve the renamed full 21-root configuration and the complete 17-method suite.
+# Bind the complete publication scope, public API probes, and test methods.
 PRESERVED_CONSUMER_INPUTS = MappingProxyType({
-    'build.gradle.kts': 'a651709b4e105237c942dfa4dd34cae4a42d4cb49955f91466d6b7a67cf435ab',
+    'build.gradle.kts': '13eba286774d29b926543e3652c51c0b5bf1a24341f5a5d02ad50a3db3477986',
+    'src/androidMain/kotlin/nativecmpkit/consumer/PublishedAndroidBindings.kt': '0cf00b18bf3c2a4b6c3e963dd601b22cb00e987923eca2de8abfb91af4438e2a',
     'settings.gradle.kts': '0a5eb5ae6d16ab58dfae5b7d5c99b982184391169fe426c845363da00975544d',
     'gradle.properties': 'bf8bbec28b310adfdc5b6d3319217bc2cf8657f44cdba2f38214eca4035ddf3b',
-    'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': 'b9090ad4e82401038b5a4a9c385b11f29ad364834928a643a66a21f91bb32274',
-    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': 'f7edb96bfaa343c8dc66121f53a37228b57e9b49261de07412572188719c31d9',
+    'src/commonMain/kotlin/nativecmpkit/consumer/PublicApiConsumer.kt': '3c24dc81f22ce9b84007480f5a0f9f03411d7d4a736e629f06c905040134446e',
+    'src/commonTest/kotlin/nativecmpkit/consumer/PublishedCommonContractTest.kt': '88d98825392b67739a1a65b84fa0e251c72b50686e1b2f1b64005afe2ce0b444',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedIoConsumerTest.kt': '6e465280638b566661cd6387a3a7b66a2d75a3faa86e219937c10f9765fbc440',
     'src/desktopTest/kotlin/nativecmpkit/consumer/PublishedNativeConsumerTest.kt': '9f7f8f42fdb3a5a1f5b0b418178f3fbf19ba6ce86e2a193338dc8c33a1d5735a',
 })
@@ -151,7 +153,7 @@ def snapshot(root: Path, expected: str) -> tuple[Input, ...]:
         else:
             target = "inert-material-context/metadata/" + Path(relative).name
         held.append(Input(relative, target, payload))
-    require(len(held) == 37 and len({item.target for item in held}) == len(held)
+    require(len(held) == 38 and len({item.target for item in held}) == len(held)
             and sum(len(item.payload) for item in held) <= MAX_INPUT_BYTES,
             "Carriage source/material inventory differs or exceeds its bound")
     # Clean status alone must not admit ignored/untracked input or an edited
@@ -175,9 +177,9 @@ def snapshot(root: Path, expected: str) -> tuple[Input, ...]:
 def receipt(expected: str, inputs: tuple[Input, ...]) -> dict:
     return {"schema_version": 1, "scope": SCOPE, "carrier_source_revision": expected,
             "preserved_native_metadata_producer_revision": METADATA_ORIGIN_REVISION,
-            "consumer_source_count": 15, "inert_original_material_count": 22,
+            "consumer_source_count": len(CONSUMER_FILES), "inert_original_material_count": 22,
             "files": [item.record() for item in inputs],
-            "full21_consumer_dependencies_preserved": True,
+            "full23_consumer_dependencies_preserved": True,
             "original17_desktop_consumer_methods_preserved": True,
             "consumer_or_native_methods_executed": 0, "collector_or_legacy_loader_executions": 0,
             "crate_payload_scans": 0, "stage_executions": 0,
@@ -313,7 +315,7 @@ def main() -> int:
         report = (verify if args.verify_only else prepare)(args.source_root, args.output,
             expected_source_revision=args.expected_source_revision)
         print(json.dumps({"carrier_source_revision": report["carrier_source_revision"],
-                          "consumer_source_count": 15, "inert_original_material_count": 22,
+                          "consumer_source_count": len(CONSUMER_FILES), "inert_original_material_count": 22,
                           "release_readiness_certified": False}, sort_keys=True))
         return 0
     except (InvalidArtifact, OSError) as error:

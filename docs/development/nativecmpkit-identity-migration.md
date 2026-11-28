@@ -41,9 +41,10 @@ covers manual Android, iPhone and iPad release verification.
 The manual tag preflight on this branch targets `NativeCmpKit/NativeCmpKit`.
 It checks the tag against the checked-out revision and the history of `main`,
 then checks the identity manifest against the Gradle modules that apply the
-publication plugin. The 21 current roots use the `nativecmpkit-*` artifact
-prefix. Navigation, Geo and the build-only Maps project are outside this
-publication set. Keep the published preview tag and its history. Packages,
+publication plugin. All 23 roles from the published preview, including Geo
+and Navigation, use the `nativecmpkit-*` artifact prefix for the migrated
+candidate. The build-only Maps project is outside this publication set. Keep
+the published preview tag and its history. Packages,
 releases, Pages and deployments remain gated pending the physical-device check
 and the existing release requirements.
 

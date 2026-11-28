@@ -44,10 +44,12 @@ class NativeConsumerPreflightSourceTest(unittest.TestCase):
         self.assertNotIn('JsonSlurper', self.preflight)
         self.assertNotIn('sourceRevision', self.preflight)
 
-    def test_preflight_keeps_all21_roots_and_forbids_dirty_or_reduced_module_flags(self):
+    def test_preflight_keeps_all_publication_roots_and_forbids_dirty_or_reduced_module_flags(self):
         modules = self.build.split('val candidateModules = listOf(', 1)[1].split('\n)', 1)[0]
-        self.assertEqual(21, len(re.findall(r'"([a-z-]+)"', modules)))
+        self.assertEqual(23, len(re.findall(r'"([a-z-]+)"', modules)))
         self.assertIn('"file-picker"', modules)
+        self.assertIn('"geo"', modules)
+        self.assertIn('"navigation"', modules)
         self.assertIn('"share"', modules)
         self.assertIn('"--target", "desktop", "--native-platform", consumerNativePlatform()', self.preflight)
         self.assertNotIn('"--module"', self.preflight)
