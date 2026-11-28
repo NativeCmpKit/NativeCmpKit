@@ -892,6 +892,7 @@ jobs:
             build/ci-identity/android-webview-diagnostics.json
             build/ci-identity/android-ownership-diagnostics.json
             build/ci-identity/consumer/
+            build/ci-verification/adaptive-controls-native-source-admission.json
             build/ci-verification/wk-identity/receipt.json
             build/ci-verification/identity-picker/receipt.json
             build/ci-verification/identity-share/receipt.json

@@ -157,6 +157,26 @@ class RelatedUiNativeSpecificationControls(unittest.TestCase):
                 doc["task"] = ":nativecmpkit-ui:compileTestKotlinIosSimulatorArm64"; path.write_text(json.dumps(doc))
                 self.assertFalse(related.validate_admission(root, now, time.time_ns(), focus))
 
+    def test_each_pre26_recovery_reads_the_adaptive_gradle_receipt_with_its_exact_schema(self):
+        producer = (ROOT / adaptive.INIT_SCRIPT).read_text()
+        relative = re.search(r'val receipt = rootProject.file\("([^"]+)"\)', producer).group(1)
+        record = producer.split("receipt.writeText", 1)[1].split("logger.lifecycle", 1)[0]
+        keys = set(re.findall(r'"([a-z0-9_]+)" to ', record))
+        for focus in (*related.PRE26_RECOVERY_FOCUSES, *related.PRE26_PENDING_FOCUSES):
+            with self.subTest(focus=focus), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                copy_sources(root)
+                self.assertEqual(relative, related.admission_path(focus))
+                doc = related._admission(focus)
+                self.assertEqual(keys, set(doc))
+                path = root / relative
+                path.parent.mkdir(parents=True)
+                path.write_text(json.dumps(doc))
+                now = time.time_ns()
+                self.assertTrue(related.validate_admission(root, now, now, focus))
+                path.write_text(json.dumps({**doc, "common_sources": []}))
+                self.assertFalse(related.validate_admission(root, now, time.time_ns(), focus))
+
     def test_stale_future_corrupt_or_aliased_source_admission_refuses(self):
         focus = related.FOCUSES[1]
         with tempfile.TemporaryDirectory() as temporary:

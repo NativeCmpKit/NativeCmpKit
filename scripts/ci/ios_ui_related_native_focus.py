@@ -339,7 +339,7 @@ def admission_path(focus: str) -> str:
     selection = _selection(focus)
     if focus in SPLIT_FOCUSES:
         return selection["admission_path"]
-    return ("build/ci-verification/adaptive-controls-native-source-admission.json" if focus == FOCUSES[0]
+    return ("build/ci-verification/adaptive-controls-native-source-admission.json" if init_script(focus) == adaptive.INIT_SCRIPT
             else "build/ci-verification/ui-related-native-source-admission.json")
 
 
@@ -350,7 +350,7 @@ def _admission(focus: str) -> dict:
               "excluded_unrelated_test_sources": True, "production_source_sets_changed": False,
               "compiler_executions_attested": 0, "apple_links_attested": 0, "native_tests_executed": 0,
               "scope": "Source/selection admission only; original fresh native XML/runtime/cleanup decide results"}
-    if focus != FOCUSES[0]:
+    if init_script(focus) != adaptive.INIT_SCRIPT:
         result["common_sources"] = []
     if focus in SPLIT_FOCUSES:
         result.update(receipt_subdirectory=receipt_subdirectory(focus), **timeout_accounting(focus))
