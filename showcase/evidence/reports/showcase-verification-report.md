@@ -41,8 +41,8 @@ manifest row. Statuses are evidence, not intent:
 | Coverage contract, inventory, API extract | `showcase/*` | `eacba3d9`, `03676e2f` |
 | Functional driver, tour, recorder, index, checks | `showcase/automation/*` | `03676e2f` … `efd99aae` |
 
-The showcase drives **public** APIs only. `calf-maps` is build-file-only and
-`calf-media`/`calf-notifications` are not included in the build; they are shown
+The showcase drives **public** APIs only. `kira-maps` is build-file-only and
+`kira-media`/`kira-notifications` are not included in the build; they are shown
 as excluded rows, not as features.
 
 ---
