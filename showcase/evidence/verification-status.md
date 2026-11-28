@@ -39,6 +39,8 @@ driver wrote results at the end and its rerun file is partial.
 - Missing visual states: iOS Time Picker, iOS action-sheet capture (functional
   verdict exists), WebView second page on iOS after the toolbar-label change.
 
+Executable dispatch and recording steps: [session-runbook.md](session-runbook.md).
+
 ## Outstanding verification
 
 1. Android full functional re-run on the current branch (all flows, including the
