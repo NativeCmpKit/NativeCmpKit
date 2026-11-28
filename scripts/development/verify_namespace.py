@@ -53,7 +53,7 @@ CONFIG_SUFFIXES = {".py", ".toml", ".lock", ".yaml", ".yml", ".json", ".properti
 OLD_IDENTITY = re.compile(
     r"com[./_]mohamedrejeb[./_](?:calf|nativecmpkit)(?:[./_]|\b)|\b(?i:calf)[-_]|\b(?:Experimental)?Calf[A-Z]|\bcalf[A-Z]"
     r"|io[./_]github[./_]apdelrahman1911[./_]kira(?:[./_]|\b)|\bkira-"
-    r"|\b(?i:github\.com/apdelrahman1911/nativecmpkit)\b"
+    r"|(?i:\bgithub\.com/apdelrahman1911/nativecmpkit\b|(?<![\w/])/apdelrahman1911/nativecmpkit\b)"
 )
 PACKAGE = re.compile(r"^package\s+([\w.]+)", re.M)
 

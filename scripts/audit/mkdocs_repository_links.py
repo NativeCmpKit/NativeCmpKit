@@ -30,7 +30,10 @@ def repository_link(url, page_path, root=ROOT):
         if not excluded and not target.is_dir():
             return url
     path = target.relative_to(root.resolve()).as_posix()
-    return urlunsplit(("https", "github.com", "/Apdelrahman1911/nativeCmpkit/" + ("tree" if target.is_dir() else "blob") + "/main/" + quote(path, safe="/"), parts.query, parts.fragment))
+    repository = urlsplit(REPO)
+    action = "tree" if target.is_dir() else "blob"
+    destination = f"{repository.path}/{action}/main/{quote(path, safe='/')}"
+    return urlunsplit((repository.scheme, repository.netloc, destination, parts.query, parts.fragment))
 
 
 def on_page_markdown(markdown, page, config, files):

@@ -36,8 +36,6 @@ NOTICE_METHODS = {
 # line shifts are harmless, additional unreviewed constructors are not.
 CALLER_SCOPES = {
     ("tests/consumer/test_derived_apache_notices.py", "DerivedApacheArtifactTest.verifier", 1): "nonnative",
-    ("tests/consumer/test_derived_apache_notices.py", "DerivedApacheArtifactTest.verifier", 2): "nonnative",
-    ("tests/consumer/test_derived_apache_notices.py", "DerivedApacheArtifactTest.test_navigation_model_identity_is_scoped_and_default_rejection_remains", 1): "invalid",
     ("tests/consumer/test_gradle_module_identity.py", "GradleOwningComponentTest.target_identity_passes", 1): "nonnative",
     ("tests/consumer/test_native_license_legacy_winapi.py", "LegacyWinapiLicenseTest.inspect_notices", 1): "material-only",
     ("tests/consumer/test_native_license_supplements.py", "VcsLicenseSupplementTest.notice_checks", 1): "native",
@@ -45,6 +43,7 @@ CALLER_SCOPES = {
     ("tests/consumer/test_verify_artifacts.py", "CupertinoFontResourceTest.test_owning_maven_verifier_rejects_empty_android_and_resource_archives", 1): "nonnative",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureBase.run_gate", 1): "nonnative",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_packaged_legacy_class_path_and_binary_reference_are_refused", 1): "nonnative",
+    ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_packaged_dependencies_refuse_both_superseded_groups", 1): "nonnative",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_candidate_dynamic_or_snapshot_versions_rejected", 1): "invalid",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_unknown_target_or_module_rejected", 1): "invalid",
     ("tests/consumer/test_verify_artifacts.py", "RepositoryFixtureTest.test_unknown_target_or_module_rejected", 2): "invalid",
@@ -193,9 +192,9 @@ class NativeVerifierCallerWiringTest(unittest.TestCase):
             return any(reaches(call, seen | {name}) for call in calls)
 
         tests = {name for name in methods if name.startswith("test_")}
-        self.assertEqual(50, len(tests))
+        self.assertEqual(51, len(tests))
         self.assertEqual(NOTICE_METHODS, {name for name in tests if reaches(name)})
-        self.assertEqual(40, len(tests - NOTICE_METHODS))
+        self.assertEqual(41, len(tests - NOTICE_METHODS))
 
 
 if __name__ == "__main__":

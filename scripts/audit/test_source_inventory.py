@@ -63,7 +63,10 @@ val visible = "fun notCode()" + """class NotCode""" + 'x'
     def test_baseline_rust_and_xcode_classification(self):
         data = json.loads((inventory.ROOT / "docs/audit/source-inventory.json").read_text())
         files = {item["path"]: item for item in data["files"]}
-        self.assertIsNone(files["nativecmpkit-file-picker/native/src/lib.rs"]["source_set"])
+        identity = json.loads((inventory.ROOT / "docs/migration/identity.json").read_text())
+        original_picker, = (item["source_directory"] for item in identity["modules"]
+                            if item["new_artifact"] == "nativecmpkit-file-picker")
+        self.assertIsNone(files[f"{original_picker}/native/src/lib.rs"]["source_set"])
         xcode = [item for item in files.values() if item["path"].startswith("sample/ios/")]
         self.assertTrue(xcode)
         self.assertTrue(all(item["module"] == "sample/ios" and not item["included_in_gradle"] for item in xcode))

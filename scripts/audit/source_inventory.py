@@ -177,8 +177,12 @@ def module_for(path: str, build_dirs: list[str]) -> str:
 def owner_for(path: str) -> str:
     if path.endswith((".gradle.kts", "Cargo.toml")) or path.startswith(("convention-plugins/", ".github/", "gradle/")) or path in {"gradle.properties", "gradlew", "gradlew.bat", "cleanup.sh", "renovate.json"}:
         return "audit_build"
+    module = path.partition("/")[0]
+    if module.startswith("nativecmpkit-"):
+        # The review area names also index the original source inventory.
+        module = "calf-" + module.removeprefix("nativecmpkit-")
     for owner, modules in AREA.items():
-        if path.split("/")[0] in modules.split():
+        if module in modules.split():
             return owner
     return "audit_history_architecture"
 

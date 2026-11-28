@@ -15,7 +15,8 @@ class CurrentIdentityTest(unittest.TestCase):
         old_jni = 'Java_' + '_'.join(('com', 'mohamedrejeb', 'calf', 'picker', 'abiVersion'))
         alternate_namespace = '.'.join(('io', 'github', 'apdelrahman1911', 'kira', 'picker'))
         alternate_artifact = '-'.join(('kira', 'file', 'picker'))
-        for obsolete in (old_jni, alternate_namespace, alternate_artifact):
+        old_repository_path = '/'.join(('', 'Apdelrahman1911', 'nativeCmpkit', 'blob', 'main'))
+        for obsolete in (old_jni, alternate_namespace, alternate_artifact, old_repository_path):
             with self.subTest(value=obsolete):
                 self.assertIsNotNone(OLD_IDENTITY.search(obsolete))
         for current in ('Java_io_github_apdelrahman1911_nativecmpkit_picker_abiVersion',

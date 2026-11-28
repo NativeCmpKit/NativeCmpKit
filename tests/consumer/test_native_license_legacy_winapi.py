@@ -27,6 +27,9 @@ import verify_artifacts as gate
 ROOT = Path(__file__).resolve().parents[2]
 ORIGINALS = ROOT / "docs/development/evidence/current-platform-recovery-20261101/native-stage-prerequisites20261104"
 NAMES = ("winapi-i686-pc-windows-gnu", "winapi-x86_64-pc-windows-gnu")
+ARCHIVED_IDENTITY = json.loads((ROOT / "docs/migration/identity.json").read_bytes())
+ARCHIVED_PICKER_MODULE, = (entry["source_directory"] for entry in ARCHIVED_IDENTITY["modules"]
+                           if entry["new_artifact"] == "nativecmpkit-file-picker")
 
 
 class LegacyWinapiLicenseTest(unittest.TestCase):
@@ -37,8 +40,21 @@ class LegacyWinapiLicenseTest(unittest.TestCase):
         self.catalog = self.root / "public-catalog"
         self.entry = self.catalog / (NAMES[0] + "-0.4.0")
         shutil.copytree(ROOT / supplements.CATALOG_RELATIVE / self.entry.name, self.entry)
-        self.metadata_bytes = (ORIGINALS / "metadata-current606/nativecmpkit-file-picker.json").read_bytes()
-        self.metadata = json.loads(self.metadata_bytes)
+        archived = (ORIGINALS / "metadata-current606" / f"{ARCHIVED_PICKER_MODULE}.json").read_bytes()
+        self.metadata = json.loads(archived)
+        self.assertEqual(ARCHIVED_PICKER_MODULE, self.metadata["module"])
+        # Port the owning crate identity in the synthetic fixture. Registry package material
+        # is still taken verbatim from the independently retained original metadata.
+        self.metadata["module"] = "nativecmpkit-file-picker"
+        workspace, = (package for package in self.metadata["packages"] if package["source_kind"] == "local-root")
+        original_id = workspace["id"]
+        workspace["name"] = gate.NATIVE_CRATE_NAMES[self.metadata["module"]]
+        workspace["id"] = workspace["name"] + "@" + workspace["version"]
+        for node in self.metadata["resolve"]:
+            if node["id"] == original_id:
+                node["id"] = workspace["id"]
+            node["dependencies"] = [workspace["id"] if value == original_id else value for value in node["dependencies"]]
+        self.metadata_bytes = (json.dumps(self.metadata, indent=2, sort_keys=True) + "\n").encode()
         self.packages = {package["name"]: package for package in self.metadata["packages"]}
         self.package = copy.deepcopy(self.packages[NAMES[0]])
         self.data = json.loads((self.entry / "manifest.json").read_bytes())

@@ -1,0 +1,25 @@
+{
+  "change_scope": "NativeCmpKit module prefix only in source snapshot selection and its tests. Eight other core input hashes and all witness, dependency trust and release boundaries are held. No new runtime witness is certified.",
+  "checkpoint": "011",
+  "input_files_sha256": {
+    "scripts/dependencies/README.md": "1e039838514f250a9e33d06034c038cd859c51a14b299cd376961d83ac31fafe",
+    "scripts/dependencies/gradle_fixtures.py": "5df58906a53068fae43ad48958a7ac5218d51452fa532b1abd6129780f6968e6",
+    "scripts/dependencies/gradle_process.py": "33118641778e3375bee895a653bbeb422126530d20d49561968a8b2310503d83",
+    "scripts/dependencies/integrity.py": "a83297bf6a057de0fe11d049e1c3411a6f0aed2ada13ea225722ac8b63af594b",
+    "scripts/dependencies/integrity_model.py": "617dedbcffae1cff3314ea9a63b6e6b2979dc8b88977315c676d4ab1f4e949f2",
+    "scripts/dependencies/owned_cleanup_fixtures.py": "dcdcfa962f5987713a0644ff701cca72bcc9de8d021f5d302f18ac6be2d55bbe",
+    "scripts/dependencies/owned_gradle.py": "e06d90f01ae71ba674a4131acee93ec03e99b4c582df3940015aae3417d7e322",
+    "scripts/dependencies/resolve-graphs.init.gradle": "7002fce4db395a3fce598fe8d1ee3405a6ae046eb82d153ad54316d790eb37ac",
+    "scripts/dependencies/test_integrity.py": "a939c0d5675c643acb3a0993879d12a9f8c4f86e0a55cb0589dc2ae40216d868",
+    "scripts/dependencies/test_owned_gradle.py": "95b91d978cf62be69bd4a97d071cf314be941abe37056917a37edfc15c95c8d8"
+  },
+  "manifest_is_input_binding_not_test_or_trust_acceptance": true,
+  "new_actual_fixture_or_external_witness_certified": false,
+  "ordinary_build_policy_installed": false,
+  "previous_checkpoint": "scripts/dependencies/checkpoint-offline-010.json",
+  "previous_checkpoint_sha256": "68f51a03f624378949c3669ebec4ce78dcb41d27cb76e5c6afd7c31b097185c6",
+  "production_dependencies_verified": false,
+  "record_type": "exact-offline-tool-input-manifest",
+  "release_readiness_certified": false,
+  "schema_version": 1
+}

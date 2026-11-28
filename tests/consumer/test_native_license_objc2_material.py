@@ -248,7 +248,8 @@ class ActiveObjc2MaterialTest(unittest.TestCase):
                 supplements.load_supplements(CATALOG, rows, source_root=ROOT)
 
     def test_carriage_dependency_closure_and_three_inert_sources_are_pinned(self):
-        self.assertEqual(15, len(carriage.CONSUMER_FILES)); self.assertEqual(7, len(carriage.CHECKER_MODULES))
+        self.assertEqual(16, len(carriage.CONSUMER_FILES))
+        self.assertEqual(7, len(carriage.CHECKER_MODULES))
         self.assertIn('native_license_objc2_material.py', carriage.CONSUMER_FILES)
         self.assertIn('native_license_material_v2.py', carriage.CONSUMER_FILES)
         imports = {node.names[0].name for node in ast.walk(ast.parse(carriage.SMOKE_SOURCE))
