@@ -55,7 +55,8 @@ class PopoverAnchorSourceControls(unittest.TestCase):
         old = library.plan(ROOT, "ios", only_modules=("nativecmpkit-ui",), focus=library.IOS_MODAL_XCUI_FOCUS)
         self.assertNotIn(INIT, library.gradle_command("ios", old, SIMULATOR))
         live = (ROOT / "scripts/ci/ios_ui_application.py").read_text()
-        self.assertIn('focus == lt.IOS_MODAL_XCUI_FOCUS:', live)
+        self.assertIn('focus in (lt.IOS_MODAL_XCUI_FOCUS, lt.IOS_DEFAULT_ACTION_SHEET_FOCUS)', live)
+        self.assertIn('focus == lt.IOS_MODAL_XCUI_FOCUS or native_ui_input.owns_phone_action_sheet(', live)
         self.assertNotIn("lt.IOS_POPOVER_ANCHOR_FOCUS", live)  # No claimed independent OS input for controlled cases.
 
     def test_wrong_suite_modules_host_and_disabled_native_source_fail_closed(self):
@@ -92,10 +93,16 @@ class PopoverAnchorSourceControls(unittest.TestCase):
                       "if (willRepositionPopoverToRect == null || inView == null) return", "inView.pointed.value = anchor.view"):
             self.assertIn(token, delegate)
         cleanup = source.split("    private fun clearController()", 1)[1].split("    private fun ownsPopover", 1)[0]
-        for token in ("ownedAnchorView?.objcPtr() == popover.sourceView?.objcPtr()",
-                      "ownedAnchorBarButton?.objcPtr() == popover.barButtonItem?.objcPtr()",
-                      "delegate.objcPtr() == presentationDelegate.objcPtr()", "ownedAnchorView = null", "ownedAnchorBarButton = null"):
+        for token in ("delegate.objcPtr() == presentationDelegate.objcPtr()", "clearPopoverAnchor(popover)",
+                      "ownedAnchorView = null", "ownedAnchorBarButton = null"):
             self.assertIn(token, cleanup)
+        self.assertLess(cleanup.index("delegate.objcPtr() == presentationDelegate.objcPtr()"),
+                        cleanup.index("clearPopoverAnchor(popover)"))
+        anchor_cleanup = source.split("    private fun clearPopoverAnchor(", 1)[1].split("    private fun applyPopoverAnchor(", 1)[0]
+        self.assertIn("ownedAnchorView?.let { if (it.objcPtr() == popover.sourceView?.objcPtr()) popover.sourceView = null }",
+                      anchor_cleanup)
+        self.assertIn("ownedAnchorBarButton?.let { if (it.objcPtr() == popover.barButtonItem?.objcPtr()) popover.barButtonItem = null }",
+                      anchor_cleanup)
         self.assertNotIn("presentationController?.delegate =", source)
         adapter = (ROOT / "nativecmpkit-ui/src/iosMain/kotlin/io/github/apdelrahman1911/nativecmpkit/ui/dialog/AdaptiveAlertDialog.ios.kt").read_text()
         self.assertEqual(2, adapter.count("val popoverAnchor = LocalAlertDialogIosPopoverAnchor.current"))
