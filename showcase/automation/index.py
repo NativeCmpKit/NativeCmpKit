@@ -56,7 +56,7 @@ def main() -> None:
             f"- Job/attempt: `{meta.get('job', 'pending')}` / `{meta.get('attempt', 'pending')}`",
             f"- Device: {meta.get('device', 'pending')}",
             f"- Runtime: {meta.get('runtime', 'pending')}",
-            f"- ui-test-actions: `{runs.get('uiTestActionsRef', '0c818c5d72e8c30c59bd1287c330a40392bf8e89')}`",
+            f"- ui-test-actions: `{runs.get('uiTestActionsRef', '1c0d90debd7319c7580279bcbe2fb5ab19d6feea')}`",
             "",
             "| Capture | Component / scenario | Expected observation | Image |",
             "| --- | --- | --- | --- |",
