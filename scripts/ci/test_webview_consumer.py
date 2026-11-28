@@ -62,6 +62,24 @@ class WebViewConsumerControllerTests(unittest.TestCase):
         with self.assertRaises(c.EvidenceError):
             c.resolution_contract(document, staged, 'linux-x64', 'module')
 
+    def test_source_built_javafx_requires_exact_artifact_bytes_without_stock_fallback(self):
+        document, staged = resolution('macos-arm64', 'pom')
+        runtime = {}
+        javafx_rows = [row for row in document['resolved_artifacts'] if row['group'] == 'org.openjfx']
+        for row in javafx_rows:
+            row['version'] = c.OPENJFX_SOURCE_VERSION
+            row['file'] = f"{row['module']}-{c.OPENJFX_SOURCE_VERSION}-mac-aarch64.jar"
+            key = f"org/openjfx/{row['module']}/{row['version']}/{row['file']}"
+            runtime[key] = {'bytes': row['bytes'], 'sha256': row['sha256']}
+        result = c.resolution_contract(document, staged, 'macos-arm64', 'pom', runtime)
+        self.assertEqual(result['native_classifier'], 'mac-aarch64')
+        javafx_rows[0]['sha256'] = 'd' * 64
+        with self.assertRaisesRegex(c.EvidenceError, 'bytes differ'):
+            c.resolution_contract(document, staged, 'macos-arm64', 'pom', runtime)
+        javafx_rows[0]['version'] = '21.0.13'
+        with self.assertRaisesRegex(c.EvidenceError, 'Misaligned'):
+            c.resolution_contract(document, staged, 'macos-arm64', 'pom', runtime)
+
     def test_missing_native_module_is_rejected_on_every_classpath(self):
         for configuration in c.CLASSPATHS:
             document, staged = resolution()

@@ -11,6 +11,7 @@ import platform
 import shutil
 import subprocess
 import time
+from zipfile import ZipFile
 
 from probe_runner import CASES, HERE, case_results, compare_patch, document, need, patch_source
 
@@ -19,6 +20,13 @@ LOCK = HERE / "source-sdk-lock.json"
 LOADER = "modules/javafx.web/src/main/java/com/sun/webkit/network/HTTP2Loader.java"
 PATCH = HERE / "cancel-response-future.patch"
 WRAPPER = "gradle/wrapper/gradle-wrapper.properties"
+CONSUMER_VERSION = "21.0.13.1-nativecmpkit-verification.1"
+CONSUMER_MODULES = ("base", "graphics", "controls", "media", "web", "swing")
+CLASSIFIERS = {
+    ("linux", "x64"): ("linux", "linux"), ("linux", "arm64"): ("linux", "linux-aarch64"),
+    ("macos", "x64"): ("mac", "mac"), ("macos", "arm64"): ("mac", "mac-aarch64"),
+    ("windows", "x64"): ("win", "win"),
+}
 
 
 def sha256(path):
@@ -165,6 +173,48 @@ def windows_binary_inventory(sdk, binaries, architecture):
     return inventory
 
 
+def stage_consumer_jars(source, output, target, architecture, sdk_hashes):
+    """Stage upstream Gradle's exact modular JARs for an isolated artifact-only consumer."""
+    upstream_classifier, consumer_classifier = CLASSIFIERS[target, architecture]
+    publications = source / "build/publications"
+    webkit = {"linux": "libjfxwebkit.so", "macos": "libjfxwebkit.dylib", "windows": "jfxwebkit.dll"}[target]
+    rows = []
+    for module in CONSUMER_MODULES:
+        artifact = f"javafx-{module}"
+        original = publications / f"javafx.{module}-{upstream_classifier}.jar"
+        original_empty = publications / f"javafx.{module}.jar"
+        sdk_jar = source / f"build/sdk/lib/javafx.{module}.jar"
+        with ZipFile(original) as jar, ZipFile(sdk_jar) as sdk:
+            leaves = [entry for entry in jar.infolist() if not entry.is_dir()]
+            need(len({entry.filename for entry in leaves}) == len(leaves), "Repeated entry in generated OpenJFX JAR")
+            need("module-info.class" in jar.namelist(), f"Missing module descriptor: {original.name}")
+            if module == "web":
+                loader = "com/sun/webkit/network/HTTP2Loader.class"
+                need(jar.read(loader) == sdk.read(loader), "Maven WebView uses different cancellation code from the SDK")
+            natives = [entry for entry in leaves if Path(entry.filename).suffix in {".dll", ".dylib", ".so"}]
+            if module == "web":
+                need([Path(entry.filename).name for entry in natives] == [webkit], "Expected the host WebKit in the Maven JAR")
+            for entry in natives:
+                with jar.open(entry) as native_file:
+                    digest = hashlib.file_digest(native_file, "sha256").hexdigest()
+                need(sdk_hashes.get(Path(entry.filename).name) == digest,
+                     f"Generated native JAR payload differs from the tested SDK: {entry.filename}")
+        relative = Path("org/openjfx") / artifact / CONSUMER_VERSION
+        stage = output / "javafx-maven" / relative
+        stage.mkdir(parents=True)
+        for jar, suffix in ((original_empty, ""), (original, f"-{consumer_classifier}")):
+            name = f"{artifact}-{CONSUMER_VERSION}{suffix}.jar"
+            destination = stage / name
+            shutil.copyfile(jar, destination)
+            digest = sha256(destination)
+            need(digest == sha256(jar), "Staging changed the OpenJFX modular JAR")
+            rows.append({"file": (relative / name).as_posix(), "sha256": digest, "bytes": destination.stat().st_size})
+    write_json(output / "javafx-consumer-jars.json", {
+        "version": CONSUMER_VERSION, "classifier": consumer_classifier, "source_classifier": upstream_classifier,
+        "artifacts": rows, "artifact_only_consumer": True, "production_qualified": False,
+    })
+
+
 def verify_sdk(source, output, lock, target, architecture):
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
@@ -210,6 +260,7 @@ def verify_sdk(source, output, lock, target, architecture):
     need(before == {path.name: sha256(path) for path in binaries}, "SDK binaries changed during execution")
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)
+    stage_consumer_jars(source, output, target, architecture, before)
 
 
 if __name__ == "__main__":

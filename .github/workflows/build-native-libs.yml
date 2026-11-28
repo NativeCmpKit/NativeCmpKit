@@ -20,14 +20,14 @@ jobs:
   openjfx-source-sdk:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && startsWith(inputs.profile, 'openjfx-source-')
     runs-on: ${{ fromJSON('{"openjfx-source-linux-x64":"ubuntu-24.04","openjfx-source-linux-arm64":"ubuntu-24.04-arm","openjfx-source-macos-x64":"macos-26-intel","openjfx-source-macos-arm64":"macos-26","openjfx-source-windows-x64":"windows-2022"}')[inputs.profile] }}
-    timeout-minutes: 260
+    timeout-minutes: 330
     defaults:
       run:
         shell: bash
     env:
       LC_ALL: C.UTF-8
       TZ: UTC
-      SOURCE_DIR: openjfx-source
+      SOURCE_DIR: build/openjfx-source
       SOURCE_ARCH: ${{ endsWith(inputs.profile, 'arm64') && 'arm64' || 'x64' }}
       SOURCE_OS: ${{ startsWith(inputs.profile, 'openjfx-source-macos-') && 'macos' || inputs.profile == 'openjfx-source-windows-x64' && 'windows' || 'linux' }}
       SOURCE_CHECK: tests/dependency/javafx-http2-cancellation/verify_source_sdk.py
@@ -44,7 +44,7 @@ jobs:
         with:
           repository: openjdk/jfx21u
           ref: refs/tags/21.0.13.1+1
-          path: openjfx-source
+          path: build/openjfx-source
           persist-credentials: false
       - name: Bind OpenJFX source and build materials before compilation
         run: python3 -B "$SOURCE_CHECK" prepare --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS"
@@ -193,6 +193,20 @@ jobs:
           exit $status
       - name: Inspect SDK binaries and run the real WebView cancellation cases
         run: python3 -B "$SOURCE_CHECK" verify --source "$SOURCE_DIR" --output "$EVIDENCE_DIR" --platform "$SOURCE_OS" --arch "$SOURCE_ARCH"
+      - name: Provision the library consumer build SDK
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+        with:
+          packages: cmdline-tools;23.0 platforms;android-37.0
+          accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: false
+      - name: Test the staged WebView with the source-built OpenJFX runtime
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --no-self-update
+          host="$SOURCE_OS-$SOURCE_ARCH"
+          command=(python3 -B scripts/ci/webview_consumer.py --host "$host" --source-javafx
+            --output build/ci-webview-consumer/source-sdk)
+          if [[ "$SOURCE_OS" == linux ]]; then command=(xvfb-run -a "${command[@]}"); fi
+          "${command[@]}"
       - name: Preserve source-build and cancellation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
@@ -218,6 +232,10 @@ jobs:
             build/openjfx-source-verification/lifecycle.stdout
             build/openjfx-source-verification/lifecycle.stderr
             build/openjfx-source-verification/lifecycle-results.json
+            build/openjfx-source-verification/javafx-consumer-jars.json
+            build/ci-webview-consumer/source-sdk/*.json
+            build/ci-webview-consumer/source-sdk/*/*.json
+            build/ci-webview-consumer/source-sdk/*/junit/*.xml
 
   native-check:
     if: github.repository == 'NativeCmpKit/NativeCmpKit' && github.event_name == 'workflow_dispatch' && inputs.profile == 'all'

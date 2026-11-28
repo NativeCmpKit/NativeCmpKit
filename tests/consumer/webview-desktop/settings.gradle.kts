@@ -18,6 +18,10 @@ require(candidateDirectory.isAbsolute && candidateDirectory.isDirectory) {
 val metadataMode = providers.gradleProperty("nativecmpkitMetadataMode").get()
 require(metadataMode in setOf("module", "pom")) { "Select module or pom explicitly" }
 
+val javafxVerificationRepository = providers.gradleProperty("nativecmpkitJavaFxVerificationRepository").orNull?.let {
+    java.io.File(it).also { path -> require(path.isAbsolute && path.isDirectory) }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -35,6 +39,18 @@ dependencyResolutionManagement {
                 }
             }
             filter { includeGroup("io.github.apdelrahman1911.nativecmpkit") }
+        }
+        javafxVerificationRepository?.let { verificationDirectory ->
+            exclusiveContent {
+                forRepository {
+                    maven {
+                        name = "OpenJfxFullSourceVerification"
+                        url = verificationDirectory.toURI()
+                        metadataSources { artifact() }
+                    }
+                }
+                filter { includeGroup("org.openjfx") }
+            }
         }
         google()
         mavenCentral()

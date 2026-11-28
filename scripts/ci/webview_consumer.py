@@ -39,6 +39,10 @@ FILES = ("README.md", "settings.gradle.kts", "build.gradle.kts", "gradle.propert
          "src/test/kotlin/nativecmpkit/consumer/PublishedWebViewConsumerTest.kt")
 CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedWebViewConsumerTest"
 METHODS = {"loadedPublicClassesComeFromTheExactStagedJar", "publicComposableLoadsEvaluatesAndReleasesTheRealNativeView"}
+TRANSPORT_CLASS = "io.github.apdelrahman1911.nativecmpkit.consumer.PublishedWebViewCancellationTest"
+TRANSPORT_METHOD = "stopNavigationAndDisposalCloseTheOriginalHttpExchange"
+OPENJFX_SOURCE_VERSION = "21.0.13.1-nativecmpkit-verification.1"
+OPENJFX_BUILD = "build/openjfx-source-verification"
 CLASSPATHS = {"compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"}
 FX_MODULES = {"base", "graphics", "controls", "media", "web", "swing"}
 HOSTS = {
@@ -247,7 +251,29 @@ def selectors(repository: Path):
     return result
 
 
-def resolution_contract(document, staged, host, mode):
+def source_javafx_inputs(root, host):
+    directory = lt.safe_path(root, OPENJFX_BUILD)
+    repository = lt.safe_path(directory, 'javafx-maven')
+    manifest = read_json(directory / 'javafx-consumer-jars.json')
+    classifier = HOSTS[host][2]
+    need(manifest['version'] == OPENJFX_SOURCE_VERSION and manifest['classifier'] == classifier and
+         manifest['artifact_only_consumer'] is True and manifest['production_qualified'] is False,
+         "Unexpected source-built OpenJFX stage identity")
+    expected = {f'org/openjfx/javafx-{module}/{OPENJFX_SOURCE_VERSION}/javafx-{module}-{OPENJFX_SOURCE_VERSION}{suffix}.jar'
+                for module in FX_MODULES for suffix in ('', '-' + classifier)}
+    rows = manifest['artifacts']
+    need(len(rows) == len(expected) and {row['file'] for row in rows} == expected, "Incomplete source-built OpenJFX stage")
+    inventory = {}
+    for row in rows:
+        path = lt.safe_path(repository, row['file'])
+        observed = {'bytes': path.stat().st_size, 'sha256': lt.sha256(path)}
+        need(path.is_file() and not path.is_symlink() and path.stat().st_nlink == 1 and
+             observed == {key: row[key] for key in observed}, "OpenJFX source-built bytes differ from the held stage")
+        inventory[row['file']] = observed
+    return repository, inventory
+
+
+def resolution_contract(document, staged, host, mode, javafx_stage=None):
     need(mode in MODES and host in HOSTS, "Unsupported finite consumer mode/host")
     need(document.get('schema_version') == 2 and document.get('scope') == 'PARTIAL WebView desktop Maven consumer' and
          document.get('candidate_group') == GROUP and document.get('candidate_version') == VERSION and
@@ -258,6 +284,7 @@ def resolution_contract(document, staged, host, mode):
     need(isinstance(rows, list) and 1 <= len(rows) <= 4096, "Missing independent Maven resolution")
     seen = {name: set() for name in CLASSPATHS}
     fx = {name: set() for name in CLASSPATHS}
+    javafx_version = OPENJFX_SOURCE_VERSION if javafx_stage is not None else '21.0.13'
     identities = set()
     for row in rows:
         need(isinstance(row, dict) and row.get('configuration') in CLASSPATHS and all(isinstance(row.get(k), str) and row[k]
@@ -281,10 +308,15 @@ def resolution_contract(document, staged, host, mode):
                  staged.get(row['metadata_file'], {}).get('sha256') == row.get('metadata_sha256'), "Wrong held module metadata hash")
             seen[row['configuration']].add(target)
         if row['group'] == 'org.openjfx':
-            need(row['module'].startswith('javafx-') and row['module'][7:] in FX_MODULES and row['version'] == '21.0.13', "Misaligned/unknown JavaFX dependency")
-            generic = row['module'] + '-21.0.13.jar'
-            expected = row['module'] + '-21.0.13-' + HOSTS[host][2] + '.jar'
+            need(row['module'].startswith('javafx-') and row['module'][7:] in FX_MODULES and row['version'] == javafx_version,
+                 "Misaligned/unknown JavaFX dependency")
+            generic = f"{row['module']}-{javafx_version}.jar"
+            expected = f"{row['module']}-{javafx_version}-{HOSTS[host][2]}.jar"
             need(row['file'] in (generic, expected), "Foreign-host JavaFX native classifier")
+            if javafx_stage is not None:
+                relative = f"org/openjfx/{row['module']}/{javafx_version}/{row['file']}"
+                need(javafx_stage.get(relative) == {'bytes': row['bytes'], 'sha256': row['sha256']},
+                     "Resolved OpenJFX bytes differ from the exact source-built JAR")
             if row['file'] == expected:
                 fx[row['configuration']].add(row['module'][7:])
     need(all(value == {MODULE + '-desktop'} for value in seen.values()), "Packaged WebView must resolve on all four classpaths")
@@ -293,11 +325,14 @@ def resolution_contract(document, staged, host, mode):
     return {'classpath_count': 4, 'aligned_consuming_host_javafx_modules': sorted(FX_MODULES), 'native_classifier': HOSTS[host][2], 'resolved_rows': len(rows)}
 
 
-def fresh_tests(consumer: Path, output: Path, mode: str, start: int, end: int, log: Path):
+def fresh_tests(consumer: Path, output: Path, mode: str, start: int, end: int, log: Path, *, transport=False, source_javafx=False):
     lines = log.read_text(errors='replace').splitlines()
-    expected = f'NATIVECMPKIT_WEBVIEW_CONSUMER_TEST task=:test gradle=9.7.1 java=17 mode={mode}'
-    need(Counter(line for line in lines if line.startswith('NATIVECMPKIT_WEBVIEW_CONSUMER_TEST ')) == {expected: 1}, "Missing fresh actual Gradle9.7.1/JDK17 consumer test task")
-    files = [p for p in lt.source_files(consumer, 'build/test-results/test') if p.name.startswith('TEST-') and p.suffix == '.xml']
+    tasks = ('test', 'networkCancellationTest') if source_javafx else ('test',)
+    markers = {f'NATIVECMPKIT_WEBVIEW_CONSUMER_TEST task=:{task} gradle=9.7.1 java=17 mode={mode}': 1 for task in tasks}
+    need(Counter(line for line in lines if line.startswith('NATIVECMPKIT_WEBVIEW_CONSUMER_TEST ')) == markers,
+         "Missing fresh actual Gradle9.7.1/JDK17 consumer test task")
+    task = 'networkCancellationTest' if transport else 'test'
+    files = [p for p in lt.source_files(consumer, f'build/test-results/{task}') if p.name.startswith('TEST-') and p.suffix == '.xml']
     cases, reports = [], []
     for path in files:
         record = path.stat()
@@ -313,15 +348,17 @@ def fresh_tests(consumer: Path, output: Path, mode: str, start: int, end: int, l
         cases += parsed
         reports.append({'path': target.relative_to(output).as_posix(), 'sha256': hashlib.sha256(payload).hexdigest(), **lt.case_counts(parsed)})
     observation = {'reports': reports, 'testcases': cases, 'totals': lt.case_counts(cases), 'metadata_mode': mode}
-    write(output / mode / 'test-outcomes.json', observation)
-    need(len(files) == 1 and {(c['classname'], c['name']) for c in cases} == {(CLASS, method) for method in METHODS} and len(cases) == 2,
-         "Exactly both consumer methods must execute; no missing/extra/duplicate cases")
-    need(observation['totals']['passed'] == observation['totals']['executed'] == 2 and not any(observation['totals'][k] for k in ('failures', 'errors', 'skipped')),
-         "Both actual native consumer methods must pass without skips")
+    write(output / mode / ('transport-outcomes.json' if transport else 'test-outcomes.json'), observation)
+    expected = {(TRANSPORT_CLASS, TRANSPORT_METHOD)} if transport else {(CLASS, method) for method in METHODS}
+    need(len(files) == 1 and len(cases) == len(expected) and {(c['classname'], c['name']) for c in cases} == expected,
+         "Missing/extra/duplicate consumer test cases")
+    need(observation['totals']['passed'] == observation['totals']['executed'] == len(expected) and
+         not any(observation['totals'][k] for k in ('failures', 'errors', 'skipped')),
+         "Every selected actual native consumer method must pass without skips")
     return observation
 
 
-def commands(root: Path, consumer: Path | None, mode=None):
+def commands(root: Path, consumer: Path | None, mode=None, javafx_repository=None):
     wrapper = root / ('gradlew.bat' if os.name == 'nt' else 'gradlew')
     base = [str(wrapper), '--no-daemon', '--no-parallel', '--no-configuration-cache', '--no-build-cache', '--console=plain', '--max-workers=2',
             '--dependency-verification', 'strict', '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8', '-Pkotlin.compiler.execution.strategy=in-process',
@@ -331,11 +368,14 @@ def commands(root: Path, consumer: Path | None, mode=None):
                 '-PnativecmpkitVerification=true', '-PnativecmpkitVerificationTargets=desktop', '-PnativeCmpkit.version=' + VERSION,
                 'stageWebViewVerificationPublications']
     need(mode in MODES, "Only module/POM consumer commands allowed")
-    return [*base, '-p', str(consumer), '-PnativecmpkitRepository=' + str(root / 'build/verification-repo'), '-PnativecmpkitVersion=' + VERSION,
-            '-PnativecmpkitMetadataMode=' + mode, 'verifyCandidateResolution', 'test']
+    invocation = [*base, '-p', str(consumer), '-PnativecmpkitRepository=' + str(root / 'build/verification-repo'),
+                  '-PnativecmpkitVersion=' + VERSION, '-PnativecmpkitMetadataMode=' + mode, 'verifyCandidateResolution', 'test']
+    if javafx_repository is not None:
+        invocation += ['-PnativecmpkitJavaFxVerificationRepository=' + str(javafx_repository), 'networkCancellationTest']
+    return invocation
 
 
-def run(root: Path, relative: str, host: str, timeout=4200):
+def run(root: Path, relative: str, host: str, timeout=4200, *, source_javafx=False):
     need(host in HOSTS and 600 <= timeout <= 4800, "Finite actual host and bounded timeout required")
     output = lt.safe_path(root, relative)
     base = lt.safe_path(root, 'build/ci-webview-consumer')
@@ -347,6 +387,7 @@ def run(root: Path, relative: str, host: str, timeout=4200):
               'process_cleanup_scope': 'Owned bounded process groups only; not detached-process/OS sandbox attestation', 'executions': [], 'modes': {}}
     began, phase, before, staged = time.monotonic(), 'preflight', None, None
     copies = {}
+    javafx_repository, javafx_stage = None, None
     repository = root / 'build/verification-repo'
     lock = base / '.webview-consumer.lock'
     lock_fd = None
@@ -358,6 +399,10 @@ def run(root: Path, relative: str, host: str, timeout=4200):
         write(output / 'runtime-before.json', runtime)
         before = inputs(root)
         write(output / 'inputs-before.json', before)
+        if source_javafx:
+            javafx_repository, javafx_stage = source_javafx_inputs(root, host)
+            write(output / 'javafx-stage-before.json', javafx_stage)
+            record['javafx_runtime'] = 'source-sdk-verification'
         need(not repository.exists() and not repository.is_symlink(), "Refuse stale staging; preserve old artifacts")
         cache = cache_state(root)
         write(output / 'producer-cache-before.json', cache)
@@ -397,7 +442,7 @@ def run(root: Path, relative: str, host: str, timeout=4200):
                 need(copied[name] == before[FIXTURE + '/' + name], "Independent consumer copy differs from held source")
             copies[mode] = (consumer, copied)
             write(output / mode / 'fixture-copy.json', copied)
-            command = commands(root, consumer, mode)
+            command = commands(root, consumer, mode, javafx_repository)
             log = output / mode / 'consumer.log'
             remaining = timeout - int(time.monotonic() - began) - 30
             need(remaining > 0, "No bounded time remains for consumer")
@@ -407,12 +452,16 @@ def run(root: Path, relative: str, host: str, timeout=4200):
             record['executions'].append({'phase': phase, 'command': command, 'execution': result, 'log_sha256': lt.sha256(log)})
             record['modes'][mode] = {'gradle_daemon': daemon_jvm.observation(log)}
             # Preserve actual failed test XML before resolution/build acceptance.
-            record['modes'][mode]['tests'] = fresh_tests(consumer, output, mode, start, end, log)
+            record['modes'][mode]['tests'] = fresh_tests(consumer, output, mode, start, end, log, source_javafx=source_javafx)
+            if source_javafx:
+                record['modes'][mode]['transport_tests'] = fresh_tests(
+                    consumer, output, mode, start, end, log, transport=True, source_javafx=True,
+                )
             resolution = consumer / 'build/reports/webview-consumer-resolution.json'
             need(start - 2_000_000_000 <= resolution.stat().st_mtime_ns <= end + 2_000_000_000, "Stale independent resolution")
             document = read_json(resolution)
             write(output / mode / 'resolution.json', document)
-            record['modes'][mode]['resolution'] = resolution_contract(document, staged, host, mode)
+            record['modes'][mode]['resolution'] = resolution_contract(document, staged, host, mode, javafx_stage)
             need(result['exit_code'] == 0 and not result.get('stop_reason'), "Actual independent consumer build failed")
         runtime_after = runtime_context.capture(expected_arch=HOSTS[host][1], android_package='android-37.0', require_clean=True)
         write(output / 'runtime-after.json', runtime_after)
@@ -439,6 +488,13 @@ def run(root: Path, relative: str, host: str, timeout=4200):
                 record['staged_package_inputs_held'] = staged == after_staged
                 checks.append(record['staged_package_inputs_held'])
             except (OSError, ValueError):
+                checks.append(False)
+        if javafx_stage is not None:
+            try:
+                _, after_javafx = source_javafx_inputs(root, host)
+                write(output / 'javafx-stage-after.json', after_javafx)
+                checks.append(javafx_stage == after_javafx)
+            except (OSError, ValueError, KeyError, TypeError):
                 checks.append(False)
         for mode, (consumer, copied) in copies.items():
             try:
@@ -482,8 +538,9 @@ def main():
     parser.add_argument('--host', choices=tuple(HOSTS), required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--timeout', type=int, default=4200)
+    parser.add_argument('--source-javafx', action='store_true', help='Require the staged full-source OpenJFX SDK for both metadata modes')
     args = parser.parse_args()
-    result = run(ROOT, args.output, args.host, args.timeout)
+    result = run(ROOT, args.output, args.host, args.timeout, source_javafx=args.source_javafx)
     print(json.dumps({key: result[key] for key in ('passed', 'scope', 'host', 'error') if key in result}))
     return 0 if result['passed'] else 1
 

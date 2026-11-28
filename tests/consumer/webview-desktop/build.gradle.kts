@@ -28,6 +28,8 @@ val allowedCandidates = candidateRoots.flatMap { listOf(it, "$it-desktop") }.toS
 // The JVM plugin supplies a `java` DSL accessor; do not resolve packages through it.
 val candidateRepository = File(providers.gradleProperty("nativecmpkitRepository").get())
 require(candidateRepository.isAbsolute && candidateRepository.isDirectory)
+val javafxVerification = providers.gradleProperty("nativecmpkitJavaFxVerificationRepository").isPresent
+val javafxVersion = if (javafxVerification) "21.0.13.1-nativecmpkit-verification.1" else "21.0.13"
 
 kotlin {
     jvmToolchain(17)
@@ -53,7 +55,7 @@ dependencies {
         else -> error("Unsupported consumer OS/architecture: no classifier fallback")
     }
     listOf("base", "graphics", "controls", "media", "web", "swing").forEach {
-        implementation("org.openjfx:javafx-$it:21.0.13:$classifier")
+        implementation("org.openjfx:javafx-$it:$javafxVersion:$classifier")
     }
     testImplementation(kotlin("test-junit"))
     testImplementation("junit:junit:4.13.2")
@@ -213,6 +215,9 @@ tasks.withType<Test>().configureEach {
     systemProperty("java.io.tmpdir", ownTmp.get().asFile.absolutePath)
     systemProperty("java.library.path", emptyNativePath.get().asFile.absolutePath)
     doFirst {
+        if (name == "networkCancellationTest") check(javafxVerification) {
+            "The full-source transport test requires the explicitly staged OpenJFX SDK artifacts"
+        }
         ownHome.get().asFile.mkdirs()
         ownTmp.get().asFile.mkdirs()
         emptyNativePath.get().asFile.mkdirs()
