@@ -221,7 +221,8 @@ PRE26_NEGATIVE_STEPS_PREFIX = "NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE "
 PRE26_NEGATIVE_STEPS_PHASES = (
     "compose-enter", "main-throw-control-verified", "composition-throw-control-start",
     "composition-throw-control-entered", "composition-throw-control-verified",
-    "set-content-enter", "adaptive-slider-enter",
+    "set-content-enter", "adaptive-slider-enter", "compose-content-enter", "compose-content-returned",
+    "validation-caught", "composition-disposed",
     "set-content-returned", "public-validation-verified",
 )
 PRE26_TOOLBAR_CASE = (

@@ -3,7 +3,7 @@
 
 CONTRACT_INPUT_SHA256 = {
     "scripts/ci/webview_content_policy_native_focus.py": "35e74ec77980f6f3417407894c434dae1ff2c337f85e802e543f18bbf39cba34",
-    "scripts/ci/ios_ui_application.py": "07083e66665cb94b1014ccca0a7e490fe3492dd5caf2f66e9a0cc588646c4f6f",
+    "scripts/ci/ios_ui_application.py": "6f7aa0c33461a6fca2787c9b6390e013dcb96a4c8bb720a260050d59a2bc64ae",
     "scripts/ci/fixtures/webview-content-policy-routing-source-inverse.json": "c44400087570740d3248704c2165c3222229f2c05ff1a2a3840dbda9aa04b916",
     "scripts/ci/fixtures/webview-current-contract667-source-inverse.json": "56574379b6d9621e8b72009cad3551115401b860250f5c40af23bf3be279f937",
     "scripts/ci/fixtures/platform-recovery659-source-inverse.json": "c9a56d4288e1d6a71914de27b0218d0877840136e9d24d448e2d192fcf7d90e9",

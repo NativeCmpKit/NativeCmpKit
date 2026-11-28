@@ -10,8 +10,9 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.SliderColors
 import androidx.compose.runtime.AbstractApplier
-import androidx.compose.runtime.Composition
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ControlledComposition
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.mutableStateOf
@@ -190,46 +191,9 @@ class AdaptiveSliderNativeMatrixTest {
             if (branch == AdaptiveControlBranch.Pre26) println("NATIVECMPKIT_ADAPTIVE_NEGATIVE_STEPS_PHASE $phase")
         }
         trace("compose-enter")
-        if (branch == AdaptiveControlBranch.Pre26) {
-            onApplicationMain {
-                val control = assertFailsWith<IllegalArgumentException> { throw IllegalArgumentException("validation control") }
-                assertEquals("validation control", control.message)
-            }
-            trace("main-throw-control-verified")
-            trace("composition-throw-control-start")
-            val control = assertFailsWith<IllegalArgumentException> {
-                runComposeUiTest {
-                    setContent {
-                        trace("composition-throw-control-entered")
-                        throw IllegalArgumentException("composition validation control")
-                    }
-                    waitForIdle()
-                }
-            }
-            assertEquals("composition validation control", control.message)
-            trace("composition-throw-control-verified")
-            val failure = assertFailsWith<IllegalArgumentException> {
-                runComposeUiTest {
-                    trace("set-content-enter")
-                    setContent {
-                        trace("adaptive-slider-enter")
-                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1,
-                            colors = colors, interactionSource = interactions)
-                    }
-                    trace("set-content-returned")
-                    waitForIdle()
-                }
-            }
-            assertEquals("steps should be >= 0", failure.message,
-                "Only the public invalid-steps contract satisfies this test")
-            trace("public-validation-verified")
-            return
-        }
         onApplicationMain {
-            // Exercise the public argument check synchronously in Compose. This
-            // deliberately invalid input must throw before any layout is created.
             val parent = Recomposer(EmptyCoroutineContext)
-            val composition = Composition(object : AbstractApplier<Unit>(Unit) {
+            val composition = ControlledComposition(object : AbstractApplier<Unit>(Unit) {
                 override fun insertTopDown(index: Int, instance: Unit): Unit = error("Unexpected slider layout")
                 override fun insertBottomUp(index: Int, instance: Unit): Unit = error("Unexpected slider layout")
                 override fun remove(index: Int, count: Int) = Unit
@@ -237,15 +201,23 @@ class AdaptiveSliderNativeMatrixTest {
                 override fun onClear() = Unit
             }, parent)
             try {
-                val failure = assertFailsWith<IllegalArgumentException> {
-                    trace("set-content-enter")
-                    composition.setContent {
-                        trace("adaptive-slider-enter")
-                        AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1,
-                            colors = colors, interactionSource = interactions)
-                    }
-                    trace("set-content-returned")
+                val content: @Composable () -> Unit = {
+                    trace("adaptive-slider-enter")
+                    AdaptiveSlider(.5f, {}, Modifier.width(240.dp), steps = -1,
+                        colors = colors, interactionSource = interactions)
                 }
+                val failure = assertFailsWith<IllegalArgumentException> {
+                    if (branch == AdaptiveControlBranch.Pre26) {
+                        // An initial-composition exception stalls the iOS 18.6 UI test host.
+                        // Drive the composer directly and catch the public guard before applying changes.
+                        trace("compose-content-enter")
+                        composition.composeContent(content)
+                    } else {
+                        composition.setContent(content)
+                    }
+                    trace("compose-content-returned")
+                }
+                trace("validation-caught")
                 assertEquals("steps should be >= 0", failure.message,
                     "Only the public invalid-steps contract satisfies this test")
                 trace("public-validation-verified")
@@ -255,6 +227,7 @@ class AdaptiveSliderNativeMatrixTest {
                 } finally {
                     parent.cancel()
                 }
+                trace("composition-disposed")
             }
         }
     }
