@@ -149,6 +149,11 @@ def nav_restore(ui, platform):
         ui.action("device.orientation", {"orientation": "portrait"})
 
 
+def scroll_top(ui, times=30):
+    for _ in range(times):
+        tour.scroll_list(ui, -10)
+
+
 def click_switch(ui):
     selectors = (
         {"role": "switch"}, {"role": "AXSwitch"}, {"role": "togglebutton"},
@@ -365,10 +370,12 @@ FLOWS = [
         assert_absent(ui, "Allow swipe to hide"),
     )),
     ("date-display", "Adaptive Date Picker", lambda ui, p: (
-        tour.scroll_list(ui, -10),
+        # The compact date field grabs focus on launch and the column scrolls
+        # down; reset to the top before reading or tapping the switch.
+        scroll_top(ui),
         assert_text(ui, "Inline display: Picker"),
         click_switch_near(ui, "Inline display: Picker"),
-        tour.scroll_list(ui, -10),
+        scroll_top(ui),
         assert_text(ui, "Inline display: Input"),
     )),
     ("webview-js", "Web View", lambda ui, p: (
@@ -518,7 +525,8 @@ def main() -> None:
             continue
         entry = {"id": flow_id, "screen": screen, "status": "failed", "before": None, "after": None}
         try:
-            ui.action("app.restart", {"id": tour.ANDROID_APP_ID})
+            ui.action("app.close", {"id": tour.ANDROID_APP_ID})
+            ui.action("app.launch", {"id": tour.ANDROID_APP_ID})
             if not tour.wait_home(ui):
                 tour.find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
             tour.open_screen(ui, screen, use_search=args.platform == "android")
