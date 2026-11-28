@@ -310,7 +310,8 @@ def main() -> None:
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / f"{device}.png"
         try:
-            png = ui.screenshot(wait_stable_ms=250, bind_snapshot=True)
+            result = ui.screenshot(wait_stable_ms=250, bind_snapshot=True)
+            png = result["png"] if isinstance(result, dict) else result
         except TypeError:
             png = ui.screenshot()
         except Exception:

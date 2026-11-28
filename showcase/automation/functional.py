@@ -495,7 +495,8 @@ def main() -> None:
 
     def screenshot(ui):
         try:
-            return ui.screenshot(wait_stable_ms=200, bind_snapshot=True)
+            result = ui.screenshot(wait_stable_ms=200, bind_snapshot=True)
+            return result["png"] if isinstance(result, dict) else result
         except TypeError:
             return ui.screenshot()
         except Exception:
