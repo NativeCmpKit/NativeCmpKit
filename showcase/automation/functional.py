@@ -127,6 +127,9 @@ def find_any(ui, text, timeout_ms=3000):
     observation = tour.soft_find(ui, {"text": text}, timeout_ms=timeout_ms)
     if observation.get("satisfied") and observation.get("nodes"):
         return observation
+    observation = tour.soft_find(ui, {"label": text}, timeout_ms=timeout_ms)
+    if observation.get("satisfied") and observation.get("nodes"):
+        return observation
     observation = tour.soft_find(ui, {"name": text}, timeout_ms=timeout_ms)
     if observation.get("satisfied") and observation.get("nodes"):
         return observation

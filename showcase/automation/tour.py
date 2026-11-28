@@ -115,6 +115,8 @@ def click_first(ui, labels):
 def click_text(ui, text: str):
     observation = soft_find(ui, {"text": text})
     if not observation.get("satisfied"):
+        observation = soft_find(ui, {"label": text})
+    if not observation.get("satisfied"):
         observation = soft_find(ui, {"name": text})
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise RuntimeError(f"No visible element for {text!r}")
@@ -144,6 +146,8 @@ def choose_clickable(observation, nodes):
 
 def click_result(ui, text: str):
     observation = soft_find(ui, {"text": text})
+    if not observation.get("satisfied"):
+        observation = soft_find(ui, {"label": text})
     if not observation.get("satisfied"):
         observation = soft_find(ui, {"name": text})
     nodes = [
