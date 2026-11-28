@@ -309,7 +309,13 @@ def main() -> None:
         directory = args.output_root / args.platform / component / scenario
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / f"{device}.png"
-        path.write_bytes(ui.screenshot())
+        try:
+            png = ui.screenshot(wait_stable_ms=250, bind_snapshot=True)
+        except TypeError:
+            png = ui.screenshot()
+        except Exception:
+            png = ui.screenshot()
+        path.write_bytes(png)
         record["captures"].append(
             {"component": component, "scenario": scenario, "path": path.as_posix(),
              "bytes": path.stat().st_size}

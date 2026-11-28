@@ -64,11 +64,13 @@ def click_first(ui, labels):
 def _ios_action_sheet(ui):
     if "ipad" in CURRENT_DEVICE:
         # UIKit presents an action sheet as a popover and intentionally omits
-        # the cancel action; dismissal is an outside tap.
+        # the cancel action; v4 exposes the modal and dismisses it natively.
         assert_text(ui, "Ok")
         assert_absent(ui, "Cancel", timeout_ms=2000)
-        ui.action("pointer.click", {"x": 8, "y": 200})
-        assert_absent(ui, "This is a native alert dialog from Kira")
+        present = ui.action("alert.present")["result"]
+        assert present.get("present"), f"no modal reported: {present!r}"
+        ui.action("alert.dismiss", {"timeout_ms": 5000})
+        assert_absent(ui, "This is a native alert dialog from Kira", timeout_ms=5000)
         return
     assert_text(ui, "Cancel")
     tour.click_text(ui, "Cancel")
@@ -79,12 +81,22 @@ def deny_permission_dialogs(ui, platform):
     labels = ["Don't allow", "Don’t allow", "Deny"] if platform == "android" else ["Don’t Allow", "Don't Allow", "Don’t allow"]
     for _ in range(3):
         try:
+            present = ui.action("alert.present")["result"]
+        except Exception:
+            present = {}
+        if present.get("present"):
+            try:
+                ui.action("alert.deny", {"timeout_ms": 5000})
+                continue
+            except Exception:
+                pass
+        try:
             click_any(ui, labels)
         except Exception:
             return
 
 
-def click_node(ui, text, count=1, hold_ms=0):
+def click_node(ui, text, count=1, hold_ms=0, double=False):
     observation = find_any(ui, text, timeout_ms=3000)
     if not observation.get("satisfied") or not observation.get("nodes"):
         raise AssertionError(f"no node for {text!r}")
@@ -93,6 +105,9 @@ def click_node(ui, text, count=1, hold_ms=0):
     if not bounds:
         raise AssertionError(f"no bounds for {text!r}")
     params = {"x": bounds["x"] + bounds["width"] // 2, "y": bounds["y"] + bounds["height"] // 2}
+    if double:
+        ui.action("pointer.double_tap", params)
+        return
     if count > 1:
         params["count"] = count
     if hold_ms:
@@ -139,14 +154,19 @@ def count_text(ui, text):
 
 def nav_restore(ui, platform):
     assert_text(ui, "111.19")
-    if platform != "android":
-        raise AssertionError("orientation control is not exposed for this target")
+    if platform == "android":
+        try:
+            ui.action("device.orientation", {"orientation": "landscape", "wait_settled_ms": 1200})
+            assert_text(ui, "111.19")
+        finally:
+            ui.action("device.orientation", {"orientation": "portrait", "wait_settled_ms": 1200})
+        return
     try:
-        ui.action("device.orientation", {"orientation": "landscape"})
+        ui.action("device.rotate", {"direction": "left", "wait_settled_ms": 1200})
         tour.find(ui, {"text_contains": "Geo Maths"}, timeout_ms=8000)
         assert_text(ui, "111.19")
     finally:
-        ui.action("device.orientation", {"orientation": "portrait"})
+        ui.action("device.rotate", {"direction": "right", "wait_settled_ms": 1200})
 
 
 def scroll_top(ui, times=30):
@@ -182,37 +202,33 @@ def drag_from_text(ui, text, dy=300):
     ui.action("pointer.drag", {"x": x, "y": y, "end_x": x, "end_y": y + dy, "duration_ms": 500})
 
 
+def toggle_switch(ui, label, target=None):
+    selector = {"properties": {"checkable": True}, "within": {"label_contains": label}}
+    try:
+        ui.action("element.scroll_into_view", {"selector": {"label_contains": label}})
+    except Exception:
+        pass
+    params = {"selector": selector}
+    if target is not None:
+        params["target_state"] = target
+    try:
+        ui.action("element.toggle", params)
+    except Exception as error:  # noqa: BLE001 - fall back to a role selector
+        fallback = {"role": "switch", "within": {"label_contains": label}}
+        if target is not None:
+            ui.action("element.toggle", {"selector": fallback, "target_state": target})
+        else:
+            ui.action("element.toggle", {"selector": fallback})
+        return
+    if target is not None:
+        ui.action("element.wait", {
+            "selector": selector, "state": "checked" if target else "unchecked",
+            "timeout_ms": 5000,
+        })
+
+
 def click_switch_near(ui, label, expect=None):
-    observation = find_any(ui, label, timeout_ms=3000)
-    if not observation.get("satisfied") or not observation.get("nodes"):
-        raise AssertionError(f"no label {label!r}")
-    anchor = observation["nodes"][0]
-    bounds = anchor.get("bounds")
-    clicked = False
-    snapshot = ui.action("tree.snapshot")["result"]
-    for node in snapshot.get("nodes", []):
-        node_bounds = node.get("bounds")
-        if not node_bounds or not bounds:
-            continue
-        role = str(node.get("role", "")).lower()
-        properties = node.get("properties", {})
-        looks_like_switch = (
-            role in ("axcheckbox", "checkbox", "switch", "axswitch", "togglebutton")
-            or properties.get("checkable") is True
-            or properties.get("checked") is not None
-        )
-        if not looks_like_switch:
-            continue
-        if node.get("visible") is False:
-            continue
-        if abs(node_bounds["y"] - bounds["y"]) <= 80 and node_bounds["x"] > bounds["x"]:
-            ui.action("element.click", {
-                "id": node["id"], "snapshot_id": snapshot["snapshot_id"],
-            })
-            clicked = True
-            break
-    if not clicked:
-        click_switch(ui)
+    toggle_switch(ui, label)
     if expect:
         try:
             tour.find(ui, {"text_contains": expect}, timeout_ms=3000)
@@ -221,59 +237,34 @@ def click_switch_near(ui, label, expect=None):
 
 
 def drag_slider(ui, needle: str):
-    for role in ("slider", "AXSlider"):
-        observation = tour.soft_find(ui, {"role": role}, timeout_ms=1500)
-        if observation.get("satisfied") and observation.get("nodes"):
-            node = observation["nodes"][0]
-            bounds = node.get("bounds")
-            if not bounds:
-                continue
-            x, y, width, height = bounds["x"], bounds["y"], bounds["width"], bounds["height"]
-            ui.action("pointer.drag", {
-                "x": x + max(8, width // 5), "y": y + height // 2,
-                "end_x": x + width - max(8, width // 5), "end_y": y + height // 2,
-                "duration_ms": 500,
-            })
-            return
-    # iOS exposes the UISlider as an unnamed AXGroup; use the label row above it
-    # and the wide track group that shares its left edge.
-    label = tour.soft_find(ui, {"text_contains": needle}, timeout_ms=3000)
-    if not (label.get("satisfied") and label.get("nodes")):
-        label = find_any(ui, needle, timeout_ms=3000)
-    nodes = label.get("nodes", [])
-    if not nodes:
-        raise AssertionError("no slider label exposed")
-    bounds = nodes[0].get("bounds")
-    if not bounds:
-        raise AssertionError("slider label has no bounds")
-    snapshot = ui.action("tree.snapshot")["result"]
-    track = None
-    for node in snapshot.get("nodes", []):
-        candidate = node.get("bounds")
-        if not candidate:
-            continue
-        if (candidate["x"] == bounds["x"] and candidate["y"] >= bounds["y"] + bounds["height"]
-                and candidate["width"] > 200 and candidate["height"] <= 80):
-            track = candidate
-            break
-    if not track:
-        raise AssertionError("no slider track exposed")
-    start_y = track["y"] + track["height"] // 2
-    attempts = (
-        (track["x"] + int(track["width"] * 0.5), track["x"] + int(track["width"] * 0.9), 1200),
-        (track["x"] + int(track["width"] * 0.2), track["x"] + int(track["width"] * 0.8), 800),
-        (track["x"] + int(track["width"] * 0.5), track["x"] + int(track["width"] * 0.95), 400),
-    )
     before = text_value(ui, needle)
-    for start_x, end_x, duration in attempts:
-        ui.action("pointer.drag", {
-            "x": start_x, "y": start_y, "end_x": end_x, "end_y": start_y,
-            "duration_ms": duration,
-        })
-        if text_value(ui, needle) != before:
-            return
-    # tap-to-seek fallback
-    ui.action("pointer.click", {"x": track["x"] + int(track["width"] * 0.85), "y": start_y})
+    candidates = (
+        {"within": {"label_contains": needle}, "properties": {"adjustable": True}},
+        {"within": {"label_contains": needle}, "role": "slider"},
+    )
+    for selector in candidates:
+        try:
+            ui.action("element.adjust", {"selector": selector, "percent": 82})
+            if text_value(ui, needle) != before:
+                return
+        except Exception:
+            continue
+    # fallback: drag the visible adjustable/group element
+    observation = tour.soft_find(ui, {"properties": {"adjustable": True}}, timeout_ms=1500)
+    if not (observation.get("satisfied") and observation.get("nodes")):
+        observation = tour.soft_find(ui, {"text_contains": needle}, timeout_ms=2000)
+        nodes = observation.get("nodes", [])
+    else:
+        nodes = observation["nodes"]
+    if not nodes or not nodes[0].get("bounds"):
+        raise AssertionError("no slider element exposed")
+    bounds = nodes[0]["bounds"]
+    ui.action("element.drag", {
+        "target_selector": {"within": {"label_contains": needle}, "properties": {"adjustable": True}},
+        "dx": int(bounds["width"] * 0.3), "dy": 0, "duration_ms": 600, "steps": 12,
+    })
+    if text_value(ui, needle) == before:
+        raise AssertionError("slider did not move")
 
 
 FLOWS = [
@@ -287,9 +278,8 @@ FLOWS = [
         assert_text(ui, "Clicks: 1"),
         click_node(ui, "Tap me", hold_ms=800),
         assert_text(ui, "Long: 1"),
-        # Double tap is not driven: Android adb taps exceed Compose's ~300 ms
-        # window, and the iOS AXe --count path loses the action response.
-        None,
+        click_node(ui, "Tap me", double=True),
+        assert_text(ui, "Double: 1"),
     )),
     ("switch", "Adaptive Switch", lambda ui, p: (
         assert_text(ui, "Wi-Fi: off"),
@@ -360,12 +350,13 @@ FLOWS = [
     )),
     ("sheet-veto", "Adaptive Bottom Sheet", lambda ui, p: (
         tour.click_text(ui, "Show Bottom Sheet"),
-        assert_text_scroll(ui, "Allow swipe to hide", scrolls=5),
-        click_switch_near(ui, "Allow swipe to hide"),
+        ui.action("element.scroll_into_view", {"selector": {"label_contains": "Allow swipe to hide"}}),
+        assert_text(ui, "Allow swipe to hide"),
+        toggle_switch(ui, "Allow swipe to hide", target=False),
         (lambda: (ui.action("keyboard.press", {"keys": ["BACK"]}) if p == "android"
                   else drag_from_text(ui, "Allow swipe to hide")))(),
         assert_text(ui, "Allow swipe to hide"),
-        click_switch_near(ui, "Allow swipe to hide"),
+        toggle_switch(ui, "Allow swipe to hide", target=True),
         tour.click_text(ui, "Close"),
         assert_absent(ui, "Allow swipe to hide"),
     )),
@@ -378,7 +369,7 @@ FLOWS = [
     )),
     ("webview-js", "Web View", lambda ui, p: (
         assert_text(ui, "JavaScript: on"),
-        tour.click_text(ui, "JavaScript: on"),
+        toggle_switch(ui, "JavaScript", target=False),
         assert_text(ui, "JavaScript: off"),
         tour.click_text(ui, "Evaluate JavaScript title"),
         assert_text(ui, "JS:"),
@@ -447,7 +438,6 @@ FLOWS = [
 PLATFORM_ONLY = {
     "alert-text-field": "ios",
     "action-sheet": "ios",
-    "nav-restore": "android",
 }
 
 BLOCKED = [
@@ -503,6 +493,14 @@ def main() -> None:
         "flows": [],
     }
 
+    def screenshot(ui):
+        try:
+            return ui.screenshot(wait_stable_ms=200, bind_snapshot=True)
+        except TypeError:
+            return ui.screenshot()
+        except Exception:
+            return ui.screenshot()
+
     def save(flow: str, phase: str, png: bytes):
         directory = args.output_root / args.platform / "functional" / flow
         directory.mkdir(parents=True, exist_ok=True)
@@ -523,19 +521,21 @@ def main() -> None:
             continue
         entry = {"id": flow_id, "screen": screen, "status": "failed", "before": None, "after": None}
         try:
-            ui.action("app.close", {"id": tour.ANDROID_APP_ID})
-            ui.action("app.launch", {"id": tour.ANDROID_APP_ID})
+            try:
+                ui.action("app.restart", {"id": tour.ANDROID_APP_ID, "wait_ready": True, "timeout_ms": 20000})
+            except Exception:
+                ui.action("app.restart", {"id": tour.ANDROID_APP_ID})
             if not tour.wait_home(ui):
                 tour.find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
             tour.open_screen(ui, screen, use_search=args.platform == "android")
-            entry["before"] = save(flow_id, "before", ui.screenshot())
+            entry["before"] = save(flow_id, "before", screenshot(ui))
             action(ui, args.platform)
-            entry["after"] = save(flow_id, "after", ui.screenshot())
+            entry["after"] = save(flow_id, "after", screenshot(ui))
             entry["status"] = "passed"
         except Exception as error:  # noqa: BLE001
             entry["error"] = repr(error)
             try:
-                entry["after"] = save(flow_id, "failed-after", ui.screenshot())
+                entry["after"] = save(flow_id, "failed-after", screenshot(ui))
             except Exception:
                 pass
         result["flows"].append(entry)
