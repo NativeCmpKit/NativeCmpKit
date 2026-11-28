@@ -43,15 +43,16 @@
       ],
       "flowId": "android-phone-adaptivebutton-filled-enabled-and-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-button/overview/api35-phone.png",
+        "android": "screenshots/android/functional/buttons/api35-phone-after.png",
         "ios": "screenshots/ios/functional/buttons/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
           "status": "passed",
-          "run": "45957524569",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -85,6 +86,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/buttons/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/buttons/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "buttons",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/buttons/api35-phone-before.png",
+          "after": "screenshots/android/functional/buttons/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -287,15 +300,16 @@
       ],
       "flowId": "android-phone-modifier-adaptiveclickable-single-long-double-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-clickable/overview/api35-phone.png",
+        "android": "screenshots/android/functional/clickable/api35-phone-after.png",
         "ios": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "failed",
@@ -331,6 +345,18 @@
           "after": "screenshots/ios/functional/clickable/iphone-simulator-failed-after.png",
           "error": "ClientError('The action response was lost. Inspect the live UI before deciding whether to retry.')",
           "reason": null
+        },
+        {
+          "flow": "clickable",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/clickable/api35-phone-before.png",
+          "after": "screenshots/android/functional/clickable/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -359,15 +385,16 @@
       ],
       "flowId": "android-phone-adaptiveswitch-on-off-and-disabled",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-switch/overview/api35-phone.png",
+        "android": "screenshots/android/functional/switch/api35-phone-after.png",
         "ios": "screenshots/ios/functional/switch/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -401,6 +428,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/switch/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/switch/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "switch",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/switch/api35-phone-before.png",
+          "after": "screenshots/android/functional/switch/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -489,15 +528,16 @@
       ],
       "flowId": "android-phone-adaptiveslider-continuous-value-readout",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-slider/overview/api35-phone.png",
+        "android": "screenshots/android/functional/slider/api35-phone-after.png",
         "ios": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "failed",
@@ -532,6 +572,18 @@
           "before": "screenshots/ios/functional/slider/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/slider/iphone-simulator-failed-after.png",
           "error": "AssertionError('no slider label exposed')",
+          "reason": null
+        },
+        {
+          "flow": "slider",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/slider/api35-phone-before.png",
+          "after": "screenshots/android/functional/slider/api35-phone-after.png",
+          "error": null,
           "reason": null
         }
       ]
@@ -1075,15 +1127,15 @@
       ],
       "flowId": "android-phone-datebounds-and-selectabledates-bounded-weekdays-only",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-date-picker/overview/api35-phone.png",
+        "android": "screenshots/android/functional/date-bounds/api35-phone-after.png",
         "ios": "screenshots/ios/functional/date-bounds/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "failed",
-          "run": "45993784178",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140487958128",
+          "job": "140837241882",
           "device": "api35-phone"
         },
         "ios": {
@@ -1131,6 +1183,18 @@
           "before": null,
           "after": null,
           "error": "ClientError('HTTP 530 (http_error)')",
+          "reason": null
+        },
+        {
+          "flow": "date-bounds",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/date-bounds/api35-phone-before.png",
+          "after": "screenshots/android/functional/date-bounds/api35-phone-after.png",
+          "error": null,
           "reason": null
         }
       ]
@@ -1273,15 +1337,16 @@
       ],
       "flowId": "android-phone-adaptivealertdialog-two-button-confirm-and-cancel",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-alert-dialog/simple/api35-phone.png",
+        "android": "screenshots/android/functional/alert-confirm/api35-phone-after.png",
         "ios": "screenshots/ios/functional/alert-confirm/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -1327,6 +1392,30 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/alert-confirm/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/alert-confirm/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-cancel",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/alert-cancel/api35-phone-before.png",
+          "after": "screenshots/android/functional/alert-cancel/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "alert-confirm",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/alert-confirm/api35-phone-before.png",
+          "after": "screenshots/android/functional/alert-confirm/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -1563,15 +1652,16 @@
       ],
       "flowId": "android-phone-adaptivebottomsheet-show-content-dismiss",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-bottom-sheet/expanded/api35-phone.png",
+        "android": "screenshots/android/functional/sheet/api35-phone-after.png",
         "ios": "screenshots/ios/functional/sheet/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -1605,6 +1695,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/sheet/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/sheet/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "sheet",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/sheet/api35-phone-before.png",
+          "after": "screenshots/android/functional/sheet/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -1643,9 +1745,9 @@
       "execution": {
         "android": {
           "status": "passed",
-          "run": "45993784178",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140487958128",
+          "job": "140837241882",
           "device": "api35-phone"
         },
         "ios": {
@@ -1690,6 +1792,18 @@
           "run": "45993784178",
           "attempt": "1",
           "job": "140487958128",
+          "before": "screenshots/android/functional/dropdown/api35-phone-before.png",
+          "after": "screenshots/android/functional/dropdown/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "dropdown",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
           "before": "screenshots/android/functional/dropdown/api35-phone-before.png",
           "after": "screenshots/android/functional/dropdown/api35-phone-after.png",
           "error": null,
@@ -1784,9 +1898,9 @@
       "execution": {
         "android": {
           "status": "passed",
-          "run": "45993784178",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140487958128",
+          "job": "140837241882",
           "device": "api35-phone"
         },
         "ios": {
@@ -1835,6 +1949,18 @@
           "after": "screenshots/android/functional/scaffold-tab/api35-phone-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "scaffold-tab",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/scaffold-tab/api35-phone-before.png",
+          "after": "screenshots/android/functional/scaffold-tab/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -1864,15 +1990,16 @@
       ],
       "flowId": "android-phone-adaptivetopbar-title-leading-trailing-menu",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-top-bar/overview/api35-phone.png",
+        "android": "screenshots/android/functional/topbar/api35-phone-after.png",
         "ios": "screenshots/ios/functional/topbar/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -1908,6 +2035,18 @@
           "after": "screenshots/ios/functional/topbar/iphone-simulator-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "topbar",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/topbar/api35-phone-before.png",
+          "after": "screenshots/android/functional/topbar/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -1935,15 +2074,16 @@
       ],
       "flowId": "android-phone-adaptivenavigationbar-items-and-selected-index",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-navigation-bar/overview/api35-phone.png",
+        "android": "screenshots/android/functional/navbar/api35-phone-after.png",
         "ios": "screenshots/ios/functional/navbar/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -1979,6 +2119,18 @@
           "after": "screenshots/ios/functional/navbar/iphone-simulator-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "navbar",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/navbar/api35-phone-before.png",
+          "after": "screenshots/android/functional/navbar/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -2007,15 +2159,16 @@
       ],
       "flowId": "android-phone-adaptivetoolbar-collapsed-and-expanded",
       "screenshot": {
-        "android": "screenshots/android/ui-adaptive-toolbar/overview/api35-phone.png",
+        "android": "screenshots/android/functional/toolbar/api35-phone-after.png",
         "ios": "screenshots/ios/functional/toolbar/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -2049,6 +2202,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/toolbar/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/toolbar/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "toolbar",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/toolbar/api35-phone-before.png",
+          "after": "screenshots/android/functional/toolbar/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -2768,15 +2933,16 @@
       ],
       "flowId": "android-phone-remembermultiplepermissionsstate-camera-and-microphone",
       "screenshot": {
-        "android": "screenshots/android/permissions/overview/api35-phone.png",
+        "android": "screenshots/android/functional/permissions-bulk-deny/api35-phone-after.png",
         "ios": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -2810,6 +2976,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/permissions-bulk-deny/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "permissions-bulk-deny",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/permissions-bulk-deny/api35-phone-before.png",
+          "after": "screenshots/android/functional/permissions-bulk-deny/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -3412,15 +3590,16 @@
       ],
       "flowId": "android-phone-webviewstate-deterministic-html-load",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
+        "android": "screenshots/android/functional/webview/api35-phone-after.png",
         "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3442,7 +3621,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "webview",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "WEB-002",
@@ -3470,15 +3663,16 @@
       ],
       "flowId": "android-phone-webviewnavigator-url-load-back-and-forward",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
+        "android": "screenshots/android/functional/webview/api35-phone-after.png",
         "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3500,7 +3694,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "webview",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "WEB-003",
@@ -3527,15 +3735,16 @@
       ],
       "flowId": "android-phone-webviewstate-errorsforcurrentrequest-bad-destination",
       "screenshot": {
-        "android": "screenshots/android/webview/invalid-destination/api35-phone.png",
+        "android": "screenshots/android/functional/webview/api35-phone-after.png",
         "ios": "screenshots/ios/webview/invalid-destination/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3557,7 +3766,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "webview",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "WEB-004",
@@ -3584,15 +3807,16 @@
       ],
       "flowId": "android-phone-webviewstate-evaluatejavascript-and-settings-javascript-on",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
+        "android": "screenshots/android/functional/webview/api35-phone-after.png",
         "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3614,7 +3838,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "webview",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "WEB-005",
@@ -3643,15 +3881,16 @@
       ],
       "flowId": "android-phone-cookiemanager-set-get-remove",
       "screenshot": {
-        "android": "screenshots/android/webview/cookies-cleared/api35-phone.png",
+        "android": "screenshots/android/functional/webview/api35-phone-after.png",
         "ios": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3673,7 +3912,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "webview",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "NAV-001",
@@ -3813,15 +4066,16 @@
       ],
       "flowId": "android-phone-latlng-distance-and-bearing-maths",
       "screenshot": {
-        "android": "screenshots/android/geo-math/overview/api35-phone.png",
+        "android": "screenshots/android/functional/geo-math/api35-phone-after.png",
         "ios": "screenshots/ios/geo-math/overview/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "captured",
-          "run": "45957524569",
+          "status": "passed",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140367856551"
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "captured",
@@ -3843,7 +4097,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "geo-math",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/geo-math/api35-phone-before.png",
+          "after": "screenshots/android/functional/geo-math/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "GEO-002",
@@ -4098,15 +4366,16 @@
       ],
       "flowId": "android-phone-liquid-glass-fallback-non-ios-runtime",
       "screenshot": {
-        "android": "screenshots/android/liquid-glass-fallback/non-ios-runtime/api35-phone.png",
+        "android": "screenshots/android/functional/liquidglass/api35-phone-after.png",
         "ios": "screenshots/ios/liquid-glass-fallback/non-ios-runtime/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "not-applicable",
@@ -4128,7 +4397,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "liquidglass",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/liquidglass/api35-phone-before.png",
+          "after": "screenshots/android/functional/liquidglass/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "PERM-SMS-001",
@@ -4162,9 +4445,9 @@
       "execution": {
         "android": {
           "status": "passed",
-          "run": "45993784178",
+          "run": "46099102700",
           "attempt": "1",
-          "job": "140487958128",
+          "job": "140837241882",
           "device": "api35-phone"
         },
         "ios": {
@@ -4213,6 +4496,18 @@
           "after": "screenshots/android/functional/permissions-sms-rows/api35-phone-after.png",
           "error": null,
           "reason": null
+        },
+        {
+          "flow": "permissions-sms-rows",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/permissions-sms-rows/api35-phone-before.png",
+          "after": "screenshots/android/functional/permissions-sms-rows/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -4241,15 +4536,16 @@
       ],
       "flowId": "android-phone-cupertinoicon-catalog-category-filters",
       "screenshot": {
-        "android": "screenshots/android/cupertinoicon-catalog/category-filters/api35-phone.png",
+        "android": "screenshots/android/functional/icons-category/api35-phone-after.png",
         "ios": "screenshots/ios/functional/icons-category/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -4283,6 +4579,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/icons-category/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/icons-category/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "icons-category",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/icons-category/api35-phone-before.png",
+          "after": "screenshots/android/functional/icons-category/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -4385,7 +4693,7 @@
       "flowId": "android-phone-alertdialogiosstyle-actionsheet-ipad-popover",
       "screenshot": {
         "android": "screenshots/android/alertdialogiosstyle-actionsheet/ipad-popover/api35-phone.png",
-        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/iphone-simulator.png"
+        "ios": "screenshots/ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png"
       },
       "execution": {
         "android": {
@@ -4395,10 +4703,11 @@
           "job": null
         },
         "ios": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "failed",
+          "run": "46099392157",
+          "attempt": "1",
+          "job": "140838141915",
+          "device": "ipad-simulator"
         },
         "desktop": {
           "status": "not-applicable",
@@ -4413,7 +4722,13 @@
           "job": null
         }
       },
-      "defect": null,
+      "defect": {
+        "platform": "ios",
+        "run": "46099392157",
+        "attempt": "1",
+        "job": "140838141915",
+        "error": "iPad ActionSheet popover exposes Ok and Remove but no Cancel action; the tour and the functional pass both failed to find Cancel"
+      },
       "limitations": []
     },
     {
@@ -4441,7 +4756,7 @@
       "flowId": "android-phone-homescreen-large-screen-index-layout",
       "screenshot": {
         "android": "screenshots/android/homescreen/large-screen-index-layout/api35-phone.png",
-        "ios": "screenshots/ios/homescreen/large-screen-index-layout/iphone-simulator.png"
+        "ios": "screenshots/ios/home/index/ipad-simulator.png"
       },
       "execution": {
         "android": {
@@ -4451,10 +4766,11 @@
           "job": null
         },
         "ios": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46099392157",
+          "attempt": "1",
+          "job": "140838141915",
+          "device": "ipad-simulator"
         },
         "desktop": {
           "status": "not-applicable",
@@ -4497,7 +4813,7 @@
       "flowId": "android-phone-adaptivescaffold-tablet-tab-and-bar-layout",
       "screenshot": {
         "android": "screenshots/android/adaptivescaffold/tablet-tab-and-bar-layout/api35-phone.png",
-        "ios": "screenshots/ios/adaptivescaffold/tablet-tab-and-bar-layout/iphone-simulator.png"
+        "ios": "screenshots/ios/ui-adaptive-scaffold/overview/ipad-simulator.png"
       },
       "execution": {
         "android": {
@@ -4507,10 +4823,11 @@
           "job": null
         },
         "ios": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46099392157",
+          "attempt": "1",
+          "job": "140838141915",
+          "device": "ipad-simulator"
         },
         "desktop": {
           "status": "not-applicable",
@@ -4553,7 +4870,7 @@
       "flowId": "android-phone-adaptivebottomsheet-tablet-presentation",
       "screenshot": {
         "android": "screenshots/android/adaptivebottomsheet/tablet-presentation/api35-phone.png",
-        "ios": "screenshots/ios/adaptivebottomsheet/tablet-presentation/iphone-simulator.png"
+        "ios": "screenshots/ios/ui-adaptive-bottom-sheet/overview/ipad-simulator.png"
       },
       "execution": {
         "android": {
@@ -4563,10 +4880,11 @@
           "job": null
         },
         "ios": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "captured",
+          "run": "46099392157",
+          "attempt": "1",
+          "job": "140838141915",
+          "device": "ipad-simulator"
         },
         "desktop": {
           "status": "not-applicable",
@@ -4609,15 +4927,16 @@
       ],
       "flowId": "android-phone-adaptivesheetstate-detents-veto-and-dismissal",
       "screenshot": {
-        "android": "screenshots/android/adaptivesheetstate/detents-veto-and-dismissal/api35-phone.png",
+        "android": "screenshots/android/functional/sheet-veto/api35-phone-after.png",
         "ios": "screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "failed",
@@ -4653,6 +4972,18 @@
           "after": "screenshots/ios/functional/sheet-veto/iphone-simulator-failed-after.png",
           "error": "AssertionError(\"no node for 'Allow swipe to hide'\")",
           "reason": null
+        },
+        {
+          "flow": "sheet-veto",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/sheet-veto/api35-phone-before.png",
+          "after": "screenshots/android/functional/sheet-veto/api35-phone-after.png",
+          "error": null,
+          "reason": null
         }
       ]
     },
@@ -4681,15 +5012,16 @@
       ],
       "flowId": "android-phone-adaptivedatepicker-picker-and-input-display-modes",
       "screenshot": {
-        "android": "screenshots/android/adaptivedatepicker/picker-and-input-display-modes/api35-phone.png",
+        "android": "screenshots/android/functional/date-display/api35-phone-failed-after.png",
         "ios": "screenshots/ios/functional/date-display/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "failed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "failed",
@@ -4725,6 +5057,18 @@
           "after": "screenshots/ios/functional/date-display/iphone-simulator-failed-after.png",
           "error": "AssertionError(\"missing visible text 'Inline display: Input'\")",
           "reason": null
+        },
+        {
+          "flow": "date-display",
+          "platform": "android",
+          "status": "failed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/date-display/api35-phone-before.png",
+          "after": "screenshots/android/functional/date-display/api35-phone-failed-after.png",
+          "error": "AssertionError(\"missing visible text 'Inline display: Input'\")",
+          "reason": null
         }
       ]
     },
@@ -4752,15 +5096,16 @@
       ],
       "flowId": "android-phone-adaptivetimepicker-24-hour-state",
       "screenshot": {
-        "android": "screenshots/android/adaptivetimepicker/24-hour-state/api35-phone.png",
+        "android": "screenshots/android/functional/time-24h/api35-phone-after.png",
         "ios": "screenshots/ios/functional/time-24h/iphone-simulator-after.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "passed",
@@ -4794,6 +5139,18 @@
           "job": "140556939197",
           "before": "screenshots/ios/functional/time-24h/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/time-24h/iphone-simulator-after.png",
+          "error": null,
+          "reason": null
+        },
+        {
+          "flow": "time-24h",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/time-24h/api35-phone-before.png",
+          "after": "screenshots/android/functional/time-24h/api35-phone-after.png",
           "error": null,
           "reason": null
         }
@@ -4992,15 +5349,16 @@
       ],
       "flowId": "android-phone-websettings-javascript-off-and-on",
       "screenshot": {
-        "android": "screenshots/android/websettings/javascript-off-and-on/api35-phone.png",
+        "android": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
         "ios": "screenshots/ios/functional/webview-js/iphone-simulator-failed-after.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "failed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "failed",
@@ -5035,6 +5393,18 @@
           "before": "screenshots/ios/functional/webview-js/iphone-simulator-before.png",
           "after": "screenshots/ios/functional/webview-js/iphone-simulator-failed-after.png",
           "error": "AssertionError(\"missing visible text 'JS: null'\")",
+          "reason": null
+        },
+        {
+          "flow": "webview-js",
+          "platform": "android",
+          "status": "failed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/webview-js/api35-phone-before.png",
+          "after": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
+          "error": "AssertionError(\"missing visible text 'JavaScript: off'\")",
           "reason": null
         }
       ]
@@ -5178,15 +5548,16 @@
       ],
       "flowId": "android-phone-remembernavcontroller-saveable-state-restoration",
       "screenshot": {
-        "android": "screenshots/android/remembernavcontroller/saveable-state-restoration/api35-phone.png",
+        "android": "screenshots/android/functional/nav-restore/api35-phone-after.png",
         "ios": "screenshots/ios/remembernavcontroller/saveable-state-restoration/iphone-simulator.png"
       },
       "execution": {
         "android": {
-          "status": "not-run",
-          "run": null,
-          "attempt": null,
-          "job": null
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "device": "api35-phone"
         },
         "ios": {
           "status": "not-run",
@@ -5208,7 +5579,21 @@
         }
       },
       "defect": null,
-      "limitations": []
+      "limitations": [],
+      "functional": [
+        {
+          "flow": "nav-restore",
+          "platform": "android",
+          "status": "passed",
+          "run": "46099102700",
+          "attempt": "1",
+          "job": "140837241882",
+          "before": "screenshots/android/functional/nav-restore/api35-phone-before.png",
+          "after": "screenshots/android/functional/nav-restore/api35-phone-after.png",
+          "error": null,
+          "reason": null
+        }
+      ]
     },
     {
       "id": "GEO-003",

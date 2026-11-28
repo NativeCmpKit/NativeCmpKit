@@ -171,7 +171,7 @@ def click_switch_near(ui, label, expect=None):
         )
         if not looks_like_switch:
             continue
-        if abs(node_bounds["y"] - bounds["y"]) <= 24 and node_bounds["x"] > bounds["x"]:
+        if abs(node_bounds["y"] - bounds["y"]) <= 80 and node_bounds["x"] > bounds["x"]:
             ui.action("pointer.click", {
                 "x": node_bounds["x"] + node_bounds["width"] // 2,
                 "y": node_bounds["y"] + node_bounds["height"] // 2,
@@ -327,8 +327,11 @@ FLOWS = [
         assert_absent(ui, "Allow swipe to hide"),
     )),
     ("date-display", "Adaptive Date Picker", lambda ui, p: (
+        tour.scroll_list(ui, -10),
         assert_text(ui, "Inline display: Picker"),
-        click_switch_near(ui, "Inline display: Picker", expect="Inline display: Input"),
+        click_switch_near(ui, "Inline display: Picker"),
+        tour.scroll_list(ui, -10),
+        assert_text(ui, "Inline display: Input"),
     )),
     ("webview-js", "Web View", lambda ui, p: (
         assert_text(ui, "JavaScript: on"),
@@ -476,7 +479,8 @@ def main() -> None:
         entry = {"id": flow_id, "screen": screen, "status": "failed", "before": None, "after": None}
         try:
             ui.action("app.restart", {"id": tour.ANDROID_APP_ID})
-            tour.find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
+            if not tour.wait_home(ui):
+                tour.find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
             tour.open_screen(ui, screen, use_search=args.platform == "android")
             entry["before"] = save(flow_id, "before", ui.screenshot())
             action(ui, args.platform)
@@ -509,7 +513,7 @@ def main() -> None:
     result["updated_at"] = datetime.now(timezone.utc).isoformat()
     save_result(result, args, device)
     print(json.dumps(result["summary"]))
-    raise SystemExit(0 if failed == 0 else 1)
+    raise SystemExit(0 if result["summary"].get("failed", 0) == 0 else 1)
 
 
 if __name__ == "__main__":

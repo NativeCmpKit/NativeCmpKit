@@ -1,8 +1,8 @@
 {
-  "captured_at": "2026-11-27T09:26:06.288493+00:00",
+  "captured_at": "2026-11-28T03:10:37.042964+00:00",
   "target": "ios",
-  "session": "dc8ed10bbd25ac3ef8eaa30a",
-  "device": "iphone-simulator",
+  "session": "295bce8ad2a99337536c8d56",
+  "device": "ipad-simulator",
   "commands": [
     "app.close",
     "app.install",
@@ -35,210 +35,209 @@
     {
       "component": "home",
       "scenario": "index",
-      "path": "screenshots/ios/home/index/iphone-simulator.png",
-      "bytes": 138669
+      "path": "screenshots/ios/home/index/ipad-simulator.png",
+      "bytes": 294962
     },
     {
       "component": "ui-adaptive-button",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-button/overview/iphone-simulator.png",
-      "bytes": 102085
+      "path": "screenshots/ios/ui-adaptive-button/overview/ipad-simulator.png",
+      "bytes": 116579
     },
     {
       "component": "ui-adaptive-clickable",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-clickable/overview/iphone-simulator.png",
-      "bytes": 37574
+      "path": "screenshots/ios/ui-adaptive-clickable/overview/ipad-simulator.png",
+      "bytes": 52317
     },
     {
       "component": "ui-adaptive-switch",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-switch/overview/iphone-simulator.png",
-      "bytes": 76913
+      "path": "screenshots/ios/ui-adaptive-switch/overview/ipad-simulator.png",
+      "bytes": 91422
     },
     {
       "component": "ui-adaptive-slider",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-slider/overview/iphone-simulator.png",
-      "bytes": 67391
+      "path": "screenshots/ios/ui-adaptive-slider/overview/ipad-simulator.png",
+      "bytes": 77991
     },
     {
       "component": "ui-adaptive-progress",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-progress/overview/iphone-simulator.png",
-      "bytes": 59345
+      "path": "screenshots/ios/ui-adaptive-progress/overview/ipad-simulator.png",
+      "bytes": 69517
     },
     {
       "component": "ui-adaptive-date-picker",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-date-picker/overview/iphone-simulator.png",
-      "bytes": 115302
+      "path": "screenshots/ios/ui-adaptive-date-picker/overview/ipad-simulator.png",
+      "bytes": 141082
     },
     {
-      "component": "ui-adaptive-bottom-sheet",
+      "component": "ui-adaptive-time-picker",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-bottom-sheet/overview/iphone-simulator.png",
-      "bytes": 38774
-    },
-    {
-      "component": "ui-adaptive-bottom-sheet",
-      "scenario": "expanded",
-      "path": "screenshots/ios/ui-adaptive-bottom-sheet/expanded/iphone-simulator.png",
-      "bytes": 76295
-    },
-    {
-      "component": "ui-adaptive-dropdown",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-dropdown/overview/iphone-simulator.png",
-      "bytes": 72173
-    },
-    {
-      "component": "ui-adaptive-dropdown",
-      "scenario": "menu",
-      "path": "screenshots/ios/ui-adaptive-dropdown/menu/iphone-simulator.png",
-      "bytes": 79815
-    },
-    {
-      "component": "ui-adaptive-scaffold",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-scaffold/overview/iphone-simulator.png",
-      "bytes": 55014
-    },
-    {
-      "component": "ui-adaptive-top-bar",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-top-bar/overview/iphone-simulator.png",
-      "bytes": 126319
-    },
-    {
-      "component": "ui-adaptive-navigation-bar",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-navigation-bar/overview/iphone-simulator.png",
-      "bytes": 64512
-    },
-    {
-      "component": "ui-adaptive-toolbar",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-toolbar/overview/iphone-simulator.png",
-      "bytes": 55130
-    },
-    {
-      "component": "ui-cupertino-icons",
-      "scenario": "overview",
-      "path": "screenshots/ios/ui-cupertino-icons/overview/iphone-simulator.png",
-      "bytes": 130880
-    },
-    {
-      "component": "io-file-picker",
-      "scenario": "overview",
-      "path": "screenshots/ios/io-file-picker/overview/iphone-simulator.png",
-      "bytes": 72125
-    },
-    {
-      "component": "io-image-picker",
-      "scenario": "overview",
-      "path": "screenshots/ios/io-image-picker/overview/iphone-simulator.png",
-      "bytes": 45060
-    },
-    {
-      "component": "io-file-saver",
-      "scenario": "overview",
-      "path": "screenshots/ios/io-file-saver/overview/iphone-simulator.png",
-      "bytes": 56693
-    },
-    {
-      "component": "io-camera-picker",
-      "scenario": "overview",
-      "path": "screenshots/ios/io-camera-picker/overview/iphone-simulator.png",
-      "bytes": 46325
-    },
-    {
-      "component": "share",
-      "scenario": "overview",
-      "path": "screenshots/ios/share/overview/iphone-simulator.png",
-      "bytes": 81248
-    },
-    {
-      "component": "webview",
-      "scenario": "overview",
-      "path": "screenshots/ios/webview/overview/iphone-simulator.png",
-      "bytes": 197410
-    },
-    {
-      "component": "permissions",
-      "scenario": "overview",
-      "path": "screenshots/ios/permissions/overview/iphone-simulator.png",
-      "bytes": 155554
-    },
-    {
-      "component": "geo-math",
-      "scenario": "overview",
-      "path": "screenshots/ios/geo-math/overview/iphone-simulator.png",
-      "bytes": 130964
-    },
-    {
-      "component": "limitations",
-      "scenario": "known-limitations",
-      "path": "screenshots/ios/limitations/known-limitations/iphone-simulator.png",
-      "bytes": 198048
+      "path": "screenshots/ios/ui-adaptive-time-picker/overview/ipad-simulator.png",
+      "bytes": 74965
     },
     {
       "component": "ui-adaptive-alert-dialog",
       "scenario": "overview",
-      "path": "screenshots/ios/ui-adaptive-alert-dialog/overview/iphone-simulator.png",
-      "bytes": 131108
+      "path": "screenshots/ios/ui-adaptive-alert-dialog/overview/ipad-simulator.png",
+      "bytes": 143406
     },
     {
       "component": "ui-adaptive-alert-dialog",
       "scenario": "simple",
-      "path": "screenshots/ios/ui-adaptive-alert-dialog/simple/iphone-simulator.png",
-      "bytes": 144680
+      "path": "screenshots/ios/ui-adaptive-alert-dialog/simple/ipad-simulator.png",
+      "bytes": 171122
+    },
+    {
+      "component": "ui-adaptive-bottom-sheet",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-bottom-sheet/overview/ipad-simulator.png",
+      "bytes": 55332
+    },
+    {
+      "component": "ui-adaptive-bottom-sheet",
+      "scenario": "expanded",
+      "path": "screenshots/ios/ui-adaptive-bottom-sheet/expanded/ipad-simulator.png",
+      "bytes": 105428
+    },
+    {
+      "component": "ui-adaptive-dropdown",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-dropdown/overview/ipad-simulator.png",
+      "bytes": 80820
+    },
+    {
+      "component": "ui-adaptive-dropdown",
+      "scenario": "menu",
+      "path": "screenshots/ios/ui-adaptive-dropdown/menu/ipad-simulator.png",
+      "bytes": 90128
+    },
+    {
+      "component": "ui-adaptive-scaffold",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-scaffold/overview/ipad-simulator.png",
+      "bytes": 63038
+    },
+    {
+      "component": "ui-adaptive-top-bar",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-top-bar/overview/ipad-simulator.png",
+      "bytes": 139190
+    },
+    {
+      "component": "ui-adaptive-toolbar",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-adaptive-toolbar/overview/ipad-simulator.png",
+      "bytes": 64442
+    },
+    {
+      "component": "ui-cupertino-icons",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-cupertino-icons/overview/ipad-simulator.png",
+      "bytes": 434945
+    },
+    {
+      "component": "ui-cupertino-icons",
+      "scenario": "category-arrows",
+      "path": "screenshots/ios/ui-cupertino-icons/category-arrows/ipad-simulator.png",
+      "bytes": 320749
+    },
+    {
+      "component": "ui-cupertino-icons",
+      "scenario": "category-communication",
+      "path": "screenshots/ios/ui-cupertino-icons/category-communication/ipad-simulator.png",
+      "bytes": 216157
+    },
+    {
+      "component": "io-file-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-file-picker/overview/ipad-simulator.png",
+      "bytes": 92517
+    },
+    {
+      "component": "io-image-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-image-picker/overview/ipad-simulator.png",
+      "bytes": 55026
+    },
+    {
+      "component": "io-file-saver",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-file-saver/overview/ipad-simulator.png",
+      "bytes": 67738
+    },
+    {
+      "component": "io-camera-picker",
+      "scenario": "overview",
+      "path": "screenshots/ios/io-camera-picker/overview/ipad-simulator.png",
+      "bytes": 55783
+    },
+    {
+      "component": "share",
+      "scenario": "overview",
+      "path": "screenshots/ios/share/overview/ipad-simulator.png",
+      "bytes": 93314
     },
     {
       "component": "webview",
-      "scenario": "javascript-title",
-      "path": "screenshots/ios/webview/javascript-title/iphone-simulator.png",
-      "bytes": 197422
+      "scenario": "overview",
+      "path": "screenshots/ios/webview/overview/ipad-simulator.png",
+      "bytes": 634748
     },
     {
       "component": "webview",
-      "scenario": "cookie-roundtrip",
-      "path": "screenshots/ios/webview/cookie-roundtrip/iphone-simulator.png",
-      "bytes": 197191
+      "scenario": "after-back",
+      "path": "screenshots/ios/webview/after-back/ipad-simulator.png",
+      "bytes": 277065
     },
     {
-      "component": "webview",
-      "scenario": "cookies-cleared",
-      "path": "screenshots/ios/webview/cookies-cleared/iphone-simulator.png",
-      "bytes": 197191
+      "component": "permissions",
+      "scenario": "overview",
+      "path": "screenshots/ios/permissions/overview/ipad-simulator.png",
+      "bytes": 268612
     },
     {
-      "component": "webview",
-      "scenario": "invalid-destination",
-      "path": "screenshots/ios/webview/invalid-destination/iphone-simulator.png",
-      "bytes": 197060
+      "component": "geo-math",
+      "scenario": "overview",
+      "path": "screenshots/ios/geo-math/overview/ipad-simulator.png",
+      "bytes": 137472
+    },
+    {
+      "component": "ui-liquid-glass",
+      "scenario": "overview",
+      "path": "screenshots/ios/ui-liquid-glass/overview/ipad-simulator.png",
+      "bytes": 78005
     }
   ],
   "errors": [
     {
-      "screen": "Adaptive Time Picker",
-      "error": "ClientError('HTTP 408 (condition_timeout)')"
-    }
-  ],
-  "ok": false,
-  "attempts": [
-    {
       "screen": "Adaptive Alert Dialog",
-      "error": "initial list navigation missed Home entry",
-      "recovered": true
+      "error": "RuntimeError(\"could not scroll to 'Show ActionSheet'\")",
+      "retried": true,
+      "retry_error": "ClientError('HTTP 400 (invalid_arguments)')"
+    },
+    {
+      "screen": "Adaptive Navigation Bar",
+      "error": "ClientError('HTTP 408 (condition_timeout)')",
+      "retried": true,
+      "retry_error": "ClientError('HTTP 400 (invalid_arguments)')"
     },
     {
       "screen": "Web View",
-      "error": "initial toolbar contentDescription not exposed; SF Symbol names used",
-      "recovered_partial": true,
-      "missing": [
-        "second-page"
-      ]
+      "error": "RuntimeError(\"No visible element for 'Evaluate JavaScript title'\")",
+      "retried": true,
+      "retry_error": "ClientError('HTTP 400 (invalid_arguments)')"
+    },
+    {
+      "screen": "Known Limitations",
+      "error": "ClientError('HTTP 408 (condition_timeout)')",
+      "retried": true,
+      "retry_error": "ClientError('HTTP 400 (invalid_arguments)')"
     }
-  ]
+  ],
+  "ok": false
 }

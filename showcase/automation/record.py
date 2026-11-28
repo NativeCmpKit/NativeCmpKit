@@ -9,7 +9,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from generate_coverage import render  # noqa: E402
+from tour import SCREENS  # noqa: E402
+
+TITLE_COMPONENTS = {title: component for title, component, _ in SCREENS}
 
 CAPTURE_ROWS = {
     ("ui-adaptive-alert-dialog", "simple"): ["UI-ALERT-001", "UI-ALERT-002"],
@@ -34,7 +38,7 @@ SCREEN_ROWS = {
                                 "UI-DATE-005", "UI-DATE-006"],
     "ui-adaptive-time-picker": ["UI-TIME-001", "UI-TIME-002"],
     "ui-adaptive-alert-dialog": ["UI-ALERT-001", "UI-ALERT-002", "UI-ALERT-003",
-                                 "UI-ALERT-004", "UI-ALERT-005"],
+                                 "UI-ALERT-004", "UI-ALERT-005", "UI-ALERT-006"],
     "ui-adaptive-bottom-sheet": ["UI-SHEET-001", "UI-SHEET-002", "UI-SHEET-003"],
     "ui-adaptive-dropdown": ["UI-MENU-001", "UI-MENU-002"],
     "ui-adaptive-scaffold": ["UI-BAR-001", "UI-BAR-008"],
@@ -105,7 +109,7 @@ def main() -> None:
             })
 
     for failure in tour.get("errors", []):
-        component = failure.get("screen", "")
+        component = TITLE_COMPONENTS.get(failure.get("screen", ""), failure.get("screen", ""))
         for row_id in SCREEN_ROWS.get(component, []):
             if only and row_id not in only:
                 continue

@@ -1,9 +1,37 @@
 {
-  "captured_at": "2026-11-27T12:45:58.506936+00:00",
+  "captured_at": "2026-11-28T04:00:33.159701+00:00",
   "target": "android",
-  "session": "b1a5a3e9615883c8e1c312d0",
+  "session": "8abe6c5ab2da7c6f114787a3",
   "device": "api35-phone",
   "flows": [
+    {
+      "id": "buttons",
+      "screen": "Adaptive Buttons",
+      "status": "passed",
+      "before": "screenshots/android/functional/buttons/api35-phone-before.png",
+      "after": "screenshots/android/functional/buttons/api35-phone-after.png"
+    },
+    {
+      "id": "clickable",
+      "screen": "Adaptive Clickable",
+      "status": "passed",
+      "before": "screenshots/android/functional/clickable/api35-phone-before.png",
+      "after": "screenshots/android/functional/clickable/api35-phone-after.png"
+    },
+    {
+      "id": "switch",
+      "screen": "Adaptive Switch",
+      "status": "passed",
+      "before": "screenshots/android/functional/switch/api35-phone-before.png",
+      "after": "screenshots/android/functional/switch/api35-phone-after.png"
+    },
+    {
+      "id": "slider",
+      "screen": "Adaptive Slider",
+      "status": "passed",
+      "before": "screenshots/android/functional/slider/api35-phone-before.png",
+      "after": "screenshots/android/functional/slider/api35-phone-after.png"
+    },
     {
       "id": "dropdown",
       "screen": "Adaptive Drop Down",
@@ -12,20 +40,33 @@
       "after": "screenshots/android/functional/dropdown/api35-phone-after.png"
     },
     {
+      "id": "alert-cancel",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/android/functional/alert-cancel/api35-phone-before.png",
+      "after": "screenshots/android/functional/alert-cancel/api35-phone-after.png"
+    },
+    {
       "id": "alert-text-field",
       "screen": "Adaptive Alert Dialog",
-      "status": "failed",
-      "before": "screenshots/android/functional/alert-text-field/api35-phone-before.png",
-      "after": "screenshots/android/functional/alert-text-field/api35-phone-failed-after.png",
-      "error": "AssertionError(\"could not scroll to 'Show Text Field Dialog'\")"
+      "status": "not-applicable",
+      "reason": "sample section is ios-only",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "alert-confirm",
+      "screen": "Adaptive Alert Dialog",
+      "status": "passed",
+      "before": "screenshots/android/functional/alert-confirm/api35-phone-before.png",
+      "after": "screenshots/android/functional/alert-confirm/api35-phone-after.png"
     },
     {
       "id": "date-bounds",
       "screen": "Adaptive Date Picker",
-      "status": "failed",
-      "before": null,
-      "after": null,
-      "error": "ClientError('HTTP 530 (http_error)')"
+      "status": "passed",
+      "before": "screenshots/android/functional/date-bounds/api35-phone-before.png",
+      "after": "screenshots/android/functional/date-bounds/api35-phone-after.png"
     },
     {
       "id": "scaffold-tab",
@@ -37,10 +78,10 @@
     {
       "id": "action-sheet",
       "screen": "Adaptive Alert Dialog",
-      "status": "failed",
-      "before": "screenshots/android/functional/action-sheet/api35-phone-before.png",
-      "after": "screenshots/android/functional/action-sheet/api35-phone-failed-after.png",
-      "error": "AssertionError(\"could not scroll to 'Show ActionSheet'\")"
+      "status": "not-applicable",
+      "reason": "sample section is ios-only",
+      "before": null,
+      "after": null
     },
     {
       "id": "permissions-sms-rows",
@@ -48,12 +89,159 @@
       "status": "passed",
       "before": "screenshots/android/functional/permissions-sms-rows/api35-phone-before.png",
       "after": "screenshots/android/functional/permissions-sms-rows/api35-phone-after.png"
+    },
+    {
+      "id": "time-24h",
+      "screen": "Adaptive Time Picker",
+      "status": "passed",
+      "before": "screenshots/android/functional/time-24h/api35-phone-before.png",
+      "after": "screenshots/android/functional/time-24h/api35-phone-after.png"
+    },
+    {
+      "id": "permissions-bulk-deny",
+      "screen": "Permissions",
+      "status": "passed",
+      "before": "screenshots/android/functional/permissions-bulk-deny/api35-phone-before.png",
+      "after": "screenshots/android/functional/permissions-bulk-deny/api35-phone-after.png"
+    },
+    {
+      "id": "sheet-veto",
+      "screen": "Adaptive Bottom Sheet",
+      "status": "passed",
+      "before": "screenshots/android/functional/sheet-veto/api35-phone-before.png",
+      "after": "screenshots/android/functional/sheet-veto/api35-phone-after.png"
+    },
+    {
+      "id": "date-display",
+      "screen": "Adaptive Date Picker",
+      "status": "failed",
+      "before": "screenshots/android/functional/date-display/api35-phone-before.png",
+      "after": "screenshots/android/functional/date-display/api35-phone-failed-after.png",
+      "error": "AssertionError(\"missing visible text 'Inline display: Input'\")"
+    },
+    {
+      "id": "webview-js",
+      "screen": "Web View",
+      "status": "failed",
+      "before": "screenshots/android/functional/webview-js/api35-phone-before.png",
+      "after": "screenshots/android/functional/webview-js/api35-phone-failed-after.png",
+      "error": "AssertionError(\"missing visible text 'JavaScript: off'\")"
+    },
+    {
+      "id": "sheet",
+      "screen": "Adaptive Bottom Sheet",
+      "status": "passed",
+      "before": "screenshots/android/functional/sheet/api35-phone-before.png",
+      "after": "screenshots/android/functional/sheet/api35-phone-after.png"
+    },
+    {
+      "id": "topbar",
+      "screen": "Adaptive Top Bar",
+      "status": "passed",
+      "before": "screenshots/android/functional/topbar/api35-phone-before.png",
+      "after": "screenshots/android/functional/topbar/api35-phone-after.png"
+    },
+    {
+      "id": "toolbar",
+      "screen": "Adaptive Toolbar",
+      "status": "passed",
+      "before": "screenshots/android/functional/toolbar/api35-phone-before.png",
+      "after": "screenshots/android/functional/toolbar/api35-phone-after.png"
+    },
+    {
+      "id": "navbar",
+      "screen": "Adaptive Navigation Bar",
+      "status": "passed",
+      "before": "screenshots/android/functional/navbar/api35-phone-before.png",
+      "after": "screenshots/android/functional/navbar/api35-phone-after.png"
+    },
+    {
+      "id": "icons-category",
+      "screen": "Cupertino Icons",
+      "status": "passed",
+      "before": "screenshots/android/functional/icons-category/api35-phone-before.png",
+      "after": "screenshots/android/functional/icons-category/api35-phone-after.png"
+    },
+    {
+      "id": "nav-restore",
+      "screen": "Geo Maths",
+      "status": "passed",
+      "before": "screenshots/android/functional/nav-restore/api35-phone-before.png",
+      "after": "screenshots/android/functional/nav-restore/api35-phone-after.png"
+    },
+    {
+      "id": "geo-math",
+      "screen": "Geo Maths",
+      "status": "passed",
+      "before": "screenshots/android/functional/geo-math/api35-phone-before.png",
+      "after": "screenshots/android/functional/geo-math/api35-phone-after.png"
+    },
+    {
+      "id": "limitations",
+      "screen": "Known Limitations",
+      "status": "passed",
+      "before": "screenshots/android/functional/limitations/api35-phone-before.png",
+      "after": "screenshots/android/functional/limitations/api35-phone-after.png"
+    },
+    {
+      "id": "liquidglass",
+      "screen": "Liquid Glass",
+      "status": "passed",
+      "before": "screenshots/android/functional/liquidglass/api35-phone-before.png",
+      "after": "screenshots/android/functional/liquidglass/api35-phone-after.png"
+    },
+    {
+      "id": "webview",
+      "screen": "Web View",
+      "status": "passed",
+      "before": "screenshots/android/functional/webview/api35-phone-before.png",
+      "after": "screenshots/android/functional/webview/api35-phone-after.png"
+    },
+    {
+      "id": "permission-camera",
+      "screen": "Permissions",
+      "status": "blocked",
+      "reason": "OS permission dialog targeting is not enabled in the baseline",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "file-picker",
+      "screen": "File Picker",
+      "status": "blocked",
+      "reason": "system document picker; no seeded file selection in this run",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "file-saver",
+      "screen": "File Saver",
+      "status": "blocked",
+      "reason": "system export dialog; no save destination in this run",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "share",
+      "screen": "Content Sharing",
+      "status": "blocked",
+      "reason": "system share sheet; no external recipient",
+      "before": null,
+      "after": null
+    },
+    {
+      "id": "camera",
+      "screen": "Camera Picker",
+      "status": "blocked",
+      "reason": "emulator camera source is not seeded",
+      "before": null,
+      "after": null
     }
   ],
-  "updated_at": "2026-11-27T12:57:18.055236+00:00",
   "summary": {
-    "passed": 3,
-    "failed": 3,
-    "blocked": 0
-  }
+    "passed": 23,
+    "failed": 2,
+    "blocked": 5
+  },
+  "updated_at": "2026-11-28T04:01:32.952836+00:00"
 }

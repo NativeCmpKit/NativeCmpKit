@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -177,6 +178,17 @@ def scroll_to_top(ui):
         scroll_list(ui, -5)
 
 
+def wait_home(ui, attempts: int = 12):
+    for _ in range(attempts):
+        try:
+            if home_visible(ui):
+                return True
+        except Exception:  # noqa: BLE001 - the agent can reject actions while launching
+            pass
+        time.sleep(1.5)
+    return False
+
+
 def ensure_home(ui):
     if home_visible(ui):
         return
@@ -188,10 +200,26 @@ def ensure_home(ui):
         if home_visible(ui):
             return
     ui.action("app.restart", {"id": ANDROID_APP_ID})
-    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
+    if not wait_home(ui):
+        find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
 
 
 def open_screen(ui, title: str, use_search: bool = True):
+    last = None
+    for attempt in range(3):
+        try:
+            return _open_screen_once(ui, title, use_search)
+        except Exception as error:  # noqa: BLE001 - retry with a clean Home
+            last = error
+            try:
+                ui.action("app.restart", {"id": ANDROID_APP_ID})
+                wait_home(ui)
+            except Exception:  # noqa: BLE001
+                pass
+    raise RuntimeError(f"Could not find the Home entry for {title!r}: {last}")
+
+
+def _open_screen_once(ui, title: str, use_search: bool = True):
     ensure_home(ui)
     try:
         ui.action("keyboard.press", {"keys": ["ESC"]})
@@ -245,7 +273,8 @@ def back(ui, platform: str):
     if home_visible(ui):
         return
     ui.action("app.restart", {"id": ANDROID_APP_ID})
-    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
+    if not wait_home(ui):
+        find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
 
 
 def main() -> None:
@@ -289,7 +318,8 @@ def main() -> None:
     # Home is the index and the reset entry point.
     if not home_visible(ui):
         ui.action("app.restart", {"id": ANDROID_APP_ID})
-    find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
+    if not wait_home(ui):
+        find(ui, {"text_contains": "component screens"}, timeout_ms=10000)
     scroll_to_top(ui)
     shot("home", "index")
 
