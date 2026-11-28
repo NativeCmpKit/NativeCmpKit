@@ -513,7 +513,9 @@ jobs:
           persist-credentials: false
       - name: Set up the isolated UI Test Actions Python environment
         if: endsWith(inputs.profile, '-sample-automation')
-        run: python3 -m venv "$RUNNER_TEMP/nativecmpkit-ui-python"
+        run: |
+          PYTHONPATH=scripts/ci python3 -B -m unittest test_mobile_alert_journey
+          python3 -m venv "$RUNNER_TEMP/nativecmpkit-ui-python"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
         with:
           distribution: temurin
