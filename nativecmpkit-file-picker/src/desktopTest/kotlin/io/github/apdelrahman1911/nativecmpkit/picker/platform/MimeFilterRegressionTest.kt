@@ -14,10 +14,18 @@ import kotlin.test.assertTrue
 class MimeFilterRegressionTest {
     @Test fun contemporaryImagesAreIncludedAndUnknownMimeIsNeverAnUnfilteredDialog() {
         val images = resolveExtensions(FilePickerFileType.Image)!!
-        for (extension in listOf("avif", "heic", "heif")) assertTrue(extension in images, extension)
+        for (extension in listOf("avif", "heic", "heif", "heics", "heifs")) assertTrue(extension in images, extension)
         assertFailsWith<IllegalArgumentException> { resolveExtensions(FilePickerFileType.Custom(listOf("application/x-nativecmpkit-unknown"))) }
         assertFailsWith<IllegalArgumentException> { resolveExtensions(FilePickerFileType.Custom(listOf("image/png", "application/x-nativecmpkit-unknown"))) }
         assertEquals(listOf("custom"), resolveExtensions(FilePickerFileType.Extension(listOf("custom"))))
+    }
+
+    @Test fun customCommaSeparatedMimeTypesAreValidatedIndividually() {
+        assertEquals(listOf("avif", "heic"), resolveExtensions(FilePickerFileType.Custom(listOf(" IMAGE/AVIF, image/heic "))))
+        val failure = assertFailsWith<IllegalArgumentException> {
+            resolveExtensions(FilePickerFileType.Custom(listOf("image/png, application/x-nativecmpkit-unknown")))
+        }
+        assertTrue(failure.message.orEmpty().contains("application/x-nativecmpkit-unknown"))
     }
 
     @Test fun protocolCaseFoldingDoesNotDependOnTurkishDefaultLocale() {

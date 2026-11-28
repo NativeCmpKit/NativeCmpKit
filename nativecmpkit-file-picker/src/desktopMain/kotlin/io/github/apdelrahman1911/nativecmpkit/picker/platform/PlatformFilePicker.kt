@@ -161,6 +161,8 @@ internal fun resolveExtensions(type: FilePickerFileType): List<String>? {
 
         else -> {
             type.value
+                .flatMap { it.split(',') }
+                .map(String::trim)
                 .flatMap { mimeType ->
                     MimeTypes.findExtensionsByMimeTypes(mimeType, mimeType.contains('*'))
                         .ifEmpty { throw IllegalArgumentException("Unknown MIME type '$mimeType'; use FilePickerFileType.Extension") }
