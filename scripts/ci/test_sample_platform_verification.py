@@ -18,6 +18,14 @@ CODEC = "sample/common/src/nonAndroidTest/kotlin/io/github/apdelrahman1911/nativ
 
 
 class SamplePlatformVerificationTests(unittest.TestCase):
+    def test_xcode_app_module_does_not_shadow_its_nativecmpkit_framework(self):
+        project = (ROOT / "sample/ios/NativeCmpKit.xcodeproj/project.pbxproj").read_text()
+        entry = (ROOT / "sample/ios/NativeCmpKit/NativeCmpKitApp.swift").read_text()
+        self.assertEqual(2, project.count("PRODUCT_MODULE_NAME = NativeCmpKitSample;"))
+        self.assertEqual(2, project.count("PRODUCT_BUNDLE_IDENTIFIER = io.github.apdelrahman1911.nativecmpkit.sample;"))
+        self.assertIn("import NativeCmpKit", entry)
+        self.assertIn(":sample:common:embedAndSignAppleFrameworkForXcode", project)
+
     def _built_target_fixture(self, root, *, missing_wasm=False,
                               jvm_output="sample/desktop/build/libs/sample-jvm.jar"):
         import sample_platform_verification as sample
@@ -308,7 +316,8 @@ class SamplePlatformVerificationTests(unittest.TestCase):
         old = ROOT / CODEC.replace("nonAndroidTest", "desktopTest")
         self.assertFalse(old.exists())
         source = (ROOT / CODEC).read_text()
-        self.assertEqual("08ce40901f75b935aaae8d25568c55851985b6c7d0d8858a5c18dd5eebe6391c",
+        # Reviewed namespace-only move of the four original codec cases.
+        self.assertEqual("7047eb9d9d8d5d39023e4389db7e846aa7af65659463da8ec4dc523cb62f6d5b",
                          hashlib.sha256((ROOT / CODEC).read_bytes()).hexdigest())
         self.assertEqual(4, source.count("@Test"))
         self.assertIn("input.toByteArray()", source)
