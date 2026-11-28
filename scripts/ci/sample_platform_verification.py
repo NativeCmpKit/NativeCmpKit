@@ -100,7 +100,7 @@ def gradle_command(root: Path, selected: dict, simulator: str | None = None) -> 
         raise ValueError("Sample plan differs from the fixed source selection")
     apple = selected["mode"] == "apple"
     if (apple and (not simulator or not runtime_context.UUID.fullmatch(simulator))) or (not apple and simulator):
-        raise ValueError("Only Apple sample execution requires its exact selected booted simulator")
+        raise ValueError("Only Apple sample verification requires its exact selected simulator")
     command = ["./gradlew", "--continue", "--no-daemon", "--console=plain", "--no-configuration-cache",
                "--max-workers=1", "--no-parallel", "-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8",
                "-Pkotlin.compiler.execution.strategy=in-process", "-Pkotlin.native.jvmArgs=-Xmx2048m",
@@ -328,7 +328,8 @@ def collect_sample_reports(root: Path, item: dict, started_ns: int, ended_ns: in
     return result
 
 
-def run(root: Path, mode: str, simulator: str | None, timeout: int, *, build_only: bool = False) -> dict:
+def run(root: Path, mode: str, simulator: str | None, timeout: int, *, build_only: bool = False,
+        xcode_timeout: int | None = None) -> dict:
     selected = plan(root, mode, build_only=build_only)
     command = gradle_command(root, selected, simulator)
     output = lt.safe_path(root, "build/ci-verification/sample-platforms-" + mode)
@@ -341,7 +342,8 @@ def run(root: Path, mode: str, simulator: str | None, timeout: int, *, build_onl
         output.mkdir()
         before = inputs(root)
         context = runtime_context.capture(expected_arch="arm64" if mode == "apple" else "x64", require_clean=True,
-                                          apple=mode == "apple", device=simulator, require_booted=mode == "apple",
+                                          apple=mode == "apple", device=simulator,
+                                          require_booted=mode == "apple" and not build_only,
                                           android_package="android-37.0", browser=mode == "linux")
         lt.write_json(output / "plan.json", selected)
         lt.write_json(output / "inputs-before.json", before)
@@ -406,7 +408,8 @@ def run(root: Path, mode: str, simulator: str | None, timeout: int, *, build_onl
                 errors.append({"error": "Actual Xcode NativeCmpKit target/scheme is missing; never guess a project or skip its build"})
             else:
                 xcommand = xcode_command(root, simulator)
-                xexecution = lt.execute(root, xcommand, output / "xcode.log", timeout, 8192)
+                xexecution = lt.execute(root, xcommand, output / "xcode.log",
+                                        timeout if xcode_timeout is None else xcode_timeout, 8192)
                 receipt["xcode"] = {"command": xcommand, "execution": xexecution, "signing_allowed": False,
                                     "real_framework_shell_phase_required": True}
                 shell = (output / "xcode.log").read_text(errors="replace")
@@ -442,7 +445,11 @@ def main() -> int:
     parser.add_argument("--build-only", action="store_true",
                         help="Recover app builds only; request and count zero sample test executions")
     parser.add_argument("--timeout", type=int, default=4800)
+    parser.add_argument("--xcode-timeout", type=int, help="Independent timeout for the Apple Xcode build")
     args = parser.parse_args()
+    if args.xcode_timeout is not None and (args.operation != "run" or args.mode != "apple" or
+                                           not 1 <= args.xcode_timeout <= 4800):
+        parser.error("--xcode-timeout requires an Apple run and a bounded positive timeout")
     if args.operation == "matrix":
         if not args.profile or args.mode or args.simulator or args.build_only:
             parser.error("matrix requires only its fixed profile")
@@ -454,7 +461,8 @@ def main() -> int:
     else:
         if not args.mode or args.profile or not 1 <= args.timeout <= 4800:
             parser.error("run requires a fixed mode and a bounded positive timeout")
-        result = run(ROOT, args.mode, args.simulator, args.timeout, build_only=args.build_only)
+        result = run(ROOT, args.mode, args.simulator, args.timeout, build_only=args.build_only,
+                     xcode_timeout=args.xcode_timeout)
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if args.operation != "run" or result["passed"] else 1
 

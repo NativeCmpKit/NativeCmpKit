@@ -694,11 +694,21 @@ jobs:
         run: |
           python3 -B scripts/ci/runtime_context.py --expected-arch arm64 --apple --select-simulator iphone \
             --output build/ci-identity/simulator.json
-          read -r device state < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["udid"], s["state"])')
-          if [[ "$state" != Booted ]]; then xcrun simctl boot "$device"; fi
-          xcrun simctl bootstatus "$device" -b
+          read -r template device_type simulator_runtime < <(python3 -c 'import json; s = json.load(open("build/ci-identity/simulator.json"))["simulator"]; print(s["udid"], s["device_type"], s["runtime_identifier"])')
+          device="$(xcrun simctl create "NativeCmpKit Sample $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" "$device_type" "$simulator_runtime")"
+          [[ "$device" =~ ^[0-9A-Fa-f]{8}(-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$ && "$device" != "$template" ]]
+          # This checks the unsigned build and does not run the app. Xcode only needs a destination.
+          trap 'if ! xcrun simctl delete "$device"; then exit 1; fi' EXIT
           python3 -B scripts/ci/sample_platform_verification.py run --mode apple --build-only \
-            --simulator "$device" --timeout 1500
+            --simulator "$device" --timeout 3600 --xcode-timeout 1200
+      - name: Retain bounded Xcode sample failure diagnostics
+        if: ${{ failure() && inputs.profile == 'identity-apple-sample' }}
+        shell: bash
+        run: |
+          output=build/ci-verification/sample-platforms-apple
+          if [[ -d "$output" ]]; then
+            python3 -B scripts/ci/failure_diagnostics.py --output "$output"
+          fi
       - name: Tests requiring an owned UIKit application
         if: inputs.profile == 'identity-apple-app' || inputs.profile == 'identity-apple-webview' || inputs.profile == 'identity-apple-webview-restore' || inputs.profile == 'identity-apple-ownership' || startsWith(inputs.profile, 'identity-apple-ui') || inputs.profile == 'identity-apple-main-ui' || inputs.profile == 'identity-apple-camera' || inputs.profile == 'identity-apple-camera-disposal'
         shell: bash
@@ -882,6 +892,7 @@ jobs:
             build/ci-verification/identity-ui-pre26-toolbar/receipt.json
             build/ci-verification/identity-ui-pre26-customization/receipt.json
             build/ci-verification/sample-platforms-apple/receipt.json
+            build/ci-verification/sample-platforms-apple/failure-diagnostics.json
             build/ci-verification/identity-linux-desktop/receipt.json
             build/ci-verification/identity-android-webview-device/controller.json
             build/ci-verification/identity-android-webview-device/library/receipt.json

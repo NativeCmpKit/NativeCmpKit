@@ -26,6 +26,22 @@ class SamplePlatformVerificationTests(unittest.TestCase):
         self.assertIn("import NativeCmpKit", entry)
         self.assertIn(":sample:common:embedAndSignAppleFrameworkForXcode", project)
 
+    def test_unsigned_identity_sample_uses_an_owned_destination_and_separate_build_budgets(self):
+        import sample_platform_verification as sample
+        workflow = (ROOT / ".github/workflows/build-native-libs.yml").read_text()
+        step = workflow.split("- name: Build the NativeCmpKit sample application with Xcode", 1)[1]
+        step = step.split("- name: Retain bounded Xcode sample failure diagnostics", 1)[0]
+        self.assertIn("xcrun simctl create", step)
+        self.assertIn('xcrun simctl delete "$device"', step)
+        self.assertNotIn("simctl boot", step)
+        self.assertIn('--simulator "$device" --timeout 3600 --xcode-timeout 1200', step)
+        arguments = ["sample_platform_verification.py", "run", "--mode", "apple", "--build-only", "--simulator",
+                     "11111111-1111-1111-1111-111111111111", "--timeout", "3600", "--xcode-timeout", "1200"]
+        with mock.patch.object(sys, "argv", arguments), mock.patch.object(sample, "run", return_value={"passed": True}) as run, \
+             mock.patch("builtins.print"):
+            self.assertEqual(0, sample.main())
+        run.assert_called_once_with(ROOT, "apple", arguments[6], 3600, build_only=True, xcode_timeout=1200)
+
     def _built_target_fixture(self, root, *, missing_wasm=False,
                               jvm_output="sample/desktop/build/libs/sample-jvm.jar"):
         import sample_platform_verification as sample
