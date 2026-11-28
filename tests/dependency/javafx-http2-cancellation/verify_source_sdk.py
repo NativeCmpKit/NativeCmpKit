@@ -9,13 +9,14 @@ import os
 from pathlib import Path
 import platform
 import shutil
+from statistics import median
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import time
 from zipfile import ZipFile
 
-from probe_runner import CASES, HERE, case_results, compare_patch, document, need, patch_source
+from probe_runner import CASES, HERE, case_results, checked_artifact, compare_patch, document, need, patch_source
 
 
 LOCK = HERE / "source-sdk-lock.json"
@@ -197,6 +198,52 @@ def verify_http2(module_path, classes, output, lock):
                         peer.wait(timeout=5)
 
 
+def compare_navigation_performance(module_path, classes, output, target, architecture):
+    _, classifier = CLASSIFIERS[target, architecture]
+    stock = output / "ordinary-runtime"
+    stock.mkdir()
+    expected = document((HERE / "artifacts.json").read_text(encoding="utf-8"))["platforms"][classifier]
+    need(len(expected) == 5, "Expected five exact aligned baseline runtime modules")
+    for row in expected:
+        checked_artifact(stock, row, download=True)
+
+    records = {"ordinary": [], "source": []}
+    for number, (runtime, module_dir) in enumerate((
+        ("ordinary", stock), ("source", module_path), ("source", module_path), ("ordinary", stock),
+    ), start=1):
+        name = f"navigation-{number}-{runtime}"
+        home = output / f"{name}-home"
+        home.mkdir()
+        scene = run_probe(module_dir, classes, output, name, "JavaFxNavigationPerformanceProbe",
+                          java_options=(f"-Duser.home={home}", "-Xms64m", "-Xmx512m"))
+        summaries = [line for line in scene.splitlines() if line.startswith('{"startupNanos":')]
+        need(len(summaries) == 1, "Missing comparable WebView performance samples")
+        sample = document(summaries[0])
+        need(type(sample["startupNanos"]) is int and sample["startupNanos"] > 0 and
+             type(sample["processCpuNanos"]) is int and sample["processCpuNanos"] >= 0 and
+             len(sample["samplesNanos"]) == 20 and all(type(value) is int and value > 0 for value in sample["samplesNanos"]),
+             "Invalid timed WebView workload")
+        records[runtime].append(sample)
+
+    metrics = {}
+    for runtime, observations in records.items():
+        durations = sorted(value for sample in observations for value in sample["samplesNanos"])
+        metrics[runtime] = {"startup_nanos": median(sample["startupNanos"] for sample in observations),
+                            "steady_state_median_nanos": median(durations), "steady_state_p95_nanos": durations[37],
+                            "median_process_cpu_nanos": median(sample["processCpuNanos"] for sample in observations)}
+    thresholds = {"startup_nanos": 300_000_000, "steady_state_median_nanos": 20_000_000,
+                  "steady_state_p95_nanos": 50_000_000}
+    regressions = [metric for metric, floor in thresholds.items()
+                   if metrics["source"][metric] > max(metrics["ordinary"][metric] * 1.5, metrics["ordinary"][metric] + floor)]
+    write_json(output / "navigation-performance.json", {
+        "ordinary_artifacts": expected, "classifier": classifier, "process_order": ["ordinary", "source", "source", "ordinary"],
+        "absolute_threshold_nanos": thresholds, "relative_threshold": 1.5, "suspect_regressions": regressions,
+        "metrics": metrics, "observations": records,
+        "scope": "Matched small local WebView navigations on this exact runner and JDK",
+    })
+    need(not regressions, "Source OpenJFX has a material regression in the matched navigation workload")
+
+
 def linux_binary_inventory(sdk, binaries, architecture):
     expected_cpu, elf_machine = {"x64": ("x86_64", "Advanced Micro Devices X86-64"),
                                  "arm64": ("aarch64", "AArch64")}[architecture]
@@ -313,7 +360,8 @@ def verify_sdk(source, output, lock, target, architecture):
     subprocess.run(["javac", "--module-path", str(module_path), "--add-modules", "javafx.controls,javafx.web,jdk.management",
                     "-d", str(classes), str(HERE / "JavaFxPublicCancellationProbe.java"),
                     str(HERE / "JavaFxCancellationLifecycleProbe.java"),
-                    str(HERE / "JavaFxHttp2CancellationProbe.java")], check=True, timeout=60)
+                    str(HERE / "JavaFxHttp2CancellationProbe.java"),
+                    str(HERE / "JavaFxNavigationPerformanceProbe.java")], check=True, timeout=60)
     stdout = run_probe(module_path, classes, output, "probe", "JavaFxPublicCancellationProbe", ",".join(CASES))
     write_json(output / "case-results.json", case_results(stdout, list(CASES)))
     stdout = run_probe(module_path, classes, output, "lifecycle", "JavaFxCancellationLifecycleProbe")
@@ -327,6 +375,7 @@ def verify_sdk(source, output, lock, target, architecture):
          "Incomplete lifecycle or socket resource observations")
     write_json(output / "lifecycle-results.json", lifecycle)
     verify_http2(module_path, classes, output, lock)
+    compare_navigation_performance(module_path, classes, output, target, architecture)
     need(before == {path.name: sha256(path) for path in binaries}, "SDK binaries changed during execution")
     source_identity(source, lock, patched=True)
     verify_materials(output, lock)

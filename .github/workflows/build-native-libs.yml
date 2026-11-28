@@ -241,6 +241,10 @@ jobs:
             build/openjfx-source-verification/http2-probe.stdout
             build/openjfx-source-verification/http2-probe.stderr
             build/openjfx-source-verification/http2-results.json
+            build/openjfx-source-verification/navigation-*-execution.json
+            build/openjfx-source-verification/navigation-*.stdout
+            build/openjfx-source-verification/navigation-*.stderr
+            build/openjfx-source-verification/navigation-performance.json
             build/openjfx-source-verification/javafx-consumer-jars.json
             build/ci-webview-consumer/source-sdk/*.json
             build/ci-webview-consumer/source-sdk/*/*.json
