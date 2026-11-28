@@ -70,6 +70,16 @@ def cargo_stdout(value, *other):
 
 
 class SourceAndAdmission(unittest.TestCase):
+    def test_bundle_startup_records_only_the_exact_ordered_prefix(self):
+        prefix = b"NATIVECMPKIT_APPKIT_STARTUP "
+        entry = prefix + b"entry\n"
+        launch = prefix + b"launch-inputs\n"
+        self.assertEqual(["entry", "launch-inputs"], runner.bundle_startup_progress(entry + launch))
+        self.assertEqual(["entry"], runner.bundle_startup_progress(entry + b"unrelated private output\n"))
+        self.assertEqual([], runner.bundle_startup_progress(entry + entry))
+        self.assertEqual([], runner.bundle_startup_progress(launch + entry))
+        self.assertEqual([], runner.bundle_startup_progress(entry + prefix + b"unknown value\n"))
+
     def test_readonly_plan_has_fixed_default_eight_no_selector_or_publication(self):
         with patch.object(runner.subprocess, "Popen", side_effect=AssertionError("no process")):
             value = runner.plan()

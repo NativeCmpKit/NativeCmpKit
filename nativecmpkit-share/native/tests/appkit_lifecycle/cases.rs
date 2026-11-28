@@ -454,6 +454,12 @@ fn cleanup_owned() {
     WITNESSES.with(|witnesses| witnesses.borrow_mut().clear());
 }
 
+fn bundle_startup_step(identifier: Option<&str>, step: &str) {
+    if identifier.is_some() {
+        println!("NATIVECMPKIT_APPKIT_STARTUP {step}");
+    }
+}
+
 fn activate_owned_bundle(identifier: &str) {
     let pid = std::process::id() as i32;
     let bundle = NSBundle::mainBundle();
@@ -468,6 +474,7 @@ fn activate_owned_bundle(identifier: &str) {
         Some(&*expected_identifier)
     );
     assert_eq!(running.processIdentifier(), pid);
+    bundle_startup_step(Some(identifier), "workspace-registration");
 
     // Ask the workspace to foreground the already registered, supervised process.
     // Any unexpected new instance receives only a selector that the harness refuses.
@@ -508,6 +515,9 @@ fn activate_owned_bundle(identifier: &str) {
 
 pub(crate) fn run() {
     let args: Vec<_> = std::env::args().skip(1).collect();
+    let bundle_identifier = std::env::var("NATIVECMPKIT_APPKIT_OWNED_BUNDLE").ok();
+    let identifier = bundle_identifier.as_deref();
+    bundle_startup_step(identifier, "entry");
     assert!(
         !args
             .iter()
@@ -519,18 +529,26 @@ pub(crate) fn run() {
         std::env::var("NATIVECMPKIT_NATIVE_UI_TESTS"),
         "Native GUI opt-in is required; no skip/pass fallback"
     );
+    bundle_startup_step(identifier, "launch-inputs");
     let main =
         MainThreadMarker::new().expect("This native harness must run on actual process Main");
     assert!(
         is_supported(),
         "This AppKit does not expose cancellable native sharing"
     );
+    bundle_startup_step(identifier, "appkit-supported");
     let app = NSApplication::sharedApplication(main);
     assert!(
         app.windows().is_empty(),
         "The disposable harness must not own an existing application window"
     );
-    assert!(app.setActivationPolicy(NSApplicationActivationPolicy::Regular));
+    bundle_startup_step(identifier, "empty-app-owner");
+    let regular = NSApplicationActivationPolicy::Regular;
+    if app.activationPolicy() != regular {
+        assert!(app.setActivationPolicy(regular));
+    }
+    assert_eq!(app.activationPolicy(), regular);
+    bundle_startup_step(identifier, "regular-policy");
     let selected = match args.as_slice() {
         [] => FINITE.to_vec(),
         [selector] if selector == "--case=stress_2048" => {
@@ -544,7 +562,7 @@ pub(crate) fn run() {
         _ => panic!("Select zero or one exact --case=NAME; no unrelated test replay"),
     };
     assert!(!selected.is_empty(), "Unknown native case selection");
-    let bundle_identifier = std::env::var("NATIVECMPKIT_APPKIT_OWNED_BUNDLE").ok();
+    bundle_startup_step(identifier, "selection");
     let staged_bundle = NSBundle::mainBundle()
         .bundleIdentifier()
         .is_some_and(|identifier| {
@@ -564,6 +582,7 @@ pub(crate) fn run() {
             "The AppKit bundle must match the staged application"
         );
     }
+    bundle_startup_step(identifier, "bundle-identity");
 
     // Enter the WindowServer event loop before running the fixture. Scheduling
     // on the run loop leaves the Main dispatch queue available to share callbacks.
@@ -575,6 +594,7 @@ pub(crate) fn run() {
                 "The AppKit application event loop must be running"
             );
             if let Some(identifier) = bundle_identifier.as_deref() {
+                bundle_startup_step(Some(identifier), "event-loop");
                 activate_owned_bundle(identifier);
             } else {
                 app.activate();

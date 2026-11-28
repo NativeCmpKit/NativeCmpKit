@@ -81,6 +81,10 @@ MARKER = re.compile(
     r"seconds=([0-9]+\.[0-9]{6}) live=([0-9]+) registry=([0-9]+) cleanup=(true|false)\Z"
 )
 WITNESS = "actual-native=true live=0 registry=0 cleanup=true controlled-callbacks-not-recipient=true"
+APPKIT_STARTUP_STAGES = (
+    "entry", "launch-inputs", "appkit-supported", "empty-app-owner", "regular-policy",
+    "selection", "bundle-identity", "event-loop", "workspace-registration",
+)
 
 
 class Refusal(ValueError):
@@ -597,6 +601,13 @@ def stage_owned_app(root: Path, case_output: Path, artifact_path: Path, artifact
     }
 
 
+def bundle_startup_progress(stdout: bytes) -> list[str]:
+    prefix = b"NATIVECMPKIT_APPKIT_STARTUP "
+    observed = [line for line in stdout.splitlines() if line.startswith(prefix.rstrip())]
+    expected = [prefix + step.encode("ascii") for step in APPKIT_STARTUP_STAGES]
+    return list(APPKIT_STARTUP_STAGES[:len(observed)]) if observed == expected[:len(observed)] else []
+
+
 def run_missing_six(root: Path, output: Path, artifact_path: Path, artifact: dict,
                     environment: dict, before: dict, native_before: dict,
                     git_before: dict, runtime_before: dict, baseline: dict, *,
@@ -650,6 +661,7 @@ def run_missing_six(root: Path, output: Path, artifact_path: Path, artifact: dic
                 marker = f"NATIVECMPKIT_APPKIT_BUNDLE pid={execution.get('pid')}".encode()
                 observed = [line for line in stdout.splitlines() if line.startswith(b"NATIVECMPKIT_APPKIT_BUNDLE")]
                 record["owned_bundle_acknowledged"] = observed == [marker]
+                record["bundle_startup_progress"] = bundle_startup_progress(stdout)
                 record["bundle_held"] = (
                     file_identity(ordinary_file(root, bundle["executable"])) == bundle["executable_identity"]
                     and file_identity(ordinary_file(root, bundle["info_plist"])) == bundle["info_identity"]
