@@ -43,4 +43,22 @@ The stock 21.0.13 Linux archives carry eight `libavplugin` variants on each arch
 
 After the SDK tests pass, the workflow stages the six original upstream modular publication JARs in a file-only verification repository. It matches their native bytes against the tested SDK and checks that the WebView loader class is identical. The independent consumer verifies its NativeCmpKit publication using both Gradle module metadata and POM-only resolution. In each mode it checks all six JavaFX classifier hashes across the four classpaths, existing WebView behavior, and transport closure on public Stop, replacement navigation and Compose disposal. This file-only test stage uses explicit JavaFX classifiers and leaves production Maven metadata, signing and dependency selection for the production qualification. [Independent consumer](../../tests/consumer/webview-desktop/README.md)
 
+## First Linux x64 full-source result
+
+On `fa37d36cfa1f362e61170e3eaa35a4b0e2578662`, the hosted Gradle `sdk` build used
+`-PCOMPILE_WEBKIT=true -PCOMPILE_MEDIA=true` and Ubuntu's media headers. Gradle
+exited 0 after executing all 145 tasks. The four real WebView cancellation
+cases passed with peer EOF before cleanup and one same-engine recovery each.
+The independent concurrent request completed. The lifecycle probe exited 0 and
+observed replacement navigation, stage detachment after cancellation and 16
+repeat peer closures. The open descriptor count was 22 before and after.
+[Exact commands and results](https://github.com/NativeCmpKit/NativeCmpKit/actions/runs/46153630862/artifacts/15272000032)
+
+The generated binaries require glibc 2.38 and supply only one media plugin.
+The stock Linux x64 baseline uses glibc 2.17 and supplies eight. Qualification
+continues with the compatibility build, the multiplexed HTTP/2 and performance
+checks, and the independent packaged consumer on every supported Desktop target.
+
+## Production qualification
+
 Production qualification additionally requires a repeatable image and toolchain, matching native corresponding sources and notices for every shipped classifier, dependency provenance and security review, and ABI and packaged consumer results on Linux x64, Linux ARM64, macOS x64, macOS ARM64 and Windows x64. Verify public Stop, repeated loads, navigation replacement and disposal while work is pending. Observe peer termination, resource accounting after repeated use, concurrent isolation, and performance against the ordinary dependency. The physical-device and publication gates are required independently.
