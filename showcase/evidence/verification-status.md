@@ -64,7 +64,7 @@ Android tablet: run [46107087160](https://github.com/NativeCmpKit/NativeCmpKit/a
 ## Final contract state
 
 - Android: 25 passed, 41 captured, 2 failed, 20 not-applicable (88 rows).
-- iOS: 19 passed, 55 captured, 4 failed, 9 not-applicable, 1 not-run.
+- iOS: 19 passed, 55 captured, 4 failed, 9 not-applicable, 1 blocked.
 
 ## Outstanding verification
 
@@ -76,8 +76,9 @@ Android tablet: run [46107087160](https://github.com/NativeCmpKit/NativeCmpKit/a
    - iPhone `slider` and `sheet-veto`: slider is an unnamed AX group; the sheet
      switch is not exposed.
    - iPad `action-sheet`: no Cancel action (recorded as a defect for `UI-ALERT-006`).
-2. `NAV-003` on iOS remains not-run: the pinned driver does not expose device
-   rotation for iOS, so the configuration-change assertion is Android-only.
+2. `NAV-003` on iOS is **blocked** by the pinned harness: `AxeSimulator`
+   exposes no `device.rotate`/`device.orientation`, so the configuration-change
+   assertion can only run on Android. It is no longer `not-run`.
 
 ## Blocked, not passed
 

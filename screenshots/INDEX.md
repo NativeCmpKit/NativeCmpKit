@@ -209,7 +209,7 @@ iOS Simulator through ui-test-actions. Host renders and mockups are not used.
 
 | Capture | Component / scenario | Expected observation | Image |
 | --- | --- | --- | --- |
-| `alertdialogiosstyle-actionsheet/ipad-popover` | alertdialogiosstyle-actionsheet | The action sheet is a centred popover / Cancel is reachable | ![alertdialogiosstyle-actionsheet ipad-popover](ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png) |
+| `alertdialogiosstyle-actionsheet/ipad-popover` | alertdialogiosstyle-actionsheet | The action sheet is a centred popover with Ok/Remove / UIKit omits the cancel action in a popover, so an outside tap dismisses it | ![alertdialogiosstyle-actionsheet ipad-popover](ios/alertdialogiosstyle-actionsheet/ipad-popover/ipad-simulator.png) |
 | `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](ios/functional/action-sheet/ipad-simulator-before.png) |
 | `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](ios/functional/action-sheet/ipad-simulator-failed-after.png) |
 | `functional/action-sheet` | functional | See coverage.json | ![functional action-sheet](ios/functional/action-sheet/iphone-simulator-after.png) |
